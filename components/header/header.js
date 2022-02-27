@@ -255,7 +255,7 @@ function Header(props) {
 
         <div style={{ width: '260px', display: 'flex', justifyContent: 'flex-end' }}>
 
-          { process.env.NEXT_PUBLIC_CHAINID == '4002' &&
+          { process.env.NEXT_PUBLIC_CHAINID == '80001' &&
             <div className={ classes.testnetDisclaimer}>
               <Typography className={ classes.testnetDisclaimerText}>Testnet</Typography>
             </div>
@@ -334,7 +334,7 @@ function Header(props) {
           <Typography className={classes.ErrorTxt}>
             The chain you're connected to isn't supported. Please check that your wallet is connected to Fantom Mainnet.
           </Typography>
-          <Button className={classes.switchNetworkBtn} variant="contained" onClick={()=>switchChain()} >Switch to { process.env.NEXT_PUBLIC_CHAINID == '4002' ? 'Fantom Testnet' : 'Fantom Mainnet' }</Button>
+          <Button className={classes.switchNetworkBtn} variant="contained" onClick={()=>switchChain()} >Switch to { process.env.NEXT_PUBLIC_CHAINID == '80001' ? 'Fantom Testnet' : 'Fantom Mainnet' }</Button>
         </div>
       </div>
     ) : null}
