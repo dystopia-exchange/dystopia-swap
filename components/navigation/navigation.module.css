@@ -2,13 +2,13 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  background: rgb(33, 43, 72);
-  border-radius: 12px;
-  border: 0 !important;
-  padding: 3px;
+  background: transparent;
+  border: none !important;
 }
 
-a.linkz { cursor: pointer !important; }
+a.linkz {
+  cursor: pointer !important;
+}
 
 .icon {
   width: 20px !important;
@@ -38,7 +38,7 @@ a.linkz { cursor: pointer !important; }
 .ffTitle {
   cursor: pointer;
   font-size: 24px !important;
-  color: #1c46f5 ;
+  color: #1c46f5;
 }
 
 .navigationContentMobile {
@@ -54,7 +54,12 @@ a.linkz { cursor: pointer !important; }
   width: 100%;
   border-radius: 10px;
   cursor: pointer;
-  background: radial-gradient(circle, rgba(63,94,251,0.7) 0%, rgba(47,128,237,0.7) 48%) rgba(63,94,251,0.7) 100%;
+  background: radial-gradient(
+      circle,
+      rgba(63, 94, 251, 0.7) 0%,
+      rgba(47, 128, 237, 0.7) 48%
+    )
+    rgba(63, 94, 251, 0.7) 100%;
 }
 
 .socials {
@@ -82,19 +87,19 @@ a.linkz { cursor: pointer !important; }
 }
 
 .telegram {
-  background-image: url('/socials/telegram.svg');
+  background-image: url("/socials/telegram.svg");
 }
 .medium {
-  background-image: url('/socials/medium.svg');
+  background-image: url("/socials/medium.svg");
 }
 .twitter {
-  background-image: url('/socials/twitter.svg');
+  background-image: url("/socials/twitter.svg");
 }
 .github {
-  background-image: url('/socials/github.svg');
+  background-image: url("/socials/github.svg");
 }
 .discord {
-  background-image: url('/socials/discord.svg');
+  background-image: url("/socials/discord.svg");
 }
 
 .navigationContentNavs {
@@ -132,21 +137,20 @@ a.linkz { cursor: pointer !important; }
 }
 
 .metamask {
-  background-image: url('/connectors/icn-metamask.svg');
+  background-image: url("/connectors/icn-metamask.svg");
 }
 .ledger {
-  background-image: url('/connectors/icn-ledger.svg');
+  background-image: url("/connectors/icn-ledger.svg");
 }
 .coinbase {
-  background-image: url('/connectors/coinbaseWalletIcon.svg');
+  background-image: url("/connectors/coinbaseWalletIcon.svg");
 }
 .torus {
-  background-image: url('/connectors/torus.jpg');
+  background-image: url("/connectors/torus.jpg");
 }
 .trust {
-  background-image: url('/connectors/trustWallet.png');
+  background-image: url("/connectors/trustWallet.png");
 }
-
 
 .menuIcon {
   display: none;
@@ -162,7 +166,6 @@ a.linkz { cursor: pointer !important; }
   padding-top: 0px;
 }
 
-
 .navigationOptionContainer {
   display: flex;
   align-items: center;
@@ -174,7 +177,6 @@ a.linkz { cursor: pointer !important; }
 }
 
 .subAssets {
-
 }
 
 .navigationSubOptionContainer {
@@ -195,7 +197,7 @@ a.linkz { cursor: pointer !important; }
 .sectionDivider {
   height: 100%;
   width: 1px;
-  background: rgba(104,108,122,0.15);
+  background: rgba(104, 108, 122, 0.15);
   margin: 16px 0 15px 26px;
 }
 
@@ -238,7 +240,6 @@ a.linkz { cursor: pointer !important; }
   align-items: center;
   justify-content: center;
 }
-
 
 .navigationOptionContainer:hover .navigationOptionIcon {
   background: #000;
@@ -295,21 +296,135 @@ a.linkz { cursor: pointer !important; }
 }
 
 .navToggles {
-  min-height: 50px;
+  height: 50px;
+  background: transparent;
 }
 
-.navButton {
-  border-radius: 10px !important;
-  padding: 8px 24px 10px 24px !important;
-  text-transform: capitalize !important;
-  border: 1px solid rgba(0,0,0,0) !important;
-  color: #7E99B0 !important;
-} /* Transparent border to eliminate position jittering from Active state */
+.nav-button-corner-top,
+.nav-button-corner-bottom {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
-.testChange {
-  border: 1px solid #06d3d7 !important;
-  background-color: rgba(0,0,0,0) !important;
-  color: #FFF !important;
+.nav-button-corner-top::before,
+.nav-button-corner-top::after,
+.nav-button-corner-bottom::before,
+.nav-button-corner-bottom::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  z-index: 999;
+}
+
+.nav-button-corner-top::before,
+.nav-button-corner-top::after {
+  top: -16.5px;
+  border-top: 1px solid var(--main-secondary-dark);
+}
+
+.nav-button-corner-top::before,
+.nav-button-corner-bottom::before {
+  left: -31px;
+  border-right: 1px solid var(--main-secondary-dark);
+}
+
+.nav-button-corner-top::after,
+.nav-button-corner-bottom::after {
+  right: -31px;
+  border-left: 1px solid var(--main-secondary-dark);
+}
+
+.nav-button-corner-bottom::before,
+.nav-button-corner-bottom::after {
+  bottom: -16.5px;
+  border-bottom: 1px solid var(--main-secondary-dark);
+}
+
+.nav-button-corner-top--dark::before,
+.nav-button-corner-top--dark::after,
+.nav-button-corner-bottom--dark::before,
+.nav-button-corner-bottom--dark::after {
+  border-color: var(--main-secondary-dark);
+}
+
+.nav-button-corner-top--light::before,
+.nav-button-corner-top--light::after,
+.nav-button-corner-bottom--light::before,
+.nav-button-corner-bottom--light::after {
+  border-color: var(--main-secondary-light);
+}
+
+.nav-button {
+  height: 50px;
+  border-radius: 0 !important;
+  padding: 12px 25px !important;
+  border-top: 1px solid transparent !important;
+  border-right: none;
+  border-bottom: 1px solid transparent !important;
+  border-left: 1px solid transparent !important;
+  text-transform: capitalize !important;
+}
+
+.nav-button--dark {
+  border-top: 1px solid var(--border-dark) !important;
+  border-right: none;
+  border-bottom: 1px solid var(--border-dark) !important;
+  border-left: 1px solid var(--border-dark) !important;
+  color: var(--menu-links-dark) !important;
+}
+
+.nav-button--dark:last-child {
+  border-right: 1px solid var(--border-dark);
+}
+
+.nav-button--light {
+  border-top: 1px solid var(--border-light) !important;
+  border-right: none;
+  border-bottom: 1px solid var(--border-light) !important;
+  border-left: 1px solid var(--border-light) !important;
+  color: var(--menu-links-light) !important;
+}
+
+.nav-button--dark:last-child {
+  border-right: 1px solid var(--border-dark);
+}
+
+.nav-button--active {
+  position: relative;
+}
+
+.nav-button--active::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 1px;
+  height: calc(100% + 2px);
+  z-index: 999;
+}
+
+.nav-button--active.nav-button--dark {
+  background-color: var(--menu-highlight-dark) !important;
+  border: 1px solid var(--main-secondary-dark) !important;
+  color: var(--main-white) !important;
+}
+
+.nav-button--active.nav-button--dark::after {
+  background-color: var(--main-secondary-dark) !important;
+}
+
+.nav-button--active.nav-button--light {
+  background-color: var(--menu-highlight-light) !important;
+  border: 1px solid var(--main-secondary-light) !important;
+  color: var(--main-secondary-light) !important;
+}
+
+.nav-button--active.nav-button--light::after {
+  background-color: var(--main-secondary-light) !important;
 }
 
 @media screen and (max-width: 1200px) {
@@ -337,7 +452,7 @@ a.linkz { cursor: pointer !important; }
     width: 100%;
     text-align: center;
     padding: 15px 0;
-    border-bottom: 1px solid rgba(126,153,176,0.2);
+    border-bottom: 1px solid rgba(126, 153, 176, 0.2);
   }
   .navigationContentMobile {
     position: fixed;
@@ -404,7 +519,12 @@ a.linkz { cursor: pointer !important; }
     border-radius: 10px;
     text-align: center !important;
     cursor: pointer;
-    background: radial-gradient(circle, rgba(63,94,251,0.7) 0%, rgba(47,128,237,0.7) 48%) rgba(63,94,251,0.7) 100%;
+    background: radial-gradient(
+        circle,
+        rgba(63, 94, 251, 0.7) 0%,
+        rgba(47, 128, 237, 0.7) 48%
+      )
+      rgba(63, 94, 251, 0.7) 100%;
   }
 
   .sectionText {
@@ -465,8 +585,8 @@ a.linkz { cursor: pointer !important; }
     border-radius: 10px !important;
     padding: 8px 10px 8px 10px !important;
     text-transform: capitalize !important;
-    border: 1px solid rgba(0,0,0,0) !important;
-    color: #7E99B0 !important;
+    border: 1px solid rgba(0, 0, 0, 0) !important;
+    color: #7e99b0 !important;
   }
 
   .subtitleText {
@@ -486,8 +606,8 @@ a.linkz { cursor: pointer !important; }
 
   .testChange {
     border: 1px solid #06d3d7 !important;
-    background-color: rgba(0,0,0,0) !important;
-    color: #FFF !important;
+    background-color: rgba(0, 0, 0, 0) !important;
+    color: #fff !important;
   }
 
   .navigationContent {
@@ -498,6 +618,6 @@ a.linkz { cursor: pointer !important; }
     width: 100%;
     text-align: center;
     padding: 15px 0;
-    border-bottom: 1px solid rgba(126,153,176,0.2);
+    border-bottom: 1px solid rgba(126, 153, 176, 0.2);
   }
 }
