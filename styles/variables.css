@@ -1,0 +1,15 @@
+:root {
+    --primary: #0D0415;
+    --text-primary: #BFBFBF;
+    --font-sans: "DM Sans", -apple-system, system-ui, BlinkMacSystemFont, 'Helvetica Neue', 'Helvetica', sans-serif;
+    --scrollbar-width: 14px;
+
+    --desktop-width: 1024px;
+
+    --background-dark: rgba(21, 23, 24, 1);
+    --background-light: rgba(227, 238, 244, 1);
+    --main-white: rgba(255, 255, 255, 1);
+
+    --menu-links-dark: rgba(137, 140, 149, 1);
+    --menu-links-light: rgba(132, 162, 180, 1);
+}
