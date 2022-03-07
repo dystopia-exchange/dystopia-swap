@@ -165,7 +165,7 @@ export default function ssVotes() {
 
         <Grid container spacing={1}>
           <Grid item lg='auto' lg='auto' sm={12} xs={12}>
-            {/*
+            
               <Button
                 variant="contained"
                 color="secondary"
@@ -178,7 +178,7 @@ export default function ssVotes() {
               >
                 <Typography className={ classes.actionButtonText }>{ `Create Bribe` }</Typography>
               </Button>
-            */}
+           
           </Grid>
           <Grid item lg={true} md={true} sm={12} xs={12}>
             <TextField

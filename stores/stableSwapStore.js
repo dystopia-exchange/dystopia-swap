@@ -12,7 +12,84 @@ import { formatCurrency } from '../utils'
 import stores from "./"
 
 import BigNumber from "bignumber.js"
+import {createClient} from "urql"
 const fetch = require("node-fetch")
+
+
+const queryone = `
+query {
+  
+    pairs(first:1000) {
+     address
+     decimals
+     symbol
+     isStable 
+    token0{
+     address
+      chainId
+      symbol
+      name
+      decimals
+      isWhitelisted
+    }
+    token1{
+     address
+      chainId
+      symbol
+      name
+      decimals
+      isWhitelisted
+   }
+   reserve0
+   reserve1
+   totalSupply
+   claimable0
+   claimable1
+    gauge{
+      address
+      balance
+      totalSupply
+      reserve0
+      reserve1
+      weight
+      weightPercent
+      bribeAddress
+      bribesEarned
+      rewardsEarned
+      bribe{
+        address
+        rewardRate
+        rewardAmount
+      }
+    }
+    gaugebribes{
+      address
+        rewardRate
+        rewardAmount
+    }
+    } 
+  
+}`
+
+const querytwo = `
+query {
+  
+   
+    tokens{
+     address
+      chainId
+      symbol
+      name
+      decimals
+      isWhitelisted
+    }
+    
+  
+    
+  
+}`
+
+const client = createClient({url:process.env.NEXT_PUBLIC_API})
 
 class Store {
   constructor(dispatcher, emitter) {
@@ -322,7 +399,6 @@ class Store {
       let thePair = pairs.filter((pair) => {
         return (pair.address.toLowerCase() == pairAddress.toLowerCase())
       })
-
       if(thePair.length > 0) {
         const pc = new web3.eth.Contract(CONTRACTS.PAIR_ABI, pairAddress)
 
@@ -338,17 +414,16 @@ class Store {
         returnPair.totalSupply = BigNumber(totalSupply).div(10**returnPair.decimals).toFixed(parseInt(returnPair.decimals))
         returnPair.reserve0 = BigNumber(reserve0).div(10**returnPair.token0.decimals).toFixed(parseInt(returnPair.token0.decimals))
         returnPair.reserve1 = BigNumber(reserve1).div(10**returnPair.token1.decimals).toFixed(parseInt(returnPair.token1.decimals))
-
+       
         return returnPair
       }
 
       const pairContract = new web3.eth.Contract(CONTRACTS.PAIR_ABI, pairAddress)
       const gaugesContract = new web3.eth.Contract(CONTRACTS.VOTER_ABI, CONTRACTS.VOTER_ADDRESS)
-
       const [ totalWeight ] = await Promise.all([
         gaugesContract.methods.totalWeight().call()
       ])
-
+     
       const [ token0, token1, totalSupply, symbol, reserve0, reserve1, decimals, balanceOf, stable, gaugeAddress, gaugeWeight, claimable0, claimable1 ] = await Promise.all([
         pairContract.methods.token0().call(),
         pairContract.methods.token1().call(),
@@ -735,8 +810,9 @@ class Store {
       this.setStore({ govToken: this._getGovTokenBase() })
       this.setStore({ veToken: this._getVeTokenBase() })
       this.setStore({ baseAssets: await this._getBaseAssets() })
-      this.setStore({ routeAssets: await this._getRouteAssets() })
       this.setStore({ pairs: await this._getPairs() })
+      this.setStore({ routeAssets: await this._getRouteAssets() })
+      
 
       this.emitter.emit(ACTIONS.UPDATED)
       this.emitter.emit(ACTIONS.CONFIGURED_SS)
@@ -752,15 +828,10 @@ class Store {
 
   _getBaseAssets = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/api/v1/baseAssets`, {
-      	method: 'get',
-      	headers: {
-          'Authorization': `Basic ${process.env.NEXT_PUBLIC_API_TOKEN}`,
-        }
-      })
-      const baseAssetsCall = await response.json()
+      const response = await client.query(querytwo).toPromise()
+      const baseAssetsCall = response
 
-      let baseAssets = baseAssetsCall.data
+      let baseAssets = baseAssetsCall.data.tokens
 
       const nativeFTM = {
         address: CONTRACTS.FTM_ADDRESS,
@@ -784,14 +855,14 @@ class Store {
 
   _getRouteAssets = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/api/v1/routeAssets`, {
-      	method: 'get',
-      	headers: {
-          'Authorization': `Basic ${process.env.NEXT_PUBLIC_API_TOKEN}`,
-        }
-      })
-      const routeAssetsCall = await response.json()
-      return routeAssetsCall.data
+      const nativeFTM = {
+        address: CONTRACTS.WFTM_ADDRESS,
+        decimals: CONTRACTS.WFTM_DECIMALS,
+        logoURI: CONTRACTS.WFTM_LOGO,
+        name: CONTRACTS.WFTM_NAME,
+        symbol: CONTRACTS.WFTM_SYMBOL
+      }
+      return nativeFTM
     } catch(ex) {
       console.log(ex)
       return []
@@ -800,14 +871,10 @@ class Store {
 
   _getPairs = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/api/v1/pairs`, {
-      	method: 'get',
-      	headers: {
-          'Authorization': `Basic ${process.env.NEXT_PUBLIC_API_TOKEN}`,
-        }
-      })
-      const pairsCall = await response.json()
-      return pairsCall.data
+      const response = await client.query(queryone).toPromise()
+      const pairsCall = response
+      console.log(pairsCall,"response")
+      return pairsCall.data.pairs
     } catch(ex) {
       console.log(ex)
       return []
@@ -922,7 +989,7 @@ class Store {
   _getPairInfo = async (web3, account, overridePairs) => {
     try {
       const multicall = await stores.accountStore.getMulticall()
-
+    
       let pairs = []
 
       if(overridePairs) {
@@ -930,7 +997,7 @@ class Store {
       } else {
         pairs = this.getStore('pairs')
       }
-
+      console.log(pairs,"yeahh55")
       const factoryContract = new web3.eth.Contract(CONTRACTS.FACTORY_ABI, CONTRACTS.FACTORY_ADDRESS)
       const gaugesContract = new web3.eth.Contract(CONTRACTS.VOTER_ABI, CONTRACTS.VOTER_ADDRESS)
 
@@ -938,7 +1005,7 @@ class Store {
         factoryContract.methods.allPairsLength().call(),
         gaugesContract.methods.totalWeight().call()
       ])
-
+      
       const ps = await Promise.all(
         pairs.map(async (pair) => {
           try {
@@ -957,14 +1024,16 @@ class Store {
               pairContract.methods.claimable1(account.address)
             ])
 
+            console.log(pair,totalSupply, reserves, balanceOf, claimable0, claimable1,"yeahh5")
+          
             pair.token0 = token0 != null ? token0 : pair.token0
             pair.token1 = token1 != null ? token1 : pair.token1
             pair.balance = BigNumber(balanceOf).div(10**pair.decimals).toFixed(parseInt(pair.decimals))
             pair.totalSupply = BigNumber(totalSupply).div(10**pair.decimals).toFixed(parseInt(pair.decimals))
             pair.reserve0 = BigNumber(reserves[0]).div(10**pair.token0.decimals).toFixed(parseInt(pair.token0.decimals))
             pair.reserve1 = BigNumber(reserves[1]).div(10**pair.token1.decimals).toFixed(parseInt(pair.token1.decimals))
-            pair.claimable0 = BigNumber(claimable0).div(10**pair.token0.decimals).toFixed(pair.token0.decimals)
-            pair.claimable1 = BigNumber(claimable1).div(10**pair.token1.decimals).toFixed(pair.token1.decimals)
+            pair.claimable0 = claimable0 != 0 ?BigNumber(claimable0).div(10**pair.token0.decimals).toFixed(pair.token0.decimals):0
+            pair.claimable1 = claimable1 != 0 ?BigNumber(claimable1).div(10**pair.token1.decimals).toFixed(pair.token1.decimals):0
 
             return pair
           } catch (ex) {
@@ -975,18 +1044,16 @@ class Store {
           }
         })
       )
-
       this.setStore({ pairs: ps })
       this.emitter.emit(ACTIONS.UPDATED)
-
-
+      
       const ps1 = await Promise.all(
         ps.map(async (pair) => {
           try {
-
+           
             if(pair.gauge && pair.gauge.address !== ZERO_ADDRESS) {
               const gaugeContract = new web3.eth.Contract(CONTRACTS.GAUGE_ABI, pair.gauge.address)
-
+              
               const [ totalSupply, gaugeBalance, gaugeWeight ] = await multicall.aggregate([
                 gaugeContract.methods.totalSupply(),
                 gaugeContract.methods.balanceOf(account.address),
@@ -994,28 +1061,57 @@ class Store {
               ])
 
               const bribeContract = new web3.eth.Contract(CONTRACTS.BRIBE_ABI, pair.gauge.bribeAddress)
+              const [ rewardsListLength ] = await multicall.aggregate([
+                bribeContract.methods.rewardsListLength(),
+              ])
+             
 
+             if(rewardsListLength>0)
+            {
+                  const bribeTokens = [{rewardRate:"",rewardAmount:"",address:""}]
+              for(let i=0;i<rewardsListLength;i++){
+                let [ bribeTokenAddress ] = await multicall.aggregate([
+                  bribeContract.methods.rewards(i)
+                ])
+
+                bribeTokens.push({"address":bribeTokenAddress,"rewardAmount":0,"rewardRate":0})
+              }
+
+             bribeTokens.shift()
+    
               const bribes = await Promise.all(
-                pair.gauge.bribes.map(async (bribe, idx) => {
+                bribeTokens.map(async (bribe, idx) => {
 
                   const [ rewardRate ] = await Promise.all([
-                    bribeContract.methods.rewardRate(bribe.token.address).call(),
+                    bribeContract.methods.rewardRate(bribe.address).call(),
                   ])
-
-                  bribe.rewardRate = BigNumber(rewardRate).div(10**bribe.token.decimals).toFixed(bribe.token.decimals)
-                  bribe.rewardAmount = BigNumber(rewardRate).times(604800).div(10**bribe.token.decimals).toFixed(bribe.token.decimals)
-
+               
+                  const tokenContract = new web3.eth.Contract(CONTRACTS.ERC20_ABI,bribe.address)
+                  const [ decimals ] = await multicall.aggregate([
+                    tokenContract.methods.decimals(),
+                  ])
+                 
+               
+                  bribe = {...bribe,"decimals":parseInt(decimals)}
+                  bribe = {...bribe,"rewardRate":BigNumber(rewardRate).div(10**parseInt(decimals)).toFixed(parseInt(decimals))}
+                  bribe = {...bribe,"rewardAmount":BigNumber(rewardRate).times(604800).div(10**parseInt(decimals)).toFixed(parseInt(decimals))}
+                
                   return bribe
                 })
               )
-
-              pair.gauge.balance = BigNumber(gaugeBalance).div(10**18).toFixed(18)
-              pair.gauge.totalSupply = BigNumber(totalSupply).div(10**18).toFixed(18)
-              pair.gauge.reserve0 = pair.totalSupply > 0 ? BigNumber(pair.reserve0).times(pair.gauge.totalSupply).div(pair.totalSupply).toFixed(pair.token0.decimals) : '0'
-              pair.gauge.reserve1 = pair.totalSupply > 0 ? BigNumber(pair.reserve1).times(pair.gauge.totalSupply).div(pair.totalSupply).toFixed(pair.token1.decimals) : '0'
-              pair.gauge.weight = BigNumber(gaugeWeight).div(10**18).toFixed(18)
-              pair.gauge.weightPercent = BigNumber(gaugeWeight).times(100).div(totalWeight).toFixed(2)
+                 console.log(bribes,"hii")
               pair.gaugebribes = bribes
+              }
+              pair.gauge.balance = parseInt(gaugeBalance) != 0? BigNumber(parseInt(gaugeBalance)).div(10**18).toFixed(18):0
+              pair.gauge.totalSupply =  parseInt(totalSupply) != 0?BigNumber(parseInt(totalSupply)).div(10**18).toFixed(18):0
+              pair.gauge.reserve0 = parseInt(pair.totalSupply) > 0 ? BigNumber(parseInt(pair.reserve0)).times(parseInt(pair.gauge.totalSupply)).div(parseInt(pair.totalSupply)).toFixed(parseInt(pair.token0.decimals)) : '0'
+              pair.gauge.reserve1 = parseInt(pair.totalSupply) > 0 ? BigNumber(parseInt(pair.reserve1)).times(parseInt(pair.gauge.totalSupply)).div(parseInt(pair.totalSupply)).toFixed(parseInt(pair.token1.decimals)) : '0'
+              pair.gauge.weight = parseInt(gaugeWeight) != 0? BigNumber(parseInt(gaugeWeight)).div(10**18).toFixed(18):0
+              pair.gauge.weightPercent = parseInt(totalWeight) != 0? BigNumber(parseInt(gaugeWeight)).times(100).div(parseInt(totalWeight)).toFixed(2):0
+             
+           
+           
+             
             }
 
             return pair
@@ -1648,16 +1744,12 @@ class Store {
 
   updatePairsCall = async (web3, account) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/api/v1/updatePairs`, {
-        method: 'get',
-        headers: {
-          'Authorization': `Basic ${process.env.NEXT_PUBLIC_API_TOKEN}`,
-        }
-      })
-      const pairsCall = await response.json()
-      this.setStore({ pairs: pairsCall.data })
+      const response = await client.query(queryone).toPromise()
+      const pairsCall = response
+      console.log(pairsCall,"yeahh6")
+      this.setStore({ pairs: pairsCall.data.pairs })
 
-      await this._getPairInfo(web3, account, pairsCall.data)
+      await this._getPairInfo(web3, account, pairsCall.data.pairs)
 
     } catch(ex) {
       console.log(ex)
