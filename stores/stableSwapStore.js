@@ -31,6 +31,7 @@ query {
       name
       decimals
       isWhitelisted
+      balance
     }
     token1{
      address
@@ -39,6 +40,7 @@ query {
       name
       decimals
       isWhitelisted
+      balance
    }
    reserve0
    reserve1
@@ -77,6 +79,7 @@ query {
    
     tokens{
      address
+     balance
       chainId
       symbol
       name
@@ -307,8 +310,8 @@ class Store {
           return {
             id: tokenIndex,
             lockEnds: locked.end,
-            lockAmount: BigNumber(locked.amount).div(10**govToken.decimals).toFixed(govToken.decimals),
-            lockValue: BigNumber(lockValue).div(10**veToken.decimals).toFixed(veToken.decimals)
+            lockAmount: BigNumber(locked.amount).div(10**parseInt(govToken.decimals)).toFixed(parseInt(govToken.decimals)),
+            lockValue: BigNumber(lockValue).div(10**parseInt(veToken.decimals)).toFixed(parseInt(veToken.decimals))
           }
         })
       )
@@ -365,8 +368,8 @@ class Store {
           return {
             id: id,
             lockEnds: locked.end,
-            lockAmount: BigNumber(locked.amount).div(10**govToken.decimals).toFixed(govToken.decimals),
-            lockValue: BigNumber(lockValue).div(10**veToken.decimals).toFixed(veToken.decimals)
+            lockAmount: BigNumber(locked.amount).div(10**parseInt(govToken.decimals)).toFixed(parseInt(govToken.decimals)),
+            lockValue: BigNumber(lockValue).div(10**parseInt(veToken.decimals)).toFixed(parseInt(veToken.decimals))
           }
         }
 
@@ -1030,10 +1033,10 @@ class Store {
             pair.token1 = token1 != null ? token1 : pair.token1
             pair.balance = BigNumber(balanceOf).div(10**pair.decimals).toFixed(parseInt(pair.decimals))
             pair.totalSupply = BigNumber(totalSupply).div(10**pair.decimals).toFixed(parseInt(pair.decimals))
-            pair.reserve0 = BigNumber(reserves[0]).div(10**pair.token0.decimals).toFixed(parseInt(pair.token0.decimals))
-            pair.reserve1 = BigNumber(reserves[1]).div(10**pair.token1.decimals).toFixed(parseInt(pair.token1.decimals))
-            pair.claimable0 = claimable0 != 0 ?BigNumber(claimable0).div(10**pair.token0.decimals).toFixed(pair.token0.decimals):0
-            pair.claimable1 = claimable1 != 0 ?BigNumber(claimable1).div(10**pair.token1.decimals).toFixed(pair.token1.decimals):0
+            pair.reserve0 = BigNumber(reserves[0]).div(10**parseInt(pair.token0.decimals)).toFixed(parseInt(pair.token0.decimals))
+            pair.reserve1 = BigNumber(reserves[1]).div(10**parseInt(pair.token1.decimals)).toFixed(parseInt(pair.token1.decimals))
+            pair.claimable0 = claimable0 != 0 ?BigNumber(claimable0).div(10**parseInt(pair.token0.decimals)).toFixed(parseInt(pair.token0.decimals)):0
+            pair.claimable1 = claimable1 != 0 ?BigNumber(claimable1).div(10**parseInt(pair.token1.decimals)).toFixed(parseInt(pair.token1.decimals)):0
 
             return pair
           } catch (ex) {
@@ -1099,7 +1102,6 @@ class Store {
                   return bribe
                 })
               )
-                 console.log(bribes,"hii")
               pair.gaugebribes = bribes
               }
               pair.gauge.balance = parseInt(gaugeBalance) != 0? BigNumber(parseInt(gaugeBalance)).div(10**18).toFixed(18):0
@@ -1140,7 +1142,7 @@ class Store {
         console.warn('baseAssets not found')
         return null
       }
-
+      
       const voterContract = new web3.eth.Contract(CONTRACTS.VOTER_ABI, CONTRACTS.VOTER_ADDRESS)
 
       const baseAssetsBalances = await Promise.all(
@@ -1160,7 +1162,7 @@ class Store {
               voterContract.methods.isWhitelisted(asset.address).call(),
               assetContract.methods.balanceOf(account.address).call(),
             ])
-
+            
             return {
               balanceOf,
               isWhitelisted
@@ -1175,13 +1177,13 @@ class Store {
             }
           }
         })
-      )
+      ) 
 
       for (let i = 0; i < baseAssets.length; i++) {
-        baseAssets[i].balance = BigNumber(baseAssetsBalances[i].balanceOf).div(10 ** baseAssets[i].decimals).toFixed(baseAssets[i].decimals)
+        baseAssets[i].balance = BigNumber(baseAssetsBalances[i].balanceOf).div(10 ** parseInt(baseAssets[i].decimals)).toFixed(parseInt(baseAssets[i].decimals))
         baseAssets[i].isWhitelisted = baseAssetsBalances[i].isWhitelisted
       }
-
+      console.log(baseAssets,"hiii2")
       this.setStore({ baseAssets })
       this.emitter.emit(ACTIONS.UPDATED)
     } catch (ex) {
@@ -1410,11 +1412,11 @@ class Store {
 
       // SUBMIT DEPOSIT TRANSACTION
       const sendSlippage = BigNumber(100).minus(slippage).div(100)
-      const sendAmount0 = BigNumber(amount0).times(10**token0.decimals).toFixed(0)
-      const sendAmount1 = BigNumber(amount1).times(10**token1.decimals).toFixed(0)
+      const sendAmount0 = BigNumber(amount0).times(10**parseInt(token0.decimals)).toFixed(0)
+      const sendAmount1 = BigNumber(amount1).times(10**parseInt(token1.decimals)).toFixed(0)
       const deadline = ''+moment().add(600, 'seconds').unix()
-      const sendAmount0Min = BigNumber(amount0).times(sendSlippage).times(10**token0.decimals).toFixed(0)
-      const sendAmount1Min = BigNumber(amount1).times(sendSlippage).times(10**token1.decimals).toFixed(0)
+      const sendAmount0Min = BigNumber(amount0).times(sendSlippage).times(10**parseInt(token0.decimals)).toFixed(0)
+      const sendAmount1Min = BigNumber(amount1).times(sendSlippage).times(10**parseInt(token1.decimals)).toFixed(0)
 
 
       let func = 'addLiquidity'
@@ -1466,7 +1468,7 @@ class Store {
           const pair = await this.getPairByAddress(pairFor)
           const stakeAllowance = await this._getStakeAllowance(web3, pair, account)
 
-          if(BigNumber(stakeAllowance).lt( BigNumber(balanceOf).div(10**pair.decimals).toFixed(pair.decimals) )) {
+          if(BigNumber(stakeAllowance).lt( BigNumber(balanceOf).div(10**parseInt(pair.decimals)).toFixed(parseInt(pair.decimals)) )) {
             this.emitter.emit(ACTIONS.TX_STATUS, {
               uuid: stakeAllowanceTXID,
               description: `Allow the router to spend your ${pair.symbol}`
@@ -1481,7 +1483,7 @@ class Store {
 
           const allowanceCallsPromise = []
 
-          if(BigNumber(stakeAllowance).lt( BigNumber(balanceOf).div(10**pair.decimals).toFixed(pair.decimals)  )) {
+          if(BigNumber(stakeAllowance).lt( BigNumber(balanceOf).div(10**parseInt(pair.decimals)).toFixed(parseInt(pair.decimals))  )) {
             const stakePromise = new Promise((resolve, reject) => {
               context._callContractWait(web3, pairContract, 'approve', [pair.gauge.address, MAX_UINT256], account, gasPrice, null, null, stakeAllowanceTXID, (err) => {
                 if (err) {
@@ -1685,11 +1687,11 @@ class Store {
 
       // SUBMIT DEPOSIT TRANSACTION
       const sendSlippage = BigNumber(100).minus(slippage).div(100)
-      const sendAmount0 = BigNumber(amount0).times(10**token0.decimals).toFixed(0)
-      const sendAmount1 = BigNumber(amount1).times(10**token1.decimals).toFixed(0)
+      const sendAmount0 = BigNumber(amount0).times(10**parseInt(token0.decimals)).toFixed(0)
+      const sendAmount1 = BigNumber(amount1).times(10**parseInt(token1.decimals)).toFixed(0)
       const deadline = ''+moment().add(600, 'seconds').unix()
-      const sendAmount0Min = BigNumber(amount0).times(sendSlippage).times(10**token0.decimals).toFixed(0)
-      const sendAmount1Min = BigNumber(amount1).times(sendSlippage).times(10**token1.decimals).toFixed(0)
+      const sendAmount0Min = BigNumber(amount0).times(sendSlippage).times(10**parseInt(token0.decimals)).toFixed(0)
+      const sendAmount1Min = BigNumber(amount1).times(sendSlippage).times(10**parseInt(token1.decimals)).toFixed(0)
 
 
       let func = 'addLiquidity'
@@ -1902,11 +1904,11 @@ class Store {
 
       // SUBMIT DEPOSIT TRANSACTION
       const sendSlippage = BigNumber(100).minus(slippage).div(100)
-      const sendAmount0 = BigNumber(amount0).times(10**token0.decimals).toFixed(0)
-      const sendAmount1 = BigNumber(amount1).times(10**token1.decimals).toFixed(0)
+      const sendAmount0 = BigNumber(amount0).times(10**parseInt(token0.decimals)).toFixed(0)
+      const sendAmount1 = BigNumber(amount1).times(10**parseInt(token1.decimals)).toFixed(0)
       const deadline = ''+moment().add(600, 'seconds').unix()
-      const sendAmount0Min = BigNumber(amount0).times(sendSlippage).times(10**token0.decimals).toFixed(0)
-      const sendAmount1Min = BigNumber(amount1).times(sendSlippage).times(10**token1.decimals).toFixed(0)
+      const sendAmount0Min = BigNumber(amount0).times(sendSlippage).times(10**parseInt(token0.decimals)).toFixed(0)
+      const sendAmount1Min = BigNumber(amount1).times(sendSlippage).times(10**parseInt(token1.decimals)).toFixed(0)
 
       const routerContract = new web3.eth.Contract(CONTRACTS.ROUTER_ABI, CONTRACTS.ROUTER_ADDRESS)
 
@@ -1981,7 +1983,7 @@ class Store {
       const pairContract = new web3.eth.Contract(CONTRACTS.PAIR_ABI, pair.address)
       const balanceOf = await pairContract.methods.balanceOf(account.address).call()
 
-      if(BigNumber(stakeAllowance).lt( BigNumber(balanceOf).div(10**pair.decimals).toFixed(pair.decimals) )) {
+      if(BigNumber(stakeAllowance).lt( BigNumber(balanceOf).div(10**parseInt(pair.decimals)).toFixed(parseInt(pair.decimals)) )) {
         this.emitter.emit(ACTIONS.TX_STATUS, {
           uuid: stakeAllowanceTXID,
           description: `Allow the router to spend your ${pair.symbol}`
@@ -1999,7 +2001,7 @@ class Store {
 
       const allowanceCallsPromises = []
 
-      if(BigNumber(stakeAllowance).lt( BigNumber(balanceOf).div(10**pair.decimals).toFixed(pair.decimals)  )) {
+      if(BigNumber(stakeAllowance).lt( BigNumber(balanceOf).div(10**parseInt(pair.decimals)).toFixed(parseInt(pair.decimals))  )) {
         const stakePromise = new Promise((resolve, reject) => {
           context._callContractWait(web3, pairContract, 'approve', [pair.gauge.address, MAX_UINT256], account, gasPrice, null, null, stakeAllowanceTXID, (err) => {
             if (err) {
@@ -2224,11 +2226,11 @@ class Store {
 
       // SUBMIT DEPOSIT TRANSACTION
       const sendSlippage = BigNumber(100).minus(slippage).div(100)
-      const sendAmount0 = BigNumber(amount0).times(10**token0.decimals).toFixed(0)
-      const sendAmount1 = BigNumber(amount1).times(10**token1.decimals).toFixed(0)
+      const sendAmount0 = BigNumber(amount0).times(10**parseInt(token0.decimals)).toFixed(0)
+      const sendAmount1 = BigNumber(amount1).times(10**parseInt(token1.decimals)).toFixed(0)
       const deadline = ''+moment().add(600, 'seconds').unix()
-      const sendAmount0Min = BigNumber(amount0).times(sendSlippage).times(10**token0.decimals).toFixed(0)
-      const sendAmount1Min = BigNumber(amount1).times(sendSlippage).times(10**token1.decimals).toFixed(0)
+      const sendAmount0Min = BigNumber(amount0).times(sendSlippage).times(10**parseInt(token0.decimals)).toFixed(0)
+      const sendAmount1Min = BigNumber(amount1).times(sendSlippage).times(10**parseInt(token1.decimals)).toFixed(0)
 
       const routerContract = new web3.eth.Contract(CONTRACTS.ROUTER_ABI, CONTRACTS.ROUTER_ADDRESS)
       const gaugeContract = new web3.eth.Contract(CONTRACTS.GAUGE_ABI, pair.gauge.address)
@@ -2282,7 +2284,7 @@ class Store {
     try {
       const tokenContract = new web3.eth.Contract(CONTRACTS.ERC20_ABI, token.address)
       const allowance = await tokenContract.methods.allowance(account.address, CONTRACTS.ROUTER_ADDRESS).call()
-      return BigNumber(allowance).div(10**token.decimals).toFixed(token.decimals)
+      return BigNumber(allowance).div(10**parseInt(token.decimals)).toFixed(parseInt(token.decimals))
     } catch (ex) {
       console.error(ex)
       return null
@@ -2293,7 +2295,7 @@ class Store {
     try {
       const tokenContract = new web3.eth.Contract(CONTRACTS.ERC20_ABI, pair.address)
       const allowance = await tokenContract.methods.allowance(account.address, pair.gauge.address).call()
-      return BigNumber(allowance).div(10**pair.decimals).toFixed(pair.decimals)
+      return BigNumber(allowance).div(10**parseInt(pair.decimals)).toFixed(parseInt(pair.decimals))
     } catch (ex) {
       console.error(ex)
       return null
@@ -2304,7 +2306,7 @@ class Store {
     try {
       const tokenContract = new web3.eth.Contract(CONTRACTS.ERC20_ABI, pair.address)
       const allowance = await tokenContract.methods.allowance(account.address, CONTRACTS.ROUTER_ADDRESS).call()
-      return BigNumber(allowance).div(10**pair.decimals).toFixed(pair.decimals)
+      return BigNumber(allowance).div(10**parseInt(pair.decimals)).toFixed(parseInt(pair.decimals))
     } catch (ex) {
       console.error(ex)
       return null
@@ -2334,8 +2336,8 @@ class Store {
       const gasPrice = await stores.accountStore.getGasPrice()
       const routerContract = new web3.eth.Contract(CONTRACTS.ROUTER_ABI, CONTRACTS.ROUTER_ADDRESS)
 
-      const sendAmount0 = BigNumber(amount0).times(10**token0.decimals).toFixed(0)
-      const sendAmount1 = BigNumber(amount1).times(10**token1.decimals).toFixed(0)
+      const sendAmount0 = BigNumber(amount0).times(10**parseInt(token0.decimals)).toFixed(0)
+      const sendAmount1 = BigNumber(amount1).times(10**parseInt(token1.decimals)).toFixed(0)
 
       let addy0 = token0.address
       let addy1 = token1.address
@@ -2356,7 +2358,7 @@ class Store {
           amount0,
           amount1,
         },
-        output: BigNumber(res.liquidity).div(10**(pair.decimals)).toFixed(pair.decimals)
+        output: BigNumber(res.liquidity).div(10**parseInt(pair.decimals)).toFixed(parseInt(pair.decimals))
       }
       this.emitter.emit(ACTIONS.QUOTE_ADD_LIQUIDITY_RETURNED, returnVal)
 
@@ -2405,8 +2407,8 @@ class Store {
       const [ token0Balance, token1Balance, poolBalance, gaugeBalance/*, earned*/ ] = await Promise.all(balanceCalls)
 
       const returnVal = {
-        token0: BigNumber(token0Balance).div(10**pair.token0.decimals).toFixed(pair.token0.decimals),
-        token1: BigNumber(token1Balance).div(10**pair.token1.decimals).toFixed(pair.token1.decimals),
+        token0: BigNumber(token0Balance).div(10**parseInt(pair.token0.decimals)).toFixed(parseInt(pair.token0.decimals)),
+        token1: BigNumber(token1Balance).div(10**parseInt(pair.token1.decimals)).toFixed(parseInt(pair.token1.decimals)),
         pool: BigNumber(poolBalance).div(10**18).toFixed(18),
       }
 
@@ -2618,8 +2620,8 @@ class Store {
       const sendSlippage = BigNumber(100).minus(slippage).div(100)
       const sendAmount = BigNumber(amount).times(10**pair.decimals).toFixed(0)
       const deadline = ''+moment().add(600, 'seconds').unix()
-      const sendAmount0Min = BigNumber(amount0).times(sendSlippage).times(10**token0.decimals).toFixed(0)
-      const sendAmount1Min = BigNumber(amount1).times(sendSlippage).times(10**token1.decimals).toFixed(0)
+      const sendAmount0Min = BigNumber(amount0).times(sendSlippage).times(10**parseInt(token0.decimals)).toFixed(0)
+      const sendAmount1Min = BigNumber(amount1).times(sendSlippage).times(10**parseInt(token1.decimals)).toFixed(0)
 
       const routerContract = new web3.eth.Contract(CONTRACTS.ROUTER_ABI, CONTRACTS.ROUTER_ADDRESS)
       const gaugeContract = new web3.eth.Contract(CONTRACTS.GAUGE_ABI, pair.gauge.address)
@@ -2735,8 +2737,8 @@ class Store {
           withdrawAmount
         },
         output: {
-          amount0: BigNumber(res.amountA).div(10**(token0.decimals)).toFixed(token0.decimals),
-          amount1: BigNumber(res.amountB).div(10**(token1.decimals)).toFixed(token1.decimals)
+          amount0: BigNumber(res.amountA).div(10**(parseInt(token0.decimals))).toFixed(parseInt(token0.decimals)),
+          amount1: BigNumber(res.amountB).div(10**(parseInt(token1.decimals))).toFixed(parseInt(token1.decimals))
         }
       }
       this.emitter.emit(ACTIONS.QUOTE_REMOVE_LIQUIDITY_RETURNED, returnVal)
@@ -2805,6 +2807,7 @@ class Store {
 
       // some path logic. Have a base asset (FTM) swap from start asset to FTM, swap from FTM back to out asset. Don't know.
       const routeAssets = this.getStore('routeAssets')
+      
       const { fromAsset, toAsset, fromAmount } = payload.content
 
       const routerContract = new web3.eth.Contract(CONTRACTS.ROUTER_ABI, CONTRACTS.ROUTER_ADDRESS)
@@ -2910,7 +2913,7 @@ class Store {
 
       for(let i = 0; i < receiveAmounts.length; i++) {
         amountOuts[i].receiveAmounts = receiveAmounts[i]
-        amountOuts[i].finalValue = BigNumber(receiveAmounts[i][receiveAmounts[i].length-1]).div(10**toAsset.decimals).toFixed(toAsset.decimals)
+        amountOuts[i].finalValue = BigNumber(receiveAmounts[i][receiveAmounts[i].length-1]).div(10**parseInt(toAsset.decimals)).toFixed(parseInt(toAsset.decimals))
       }
 
       const bestAmountOut = amountOuts.filter((ret) => {
@@ -3114,7 +3117,7 @@ class Store {
           if(asset.address.toLowerCase() === assetAddress.toLowerCase()) {
             if(asset.address === 'FTM') {
               let bal = await web3.eth.getBalance(account.address)
-              asset.balance = BigNumber(bal).div(10 ** asset.decimals).toFixed(asset.decimals)
+              asset.balance = BigNumber(bal).div(10 ** parseInt(asset.decimals)).toFixed(parseInt(asset.decimals))
             } else {
               const assetContract = new web3.eth.Contract(CONTRACTS.ERC20_ABI, asset.address)
 
@@ -3122,7 +3125,7 @@ class Store {
                 assetContract.methods.balanceOf(account.address).call(),
               ])
 
-              asset.balance = BigNumber(balanceOf).div(10 ** asset.decimals).toFixed(asset.decimals)
+              asset.balance = BigNumber(balanceOf).div(10 **parseInt( asset.decimals)).toFixed(parseInt(asset.decimals))
             }
           }
 
@@ -3143,7 +3146,7 @@ class Store {
     try {
       const tokenContract = new web3.eth.Contract(CONTRACTS.ERC20_ABI, token.address)
       const allowance = await tokenContract.methods.allowance(account.address, CONTRACTS.ROUTER_ADDRESS).call()
-      return BigNumber(allowance).div(10**token.decimals).toFixed(token.decimals)
+      return BigNumber(allowance).div(10**parseInt(token.decimals)).toFixed(parseInt(token.decimals))
     } catch (ex) {
       console.error(ex)
       return null
@@ -3183,8 +3186,8 @@ class Store {
           return {
             id: tokenIndex,
             lockEnds: locked.end,
-            lockAmount: BigNumber(locked.amount).div(10**govToken.decimals).toFixed(govToken.decimals),
-            lockValue: BigNumber(lockValue).div(10**veToken.decimals).toFixed(veToken.decimals)
+            lockAmount: BigNumber(locked.amount).div(10**parseInt(govToken.decimals)).toFixed(parseInt(govToken.decimals)),
+            lockValue: BigNumber(lockValue).div(10**parseInt(veToken.decimals)).toFixed(parseInt(veToken.decimals))
           }
         })
       )
@@ -3301,7 +3304,7 @@ class Store {
     try {
       const tokenContract = new web3.eth.Contract(CONTRACTS.ERC20_ABI, token.address)
       const allowance = await tokenContract.methods.allowance(account.address, CONTRACTS.VE_TOKEN_ADDRESS).call()
-      return BigNumber(allowance).div(10**token.decimals).toFixed(token.decimals)
+      return BigNumber(allowance).div(10**parseInt(token.decimals)).toFixed(parseInt(token.decimals))
     } catch (ex) {
       console.error(ex)
       return null
@@ -3722,7 +3725,7 @@ class Store {
     try {
       const tokenContract = new web3.eth.Contract(CONTRACTS.ERC20_ABI, token.address)
       const allowance = await tokenContract.methods.allowance(account.address, pair.gauge.bribeAddress).call()
-      return BigNumber(allowance).div(10**token.decimals).toFixed(token.decimals)
+      return BigNumber(allowance).div(10**parseInt(token.decimals)).toFixed(parseInt(token.decimals))
     } catch (ex) {
       console.error(ex)
       return null
@@ -3761,8 +3764,26 @@ class Store {
       const bribesEarned = await Promise.all(
         filteredPairs.map(async (pair) => {
 
+          const [ rewardsListLength ] = await multicall.aggregate([
+            bribeContract.methods.rewardsListLength(),
+          ])
+         
+
+         if(rewardsListLength>0)
+        {
+              const bribeTokens = [{rewardRate:"",rewardAmount:"",address:""}]
+          for(let i=0;i<rewardsListLength;i++){
+            let [ bribeTokenAddress ] = await multicall.aggregate([
+              bribeContract.methods.rewards(i)
+            ])
+
+            bribeTokens.push({"address":bribeTokenAddress,"rewardAmount":0,"rewardRate":0})
+          }
+
+         bribeTokens.shift()
+
           const bribesEarned = await Promise.all(
-            pair.gauge.bribes.map(async (bribe) => {
+            bribeTokens.map(async (bribe) => {
               const bribeContract = new web3.eth.Contract(CONTRACTS.BRIBE_ABI, pair.gauge.bribeAddress)
 
               const [ earned ] = await Promise.all([
@@ -3770,7 +3791,7 @@ class Store {
               ])
 
               return {
-                earned: BigNumber(earned).div(10**bribe.token.decimals).toFixed(bribe.token.decimals),
+                earned: BigNumber(earned).div(10**parseInt(bribe.token.decimals)).toFixed(parseInt(bribe.token.decimals)),
               }
             })
           )
@@ -3778,6 +3799,7 @@ class Store {
           pair.gauge.bribesEarned = bribesEarned
 
           return pair
+        }
         })
       )
 
@@ -3832,7 +3854,7 @@ class Store {
                   bribeContract.methods.earned(bribe.token.address, tokenID).call(),
                 ])
 
-                bribe.earned = BigNumber(earned).div(10**bribe.token.decimals).toFixed(bribe.token.decimals)
+                bribe.earned = BigNumber(earned).div(10**parseInt(bribe.token.decimals)).toFixed(parseInt(bribe.token.decimals))
                 return bribe
               })
             )
@@ -3873,7 +3895,7 @@ class Store {
             token: theNFT[0],
             lockToken: veToken,
             rewardToken: govToken,
-            earned: BigNumber(veDistEarned).div(10**govToken.decimals).toFixed(govToken.decimals),
+            earned: BigNumber(veDistEarned).div(10**parseInt(govToken.decimals)).toFixed(parseInt(govToken.decimals)),
             rewardType: 'Distribution'
           })
         }
@@ -4347,7 +4369,7 @@ class Store {
 
       const token = await this.getBaseAsset(search)
       token.isWhitelisted = isWhitelisted
-      token.listingFee = BigNumber(listingFee).div(10**veToken.decimals).toFixed(veToken.decimals)
+      token.listingFee = BigNumber(listingFee).div(10**parseInt(veToken.decimals)).toFixed(parseInt(veToken.decimals))
 
       this.emitter.emit(ACTIONS.SEARCH_WHITELIST_RETURNED, token)
     } catch(ex) {
