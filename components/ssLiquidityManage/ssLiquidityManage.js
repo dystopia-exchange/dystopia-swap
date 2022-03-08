@@ -246,9 +246,9 @@ export default function ssLiquidityManage() {
         setAmount1('')
       } else {
         if(invert) {
-          amountB = BigNumber(amountA).times(pp.reserve0).div(pp.reserve1).toFixed(pp.token0.decimals>6?6:pp.token0.decimals)
+          amountB = BigNumber(amountA).times(parseInt(pp.reserve0)).div(parseInt(pp.reserve1)).toFixed(parseInt(pp.token0.decimals)>6?6:parseInt(pp.token0.decimals))
         } else {
-          amountB = BigNumber(amountA).times(pp.reserve1).div(pp.reserve0).toFixed(pp.token1.decimals>6?6:pp.token1.decimals)
+          amountB = BigNumber(amountA).times(parseInt(pp.reserve1)).div(parseInt(pp.reserve0)).toFixed(parseInt(pp.token1.decimals)>6?6:parseInt(pp.token1.decimals))
         }
         setAmount1(amountB)
       }
@@ -258,9 +258,9 @@ export default function ssLiquidityManage() {
         setAmount0('')
       } else {
         if(invert) {
-          amountA = BigNumber(amountB).times(pp.reserve1).div(pp.reserve0).toFixed(pp.token1.decimals>6?6:pp.token1.decimals)
+          amountA = BigNumber(amountB).times(parseInt(pp.reserve1)).div(parseInt(pp.reserve0)).toFixed(parseInt(pp.token1.decimals)>6?6:parseInt(pp.token1.decimals))
         } else {
-          amountA = BigNumber(amountB).times(pp.reserve0).div(pp.reserve1).toFixed(pp.token0.decimals>6?6:pp.token0.decimals)
+          amountA = BigNumber(amountB).times(parseInt(pp.reserve0)).div(parseInt(pp.reserve1)).toFixed(parseInt(pp.token0.decimals)>6?6:parseInt(pp.token0.decimals))
         }
         setAmount0(amountA)
       }
@@ -310,13 +310,13 @@ export default function ssLiquidityManage() {
     setAmount1Error(false)
 
     if(input === 'amount0') {
-      let am = BigNumber(asset0.balance).times(percent).div(100).toFixed(asset0.decimals)
+      let am = BigNumber(asset0.balance).times(percent).div(100).toFixed(parseInt(asset0.decimals))
       setAmount0(am);
       amount0Ref.current.focus();
       callQuoteAddLiquidity(am, amount1, 0, stable, pair, asset0, asset1)
 
     } else if (input === 'amount1') {
-      let am = BigNumber(asset1.balance).times(percent).div(100).toFixed(asset1.decimals)
+      let am = BigNumber(asset1.balance).times(percent).div(100).toFixed(parseInt(asset1.decimals))
       setAmount1(am);
       amount1Ref.current.focus();
       callQuoteAddLiquidity(amount0, am, 1, stable, pair, asset0, asset1)
