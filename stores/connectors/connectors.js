@@ -6,7 +6,7 @@ import { NetworkConnector } from "@web3-react/network-connector";
 const POLLING_INTERVAL = 12000;
 const RPC_URLS = {
   250: "https://rpc.ftm.tools",
-  80001: "https://polygon-mumbai.g.alchemy.com/v2/z31K9anv5tvGi7AxPhtSSD2FCBJvK0Wj"
+  80001: "https://polygon-mumbai.g.alchemy.com/v2/5pRr0lzXltpqOfMV92aaHImC69sKCcub"
 };
 
 let obj = {}

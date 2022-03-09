@@ -3598,12 +3598,12 @@ class Store {
       const gaugesContract = new web3.eth.Contract(CONTRACTS.VOTER_ABI, CONTRACTS.VOTER_ADDRESS)
 
       const multicall = await stores.accountStore.getMulticall()
-
       const calls = filteredPairs.map((pair) => {
         return gaugesContract.methods.votes(tokenID, pair.address)
       })
 
       const voteCounts = await multicall.aggregate(calls);
+      console.log(voteCounts,"hiii")
 
       let votes = []
 
@@ -3615,7 +3615,7 @@ class Store {
       for(let i = 0; i < voteCounts.length; i++) {
         votes.push({
           address: filteredPairs[i].address,
-          votePercent: (BigNumber(totalVotes).gt(0) || BigNumber(totalVotes).lt(0)) ? BigNumber(voteCounts[i]).times(100).div(totalVotes).toFixed(0) : '0'
+          votePercent: (BigNumber(totalVotes).gt(0) || BigNumber(totalVotes).lt(0)) ? BigNumber(voteCounts[i]).times(100).div(parseInt(totalVotes)).toFixed(0) : '0'
         })
       }
 
@@ -3842,18 +3842,39 @@ class Store {
       let filteredBribes = []
 
       if(tokenID) {
+        const bribeContract = new web3.eth.Contract(CONTRACTS.BRIBE_ABI, pair.gauge.bribeAddress)
+        const [ rewardsListLength ] = await multicall.aggregate([
+          bribeContract.methods.rewardsListLength(),
+        ])
+       
+
+      
+            const bribeTokens = [{rewardRate:"",rewardAmount:"",address:""}]
+        for(let i=0;i<rewardsListLength;i++){
+          let [ bribeTokenAddress ] = await multicall.aggregate([
+            bribeContract.methods.rewards(i)
+          ])
+
+          bribeTokens.push({"address":bribeTokenAddress,"rewardAmount":0,"rewardRate":0})
+        }
+
+       bribeTokens.shift()
+
         const bribesEarned = await Promise.all(
           filteredPairs.map(async (pair) => {
 
             const bribesEarned = await Promise.all(
-              pair.gauge.bribes.map(async (bribe) => {
+              bribeTokens.map(async (bribe) => {
                 const bribeContract = new web3.eth.Contract(CONTRACTS.BRIBE_ABI, pair.gauge.bribeAddress)
 
                 const [ earned ] = await Promise.all([
-                  bribeContract.methods.earned(bribe.token.address, tokenID).call(),
+                  bribeContract.methods.earned(bribe.address, tokenID).call(),
                 ])
-
-                bribe.earned = BigNumber(earned).div(10**parseInt(bribe.token.decimals)).toFixed(parseInt(bribe.token.decimals))
+                const tokenContract = new web3.eth.Contract(CONTRACTS.ERC20_ABI,bribe.address)
+                const [ decimals ] = await multicall.aggregate([
+                  tokenContract.methods.decimals(),
+                ])
+                bribe.earned = BigNumber(earned).div(10**parseInt(decimals)).toFixed(parseInt(decimals))
                 return bribe
               })
             )
