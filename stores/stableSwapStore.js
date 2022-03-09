@@ -1183,7 +1183,6 @@ class Store {
         baseAssets[i].balance = BigNumber(baseAssetsBalances[i].balanceOf).div(10 ** parseInt(baseAssets[i].decimals)).toFixed(parseInt(baseAssets[i].decimals))
         baseAssets[i].isWhitelisted = baseAssetsBalances[i].isWhitelisted
       }
-      console.log(baseAssets,"hiii2")
       this.setStore({ baseAssets })
       this.emitter.emit(ACTIONS.UPDATED)
     } catch (ex) {
@@ -2807,11 +2806,11 @@ class Store {
 
       // some path logic. Have a base asset (FTM) swap from start asset to FTM, swap from FTM back to out asset. Don't know.
       const routeAssets = this.getStore('routeAssets')
-      
+
       const { fromAsset, toAsset, fromAmount } = payload.content
 
       const routerContract = new web3.eth.Contract(CONTRACTS.ROUTER_ABI, CONTRACTS.ROUTER_ADDRESS)
-      const sendFromAmount = BigNumber(fromAmount).times(10**fromAsset.decimals).toFixed()
+      const sendFromAmount = BigNumber(fromAmount).times(10**parseInt(fromAsset.decimals)).toFixed()
 
       if (!fromAsset || !toAsset || !fromAmount || !fromAsset.address || !toAsset.address || fromAmount === '') {
         return null
@@ -2826,13 +2825,13 @@ class Store {
       if(toAsset.address === 'FTM') {
         addy1 = CONTRACTS.WFTM_ADDRESS
       }
-
-      const includesRouteAddress = routeAssets.filter((asset) => {
+      
+      const includesRouteAddress = Array.isArray(routeAssets) ? routeAssets.filter((asset) => {
         return (asset.address.toLowerCase() == addy0.toLowerCase() || asset.address.toLowerCase() == addy1.toLowerCase())
-      })
+      }):routeAssets
 
       let amountOuts = []
-
+     
       if(includesRouteAddress.length === 0) {
         amountOuts = routeAssets.map((routeAsset) => {
           return [
