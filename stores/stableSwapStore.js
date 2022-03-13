@@ -24,6 +24,7 @@ query {
      decimals
      symbol
      isStable 
+     rewardType
     token0{
      address
       chainId
@@ -537,10 +538,10 @@ class Store {
 
   getPair = async (addressA, addressB, stab) => {
 
-    if(addressA === 'FTM') {
+    if(addressA === 'MATIC') {
       addressA = CONTRACTS.WFTM_ADDRESS
     }
-    if(addressB === 'FTM') {
+    if(addressB === 'MATIC') {
       addressB = CONTRACTS.WFTM_ADDRESS
     }
 
@@ -1148,7 +1149,7 @@ class Store {
       const baseAssetsBalances = await Promise.all(
         baseAssets.map(async (asset) => {
           try {
-            if(asset.address === 'FTM') {
+            if(asset.address === 'MATIC') {
               let bal = await web3.eth.getBalance(account.address)
               return {
                 balanceOf: bal,
@@ -1257,10 +1258,10 @@ class Store {
 
       let toki0 = token0.address
       let toki1 = token1.address
-      if(token0.address === 'FTM') {
+      if(token0.address === 'MATIC') {
         toki0 = CONTRACTS.WFTM_ADDRESS
       }
-      if(token1.address === 'FTM') {
+      if(token1.address === 'MATIC') {
         toki1 = CONTRACTS.WFTM_ADDRESS
       }
 
@@ -1320,7 +1321,7 @@ class Store {
       let allowance1 = 0
 
       // CHECK ALLOWANCES AND SET TX DISPLAY
-      if(token0.address !== 'FTM') {
+      if(token0.address !== 'MATIC') {
         allowance0 = await this._getDepositAllowance(web3, token0, account)
         if(BigNumber(allowance0).lt(amount0)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -1343,7 +1344,7 @@ class Store {
         })
       }
 
-      if(token1.address !== 'FTM') {
+      if(token1.address !== 'MATIC') {
         allowance1 = await this._getDepositAllowance(web3, token1, account)
         if(BigNumber(allowance1).lt(amount1)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -1422,13 +1423,13 @@ class Store {
       let params = [token0.address, token1.address, isStable, sendAmount0, sendAmount1, sendAmount0Min, sendAmount1Min, account.address, deadline]
       let sendValue = null
 
-      if(token0.address === 'FTM') {
-        func = 'addLiquidityFTM'
+      if(token0.address === 'MATIC') {
+        func = 'addLiquidityMATIC'
         params = [token1.address, isStable, sendAmount1, sendAmount1Min, sendAmount0Min, account.address, deadline]
         sendValue = sendAmount0
       }
-      if(token1.address === 'FTM') {
-        func = 'addLiquidityFTM'
+      if(token1.address === 'MATIC') {
+        func = 'addLiquidityMATIC'
         params = [token0.address, isStable, sendAmount0, sendAmount0Min, sendAmount1Min, account.address, deadline]
         sendValue = sendAmount1
       }
@@ -1442,10 +1443,10 @@ class Store {
         // GET PAIR FOR NEWLY CREATED LIQUIDITY POOL
         let tok0 = token0.address
         let tok1 = token1.address
-        if(token0.address === 'FTM') {
+        if(token0.address === 'MATIC') {
           tok0 = CONTRACTS.WFTM_ADDRESS
         }
-        if(token1.address === 'FTM') {
+        if(token1.address === 'MATIC') {
           tok1 = CONTRACTS.WFTM_ADDRESS
         }
         const pairFor = await factoryContract.methods.getPair(tok0, tok1, isStable).call()
@@ -1525,7 +1526,6 @@ class Store {
   createPairDeposit = async (payload) => {
     try {
       const context = this
-
       const account = stores.accountStore.getStore("account")
       if (!account) {
         console.warn('account not found')
@@ -1542,14 +1542,13 @@ class Store {
 
       let toki0 = token0.address
       let toki1 = token1.address
-      if(token0.address === 'FTM') {
+      if(token0.address === 'MATIC') {
         toki0 = CONTRACTS.WFTM_ADDRESS
       }
-      if(token1.address === 'FTM') {
+      if(token1.address === 'MATIC') {
         toki1 = CONTRACTS.WFTM_ADDRESS
       }
-
-
+      
       const factoryContract = new web3.eth.Contract(CONTRACTS.FACTORY_ABI, CONTRACTS.FACTORY_ADDRESS)
       const pairFor = await factoryContract.methods.getPair(toki0, toki1, isStable).call()
 
@@ -1594,7 +1593,7 @@ class Store {
       let allowance1 = 0
 
       // CHECK ALLOWANCES AND SET TX DISPLAY
-      if(token0.address !== 'FTM') {
+      if(token0.address !== 'MATIC') {
         allowance0 = await this._getDepositAllowance(web3, token0, account)
         if(BigNumber(allowance0).lt(amount0)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -1617,7 +1616,7 @@ class Store {
         })
       }
 
-      if(token1.address !== 'FTM') {
+      if(token1.address !== 'MATIC') {
         allowance1 = await this._getDepositAllowance(web3, token1, account)
         if(BigNumber(allowance1).lt(amount1)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -1697,17 +1696,17 @@ class Store {
       let params = [token0.address, token1.address, isStable, sendAmount0, sendAmount1, sendAmount0Min, sendAmount1Min, account.address, deadline]
       let sendValue = null
 
-      if(token0.address === 'FTM') {
-        func = 'addLiquidityFTM'
+      if(token0.address === 'MATIC') {
+        func = 'addLiquidityMATIC'
         params = [token1.address, isStable, sendAmount1, sendAmount1Min, sendAmount0Min, account.address, deadline]
         sendValue = sendAmount0
       }
-      if(token1.address === 'FTM') {
-        func = 'addLiquidityFTM'
+      if(token1.address === 'MATIC') {
+        func = 'addLiquidityMATIC'
         params = [token0.address, isStable, sendAmount0, sendAmount0Min, sendAmount1Min, account.address, deadline]
         sendValue = sendAmount1
       }
-
+console.log(params,sendValue,"hiii")
       const routerContract = new web3.eth.Contract(CONTRACTS.ROUTER_ABI, CONTRACTS.ROUTER_ADDRESS)
       this._callContractWait(web3, routerContract, func, params, account, gasPrice, null, null, depositTXID, async (err) => {
         if (err) {
@@ -1717,10 +1716,10 @@ class Store {
         // GET PAIR FOR NEWLY CREATED LIQUIDITY POOL
         let tok0 = token0.address
         let tok1 = token1.address
-        if(token0.address === 'FTM') {
+        if(token0.address === 'MATIC') {
           tok0 = CONTRACTS.WFTM_ADDRESS
         }
-        if(token1.address === 'FTM') {
+        if(token1.address === 'MATIC') {
           tok1 = CONTRACTS.WFTM_ADDRESS
         }
         const pairFor = await factoryContract.methods.getPair(tok0, tok1, isStable).call()
@@ -1810,7 +1809,7 @@ class Store {
       let allowance1 = 0
 
       // CHECK ALLOWANCES AND SET TX DISPLAY
-      if(token0.address !== 'FTM') {
+      if(token0.address !== 'MATIC') {
         allowance0 = await this._getDepositAllowance(web3, token0, account)
         if(BigNumber(allowance0).lt(amount0)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -1833,7 +1832,7 @@ class Store {
         })
       }
 
-      if(token1.address !== 'FTM') {
+      if(token1.address !== 'MATIC') {
         allowance1 = await this._getDepositAllowance(web3, token1, account)
         if(BigNumber(allowance1).lt(amount1)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -1915,13 +1914,13 @@ class Store {
       let params = [token0.address, token1.address, pair.isStable, sendAmount0, sendAmount1, sendAmount0Min, sendAmount1Min, account.address, deadline]
       let sendValue = null
 
-      if(token0.address === 'FTM') {
-        func = 'addLiquidityFTM'
+      if(token0.address === 'MATIC') {
+        func = 'addLiquidityMATIC'
         params = [token1.address, pair.isStable, sendAmount1, sendAmount1Min, sendAmount0Min, account.address, deadline]
         sendValue = sendAmount0
       }
-      if(token1.address === 'FTM') {
-        func = 'addLiquidityFTM'
+      if(token1.address === 'MATIC') {
+        func = 'addLiquidityMATIC'
         params = [token0.address, pair.isStable, sendAmount0, sendAmount0Min, sendAmount1Min, account.address, deadline]
         sendValue = sendAmount1
       }
@@ -2099,7 +2098,7 @@ class Store {
       let allowance1 = 0
 
       // CHECK ALLOWANCES AND SET TX DISPLAY
-      if(token0.address !== 'FTM') {
+      if(token0.address !== 'MATIC') {
         allowance0 = await this._getDepositAllowance(web3, token0, account)
         if(BigNumber(allowance0).lt(amount0)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -2122,7 +2121,7 @@ class Store {
         })
       }
 
-      if(token1.address !== 'FTM') {
+      if(token1.address !== 'MATIC') {
         allowance1 = await this._getDepositAllowance(web3, token1, account)
         if(BigNumber(allowance1).lt(amount1)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -2239,13 +2238,13 @@ class Store {
       let params = [token0.address, token1.address, pair.isStable, sendAmount0, sendAmount1, sendAmount0Min, sendAmount1Min, account.address, deadline]
       let sendValue = null
 
-      if(token0.address === 'FTM') {
-        func = 'addLiquidityFTM'
+      if(token0.address === 'MATIC') {
+        func = 'addLiquidityMATIC'
         params = [token1.address, pair.isStable, sendAmount1, sendAmount1Min, sendAmount0Min, account.address, deadline]
         sendValue = sendAmount0
       }
-      if(token1.address === 'FTM') {
-        func = 'addLiquidityFTM'
+      if(token1.address === 'MATIC') {
+        func = 'addLiquidityMATIC'
         params = [token0.address, pair.isStable, sendAmount0, sendAmount0Min, sendAmount1Min, account.address, deadline]
         sendValue = sendAmount1
       }
@@ -2341,10 +2340,10 @@ class Store {
       let addy0 = token0.address
       let addy1 = token1.address
 
-      if(token0.address === 'FTM') {
+      if(token0.address === 'MATIC') {
         addy0 = CONTRACTS.WFTM_ADDRESS
       }
-      if(token1.address === 'FTM') {
+      if(token1.address === 'MATIC') {
         addy1 = CONTRACTS.WFTM_ADDRESS
       }
 
@@ -2819,10 +2818,10 @@ class Store {
       let addy0 = fromAsset.address
       let addy1 = toAsset.address
 
-      if(fromAsset.address === 'FTM') {
+      if(fromAsset.address === 'MATIC') {
         addy0 = CONTRACTS.WFTM_ADDRESS
       }
-      if(toAsset.address === 'FTM') {
+      if(toAsset.address === 'MATIC') {
         addy1 = CONTRACTS.WFTM_ADDRESS
       }
       
@@ -3014,7 +3013,7 @@ class Store {
       let allowance = 0
 
       // CHECK ALLOWANCES AND SET TX DISPLAY
-      if(fromAsset.address !== 'FTM') {
+      if(fromAsset.address !== 'MATIC') {
         allowance = await this._getSwapAllowance(web3, fromAsset, account)
 
         if(BigNumber(allowance).lt(fromAmount)) {
@@ -3076,13 +3075,13 @@ class Store {
       let params = [sendFromAmount, sendMinAmountOut, quote.output.routes, account.address, deadline]
       let sendValue = null
 
-      if(fromAsset.address === 'FTM') {
-        func = 'swapExactFTMForTokens'
+      if(fromAsset.address === 'MATIC') {
+        func = 'swapExactMATICForTokens'
         params = [sendMinAmountOut, quote.output.routes, account.address, deadline]
         sendValue = sendFromAmount
       }
-      if(toAsset.address === 'FTM') {
-        func = 'swapExactTokensForFTM'
+      if(toAsset.address === 'MATIC') {
+        func = 'swapExactTokensForMATIC'
       }
 
       this._callContractWait(web3, routerContract, func, params, account, gasPrice, null, null, swapTXID, (err) => {
@@ -3114,7 +3113,7 @@ class Store {
       const ba = await Promise.all(
         baseAssets.map(async (asset) => {
           if(asset.address.toLowerCase() === assetAddress.toLowerCase()) {
-            if(asset.address === 'FTM') {
+            if(asset.address === 'MATIC') {
               let bal = await web3.eth.getBalance(account.address)
               asset.balance = BigNumber(bal).div(10 ** parseInt(asset.decimals)).toFixed(parseInt(asset.decimals))
             } else {
@@ -3603,7 +3602,6 @@ class Store {
       })
 
       const voteCounts = await multicall.aggregate(calls);
-      console.log(voteCounts,"hiii")
 
       let votes = []
 
@@ -3849,7 +3847,7 @@ class Store {
        
 
       
-            const bribeTokens = [{rewardRate:"",rewardAmount:"",address:""}]
+        const bribeTokens = [{rewardRate:"",rewardAmount:"",address:""}]
         for(let i=0;i<rewardsListLength;i++){
           let [ bribeTokenAddress ] = await multicall.aggregate([
             bribeContract.methods.rewards(i)
@@ -3939,12 +3937,12 @@ class Store {
           const [ earned ] = await Promise.all([
             gaugeContract.methods.earned(CONTRACTS.GOV_TOKEN_ADDRESS, account.address).call(),
           ])
-
           pair.gauge.rewardsEarned = BigNumber(earned).div(10**18).toFixed(18)
           return pair
         })
       )
-
+      
+      
       const filteredRewards = []
       for(let j = 0; j < rewardsEarned.length; j++) {
         let pair = Object.assign({}, rewardsEarned[j])
@@ -3953,7 +3951,6 @@ class Store {
           filteredRewards.push(pair)
         }
       }
-
       console.log(filteredBribes)
       console.log(filteredFees)
       console.log(filteredRewards)
@@ -4364,6 +4361,7 @@ class Store {
 
   searchWhitelist = async (payload) => {
     try {
+      console.log(payload,"hiii2")
       const account = stores.accountStore.getStore("account")
       if (!account) {
         console.warn('account not found')

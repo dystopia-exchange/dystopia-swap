@@ -91,6 +91,7 @@ export default function ssWhitelist() {
 
   const renderToken = () => {
     return (
+      
       <Paper className={ classes.tokenContainer }>
         <div className={ classes.inline }>
           <img src={token.logoURI} alt='' width='70' height='70' className={ classes.tokenLogo } />
@@ -223,6 +224,7 @@ export default function ssWhitelist() {
       </div>
       <div className={ classes.results }>
         { loading && <CircularProgress />}
+        {console.log(token  ,"hiii")}
         { token && token.address && renderToken()}
       </div>
     </div>
