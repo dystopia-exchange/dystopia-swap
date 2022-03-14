@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Typography, Button, TextField, InputAdornment, CircularProgress } from '@material-ui/core';
+import { Grid, Typography, Button, TextField, InputAdornment, CircularProgress } from '@mui/material';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import moment from 'moment';

@@ -1,15 +1,10 @@
 import React, { Component, useState, useEffect } from "react";
-import { Typography, Button, CircularProgress, Tooltip } from "@material-ui/core";
+import { Typography, Button, CircularProgress, Tooltip } from "@mui/material";
 import classes from './transactionQueue.module.css';
-
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
-import HourglassFullIcon from '@material-ui/icons/HourglassFull';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ErrorIcon from '@material-ui/icons/Error';
-import PauseIcon from '@material-ui/icons/Pause';
 
 import { ACTIONS, ETHERSCAN_URL } from '../../stores/constants';
 import { formatAddress } from '../../utils'
+import { HourglassEmpty, HourglassFull, CheckCircle, Error, Pause } from '@mui/icons-material';
 
 export default function Transaction({ transaction }) {
 
@@ -18,17 +13,17 @@ export default function Transaction({ transaction }) {
   const mapStatusToIcon = (status) => {
     switch (status) {
       case 'WAITING':
-        return <PauseIcon className={ classes.orangeIcon }  />
+        return <Pause className={ classes.orangeIcon }  />
       case 'PENDING':
-        return <HourglassEmptyIcon className={ classes.greenIcon }  />
+        return <HourglassEmpty className={ classes.greenIcon }  />
       case 'SUBMITTED':
-        return <HourglassFullIcon className={ classes.greenIcon }  />
+        return <HourglassFull className={ classes.greenIcon }  />
       case 'CONFIRMED':
-        return <CheckCircleIcon className={ classes.greenIcon }  />
+        return <CheckCircle className={ classes.greenIcon }  />
       case 'REJECTED':
-        return <ErrorIcon className={ classes.redIcon }  />
+        return <Error className={ classes.redIcon }  />
       case 'DONE':
-        return <CheckCircleIcon className={ classes.greenIcon } />
+        return <CheckCircle className={ classes.greenIcon } />
       default:
     }
   }

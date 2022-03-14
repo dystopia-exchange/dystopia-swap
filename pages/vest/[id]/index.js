@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import BigNumber from 'bignumber.js';
-import { Typography, Button, Paper, SvgIcon, Grid } from "@material-ui/core";
+import { Typography, Button, Paper, SvgIcon, Grid } from "@mui/material";
 import Vesting from '../../../components/ssVest';
 
 import classes from './vest.module.css';

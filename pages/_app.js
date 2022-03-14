@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
 import Layout from "../components/layout/layout.js";
-import { ThemeProvider } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import CssBaseline from "@mui/material/CssBaseline";
 import { useRouter } from "next/router";
 
 import { AppThemeProvider, useAppTheme } from "../ui/AppThemeProvider";
@@ -16,6 +15,7 @@ import stores from "../stores/index.js";
 import { ACTIONS } from "../stores/constants";
 import "../styles/global.css";
 import "../styles/variables.css";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -79,26 +79,36 @@ export default function MyApp({ Component, pageProps }) {
     }
   };
 
+  const theme = createTheme({
+    components: {
+      typography: {
+        fontFamily: 'Roboto-Mono, Arial',
+      },
+    },
+  });
+
   return (
-    <React.Fragment>
-      <Head>
-        <title>Solidly</title>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-        />
-      </Head>
-      <AppThemeProvider value={{ appTheme, setAppTheme }}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        {validateConfigured() && (
-          <Layout>
-            <Component {...pageProps} changeTheme={changeTheme} />
-          </Layout>
-        )}
-        {!validateConfigured() && <Configure {...pageProps} />}
-      </AppThemeProvider>
-    </React.Fragment>
+    <ThemeProvider theme={theme}>
+      <React.Fragment>
+        <Head>
+          <title>Solidly</title>
+          <meta
+            name="viewport"
+            content="minimum-scale=1, initial-scale=1, width=device-width"
+          />
+        </Head>
+        <AppThemeProvider value={{appTheme, setAppTheme}}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline/>
+          {validateConfigured() && (
+            <Layout>
+              <Component {...pageProps} changeTheme={changeTheme}/>
+            </Layout>
+          )}
+          {!validateConfigured() && <Configure {...pageProps} />}
+        </AppThemeProvider>
+      </React.Fragment>
+    </ThemeProvider>
   );
 }
 

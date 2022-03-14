@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Paper, Typography, Button, CircularProgress, IconButton } from '@material-ui/core';
+import { Paper, Typography, Button, CircularProgress, IconButton } from '@mui/material';
 import classes from "./ssVest.module.css";
 
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { ArrowBack } from '@mui/icons-material';
 import VestingInfo from './vestingInfo'
 import stores from '../../stores'
 import {
@@ -46,7 +46,7 @@ export default function Unlock({ nft, govToken, veToken }) {
     <Paper elevation={0} className={ classes.container2 }>
       <div className={ classes.titleSection }>
         <IconButton className={ classes.backButton } onClick={ onBack }>
-          <ArrowBackIcon className={ classes.backIcon } />
+          <ArrowBack className={ classes.backIcon } />
         </IconButton>
         <Typography className={ classes.titleText }>Manage Existing Lock</Typography>
       </div>

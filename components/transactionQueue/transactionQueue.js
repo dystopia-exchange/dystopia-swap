@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Typography, Button, CircularProgress, DialogContent, Dialog, Slide, IconButton } from "@material-ui/core";
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
-import CloseIcon from '@material-ui/icons/Close';
+import React, { useState, useEffect } from "react";
+import { Typography, DialogContent, Dialog, Slide, IconButton } from "@mui/material";
+import { OpenInNew, Close } from '@mui/icons-material';
 
 import Lottie from "lottie-react";
 import successAnim from "../../public/lottiefiles/successAnim.json";
@@ -157,7 +156,7 @@ export default function TransactionQueue({ setQueueLength }) {
             return tx.txHash != null
           }).map((tx, idx) => {
             return (<Typography className={ classes.viewDetailsText } key={`tx_key_${idx}`}>
-              <a href={`${ETHERSCAN_URL}tx/${tx?.txHash}`} target="_blank">{ tx && tx.description ? tx.description : 'View in Explorer' } <OpenInNewIcon className={classes.newWindowIcon} /></a>
+              <a href={`${ETHERSCAN_URL}tx/${tx?.txHash}`} target="_blank">{ tx && tx.description ? tx.description : 'View in Explorer' } <OpenInNew className={classes.newWindowIcon} /></a>
             </Typography>)
           })
         }
@@ -199,7 +198,7 @@ export default function TransactionQueue({ setQueueLength }) {
       <DialogContent>
         <IconButton className={ classes.closeIconbutton }
           onClick={handleClose}>
-          <CloseIcon />
+          <Close />
         </IconButton>
         { renderTransactions(transactions) }
         { renderDone(transactions) }

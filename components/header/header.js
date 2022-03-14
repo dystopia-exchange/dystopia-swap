@@ -12,13 +12,9 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
-} from "@material-ui/core";
-import { withStyles, withTheme } from "@material-ui/core/styles";
-import HelpIcon from "@material-ui/icons/Help";
-import ListIcon from "@material-ui/icons/List";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import AccountBalanceWalletOutlinedIcon from "@material-ui/icons/AccountBalanceWalletOutlined";
-import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
+} from "@mui/material";
+import { withStyles, withTheme } from "@mui/styles";
+import { List, ArrowDropDown, AccountBalanceWalletOutlined, DashboardOutlined } from "@mui/icons-material";
 
 import Navigation from "../navigation";
 import Unlock from "../unlock";
@@ -196,7 +192,7 @@ function Header(props) {
 
   const [account, setAccount] = useState(accountStore);
   const [darkMode, setDarkMode] = useState(
-    props.theme.palette.type === "dark" ? true : false
+    props.theme.palette.mode === "dark" ? true : false
   );
   const [unlockOpen, setUnlockOpen] = useState(false);
   const [chainInvalid, setChainInvalid] = useState(false);
@@ -318,7 +314,7 @@ function Header(props) {
                 color="secondary"
                 overlap="circular"
               >
-                <ListIcon className={classes.iconColor} />
+                <List className={classes.iconColor} />
               </StyledBadge>
             </IconButton>
           )}
@@ -343,7 +339,7 @@ function Header(props) {
                     ? formatAddress(account.address)
                     : "Connect Wallet"}
                 </Typography>
-                <ArrowDropDownIcon className={classes.ddIcon} />
+                <ArrowDropDown className={classes.ddIcon} />
               </Button>
 
               <StyledMenu
@@ -359,7 +355,7 @@ function Header(props) {
                   onClick={() => router.push("/dashboard")}
                 >
                   <ListItemIcon className={classes.userMenuIcon}>
-                    <DashboardOutlinedIcon fontSize="small" />
+                    <DashboardOutlined fontSize="small" />
                   </ListItemIcon>
                   <ListItemText
                     className={classes.userMenuText}
@@ -368,7 +364,7 @@ function Header(props) {
                 </StyledMenuItem>
                 <StyledMenuItem onClick={onAddressClicked}>
                   <ListItemIcon className={classes.userMenuIcon}>
-                    <AccountBalanceWalletOutlinedIcon fontSize="small" />
+                    <AccountBalanceWalletOutlined fontSize="small" />
                   </ListItemIcon>
                   <ListItemText
                     className={classes.userMenuText}

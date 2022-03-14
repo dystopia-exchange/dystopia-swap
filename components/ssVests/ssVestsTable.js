@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Skeleton from '@material-ui/lab/Skeleton';
-import { Paper, Button, Table, TableBody, TableCell, InputAdornment, TableContainer, TableHead, TableRow, TableSortLabel, TablePagination, Typography, Tooltip, Toolbar, Grid } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
+import Skeleton from '@mui/lab/Skeleton';
+import { Paper, Button, Table, TableBody, TableCell, InputAdornment, TableContainer, TableHead, TableRow, TableSortLabel, TablePagination, Typography, Tooltip, Toolbar, Grid } from '@mui/material';
 import { useRouter } from "next/router";
-import BigNumber from 'bignumber.js';
-import EnhancedEncryptionOutlinedIcon from '@material-ui/icons/EnhancedEncryptionOutlined';
+import { EnhancedEncryptionOutlined } from '@mui/icons-material';
 import moment from 'moment';
 
 import { formatCurrency } from '../../utils';
@@ -280,7 +279,7 @@ const EnhancedTableToolbar = (props) => {
           <Button
             variant="contained"
             color="secondary"
-            startIcon={<EnhancedEncryptionOutlinedIcon />}
+            startIcon={<EnhancedEncryptionOutlined />}
             size='large'
             className={ classes.buttonOverride }
             color='primary'

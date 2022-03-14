@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Grid, Typography, SvgIcon } from '@material-ui/core';
+import { Paper, Grid, Typography, SvgIcon } from '@mui/material';
 
 import { formatCurrency } from '../../utils';
 import classes from './ffDashboardVoteOverview.module.css';

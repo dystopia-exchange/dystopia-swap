@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Skeleton from '@material-ui/lab/Skeleton';
 import {
   Paper,
   Button,
@@ -14,21 +12,11 @@ import {
   TableSortLabel,
   TablePagination,
   Typography,
-  Tooltip,
-  Toolbar,
-  IconButton,
-  TextField,
-  InputAdornment,
-  Popper,
-  Fade,
-  Grid,
-  Switch,
-  Select,
-  MenuItem
-} from '@material-ui/core';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Skeleton } from '@mui/lab';
 import { useRouter } from "next/router";
 import BigNumber from 'bignumber.js';
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 import { formatCurrency } from '../../utils';
 import stores from '../../stores'

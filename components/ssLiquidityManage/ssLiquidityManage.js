@@ -1,21 +1,30 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { useRouter } from 'next/router'
-import { Paper, Grid, Typography, Button, TextField, InputAdornment, CircularProgress, Tooltip, IconButton, FormControlLabel, Switch, Select, MenuItem, Dialog  } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
-import { formatCurrency } from '../../utils'
-import classes from './ssLiquidityManage.module.css'
-
-import AddIcon from '@material-ui/icons/Add'
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
-import ArrowBackIcon from '@material-ui/icons/ArrowBack'
-import SearchIcon from '@material-ui/icons/Search'
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
-
-import stores from '../../stores'
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useRouter } from 'next/router';
+import {
+  Paper,
+  Grid,
+  Typography,
+  Button,
+  TextField,
+  InputAdornment,
+  CircularProgress,
+  Tooltip,
+  IconButton,
+  FormControlLabel,
+  Switch,
+  Select,
+  MenuItem,
+  Dialog,
+} from '@mui/material';
+import BigNumber from 'bignumber.js';
+import { formatCurrency } from '../../utils';
+import classes from './ssLiquidityManage.module.css';
+import stores from '../../stores';
 import {
   ACTIONS,
-  CONTRACTS
+  CONTRACTS,
 } from '../../stores/constants';
+import { Add, ArrowDownward, ArrowBack, Search, DeleteOutline } from '@mui/icons-material';
 
 export default function ssLiquidityManage() {
 
@@ -1045,7 +1054,7 @@ export default function ssLiquidityManage() {
         <div className={ classes.titleSection }>
           <Tooltip title="Back to Liquidity" placement="top">
           <IconButton className={ classes.backButton } onClick={ onBack }>
-            <ArrowBackIcon className={ classes.backIcon } />
+            <ArrowBack className={ classes.backIcon } />
           </IconButton>
           </Tooltip>
           <Typography className={ classes.titleText }>Manage Liquidity Pair</Typography>
@@ -1058,7 +1067,7 @@ export default function ssLiquidityManage() {
                 { renderMassiveInput('amount0', amount0, amount0Error, amount0Changed, asset0, null, assetOptions, onAssetSelect, amount0Focused, amount0Ref) }
                 <div className={ classes.swapIconContainer }>
                   <div className={ classes.swapIconSubContainer }>
-                    <AddIcon className={ classes.swapIcon } />
+                    <Add className={ classes.swapIcon } />
                   </div>
                 </div>
                 { renderMassiveInput('amount1', amount1, amount1Error, amount1Changed, asset1, null, assetOptions, onAssetSelect, amount1Focused, amount1Ref) }
@@ -1073,7 +1082,7 @@ export default function ssLiquidityManage() {
                 { renderMassiveInput('withdraw', withdrawAmount, withdrawAmountError, withdrawAmountChanged, withdrawAsset, null, withdrawAassetOptions, onAssetSelect, null, null) }
                 <div className={ classes.swapIconContainer }>
                   <div className={ classes.swapIconSubContainer }>
-                    <ArrowDownwardIcon className={ classes.swapIcon } />
+                    <ArrowDownward className={ classes.swapIcon } />
                   </div>
                 </div>
                 <div className={ classes.receiveAssets }>
@@ -1383,7 +1392,7 @@ function AssetSelect({ type, value, assetOptions, onSelect, disabled }) {
         </div>
         <div className={ classes.assetSelectActions}>
           <IconButton onClick={ () => { deleteOption(asset) } }>
-            <DeleteOutlineIcon />
+            <DeleteOutline />
           </IconButton>
           <IconButton onClick={ () => { viewOption(asset) } }>
             ↗
@@ -1433,7 +1442,7 @@ function AssetSelect({ type, value, assetOptions, onSelect, disabled }) {
               onChange={ onSearchChanged }
               InputProps={{
                 startAdornment: <InputAdornment position="start">
-                  <SearchIcon />
+                  <Search />
                 </InputAdornment>,
               }}
             />
@@ -1473,7 +1482,7 @@ function AssetSelect({ type, value, assetOptions, onSelect, disabled }) {
               onChange={ onSearchChanged }
               InputProps={{
                 startAdornment: <InputAdornment position="start">
-                  <SearchIcon />
+                  <Search />
                 </InputAdornment>,
               }}
             />

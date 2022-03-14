@@ -12,13 +12,11 @@ import {
   Switch,
   Select,
   MenuItem
-} from '@material-ui/core';
+} from '@mui/material';
 import classes from './ssRewards.module.css';
 
-import FilterListIcon from '@material-ui/icons/FilterList';
-import SearchIcon from '@material-ui/icons/Search';
 import RewardsTable from './ssRewardsTable.js'
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { AddCircleOutline } from '@mui/icons-material';
 
 import { formatCurrency } from '../../utils';
 import stores from '../../stores'
@@ -196,7 +194,7 @@ export default function ssRewards() {
             <Button
               variant="contained"
               color="secondary"
-              startIcon={<AddCircleOutlineIcon />}
+              startIcon={<AddCircleOutline />}
               size='large'
               className={ classes.buttonOverride }
               color='primary'

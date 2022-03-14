@@ -9,9 +9,9 @@ import {
   Tooltip,
   Grid,
   SvgIcon,
-} from "@material-ui/core";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
-import { withTheme, withStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import { ToggleButton, ToggleButtonGroup } from "@mui/lab";
+import { withTheme, withStyles } from "@mui/styles";
 
 import SSWarning from "../ssWarning";
 

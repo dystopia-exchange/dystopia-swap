@@ -16,7 +16,7 @@ const coreTheme = {
       "-apple-system",
       "BlinkMacSystemFont",
       '"Segoe UI"',
-      "Roboto",
+      "'Roboto Mono'",
       '"Helvetica Neue"',
       "sans-serif",
       '"Apple Color Emoji"',
@@ -52,7 +52,7 @@ const coreTheme = {
         "-apple-system",
         "BlinkMacSystemFont",
         '"Segoe UI"',
-        "Roboto",
+        "'Roboto Mono'",
         '"Helvetica Neue"',
         "sans-serif"
       ],
