@@ -1359,12 +1359,13 @@ class Store {
                       CONTRACTS.ERC20_ABI,
                       bribe.address
                     );
+                  
                     const [decimals, symbol] = await multicall.aggregate([
                       tokenContract.methods.decimals(),
                       tokenContract.methods.symbol(),
                     ]);
-
-                    bribe = { ...bribe, symbol: parseInt(symbol) };
+                    
+                    bribe = { ...bribe, symbol: symbol };
                     bribe = { ...bribe, decimals: parseInt(decimals) };
                     bribe = {
                       ...bribe,
@@ -2251,7 +2252,6 @@ class Store {
         ];
         sendValue = sendAmount1;
       }
-      console.log(params, sendValue, "hiii");
       const routerContract = new web3.eth.Contract(
         CONTRACTS.ROUTER_ABI,
         CONTRACTS.ROUTER_ADDRESS
@@ -5102,7 +5102,6 @@ class Store {
 
   getVestBalances = async (payload) => {
     try {
-      console.log("hiii6");
       const account = stores.accountStore.getStore("account");
       if (!account) {
         console.warn("account not found");
@@ -5184,7 +5183,6 @@ class Store {
                 };
               })
             );
-            console.log(bribesEarned, "hiii5");
             pair.gauge.bribesEarned = bribesEarned ? bribesEarned : null;
 
             return pair;
@@ -5198,6 +5196,7 @@ class Store {
       this.emitter.emit(ACTIONS.ERROR, ex);
     }
   };
+
   getRewardBalances = async (payload) => {
     try {
       const account = stores.accountStore.getStore("account");
@@ -5296,7 +5295,6 @@ class Store {
             return pair;
           })
         );
-        console.log(bribesEarned,"hiii7")
         filteredBribes = bribesEarned
           .filter((pair) => {
             if (
@@ -5379,7 +5377,6 @@ class Store {
           return pair;
         })
       );
-      console.log(rewardsEarned,"hiii8")
       const filteredRewards = [];
       for (let j = 0; j < rewardsEarned.length; j++) {
         let pair = Object.assign({}, rewardsEarned[j]);
@@ -5404,8 +5401,6 @@ class Store {
         rewards: filteredRewards,
         veDist: veDistReward,
       };
-
-      console.log(rewards,"hiii7")
 
       this.setStore({
         rewards,

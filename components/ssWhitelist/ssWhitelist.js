@@ -224,7 +224,6 @@ export default function ssWhitelist() {
       </div>
       <div className={ classes.results }>
         { loading && <CircularProgress />}
-        {console.log(token  ,"hiii")}
         { token && token.address && renderToken()}
       </div>
     </div>
