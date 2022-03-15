@@ -45,10 +45,10 @@ export default function ssVotes() {
       setToken(nfts[0]);
     }
 
-    // if(nfts && nfts.length > 0 && filteredAssets && filteredAssets.length > 0) {
-    //   stores.dispatcher.dispatch({ type: ACTIONS.GET_VEST_VOTES, content: { tokenID: nfts[0].id } })
-    //   stores.dispatcher.dispatch({ type: ACTIONS.GET_VEST_BALANCES, content: { tokenID: nfts[0].id } })
-    // }
+    if(nfts && nfts.length > 0 && filteredAssets && filteredAssets.length > 0) {
+       stores.dispatcher.dispatch({ type: ACTIONS.GET_VEST_VOTES, content: { tokenID: nfts[0].id } })
+      // stores.dispatcher.dispatch({ type: ACTIONS.GET_VEST_BALANCES, content: { tokenID: nfts[0].id } })
+    }
 
     forceUpdate()
   }

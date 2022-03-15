@@ -8,7 +8,8 @@ import stores from "./";
 
 import BigNumber from "bignumber.js";
 import { createClient } from "urql";
-const fetch = require("node-fetch");
+import { assertValidExecutionArguments } from "graphql/execution/execute";
+import axios from 'axios'
 
 const queryone = `
 query {
@@ -27,6 +28,7 @@ query {
       decimals
       isWhitelisted
       balance
+      logoURI
     }
     token1{
      address
@@ -36,6 +38,7 @@ query {
       decimals
       isWhitelisted
       balance
+      logoURI
    }
    reserve0
    reserve1
@@ -80,6 +83,7 @@ query {
       name
       decimals
       isWhitelisted
+      logoURI
     }
     
   
@@ -1025,6 +1029,11 @@ class Store {
       const baseAssetsCall = response;
 
       let baseAssets = baseAssetsCall.data.tokens;
+      const response2 = await axios.get(`https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`)
+     
+     console.log(baseAssets,response2.data,"hiii")
+
+
 
       const nativeFTM = {
         address: CONTRACTS.FTM_ADDRESS,
@@ -1036,6 +1045,17 @@ class Store {
 
       baseAssets.unshift(nativeFTM);
 
+      for(let i =0 ; i < response2.data.length;i++){
+        console.log(response2.data[i],"hiii3")
+        for(let j =0 ; j < baseAssets.length;j++){
+          console.log(response2.data[i].address.toLowerCase(),baseAssets[j].address.toLowerCase(),"hiii4")
+        if(response2.data[i].address.toLowerCase() == baseAssets[j].address.toLowerCase()){
+          console.log("true","hiii4")
+          baseAssets[j].logoURI = response2.data[i].logoURI
+        }
+      }
+    }
+      console.log(baseAssets,response2.data,"hiii2")
       let localBaseAssets = this.getLocalAssets();
 
       return [...baseAssets, ...localBaseAssets];
@@ -1364,7 +1384,7 @@ class Store {
                       tokenContract.methods.decimals(),
                       tokenContract.methods.symbol(),
                     ]);
-                    
+
                     bribe = { ...bribe, symbol: symbol };
                     bribe = { ...bribe, decimals: parseInt(decimals) };
                     bribe = {
