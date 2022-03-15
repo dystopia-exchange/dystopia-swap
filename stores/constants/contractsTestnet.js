@@ -24,7 +24,7 @@ export const FTM_ADDRESS = 'MATIC'
 export const FTM_NAME = 'MATIC'
 export const FTM_SYMBOL = 'MATIC'
 export const FTM_DECIMALS = 18
-export const FTM_LOGO = 'https://assets.coingecko.com/coins/images/4001/large/Fantom.png'
+export const FTM_LOGO = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png'
 
 export const FACTORY_ADDRESS = '0x3a5C1E2f67Ba8A3bA20Fc5B7921E7Ac7cdB87D6F'
 export const FACTORY_ABI = abis.factoryABI
