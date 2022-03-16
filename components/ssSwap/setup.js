@@ -474,7 +474,6 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
         return true
       }
     })
-    // console.log(ao,assetOptions,"hiii")
     setFilteredAssetOptions(ao)
 
     //no options in our default list and its an address we search for the address

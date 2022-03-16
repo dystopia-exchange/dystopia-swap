@@ -46,8 +46,8 @@ export default function ssVotes() {
     }
 
     if(nfts && nfts.length > 0 && filteredAssets && filteredAssets.length > 0) {
-      stores.dispatcher.dispatch({ type: ACTIONS.GET_VEST_VOTES, content: { tokenID: nfts[0].id } })
-      stores.dispatcher.dispatch({ type: ACTIONS.GET_VEST_BALANCES, content: { tokenID: nfts[0].id } })
+       stores.dispatcher.dispatch({ type: ACTIONS.GET_VEST_VOTES, content: { tokenID: nfts[0].id } })
+      // stores.dispatcher.dispatch({ type: ACTIONS.GET_VEST_BALANCES, content: { tokenID: nfts[0].id } })
     }
 
     forceUpdate()
@@ -185,7 +185,7 @@ export default function ssVotes() {
               className={classes.searchContainer}
               variant="outlined"
               fullWidth
-              placeholder="FTM, MIM, 0x..."
+              placeholder="MATIC, MIM, 0x..."
               value={search}
               onChange={onSearchChanged}
               InputProps={{

@@ -455,7 +455,7 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
           <Table className={classes.table} aria-labelledby='tableTitle' size={'medium'} aria-label='enhanced table'>
             <EnhancedTableHead classes={classes} order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
             <TableBody>
-              {stableSort(rewards, getComparator(order, orderBy))
+              {Array.isArray(rewards)>0? stableSort(rewards, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                 if (!row) {
@@ -715,7 +715,7 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                     </TableCell>
                   </TableRow>
                 );
-              })}
+              }):null}
             </TableBody>
           </Table>
         </TableContainer>
