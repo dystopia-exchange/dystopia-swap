@@ -60,6 +60,7 @@ function Setup() {
     }
 
     const quoteReturned = (val) => {
+      
       if(!val) {
         setQuoteLoading(false)
         setQuote(null)
@@ -469,7 +470,6 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
         return true
       }
     })
-
     setFilteredAssetOptions(ao)
 
     //no options in our default list and its an address we search for the address
@@ -576,7 +576,7 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               autoFocus
               variant="outlined"
               fullWidth
-              placeholder="FTM, MIM, 0x..."
+              placeholder="MATIC, DAI, 0x..."
               value={ search }
               onChange={ onSearchChanged }
               InputProps={{
@@ -616,7 +616,7 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               autoFocus
               variant="outlined"
               fullWidth
-              placeholder="FTM, MIM, 0x..."
+              placeholder="MATICC,DAI, 0x..."
               value={ search }
               onChange={ onSearchChanged }
               InputProps={{

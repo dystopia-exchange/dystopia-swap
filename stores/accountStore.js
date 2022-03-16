@@ -12,7 +12,7 @@ import {
   network
 } from './connectors';
 
-import Web3 from 'web3';
+import Web3 from 'web3'; 
 
 class Store {
   constructor(dispatcher, emitter) {

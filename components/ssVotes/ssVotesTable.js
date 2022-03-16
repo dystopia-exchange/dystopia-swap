@@ -350,7 +350,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EnhancedTable({ gauges, setParentSliderValues, defaultVotes, veToken, token }) {
   const classes = useStyles();
-
+console.log(gauges,"yeahh1")
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('totalVotes');
   const [sliderValues, setSliderValues] = useState(defaultVotes)
@@ -402,26 +402,26 @@ export default function EnhancedTable({ gauges, setParentSliderValues, defaultVo
     );
   }
 
-  const renderTooltip = (pair) => {
-    return (
-      <div className={ classes.tooltipContainer }>
-        {
-          pair?.gauge?.bribes.map((bribe, idx) => {
+  // const renderTooltip = (pair) => {
+  //   return (
+  //     <div className={ classes.tooltipContainer }>
+  //       {
+  //         pair?.gauge?.bribes.map((bribe, idx) => {
 
-            let earned = 0
-            if(pair.gauge.bribesEarned && pair.gauge.bribesEarned.length > idx) {
-              earned = pair.gauge.bribesEarned[idx].earned
-            }
+  //           let earned = 0
+  //           if(pair.gauge.bribesEarned && pair.gauge.bribesEarned.length > idx) {
+  //             earned = pair.gauge.bribesEarned[idx].earned
+  //           }
 
-            return (<div className={ classes.inlineBetween }>
-              <Typography>Bribe:</Typography>
-              <Typography>{ formatCurrency(bribe.rewardAmount) } { bribe.token.symbol }</Typography>
-            </div>)
-          })
-        }
-      </div>
-    )
-  }
+  //           return (<div className={ classes.inlineBetween }>
+  //             <Typography>Bribe:</Typography>
+  //             <Typography>{ formatCurrency(bribe.rewardAmount) } { bribe.token.symbol }</Typography>
+  //           </div>)
+  //         })
+  //       }
+  //     </div>
+  //   )
+  // }
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, gauges.length - page * rowsPerPage);
   const marks = [
@@ -540,16 +540,21 @@ export default function EnhancedTable({ gauges, setParentSliderValues, defaultVo
                       { formatCurrency(row?.gauge?.weightPercent) } %
                     </Typography>
                   </TableCell>
+                  {console.log(row?.gaugebribes.length,"yeahh2")}
                   <TableCell className={classes.cell} align="right">
                     {
-                      row?.gauge?.bribes.map((bribe, idx) => {
+                    row?.gaugebribes.length ? ( 
+                      row?.gaugebribes.map((bribe, idx) => {
                         return (
                           <div className={ classes.inlineEnd }>
                             <Typography variant="h2" className={classes.textSpaced}>{ formatCurrency(bribe.rewardAmount) }</Typography>
-                            <Typography variant="h5" className={classes.textSpaced} color='textSecondary'>{ bribe.token.symbol }</Typography>
+                            <Typography variant="h5" className={classes.textSpaced} color='textSecondary'>{ bribe.symbol }</Typography> 
                           </div>
                         )
                       })
+                     
+                    )
+                    :null
                     }
                   </TableCell>
                   <TableCell className={classes.cell} align="right">

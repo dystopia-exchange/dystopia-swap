@@ -3,7 +3,7 @@ import { Paper, Typography, Button, CircularProgress, InputAdornment, TextField,
 import BigNumber from 'bignumber.js';
 import { Search } from '@mui/icons-material';
 import { useRouter } from "next/router";
-
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import classes from './ssVotes.module.css';
 import { formatCurrency } from '../../utils';
 
@@ -45,8 +45,8 @@ export default function ssVotes() {
     }
 
     if(nfts && nfts.length > 0 && filteredAssets && filteredAssets.length > 0) {
-      stores.dispatcher.dispatch({ type: ACTIONS.GET_VEST_VOTES, content: { tokenID: nfts[0].id } })
-      stores.dispatcher.dispatch({ type: ACTIONS.GET_VEST_BALANCES, content: { tokenID: nfts[0].id } })
+       stores.dispatcher.dispatch({ type: ACTIONS.GET_VEST_VOTES, content: { tokenID: nfts[0].id } })
+      // stores.dispatcher.dispatch({ type: ACTIONS.GET_VEST_BALANCES, content: { tokenID: nfts[0].id } })
     }
 
     forceUpdate()
@@ -164,7 +164,7 @@ export default function ssVotes() {
 
         <Grid container spacing={1}>
           <Grid item lg='auto' lg='auto' sm={12} xs={12}>
-            {/*
+            
               <Button
                 variant="contained"
                 color="secondary"
@@ -177,14 +177,14 @@ export default function ssVotes() {
               >
                 <Typography className={ classes.actionButtonText }>{ `Create Bribe` }</Typography>
               </Button>
-            */}
+           
           </Grid>
           <Grid item lg={true} md={true} sm={12} xs={12}>
             <TextField
               className={classes.searchContainer}
               variant="outlined"
               fullWidth
-              placeholder="FTM, MIM, 0x..."
+              placeholder="MATIC, MIM, 0x..."
               value={search}
               onChange={onSearchChanged}
               InputProps={{
