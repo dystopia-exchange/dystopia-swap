@@ -1,4 +1,4 @@
-import { createTheme } from "@material-ui/core/styles";
+import { createTheme } from '@mui/material/styles';
 import coreTheme from "./coreTheme";
 
 // Create a theme instance.
@@ -17,7 +17,7 @@ const theme = createTheme({
       primary: "rgba(255, 255, 255, 0.87)",
       secondary: "#7E99B0",
     },
-    type: "dark"
+    mode: "dark"
   },
   overrides: {
     ...coreTheme.overrides,

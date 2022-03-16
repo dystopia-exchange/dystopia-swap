@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Paper, TextField, InputAdornment, CircularProgress, Typography, Tooltip, Button, Select, MenuItem, Grid } from '@material-ui/core'
+import { Paper, TextField, InputAdornment, CircularProgress, Typography, Tooltip, Button, Select, MenuItem, Grid } from '@mui/material'
 import BigNumber from 'bignumber.js'
 
 import classes from './ssWhitelist.module.css'
-import SearchIcon from '@material-ui/icons/Search'
+import { Search } from '@mui/icons-material'
 
 import stores from '../../stores'
 import { ACTIONS, ETHERSCAN_URL } from '../../stores/constants'
@@ -210,7 +210,7 @@ export default function ssWhitelist() {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon />
+                <Search />
               </InputAdornment>
             ),
           }}

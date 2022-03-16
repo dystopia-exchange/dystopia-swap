@@ -2,6 +2,7 @@ import Head from "next/head";
 import classes from "./layout.module.css";
 import Header from "../header";
 import Navigation from "../navigation";
+import AppWrapper from "../../ui/AppWrapper";
 import SnackbarController from "../snackbar";
 
 export default function Layout({
@@ -12,7 +13,7 @@ export default function Layout({
   title
 }) {
   return (
-    <div className={classes.container}>
+    <AppWrapper>
       <Head>
         <link rel="icon" href="/favicon.png" />
         <link
@@ -38,6 +39,6 @@ export default function Layout({
         <SnackbarController />
         <main>{children}</main>
       </div>
-    </div>
+    </AppWrapper>
   );
 }

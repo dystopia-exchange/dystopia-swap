@@ -9,14 +9,10 @@ import {
   Dialog,
   CircularProgress,
   Tooltip
-} from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+} from '@mui/material';
+import { Search, ArrowDownward, ArrowForwardIos, DeleteOutline } from '@mui/icons-material';
 
-import { withTheme } from '@material-ui/core/styles';
+import { withTheme } from '@mui/styles';
 
 import { formatCurrency, formatAddress, formatCurrencyWithSymbol, formatCurrencySmall } from '../../utils'
 
@@ -306,7 +302,7 @@ function Setup() {
           />
           <div className={ classes.line }>
             <div className={classes.routeArrow}>
-              <ArrowForwardIosIcon className={classes.routeArrowIcon} />
+              <ArrowForwardIos className={classes.routeArrowIcon} />
             </div>
             <div className={ classes.stabIndicatorContainer }>
               <Typography className={ classes.stabIndicator }>{ quote.output.routes[0].stable ? 'Stable' : 'Volatile' }</Typography>
@@ -323,7 +319,7 @@ function Setup() {
               />
               <div className={ classes.line }>
                 <div className={classes.routeArrow}>
-                  <ArrowForwardIosIcon className={classes.routeArrowIcon} />
+                  <ArrowForwardIos className={classes.routeArrowIcon} />
                 </div>
                 <div className={ classes.stabIndicatorContainer }>
                   <Typography className={ classes.stabIndicator }>{ quote.output.routes[1].stable ? 'Stable' : 'Volatile' }</Typography>
@@ -403,7 +399,7 @@ function Setup() {
           </div>
           <div className={ classes.massiveInputAmount }>
             <TextField
-              placeholder='0.00'
+              placeholder='10.00'
               fullWidth
               error={ amountError }
               helperText={ amountError }
@@ -428,7 +424,7 @@ function Setup() {
       { renderMassiveInput('From', fromAmountValue, fromAmountError, fromAmountChanged, fromAssetValue, fromAssetError, fromAssetOptions, onAssetSelect) }
       <div className={ classes.swapIconContainer }>
         <div className={ classes.swapIconSubContainer }>
-          <ArrowDownwardIcon className={ classes.swapIcon } onClick={ swapAssets }/>
+          <ArrowDownward className={ classes.swapIcon } onClick={ swapAssets }/>
         </div>
       </div>
       { renderMassiveInput('To', toAmountValue, toAmountError, toAmountChanged, toAssetValue, toAssetError, toAssetOptions, onAssetSelect) }
@@ -535,7 +531,7 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
         </div>
         <div className={ classes.assetSelectActions}>
           <IconButton onClick={ () => { deleteOption(asset) } }>
-            <DeleteOutlineIcon />
+            <DeleteOutline />
           </IconButton>
           <IconButton onClick={ () => { viewOption(asset) } }>
             ↗
@@ -585,7 +581,7 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               onChange={ onSearchChanged }
               InputProps={{
                 startAdornment: <InputAdornment position="start">
-                  <SearchIcon />
+                  <Search />
                 </InputAdornment>,
               }}
             />
@@ -625,7 +621,7 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               onChange={ onSearchChanged }
               InputProps={{
                 startAdornment: <InputAdornment position="start">
-                  <SearchIcon />
+                  <Search />
                 </InputAdornment>,
               }}
             />

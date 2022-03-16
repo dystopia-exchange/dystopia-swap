@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { Typography, Button, CircularProgress } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
+import { withStyles } from "@mui/styles";
+import { Typography, Button, CircularProgress } from "@mui/material";
+import { Close } from "@mui/icons-material";
 
 import { Web3ReactProvider, useWeb3React } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
@@ -134,7 +134,7 @@ class Unlock extends Component {
     return (
       <div className={classes.root}>
         <div className={classes.closeIcon} onClick={closeModal}>
-          <CloseIcon />
+          <Close />
         </div>
         <div className={classes.contentContainer}>
           <Web3ReactProvider getLibrary={getLibrary}>

@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Paper, Grid, Button, FormControlLabel, Checkbox, Tooltip } from '@material-ui/core'
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import PieChartIcon from '@material-ui/icons/PieChart';
+import { Typography, Paper, Button } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { PieChart } from '@mui/icons-material';
 import BigNumber from 'bignumber.js';
 import classes from './ssBribeCard.module.css'
-
-import * as moment from 'moment';
 import stores from '../../stores/index.js'
-import { getProvider, formatCurrency } from '../../utils'
+import { formatCurrency } from '../../utils'
 
 import { ACTIONS } from '../../stores/constants';
 
 const theme = createTheme({
   palette: {
-    type: 'dark',
+    mode: 'dark',
     secondary: {
       main: '#fff'
     }
@@ -25,7 +23,7 @@ const theme = createTheme({
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',
-      'Roboto',
+      '"Roboto Mono"',
       '"Helvetica Neue"',
       'sans-serif',
       '"Apple Color Emoji"',
@@ -153,7 +151,7 @@ export default function BribeCard({ pair, bribe }) {
     <Paper elevation={ 1 } className={ getContainerClass() } >
       <ThemeProvider theme={theme}>
         <div className={ classes.topInfo }>
-          <PieChartIcon className={ classes.avatar } />
+          <PieChart className={ classes.avatar } />
           {
             BigNumber(bribe.earned).gt(0) && renderClaimable()
           }

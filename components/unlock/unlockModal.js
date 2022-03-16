@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { DialogContent, Dialog, Slide } from "@material-ui/core";
+import { DialogContent, Dialog, Slide } from "@mui/material";
 
 import Unlock from "./unlock.js";
 

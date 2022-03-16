@@ -1,0 +1,20 @@
+.app-wrapper {
+  background: white;
+}
+
+.app-wrapper--light {
+  background: url("/images/background/background-light.jpg");
+  background-position: top left;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: var(--background-light);
+}
+
+.app-wrapper--dark {
+  background: url("/images/background/background-dark.jpg");
+  background-position: top left;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: var(--background-dark);
+}
+

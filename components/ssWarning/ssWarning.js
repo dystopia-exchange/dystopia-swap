@@ -1,4 +1,4 @@
-import { Dialog, Typography, Button } from "@material-ui/core";
+import { Dialog, Typography, Button } from "@mui/material";
 import classes from "./ssWarning.module.css";
 
 export default function ffWarning({ close }) {

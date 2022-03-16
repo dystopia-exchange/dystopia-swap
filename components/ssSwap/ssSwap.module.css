@@ -19,6 +19,7 @@
 }
 
 .smallerText {
+  font-family: 'Roboto Mono', sans-serif;
   font-size: 12px !important;
   margin-top: 0px !important;
   margin-bottom: 0px !important;

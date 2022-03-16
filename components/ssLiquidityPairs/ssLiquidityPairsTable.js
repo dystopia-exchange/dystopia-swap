@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Skeleton from '@material-ui/lab/Skeleton';
+import { makeStyles } from '@mui/styles';
+import Skeleton from '@mui/lab/Skeleton';
 import {
   Paper,
   Button,
@@ -23,13 +23,10 @@ import {
   Fade,
   Grid,
   Switch
-} from '@material-ui/core';
+} from '@mui/material';
 import { useRouter } from "next/router";
 import BigNumber from 'bignumber.js';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import SearchIcon from '@material-ui/icons/Search';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import { FilterList, Search, AddCircleOutline, InfoOutlined } from '@mui/icons-material';
 
 import { formatCurrency } from '../../utils';
 
@@ -545,7 +542,7 @@ const EnhancedTableToolbar = (props) => {
         <Button
           variant="contained"
           color="secondary"
-          startIcon={<AddCircleOutlineIcon />}
+          startIcon={<AddCircleOutline />}
           size='large'
           className={ classes.buttonOverride }
           color='primary'
@@ -565,7 +562,7 @@ const EnhancedTableToolbar = (props) => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon />
+                <Search />
               </InputAdornment>
             ),
           }}
@@ -574,7 +571,7 @@ const EnhancedTableToolbar = (props) => {
       <Grid item lg={1} md={true} sm={2} xs={2}>
         <Tooltip placement="top" title="Filter list">
           <IconButton onClick={handleClick} className={ classes.filterButton } aria-label="filter list">
-            <FilterListIcon />
+            <FilterList />
           </IconButton>
         </Tooltip>
       </Grid>
@@ -986,7 +983,7 @@ export default function EnhancedTable({ pairs }) {
                         </Grid>
                         <Grid item lg={2}>
                         <Tooltip title={ renderTooltip(row)}>
-                          <InfoOutlinedIcon className={classes.infoIcon} />
+                          <InfoOutlined className={classes.infoIcon} />
                         </Tooltip>
                         </Grid>
                       </Grid>

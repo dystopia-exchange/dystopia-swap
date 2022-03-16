@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Snackbar, IconButton, Button, Typography, SvgIcon } from '@material-ui/core';
+import { Snackbar, IconButton, Button, Typography, SvgIcon } from '@mui/material';
 
 import { colors } from '../../theme/coreTheme';
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Paper, Typography, Button, TextField, InputAdornment, CircularProgress, RadioGroup, Radio, FormControlLabel, Tooltip, IconButton } from '@material-ui/core';
+import { Paper, Typography, Button, TextField, InputAdornment, CircularProgress, RadioGroup, Radio, FormControlLabel, Tooltip, IconButton } from '@mui/material';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import moment from 'moment';
@@ -10,7 +10,7 @@ import {
   ACTIONS
 } from '../../stores/constants';
 
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { ArrowBack } from '@mui/icons-material';
 import VestingInfo from "./vestingInfo"
 
 export default function ssLock({ govToken, veToken }) {
@@ -244,7 +244,7 @@ export default function ssLock({ govToken, veToken }) {
         <div className={ classes.titleSection }>
         <Tooltip title="Back to Vest" placement="top">
           <IconButton className={ classes.backButton } onClick={ onBack }>
-            <ArrowBackIcon className={ classes.backIcon } />
+            <ArrowBack className={ classes.backIcon } />
           </IconButton>
           </Tooltip>
           <Typography className={ classes.titleText }>Create New Lock</Typography>

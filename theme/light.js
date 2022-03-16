@@ -1,5 +1,4 @@
-import { createTheme } from "@material-ui/core/styles";
-import { red } from "@material-ui/core/colors";
+import { createTheme } from '@mui/material/styles';
 import coreTheme from "./coreTheme";
 
 // Create a theme instance.
@@ -11,7 +10,7 @@ const theme = createTheme({
       default: "#F0F2F5",
       paper: "#ffffff"
     },
-    type: "light"
+    mode: "light"
   },
   overrides: {
     ...coreTheme.overrides,

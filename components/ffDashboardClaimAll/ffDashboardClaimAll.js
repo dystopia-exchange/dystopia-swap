@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Typography, Button, CircularProgress, SvgIcon, Grid } from '@material-ui/core';
+import { Paper, Typography, Button, CircularProgress, SvgIcon, Grid } from '@mui/material';
 import BigNumber from 'bignumber.js';
 import classes from './ffDashboardClaimAll.module.css';
 import RewardsTable from './ffDashboardClaimAllTable.js'

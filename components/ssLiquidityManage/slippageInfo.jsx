@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { Alert } from '@material-ui/lab'
-import { withStyles } from '@material-ui/core/styles';
+import { Alert } from '@mui/material';
+import { withStyles } from '@mui/styles';
 
 const styles = () => ({
   alert: {

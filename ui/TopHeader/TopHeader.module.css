@@ -1,0 +1,32 @@
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 64px;
+}
+
+.top-header--light {
+  background: var(--background-light);
+  color: var(--menu-links-light);
+  border-top: 1px solid #86b9d6;
+  border-bottom: 1px solid #86b9d6;
+}
+
+.top-header--dark {
+  background: var(--background-dark);
+  color: var(--menu-links-dark);
+  border-top: 1px solid #5f7285;
+  border-bottom: 1px solid #5f7285;
+}
+
+@media (min-width: 1024px) {
+  .top-header {
+    height: 50px;
+    display: block;
+    z-index: 20;
+    position: fixed;
+  }
+}

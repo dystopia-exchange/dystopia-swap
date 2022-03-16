@@ -1,4 +1,4 @@
-import { Typography, Button, Paper, SvgIcon, Grid, Avatar } from "@material-ui/core";
+import { Typography, Button, Paper, SvgIcon, Grid, Avatar } from "@mui/material";
 
 import { useScrollTo } from 'react-use-window-scroll';
 

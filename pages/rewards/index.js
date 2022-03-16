@@ -1,4 +1,4 @@
-import { Typography, Button, Paper, SvgIcon } from "@material-ui/core"
+import { Typography, Button, Paper, SvgIcon } from "@mui/material"
 import SSRewards from '../../components/ssRewards'
 
 import React, { useState, useEffect } from 'react';

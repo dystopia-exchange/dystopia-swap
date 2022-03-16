@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Paper, Typography, Button, CircularProgress, InputAdornment, TextField, MenuItem, Select, Grid } from '@material-ui/core';
+import { Paper, Typography, Button, CircularProgress, InputAdornment, TextField, MenuItem, Select, Grid } from '@mui/material';
 import BigNumber from 'bignumber.js';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import SearchIcon from '@material-ui/icons/Search';
+import { Search } from '@mui/icons-material';
 import { useRouter } from "next/router";
-
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import classes from './ssVotes.module.css';
 import { formatCurrency } from '../../utils';
 
@@ -191,7 +190,7 @@ export default function ssVotes() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon />
+                    <Search />
                   </InputAdornment>
                 ),
               }}

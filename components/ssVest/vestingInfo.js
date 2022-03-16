@@ -1,4 +1,4 @@
-import { Paper, Typography  } from '@material-ui/core';
+import { Paper, Typography  } from '@mui/material';
 import classes from "./ssVest.module.css";
 import moment from 'moment';
 import { formatCurrency } from '../../utils';
