@@ -794,7 +794,7 @@ export default function ssLiquidityManage() {
               fullWidth
               value={ value }
               disabled={ true }
-              InputProps={{
+              inputProps={{
                 className: classes.mediumInput,
               }}
             />
@@ -853,7 +853,7 @@ export default function ssLiquidityManage() {
               onChange={ amountChanged }
               disabled={ createLoading }
               onFocus={ onFocus ? onFocus : null }
-              InputProps={{
+              inputProps={{
                 className: classes.largeInput
               }}
             />
@@ -966,7 +966,7 @@ export default function ssLiquidityManage() {
             value={ amountValue }
             onChange={ amountChanged }
             disabled={ depositLoading || stakeLoading || depositStakeLoading || createLoading }
-            InputProps={{
+            inputProps={{
               className: classes.smallInput,
               endAdornment: <InputAdornment position="end">
                 %
@@ -1004,7 +1004,7 @@ export default function ssLiquidityManage() {
               fullWidth
               value={ token }
               onChange={ handleChange }
-              InputProps={{
+              inputProps={{
                 className: classes.mediumInput,
               }}
             >
@@ -1440,7 +1440,7 @@ function AssetSelect({ type, value, assetOptions, onSelect, disabled }) {
               placeholder="FTM, MIM, 0x..."
               value={ search }
               onChange={ onSearchChanged }
-              InputProps={{
+              inputProps={{
                 startAdornment: <InputAdornment position="start">
                   <Search />
                 </InputAdornment>,
@@ -1480,7 +1480,7 @@ function AssetSelect({ type, value, assetOptions, onSelect, disabled }) {
               placeholder="FTM, MIM, 0x..."
               value={ search }
               onChange={ onSearchChanged }
-              InputProps={{
+              inputProps={{
                 startAdornment: <InputAdornment position="start">
                   <Search />
                 </InputAdornment>,

@@ -559,7 +559,7 @@ const EnhancedTableToolbar = (props) => {
           placeholder="FTM, MIM, 0x..."
           value={search}
           onChange={onSearchChanged}
-          InputProps={{
+          inputProps={{
             startAdornment: (
               <InputAdornment position="start">
                 <Search />

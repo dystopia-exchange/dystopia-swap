@@ -168,7 +168,7 @@ export default function ssWhitelist() {
                   fullWidth
                   value={ value }
                   onChange={handleChange}
-                  InputProps={{
+                  inputProps={{
                     className: classes.mediumInput,
                   }}
                 >
@@ -206,7 +206,7 @@ export default function ssWhitelist() {
           placeholder="0x..."
           value={search}
           onChange={onSearchChanged}
-          InputProps={{
+          inputProps={{
             startAdornment: (
               <InputAdornment position="start">
                 <Search />

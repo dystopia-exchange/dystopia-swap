@@ -148,7 +148,7 @@ export default function ssLock({ govToken, veToken }) {
                 min: moment().add(7, 'days').format('YYYY-MM-DD'),
                 max: moment().add(1460, 'days').format('YYYY-MM-DD')
               }}
-              InputProps={{
+              inputProps={{
                 className: classes.largeInput,
                 shrink: true
               }}
@@ -209,7 +209,7 @@ export default function ssLock({ govToken, veToken }) {
               value={ amountValue }
               onChange={ amountChanged }
               disabled={ lockLoading }
-              InputProps={{
+              inputProps={{
                 className: classes.largeInput
               }}
             />

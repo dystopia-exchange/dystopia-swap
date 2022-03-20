@@ -29,6 +29,7 @@ import classes from "./header.module.css";
 import TopHeader from "../../ui/TopHeader";
 import Logo from "../../ui/Logo";
 import ThemeSwitcher from "../../ui/ThemeSwitcher";
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 const {
   CONNECT_WALLET,
@@ -279,6 +280,8 @@ function Header(props) {
     setAnchorEl(null);
   };
 
+  const { appTheme } = useAppThemeContext();
+
   return (
     <TopHeader>
       <div className={classes.headerContainer}>
@@ -294,7 +297,7 @@ function Header(props) {
         <div className={classes.userBlock}>
           {process.env.NEXT_PUBLIC_CHAINID == "80001" && (
             <div className={classes.testnetDisclaimer}>
-              <Typography className={classes.testnetDisclaimerText}>
+              <Typography className={[classes.testnetDisclaimerText, classes[`testnetDisclaimerText--${appTheme}`]].join(' ')}>
                 Testnet
               </Typography>
             </div>
@@ -323,7 +326,7 @@ function Header(props) {
             <div>
               <Button
                 disableElevation
-                className={classes.accountButton}
+                className={[classes.accountButton, classes[`accountButton--${appTheme}`]].join(' ')}
                 variant="contained"
                 aria-controls="simple-menu"
                 aria-haspopup="true"

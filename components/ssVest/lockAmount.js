@@ -105,7 +105,7 @@ export default function ffLockAmount({ nft, govToken, updateLockAmount }) {
               value={ amountValue }
               onChange={ amountChanged }
               disabled={ lockLoading }
-              InputProps={{
+              inputProps={{
                 className: classes.largeInput
               }}
             />

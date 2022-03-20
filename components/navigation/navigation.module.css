@@ -190,7 +190,10 @@ a.linkz {
 }
 
 .subtitleText {
-  font-size: 14px !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  line-height: 140% !important;
   margin: 0 !important;
 }
 
@@ -310,6 +313,16 @@ a.linkz {
 }
 
 .nav-button-corner-top::before,
+.nav-button-corner-top::after {
+  margin-top: 3.5px;
+}
+
+.nav-button-corner-bottom::before,
+.nav-button-corner-bottom::after {
+  margin-bottom: 3.5px;
+}
+
+.nav-button-corner-top::before,
 .nav-button-corner-top::after,
 .nav-button-corner-bottom::before,
 .nav-button-corner-bottom::after {
@@ -417,7 +430,7 @@ a.linkz {
   background-color: var(--main-secondary-dark) !important;
 }
 
-.nav-button--active.nav-button--light {
+.nav-button--active.nav-button--light {;
   background-color: var(--menu-highlight-light) !important;
   border: 1px solid var(--main-secondary-light) !important;
   color: var(--main-secondary-light) !important;

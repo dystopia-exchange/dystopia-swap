@@ -157,7 +157,7 @@ export default function ssBribeCreate() {
               fullWidth
               value={ value }
               onChange={ onChange }
-              InputProps={{
+              inputProps={{
                 className: classes.largeInput,
               }}
             >
@@ -225,7 +225,7 @@ export default function ssBribeCreate() {
               value={ amount }
               onChange={ amountChanged }
               disabled={ createLoading }
-              InputProps={{
+              inputProps={{
                 className: classes.largeInput
               }}
             />
@@ -413,7 +413,7 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               placeholder="FTM, MIM, 0x..."
               value={ search }
               onChange={ onSearchChanged }
-              InputProps={{
+              inputProps={{
                 startAdornment: <InputAdornment position="start">
                   <Search />
                 </InputAdornment>,
@@ -453,7 +453,7 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               placeholder="FTM, MIM, 0x..."
               value={ search }
               onChange={ onSearchChanged }
-              InputProps={{
+              inputProps={{
                 startAdornment: <InputAdornment position="start">
                   <Search />
                 </InputAdornment>,

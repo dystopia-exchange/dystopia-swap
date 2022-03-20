@@ -133,14 +133,21 @@
   align-items: center;
   margin-left: 14px !important;
   height: 28px;
-  background-color: rgb(33, 43, 72) !important;
   border: 0 !important;
   border-radius: 40px !important;
-  color: rgba(255, 255, 255, 0.87) !important;
+  color: #ffffff !important;
   padding-left: 10px !important;
   padding-right: 10px !important;
   position: fixed;
   z-index: 10030 !important;
+}
+
+.accountButton--dark {
+  background-color: rgb(33, 43, 72) !important;
+}
+
+.accountButton--light {
+  background-color: #9BC9E4 !important;
 }
 
 .iconColor {
@@ -215,8 +222,10 @@
 }
 
 .headBtnTxt {
-  font-size: 13px !important;
-  font-weight: 700 !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 120%;
 }
 
 .metamask {
@@ -334,12 +343,22 @@
 }
 
 .testnetDisclaimerText {
-  font-size: 13px !important;
-  font-weight: 200 !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 120%;
   border: 1px solid rgb(6, 211, 215) !important;
   border-radius: 10px;
-  background: rgb(23, 52, 72) !important;
-  padding: 5px 10px !important;
+  padding: 3px 10px !important;
+  color: #ffffff;
+}
+
+.testnetDisclaimerText--light {
+  background-color: #9BC9E4 !important;
+}
+
+.testnetDisclaimerText--dark {
+  background-color: rgb(33, 43, 72) !important;
 }
 
 @media screen and (max-width: 1200px) {

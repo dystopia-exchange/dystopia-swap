@@ -325,7 +325,7 @@ export default function SSLiquidityCreate() {
               value={ amountValue }
               onChange={ amountChanged }
               disabled={ createLoading }
-              InputProps={{
+              inputProps={{
                 className: classes.largeInput
               }}
             />
@@ -363,7 +363,7 @@ export default function SSLiquidityCreate() {
               fullWidth
               value={ token }
               onChange={ handleChange }
-              InputProps={{
+              inputProps={{
                 className: classes.mediumInput,
               }}
             >
@@ -645,7 +645,7 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               placeholder="FTM, MIM, 0x..."
               value={ search }
               onChange={ onSearchChanged }
-              InputProps={{
+              inputProps={{
                 startAdornment: <InputAdornment position="start">
                   <Search />
                 </InputAdornment>,
@@ -685,7 +685,7 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               placeholder="FTM, MIM, 0x..."
               value={ search }
               onChange={ onSearchChanged }
-              InputProps={{
+              inputProps={{
                 startAdornment: <InputAdornment position="start">
                   <Search />
                 </InputAdornment>,

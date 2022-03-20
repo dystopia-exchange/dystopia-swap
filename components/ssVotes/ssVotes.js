@@ -132,7 +132,7 @@ export default function ssVotes() {
                   fullWidth
                   value={ value }
                   onChange={handleChange}
-                  InputProps={{
+                  inputProps={{
                     className: classes.mediumInput,
                   }}
                 >
@@ -187,7 +187,7 @@ export default function ssVotes() {
               placeholder="FTM, MIM, 0x..."
               value={search}
               onChange={onSearchChanged}
-              InputProps={{
+              inputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <Search />

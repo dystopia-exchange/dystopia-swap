@@ -17,13 +17,18 @@ const theme = createTheme({
     }
   },
   typography: {
+    allVariants: {
+      fontFamily: 'serif',
+      textTransform: 'none',
+      fontSize: 16,
+    },
     fontFamily: [
+      '"Roboto Mono"',
       'Inter',
       'Arial',
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',
-      '"Roboto Mono"',
       '"Helvetica Neue"',
       'sans-serif',
       '"Apple Color Emoji"',

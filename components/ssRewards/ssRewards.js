@@ -150,7 +150,7 @@ export default function ssRewards() {
                 fullWidth
                 value={ value }
                 onChange={handleChange}
-                InputProps={{
+                inputProps={{
                   className: classes.mediumInput,
                 }}
               >

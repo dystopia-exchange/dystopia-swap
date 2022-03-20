@@ -80,12 +80,12 @@ export default function MyApp({ Component, pageProps }) {
   };
 
   const theme = createTheme({
-    components: {
-      typography: {
-        fontFamily: 'Roboto-Mono, Arial',
+    typography: {
+      allVariants: {
+        fontFamily: '"Roboto Mono", serif',
       },
     },
-  });
+  })
 
   return (
     <ThemeProvider theme={theme}>
