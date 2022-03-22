@@ -63,11 +63,12 @@ function Setup() {
     };
 
     const quoteReturned = (val) => {
-      if (!val) {
-        setQuoteLoading(false);
-        setQuote(null);
-        setToAmountValue('');
-        setQuoteError('Insufficient liquidity or no route available to complete swap');
+
+      if(!val) {
+        setQuoteLoading(false)
+        setQuote(null)
+        setToAmountValue('')
+        setQuoteError('Insufficient liquidity or no route available to complete swap')
       }
       if (val && val.inputs && val.inputs.fromAmount === fromAmountValue && val.inputs.fromAsset.address === fromAssetValue.address && val.inputs.toAsset.address === toAssetValue.address) {
         setQuoteLoading(false);
@@ -488,9 +489,8 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
       } else {
         return true;
       }
-    });
-
-    setFilteredAssetOptions(ao);
+    })
+    setFilteredAssetOptions(ao)
 
     //no options in our default list and its an address we search for the address
     if (ao.length === 0 && search && search.length === 42) {
@@ -608,10 +608,10 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
               autoFocus
               variant="outlined"
               fullWidth
-              placeholder="FTM, MIM, 0x..."
-              value={search}
-              onChange={onSearchChanged}
-              inputProps={{
+              placeholder="MATIC, DAI, 0x..."
+              value={ search }
+              onChange={ onSearchChanged }
+              InputProps={{
                 startAdornment: <InputAdornment position="start">
                   <Search/>
                 </InputAdornment>,
@@ -648,10 +648,10 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
               autoFocus
               variant="outlined"
               fullWidth
-              placeholder="FTM, MIM, 0x..."
-              value={search}
-              onChange={onSearchChanged}
-              inputProps={{
+              placeholder="MATICC,DAI, 0x..."
+              value={ search }
+              onChange={ onSearchChanged }
+              InputProps={{
                 startAdornment: <InputAdornment position="start">
                   <Search/>
                 </InputAdornment>,
