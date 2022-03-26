@@ -399,7 +399,7 @@ function Setup() {
           </div>
           <div className={ classes.massiveInputAmount }>
             <TextField
-              placeholder='10.00'
+              placeholder='0.00'
               fullWidth
               error={ amountError }
               helperText={ amountError }
