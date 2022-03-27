@@ -19,10 +19,15 @@
 }
 
 .smallerText {
-  font-family: 'Roboto Mono', sans-serif;
-  font-size: 12px !important;
-  margin-top: 0px !important;
-  margin-bottom: 0px !important;
+  position: absolute !important;
+  left: 151px;
+  top: 118px;
+  font-style: normal;
+  font-weight: 500 !important;
+  font-size: 18px !important;
+  line-height: 140% !important;
+  color: #0A2C40 !important;
+  text-transform: uppercase;
 }
 
 .swapInputs {
@@ -187,18 +192,6 @@
   background: rgb(33, 43, 72);
 }
 
-.inputTitleContainerSlippage {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  position: absolute;
-  top: 0px;
-}
-
-.inputBalanceSlippage {
-  padding-left: 12px;
-}
-
 .inputBalanceText,
 .inputTitleText {
   position: absolute;
@@ -210,6 +203,13 @@
   color: #ffffff;
 }
 
+.inputBalanceSlippage {
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  color: var(--input-font-color-dark) !important;
+}
+
 .inputTitleText {
   left: 20px;
 }
@@ -218,9 +218,12 @@
   left: 151px;
 }
 
+.slippage {
+  position: absolute;
+  left: 30px;
+}
+
 .textField {
-  width: 400px;
-  height: 172px;
   margin-top: 2px;
   margin-bottom: 2px;
   position: relative;
@@ -585,9 +588,10 @@
 }
 
 .buttonOverride {
-  position: absolute;
+  position: absolute !important;
+  bottom: -92px;
+  margin-left: 26px !important;
   left: 118px;
-  bottom: -37px;
   width: 292px;
   height: 65px;
   font-style: normal !important;
@@ -614,6 +618,19 @@
 .buttonOverride--light:active {
   background: transparent url("/images/ui/swap-btn--active--light.svg") !important;
 }
+
+.buttonOverride--dark {
+  background: transparent url("/images/ui/swap-btn--dark.svg") !important;
+}
+
+.buttonOverride--dark:hover {
+  background: transparent url("/images/ui/swap-btn--hover--dark.svg") !important;
+}
+
+.buttonOverride--dark:active {
+  background: transparent url("/images/ui/swap-btn--active--dark.svg") !important;
+}
+
 
 .route {
   display: flex;

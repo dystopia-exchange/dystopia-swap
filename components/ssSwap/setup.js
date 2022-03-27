@@ -64,11 +64,11 @@ function Setup() {
 
     const quoteReturned = (val) => {
 
-      if(!val) {
-        setQuoteLoading(false)
-        setQuote(null)
-        setToAmountValue('')
-        setQuoteError('Insufficient liquidity or no route available to complete swap')
+      if (!val) {
+        setQuoteLoading(false);
+        setQuote(null);
+        setToAmountValue('');
+        setQuoteError('Insufficient liquidity or no route available to complete swap');
       }
       if (val && val.inputs && val.inputs.fromAmount === fromAmountValue && val.inputs.fromAsset.address === fromAssetValue.address && val.inputs.toAsset.address === toAssetValue.address) {
         setQuoteLoading(false);
@@ -368,29 +368,28 @@ function Setup() {
 
   const renderSmallInput = (type, amountValue, amountError, amountChanged) => {
     return (
-      <div className={classes.textField}>
-        <div className={classes.inputTitleContainerSlippage}>
-          <div className={classes.inputBalanceSlippage}>
-            <Typography className={classes.inputBalanceText} noWrap> Slippage </Typography>
-          </div>
-        </div>
-        <div className={classes.smallInputContainer}>
-          <TextField
-            placeholder="0.00"
-            fullWidth
-            error={amountError}
-            helperText={amountError}
-            value={amountValue}
-            onChange={amountChanged}
-            disabled={loading}
-            inputProps={{
-              className: classes.smallInput,
-              endAdornment: <InputAdornment position="end">
-                %
-              </InputAdornment>,
-            }}
-          />
-        </div>
+      <div className={classes.slippage}>
+        <Typography
+          className={[classes.inputBalanceSlippage].join(" ")}
+          noWrap>
+          Slippage
+        </Typography>
+
+        <InputBase
+          placeholder="0.00"
+          fullWidth
+          error={amountError}
+          helperText={amountError}
+          value={amountValue}
+          onChange={amountChanged}
+          disabled={loading}
+          inputProps={{
+            className: classes.smallInput,
+            endAdornment: <InputAdornment position="end">
+              %
+            </InputAdornment>,
+          }}
+        />
       </div>
     );
   };
@@ -450,17 +449,17 @@ function Setup() {
       {renderMassiveInput('To', toAmountValue, toAmountError, toAmountChanged, toAssetValue, toAssetError, toAssetOptions, onAssetSelect)}
       {renderSwapInformation()}
       {/*<div className={classes.actionsContainer}>*/}
-        <Button
-          variant="contained"
-          size="large"
-          color="primary"
-          className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(' ')}
-          disabled={loading || quoteLoading}
-          onClick={onSwap}
-        >
-          <Typography className={classes.actionButtonText}>{loading ? `Swapping` : `Swap`}</Typography>
-          {loading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-        </Button>
+      <Button
+        variant="contained"
+        size="large"
+        color="primary"
+        className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(' ')}
+        disabled={loading || quoteLoading}
+        onClick={onSwap}
+      >
+        <Typography className={classes.actionButtonText}>{loading ? `Swapping` : `Swap`}</Typography>
+        {loading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+      </Button>
       {/*</div>*/}
     </div>
   );
@@ -489,8 +488,8 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
       } else {
         return true;
       }
-    })
-    setFilteredAssetOptions(ao)
+    });
+    setFilteredAssetOptions(ao);
 
     //no options in our default list and its an address we search for the address
     if (ao.length === 0 && search && search.length === 42) {
@@ -609,8 +608,8 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
               variant="outlined"
               fullWidth
               placeholder="MATIC, DAI, 0x..."
-              value={ search }
-              onChange={ onSearchChanged }
+              value={search}
+              onChange={onSearchChanged}
               InputProps={{
                 startAdornment: <InputAdornment position="start">
                   <Search/>
@@ -649,8 +648,8 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
               variant="outlined"
               fullWidth
               placeholder="MATICC,DAI, 0x..."
-              value={ search }
-              onChange={ onSearchChanged }
+              value={search}
+              onChange={onSearchChanged}
               InputProps={{
                 startAdornment: <InputAdornment position="start">
                   <Search/>
@@ -691,7 +690,8 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
         openSearch();
       }}>
         <div className={classes.assetSelectMenuItem}>
-          <div className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+          <div
+            className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
             <img
               className={classes.displayAssetIcon}
               alt=""

@@ -1,7 +1,7 @@
 .form {
   position: relative;
   width: 463px;
-  height: 390px;
+  height: auto;
   margin-left: 1px;
   background: var(--background-dark);
   padding: 13px 30px;
