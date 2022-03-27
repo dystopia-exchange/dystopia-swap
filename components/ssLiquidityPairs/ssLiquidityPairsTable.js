@@ -728,9 +728,9 @@ export default function EnhancedTable({ pairs }) {
     if(toggleVariable !== true && pair.isStable === false) {
       return false
     }
-    if(toggleActiveGauge === true && (!pair.gauge || !pair.gauge.address)) {
-      return false
-    }
+    // if(toggleActiveGauge === true && (!pair.gauge || !pair.gauge.address)) {
+    //   return false
+    // }
     if(toggleActive === true) {
       if(!BigNumber(pair?.gauge?.balance).gt(0) && !BigNumber(pair?.balance).gt(0)) {
         return false
@@ -739,7 +739,6 @@ export default function EnhancedTable({ pairs }) {
 
     return true
   })
-
   const emptyRows = 5 - Math.min(5, filteredPairs.length - page * 5);
 
   return (

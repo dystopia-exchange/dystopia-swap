@@ -18,6 +18,7 @@ export const WFTM_ADDRESS = '0xe02f20BB33F8Bfb48eB907523435CA886e139A08'
 export const WFTM_NAME = 'Wrapped MATIC'
 export const WFTM_SYMBOL = 'WMATIC'
 export const WFTM_DECIMALS = 18
+export const WFTM_LOGO = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png'
 export const WFTM_ABI = abis.wftmABI
 
 export const FTM_ADDRESS = 'MATIC'
