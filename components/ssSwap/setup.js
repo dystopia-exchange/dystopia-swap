@@ -263,7 +263,8 @@ function Setup() {
 
     if (quoteError) {
       return (
-        <div className={classes.quoteLoader}>
+        <div className={[classes.quoteLoader, classes.quoteLoaderError].join(" ")}>
+          <div className={[classes.quoteLoaderDivider, classes.quoteLoaderDividerError].join(" ")}></div>
           <Typography className={classes.quoteError}>{quoteError}</Typography>
         </div>
       );
@@ -271,7 +272,7 @@ function Setup() {
 
     if (quoteLoading) {
       return (
-        <div className={classes.quoteLoader}>
+        <div className={[classes.quoteLoader, classes.quoteLoaderLoading].join(" ")}>
           <CircularProgress size={20} className={classes.loadingCircle}/>
         </div>
       );
@@ -279,31 +280,59 @@ function Setup() {
 
     if (!quote) {
       return;
-      <div className={classes.quoteLoader}></div>;
+      <div className={[classes.quoteLoader, classes.quoteLoaderInfo].join(" ")}></div>;
     }
 
     return (
       <div className={classes.depositInfoContainer}>
-        <Typography className={classes.depositInfoHeading}>Price Info</Typography>
-        <div className={classes.priceInfos}>
-          <div className={classes.priceInfo}>
+        {
+          BigNumber(quote.priceImpact).gt(0.5) &&
+          <div
+            className={[classes.warningContainer, classes[`warningContainer--${appTheme}`], BigNumber(quote.priceImpact).gt(5) ? classes.warningContainerError : classes.warningContainerWarning].join(" ")}>
+            <div className={[
+              classes.warningDivider,
+              BigNumber(quote.priceImpact).gt(5) ? classes.warningDividerError : classes.warningDividerWarning].join(" ")
+            }>
+            </div>
+
             <Typography
-              className={classes.title}>{formatCurrency(BigNumber(quote.inputs.fromAmount).div(quote.output.finalValue).toFixed(18))}</Typography>
-            <Typography className={classes.text}>{`${fromAssetValue?.symbol} per ${toAssetValue?.symbol}`}</Typography>
+              className={[BigNumber(quote.priceImpact).gt(5) ? classes.warningError : classes.warningWarning, classes[`warningText--${appTheme}`]].join(" ")}
+              align="center">Price impact: {formatCurrency(quote.priceImpact)}%</Typography>
           </div>
-          <div className={classes.priceInfo}>
-            <Typography
-              className={classes.title}> {formatCurrency(BigNumber(quote.output.finalValue).div(quote.inputs.fromAmount).toFixed(18))} </Typography>
-            <Typography className={classes.text}>{`${toAssetValue?.symbol} per ${fromAssetValue?.symbol}`}</Typography>
+        }
+
+        <Typography className={[classes.depositInfoHeading, classes.depositInfoHeadingPrice].join(" ")}>Price
+          Info</Typography>
+
+        <div className={[classes.priceInfos, classes[`priceInfos--${appTheme}`]].join(' ')}>
+          <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Typography className={classes.text}>
+              {`${fromAssetValue?.symbol} per ${toAssetValue?.symbol}`}
+            </Typography>
+
+            <Typography className={classes.title}>
+              {formatCurrency(BigNumber(quote.inputs.fromAmount).div(quote.output.finalValue).toFixed(18))}
+            </Typography>
           </div>
-          <div className={classes.priceInfo}>
-            {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
+
+          <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Typography className={classes.text}>
+              {`${toAssetValue?.symbol} per ${fromAssetValue?.symbol}`}
+            </Typography>
+
+            <Typography className={classes.title}>
+              {formatCurrency(BigNumber(quote.output.finalValue).div(quote.inputs.fromAmount).toFixed(18))}
+            </Typography>
           </div>
+
+          {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
         </div>
+
         <Typography className={classes.depositInfoHeading}>Route</Typography>
-        <div className={classes.route}>
+
+        <div className={[classes.route, classes[`route--${appTheme}`]].join(' ')}>
           <img
-            className={classes.displayAssetIconSmall}
+            className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
             alt=""
             src={fromAssetValue ? `${fromAssetValue.logoURI}` : ''}
             height="40px"
@@ -313,18 +342,22 @@ function Setup() {
             }}
           />
           <div className={classes.line}>
-            <div className={classes.routeArrow}>
-              <ArrowForwardIos className={classes.routeArrowIcon}/>
+            <div className={[classes.routeLinesLeft, classes[`routeLinesLeft--${appTheme}`]].join(' ')}>
             </div>
-            <div className={classes.stabIndicatorContainer}>
+            <div className={[classes.routeArrow, classes[`routeArrow--${appTheme}`]].join(' ')}>
+            </div>
+            <div className={[classes.routeLinesRight, classes[`routeLinesRight--${appTheme}`]].join(' ')}>
+            </div>
+
+            {/*<div className={classes.stabIndicatorContainer}>
               <Typography
                 className={classes.stabIndicator}>{quote.output.routes[0].stable ? 'Stable' : 'Volatile'}</Typography>
-            </div>
+            </div>*/}
           </div>
           {quote && quote.output && quote.output.routeAsset &&
             <>
               <img
-                className={classes.displayAssetIconSmall}
+                className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
                 alt=""
                 src={quote.output.routeAsset ? `${quote.output.routeAsset.logoURI}` : ''}
                 height="40px"
@@ -345,7 +378,7 @@ function Setup() {
             </>
           }
           <img
-            className={classes.displayAssetIconSmall}
+            className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
             alt=""
             src={toAssetValue ? `${toAssetValue.logoURI}` : ''}
             height="40px"
@@ -355,13 +388,6 @@ function Setup() {
             }}
           />
         </div>
-        {
-          BigNumber(quote.priceImpact).gt(0.5) &&
-          <div className={classes.warningContainer}>
-            <Typography className={BigNumber(quote.priceImpact).gt(5) ? classes.warningError : classes.warningWarning}
-                        align="center">Price impact {formatCurrency(quote.priceImpact)}%</Typography>
-          </div>
-        }
       </div>
     );
   };
@@ -370,7 +396,7 @@ function Setup() {
     return (
       <div className={classes.slippage}>
         <Typography
-          className={[classes.inputBalanceSlippage].join(" ")}
+          className={[classes.inputBalanceSlippage, classes[`inputBalanceSlippage--${appTheme}`]].join(" ")}
           noWrap>
           Slippage
         </Typography>
@@ -384,10 +410,10 @@ function Setup() {
           onChange={amountChanged}
           disabled={loading}
           inputProps={{
-            className: classes.smallInput,
-            endAdornment: <InputAdornment position="end">
-              %
-            </InputAdornment>,
+            className: [classes.smallInput, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
+          }}
+          InputProps={{
+            endAdornment: <InputAdornment position="end">%</InputAdornment>,
           }}
         />
       </div>
@@ -408,10 +434,12 @@ function Setup() {
           }
         }}>
           Balance:
-          {(assetValue && assetValue.balance) ?
-            ' ' + formatCurrency(assetValue.balance) :
-            ''
-          }
+          <span>
+            {(assetValue && assetValue.balance) ?
+              ' ' + formatCurrency(assetValue.balance) :
+              ''
+            }
+          </span>
         </Typography>
         <div className={`${classes.massiveInputContainer} ${(amountError || assetError) && classes.error}`}>
           <div className={classes.massiveInputAssetSelect}>
@@ -536,7 +564,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
         <div className={classes.assetSelectMenuItem}>
           <div className={classes.displayDualIconContainerSmall}>
             <img
-              className={classes.displayAssetIconSmall}
+              className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
               alt=""
               src={asset ? `${asset.logoURI}` : ''}
               height="60px"
@@ -575,7 +603,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
         <div className={classes.assetSelectMenuItem}>
           <div className={classes.displayDualIconContainerSmall}>
             <img
-              className={classes.displayAssetIconSmall}
+              className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
               alt=""
               src={asset ? `${asset.logoURI}` : ''}
               height="60px"

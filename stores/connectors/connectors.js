@@ -35,6 +35,6 @@ export const walletconnect = new WalletConnectConnector({
 
 export const walletlink = new WalletLinkConnector({
   url: RPC_URLS[process.env.NEXT_PUBLIC_CHAINID],
-  appName: "Solidly",
+  appName: "Dystopia",
   chainId: parseInt(process.env.NEXT_PUBLIC_CHAINID),
 });

@@ -16,6 +16,10 @@
   height: 100%;
 }
 
+.main {
+  padding-bottom: 80px;
+}
+
 @media screen and (max-width: 1200px) {
   .container {
     flex-direction: column;

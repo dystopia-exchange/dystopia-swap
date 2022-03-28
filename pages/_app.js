@@ -6,7 +6,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useRouter } from "next/router";
 
 import { AppThemeProvider, useAppTheme } from "../ui/AppThemeProvider";
-import darkTheme from "../theme/dark";
 
 import Configure from "./configure";
 
@@ -33,8 +32,9 @@ export default function MyApp({ Component, pageProps }) {
   }, []);
 
   const changeTheme = (dark) => {
-    // setThemeConfig(dark ? darkTheme : lightTheme);
-    // localStorage.setItem('yearn.finance-dark-mode', dark ? 'dark' : 'light');
+    setAppTheme(dark ? 'dark' : 'light')
+
+    localStorage.setItem('dystopia.finance-dark-mode', dark ? 'dark' : 'light');
   };
 
   const accountConfigureReturned = () => {
@@ -47,7 +47,7 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(function () {
     const localStorageDarkMode = window.localStorage.getItem(
-      "yearn.finance-dark-mode"
+      "dystopia.finance-dark-mode"
     );
     changeTheme(localStorageDarkMode ? localStorageDarkMode === "dark" : false);
   }, []);
@@ -91,7 +91,7 @@ export default function MyApp({ Component, pageProps }) {
     <ThemeProvider theme={theme}>
       <React.Fragment>
         <Head>
-          <title>Solidly</title>
+          <title>Dystopia</title>
           <meta
             name="viewport"
             content="minimum-scale=1, initial-scale=1, width=device-width"
