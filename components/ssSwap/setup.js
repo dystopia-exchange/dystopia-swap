@@ -635,7 +635,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
               autoFocus
               variant="outlined"
               fullWidth
-              placeholder="MATIC, DAI, 0x..."
+              placeholder="Search by name or paste address"
               value={search}
               onChange={onSearchChanged}
               InputProps={{
@@ -671,14 +671,19 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
       <>
         <div className={classes.searchContainer}>
           <div className={classes.searchInline}>
-            <TextField
+            <InputBase
               autoFocus
               variant="outlined"
               fullWidth
-              placeholder="MATICC,DAI, 0x..."
+              placeholder="Search by name or paste address"
               value={search}
               onChange={onSearchChanged}
-              InputProps={{
+              inputProps={{
+                style: {
+                  background: '#DBE6EC',
+                  border: '1px solid #86B9D6',
+                  borderRadius: 0,
+                },
                 startAdornment: <InputAdornment position="start">
                   <Search/>
                 </InputAdornment>,

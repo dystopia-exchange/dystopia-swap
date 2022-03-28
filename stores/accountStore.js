@@ -27,8 +27,8 @@ class Store {
       connectorsByName: {
         MetaMask: injected,
         TrustWallet: injected,
-        WalletConnect: walletconnect,
         WalletLink: walletlink,
+        WalletConnect: walletconnect,
       },
       gasPrices: {
         standard: 90,

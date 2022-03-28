@@ -305,7 +305,7 @@ function Header(props) {
 
           {transactionQueueLength > 0 && (
             <IconButton
-              className={classes.accountButton}
+              className={[classes.accountButton, classes[`accountButton--${appTheme}`]].join(' ')}
               variant="contained"
               color="primary"
               onClick={() => {
@@ -379,7 +379,7 @@ function Header(props) {
           ) : (
             <Button
               disableElevation
-              className={classes.accountButton}
+              className={[classes.accountButton, classes[`accountButton--${appTheme}`]].join(' ')}
               variant="contained"
               onClick={onAddressClicked}
             >
@@ -388,6 +388,16 @@ function Header(props) {
                   className={`${classes.accountIcon} ${classes.metamask}`}
                 ></div>
               )}
+
+              {!account?.address && (
+                <img src="/images/ui/icon-wallet.svg" className={classes.walletIcon}/>
+              )}
+
+              <div className={classes.walletPointContainer}>
+                <div className={classes.walletPoint}>
+                </div>
+              </div>
+
               <Typography className={classes.headBtnTxt}>
                 {account && account.address
                   ? formatAddress(account.address)

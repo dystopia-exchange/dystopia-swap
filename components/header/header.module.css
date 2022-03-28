@@ -60,8 +60,18 @@
 .userBlock {
   display: flex;
   justify-content: flex-end;
-  width: 260px;
   margin-right: 30px;
+}
+
+.walletPointContainer {
+  margin: 0 5px;
+}
+
+.walletPoint {
+  width: 2px;
+  height: 2px;
+  background: #0B5E8E;
+  border-radius: 2px;
 }
 
 .version {
@@ -128,18 +138,25 @@
   height: 100%;
 }
 
+.walletIcon {
+  width: 18px;
+  height: 18px;
+}
+
 .accountButton {
   display: flex;
   align-items: center;
   margin-left: 14px !important;
+  min-width: 168px;
   height: 28px;
-  border: 0 !important;
   border-radius: 40px !important;
   color: #ffffff !important;
   padding-left: 10px !important;
   padding-right: 10px !important;
   position: fixed;
   z-index: 10030 !important;
+  background: #9BC9E4 !important;
+  border: 1px solid #0B5E8E !important;
 }
 
 .accountButton--dark {
@@ -226,6 +243,7 @@
   font-weight: 500 !important;
   font-size: 14px !important;
   line-height: 120%;
+  white-space: nowrap;
 }
 
 .metamask {
@@ -241,7 +259,7 @@
   background-image: url("/connectors/torus.jpg");
 }
 .trust {
-  background-image: url("/connectors/trustWallet.png");
+  background-image: url("/connectors/trustWallet.svg");
 }
 
 .themeSelectContainer {
@@ -347,8 +365,9 @@
   font-weight: 500 !important;
   font-size: 14px !important;
   line-height: 120%;
-  border: 1px solid rgb(6, 211, 215) !important;
-  border-radius: 10px;
+  background: #9BC9E4 !important;
+  border: 1px solid #0B5E8E !important;
+  border-radius: 40px !important;
   padding: 3px 10px !important;
   color: #ffffff;
 }
