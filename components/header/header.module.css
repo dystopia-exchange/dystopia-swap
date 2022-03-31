@@ -143,6 +143,14 @@
   height: 18px;
 }
 
+.notificationsButton {
+  width: 30px;
+  height: 30px;
+  margin-left: 10px !important;
+  border-radius: 100px !important;
+  background: transparent !important;
+}
+
 .accountButton {
   display: flex;
   align-items: center;
@@ -165,10 +173,6 @@
 
 .accountButton--light {
   background-color: #9BC9E4 !important;
-}
-
-.iconColor {
-  color: #fff;
 }
 
 .switchNetworkBtn {

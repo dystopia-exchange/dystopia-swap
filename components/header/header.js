@@ -14,7 +14,12 @@ import {
   ListItemText,
 } from "@mui/material";
 import { withStyles, withTheme } from "@mui/styles";
-import { List, ArrowDropDown, AccountBalanceWalletOutlined, DashboardOutlined } from "@mui/icons-material";
+import {
+  ArrowDropDown,
+  AccountBalanceWalletOutlined,
+  DashboardOutlined,
+  NotificationsNoneOutlined,
+} from "@mui/icons-material";
 
 import Navigation from "../navigation";
 import Unlock from "../unlock";
@@ -182,8 +187,12 @@ const StyledSwitch = withStyles((theme) => ({
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
-    background: "#06D3D7",
-    color: "#000",
+    background: "#15B525",
+    color: "#ffffff",
+    width: 12,
+    height: 12,
+    minWidth: 12,
+    fontSize: 8,
   },
 }))(Badge);
 
@@ -303,25 +312,6 @@ function Header(props) {
             </div>
           )}
 
-          {transactionQueueLength > 0 && (
-            <IconButton
-              className={[classes.accountButton, classes[`accountButton--${appTheme}`]].join(' ')}
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                stores.emitter.emit(ACTIONS.TX_OPEN);
-              }}
-            >
-              <StyledBadge
-                badgeContent={transactionQueueLength}
-                color="secondary"
-                overlap="circular"
-              >
-                <List className={classes.iconColor} />
-              </StyledBadge>
-            </IconButton>
-          )}
-
           {account && account.address ? (
             <div>
               <Button
@@ -406,6 +396,28 @@ function Header(props) {
             </Button>
           )}
           <ThemeSwitcher />
+
+          {transactionQueueLength > 0 && (
+            <IconButton
+              className={[classes.notificationsButton, classes[`notificationsButton--${appTheme}`]].join(' ')}
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                stores.emitter.emit(ACTIONS.TX_OPEN);
+              }}
+            >
+              <StyledBadge
+                badgeContent={transactionQueueLength}
+                overlap="circular"
+              >
+                <NotificationsNoneOutlined style={{
+                  width: 20,
+                  height: 20,
+                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                }} />
+              </StyledBadge>
+            </IconButton>
+          )}
         </div>
         {unlockOpen && (
           <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />
