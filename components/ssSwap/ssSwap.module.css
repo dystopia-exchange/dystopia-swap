@@ -14,8 +14,8 @@
   padding: 24px;
   display: flex;
   flex-direction: column;
-  -webkit-box-shadow: 0 13px 30px 0 rgba(7,9,18,0.1) !important;
-  box-shadow: 0 13px 30px 0 rgba(7,9,18,0.1) !important;
+  -webkit-box-shadow: 0 13px 30px 0 rgba(7, 9, 18, 0.1) !important;
+  box-shadow: 0 13px 30px 0 rgba(7, 9, 18, 0.1) !important;
 }
 
 .smallerText {
@@ -28,6 +28,14 @@
   line-height: 140% !important;
   color: #0A2C40 !important;
   text-transform: uppercase;
+}
+
+.smallerText--light {
+  color: #0A2C40 !important;
+}
+
+.smallerText--dark {
+  color: #FFFFFF !important;
 }
 
 .swapInputs {
@@ -45,7 +53,7 @@
   background: rgb(33, 43, 72);
   max-width: 80px;
   min-height: 50px;
-  padding: 20px 12px 4px 12px ;
+  padding: 20px 12px 4px 12px;
 }
 
 .massiveInputContainer {
@@ -120,9 +128,10 @@
 }
 
 .displayDualIconContainerSmall {
-  width: 60px;
+  width: 50px;
+  height: 50px;
   position: relative;
-  margin-right: 12px;
+  margin-right: 15px;
 }
 
 .displaySelect {
@@ -137,25 +146,49 @@
 }
 
 .searchContainer {
-  padding: 24px;
-  height: 600px;
+  padding: 30px 30px 0;
+  max-height: 710px;
   overflow-y: scroll;
+  background: #DBE6EC;
+  border: 1px solid #86B9D6;
+  border-bottom: none;
 }
 
 .manageLocalContainer {
-  width: 100%;
+  position: absolute;
+  bottom: 30px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 6px;
+  justify-content: flex-start;
+  margin-top: 20px;
+}
+
+.manageLocalBtn {
+  padding: 0 !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  color: #0B5E8E !important;
 }
 
 .assetSearchResults {
   width: 100%;
+  max-height: 490px;
+  overflow: auto;
   display: flex;
   flex-direction: column;
-  margin-top: 12px;
+  margin-top: 30px;
   min-width: 390px;
+}
+
+.assetSearchResults--light {
+  background: #9BC9E4;
+  border: 1px solid #86B9D6;
+}
+
+.assetSearchResults--dark {
+  background: #2D3741;
+  border: 1px solid #5F7285;
 }
 
 .withBalanceToggle {
@@ -268,9 +301,18 @@
   font-weight: 400 !important;
   font-size: 30px !important;
   line-height: 100% !important;
-  color: #5688A5 !important;
   border: none !important;
   outline: none !important;
+}
+
+.largeInput--light {
+  color: #325569 !important;
+  -webkit-text-fill-color: #325569 !important;
+}
+
+.largeInput--dark {
+  color: #C6CDD2 !important;
+  -webkit-text-fill-color: #C6CDD2 !important;
 }
 
 .addressInput {
@@ -313,7 +355,7 @@
 }
 
 .swapConfirmSide {
-  border: 1px solid rgba(128, 128, 128,  0.5);
+  border: 1px solid rgba(128, 128, 128, 0.5);
   border-radius: 10px;
   padding: 24px 6px;
 }
@@ -364,11 +406,33 @@
 }
 
 .assetSelectMenu {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
+  padding: 10px !important;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1px !important;
+  transition: all ease 300ms;
+}
+
+.assetSelectMenu--light {
+  background: #B9DFF5 !important;
+  box-shadow: 0 1px 0 rgba(11, 94, 142, 0);
+}
+
+.assetSelectMenu--light:hover {
+  background: #CFE5F2 !important;
+  box-shadow: 0 1px 0 rgba(11, 94, 142, 0.5);
+}
+
+.assetSelectMenu--dark {
+  background: #24292D !important;
+  box-shadow: 0 1px 0 rgba(76, 173, 229, 0);
+}
+
+.assetSelectMenu--dark:hover {
+  background: #2D3741 !important;
+  box-shadow: 0 1px 0 rgba(76, 173, 229, 0.5);
+
 }
 
 .txContainer {
@@ -759,6 +823,25 @@
   border: 1px solid #5F7285;
 }
 
+.assetOptionIcon {
+  width: 50px;
+  height: 50px;
+  padding: 4px;
+  border-radius: 100px;
+  border: 1px solid #9BC9E4;
+  background: #CFE5F2;
+}
+
+.assetOptionIcon--light {
+  background: #CFE5F2;
+  border: 1px solid #86B9D6;
+}
+
+.assetOptionIcon--dark {
+  background: #304E61;
+  border: 1px solid #5F7285;
+}
+
 .quoteLoaderDivider,
 .warningDivider {
   position: absolute;
@@ -835,10 +918,15 @@
   border: 2px solid #DB3434;
 }
 
+.searchInput > fieldset {
+  border: none;
+}
+
 @media screen and (max-width: 1200px) {
   .swapContainer {
     padding: 12px;
   }
+
   .newSwapContainer {
     flex-direction: column;
   }
@@ -848,18 +936,23 @@
   .newSwapContainer {
     margin-top: -100px;
   }
+
   .swapContainer {
     padding: 12px;
   }
+
   .addressInput {
     font-size: 12px !important;
   }
+
   .largeInput {
     font-size: 36px !important;
   }
+
   .addressField {
     font-size: 12px !important;
   }
+
   .swapInfoContainer {
     width: 100%;
   }
