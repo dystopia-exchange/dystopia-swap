@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Typography, DialogContent, Dialog, Slide, IconButton } from "@mui/material";
+import { Typography, DialogContent, Dialog, Slide, IconButton, DialogTitle } from "@mui/material";
 import { OpenInNew, Close } from '@mui/icons-material';
 
 import Lottie from "lottie-react";
@@ -17,6 +17,7 @@ function Transition(props) {
 import classes from './transactionQueue.module.css';
 import stores from '../../stores'
 import { ACTIONS, ETHERSCAN_URL } from '../../stores/constants';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 export default function TransactionQueue({ setQueueLength }) {
 
@@ -25,6 +26,7 @@ export default function TransactionQueue({ setQueueLength }) {
   const [ purpose, setPurpose ] = useState(null)
   const [ type, setType ] = useState(null)
   const [ action, setAction ] = useState(null)
+  const { appTheme } = useAppThemeContext();
 
   const handleClose = () => {
     setOpen(false);
@@ -171,9 +173,9 @@ export default function TransactionQueue({ setQueueLength }) {
 
     return (
       <>
-        <div className={ classes.headingContainer }>
+        {/*<div className={ classes.headingContainer }>
           <Typography className={ classes.heading }>{ purpose ? purpose : 'Pending Transactions'}</Typography>
-        </div>
+        </div>*/}
         <div className={ classes.transactionsContainer}>
           {
             transactions && transactions.map((tx, idx) => {
@@ -188,18 +190,52 @@ export default function TransactionQueue({ setQueueLength }) {
   return (
     <Dialog
       className={classes.dialogScale}
+      classes={{
+        root: classes.rootPaper,
+        scrollPaper: classes.topScrollPaper,
+        paper: appTheme === "dark" ? classes['paperBody--dark'] : classes['paperBody--light'],
+      }}
       open={open}
       onClose={handleClose}
       fullWidth={true}
       maxWidth={"sm"}
       TransitionComponent={Transition}
       fullScreen={fullScreen}
+      BackdropProps={{style: {backgroundColor: 'transparent'}}}
     >
-      <DialogContent>
-        <IconButton className={ classes.closeIconbutton }
-          onClick={handleClose}>
-          <Close />
-        </IconButton>
+      <DialogTitle style={{
+        padding: '30px',
+        fontWeight: 500,
+        fontSize: 24,
+        lineHeight: '120%',
+        color: '#0A2C40',
+        background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+          <div style={{
+            color: appTheme === "dark" ? '#ffffff' : '#0A2C40'
+          }}>
+            Notification History
+          </div>
+
+          <Close
+            style={{
+              cursor: 'pointer',
+              color: appTheme === "dark" ? '#ffffff' : '#0A2C40'
+            }}
+            onClick={handleClose}/>
+        </div>
+      </DialogTitle>
+
+      <DialogContent
+        style={{
+          padding: '0 30px 30px',
+          background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+        }}>
         { renderTransactions(transactions) }
         { renderDone(transactions) }
       </DialogContent>
