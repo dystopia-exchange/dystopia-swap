@@ -14,7 +14,7 @@ import {
   DialogContent,
 } from '@mui/material';
 import { Search, ArrowDownward, ArrowForwardIos, DeleteOutline, Close, ArrowBackIosNew } from '@mui/icons-material';
-
+import {useParams} from 'react-router-dom';
 import { withTheme } from '@mui/styles';
 
 import { formatCurrency, formatAddress, formatCurrencyWithSymbol, formatCurrencySmall } from '../../utils';
@@ -30,7 +30,7 @@ import BigNumber from 'bignumber.js';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 function Setup() {
-
+   console.log(useParams(),"hehe")
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
 

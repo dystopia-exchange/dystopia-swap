@@ -81,7 +81,7 @@ function Home({ changeTheme }) {
           </Grid>
           <Grid item lg={12} md={12} sm={12} xs={12}>
             <Typography variant="body1" className={classes.mainDescription}>
-              Dystopia officially launched in January 2022 with a collective goal of fair and balanced access to DeFi. Solidly is a decentralized exchange that has launched on the Fantom network with low fees, near 0 slippage on correlated assets and a strong focus on secondary markets for tokenized locks as NFT’s (veToken = lpNFTs).
+              Dystopia officially launched in April 2022 with a collective goal of fair and balanced access to DeFi. Dystopia is a decentralized exchange that has launched on the Matic network with low fees, near 0 slippage on correlated assets and a strong focus on secondary markets for tokenized locks as NFT’s (veToken = lpNFTs).
             </Typography>
             <Typography variant="body2" className={classes.secDescription}>
               One segment of the cryptocurrency landscape that has shown incredible potential is the swapping of stablecoins and volatile assets. Dystopia Swap offers users quick, seamless and cheap transactions while utilizing strategies to maximize their yield.

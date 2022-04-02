@@ -57,7 +57,7 @@ export default function Setup() {
   const [loading, setLoading] = useState(false)
   const [amount, setAmount] = useState('')
   const [fromAssetError, setFromAssetError] = useState(false);
-  const [platform, setPlatform] = React.useState(migrate[0].value);
+  const [platform, setPlatform] = React.useState(migrate[1].value);
   const [fromAssetOptions, setFromAssetOptions] = useState([])
   const [toAssetOptions, setToAssetOptions] = useState([])
 
@@ -83,11 +83,12 @@ export default function Setup() {
         if (!account) {
           console.warn("account not found");
         } else {
-
+         
           const factoryContract = new web3.eth.Contract(
             FactoryAbi,
             platform
           );
+          console.log(platform,factoryContract,"hehe3")
           const pairAddress = await factoryContract.methods.getPair(
             token0,
             token1
@@ -115,6 +116,7 @@ export default function Setup() {
             }
             setAmount(lpBalance)
             setPairDetails(pairDetails)
+            console.log(pairDetails,"hehe4")
           } else {
             const pairDetails = {
               isValid: false,
@@ -153,8 +155,8 @@ export default function Setup() {
   }
 
   useEffect(function () {
-    const ssUpdated = () => {
-      const baseAsset = stores.stableSwapStore.getStore('baseAssets')
+    const ssUpdated = async () => {
+      const baseAsset = await stores.stableSwapStore.getStore('baseAssets')
 
       setToAssetOptions(baseAsset)
       setFromAssetOptions(baseAsset)
@@ -166,12 +168,14 @@ export default function Setup() {
       if (baseAsset.length > 0 && fromAssetValue == null) {
         setFromAssetValue(baseAsset[1])
       }
-
+      console.log(baseAsset[0]?.address,baseAsset[1]?.address,"hehe2")
+      //await getPairDetails(baseAsset[0].address,baseAsset[1].address)
       // forceUpdate()
     }
+   
     stores.emitter.on(ACTIONS.UPDATED, ssUpdated)
     ssUpdated()
-  }, [fromAssetValue, toAssetValue]);
+  }, [fromAssetValue, toAssetValue,pairDetails]);
 
   const handleChange = (event) => {
     setPlatform(event.target.value);
@@ -237,6 +241,7 @@ export default function Setup() {
       setLoading(false)
     }
   }
+
   const handleAmountChange = (event) => {
     if (parseFloat(event.target.value) >= parseFloat(pairDetails.lpBalance)) {
       setAmount(pairDetails.lpBalance)
@@ -245,7 +250,9 @@ export default function Setup() {
     }
 
   }
+
   let buttonText = 'Approve';
+
   if (loading && pairDetails && parseFloat(pairDetails.allowence) === 0) {
     buttonText = 'Approving...';
   } else if (loading && pairDetails && parseFloat(pairDetails.allowence) > 0) {

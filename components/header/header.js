@@ -307,7 +307,14 @@ function Header(props) {
           {process.env.NEXT_PUBLIC_CHAINID == "80001" && (
             <div className={classes.testnetDisclaimer}>
               <Typography className={[classes.testnetDisclaimerText, classes[`testnetDisclaimerText--${appTheme}`]].join(' ')}>
-                Testnet
+                Mumbai Testnet
+              </Typography>
+            </div>
+          )}
+          {process.env.NEXT_PUBLIC_CHAINID == "137" && (
+            <div className={classes.testnetDisclaimer}>
+              <Typography className={[classes.testnetDisclaimerText, classes[`testnetDisclaimerText--${appTheme}`]].join(' ')}>
+                Matic Mainnet
               </Typography>
             </div>
           )}
@@ -440,7 +447,7 @@ function Header(props) {
               Switch to{" "}
               {process.env.NEXT_PUBLIC_CHAINID == "80001"
                 ? "Matic Testnet"
-                : "Fantom Mainnet"}
+                : "Matic Mainnet"}
             </Button>
           </div>
         </div>
