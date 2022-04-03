@@ -11,7 +11,7 @@ const migrate = [
     label: "Quickswap",
     value: "0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32",
     migratorAddress: {
-      80001: "0xeFcE7f911C3a96ED6E8109192932CE38600497F3",
+      80001: "0xA608B2665D26001aB3b7Fc514c0b5608A5FfdE4f",
       137: "0xB0EE479CA14b4B6e250511ddD21C7E3856F99dd9"
     },
   },
