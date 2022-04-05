@@ -72,8 +72,6 @@
 }
 
 .massiveInputAssetSelect {
-  /*width: 124px;*/
-  /*min-height: 124px;*/
   height: 100%;
 }
 
@@ -437,7 +435,6 @@
 .assetSelectMenu--dark:hover {
   background: #2D3741 !important;
   box-shadow: 0 1px 0 rgba(76, 173, 229, 0.5);
-
 }
 
 .txContainer {
