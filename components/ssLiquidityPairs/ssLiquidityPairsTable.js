@@ -1106,11 +1106,6 @@ export default function EnhancedTable({pairs}) {
             aria-labelledby="tableTitle"
             size={'medium'}
             aria-label="enhanced table">
-            {/*<colgroup>
-              <col span="1" style="width: 15%;">
-                <col span="1" style="width: 70%;">
-                  <col span="1" style="width: 15%;">
-            </colgroup>*/}
             <EnhancedTableHead
               classes={classes}
               order={order}

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, withStyles } from '@mui/styles';
+import { makeStyles, styled, withStyles } from '@mui/styles';
 import Skeleton from '@mui/lab/Skeleton';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, TablePagination, Typography, Slider, Tooltip } from '@mui/material';
 import BigNumber from 'bignumber.js';
 
 import { formatCurrency } from '../../utils';
+import { ArrowDropDown } from '@mui/icons-material';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 const PrettoSlider = withStyles({
   root: {
@@ -116,7 +118,13 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'asset', numeric: false, disablePadding: false, label: 'Asset' },
+  {
+    id: 'asset',
+    numeric: false,
+    disablePadding: false,
+    label: 'Asset',
+    isSticky: true,
+  },
   {
     id: 'balance',
     numeric: true,
@@ -155,22 +163,119 @@ const headCells = [
   }
 ];
 
+const StickyTableCell = styled(TableCell)(({theme, appTheme}) => ({
+  color: appTheme === 'dark' ? '#C6CDD2 !important' : '#325569 !important',
+  width: 310,
+  left: 0,
+  position: "sticky",
+  zIndex: 5,
+  whiteSpace: 'nowrap',
+  padding: '20px 25px 15px',
+}));
+
+const StyledTableCell = styled(TableCell)(({theme, appTheme}) => ({
+  background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
+  width: 'auto',
+  whiteSpace: 'nowrap',
+  padding: '20px 25px 15px',
+}));
+
 function EnhancedTableHead(props) {
   const { classes, order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
+  const {appTheme} = useAppThemeContext();
+
   return (
     <TableHead>
-      <TableRow>
+      <TableRow
+        style={{
+          border: '1px solid #9BC9E4',
+          borderColor: appTheme === 'dark' ? '#5F7285' : '#9BC9E4',
+          whiteSpace: 'nowrap',
+        }}>
         {headCells.map((headCell) => (
-          <TableCell className={classes.overrideTableHead} key={headCell.id} align={headCell.numeric ? 'right' : 'left'} padding={'normal'} sortDirection={orderBy === headCell.id ? order : false}>
+          <>
+            {
+              headCell.isSticky
+                ? <StickyTableCell
+                  appTheme={appTheme}
+                  key={headCell.id}
+                  align={headCell.numeric ? 'right' : 'left'}
+                  padding={'normal'}
+                  sortDirection={orderBy === headCell.id ? order : false}
+                  style={{
+                    background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
+                    borderBottom: '1px solid #9BC9E4',
+                    borderColor: appTheme === 'dark' ? '#5F7285' : '#9BC9E4',
+                  }}>
+                  <TableSortLabel
+                    active={orderBy === headCell.id}
+                    direction={orderBy === headCell.id ? order : 'asc'}
+                    onClick={createSortHandler(headCell.id)}>
+                    <Typography
+                      className={classes.headerText}
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 12,
+                        lineHeight: '120%',
+                      }}>
+                      {headCell.label}
+                    </Typography>
+                    {/*{orderBy === headCell.id
+                        ? <span className={classes.visuallyHidden}>
+                            {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                          </span>
+                        : null
+                      }*/}
+                  </TableSortLabel>
+                </StickyTableCell>
+                : <StyledTableCell
+                  style={{
+                    background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
+                    borderBottom: '1px solid #9BC9E4',
+                    borderColor: appTheme === 'dark' ? '#5F7285' : '#9BC9E4',
+                    color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                  }}
+                  key={headCell.id}
+                  align={headCell.numeric ? 'right' : 'left'}
+                  padding={'normal'}
+                  sortDirection={orderBy === headCell.id ? order : false}>
+                  <TableSortLabel
+                    active={orderBy === headCell.id}
+                    direction={orderBy === headCell.id ? order : 'asc'}
+                    IconComponent={ArrowDropDown}
+                    style={{
+                      color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                    }}
+                    onClick={createSortHandler(headCell.id)}>
+                    <Typography
+                      className={classes.headerText}
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 12,
+                        lineHeight: '120%',
+                      }}>
+                      {headCell.label}
+                    </Typography>
+                    {/*{orderBy === headCell.id
+                        ? <span className={classes.visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </span>
+                        : null
+                      }*/}
+                  </TableSortLabel>
+                </StyledTableCell>
+            }
+          </>
+          /*<TableCell className={classes.overrideTableHead} key={headCell.id} align={headCell.numeric ? 'right' : 'left'} padding={'normal'} sortDirection={orderBy === headCell.id ? order : false}>
             <TableSortLabel active={orderBy === headCell.id} direction={orderBy === headCell.id ? order : 'asc'} onClick={createSortHandler(headCell.id)}>
               <Typography variant="h5" className={ classes.headerText }>{headCell.label}</Typography>
               {orderBy === headCell.id ? <span className={classes.visuallyHidden}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</span> : null}
             </TableSortLabel>
-          </TableCell>
+          </TableCell>*/
         ))}
       </TableRow>
     </TableHead>
@@ -442,8 +547,17 @@ console.log(gauges,"yeahh1")
   return (
     <div className={classes.root}>
       <TableContainer className={ classes.tableContainer }>
-        <Table className={classes.table} aria-labelledby="tableTitle" size={'medium'} aria-label="enhanced table">
-          <EnhancedTableHead classes={classes} order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
+        <Table
+          className={classes.table}
+          aria-labelledby="tableTitle"
+          size={'medium'}
+          aria-label="enhanced table">
+          <EnhancedTableHead
+            classes={classes}
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort} />
+
           <TableBody>
             {stableSort(gauges, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -586,6 +700,7 @@ console.log(gauges,"yeahh1")
           </TableBody>
         </Table>
       </TableContainer>
+
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
