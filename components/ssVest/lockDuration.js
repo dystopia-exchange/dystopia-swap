@@ -1,5 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Grid, Typography, Button, TextField, CircularProgress, RadioGroup, Radio, FormControlLabel, InputAdornment } from '@mui/material';
+import {
+  Grid,
+  Typography,
+  Button,
+  TextField,
+  CircularProgress,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
+  InputAdornment,
+  InputBase,
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import BigNumber from 'bignumber.js';
@@ -8,6 +19,7 @@ import stores from '../../stores'
 import {
   ACTIONS
 } from '../../stores/constants';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 export default function ffLockDuration({ nft, updateLockDuration }) {
 
@@ -95,9 +107,11 @@ export default function ffLockDuration({ nft, updateLockDuration }) {
     min = moment.unix(nft?.lockEnds).format('YYYY-MM-DD')
   }
 
+  const {appTheme} = useAppThemeContext();
+
   const renderMassiveInput = (type, amountValue, amountError, amountChanged, balance, logo) => {
     return (
-      <div className={ classes.textField}>
+     /* <div className={ classes.textField}>
         <div className={ `${classes.massiveInputContainer} ${ (amountError) && classes.error }` }>
           <div className={ classes.massiveInputAssetSelect }>
             <div className={ classes.displaySelectContainer }>
@@ -133,13 +147,51 @@ export default function ffLockDuration({ nft, updateLockDuration }) {
             />
           </div>
         </div>
+      </div>*/
+
+      <div className={[classes.textField, classes[`textFieldDate--${appTheme}`]].join(' ')}>
+        <div className={`${classes.massiveInputContainer} ${(amountError) && classes.error}`}>
+          <div className={classes.massiveInputAssetSelect}>
+            <div className={classes.displaySelectContainerDate}>
+              <div className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+                <div className={classes.displayAssetIcon}></div>
+              </div>
+            </div>
+          </div>
+
+          <InputBase
+            className={classes.massiveInputAmountDate}
+            inputRef={inputEl}
+            id="someDate"
+            type="date"
+            placeholder="Lock Expiry Date"
+            error={amountError}
+            helperText={amountError}
+            value={amountValue}
+            onChange={amountChanged}
+            disabled={lockLoading}
+            inputProps={{
+              className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
+              min: moment().add(7, 'days').format('YYYY-MM-DD'),
+              max: moment().add(1460, 'days').format('YYYY-MM-DD'),
+            }}
+            InputProps={{
+              disableUnderline: true,
+            }}
+          />
+
+          <Typography
+            className={[classes.smallerTextDate, classes[`smallerTextDate--${appTheme}`]].join(" ")}>
+            Lock Expiry Date
+          </Typography>
+        </div>
       </div>
     )
   }
 
   return (
     <div className={ classes.someContainer }>
-      <div className={ classes.inputsContainer3 }>
+      {/*<div className={ classes.inputsContainer3 }>*/}
         { renderMassiveInput('lockDuration', selectedDate, selectedDateError, handleDateChange, null, null) }
         <div className={ classes.inline }>
           <Typography className={ classes.expiresIn }>Expires: </Typography>
@@ -150,7 +202,7 @@ export default function ffLockDuration({ nft, updateLockDuration }) {
             <FormControlLabel className={ classes.vestPeriodLabel } value="years" control={<Radio color="primary" />} label="4 years" labelPlacement="left" />
           </RadioGroup>
         </div>
-      </div>
+      {/*</div>*/}
       <div className={ classes.actionsContainer3 }>
         <Button
           className={classes.buttonOverride}
