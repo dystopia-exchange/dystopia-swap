@@ -72,8 +72,6 @@
 }
 
 .massiveInputAssetSelect {
-  /*width: 124px;*/
-  /*min-height: 124px;*/
   height: 100%;
 }
 
@@ -273,25 +271,30 @@
 }
 
 .textField {
+  width: 400px;
   margin-top: 2px;
   margin-bottom: 2px;
   position: relative;
 }
 
 .textField--From-dark {
+  height: 172px;
   background-image: url("/images/ui/swap-coin-top--dark.svg");
 }
 
 .textField--To-dark {
+  height: 171px;
   margin-top: -30px;
   background-image: url("/images/ui/swap-coin-bottom--dark.svg");
 }
 
 .textField--From-light {
+  height: 172px;
   background-image: url("/images/ui/swap-coin-top--light.svg");
 }
 
 .textField--To-light {
+  height: 171px;
   margin-top: -30px;
   background-image: url("/images/ui/swap-coin-bottom--light.svg");
 }
@@ -432,7 +435,6 @@
 .assetSelectMenu--dark:hover {
   background: #2D3741 !important;
   box-shadow: 0 1px 0 rgba(76, 173, 229, 0.5);
-
 }
 
 .txContainer {

@@ -101,7 +101,7 @@ export default function ffOverview() {
                   <BalanceIcon className={ classes.overviewIcon } />
               </Grid>
               <Grid item lg={9} md={9} sm={9} xs={9} className={ classes.itemContent }>
-                <Typography className={ classes.title }>SOLID Balance:</Typography>
+                <Typography className={ classes.title }>DYST Balance:</Typography>
                 <div className={ classes.inline }>
                 <Typography className={ classes.value }>{ formatCurrency(govToken ? govToken.balance : 0) }</Typography>
                 <Typography className={ classes.valueSymbol }>{ govToken ? govToken.symbol : '' }</Typography>

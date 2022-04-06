@@ -9,33 +9,122 @@
 }
 
 .transactionsContainer {
-  border-radius: 12px;
-  background: rgb(33, 43, 72);
-  border: 1px solid rgba(108,108,123, 0.2);
-  padding: 24px;
   margin-bottom: 12px;
 }
 
 .transaction {
-  padding: 12px 12px;
-  border-bottom: 1px solid rgba(108,108,123, 0.2);
-  cursor: pointer;
+  width: 460px;
+  margin-bottom: 20px;
 }
 
-.transaction:hover {
-  background: rgba(0, 0, 0, 0.2);
+.transactionTopBg {
+  width: 460px;
+  height: 16px;
 }
 
-.closeIconbutton {
-  position: absolute !important;
-  right: 0px;
-  top: 0px;
+.transactionTopBg--CONFIRMED,
+.transactionTopBg--DONE {
+  background-image: url("/images/ui/notify-success-top-bg.svg");
+}
+
+.transactionTopBg--PENDING,
+.transactionTopBg--WAITING {
+  background-image: url("/images/ui/notify-waiting-top-bg.svg");
+}
+
+.transactionTopBg--SUBMITTED {
+  background-image: url("/images/ui/notify-submited-top-bg.svg");
+}
+
+.transactionTopBg--REJECTED {
+  background-image: url("/images/ui/notify-error-top-bg.svg");
 }
 
 .transactionInfo {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+}
+
+.transactionInfo--CONFIRMED,
+.transactionInfo--DONE {
+  border: 1px solid #15B525;
+}
+
+.transactionInfo--PENDING,
+.transactionInfo--WAITING {
+  border: 1px solid #86B9D6;
+}
+
+.transactionInfo--SUBMITTED {
+  border: 1px solid #F9A01A;
+}
+
+.transactionInfo--REJECTED {
+  border: 1px solid #DB3434;
+}
+
+.transactionStatusText {
+  padding: 5px 2px;
+  border-top: 1px solid #86B9D6;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 120%;
+  text-transform: lowercase;
+}
+
+.transactionStatusText--CONFIRMED,
+.transactionStatusText--DONE {
+  color: #15B525;
+}
+
+.transactionStatusText--PENDING,
+.transactionStatusText--WAITING {
+  color: #86B9D6;
+}
+
+.transactionStatusText--SUBMITTED {
+  color: #F9A01A;
+}
+
+.transactionStatusText--REJECTED {
+  color: #DB3434;
+}
+
+.transactionDescriptionTitle {
+  margin-left: 10px !important;
+  padding-bottom: 10px !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  border-bottom: 1px solid #86B9D6;
+  text-align: left;
+}
+
+.transactionDescriptionTitle--CONFIRMED,
+.transactionDescriptionTitle--DONE {
+  color: #15B525;
+}
+
+.transactionDescriptionTitle--PENDING,
+.transactionDescriptionTitle--WAITING {
+  color: #86B9D6;
+}
+
+.transactionDescriptionTitle--SUBMITTED {
+  color: #F9A01A;
+}
+
+.transactionDescriptionTitle--REJECTED {
+  color: #DB3434;
+}
+
+.transactionDescription {
+  margin-left: 10px !important;
+  margin-top: 10px !important;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  color: #5688A5;
+  text-align: left;
 }
 
 .capitalise {
@@ -77,6 +166,36 @@
   max-width: 640px;
   margin: auto;
   text-align: center;
+}
+
+.topScrollPaper {
+  align-items: flex-start !important;
+  justify-content: flex-end !important;
+}
+
+.rootPaper {
+  max-width: none !important;
+}
+
+.paperBody--dark,
+.paperBody--light {
+  top: 49px !important;
+  width: auto !important;
+  height: 100%;
+  max-height: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none;
+}
+
+.paperBody--light {
+  background: #DBE6EC;
+  border: 1px solid #86B9D6;
+}
+
+.paperBody--dark {
+  background: #151718;
+  border: 1px solid #5F7285;
 }
 
 .successDialog {

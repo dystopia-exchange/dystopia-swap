@@ -477,8 +477,9 @@ function Setup() {
   return (
     <div className={classes.swapInputs}>
       {renderMassiveInput('From', fromAmountValue, fromAmountError, fromAmountChanged, fromAssetValue, fromAssetError, fromAssetOptions, onAssetSelect)}
-      <div className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}
-           onClick={swapAssets}>
+      <div
+        className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}
+        onClick={swapAssets}>
       </div>
       {renderMassiveInput('To', toAmountValue, toAmountError, toAmountChanged, toAssetValue, toAssetError, toAssetOptions, onAssetSelect)}
       {renderSwapInformation()}
