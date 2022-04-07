@@ -85,7 +85,7 @@
 
 .massiveInputAmountField {
   font-style: normal !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   font-size: 30px !important;
   line-height: 100% !important;
   color: var(--input-font-color-light);
@@ -163,7 +163,7 @@
 
 .manageLocalBtn {
   padding: 0 !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   font-size: 14px !important;
   line-height: 120% !important;
   color: #0B5E8E !important;
@@ -196,6 +196,7 @@
 .displayAssetIcon {
   width: 60px;
   height: 60px;
+  border-radius: 100px;
 }
 
 .displayAssetIconSmall {
@@ -235,7 +236,7 @@
 }
 
 .inputBalanceSlippage {
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   font-size: 14px !important;
   line-height: 120% !important;
 }
@@ -636,7 +637,7 @@
 .depositInfoHeading {
   width: 100%;
   line-height: 120%;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   color: #06D3D7 !important;
   margin-bottom: 6px !important;
   font-size: 14px !important;
@@ -671,7 +672,7 @@
 .priceInfo > .title {
   padding: 0;
   margin: 5px 0 0;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   font-size: 18px !important;
   line-height: 140% !important;
 }

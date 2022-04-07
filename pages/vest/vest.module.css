@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
 
 .ffContainer {
-  height: 100%;
+  min-height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-top: 0px;
-  padding-top: 100px;
+  margin-top: 0;
   position: relative;
+  justify-content: center;
 }
 
 .gridWrapper {
@@ -29,17 +29,15 @@
   width: calc(100%) !important;
   background: rgba(17,23,41,0.2) !important;
   text-align: center;
-  padding: 50px;
+  padding: 130px;
   height: calc(100vh);
   box-shadow: none !important;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
   flex-direction: column;
   border-radius: 0 !important;
-  position: fixed;
-  top: 0;
 }
 
 .contentFloat {
@@ -82,50 +80,56 @@
   width: calc(100% - 180px) !important;
 }
 
-.mainHeadingNC {
-  text-align: center !important;
-  font-size: 30px !important;
-  font-family: 'Monument' !important;
-  font-weight: 100 !important;
-  color: #FFF;
+.mainDescBg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 460px;
+  height: 110px;
+  margin-top: 20px;
+  padding: 30px;
+  background-image: url("/images/ui/swap-bg.svg");
 }
 
 .mainDescNC {
-  margin: 30px auto !important;
   text-align: center !important;
-  color: #7E99B0;
-  font-size: 18px !important;
-  max-width: 800px;
-  line-height: 1.8rem !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 140% !important;
+  color: #0A2C40 !important;
 }
 
 .buttonConnect {
-  background: rgba(6,211,215,0.3) !important;
-  color: rgba(6,211,215,1) !important;
-  border-radius: 60px !important;
-  padding: 12px 24px 14px 24px !important;
-  font-weight: 700 !important;
-  text-transform: none !important;
-  border: 1px solid rgba(6,211,215,1) !important;
-  transform: scale(0.85);
-  -webkit-transition: all 300ms ease-out;
-  -moz-transition: all 300ms ease-out;
-  -ms-transition: all 300ms ease-out;
-  -o-transition: all 300ms ease-out;
-  transition: all 300ms ease-out;
+  width: 292px;
+  height: 65px;
+  margin-top: 40px !important;
+  padding: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
 }
 
-.buttonConnect:hover {
-  background: rgba(6,211,215,1) !important;
-  color: #111729 !important;
-  text-transform: none !important;
-  border: 1px solid rgba(6,211,215,1) !important;
-  transform: scale(0.9);
-  -webkit-transition: all 300ms ease-out;
-  -moz-transition: all 300ms ease-out;
-  -ms-transition: all 300ms ease-out;
-  -o-transition: all 300ms ease-out;
-  transition: all 300ms ease-out;
+.buttonConnect--light {
+  background-image: url("/images/ui/btn-connect-wallet--light.svg");
+}
+
+.buttonConnect--light:hover {
+  background-image: url("/images/ui/btn-connect-wallet-hover--light.svg");
+}
+
+.buttonConnect--light:active {
+  background-image: url("/images/ui/btn-connect-wallet-click--light.svg");
+}
+
+.buttonConnect--dark {
+  background-image: url("/images/ui/btn-connect-wallet--dark.svg");
+}
+
+.buttonConnect--dark:hover {
+  background-image: url("/images/ui/btn-connect-wallet-hover--dark.svg");
+}
+
+.buttonConnect--dark:active {
+  background-image: url("/images/ui/btn-connect-wallet-click--dark.svg");
 }
 
 @media screen and (max-width: 1280px) {

@@ -11,161 +11,120 @@
   position: fixed !important;
 }
 
+.paperBody--dark,
+.paperBody--light {
+  background: rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
 .warningContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  max-width: 540px;
-  border: 1px solid rgba(104,108,122,0.2);
-  padding: 40px;
-  border-radius: 20px;
+  position: relative;
+  padding: 10px 40px 40px;
+  width: 705px;
+}
+
+.warningContainer--light {
+  background: #DBE6EC;
+  border: 1px solid #86B9D6;
+}
+
+.warningContainer--dark {
+  background: #151718;
+  border: 1px solid #5F7285;
 }
 
 .warningIcon {
-  height: 50px;
-  margin-bottom: 20px !important;
+  width: 70px;
+  height: 70px;
 }
 
 .title1 {
-  font: normal normal normal 23px/36px Inter !important;
-  letter-spacing: 0px !important;
-  color: #FFF;
-  margin-bottom: 10px !important;
+  margin-left: 20px !important;
+  font-weight: 500 !important;
+  font-size: 24px !important;
+  line-height: 120% !important;
+  color: #0A2C40 !important;
+}
+
+.title1--dark {
+  color: #ffffff !important;
 }
 
 .title2 {
-  font: normal normal bold 24px/28px Inter !important;
-  letter-spacing: 0px !important;
-  margin-bottom: 36px !important;
-  text-align: center;
-  color: #06D3D7 !important;
+  margin-top: 30px !important;
+  margin-bottom: 30px !important;
+  font-family: 'PPNeueMachina UltraBold', serif !important;
+  font-weight: 800 !important;
+  font-size: 40px !important;
+  line-height: 120% !important;
+  color: #0B5E8E !important;
+}
+
+.title2--dark {
+  color: #4CADE6 !important;
 }
 
 .paragraph {
-  text-align: center;
-  font: normal normal bold 14px/22px Inter !important;
-  letter-spacing: 0px !important;
-  margin-bottom: 33px !important;
-  color: rgba(126,153,176,0.8);
+  text-align: left !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  color: #5688A5 !important;
 }
 
-.paragraph span {
-  color: #FFF;
+.paragraph--dark {
+  color: #7C838A !important;
 }
 
 .buttonsContainer {
-  padding: 0px 24px;
+  margin-top: 30px;
 }
 
 .primaryButton {
-    background: rgb(23, 52, 72) !important;
-    font-weight: 700 !important;
-    width: 100%;
-    margin-bottom: 15px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 625px;
+  height: 65px;
+  margin-bottom: 20px !important;
+  background-image: url("/images/ui/warning-btn-success--light.svg");
+  cursor: pointer;
+}
+
+.primaryButton--dark {
+  background-image: url("/images/ui/warning-btn-success--dark.svg");
 }
 
 .secondaryButton {
-  margin-bottom: 15px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 625px;
+  height: 65px;
+  background-image: url("/images/ui/warning-btn-more--light.svg");
+  cursor: pointer;
+}
+
+.secondaryButton--dark {
+  background-image: url("/images/ui/warning-btn-more--dark.svg");
 }
 
 .buttonTextPrimary {
-  font: normal normal bold 14px/19px Inter !important;
-  letter-spacing: 0px  !important;
-  text-transform: none;
-  color: rgb(6, 211, 215) !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  line-height: 120% !important;
+  text-align: center !important;
+  color: #8F5AE8 !important;
 }
 
 .buttonTextSecondary {
-  font: normal normal bold 14px/19px Inter !important;
-  letter-spacing: 0px  !important;
-  color: #000 !important;
-  text-transform: none;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  line-height: 120% !important;
+  text-align: center !important;
+  color: #5688A5 !important;
 }
 
-
-
-@media screen and (max-width: 960px) {
-  .dialogContainer {
-    align-items: flex-start;
-  }
-
-  .warningIcon {
-    height: 50px;
-    margin-bottom: 30px !important;
-  }
-
-  .title1 {
-    font: normal normal normal 18px/26px Inter !important;
-  }
-
-  .title2 {
-    font: normal normal bold 22px/26px Inter !important;
-    letter-spacing: 0px !important;
-    margin-bottom: 30px !important;
-  }
-
-  .paragraph {
-    font: normal normal bold 14px/18px Inter !important;
-    margin: 0 20px 20px 20px !important;
-  }
-
-  .para2 {
-    font: normal normal normal 14px/18px Inter !important;
-    margin: 0 20px 20px 20px !important;
-  }
-
-  .buttonTextPrimary {
-    font: normal normal bold 13px/16px Inter !important;
-  }
-
-  .buttonTextSecondary {
-    font: normal normal bold 13px/16px Inter !important;
-  }
-
-  .primaryButton {
-    margin: 0 auto 20px auto !important;
-    min-width: inherit !important;
-  }
-}
-
-
-@media screen and (max-width: 320px) {
-  .warningIcon {
-    height: 40px;
-    margin-bottom: 15px !important;
-  }
-
-  .title1 {
-    font: normal normal normal 18px/26px Inter !important;
-  }
-
-  .title2 {
-    font: normal normal bold 22px/26px Inter !important;
-    letter-spacing: 0px !important;
-    margin-bottom: 15px !important;
-  }
-
-  .paragraph {
-    font: normal normal bold 14px/18px Inter !important;
-    margin: 0 20px 20px 20px !important;
-  }
-
-  .para2 {
-    font: normal normal normal 13px/15px Inter !important;
-    margin: 0 20px 20px 20px !important;
-  }
-
-  .buttonTextPrimary {
-    font: normal normal bold 13px/16px Inter !important;
-  }
-
-  .buttonTextSecondary {
-    font: normal normal bold 13px/16px Inter !important;
-  }
-
-  .primaryButton {
-    margin: 0 auto 20px auto !important;
-    min-width: inherit !important;
-  }
+.buttonTextSecondary--dark {
+  color: #7C838A !important;
 }

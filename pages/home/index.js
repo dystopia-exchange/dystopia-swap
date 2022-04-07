@@ -49,8 +49,6 @@ function Home({ changeTheme }) {
 
       <div className={classes.contentContainerFull}>
 
-      <SiteLogo className={classes.appLogo} />
-
         <Grid container spacing={2} className={classes.homeContentMain}>
           <Grid item lg={12} md={12} sm={12} xs={12}>
             <Typography variant="h1" className={classes.preTitle}>0.01% fee</Typography>
