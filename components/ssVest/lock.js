@@ -65,11 +65,12 @@ export default function ssLock({govToken, veToken}) {
     setSelectedValue(null);
   };
 
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
+  const handleChange = (value) => {
+    console.log('selectedValue', selectedValue);
+    setSelectedValue(value);
 
     let days = 0;
-    switch (event.target.value) {
+    switch (value) {
       case 'week':
         days = 7;
         break;
@@ -136,8 +137,9 @@ export default function ssLock({govToken, veToken}) {
         <div className={`${classes.massiveInputContainer} ${(amountError) && classes.error}`}>
           <div className={classes.massiveInputAssetSelect}>
             <div className={classes.displaySelectContainerDate}>
-              <div className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
-                <div className={classes.displayAssetIcon}></div>
+              <div
+                className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+                <div className={[classes.displayAssetIcon, classes[`displayAssetIcon--${appTheme}`]].join(' ')}/>
               </div>
             </div>
           </div>
@@ -269,7 +271,7 @@ export default function ssLock({govToken, veToken}) {
     <>
       <Paper
         elevation={0}
-        className={[classes.container3, classes[`container3--${appTheme}`]].join(' ')}>
+        className={[classes.container3, classes[`container3--${appTheme}`, 'g-flex-column']].join(' ')}>
         <div
           className={[classes.titleSection, classes[`titleSection--${appTheme}`]].join(' ')}>
           <Tooltip title="Back to Vest" placement="top">
@@ -282,48 +284,57 @@ export default function ssLock({govToken, veToken}) {
         <div className={[classes[`top`], classes[`top--${appTheme}`]].join(' ')}>
         </div>
 
-        <div
-          className={[classes.reAddPadding3, classes[`reAddPadding3--${appTheme}`]].join(' ')}>
+        <div className={[classes.reAddPadding3, classes[`reAddPadding3--${appTheme}`]].join(' ')}>
+          {renderMassiveInput('amount', amount, amountError, onAmountChanged, govToken)}
 
-          <div className={classes.inputsContainer3}>
-            {renderMassiveInput('amount', amount, amountError, onAmountChanged, govToken)}
+          <div>
+            {renderMassiveDateInput('date', selectedDate, selectedDateError, handleDateChange, govToken?.balance, govToken?.logoURI)}
 
-            <div>
-              {renderMassiveDateInput('date', selectedDate, selectedDateError, handleDateChange, govToken?.balance, govToken?.logoURI)}
+            <div
+              className={[classes.vestPeriodToggle, classes[`vestPeriodToggle--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+              <div
+                className={[classes.vestPeriodLabel, classes[`vestPeriodLabel--${appTheme}`], classes[`vestPeriodLabel--${selectedValue === 'week' ? 'checked' : ''}`]].join(' ')}
+                onClick={() => handleChange('week')}>
+                1 week
+              </div>
 
-              <div className={classes.inline}>
-                <Typography className={classes.expiresIn}>Expires: </Typography>
-                <RadioGroup className={classes.vestPeriodToggle} row onChange={handleChange} value={selectedValue}>
-                  <FormControlLabel className={classes.vestPeriodLabel} value="week" control={<Radio color="primary"/>}
-                                    label="1 week" labelPlacement="left"/>
-                  <FormControlLabel className={classes.vestPeriodLabel} value="month" control={<Radio color="primary"/>}
-                                    label="1 month" labelPlacement="left"/>
-                  <FormControlLabel className={classes.vestPeriodLabel} value="year" control={<Radio color="primary"/>}
-                                    label="1 year" labelPlacement="left"/>
-                  <FormControlLabel className={classes.vestPeriodLabel} value="years" control={<Radio color="primary"/>}
-                                    label="4 years" labelPlacement="left"/>
-                </RadioGroup>
+              <div
+                className={[classes.vestPeriodLabel, classes[`vestPeriodLabel--${appTheme}`], classes[`vestPeriodLabel--${selectedValue === 'month' ? 'checked' : ''}`]].join(' ')}
+                onClick={() => handleChange('month')}>
+                1 month
+              </div>
+
+              <div
+                className={[classes.vestPeriodLabel, classes[`vestPeriodLabel--${appTheme}`], classes[`vestPeriodLabel--${selectedValue === 'year' ? 'checked' : ''}`]].join(' ')}
+                onClick={() => handleChange('year')}>
+                1 year
+              </div>
+
+              <div
+                className={[classes.vestPeriodLabel, classes[`vestPeriodLabel--${appTheme}`], classes[`vestPeriodLabel--${selectedValue === 'years' ? 'checked' : ''}`]].join(' ')}
+                onClick={() => handleChange('years')}>
+                4 years
               </div>
             </div>
-
-            {renderVestInformation()}
-
-            <div className={classes.actionsContainer}>
-              <Button
-                className={classes.buttonOverride}
-                fullWidth
-                variant="contained"
-                size="large"
-                color="primary"
-                disabled={lockLoading}
-                onClick={onLock}>
-                <Typography className={classes.actionButtonText}>{lockLoading ? `Locking` : `Lock`}</Typography>
-
-                {lockLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-              </Button>
-            </div>
           </div>
+
+          {renderVestInformation()}
         </div>
+
+        <Button
+          className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(' ')}
+          fullWidth
+          variant="contained"
+          size="large"
+          color="primary"
+          disabled={lockLoading}
+          onClick={onLock}>
+          <Typography className={classes.actionButtonText}>
+            {lockLoading ? `Locking` : `Lock Tokens & Get veNFT`}
+          </Typography>
+
+          {lockLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+        </Button>
       </Paper>
     </>
   );

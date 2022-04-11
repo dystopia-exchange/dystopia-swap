@@ -25,13 +25,12 @@ import {
   CONTRACTS,
 } from '../../stores/constants';
 import {
-  Add,
-  ArrowDownward,
-  ArrowBack,
   Search,
   DeleteOutline,
-  ArrowForwardIos,
-  ArrowBackIosNew, RadioButtonUnchecked, RadioButtonChecked, Close,
+  ArrowBackIosNew,
+  RadioButtonUnchecked,
+  RadioButtonChecked,
+  Close,
 } from '@mui/icons-material';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
@@ -1161,342 +1160,337 @@ export default function ssLiquidityManage() {
   };
 
   return (
-    <div className={classes.retain}>
-      <Paper elevation={0} className={classes.container}>
-        <div
-          className={[classes.titleSection, classes[`titleSection--${appTheme}`]].join(' ')}>
-          <Tooltip title="Back to Liquidity" placement="top">
-            <IconButton onClick={onBack}>
-              <ArrowBackIosNew className={[classes.backIcon, classes[`backIcon--${appTheme}`]].join(' ')}/>
-            </IconButton>
-          </Tooltip>
-        </div>
+    <Paper
+      elevation={0}
+      className={[classes.container, 'g-flex-column']}>
+      <div
+        className={[classes.titleSection, classes[`titleSection--${appTheme}`]].join(' ')}>
+        <Tooltip title="Back to Liquidity" placement="top">
+          <IconButton onClick={onBack}>
+            <ArrowBackIosNew className={[classes.backIcon, classes[`backIcon--${appTheme}`]].join(' ')}/>
+          </IconButton>
+        </Tooltip>
+      </div>
 
-        <div className={classes.toggleButtons}>
-          <Grid container spacing={0}>
-            <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Paper
-                className={`${activeTab === 'deposit' ? classes.buttonActive : classes.button} ${classes.topLeftButton} ${appTheme === 'dark' ? classes['topLeftButton--dark'] : ''}`}
-                onClick={toggleDeposit}
-                disabled={depositLoading}>
-                <Typography
-                  style={{
-                    fontWeight: 600,
-                    fontSize: 18,
-                    color: appTheme === 'dark' ? (activeTab === 'deposit' ? '#ffffff' : '#7C838A') : (activeTab === 'deposit' ? '#0A2C40' : '#5688A5'),
-                  }}>
-                  Deposit
-                </Typography>
-              </Paper>
-            </Grid>
-
-            <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Paper
-                className={`${activeTab === 'withdraw' ? classes.buttonActive : classes.button} ${classes.bottomLeftButton} ${appTheme === 'dark' ? classes['bottomLeftButton--dark'] : ''}`}
-                onClick={toggleWithdraw}
-                disabled={depositLoading}>
-                <Typography
-                  style={{
-                    fontWeight: 600,
-                    fontSize: 18,
-                    color: appTheme === 'dark' ? (activeTab === 'withdraw' ? '#ffffff' : '#7C838A') : (activeTab === 'withdraw' ? '#0A2C40' : '#5688A5'),
-                  }}>
-                  Withdraw
-                </Typography>
-              </Paper>
-            </Grid>
+      <div className={classes.toggleButtons}>
+        <Grid container spacing={0}>
+          <Grid item lg={6} md={6} sm={6} xs={6}>
+            <Paper
+              className={`${activeTab === 'deposit' ? classes.buttonActive : classes.button} ${classes.topLeftButton} ${appTheme === 'dark' ? classes['topLeftButton--dark'] : ''}`}
+              onClick={toggleDeposit}
+              disabled={depositLoading}>
+              <Typography
+                style={{
+                  fontWeight: 600,
+                  fontSize: 18,
+                  color: appTheme === 'dark' ? (activeTab === 'deposit' ? '#ffffff' : '#7C838A') : (activeTab === 'deposit' ? '#0A2C40' : '#5688A5'),
+                }}>
+                Deposit
+              </Typography>
+            </Paper>
           </Grid>
-        </div>
 
-        <div
-          className={[classes.reAddPadding, classes[`reAddPadding--${appTheme}`]].join(' ')}>
-          <div className={classes.inputsContainer}>
-            {
-              activeTab === 'deposit' &&
-              <>
-                {renderMassiveInput('amount0', amount0, amount0Error, amount0Changed, asset0, null, assetOptions, onAssetSelect, amount0Focused, amount0Ref)}
-                {/*<div className={ classes.swapIconContainer }>
+          <Grid item lg={6} md={6} sm={6} xs={6}>
+            <Paper
+              className={`${activeTab === 'withdraw' ? classes.buttonActive : classes.button} ${classes.bottomLeftButton} ${appTheme === 'dark' ? classes['bottomLeftButton--dark'] : ''}`}
+              onClick={toggleWithdraw}
+              disabled={depositLoading}>
+              <Typography
+                style={{
+                  fontWeight: 600,
+                  fontSize: 18,
+                  color: appTheme === 'dark' ? (activeTab === 'withdraw' ? '#ffffff' : '#7C838A') : (activeTab === 'withdraw' ? '#0A2C40' : '#5688A5'),
+                }}>
+                Withdraw
+              </Typography>
+            </Paper>
+          </Grid>
+        </Grid>
+      </div>
+
+      <div
+        className={[classes.reAddPadding, classes[`reAddPadding--${appTheme}`]].join(' ')}>
+        <div className={classes.inputsContainer}>
+          {
+            activeTab === 'deposit' &&
+            <>
+              {renderMassiveInput('amount0', amount0, amount0Error, amount0Changed, asset0, null, assetOptions, onAssetSelect, amount0Focused, amount0Ref)}
+              {/*<div className={ classes.swapIconContainer }>
                   <div className={ classes.swapIconSubContainer }>
                     <Add className={ classes.swapIcon } />
                   </div>
                 </div>*/}
-                <div className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}></div>
-                {renderMassiveInput('amount1', amount1, amount1Error, amount1Changed, asset1, null, assetOptions, onAssetSelect, amount1Focused, amount1Ref)}
-                {renderMediumInputToggle('stable', stable)}
-                {renderTokenSelect()}
-                {renderDepositInformation()}
-              </>
-            }
-            {
-              activeTab === 'withdraw' &&
-              <>
-                {renderMassiveInput('withdraw', withdrawAmount, withdrawAmountError, withdrawAmountChanged, withdrawAsset, null, withdrawAassetOptions, onAssetSelect, null, null)}
-                {/*<div className={ classes.swapIconContainer }>
-                  <div className={ classes.swapIconSubContainer }>
-                    <ArrowDownward className={ classes.swapIcon } />
-                  </div>
-                </div>*/}
-                <div
-                  className={[classes.swapIconContainerWithdraw, classes[`swapIconContainerWithdraw--${appTheme}`]].join(' ')}></div>
-                <div className={classes.receiveAssets}>
-                  {renderMediumInput('withdrawAmount0', withdrawAmount0, pair?.token0?.logoURI, pair?.token0?.symbol)}
-                  {renderMediumInput('withdrawAmount1', withdrawAmount1, pair?.token1?.logoURI, pair?.token1?.symbol)}
-                </div>
-                {renderWithdrawInformation()}
-              </>
-            }
-          </div>
-          <div className={classes.advancedToggleContainer}>
-            <FormControlLabel
-              control={
-                <Switch
-                  size="small"
-                  checked={advanced}
-                  onChange={toggleAdvanced}
-                  color={'primary'}
-                />
-              }
-              className={classes.some}
-              label="Advanced"
-              labelPlacement="start"
-            />
-          </div>
+              <div className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}></div>
+              {renderMassiveInput('amount1', amount1, amount1Error, amount1Changed, asset1, null, assetOptions, onAssetSelect, amount1Focused, amount1Ref)}
+              {renderMediumInputToggle('stable', stable)}
+              {renderTokenSelect()}
+              {renderDepositInformation()}
+            </>
+          }
+          {
+            activeTab === 'withdraw' &&
+            <>
+              {renderMassiveInput('withdraw', withdrawAmount, withdrawAmountError, withdrawAmountChanged, withdrawAsset, null, withdrawAassetOptions, onAssetSelect, null, null)}
+              <div
+                className={[classes.swapIconContainerWithdraw, classes[`swapIconContainerWithdraw--${appTheme}`]].join(' ')}></div>
+              <div className={classes.receiveAssets}>
+                {renderMediumInput('withdrawAmount0', withdrawAmount0, pair?.token0?.logoURI, pair?.token0?.symbol)}
+                {renderMediumInput('withdrawAmount1', withdrawAmount1, pair?.token1?.logoURI, pair?.token1?.symbol)}
+              </div>
+              {renderWithdrawInformation()}
+            </>
+          }
         </div>
+        <div className={classes.advancedToggleContainer}>
+          <FormControlLabel
+            control={
+              <Switch
+                size="small"
+                checked={advanced}
+                onChange={toggleAdvanced}
+                color={'primary'}
+              />
+            }
+            className={classes.some}
+            label="Advanced"
+            labelPlacement="start"
+          />
+        </div>
+      </div>
 
-        {
-          activeTab === 'deposit' &&
-          <div className={classes.actionsContainer}>
-            {pair == null && asset0 && asset0.isWhitelisted == true && asset1 && asset1.isWhitelisted == true &&
-              <>
-                <Button
-                  variant="contained"
-                  size="large"
-                  className={[
-                    (createLoading || depositLoading) ? classes.multiApprovalButton : classes.buttonOverride,
-                    (createLoading || depositLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
-                  ].join(' ')}
-                  color="primary"
-                  disabled={createLoading || depositLoading}
-                  onClick={onCreateAndStake}
-                >
-                  <Typography
-                    className={classes.actionButtonText}>{createLoading ? `Creating` : `Create Pair & Stake`}</Typography>
-                  {createLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-                </Button>
-                {advanced &&
-                  <>
-                    <Button
-                      variant="contained"
-                      size="large"
-                      className={[
-                        (createLoading || depositLoading) ? classes.multiApprovalButton : classes.buttonOverride,
-                        (createLoading || depositLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
-                      ].join(' ')}
-                      color="primary"
-                      disabled={createLoading || depositLoading}
-                      onClick={onCreateAndDeposit}
-                    >
-                      <Typography
-                        className={classes.actionButtonText}>{depositLoading ? `Depositing` : `Create Pair & Deposit`}</Typography>
-                      {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-                    </Button>
-                  </>
-                }
-              </>
-            }
-            {pair == null && !(asset0 && asset0.isWhitelisted == true && asset1 && asset1.isWhitelisted == true) &&
-              <>
-                <Button
-                  variant="contained"
-                  size="large"
-                  className={[
-                    (createLoading || depositLoading) ? classes.multiApprovalButton : classes.buttonOverride,
-                    (createLoading || depositLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
-                  ].join(' ')}
-                  color="primary"
-                  disabled={createLoading || depositLoading}
-                  onClick={onCreateAndDeposit}
-                >
-                  <Typography
-                    className={classes.actionButtonText}>{depositLoading ? `Depositing` : `Create Pair & Deposit`}</Typography>
-                  {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-                </Button>
-              </>
-            }
-            { // There is no Gauge on the pair yet. Can only deposit
-              pair && !(pair && pair.gauge && pair.gauge.address) &&
-              <>
-                <Button
-                  variant="contained"
-                  size="large"
-                  className={[
-                    ((amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
-                    ((amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
-                  ].join(' ')}
-                  color="primary"
-                  disabled={(amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading}
-                  onClick={onDeposit}
-                >
-                  <Typography
-                    className={classes.actionButtonText}>{depositLoading ? `Depositing` : `Deposit`}</Typography>
-                  {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-                </Button>
-                {pair.token0.isWhitelisted && pair.token1.isWhitelisted &&
+      {
+        activeTab === 'deposit' &&
+        <div className={classes.actionsContainer}>
+          {pair == null && asset0 && asset0.isWhitelisted == true && asset1 && asset1.isWhitelisted == true &&
+            <>
+              <Button
+                variant="contained"
+                size="large"
+                className={[
+                  (createLoading || depositLoading) ? classes.multiApprovalButton : classes.buttonOverride,
+                  (createLoading || depositLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+                ].join(' ')}
+                color="primary"
+                disabled={createLoading || depositLoading}
+                onClick={onCreateAndStake}
+              >
+                <Typography
+                  className={classes.actionButtonText}>{createLoading ? `Creating` : `Create Pair & Stake`}</Typography>
+                {createLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+              </Button>
+              {advanced &&
+                <>
                   <Button
                     variant="contained"
                     size="large"
                     className={[
-                      (createLoading || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
-                      (createLoading || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+                      (createLoading || depositLoading) ? classes.multiApprovalButton : classes.buttonOverride,
+                      (createLoading || depositLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
                     ].join(' ')}
                     color="primary"
-                    disabled={createLoading || depositLoading || stakeLoading || depositStakeLoading}
-                    onClick={onCreateGauge}
+                    disabled={createLoading || depositLoading}
+                    onClick={onCreateAndDeposit}
                   >
                     <Typography
-                      className={classes.actionButtonText}>{createLoading ? `Creating` : `Create Gauge`}</Typography>
-                    {createLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+                      className={classes.actionButtonText}>{depositLoading ? `Depositing` : `Create Pair & Deposit`}</Typography>
+                    {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
                   </Button>
-                }
-              </>
-            }
-            { // There is a Gauge on the pair. Can deposit and stake
-              pair && (pair && pair.gauge && pair.gauge.address) &&
-              <>
+                </>
+              }
+            </>
+          }
+          {pair == null && !(asset0 && asset0.isWhitelisted == true && asset1 && asset1.isWhitelisted == true) &&
+            <>
+              <Button
+                variant="contained"
+                size="large"
+                className={[
+                  (createLoading || depositLoading) ? classes.multiApprovalButton : classes.buttonOverride,
+                  (createLoading || depositLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+                ].join(' ')}
+                color="primary"
+                disabled={createLoading || depositLoading}
+                onClick={onCreateAndDeposit}
+              >
+                <Typography
+                  className={classes.actionButtonText}>{depositLoading ? `Depositing` : `Create Pair & Deposit`}</Typography>
+                {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+              </Button>
+            </>
+          }
+          { // There is no Gauge on the pair yet. Can only deposit
+            pair && !(pair && pair.gauge && pair.gauge.address) &&
+            <>
+              <Button
+                variant="contained"
+                size="large"
+                className={[
+                  ((amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
+                  ((amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+                ].join(' ')}
+                color="primary"
+                disabled={(amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading}
+                onClick={onDeposit}
+              >
+                <Typography
+                  className={classes.actionButtonText}>{depositLoading ? `Depositing` : `Deposit`}</Typography>
+                {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+              </Button>
+              {pair.token0.isWhitelisted && pair.token1.isWhitelisted &&
                 <Button
-                  className={classes.buttonDeposit}
                   variant="contained"
                   size="large"
                   className={[
-                    ((amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
-                    ((amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+                    (createLoading || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
+                    (createLoading || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
                   ].join(' ')}
                   color="primary"
-                  disabled={(amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading}
-                  onClick={onDepositAndStake}
+                  disabled={createLoading || depositLoading || stakeLoading || depositStakeLoading}
+                  onClick={onCreateGauge}
                 >
                   <Typography
-                    className={classes.actionButtonText}>{depositStakeLoading ? `Depositing` : `Deposit & Stake`}</Typography>
-                  {depositStakeLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+                    className={classes.actionButtonText}>{createLoading ? `Creating` : `Create Gauge`}</Typography>
+                  {createLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
                 </Button>
-                {advanced &&
-                  <>
-                    <Button
-                      className={classes.buttonDeposit}
-                      variant="contained"
-                      size="large"
-                      className={[
-                        ((amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
-                        ((amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
-                      ].join(' ')}
-                      color="primary"
-                      disabled={(amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading}
-                      onClick={onDeposit}
-                    >
-                      <Typography
-                        className={classes.actionButtonText}>{depositLoading ? `Depositing` : `Deposit LP`}</Typography>
-                      {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-                    </Button>
-                    <Button
-                      variant="contained"
-                      size="large"
-                      className={[
-                        (BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
-                        (BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
-                      ].join(' ')}
-                      color="primary"
-                      disabled={BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading}
-                      onClick={onStake}
-                    >
-                      <Typography
-                        className={classes.actionButtonText}>{BigNumber(pair.balance).gt(0) ? (stakeLoading ? `Staking` : `Stake ${formatCurrency(pair.balance)} LP`) : `Nothing Unstaked`}</Typography>
-                      {stakeLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-                    </Button>
-                  </>
-                }
-              </>
-            }
-          </div>
-        }
-        {
-          activeTab === 'withdraw' &&
-          <div className={classes.actionsContainer}>
-            {
-              !(pair && pair.gauge && pair.gauge.address) &&
+              }
+            </>
+          }
+          { // There is a Gauge on the pair. Can deposit and stake
+            pair && (pair && pair.gauge && pair.gauge.address) &&
+            <>
+              <Button
+                className={classes.buttonDeposit}
+                variant="contained"
+                size="large"
+                className={[
+                  ((amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
+                  ((amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+                ].join(' ')}
+                color="primary"
+                disabled={(amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading}
+                onClick={onDepositAndStake}
+              >
+                <Typography
+                  className={classes.actionButtonText}>{depositStakeLoading ? `Depositing` : `Deposit & Stake`}</Typography>
+                {depositStakeLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+              </Button>
+              {advanced &&
+                <>
+                  <Button
+                    className={classes.buttonDeposit}
+                    variant="contained"
+                    size="large"
+                    className={[
+                      ((amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
+                      ((amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+                    ].join(' ')}
+                    color="primary"
+                    disabled={(amount0 === '' && amount1 === '') || depositLoading || stakeLoading || depositStakeLoading}
+                    onClick={onDeposit}
+                  >
+                    <Typography
+                      className={classes.actionButtonText}>{depositLoading ? `Depositing` : `Deposit LP`}</Typography>
+                    {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    className={[
+                      (BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
+                      (BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+                    ].join(' ')}
+                    color="primary"
+                    disabled={BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading}
+                    onClick={onStake}
+                  >
+                    <Typography
+                      className={classes.actionButtonText}>{BigNumber(pair.balance).gt(0) ? (stakeLoading ? `Staking` : `Stake ${formatCurrency(pair.balance)} LP`) : `Nothing Unstaked`}</Typography>
+                    {stakeLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+                  </Button>
+                </>
+              }
+            </>
+          }
+        </div>
+      }
+      {
+        activeTab === 'withdraw' &&
+        <div className={classes.actionsContainer}>
+          {
+            !(pair && pair.gauge && pair.gauge.address) &&
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              className={[
+                (depositLoading || withdrawAmount === '') ? classes.multiApprovalButton : classes.buttonOverride,
+                (depositLoading || withdrawAmount === '') ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+              ].join(' ')}
+              disabled={depositLoading || withdrawAmount === ''}
+              onClick={onWithdraw}
+            >
+              <Typography
+                className={classes.actionButtonText}>{depositLoading ? `Withdrawing` : `Withdraw`}</Typography>
+              {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+            </Button>
+          }
+          {
+            (pair && pair.gauge && pair.gauge.address) &&
+            <>
               <Button
                 variant="contained"
                 size="large"
                 color="primary"
                 className={[
-                  (depositLoading || withdrawAmount === '') ? classes.multiApprovalButton : classes.buttonOverride,
-                  (depositLoading || withdrawAmount === '') ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+                  (depositLoading || stakeLoading || depositStakeLoading || withdrawAmount === '') ? classes.multiApprovalButton : classes.buttonOverride,
+                  (depositLoading || stakeLoading || depositStakeLoading || withdrawAmount === '') ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
                 ].join(' ')}
-                disabled={depositLoading || withdrawAmount === ''}
-                onClick={onWithdraw}
+                disabled={depositLoading || stakeLoading || depositStakeLoading || withdrawAmount === ''}
+                onClick={onUnstakeAndWithdraw}
               >
                 <Typography
-                  className={classes.actionButtonText}>{depositLoading ? `Withdrawing` : `Withdraw`}</Typography>
-                {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+                  className={classes.actionButtonText}>{depositStakeLoading ? `Withdrawing` : `Unstake and Withdraw`}</Typography>
+                {depositStakeLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
               </Button>
-            }
-            {
-              (pair && pair.gauge && pair.gauge.address) &&
-              <>
-                <Button
-                  variant="contained"
-                  size="large"
-                  color="primary"
-                  className={[
-                    (depositLoading || stakeLoading || depositStakeLoading || withdrawAmount === '') ? classes.multiApprovalButton : classes.buttonOverride,
-                    (depositLoading || stakeLoading || depositStakeLoading || withdrawAmount === '') ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
-                  ].join(' ')}
-                  disabled={depositLoading || stakeLoading || depositStakeLoading || withdrawAmount === ''}
-                  onClick={onUnstakeAndWithdraw}
-                >
-                  <Typography
-                    className={classes.actionButtonText}>{depositStakeLoading ? `Withdrawing` : `Unstake and Withdraw`}</Typography>
-                  {depositStakeLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-                </Button>
-                {advanced &&
-                  <>
-                    <Button
-                      variant="contained"
-                      size="large"
-                      className={[
-                        (withdrawAmount === '' || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
-                        (withdrawAmount === '' || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
-                      ].join(' ')}
-                      color="primary"
-                      disabled={withdrawAmount === '' || depositLoading || stakeLoading || depositStakeLoading}
-                      onClick={onUnstake}
-                    >
-                      <Typography
-                        className={classes.actionButtonText}>{stakeLoading ? `Unstaking` : `Unstake LP`}</Typography>
-                      {stakeLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-                    </Button>
-                    <Button
-                      variant="contained"
-                      size="large"
-                      className={[
-                        (BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
-                        (BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
-                      ].join(' ')}
-                      color="primary"
-                      disabled={BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading}
-                      onClick={onWithdraw}
-                    >
-                      <Typography
-                        className={classes.actionButtonText}>{BigNumber(pair.balance).gt(0) ? (depositLoading ? `Withdrawing` : `Withdraw ${formatCurrency(pair.balance)} LP`) : `Nothing Unstaked`}</Typography>
-                      {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-                    </Button>
-                  </>
-                }
-              </>
-            }
-          </div>
-        }
-      </Paper>
-    </div>
+              {advanced &&
+                <>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    className={[
+                      (withdrawAmount === '' || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
+                      (withdrawAmount === '' || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+                    ].join(' ')}
+                    color="primary"
+                    disabled={withdrawAmount === '' || depositLoading || stakeLoading || depositStakeLoading}
+                    onClick={onUnstake}
+                  >
+                    <Typography
+                      className={classes.actionButtonText}>{stakeLoading ? `Unstaking` : `Unstake LP`}</Typography>
+                    {stakeLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    className={[
+                      (BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
+                      (BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+                    ].join(' ')}
+                    color="primary"
+                    disabled={BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading}
+                    onClick={onWithdraw}
+                  >
+                    <Typography
+                      className={classes.actionButtonText}>{BigNumber(pair.balance).gt(0) ? (depositLoading ? `Withdrawing` : `Withdraw ${formatCurrency(pair.balance)} LP`) : `Nothing Unstaked`}</Typography>
+                    {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+                  </Button>
+                </>
+              }
+            </>
+          }
+        </div>
+      }
+    </Paper>
   );
 }
 
@@ -1624,8 +1618,8 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
         key={asset.address + '_' + idx}
         className={[classes.assetSelectMenu, classes[`assetSelectMenu--${appTheme}`]].join(' ')}
         onClick={() => {
-        onLocalSelect(type, asset);
-      }}>
+          onLocalSelect(type, asset);
+        }}>
         <div className={classes.assetSelectMenuItem}>
           <div className={classes.displayDualIconContainerSmall}>
             <img

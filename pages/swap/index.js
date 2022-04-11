@@ -42,7 +42,7 @@ function Swap({changeTheme}) {
   const {appTheme} = useAppThemeContext();
 
   return (
-    <div className={classes.ffContainer}>
+    <>
       {account && account.address ?
         <SwapComponent/>
         :
@@ -75,7 +75,7 @@ function Swap({changeTheme}) {
         </Paper>
       }
       {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock}/>}
-    </div>
+    </>
   );
 }
 

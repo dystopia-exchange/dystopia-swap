@@ -47,7 +47,7 @@ function Vesting({ changeTheme }) {
   const {appTheme} = useAppThemeContext();
 
   return (
-    <div className={classes.ffContainer}>
+    <>
       {account && account.address ?
         <VestsNFTs />
         :
@@ -80,7 +80,7 @@ function Vesting({ changeTheme }) {
         </Paper>
       }
       {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
-    </div>
+    </>
   );
 }
 

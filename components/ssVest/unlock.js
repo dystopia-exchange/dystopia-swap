@@ -48,7 +48,7 @@ export default function Unlock({ nft, govToken, veToken }) {
   return (
     <Paper
       elevation={0}
-      className={[classes.container3, classes[`container3--${appTheme}`]].join(' ')}>
+      className={[classes.container3, classes[`container3--${appTheme}`, 'g-flex-column']].join(' ')}>
       {/*<div className={ classes.titleSection }>
         <IconButton className={ classes.backButton } onClick={ onBack }>
           <ArrowBack className={ classes.backIcon } />

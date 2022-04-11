@@ -47,7 +47,7 @@ function Liquidity({ changeTheme }) {
   const {appTheme} = useAppThemeContext();
 
   return (
-    <div className={classes.ffContainer}>
+    <>
       {account && account.address ?
         <LiquidityPairs />
         :
@@ -80,8 +80,7 @@ function Liquidity({ changeTheme }) {
         </Paper>
        }
        {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
-
-    </div>
+    </>
   );
 }
 

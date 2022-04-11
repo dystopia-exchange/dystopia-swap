@@ -401,22 +401,39 @@ function Setup() {
         <Typography
           className={[classes.inputBalanceSlippage, classes[`inputBalanceSlippage--${appTheme}`]].join(" ")}
           noWrap>
-          Slippage
+          Slippage %
         </Typography>
 
-        <InputBase
+        <TextField
           placeholder="0.00"
-          fullWidth
           error={amountError}
           helperText={amountError}
           value={amountValue}
           onChange={amountChanged}
           disabled={loading}
+          InputProps={{
+            style: {
+              border: 'none',
+              borderRadius: 0,
+            },
+            classes: {
+              root: classes.searchInput,
+            },
+            endAdornment: <InputAdornment position="end">
+              %
+            </InputAdornment>,
+          }}
           inputProps={{
             className: [classes.smallInput, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
-          }}
-          InputProps={{
-            endAdornment: <InputAdornment position="end">%</InputAdornment>,
+            style: {
+              padding: 0,
+              borderRadius: 0,
+              border: 'none',
+              fontSize: 18,
+              fontWeight: 400,
+              lineHeight: '120%',
+              color: appTheme === "dark" ? '#C6CDD2' : '#325569',
+            },
           }}
         />
       </div>

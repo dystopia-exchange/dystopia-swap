@@ -42,8 +42,7 @@ function Vote({ changeTheme }) {
   const {appTheme} = useAppThemeContext();
 
   return (
-    <div className={classes.ffContainer}>
-
+    <>
       {account && account.address ?
         <Gauges />
         :
@@ -76,7 +75,7 @@ function Vote({ changeTheme }) {
         </Paper>
        }
        {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
-    </div>
+    </>
   );
 }
 

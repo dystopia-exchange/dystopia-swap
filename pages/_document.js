@@ -14,9 +14,16 @@ export default class MyDocument extends Document {
           <link rel="stylesheet" href="/fonts/PPNeueMachina-UltraBold/PPNeueMachina-UltraBold.css"/>
           <link rel="stylesheet" href="/fonts/RobotoMono/RobotoMono.css"/>
         </Head>
-        <body style={{overflow: 'hidden'}}>
-          <Main/>
-          <NextScript/>
+        <body
+          style={{
+            overflow: 'hidden',
+            width: '100%',
+            height: '100%',
+          }}>
+
+        <Main style={{display: 'flex', flexDirection: 'column'}}/>
+
+        <NextScript/>
         </body>
       </Html>
     );

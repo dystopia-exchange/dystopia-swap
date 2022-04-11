@@ -133,29 +133,23 @@ export default function ffLockAmount({nft, govToken, updateLockAmount}) {
 
   return (
     <>
-      {/*<div className={ classes.someContainer }>*/}
-      {/*<div className={classes.inputsContainer3}>*/}
-        {renderMassiveInput('lockAmount', amount, amountError, amountChanged, govToken?.balance, govToken?.logoURI)}
-      {/*</div>*/}
+      {renderMassiveInput('lockAmount', amount, amountError, amountChanged, govToken?.balance, govToken?.logoURI)}
 
-      {/*<div className={classes.actionsContainer3}>*/}
-        <Button
-          className={classes.buttonOverride}
-          fullWidth
-          variant="contained"
-          size="large"
-          color="primary"
-          disabled={lockLoading}
-          onClick={onLock}>
+      <Button
+        className={classes.buttonOverride}
+        fullWidth
+        variant="contained"
+        size="large"
+        color="primary"
+        disabled={lockLoading}
+        onClick={onLock}>
 
-          <Typography
-            className={classes.actionButtonText}>{lockLoading ? `Increasing Lock Amount` : `Increase Lock Amount`}
-          </Typography>
+        <Typography
+          className={classes.actionButtonText}>{lockLoading ? `Increasing Lock Amount` : `Increase Lock Amount`}
+        </Typography>
 
-          {lockLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-        </Button>
-      {/*</div>*/}
-      {/*</div>*/}
+        {lockLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
+      </Button>
     </>
   );
 }

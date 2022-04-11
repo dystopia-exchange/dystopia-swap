@@ -1,0 +1,119 @@
+/*//===========================================
+// # SCROLL GRID
+//===========================================*/
+.g-scroll-y {
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.g-scroll-x {
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+/*//===========================================
+// # FLEX GRID
+//===========================================*/
+
+/*// [ Mode ] Row flex grid
+//------------------------------------------*/
+.g-flex {
+  display: flex;
+}
+
+.g-flex__item {
+  flex-basis: auto;
+  flex-grow: 1;
+  flex-shrink: 1;
+  width: 1%;
+}
+
+/*// Item with fixed width*/
+.g-flex__item-fixed {
+  flex-shrink: 0;
+}
+
+/*// [ Mode ] Column flex grid
+//------------------------------------------*/
+.g-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.g-flex-column__item {
+  flex-basis: auto;
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: 1%;
+}
+
+/*// Item with fixed height*/
+.g-flex-column__item-fixed {
+  flex-shrink: 0;
+}
+
+/*// [ Mode ] align center
+//------------------------------------------*/
+.g-flex--align-center {
+  align-items: center;
+}
+
+/*// [ Mode ] align baseline
+//------------------------------------------*/
+.g-flex--align-baseline {
+  align-items: baseline;
+}
+
+/*// [ Mode ] align start
+//------------------------------------------*/
+.g-flex--align-start {
+  align-items: flex-start;
+}
+
+/*// [ Mode ] align end
+//------------------------------------------*/
+.g-flex--align-end {
+  align-items: flex-end;
+}
+
+/*// [ Mode ] space between
+//------------------------------------------*/
+.g-flex--space-between {
+  justify-content: space-between;
+}
+
+/*// [ Mode ] space between
+//------------------------------------------*/
+.g-flex--space-around {
+  justify-content: space-around;
+}
+
+/*// [ Mode ] justify content center
+//------------------------------------------*/
+.g-flex--justify-center {
+  justify-content: center;
+}
+
+/*// [ Mode ] justify content start
+//------------------------------------------*/
+.g-flex--justify-start {
+  justify-content: flex-start;
+}
+
+/*// [ Mode ] justify content end
+//------------------------------------------*/
+.g-flex--justify-end {
+  justify-content: flex-end;
+}
+
+/*// [ Mode ] wrap
+//------------------------------------------*/
+.g-flex--wrap {
+  flex-wrap: wrap;
+}
+
+/*// [ Mode ] no wrap
+//------------------------------------------*/
+.g-flex--no-wrap {
+  flex-wrap: nowrap;
+}

@@ -1,5 +1,4 @@
 
-
 .container {
   max-width: 1400px;
   width: calc(100% - 180px);
@@ -12,7 +11,7 @@
 }
 
 .smallText {
-  color: rgba(126,153,176,0.9);
+  color: rgba(126, 153, 176, 0.9);
   margin: 0 15px 0 0 !important;
   padding: 18px 0;
 }
@@ -53,22 +52,27 @@
 }
 
 .infoSection {
-  display: flex;
-  padding: 10px 24px;
-  align-items: center;
-  justify-content: flex-end;
+  padding: 0 20px;
+  padding-right: 0;
+  background: #DBE6EC;
+  border: 1px solid #86B9D6;
 }
 
 .helpText {
-  margin-left: 6px !important;
-  font-size: 20px !important;
-  color: #52af77 !important;
+  font-weight: 500 !important;
+  font-size: 18px !important;
+  line-height: 140% !important;
+  color: #15B525 !important;
+  white-space: nowrap !important;
 }
 
 .errorText {
-  margin-left: 6px !important;
-  font-size: 20px !important;
+  margin-left: 10px !important;
+  font-weight: 500 !important;
+  font-size: 18px !important;
+  line-height: 140% !important;
   color: #da0052 !important;
+  white-space: nowrap !important;
 }
 
 .buttonOverride {
@@ -85,15 +89,12 @@
 
 
 .buttonOverrideFixed {
-  background: rgb(23, 52, 72) !important;
-  color: rgb(6, 211, 215) !important;
-  font-weight: 700 !important;
-  min-width: 200px !important;
-  max-height: 48px;
-}
-
-.buttonOverrideFixed:hover {
-  background: rgb(19, 44, 60) !important;
+  padding: 12px 20px !important;
+  margin-left: 20px !important;
+  background: #D2D0F2 !important;
+  outline: 1px solid #8F5AE8 !important;
+  border-radius: 0 !important;
+  border: none !important;
 }
 
 .tokenIDContainer {
@@ -110,10 +111,12 @@
 
 .topBarContainer {
   padding: 24px 0px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   width: 100%;
+}
+
+.textField {
+  margin-bottom: 4px;
+  position: relative;
 }
 
 .mediumInputContainer {
@@ -123,7 +126,6 @@
   width: 100%;
   align-items: center;
   background: rgb(33, 43, 72);
-  padding: 0 20px;
 }
 
 .mediumInputAssetSelect {
@@ -135,7 +137,6 @@
 .mediumInputAmount {
   flex: 1;
   height: 100%;
-  width: 300px;
 }
 
 .mediumInputAddress {
@@ -145,6 +146,14 @@
 
 .mediumInput {
   font-size: 32px !important;
+}
+
+.searchInput {
+  width: 430px !important;
+}
+
+.searchInput > fieldset {
+  border: none !important;
 }
 
 .menuOption {
@@ -157,51 +166,83 @@
 
 .smallerText {
   font-size: 12px !important;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
 }
 
-@media screen and (max-width: 1200px) {
-  .container {
-    width: calc(100% - 80px);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    margin: auto;
-    margin-bottom: 60px;
-    margin-top: 80px;
-    padding: 0 0 10px 0px;
-  }
+.tokenSelect {
+  width: 215px !important;
+  margin-left: 20px;
+  background: #DBE6EC !important;
+  border: 1px solid #86B9D6 !important;
+  border-radius: 100px !important;
 }
 
-@media screen and (max-width: 960px) {
-  .container {
-    padding: 0 0 60px 0px;
-  }
-
-  .actionButtons {
-    padding: 10px 0;
-    min-width: 100% !important;
-    background: #11172a !important;
-    position: fixed;
-    bottom: 0px;
-    left: 0;
-    transform: translatex(0);
-    border-radius: 0 !important;
-    border-top: 1px solid rgba(126, 153, 176, 0.2);
-  }
-
-  .searchContainer {
-    padding: 0px !important;
-  }
+.tokenSelect > svg {
+  color: #5F7285 !important;
 }
 
-@media screen and (max-width: 560px) {
-  .buttonOverrideFixed {
-    min-width: 100% !important;
-    max-height: 48px;
-  }
+.tokenSelect > fieldset {
+  display: none !important;
+}
 
-  .container {
-    width: calc(100% - 40px);
-    padding: 0 0 30px 0px;
-  }
+.tokenSelectInput {
+  padding: 3px !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.tokenSelectInput--dark {
+  padding: 3px !important;
+  border: 1px solid #5F7285 !important;
+  border-radius: 0 !important;
+  color: #4CADE6 !important;
+}
+
+.addButton {
+  width: 215px;
+  height: 50px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.addButton--light:hover > p {
+  background: #C6BAF0;
+}
+
+.addButton--light:active > p {
+  background: #B9A4EE;
+}
+
+.addButton--dark:hover > p {
+  background: #402E61;
+}
+
+.addButton--dark:active > p {
+  background: #523880;
+}
+
+.addButtonIcon {
+  width: 50px;
+  height: 100%;
+  background: #8F5AE8;
+}
+
+.actionButtonText {
+  width: 200px;
+  height: 100%;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 120%;
+  background: #D2D0F2;
+  color: #8F5AE8;
+  transition: all ease 300ms;
+}
+
+.actionButtonText--light {
+  background: #D2D0F2;
+}
+
+.actionButtonText--dark {
+  background: #33284C;
 }

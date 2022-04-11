@@ -142,6 +142,7 @@ function EnhancedTableHead(props) {
                     background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
                     borderBottom: '1px solid #9BC9E4',
                     borderColor: appTheme === 'dark' ? '#5F7285' : '#9BC9E4',
+                    zIndex: 10,
                   }}>
                   <TableSortLabel
                     active={orderBy === headCell.id}
@@ -466,6 +467,7 @@ export default function EnhancedTable({ vestNFTs, govToken, veToken }) {
   const [orderBy, setOrderBy] = React.useState('balance');
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
+  const [tableHeight, setTableHeight] = useState(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -587,11 +589,19 @@ export default function EnhancedTable({ vestNFTs, govToken, veToken }) {
     );
   }
 
+  window.addEventListener('resize', () => {
+    setTableHeight(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
+  });
+
   return (
-    <div className={classes.root}>
+    <>
       <EnhancedTableToolbar />
       <Paper elevation={0} className={ classes.tableContainer}>
-        <TableContainer>
+        <TableContainer
+          style={{
+            overflow: 'auto',
+            height: tableHeight,
+          }}>
           <Table
             stickyHeader
             className={classes.table}
@@ -817,6 +827,6 @@ export default function EnhancedTable({ vestNFTs, govToken, veToken }) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-    </div>
+    </>
   );
 }

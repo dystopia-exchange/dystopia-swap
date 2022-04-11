@@ -1,18 +1,7 @@
-
-
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin: auto;
-  margin-top: 90px;
-  max-width: 460px;
-  width: calc(100% - 180px);
+  align-self: center;
+  width: 460px;
   background: transparent !important;
-}
-
-.retain {
-  position: relative;
 }
 
 .smallestText {
@@ -45,6 +34,7 @@
 }
 
 .inputsContainer {
+  position: relative;
   padding: 0 30px;
 }
 
@@ -155,6 +145,7 @@
 }
 
 .reAddPadding {
+  position: relative;
   padding: 24px 0;
   background: #DBE6EC !important;
 }
@@ -993,35 +984,4 @@
 .disclaimer--dark {
   background: #24292D !important;
   color: #A2E3A9 !important;
-}
-
-@media screen and (max-width: 1280px) {
-  .actionsContainer {
-    border-left: 0px solid rgba(104, 108, 122, 0.25) !important;
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  .container {
-    margin-top: 0px;
-  }
-
-  .buttonWrap {
-    margin-top: 20px !important;
-  }
-
-  .actionsContainer {
-    border-left: 0px solid rgba(104, 108, 122, 0.25);
-  }
-}
-
-@media screen and (max-width: 960px) {
-  .container {
-    margin-top: 0px;
-    width: calc(100% - 60px);
-  }
-
-  .helpIcon {
-    display: none;
-  }
 }

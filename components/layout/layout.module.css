@@ -1,5 +1,3 @@
-
-
 .container {
   max-width: 100vw;
   min-height: 100vh;
@@ -13,13 +11,24 @@
 }
 
 .content {
-  flex: 1;
-  min-height: 100vh;
+  position: absolute;
   height: 100%;
+  width: 100%;
+}
+
+.content--light {
+  background-size: cover;
+  background: var(--background-light) url("/images/background/background-light.jpg") no-repeat top left;
+}
+
+.content--dark {
+  background-size: cover;
+  background: var(--background-dark) url("/images/background/background-dark.jpg") no-repeat top left;
 }
 
 .main {
-  padding-bottom: 80px;
+  position: relative;
+  padding: 60px 90px 30px;
 }
 
 @media screen and (max-width: 1200px) {
