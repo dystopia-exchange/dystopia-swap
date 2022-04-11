@@ -11,9 +11,8 @@ import {
   Grid,
 } from '@mui/material';
 import BigNumber from 'bignumber.js';
-import { Add, LockOutlined, Search } from '@mui/icons-material';
+import { Add, ArrowDropDownCircleOutlined, LockOutlined, Search } from '@mui/icons-material';
 import { useRouter } from "next/router";
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import classes from './ssVotes.module.css';
 import { formatCurrency } from '../../utils';
 
@@ -132,31 +131,57 @@ export default function ssVotes() {
   };
 
   const renderTokenSelect = (value, options) => {
+    console.log(value, options);
     return (
       <Select
         className={[classes.tokenSelect, classes[`tokenSelect--${appTheme}`]].join(' ')}
         fullWidth
         value={value}
         onChange={handleChange}
+        IconComponent={ArrowDropDownCircleOutlined}
         inputProps={{
           className: appTheme === 'dark' ? classes['tokenSelectInput--dark'] : classes.tokenSelectInput,
         }}>
         {options && options.map((option) => {
           return (
             <MenuItem key={option.id} value={option}>
-              <div className={classes.menuOption}>
-                <Typography>Token #{option.id}</Typography>
-                {/*<div>
-                  <Typography align="right"
-                              className={classes.smallerText}>{formatCurrency(option.lockValue)}</Typography>
-                  <Typography color="textSecondary" className={classes.smallerText}>{veToken?.symbol}</Typography>
-                </div>*/}
+              <div
+                className={[classes.menuOption, 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                <Typography
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 24,
+                    color: '#0B5E8E',
+                  }}>
+                  #{option.id}
+                </Typography>
+
+                <div className={[classes.menuOptionSec, 'g-flex-column'].join(' ')}>
+                  <Typography
+                    style={{
+                      fontWeight: 500,
+                      fontSize: 12,
+                      color: '#0B5E8E',
+                    }}>
+                    {formatCurrency(option.lockValue)}
+                  </Typography>
+
+                  <Typography
+                    style={{
+                      fontWeight: 500,
+                      fontSize: 12,
+                      color: '#86B9D6',
+                    }}>
+                    {veToken?.symbol}
+                  </Typography>
+                </div>
               </div>
             </MenuItem>
           );
         })}
       </Select>
-    );
+    )
+      ;
   };
 
   return (
@@ -254,28 +279,24 @@ export default function ssVotes() {
 
           {renderTokenSelect(token, vestNFTs)}
         </div>
-
-
       </div>
 
-      <Paper elevation={0} className={classes.tableContainer}>
-        <GaugesTable gauges={gauges.filter((pair) => {
-          if (!search || search === '') {
-            return true;
-          }
+      <GaugesTable gauges={gauges.filter((pair) => {
+        if (!search || search === '') {
+          return true;
+        }
 
-          const searchLower = search.toLowerCase();
+        const searchLower = search.toLowerCase();
 
-          if (pair.symbol.toLowerCase().includes(searchLower) || pair.address.toLowerCase().includes(searchLower) ||
-            pair.token0.symbol.toLowerCase().includes(searchLower) || pair.token0.address.toLowerCase().includes(searchLower) || pair.token0.name.toLowerCase().includes(searchLower) ||
-            pair.token1.symbol.toLowerCase().includes(searchLower) || pair.token1.address.toLowerCase().includes(searchLower) || pair.token1.name.toLowerCase().includes(searchLower)) {
-            return true;
-          }
+        if (pair.symbol.toLowerCase().includes(searchLower) || pair.address.toLowerCase().includes(searchLower) ||
+          pair.token0.symbol.toLowerCase().includes(searchLower) || pair.token0.address.toLowerCase().includes(searchLower) || pair.token0.name.toLowerCase().includes(searchLower) ||
+          pair.token1.symbol.toLowerCase().includes(searchLower) || pair.token1.address.toLowerCase().includes(searchLower) || pair.token1.name.toLowerCase().includes(searchLower)) {
+          return true;
+        }
 
-          return false;
+        return false;
 
-        })} setParentSliderValues={setVotes} defaultVotes={votes} veToken={veToken} token={token}/>
-      </Paper>
+      })} setParentSliderValues={setVotes} defaultVotes={votes} veToken={veToken} token={token}/>
     </>
   );
 }

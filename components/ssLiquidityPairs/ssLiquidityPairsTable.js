@@ -1125,8 +1125,7 @@ export default function EnhancedTable({pairs}) {
                   return (
                     <TableRow
                       key={labelId}
-                      className={classes.assetTableRow}
-                    >
+                      className={classes.assetTableRow}>
                       <StickyTableCell
                         style={{
                           background: appTheme === 'dark' ? '#151718' : '#DBE6EC',

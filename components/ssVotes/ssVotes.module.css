@@ -157,11 +157,11 @@
 }
 
 .menuOption {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  width: calc(100% - 24px);
-  padding: 6px 12px;
+  padding: 0 20px;
+}
+
+.menuOptionSec {
+  padding-right: 20px;
 }
 
 .smallerText {
