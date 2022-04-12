@@ -196,6 +196,19 @@ export default function ssWhitelist() {
   }
 
   return (
+    <>
+      <Typography
+        style={{
+          fontFamily: 'PPNeueMachina UltraBold',
+          fontWeight: 700,
+          fontSize: 72,
+          color: '#ffffff',
+          textAlign: 'center',
+        }}>
+        The page is under<br/>development
+      </Typography>
+    </>
+    /*
     <div className={ classes.container}>
       <div className={ classes.searchBar }>
       <Grid container spacing={2}>
@@ -227,5 +240,6 @@ export default function ssWhitelist() {
         { token && token.address && renderToken()}
       </div>
     </div>
+    */
   )
 }

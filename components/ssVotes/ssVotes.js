@@ -131,7 +131,6 @@ export default function ssVotes() {
   };
 
   const renderTokenSelect = (value, options) => {
-    console.log(value, options);
     return (
       <Select
         className={[classes.tokenSelect, classes[`tokenSelect--${appTheme}`]].join(' ')}
@@ -151,7 +150,7 @@ export default function ssVotes() {
                   style={{
                     fontWeight: 500,
                     fontSize: 24,
-                    color: '#0B5E8E',
+                    color: appTheme === 'dark' ? '#ffffff' : '#0B5E8E',
                   }}>
                   #{option.id}
                 </Typography>
@@ -161,7 +160,7 @@ export default function ssVotes() {
                     style={{
                       fontWeight: 500,
                       fontSize: 12,
-                      color: '#0B5E8E',
+                      color: appTheme === 'dark' ? '#ffffff' : '#0B5E8E',
                     }}>
                     {formatCurrency(option.lockValue)}
                   </Typography>
@@ -170,7 +169,7 @@ export default function ssVotes() {
                     style={{
                       fontWeight: 500,
                       fontSize: 12,
-                      color: '#86B9D6',
+                      color: appTheme === 'dark' ? '#7C838A' : '#86B9D6',
                     }}>
                     {veToken?.symbol}
                   </Typography>
@@ -180,20 +179,19 @@ export default function ssVotes() {
           );
         })}
       </Select>
-    )
-      ;
+    );
   };
 
   return (
     <>
       <div className={[classes.topBarContainer, 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
         <div className={['g-flex', 'g-flex--align-center'].join(' ')}>
-          <div className={[classes.infoSection, 'g-flex', 'g-flex--align-center', 'g-flex--no-wrap'].join(' ')}>
+          <div className={[classes.infoSection, classes[`infoSection--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--no-wrap'].join(' ')}>
             <Typography
               style={{
                 fontWeight: 400,
                 fontSize: 18,
-                color: '#5688A5',
+                color: appTheme === 'dark' ? '#ffffff' : '#5688A5',
                 whiteSpace: 'nowrap',
               }}>
               Voting Power Used:
@@ -204,7 +202,7 @@ export default function ssVotes() {
             </Typography>
 
             <Button
-              className={classes.buttonOverrideFixed}
+              className={[classes.buttonOverrideFixed, classes[`buttonOverrideFixed--${appTheme}`]].join(' ')}
               variant="contained"
               size="large"
               color="primary"
@@ -214,7 +212,7 @@ export default function ssVotes() {
                 style={{
                   fontWeight: 700,
                   fontSize: 16,
-                  color: '#8F5AE8',
+                  color: appTheme === 'dark' ? '#7F828B' : '#8F5AE8',
                   whiteSpace: 'nowrap',
                 }}>
                 {voteLoading ? `Casting Votes` : `Cast Votes`}

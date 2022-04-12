@@ -41,12 +41,6 @@
   width: 200px;
 }
 
-.actionButtonText {
-  font-size: 15px !important;
-  text-transform: capitalize !important;
-  font-weight: 700 !important;
-}
-
 .loadingCircle {
   margin-left: 6px !important;
 }
@@ -56,6 +50,11 @@
   padding-right: 0;
   background: #DBE6EC;
   border: 1px solid #86B9D6;
+}
+
+.infoSection--dark {
+  background: #151718;
+  border: 1px solid #5F7285;
 }
 
 .helpText {
@@ -95,6 +94,11 @@
   outline: 1px solid #8F5AE8 !important;
   border-radius: 0 !important;
   border: none !important;
+}
+
+.buttonOverrideFixed--dark {
+  background: #494B51 !important;
+  outline: 1px solid #7F828B !important;
 }
 
 .tokenIDContainer {
@@ -178,11 +182,18 @@
   border-radius: 100px !important;
 }
 
-.tokenSelect > svg {
+.tokenSelect--dark {
+  background: #151718 !important;
+  border: 1px solid #5F7285 !important;
+}
+
+.tokenSelect > svg,
+.tokenSelect--dark > svg {
   color: #5F7285 !important;
 }
 
-.tokenSelect > fieldset {
+.tokenSelect > fieldset,
+.tokenSelect--dark > fieldset {
   display: none !important;
 }
 
@@ -194,9 +205,8 @@
 
 .tokenSelectInput--dark {
   padding: 3px !important;
-  border: 1px solid #5F7285 !important;
+  border: none !important;
   border-radius: 0 !important;
-  color: #4CADE6 !important;
 }
 
 .addButton {
