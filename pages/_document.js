@@ -8,13 +8,22 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <link rel="stylesheet" href="/fonts/Inter/Inter.css" />
-          <link rel="stylesheet" href="/fonts/MonumentExt/Monument.css" />
-          <link rel="stylesheet" href="/fonts/Druk/Druk.css" />
+          <link rel="stylesheet" href="/fonts/Inter/Inter.css"/>
+          <link rel="stylesheet" href="/fonts/MonumentExt/Monument.css"/>
+          <link rel="stylesheet" href="/fonts/Druk/Druk.css"/>
+          <link rel="stylesheet" href="/fonts/PPNeueMachina-UltraBold/PPNeueMachina-UltraBold.css"/>
+          <link rel="stylesheet" href="/fonts/RobotoMono/RobotoMono.css"/>
         </Head>
-        <body>
-          <Main />
-          <NextScript />
+        <body
+          style={{
+            overflow: 'hidden',
+            width: '100%',
+            height: '100%',
+          }}>
+
+        <Main style={{display: 'flex', flexDirection: 'column'}}/>
+
+        <NextScript/>
         </body>
       </Html>
     );
@@ -30,7 +39,7 @@ MyDocument.getInitialProps = async ctx => {
 
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: App => props => sheets.collect(<App {...props} />)
+      enhanceApp: App => props => sheets.collect(<App {...props} />),
     });
 
   const initialProps = await Document.getInitialProps(ctx);
@@ -40,7 +49,7 @@ MyDocument.getInitialProps = async ctx => {
     // Styles fragment is rendered after the app and page rendering finish.
     styles: [
       ...React.Children.toArray(initialProps.styles),
-      sheets.getStyleElement()
-    ]
+      sheets.getStyleElement(),
+    ],
   };
 };

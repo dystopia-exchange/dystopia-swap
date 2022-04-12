@@ -1,20 +1,42 @@
-.vestContainer {
-  width: calc(100% - 180px);
-  max-width: 485px;
-  margin: 0 auto;
-  position: relative;
-}
-
 .backButton {
   top: 24px;
   left: 0px;
   position: absolute !important;
 }
 
-.smallerText {
-  font-size: 12px !important;
-  margin-top: 0px !important;
-  margin-bottom: 0px !important;
+.smallerText,
+.smallerTextDate {
+  position: absolute !important;
+  left: 151px;
+  top: 118px;
+  font-style: normal;
+  font-weight: 500 !important;
+  font-size: 18px !important;
+  line-height: 140% !important;
+  color: #0A2C40 !important;
+  text-transform: uppercase;
+}
+
+.smallerText--light {
+  color: #0A2C40 !important;
+}
+
+.smallerText--dark {
+  color: #FFFFFF !important;
+}
+
+.smallerTextDate {
+  top: 78px;
+  font-size: 14px !important;
+  line-height: 120% !important;
+}
+
+.smallerTextDate--light {
+  color: #5688A5 !important;
+}
+
+.smallerTextDate--dark {
+  color: #FFFFFF !important;
 }
 
 .container {
@@ -27,27 +49,44 @@
 }
 
 .container2 {
-  width: calc(100%);
-  border: 1px solid rgba(104, 108, 122, 0.25);
-  left: 0;
-  right: 0;
-  margin: auto;
-  padding: 24px;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 460px;
+  background: transparent !important;
 }
 
 .container3 {
-  width: calc(100%);
-  border: 1px solid rgba(104, 108, 122, 0.25);
-  left: 0;
-  right: 0;
-  margin: auto;
-  padding: 24px;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 4px;
+  align-self: center;
+  width: 460px;
+  background: transparent !important;
+}
+
+.reAddPadding3 {
+  width: 462px;
+  padding: 12px 30px 30px;
+  background: #DBE6EC !important;
+  border: 1px solid #86B9D6 !important;
+  border-top: none !important;
+}
+
+.reAddPadding3--dark {
+  background: #151718 !important;
+  border: 1px solid #5F7285 !important;
+  border-top: none !important;
+}
+
+.top {
+  top: 1px;
+  width: 464px;
+  height: 18px;
+  margin-bottom: -1px;
+  margin-left: -2px;
+  background-image: url("/images/ui/swap-popup-top-slice.svg");
+}
+
+.top--dark {
+  background-image: url("/images/ui/swap-popup-top-slice--dark.svg");
 }
 
 .contentBox {
@@ -70,8 +109,53 @@
   position: relative;
 }
 
+
 .textField {
+  width: 400px;
+  margin-top: 2px;
+  margin-bottom: 2px;
   position: relative;
+}
+
+.textFieldDate--light {
+  margin-top: 20px;
+  height: 130px;
+  background-image: url("/images/ui/calendar-bg--light.svg");
+}
+
+.textFieldDate--dark {
+  margin-top: 20px;
+  height: 130px;
+  background-image: url("/images/ui/calendar-bg--dark.svg");
+}
+
+.textField--dark {
+  height: 172px;
+  background-image: url("/images/ui/swap-coin-top--dark.svg");
+}
+
+.textField--light {
+  height: 172px;
+  background-image: url("/images/ui/swap-coin-top--light.svg");
+}
+
+.inputBalanceText,
+.inputTitleText {
+  position: absolute;
+  top: 12px;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  color: #ffffff;
+}
+
+.inputBalanceText {
+  left: 151px;
+}
+
+.inputTitleText {
+  left: 20px;
 }
 
 .balances {
@@ -99,10 +183,6 @@
 .inputTitle {
   padding-bottom: 16px;
   margin-left: 6px;
-}
-
-.inputTitleText {
-  font-size: 18px !important;
 }
 
 .infoContainer {
@@ -172,10 +252,6 @@
   flex: 1;
 }
 
-.inputsContainer3 {
-  width: 100%;
-}
-
 .actionsContainer3 {
   width: 100%;
   margin-top: 0px;
@@ -187,13 +263,30 @@
 }
 
 .buttonOverride {
-  background: rgb(23, 52, 72) !important;
-  color: rgb(6, 211, 215) !important;
+  width: 460px;
+  height: 65px;
+  margin-left: 1px;
+  margin-top: 20px !important;
+  background: transparent url("/images/ui/liquidity-add-button-deposit--light.svg") !important;
   font-weight: 700 !important;
+  font-size: 16px !important;
+  line-height: 120% !important;
+  text-align: center !important;
+  color: #8F5AE8 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
 }
 
 .buttonOverride:hover {
-  background: rgb(19, 44, 60) !important;
+  background: transparent url("/images/ui/liquidity-add-button-deposit--light.svg") !important;
+}
+
+.buttonOverride--dark {
+  background: transparent url("/images/ui/liquidity-add-button-deposit--dark.svg") !important;
+}
+
+.buttonOverride--dark:hover {
+  background: transparent url("/images/ui/liquidity-add-button-deposit--dark.svg") !important;
 }
 
 .toggleButtons {
@@ -251,7 +344,7 @@
   justify-content: center;
   border-radius: 30px;
   font-size: 11px !important;
-  border: 1px solid rgba(104,108,122,0.2);
+  border: 1px solid rgba(104, 108, 122, 0.2);
   position: absolute;
   top: -2px;
   right: 3px;
@@ -263,29 +356,12 @@
   height: 130px;
 }
 
-.inline {
-  display: flex;
-  align-items: center;
-}
-
 .expiresIn {
   background: none;
   opacity: 0.6;
   width: 80px;
   font-size: 12px !important;
 }
-
-.vestPeriodToggle {
-  background: none;
-  opacity: 0.6;
-  flex: 1;
-}
-
-.vestPeriodLabel > span {
-  font-size: 12px !important;
-}
-
-
 
 
 .vestingInfoContainer {
@@ -330,9 +406,6 @@
 }
 
 
-
-
-
 .error {
   border: 1px solid #dc3545;
 }
@@ -341,21 +414,27 @@
   display: flex;
   flex-wrap: wrap;
   border-radius: 10px;
-  width: 100%;
   align-items: center;
-  background: rgb(33, 43, 72);
 }
 
 .massiveInputAssetSelect {
-  width: 124px;
-  min-height: 124px;
   height: 100%;
 }
 
 .massiveInputAmount {
-  flex: 1;
-  height: 100%;
-  max-width: calc(100% - 124px);
+  position: absolute !important;
+  left: 151px;
+  top: 68px;
+  border: none !important;
+  margin-right: 20px !important;
+}
+
+.massiveInputAmountDate {
+  position: absolute !important;
+  left: 151px;
+  top: 28px;
+  border: none !important;
+  margin-right: 20px !important;
 }
 
 .massiveInputAddress {
@@ -364,22 +443,65 @@
 }
 
 .displaySelectContainer {
-  padding: 12px;
-  min-height: 100px;
+  padding: 61px 20px 20px;
+}
+
+.displaySelectContainerDate {
+  padding: 21px 20px 20px;
 }
 
 .displayDualIconContainer {
-  width: 100px;
   position: relative;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.displayDualIconContainer--light {
+  background-image: url("/images/ui/swap-currency-circle--light.svg");
+}
+
+.displayDualIconContainer--dark {
+  background-image: url("/images/ui/swap-currency-circle--dark.svg");
+}
+
+.displayDualIconContainerSmall {
+  width: 50px;
+  height: 50px;
+  position: relative;
+  margin-right: 15px;
+}
+
+.assetOptionIcon {
+  width: 50px;
+  height: 50px;
+  padding: 4px;
+  border-radius: 100px;
+  border: 1px solid #9BC9E4;
+  background: #CFE5F2;
+}
+
+.assetOptionIcon--light {
+  background: #CFE5F2;
+  border: 1px solid #86B9D6;
+}
+
+.assetOptionIcon--dark {
+  background: #304E61;
+  border: 1px solid #5F7285;
 }
 
 .displayAssetIcon {
-  border: 1px solid rgba(126, 153, 176, 0.2);
-  border-radius: 50px;
-  background: rgb(33, 43, 72);
-  width: 100px;
-  height: 100px;
-  padding: 10px;
+  width: 60px;
+  height: 60px;
+  background: #0B5E8E;
+  border-radius: 100px;
+}
+
+.displayAssetIcon--dark {
+  background: #4CADE6;
 }
 
 .displayAssetIconWhite {
@@ -413,14 +535,6 @@
   cursor: pointer;
 }
 
-.inputBalanceText {
-  font-weight: 100 !important;
-  font-size: 12px !important;
-  color: #7e99b0;
-  margin-right: 6px !important;
-  margin-top: 6px !important;
-}
-
 .balances {
   display: flex;
   justify-content: flex-end;
@@ -429,8 +543,22 @@
 }
 
 .largeInput {
-  font-size: 42px !important;
-  z-index: 99;
+  padding: 0 !important;
+  font-weight: 400 !important;
+  font-size: 30px !important;
+  line-height: 100% !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.largeInput--light {
+  color: #325569 !important;
+  -webkit-text-fill-color: #325569 !important;
+}
+
+.largeInput--dark {
+  color: #C6CDD2 !important;
+  -webkit-text-fill-color: #C6CDD2 !important;
 }
 
 .someContainer {
@@ -440,16 +568,20 @@
 }
 
 .titleSection {
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: none;
-  border: 1px solid #212B48;
-  border-radius: 10px;
-  width: calc(100% - 0px);
-  margin: 0px 0px 15px 0px;
-  position: relative;
-  min-height: 60px;
+  width: 58px;
+  height: 58px;
+  margin-left: -95px;
+  background: #DBE6EC;
+  border: 1px solid #86B9D6;
+}
+
+.titleSection--dark {
+  background: #151718;
+  border: 1px solid #5F7285;
 }
 
 .backButton {
@@ -483,12 +615,18 @@
   margin-bottom: 12px;
 }
 
-.vestInfoContainer > .mainSection > .amount {
+.amount {
+  font-weight: 500 !important;
   font-size: 20px !important;
-  line-height: 2;
+  line-height: 120% !important;
+  color: #5688A5 !important;
 }
 
-.vestInfoContainer > .mainSection > .values {
+.amount--dark {
+  color: #C6CDD2 !important;
+}
+
+.values {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -499,32 +637,57 @@
   padding: 3px 0px
 }
 
-.vestInfoContainer > .seccondSection {
-}
-
-.vestInfoContainer > .seccondSection > .info {
+.info {
+  font-weight: 500 !important;
   font-size: 12px !important;
-  font-style: italic;
-  padding: 3px 0px !important
+  line-height: 120% !important;
+  color: #5688A5 !important;
+  margin-top: 15px !important;
 }
 
-
-@media screen and (max-width: 1200px) {
-  .container {
-    top: 180px;
-  }
+.info---dark {
+  color: #7C838A !important;
 }
 
-@media screen and (max-width: 960px) {
-  .container {
-    top: 360px;
-  }
-
-  .vestContainer {
-    width: calc(100% - 60px);
-  }
+.vestPeriodToggle {
+  margin-top: 15px;
+  background: #CFE5F2;
+  border: 1px solid #86B9D6;
+  box-sizing: border-box;
+  border-radius: 100px;
 }
 
-@media screen and (max-width: 560px) {
+.vestPeriodToggle--dark {
+  background: #24292D;
+  border: 1px solid #5F7285;
+}
 
+.vestPeriodLabel {
+  padding: 6px 15px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 120%;
+  color: #325569;
+  cursor: pointer;
+  background: transparent;
+  outline: 1px solid transparent;
+  box-sizing: border-box;
+  border-radius: 100px;
+  transition: all ease 300ms;
+}
+
+.vestPeriodLabel--dark {
+  color: #C6CDD2;
+}
+
+.vestPeriodLabel--checked {
+  background: #0B5E8E;
+  outline: 1px solid #0B5E8E;
+  box-sizing: border-box;
+  border-radius: 100px;
+  color: #FFFFFF;
+}
+
+.vestPeriodLabel--dark.vestPeriodLabel--checked {
+  background: #4CADE6;
 }

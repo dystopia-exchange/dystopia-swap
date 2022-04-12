@@ -243,6 +243,7 @@ function EnhancedTableHead(props) {
                       background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
                       borderBottom: '1px solid #9BC9E4',
                       borderColor: appTheme === 'dark' ? '#5F7285' : '#9BC9E4',
+                      zIndex: 10,
                     }}>
                     <TableSortLabel
                       active={orderBy === headCell.id}
@@ -483,19 +484,8 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid #5F7285',
   },
   toolbar: {
-    display: 'flex',
-    justifyContent: 'space-between',
     marginBottom: 30,
     padding: 0,
-  },
-  tableContainer: {
-    border: 'none',
-    borderRadius: 0,
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-    background: 'transparent',
   },
   filterButton: {
     width: 50,
@@ -743,7 +733,7 @@ const EnhancedTableToolbar = (props) => {
   const {appTheme} = useAppThemeContext();
 
   return (
-    <Toolbar className={classes.toolbar}>
+    <Toolbar className={[classes.toolbar, 'g-flex-column__item-fixed', 'g-flex', 'g-flex--space-between'].join(' ')}>
       <div
         className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
         onClick={onCreate}>
@@ -835,7 +825,7 @@ const EnhancedTableToolbar = (props) => {
         </Tooltip>
       </div>
 
-      <Popper id={id} open={open} anchorEl={anchorEl} transition placement="bottom-end" style={{ zIndex: 100 }}>
+      <Popper id={id} open={open} anchorEl={anchorEl} transition placement="bottom-end" style={{zIndex: 100}}>
         {({TransitionProps}) => (
           <Fade {...TransitionProps} timeout={350}>
             <div className={[classes.filterContainer, classes[`filterContainer--${appTheme}`]].join(' ')}>
@@ -927,6 +917,7 @@ export default function EnhancedTable({pairs}) {
   const [toggleActiveGauge, setToggleActiveGauge] = useState(localToggles.toggleActiveGauge);
   const [toggleStable, setToggleStable] = useState(localToggles.toggleStable);
   const [toggleVariable, setToggleVariable] = useState(localToggles.toggleVariable);
+  const [tableHeight, setTableHeight] = useState(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -1008,7 +999,7 @@ export default function EnhancedTable({pairs}) {
 
   function TablePaginationActions(props) {
     const theme = useTheme();
-    const { count, page, rowsPerPage, onPageChange } = props;
+    const {count, page, rowsPerPage, onPageChange} = props;
 
     const handleFirstPageButtonClick = (event) => {
       onPageChange(event, 0);
@@ -1027,7 +1018,7 @@ export default function EnhancedTable({pairs}) {
     };
 
     return (
-      <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <Box sx={{flexShrink: 0, ml: 2.5}}>
         <IconButton
           onClick={handleFirstPageButtonClick}
           disabled={page === 0}
@@ -1039,7 +1030,7 @@ export default function EnhancedTable({pairs}) {
             borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
             color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
           }}>
-          {theme.direction === 'rtl' ? <KeyboardDoubleArrowRight /> : <KeyboardDoubleArrowLeft />}
+          {theme.direction === 'rtl' ? <KeyboardDoubleArrowRight/> : <KeyboardDoubleArrowLeft/>}
         </IconButton>
 
         <IconButton
@@ -1054,7 +1045,7 @@ export default function EnhancedTable({pairs}) {
             borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
             color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
           }}>
-          {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+          {theme.direction === 'rtl' ? <KeyboardArrowRight/> : <KeyboardArrowLeft/>}
         </IconButton>
 
         <IconButton
@@ -1069,7 +1060,7 @@ export default function EnhancedTable({pairs}) {
             borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
             color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
           }}>
-          {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+          {theme.direction === 'rtl' ? <KeyboardArrowLeft/> : <KeyboardArrowRight/>}
         </IconButton>
 
         <IconButton
@@ -1084,33 +1075,38 @@ export default function EnhancedTable({pairs}) {
             borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
             color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
           }}>
-          {theme.direction === 'rtl' ? <KeyboardDoubleArrowLeft /> : <KeyboardDoubleArrowRight />}
+          {theme.direction === 'rtl' ? <KeyboardDoubleArrowLeft/> : <KeyboardDoubleArrowRight/>}
         </IconButton>
       </Box>
     );
   }
 
+  window.addEventListener('resize', () => {
+    setTableHeight(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
+  });
+
   return (
-    <div className={classes.root}>
+    <>
       <EnhancedTableToolbar
         setSearch={setSearch}
         setToggleActive={setToggleActive}
         setToggleActiveGauge={setToggleActiveGauge}
         setToggleStable={setToggleStable}
         setToggleVariable={setToggleVariable}/>
-      <Paper elevation={0} className={classes.tableContainer}>
-        <TableContainer>
+
+      <div
+        className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
+        <TableContainer
+          style={{
+            overflow: 'auto',
+            height: tableHeight,
+          }}>
           <Table
             stickyHeader
             className={classes.table}
             aria-labelledby="tableTitle"
             size={'medium'}
             aria-label="enhanced table">
-            {/*<colgroup>
-              <col span="1" style="width: 15%;">
-                <col span="1" style="width: 70%;">
-                  <col span="1" style="width: 15%;">
-            </colgroup>*/}
             <EnhancedTableHead
               classes={classes}
               order={order}
@@ -1129,8 +1125,7 @@ export default function EnhancedTable({pairs}) {
                   return (
                     <TableRow
                       key={labelId}
-                      className={classes.assetTableRow}
-                    >
+                      className={classes.assetTableRow}>
                       <StickyTableCell
                         style={{
                           background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
@@ -1833,7 +1828,7 @@ export default function EnhancedTable({pairs}) {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Paper>
-    </div>
+      </div>
+    </>
   );
 }

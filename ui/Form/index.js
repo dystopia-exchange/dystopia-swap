@@ -7,7 +7,7 @@ const Form = (props) => {
   const {appTheme} = useAppThemeContext();
 
   return (
-    <div>
+    <div className={['g-flex-column', 'g-flex--align-center'].join(' ')}>
       <div className={[classes[`top`], classes[`top--${appTheme}`]].join(' ')}>
       </div>
 

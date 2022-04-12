@@ -42,22 +42,21 @@ function Swap({changeTheme}) {
   const {appTheme} = useAppThemeContext();
 
   return (
-    <div className={classes.ffContainer}>
+    <>
       {account && account.address ?
         <SwapComponent/>
         :
         <Paper className={classes.notConnectedContent}>
           <div className={classes.contentFloat}>
-            <img
-              alt=""
-              src={'/images/ui/swap-text.svg'}
-              width="207px"
-              height="66px"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
-              }}
-            />
+            <Typography
+              style={{
+                fontFamily: 'PPNeueMachina UltraBold',
+                fontWeight: 700,
+                fontSize: 72,
+                color: '#ffffff',
+              }}>
+              Swap
+            </Typography>
 
             <div className={classes.mainDescBg}>
               <Typography className={classes.mainDescNC} variant="body2">
@@ -76,7 +75,7 @@ function Swap({changeTheme}) {
         </Paper>
       }
       {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock}/>}
-    </div>
+    </>
   );
 }
 

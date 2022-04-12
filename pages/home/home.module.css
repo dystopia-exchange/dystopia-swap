@@ -2,247 +2,185 @@
   height: 100%;
   width: auto;
   margin-top: 0px;
-  position: relative;
-}
-
-.contentContainerFull,
-.contentContainerFullTwo {
-  height: 100vh;
-  width: 100%;
-  position: relative;
-}
-
-.homeContentMain {
-  text-align: center !important;
-  max-width: 50vw;
-  height: auto;
+  background: #DBE6EC !important;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.ffContainer--dark {
+  background: #151718 !important;
+}
+
+.contentContainerFull {
+  display: flex;
+  justify-content: space-between;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  padding: 30px;
+}
+
+.bgLeft {
+  width: 620px;
+  height: 740px;
+  margin-top: 92px;
+}
+
+.homeContentMain,
+.homeContentMainSec {
+  text-align: center !important;
+  width: 580px;
+  height: auto;
   z-index: 2;
+  background: #DBE6EC !important;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.homeContentMain--dark,
+.homeContentMainSec--dark {
+  background: #151718 !important;
+}
+
+.homeContentMainSec {
+  width: 950px;
 }
 
 .mainTitle {
-  font-family: 'Monument' !important;
-  font-size: 60px !important;
-  margin-bottom: 30px !important;
-  animation: mainTitleAnim 1s ease 1;
-  animation-delay: 200ms;
-  animation-fill-mode: forwards;
-  position: relative;
-  bottom: 0;
-  opacity: 0;
+  margin-top: 100px !important;
+  font-family: 'PPNeueMachina UltraBold', serif !important;
+  font-weight: 800 !important;
+  font-size: 72px !important;
+  line-height: 100% !important;
   text-align: center !important;
-  }
-
-  @keyframes mainTitleAnim {
-  0% {
-    bottom: -100px;
-    opacity: 0;
-  }
-  100% {
-    bottom: 0;
-    opacity: 1;
-  }
-  }
-
-.appLogo {
-  transform: scale(6);
-  position: fixed;
-  left: 100px;
-  top: 30px;
+  color: #0A2C40 !important;
 }
 
-.preTitle {
-  font-family: 'Monument' !important;
-  font-size: 18px !important;
-  text-transform: uppercase;
-  color: #06D3D7 !important;
-  margin-bottom: 20px !important;
-  font-weight: 100 !important;
-  letter-spacing: 3px;
-  animation: preTitleAnim 1s ease 1;
-  animation-delay: 0s;
-  animation-fill-mode: forwards;
-  position: relative;
-  bottom: 0;
-  opacity: 0;
+.mainTitle--dark {
+  color: #ffffff !important;
 }
 
-@keyframes preTitleAnim {
-0% {
-  bottom: -100px;
-  opacity: 0;
-}
-100% {
-  bottom: 0;
-  opacity: 1;
-}
+.bigLogo,
+.bigLogoSec {
+  width: 442px;
+  height: 60px;
+  margin-top: 50px;
 }
 
-.secTitle {
-  font-family: 'Monument' !important;
-  font-size: 30px !important;
-  margin-bottom: 20px !important;
-  text-align: center !important;
+.bigLogoSec {
+  margin-top: 100px;
+}
+
+.feeTitle {
+  margin-top: 94px !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  color: #0B5E8E !important;
 }
 
 .mainDescription {
-  font-size: 20px !important;
-  margin-bottom: 20px !important;
-  line-height: 1.7rem !important;
-  color: rgba(255,255,255,0.7) !important;
+  margin-top: 80px !important;
+  font-weight: 400 !important;
+  font-size: 28px !important;
+  line-height: 130% !important;
+  text-align: center !important;
+  letter-spacing: 0 !important;
+  color: #325569 !important;
+}
+
+.mainDescription--dark {
+  color: #C6CDD2 !important;
 }
 
 .secDescription {
-  font-size: 16px !important;
-  margin-bottom: 20px !important;
-  line-height: 1.7rem !important;
-  color: #7E99B0 !important;
+  margin-top: 60px !important;
+  font-weight: 400 !important;
+  font-size: 17px !important;
+  line-height: 140% !important;
+  text-align: center !important;
+  letter-spacing: 0 !important;
+  color: #325569 !important;
+}
+
+.secDescription--dark {
+  color: #C6CDD2 !important;
 }
 
 .buttonInfo {
-  background: #212B48 !important;
-  font-family: 'Monument' !important;
-  padding: 12px 20px 10px 20px !important;
-  min-width: 100% !important;
-  text-transform: capitalize !important;
-  color: #7E99B0 !important;
-  animation: buttonInfoAnim 1s ease 1;
-  animation-delay: 400ms;
-  animation-fill-mode: forwards;
-  position: relative;
-  bottom: 0;
-  opacity: 0;
-  }
+  width: 200px !important;
+  padding: 19px !important;
+  margin: auto;
+  margin-top: 90px !important;
+  background: #DBE6EC !important;
+  border: 1px solid #86B9D6 !important;
+  border-radius: 0 !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  line-height: 120% !important;
+  color: #0B5E8E !important;
+  cursor: pointer;
+}
 
-  @keyframes buttonInfoAnim {
-    0% {
-    bottom: -100px;
-    opacity: 0;
-    }
-    100% {
-    bottom: 0;
-    opacity: 1;
-    }
-  }
+.buttonInfo--dark {
+  background: #151718 !important;
+  border: 1px solid #5F7285 !important;
+  color: #4CADE6 !important;
+}
 
 .buttonEnter {
-  animation: buttonInfoAnim 1s ease 1;
-  animation-delay: 600ms;
-  animation-fill-mode: forwards;
-  position: relative;
-  bottom: 0;
-  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 292px;
+  height: 65px;
+  margin: auto;
+  margin-top: 130px !important;
+  padding: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  line-height: 120% !important;
+  color: #8F5AE8 !important;
+  cursor: pointer;
 }
 
-.buttonEnter,
-.buttonEnterSingle {
-  background: rgba(6,211,215,0.1) !important;
-  font-family: 'Monument' !important;
-  padding: 12px 20px 10px 20px !important;
-  min-width: 100% !important;
-  text-transform: capitalize !important;
-  color: #06D3D7 !important;
+.buttonEnter--light {
+  background-image: url("/images/ui/btn-enter--light.svg");
 }
 
-.floatingSphere {
-    height: 600px;
-    width: 600px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-image: url('/images/sphere_001.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    z-index: 1;
-    mix-blend-mode: lighten;
-    opacity: 0.5;
+.buttonEnter--light:hover {
+  background-image: url("/images/ui/btn-enter-hover--light.svg");
 }
 
-@media screen and (max-width: 960px) {
-  .floatingSphere { display: none; }
-
-  .homeContentMain {
-    text-align: center;
-    max-width: 80vw;
-    height: auto;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-  }
-
-  .mainDescription {
-    font-size: 16px !important;
-    margin-bottom: 20px !important;
-    line-height: 1.7rem !important;
-    color: rgba(255,255,255,0.7) !important;
-  }
-
-  .secDescription {
-    font-size: 14px !important;
-    margin-bottom: 20px !important;
-    line-height: 1.2rem !important;
-    color: #7E99B0 !important;
-  }
-
-  .buttonInfo,
-  .buttonEnter {
-    width: 100% !important;
-    margin: 0 !important;
-    float: none !important;
-  }
-
-  .buttonEnterSingle {
-    width: 100% !important;
-  }
-
-  .mainTitle {
-    font-size: 38px !important;
-    margin-bottom: 25px !important;
-  }
+.buttonEnter--light:active {
+  background-image: url("/images/ui/btn-enter-click--light.svg");
 }
 
-@media screen and (max-width: 600px) {
-  .viewCollateral {
-    margin: 80px 0 0px 15px !important;
-    float: right;
-  }
+.buttonEnter--dark {
+  margin-top: 60px !important;
+  background-image: url("/images/ui/btn-enter--dark.svg");
+}
 
-  .mainTitle {
-    font-size: 32px !important;
-    margin-bottom: 25px !important;
-  }
+.buttonEnter--dark:hover {
+  margin-top: 60px !important;
+  background-image: url("/images/ui/btn-enter-hover--dark.svg");
+}
 
-  .secTitle {
-    font-size: 20px !important;
-  }
+.buttonEnter--dark:active {
+  margin-top: 60px !important;
+  background-image: url("/images/ui/btn-enter-click--dark.svg");
+}
 
-  .mainDescription {
-    font-size: 14px !important;
-    margin-bottom: 20px !important;
-    line-height: 1.4rem !important;
-    color: rgba(255,255,255,0.7) !important;
-  }
+.buttonEnterTitle {
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  line-height: 120% !important;
+}
 
-  .secDescription {
-    font-size: 13px !important;
-    margin-bottom: 20px !important;
-    line-height: 1.2rem !important;
-    color: #7E99B0 !important;
-  }
-
-  .mainHeading {
-    margin: 0px 0 0px 0 !important;
-    text-align: left !important;
-    font-size: 20px !important;
-  }
-
-  .accountInfo {
-    display: none;
-  }
+.buttonEnter--light .buttonEnterTitle {
+  color: #8F5AE8 !important;
 }

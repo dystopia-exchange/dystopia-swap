@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import Unlock from '../../components/unlock';
 
 import classes from './vest.module.css';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 function Vesting({ changeTheme }) {
 
@@ -43,33 +44,43 @@ function Vesting({ changeTheme }) {
     setUnlockOpen(false);
   };
 
+  const {appTheme} = useAppThemeContext();
+
   return (
-    <div className={classes.ffContainer}>
+    <>
       {account && account.address ?
-        <div className={classes.connected}>
-          <VestsNFTs />
-        </div>
-      :
+        <VestsNFTs />
+        :
         <Paper className={classes.notConnectedContent}>
-          <div className={classes.sphere}></div>
           <div className={classes.contentFloat}>
-          <Typography className={classes.mainHeadingNC} variant='h1'>Vesting NFTs</Typography>
-          <Typography className={classes.mainDescNC} variant='body2'>
-            Lock your Solid to earn rewards and governance rights. Each locked position is created and represented as an NFT, meaning you can hold multiple locked positions.
-          </Typography>
-          <Button
-            disableElevation
-            className={classes.buttonConnect}
-            variant="contained"
-            onClick={onAddressClicked}>
+            <Typography
+              style={{
+                fontFamily: 'PPNeueMachina UltraBold',
+                fontWeight: 700,
+                fontSize: 72,
+                color: '#ffffff',
+              }}>
+              Vest
+            </Typography>
+
+            <div className={classes.mainDescBg}>
+              <Typography className={classes.mainDescNC} variant="body2">
+                Lock your Solid to earn rewards and governance rights. Each locked position is created and represented as an NFT, meaning you can hold multiple locked positions.
+              </Typography>
+            </div>
+
+            <Button
+              disableElevation
+              className={[classes.buttonConnect, classes[`buttonConnect--${appTheme}`]].join(' ')}
+              variant="contained"
+              onClick={onAddressClicked}>
               {account && account.address && <div className={`${classes.accountIcon} ${classes.metamask}`}></div>}
-              <Typography>Connect Wallet to Continue</Typography>
-          </Button>
+            </Button>
           </div>
         </Paper>
       }
       {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
-    </div>
+    </>
   );
 }
 

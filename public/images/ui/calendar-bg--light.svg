@@ -1,0 +1,26 @@
+
+<svg width="400px" height="130px" viewBox="0 0 400 130" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <polygon id="path-6t8osflbyl-1" points="400 0 0 0 0 114 0 130 400 130 400 114"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="calendar-bg--light" transform="translate(0.000000, -0.000000)">
+            <rect id="Rectangle" fill="#B9DFF5" fill-rule="nonzero" x="0" y="3.05979995e-07" width="400" height="114"></rect>
+            <polygon id="Path" fill="#B9DFF5" fill-rule="nonzero" points="400 130 0 130 0 114 400 114"></polygon>
+            <g id="Clipped" transform="translate(0.000000, 0.000000)">
+                <mask id="mask-6t8osflbyl-2" fill="white">
+                    <use xlink:href="#path-6t8osflbyl-1"></use>
+                </mask>
+                <g id="Path"></g>
+                <path d="M0,0 L0,-1 L-1,-1 L-1,0 L0,0 Z M400,0 L401,0 L401,-1 L400,-1 L400,0 Z M0,130 L-1,130 L-1,131 L0,131 L0,130 Z M400,130 L400,131 L401,131 L401,130 L400,130 Z M0,1 L400,1 L400,-1 L0,-1 L0,1 Z M1,114 L1,0 L-1,0 L-1,114 L1,114 Z M1,130 L1,114 L-1,114 L-1,130 L1,130 Z M400,129 L0,129 L0,131 L400,131 L400,129 Z M399,114 L399,130 L401,130 L401,114 L399,114 Z M399,0 L399,114 L401,114 L401,0 L399,0 Z" id="Shape" fill="#86B9D6" fill-rule="nonzero" mask="url(#mask-6t8osflbyl-2)"></path>
+            </g>
+            <rect id="Rectangle" fill="#86B9D6" fill-rule="nonzero" transform="translate(130.500005, 65.000000) rotate(-90.000000) translate(-130.500005, -65.000000) " x="65.500005" y="64.4999953" width="130" height="1.00001"></rect>
+            <polygon id="Path" fill="#0B5E8E" points="1.00195 126 0.00195312 126 0.00195312 129 0.00195312 130 1.00195 130 4.00195 130 4.00195 129 1.00195 129"></polygon>
+            <polygon id="Path" fill="#0B5E8E" points="1.00195 4.00000031 0.00195312 4.00000031 0.00195312 1.00000031 0.00195312 3.05979995e-07 1.00195 3.05979995e-07 4.00195 5.44398995e-07 4.00195 1.00000031 1.00195 1.00000031"></polygon>
+            <polygon id="Path" fill="#0B5E8E" points="399 4.00000031 400 4.00000031 400 1.00000031 400 3.05979995e-07 399 3.05979995e-07 396 5.44398995e-07 396 1.00000031 399 1.00000031"></polygon>
+            <polygon id="Path" fill="#0B5E8E" points="399 126 400 126 400 129 400 130 399 130 396 130 396 129 399 129"></polygon>
+            <polygon id="Path" fill="#0B5E8E" points="134 1.00000031 134 3.05979995e-07 131 1.74845995e-07 130 1.31133995e-07 127 -4.88498131e-15 127 1.00000031 130 1.00000031 130 4.00000031 131 4.00000031 131 1.00000031"></polygon>
+            <polygon id="Path" fill="#0B5E8E" points="134 129 134 130 131 130 130 130 127 130 127 129 130 129 130 126 131 126 131 129"></polygon>
+        </g>
+    </g>
+</svg>

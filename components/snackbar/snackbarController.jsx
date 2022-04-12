@@ -79,7 +79,7 @@ class SnackbarController extends Component {
         <Snackbar type={snackbarType} message={snackbarMessage} open={true} />
       );
     } else {
-      return <div></div>;
+      return <></>;
     }
   }
 }

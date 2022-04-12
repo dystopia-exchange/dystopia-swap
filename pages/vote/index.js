@@ -6,6 +6,7 @@ import classes from './vote.module.css';
 
 import stores from '../../stores';
 import { ACTIONS } from '../../stores/constants';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 function Vote({ changeTheme }) {
   const accountStore = stores.accountStore.getStore('account');
@@ -38,34 +39,43 @@ function Vote({ changeTheme }) {
     setUnlockOpen(false);
   };
 
-  return (
-    <div className={classes.ffContainer}>
+  const {appTheme} = useAppThemeContext();
 
+  return (
+    <>
       {account && account.address ?
-        <div className={classes.connected}>
-          <Gauges />
-        </div>
+        <Gauges />
         :
         <Paper className={classes.notConnectedContent}>
-          <div className={classes.sphere}></div>
           <div className={classes.contentFloat}>
-          <Typography className={classes.mainHeadingNC} variant='h1'>Vote</Typography>
-          <Typography className={classes.mainDescNC} variant='body2'>
-            Use your veSolid to vote for your selected liquidity pair’s rewards distribution or create a bribe to encourage others to do the same.
-          </Typography>
-          <Button
-            disableElevation
-            className={classes.buttonConnect}
-            variant="contained"
-            onClick={onAddressClicked}>
+            <Typography
+              style={{
+                fontFamily: 'PPNeueMachina UltraBold',
+                fontWeight: 700,
+                fontSize: 72,
+                color: '#ffffff',
+              }}>
+              Vote
+            </Typography>
+
+            <div className={classes.mainDescBg}>
+              <Typography className={classes.mainDescNC} variant="body2">
+                Use your veSolid to vote for your selected liquidity pair’s rewards distribution or create a bribe to encourage others to do the same.
+              </Typography>
+            </div>
+
+            <Button
+              disableElevation
+              className={[classes.buttonConnect, classes[`buttonConnect--${appTheme}`]].join(' ')}
+              variant="contained"
+              onClick={onAddressClicked}>
               {account && account.address && <div className={`${classes.accountIcon} ${classes.metamask}`}></div>}
-              <Typography>Connect Wallet to Continue</Typography>
-          </Button>
+            </Button>
           </div>
         </Paper>
        }
        {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
-    </div>
+    </>
   );
 }
 
