@@ -1,12 +1,13 @@
 .ffContainer {
   height: 100%;
-  width: auto;
+  width: 100%;
   margin-top: 0px;
   background: #DBE6EC !important;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  overflow: hidden;
 }
 
 .ffContainer--dark {
@@ -23,9 +24,8 @@
 }
 
 .bgLeft {
-  width: 620px;
-  height: 740px;
-  margin-top: 92px;
+  /*width: 620px;*/
+  /*height: 740px;*/
 }
 
 .homeContentMain,
@@ -49,7 +49,6 @@
 }
 
 .mainTitle {
-  margin-top: 100px !important;
   font-family: 'PPNeueMachina UltraBold', serif !important;
   font-weight: 800 !important;
   font-size: 72px !important;
@@ -130,7 +129,8 @@
   color: #4CADE6 !important;
 }
 
-.buttonEnter {
+.buttonEnter,
+.buttonEnterSec {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -148,29 +148,35 @@
   cursor: pointer;
 }
 
-.buttonEnter--light {
+.buttonEnter--light,
+.buttonEnterSec--light {
   background-image: url("/images/ui/btn-enter--light.svg");
 }
 
-.buttonEnter--light:hover {
+.buttonEnter--light:hover,
+.buttonEnterSec--light:hover {
   background-image: url("/images/ui/btn-enter-hover--light.svg");
 }
 
-.buttonEnter--light:active {
+.buttonEnter--light:active,
+.buttonEnterSec--light:active {
   background-image: url("/images/ui/btn-enter-click--light.svg");
 }
 
-.buttonEnter--dark {
+.buttonEnter--dark,
+.buttonEnterSec--dark {
   margin-top: 60px !important;
   background-image: url("/images/ui/btn-enter--dark.svg");
 }
 
-.buttonEnter--dark:hover {
+.buttonEnter--dark:hover,
+.buttonEnterSec--dark:hover {
   margin-top: 60px !important;
   background-image: url("/images/ui/btn-enter-hover--dark.svg");
 }
 
-.buttonEnter--dark:active {
+.buttonEnter--dark:active,
+.buttonEnterSec--dark:active {
   margin-top: 60px !important;
   background-image: url("/images/ui/btn-enter-click--dark.svg");
 }
@@ -183,4 +189,34 @@
 
 .buttonEnter--light .buttonEnterTitle {
   color: #8F5AE8 !important;
+}
+
+@media screen and (max-width: 1360px) {
+  .feeTitle {
+    margin-top: 84px !important;
+  }
+
+  .buttonEnter {
+    margin-top: 100px !important;
+  }
+
+  .buttonEnterSec {
+    margin-top: 50px !important;
+  }
+
+  .buttonInfo {
+    margin-top: 60px !important;
+  }
+
+  .bigLogoSec {
+    margin-top: 0;
+  }
+
+  .mainDescription {
+    margin-top: 60px !important;
+  }
+
+  .secDescription {
+    margin-top: 50px !important;
+  }
 }
