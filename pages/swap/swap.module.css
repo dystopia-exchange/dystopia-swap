@@ -10,7 +10,7 @@
 
 .notConnectedContent {
   width: calc(100%) !important;
-  background: rgba(17,23,41,0.2) !important;
+  background: transparent !important;
   text-align: center;
   padding: 130px;
   height: calc(100vh);

@@ -47,7 +47,7 @@ function Rewards({ changeTheme }) {
   const {appTheme} = useAppThemeContext();
 
   return (
-    <div className={classes.ffContainer}>
+    <>
       {account && account.address ?
         <SSRewards />
        :
@@ -81,7 +81,7 @@ function Rewards({ changeTheme }) {
        }
        {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
 
-    </div>
+    </>
   );
 }
 

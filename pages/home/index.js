@@ -8,6 +8,7 @@ import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 function Home({changeTheme}) {
   const [showLearnMore, setShowLearnMore] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   function handleNavigate(route) {
     router.push(route);
@@ -17,11 +18,27 @@ function Home({changeTheme}) {
 
   const {appTheme} = useAppThemeContext();
 
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
+
   return (
-    <div className={[classes.ffContainer, classes[`ffContainer--${appTheme}`]].join(' ')}>
-      <div className={classes.contentContainerFull}>
+    <div
+      className={[classes.ffContainer, classes[`ffContainer--${appTheme}`]].join(' ')}
+      style={{
+        width: windowWidth <= 1360 ? '100%' : 'auto',
+      }}>
+      <div
+        className={classes.contentContainerFull}
+        style={{
+          padding: windowWidth <= 1360 ? (showLearnMore ? '30px 0px' : '30px 140px') : '30px',
+        }}>
         <img
-          src={appTheme === "dark" ? "/images/ui/enter-bg-left--dark.png" : "/images/ui/enter-bg-left--light.png"}
+          src={
+            appTheme === "dark"
+              ? `/images/ui/enter-bg-left${windowWidth <= 1360 ? '-1360' : ''}--dark.png`
+              : `/images/ui/enter-bg-left${windowWidth <= 1360 ? '-1360' : ''}--light.png`
+          }
           className={classes.bgLeft}/>
 
         {!showLearnMore &&
@@ -59,7 +76,7 @@ function Home({changeTheme}) {
 
             <Typography className={[classes.mainDescription, classes[`mainDescription--${appTheme}`]].join(' ')}>
               Dystopia officially launched in April 2022 with a collective goal
-              of <span>fair and balanced access to DeFi.</span>
+              of <span style={{fontWeight: 700}}>fair and balanced access to DeFi.</span>
               <br/>
               <br/>
               Dystopia is a decentralized exchange that has launched on the Polygon network with low fees, near 0
@@ -76,7 +93,7 @@ function Home({changeTheme}) {
 
             <Button
               disableElevation
-              className={[classes.buttonEnter, classes[`buttonEnter--${appTheme}`]].join(' ')}
+              className={[classes.buttonEnterSec, classes[`buttonEnterSec--${appTheme}`]].join(' ')}
               variant="contained"
               onClick={() => router.push('/swap')}>
               <Typography className={classes.buttonEnterTitle}>
@@ -86,10 +103,15 @@ function Home({changeTheme}) {
           </div>}
 
         <img
-          src={appTheme === "dark" ? "/images/ui/enter-bg-right--dark.png" : "/images/ui/enter-bg-right--light.png"}
+          src={
+            appTheme === "dark"
+              ? `/images/ui/enter-bg-right${windowWidth <= 1360 ? '-1360' : ''}--dark.png`
+              : `/images/ui/enter-bg-right${windowWidth <= 1360 ? '-1360' : ''}--light.png`
+          }
           className={classes.bgLeft}/>
       </div>
-    </div>);
+    </div>
+  );
 }
 
 export default Home;
