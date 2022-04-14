@@ -514,7 +514,7 @@ const useStyles = makeStyles((theme) => {
   });
 });
 
-export default function EnhancedTable({gauges, setParentSliderValues, defaultVotes, veToken, token}) {
+export default function EnhancedTable({gauges, setParentSliderValues, defaultVotes, veToken, token, showSearch}) {
   const classes = useStyles();
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('totalVotes');
@@ -522,6 +522,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [tableHeight, setTableHeight] = useState(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const {appTheme} = useAppThemeContext();
 
@@ -746,10 +747,15 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
 
   window.addEventListener('resize', () => {
     setTableHeight(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
+    setWindowWidth(window.innerWidth);
   });
 
   return (
-    <div className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
+    <div
+      style={{
+        marginTop: ((windowWidth <= 1360 && showSearch) || windowWidth <= 1210) ? 45 : 0,
+      }}
+      className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
       <TableContainer
         style={{
           overflow: 'auto',

@@ -31,7 +31,7 @@ function Home({changeTheme}) {
       <div
         className={classes.contentContainerFull}
         style={{
-          padding: windowWidth <= 1360 ? (showLearnMore ? '30px 0px' : '30px 140px') : '30px',
+          padding: windowWidth <= 1360 ? (showLearnMore || windowWidth <= 1280 ? '30px 0px' : '30px 140px') : '30px',
         }}>
         <img
           src={
