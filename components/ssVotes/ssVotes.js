@@ -8,7 +8,7 @@ import {
   TextField,
   MenuItem,
   Select,
-  Grid,
+  Grid, IconButton,
 } from '@mui/material';
 import BigNumber from 'bignumber.js';
 import { Add, ArrowDropDownCircleOutlined, LockOutlined, Search } from '@mui/icons-material';
@@ -35,6 +35,8 @@ export default function ssVotes() {
   const [token, setToken] = useState(null);
   const [vestNFTs, setVestNFTs] = useState([]);
   const [search, setSearch] = useState('');
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [showSearch, setShowSearch] = useState(false);
 
   const {appTheme} = useAppThemeContext();
 
@@ -130,6 +132,14 @@ export default function ssVotes() {
     router.push('/bribe/create');
   };
 
+  const handleSearch = () => {
+    setShowSearch(!showSearch);
+  };
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
+
   const renderTokenSelect = (value, options) => {
     return (
       <Select
@@ -185,8 +195,13 @@ export default function ssVotes() {
   return (
     <>
       <div className={[classes.topBarContainer, 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
-        <div className={['g-flex', 'g-flex--align-center'].join(' ')}>
-          <div className={[classes.infoSection, classes[`infoSection--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--no-wrap'].join(' ')}>
+        <div
+          style={{
+            position: 'relative',
+          }}
+          className={['g-flex', 'g-flex--align-center'].join(' ')}>
+          <div
+            className={[classes.infoSection, classes[`infoSection--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--no-wrap'].join(' ')}>
             <Typography
               style={{
                 fontWeight: 400,
@@ -237,45 +252,56 @@ export default function ssVotes() {
         </div>
 
         <div className={['g-flex', 'g-flex--align-center'].join(' ')}>
-          <TextField
-            className={classes.searchInput}
-            variant="outlined"
-            fullWidth
-            placeholder="Search by name or paste address"
-            value={search}
-            onChange={onSearchChanged}
-            InputProps={{
-              style: {
-                background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-                border: '1px solid',
-                borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-                borderRadius: 0,
-              },
-              classes: {
-                root: classes.searchInput,
-              },
-              startAdornment: <InputAdornment position="start">
-                <Search style={{
-                  width: 20,
-                  height: 20,
-                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                }}/>
-              </InputAdornment>,
-            }}
-            inputProps={{
-              style: {
-                padding: 10,
-                borderRadius: 0,
-                border: 'none',
-                fontSize: 18,
-                fontWeight: 400,
-                lineHeight: '120%',
-                color: appTheme === "dark" ? '#C6CDD2' : '#325569',
-              },
-            }}
-          />
+          {(windowWidth > 1360 || showSearch) &&
+            <TextField
+              className={classes.searchInput}
+              variant="outlined"
+              fullWidth
+              placeholder="Search by name or paste address"
+              value={search}
+              onChange={onSearchChanged}
+              InputProps={{
+                style: {
+                  background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+                  border: '1px solid',
+                  borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
+                  borderRadius: 0,
+                },
+                classes: {
+                  root: classes.searchInput,
+                },
+                startAdornment: <InputAdornment position="start">
+                  <Search style={{
+                    width: 20,
+                    height: 20,
+                    color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  }}/>
+                </InputAdornment>,
+              }}
+              inputProps={{
+                style: {
+                  padding: 10,
+                  borderRadius: 0,
+                  border: 'none',
+                  fontSize: 18,
+                  fontWeight: 400,
+                  lineHeight: '120%',
+                  color: appTheme === "dark" ? '#C6CDD2' : '#325569',
+                },
+              }}
+            />
+          }
 
           {renderTokenSelect(token, vestNFTs)}
+
+          {windowWidth <= 1360 &&
+            <IconButton
+              className={[classes.searchButton, classes[`searchButton--${appTheme}`]].join(' ')}
+              onClick={handleSearch}
+              aria-label="filter list">
+              <Search/>
+            </IconButton>
+          }
         </div>
       </div>
 
@@ -294,7 +320,8 @@ export default function ssVotes() {
 
         return false;
 
-      })} setParentSliderValues={setVotes} defaultVotes={votes} veToken={veToken} token={token}/>
+      })} setParentSliderValues={setVotes} defaultVotes={votes} veToken={veToken} token={token}
+                   showSearch={showSearch}/>
     </>
   );
 }

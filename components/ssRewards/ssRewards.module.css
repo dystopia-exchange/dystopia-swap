@@ -219,11 +219,24 @@
 
 .divider {
   position: absolute;
-  width: 400px;
+  width: 100px;
   height: 8px;
   background-image: url("/images/ui/divider-rewards.svg");
 }
 
 .divider--dark {
   background-image: url("/images/ui/divider-rewards--dark.svg");
+}
+
+@media screen and (max-width: 1005px) {
+  .disclaimerContainer {
+    position: absolute !important;
+    top: 40px;
+    left: 90px;
+    width: calc(100% - 180px);
+  }
+
+  .toolbarContainer {
+    margin-top: 68px;
+  }
 }

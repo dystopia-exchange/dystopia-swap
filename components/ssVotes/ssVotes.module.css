@@ -114,6 +114,7 @@
 }
 
 .topBarContainer {
+  position: relative;
   padding: 24px 0px;
   width: 100%;
 }
@@ -255,4 +256,69 @@
 
 .actionButtonText--dark {
   background: #33284C;
+}
+
+.searchButton {
+  width: 50px !important;
+  height: 50px !important;
+  margin-left: 10px !important;
+  border-radius: 100px !important;
+}
+
+.searchButton--light {
+  background: #0B5E8E !important;
+  color: #fff !important;
+}
+
+.searchButton--light:hover {
+  background: #86B9D6 !important;
+}
+
+.searchButton--light:active {
+  background: #86B9D6 !important;
+  border: 1px solid #0B5E8E !important;
+}
+
+.searchButton--dark {
+  background: #4CADE6 !important;
+  color: #0A2C40 !important;
+}
+
+.searchButton--dark:hover {
+  background: #5F7285;
+}
+
+.searchButton--dark:active {
+  background: #5F7285;
+  border: 1px solid #4CADE6;
+}
+
+@media (max-width: 1360px) {
+  .searchInput {
+    position: absolute !important;
+    top: 42px;
+    right: 0;
+  }
+}
+
+@media (max-width: 1210px) {
+  .addButton {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    margin: 0;
+  }
+}
+
+@media (max-width: 935px) {
+  .tokenSelect {
+    position: absolute !important;
+    top: -30px;
+    left: 0;
+    margin: 0;
+  }
+
+  .searchInput {
+    width: 300px !important;
+  }
 }

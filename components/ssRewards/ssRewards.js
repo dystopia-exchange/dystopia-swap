@@ -35,6 +35,7 @@ export default function ssRewards() {
   const [token, setToken] = useState(null);
   const [veToken, setVeToken] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const {appTheme} = useAppThemeContext();
 
@@ -139,6 +140,10 @@ export default function ssRewards() {
   const open = Boolean(anchorEl);
   const id = open ? 'transitions-popper' : undefined;
 
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
+
   const renderTokenSelect = (value, options) => {
     return (
       <Select
@@ -211,15 +216,30 @@ export default function ssRewards() {
 
         <div className={['g-flex', 'g-flex--align-baseline'].join(' ')}>
           <div
+            className={classes.disclaimerContainer}
             style={{
               position: 'relative',
             }}>
             <div className={[classes.divider, classes[`divider--${appTheme}`]].join(' ')}>
             </div>
 
-            <Typography className={[classes.disclaimer, classes[`disclaimer--${appTheme}`]].join(' ')}>
-              Rewards are an estimation that aren’t exact till the<br/>supply → rewardPerToken calculations have run
-            </Typography>
+            {windowWidth > 1100 &&
+              <Typography className={[classes.disclaimer, classes[`disclaimer--${appTheme}`]].join(' ')}>
+                Rewards are an estimation that aren’t exact till the<br/>supply → rewardPerToken calculations have run
+              </Typography>
+            }
+
+            {windowWidth <= 1100 && windowWidth > 1005 &&
+              <Typography className={[classes.disclaimer, classes[`disclaimer--${appTheme}`]].join(' ')}>
+                Rewards are an estimation that aren’t<br/>exact till the supply → rewardPerToken<br/>calculations have run
+              </Typography>
+            }
+
+            {windowWidth <= 1005 &&
+              <Typography className={[classes.disclaimer, classes[`disclaimer--${appTheme}`]].join(' ')}>
+                Rewards are an estimation that aren’t exact till the supply → rewardPerToken calculations have run
+              </Typography>
+            }
           </div>
 
           {renderTokenSelect(token, vestNFTs)}

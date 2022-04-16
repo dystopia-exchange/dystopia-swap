@@ -220,3 +220,34 @@
     margin-top: 50px !important;
   }
 }
+
+@media (max-width: 1024px) {
+  .mainTitle {
+    font-size: 58px !important;
+  }
+
+  .feeTitle {
+    margin-top: 44px !important;
+    font-size: 12px !important;
+  }
+
+  .buttonEnter {
+    margin-top: 60px !important;
+  }
+
+  .buttonEnterSec {
+    margin-top: 60px !important;
+  }
+
+  .mainDescription {
+    font-size: 18px !important;
+  }
+
+  .secDescription {
+    font-size: 14px !important;
+  }
+
+  .buttonEnterSec {
+    margin-top: 40px !important;
+  }
+}

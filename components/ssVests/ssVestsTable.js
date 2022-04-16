@@ -467,7 +467,8 @@ export default function EnhancedTable({ vestNFTs, govToken, veToken }) {
   const [orderBy, setOrderBy] = React.useState('balance');
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
-  const [tableHeight, setTableHeight] = useState(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [tableHeight, setTableHeight] = useState((window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30) - (windowWidth < 1280 ? 50 : 0));
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -590,7 +591,8 @@ export default function EnhancedTable({ vestNFTs, govToken, veToken }) {
   }
 
   window.addEventListener('resize', () => {
-    setTableHeight(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
+    setWindowWidth(window.innerWidth);
+    setTableHeight((window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30) - (windowWidth < 1280 ? 50 : 0));
   });
 
   return (

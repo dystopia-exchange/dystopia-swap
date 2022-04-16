@@ -58,8 +58,7 @@ a.linkz {
       circle,
       rgba(63, 94, 251, 0.7) 0%,
       rgba(47, 128, 237, 0.7) 48%
-    )
-    rgba(63, 94, 251, 0.7) 100%;
+  ) rgba(63, 94, 251, 0.7) 100%;
 }
 
 .socials {
@@ -89,15 +88,19 @@ a.linkz {
 .telegram {
   background-image: url("/socials/telegram.svg");
 }
+
 .medium {
   background-image: url("/socials/medium.svg");
 }
+
 .twitter {
   background-image: url("/socials/twitter.svg");
 }
+
 .github {
   background-image: url("/socials/github.svg");
 }
+
 .discord {
   background-image: url("/socials/discord.svg");
 }
@@ -139,15 +142,19 @@ a.linkz {
 .metamask {
   background-image: url("/connectors/icn-metamask.svg");
 }
+
 .ledger {
   background-image: url("/connectors/icn-ledger.svg");
 }
+
 .coinbase {
   background-image: url("/connectors/coinbaseWalletIcon.svg");
 }
+
 .torus {
   background-image: url("/connectors/torus.jpg");
 }
+
 .trust {
   background-image: url("/connectors/trustWallet.svg");
 }
@@ -440,197 +447,11 @@ a.linkz {
   background-color: var(--main-secondary-light) !important;
 }
 
-@media screen and (max-width: 1200px) {
+@media (max-width: 1280px) {
   .navigationContainer {
-    position: fixed;
-    min-height: 60px;
-    display: flex;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 15px 0px !important;
-    border-radius: 0px !important;
-    z-index: 10020;
-    background: #111729;
-  }
-  .socials {
-    display: none;
-  }
-  .navigationContent {
-    /* display: none; */
-    background: #111729;
-    position: fixed;
-    left: 0;
-    top: 60px;
-    width: 100%;
-    text-align: center;
-    padding: 15px 0;
-    border-bottom: 1px solid rgba(126, 153, 176, 0.2);
-  }
-  .navigationContentMobile {
-    position: fixed;
-    top: 0px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 100%;
-    padding: 20px;
-    height: 100vh;
-    z-index: 9;
-    align-items: center;
-    border-radius: 0 !important;
-    text-align: center !important;
-  }
-  .menuIcon {
     position: absolute;
-    top: 7px;
-    right: 10px;
-    display: flex;
-    transform: scale(0.8);
-  }
-  .navigationHeading {
-    width: 100%;
-    display: block;
-  }
-  .headerThings {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .backButtonContainer {
-    position: absolute;
-    top: 24px;
-    left: 12px;
-    display: flex;
-  }
-
-  .subtitleText {
-    padding-left: 0px;
-    font-size: 15px !important;
-    margin: 0 !important;
-    text-align: center !important;
-  }
-
-  .navigationOptionNotSelected {
-    margin-right: 0px;
-  }
-
-  .navigationOptionSelected,
-  .navigationOptionSelectedWhite {
-    display: none !important;
-  }
-
-  .navigationOptionActive {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0px;
-    margin: 0px auto !important;
-    width: 100%;
-    border-radius: 10px;
-    text-align: center !important;
-    cursor: pointer;
-    background: radial-gradient(
-        circle,
-        rgba(63, 94, 251, 0.7) 0%,
-        rgba(47, 128, 237, 0.7) 48%
-      )
-      rgba(63, 94, 251, 0.7) 100%;
-  }
-
-  .sectionText {
-    color: rgba(104, 108, 128, 0.8);
-    /* color: #234ce7; */
-    font-size: 13px !important;
-    cursor: default;
-    margin: 10px 0 10px 0px !important;
-    padding: 0 !important;
-    text-align: center !important;
-  }
-
-  .navigationOptionContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    padding: 0px 0px;
-    width: 100%;
-    cursor: pointer;
-  }
-
-  .navigationSubOptionContainer {
-    text-align: center !important;
-    justify-content: center;
-    padding: 0 !important;
-  }
-}
-
-@media screen and (max-width: 500px) {
-  .navigationOptionNotSelected {
-    margin-right: 0px;
-  }
-
-  .smallVersion,
-  .sectionDivider {
-    display: none;
-  }
-
-  .navigationSubOptionContainer {
-    text-align: center !important;
-    justify-content: center;
-    padding: 0 !important;
-  }
-
-  .sectionText {
-    margin: 10px 0 10px 0px !important;
-    padding: 0 !important;
-  }
-}
-
-@media screen and (max-width: 560px) {
-  .navToggles {
-    min-height: 30px;
-  }
-
-  .navButton {
-    border-radius: 10px !important;
-    padding: 8px 10px 8px 10px !important;
-    text-transform: capitalize !important;
-    border: 1px solid rgba(0, 0, 0, 0) !important;
-    color: #7e99b0 !important;
-  }
-
-  .subtitleText {
-    padding-left: 0px;
-    font-size: 12px !important;
-    margin: 0 !important;
-    text-align: center !important;
-  }
-
-  .appLogo {
-    transform: scale(5);
-    position: fixed;
-    left: 70px;
-    top: 18px;
-    cursor: pointer;
-  }
-
-  .testChange {
-    border: 1px solid #06d3d7 !important;
-    background-color: rgba(0, 0, 0, 0) !important;
-    color: #fff !important;
-  }
-
-  .navigationContent {
-    background: #111729;
-    position: fixed;
-    left: 0;
-    top: 45px;
-    width: 100%;
-    text-align: center;
-    padding: 15px 0;
-    border-bottom: 1px solid rgba(126, 153, 176, 0.2);
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }

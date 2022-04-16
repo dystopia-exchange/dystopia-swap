@@ -385,31 +385,8 @@
   background-color: rgb(33, 43, 72) !important;
 }
 
-@media screen and (max-width: 1200px) {
-  .accountButton {
-    display: flex;
-    align-items: center;
-    margin-left: 0 !important;
-    position: fixed !important;
-    z-index: 10030 !important;
-    top: 17px !important;
-    right: 10px !important;
-  }
-
-  .userMenu {
-    z-index: 10030 !important;
-  }
-
-  .userMenuText {
-    transform: scale(1);
-  }
-}
-
-@media screen and (max-width: 560px) {
-  .accountButton {
-    min-height: 40px;
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-    top: 10px !important;
+@media (max-width: 1280px) {
+  .headerContainer {
+    border-bottom: 1px solid #86B9D6;
   }
 }

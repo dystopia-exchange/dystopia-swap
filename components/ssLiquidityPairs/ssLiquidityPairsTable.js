@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, styled, useTheme, withStyles } from '@mui/styles';
 import Skeleton from '@mui/lab/Skeleton';
@@ -318,7 +318,7 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   root: {
     width: '100%',
   },
@@ -326,10 +326,6 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       background: 'rgba(104,108,122,0.05)',
     },
-  },
-  paper: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
   },
   visuallyHidden: {
     border: 0,
@@ -350,9 +346,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    // '@media (max-width: 1000px)': {
-    //   display: 'block',
-    // },
   },
   icon: {
     marginRight: '12px',
@@ -467,6 +460,12 @@ const useStyles = makeStyles((theme) => ({
     '& > fieldset': {
       border: 'none',
     },
+    ["@media (max-width:1360px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      position: 'absolute',
+      top: 40,
+      right: 0,
+    },
   },
   myDeposits: {
     display: 'flex',
@@ -505,6 +504,34 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   'filterButton--dark': {
+    background: '#4CADE6',
+    color: '#0A2C40',
+    '&:hover': {
+      background: '#5F7285',
+    },
+    '&:active': {
+      background: '#5F7285',
+      border: '1px solid #4CADE6',
+    },
+  },
+  searchButton: {
+    width: 50,
+    height: 50,
+    marginLeft: 10,
+    borderRadius: 100,
+  },
+  'searchButton--light': {
+    background: '#0B5E8E',
+    color: '#fff',
+    '&:hover': {
+      background: '#86B9D6',
+    },
+    '&:active': {
+      background: '#86B9D6',
+      border: '1px solid #0B5E8E',
+    },
+  },
+  'searchButton--dark': {
     background: '#4CADE6',
     color: '#0A2C40',
     '&:hover': {
@@ -641,7 +668,7 @@ const useStyles = makeStyles((theme) => ({
   table: {
     tableLayout: 'auto',
   },
-}));
+});
 
 const getLocalToggles = () => {
   let localToggles = {
@@ -649,6 +676,7 @@ const getLocalToggles = () => {
     toggleActiveGauge: true,
     toggleVariable: true,
     toggleStable: true,
+    showSearch: false,
   };
   // get locally saved toggles
   try {
@@ -674,6 +702,12 @@ const EnhancedTableToolbar = (props) => {
   const [toggleActiveGauge, setToggleActiveGauge] = useState(localToggles.toggleActiveGauge);
   const [toggleStable, setToggleStable] = useState(localToggles.toggleStable);
   const [toggleVariable, setToggleVariable] = useState(localToggles.toggleVariable);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [showSearch, setShowSearch] = useState(localToggles.showSearch);
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
 
   const onSearchChanged = (event) => {
     setSearch(event.target.value);
@@ -705,6 +739,11 @@ const EnhancedTableToolbar = (props) => {
         props.setToggleVariable(event.target.checked);
         localToggles.toggleVariable = event.target.checked;
         break;
+      case 'showSearch':
+        setShowSearch(event.showSearch);
+        props.setShowSearch(event.showSearch);
+        localToggles.showSearch = event.showSearch;
+        break;
       default:
 
     }
@@ -727,6 +766,10 @@ const EnhancedTableToolbar = (props) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
+  const handleSearch = () => {
+    onToggle({target: {name: 'showSearch'}, showSearch: !localToggles.showSearch});
+  };
+
   const open = Boolean(anchorEl);
   const id = open ? 'transitions-popper' : undefined;
 
@@ -747,43 +790,45 @@ const EnhancedTableToolbar = (props) => {
       </div>
 
       <div className={classes.searchContainer}>
-        <TextField
-          className={classes.searchInput}
-          variant="outlined"
-          fullWidth
-          placeholder="Search by name or paste address"
-          value={search}
-          onChange={onSearchChanged}
-          InputProps={{
-            style: {
-              background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-              border: '1px solid',
-              borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-              borderRadius: 0,
-            },
-            classes: {
-              root: classes.searchInput,
-            },
-            startAdornment: <InputAdornment position="start">
-              <Search style={{
-                width: 20,
-                height: 20,
-                color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-              }}/>
-            </InputAdornment>,
-          }}
-          inputProps={{
-            style: {
-              padding: 10,
-              borderRadius: 0,
-              border: 'none',
-              fontSize: 18,
-              fontWeight: 400,
-              lineHeight: '120%',
-              color: appTheme === "dark" ? '#C6CDD2' : '#325569',
-            },
-          }}
-        />
+        {(windowWidth > 1360 || showSearch) &&
+          <TextField
+            className={classes.searchInput}
+            variant="outlined"
+            fullWidth
+            placeholder="Search by name or paste address"
+            value={search}
+            onChange={onSearchChanged}
+            InputProps={{
+              style: {
+                background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+                border: '1px solid',
+                borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
+                borderRadius: 0,
+              },
+              classes: {
+                root: classes.searchInput,
+              },
+              startAdornment: <InputAdornment position="start">
+                <Search style={{
+                  width: 20,
+                  height: 20,
+                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                }}/>
+              </InputAdornment>,
+            }}
+            inputProps={{
+              style: {
+                padding: 10,
+                borderRadius: 0,
+                border: 'none',
+                fontSize: 18,
+                fontWeight: 400,
+                lineHeight: '120%',
+                color: appTheme === "dark" ? '#C6CDD2' : '#325569',
+              },
+            }}
+          />
+        }
 
         <div
           className={[classes.myDeposits, classes[`myDeposits--${appTheme}`]].join(' ')}>
@@ -823,6 +868,15 @@ const EnhancedTableToolbar = (props) => {
             <FilterAltOutlined/>
           </IconButton>
         </Tooltip>
+
+        {windowWidth <= 1360 &&
+          <IconButton
+            className={[classes.searchButton, classes[`searchButton--${appTheme}`]].join(' ')}
+            onClick={handleSearch}
+            aria-label="filter list">
+            <Search/>
+          </IconButton>
+        }
       </div>
 
       <Popper id={id} open={open} anchorEl={anchorEl} transition placement="bottom-end" style={{zIndex: 100}}>
@@ -909,6 +963,7 @@ export default function EnhancedTable({pairs}) {
   const [orderBy, setOrderBy] = useState('stakedBalance');
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const localToggles = getLocalToggles();
 
@@ -917,6 +972,7 @@ export default function EnhancedTable({pairs}) {
   const [toggleActiveGauge, setToggleActiveGauge] = useState(localToggles.toggleActiveGauge);
   const [toggleStable, setToggleStable] = useState(localToggles.toggleStable);
   const [toggleVariable, setToggleVariable] = useState(localToggles.toggleVariable);
+  const [showSearch, setShowSearch] = useState(localToggles.showSearch);
   const [tableHeight, setTableHeight] = useState(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
 
   const handleRequestSort = (event, property) => {
@@ -996,6 +1052,10 @@ export default function EnhancedTable({pairs}) {
   const emptyRows = 5 - Math.min(5, filteredPairs.length - page * 5);
 
   const {appTheme} = useAppThemeContext();
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
 
   function TablePaginationActions(props) {
     const theme = useTheme();
@@ -1092,9 +1152,13 @@ export default function EnhancedTable({pairs}) {
         setToggleActive={setToggleActive}
         setToggleActiveGauge={setToggleActiveGauge}
         setToggleStable={setToggleStable}
-        setToggleVariable={setToggleVariable}/>
+        setToggleVariable={setToggleVariable}
+        setShowSearch={setShowSearch}/>
 
       <div
+        style={{
+          marginTop: windowWidth <= 1360 && showSearch ? 45 : 0,
+        }}
         className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
         <TableContainer
           style={{
