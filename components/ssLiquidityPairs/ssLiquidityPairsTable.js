@@ -881,7 +881,7 @@ const EnhancedTableToolbar = (props) => {
             }}
             inputProps={{
               style: {
-                padding: 10,
+                padding: 11.5,
                 borderRadius: 0,
                 border: 'none',
                 fontSize: 18,
