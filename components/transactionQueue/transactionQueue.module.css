@@ -240,3 +240,15 @@
   margin-bottom: -2px;
   margin-left: 3px;
 }
+
+@media (max-width:660px) {
+  .paperBody--dark,
+  .paperBody--light {
+    top: 0 !important;
+    width: 100% !important;
+  }
+
+  .transactionsContainer {
+    padding-top: 40px;
+  }
+}

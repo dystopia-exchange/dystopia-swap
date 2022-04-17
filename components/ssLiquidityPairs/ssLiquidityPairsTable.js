@@ -1979,7 +1979,10 @@ export default function EnhancedTable({pairs}) {
                                 lineHeight: '120%',
                                 color: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
                               }}
-                              onClick={() => {
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                event.preventDefault();
+
                                 onView(row);
                               }}>
                               Manage
