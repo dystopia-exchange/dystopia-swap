@@ -914,39 +914,3 @@
 .searchInput > fieldset {
   border: none;
 }
-
-/*@media screen and (max-width: 1200px) {
-  .swapContainer {
-    padding: 12px;
-  }
-
-  .newSwapContainer {
-    flex-direction: column;
-  }
-}
-
-@media screen and (max-width: 576px) {
-  .newSwapContainer {
-    margin-top: -100px;
-  }
-
-  .swapContainer {
-    padding: 12px;
-  }
-
-  .addressInput {
-    font-size: 12px !important;
-  }
-
-  .largeInput {
-    font-size: 36px !important;
-  }
-
-  .addressField {
-    font-size: 12px !important;
-  }
-
-  .swapInfoContainer {
-    width: 100%;
-  }
-}*/

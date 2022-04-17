@@ -250,4 +250,34 @@
   .buttonEnterSec {
     margin-top: 40px !important;
   }
+
+  .contentContainerFull {
+    justify-content: center;
+  }
+
+  .homeContentMain,
+  .homeContentMainSec {
+    min-width: 60%;
+  }
+}
+
+@media (max-width: 720px) {
+  .contentContainerFull {
+    justify-content: center;
+  }
+
+  .homeContentMain,
+  .homeContentMainSec {
+    min-width: 70%;
+    padding-bottom: 80px;
+  }
+
+  .bigLogo,
+  .bigLogoSec {
+    width: 320px;
+  }
+
+  .mainDescription {
+    margin-top: 30px !important;
+  }
 }

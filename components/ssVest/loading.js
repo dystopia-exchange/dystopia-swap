@@ -1,5 +1,4 @@
-import { Paper } from '@mui/material';
-import Skeleton from '@mui/lab/Skeleton';
+import { Paper, Skeleton } from '@mui/material';
 import classes from "./ssVest.module.css";
 
 export default function loading() {

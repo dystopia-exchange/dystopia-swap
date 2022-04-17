@@ -10,8 +10,8 @@ import {
   Typography,
   Button,
   CircularProgress,
+  Skeleton,
 } from '@mui/material';
-import { Skeleton } from '@mui/lab';
 import BigNumber from 'bignumber.js';
 import stores from '../../stores';
 import { ACTIONS } from '../../stores/constants';

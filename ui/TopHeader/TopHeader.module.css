@@ -2,7 +2,7 @@
   width: 100%;
   padding-left: 1rem;
   padding-right: 1rem;
-  height: 64px;
+  height: 50px;
 }
 
 .top-header--light {
@@ -22,5 +22,11 @@
 @media (max-width: 1280px) {
   .top-header {
     height: 100px;
+  }
+}
+
+@media (max-width: 720px) {
+  .top-header {
+    height: 89px;
   }
 }

@@ -74,30 +74,3 @@
   padding: 20px;
   height: 100%;
 }
-
-@media screen and (max-width: 1600px) {
-
-}
-
-@media screen and (max-width: 1200px) {
-  .container {
-    padding-top: 180px;
-    margin-bottom: 60px;
-  }
-
-  .xxxContainer {
-    margin: auto;
-    background: none;
-    position: relative;
-    width: calc(100% - 80px) !important;
-    margin-top: -30px !important;
-  }
-
-  .columnRight {
-    padding-left: 0px;
-  }
-}
-
-@media screen and (max-width: 1000px) {
-
-}

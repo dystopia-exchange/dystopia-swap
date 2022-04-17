@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import classes from './ssLiquidityPairs.module.css';
-
 import PairsTable from './ssLiquidityPairsTable.js';
 
 import stores from '../../stores';
