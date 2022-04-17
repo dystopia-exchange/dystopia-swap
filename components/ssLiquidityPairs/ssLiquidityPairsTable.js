@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, styled, useTheme } from '@mui/styles';
 import {
@@ -21,7 +21,10 @@ import {
   Fade,
   Grid,
   Switch,
-  Skeleton, Accordion, AccordionSummary, AccordionDetails,
+  Skeleton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material';
 import { useRouter } from "next/router";
 import BigNumber from 'bignumber.js';
@@ -30,11 +33,12 @@ import {
   Search,
   Add,
   Close,
-  ArrowDropDown, ExpandMore, ExpandLess,
+  ArrowDropDown,
+  ExpandMore,
+  ExpandLess,
 } from '@mui/icons-material';
-
+import SortSelect from '../select-sort/select-sort';
 import { formatCurrency } from '../../utils';
-
 import classes from './ssLiquidityPairs.module.css';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import TablePaginationActions from '../table-pagination/table-pagination';
@@ -692,6 +696,10 @@ const useStyles = makeStyles({
     margin: 0,
     padding: 0,
   },
+  sortSelect: {
+    position: 'absolute',
+    top: 60,
+  },
 });
 
 const getLocalToggles = () => {
@@ -721,6 +729,19 @@ const EnhancedTableToolbar = (props) => {
 
   const localToggles = getLocalToggles();
 
+  const options = [
+    {id: 'balance--desc', label: 'Wallet: high to low'},
+    {id: 'balance--asc', label: 'Wallet: low to high'},
+    {id: 'poolBalance--desc', label: 'My Pool Amount: high to low'},
+    {id: 'poolBalance--asc', label: 'My Pool Amount: low to high'},
+    {id: 'stakedBalance--desc', label: 'My Staked Amount: high to low'},
+    {id: 'stakedBalance--asc', label: 'My Staked Amount: low to high'},
+    {id: 'poolAmount--desc', label: 'Total Pool Amount: high to low'},
+    {id: 'poolAmount--asc', label: 'Total Pool Amount: low to high'},
+    {id: 'stakedAmount--desc', label: 'Total Pool Staked: high to low'},
+    {id: 'stakedAmount--asc', label: 'Total Pool Staked: low to high'},
+  ];
+
   const [search, setSearch] = useState('');
   const [toggleActive, setToggleActive] = useState(localToggles.toggleActive);
   const [toggleActiveGauge, setToggleActiveGauge] = useState(localToggles.toggleActiveGauge);
@@ -728,6 +749,8 @@ const EnhancedTableToolbar = (props) => {
   const [toggleVariable, setToggleVariable] = useState(localToggles.toggleVariable);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [showSearch, setShowSearch] = useState(localToggles.showSearch);
+  const [sortValueId, setSortValueId] = useState(options[0].id);
+  const [sortDirection, setSortDirection] = useState('asc');
 
   window.addEventListener('resize', () => {
     setWindowWidth(window.innerWidth);
@@ -797,6 +820,16 @@ const EnhancedTableToolbar = (props) => {
   const open = Boolean(anchorEl);
   const id = open ? 'transitions-popper' : undefined;
 
+  const handleChangeSort = ({target: {value}}) => {
+    const property = value.substring(0, value.indexOf('--'));
+    const event = value.substring(value.indexOf('--') + 2);
+
+    setSortValueId(value);
+    setSortDirection(event);
+
+    props.handleRequestSort(event, property)
+  };
+
   const {appTheme} = useAppThemeContext();
 
   return (
@@ -812,6 +845,12 @@ const EnhancedTableToolbar = (props) => {
           Add Liquidity
         </Typography>
       </div>
+
+      {windowWidth <= 660 &&
+        <div className={classes.sortSelect}>
+          {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
+        </div>
+      }
 
       <div className={classes.searchContainer}>
         {(windowWidth > 1360 || showSearch) &&
@@ -1002,6 +1041,7 @@ export default function EnhancedTable({pairs}) {
   const [showSearch, setShowSearch] = useState(localToggles.showSearch);
   const [tableHeight, setTableHeight] = useState(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
   const [expanded, setExpanded] = useState('');
+  const [sortDirection, setSortDirection] = useState('asc');
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -1101,7 +1141,9 @@ export default function EnhancedTable({pairs}) {
         setToggleActiveGauge={setToggleActiveGauge}
         setToggleStable={setToggleStable}
         setToggleVariable={setToggleVariable}
-        setShowSearch={setShowSearch}/>
+        setShowSearch={setShowSearch}
+        handleRequestSort={handleRequestSort}
+        setSortDirection={setSortDirection}/>
 
       {windowWidth > 660 &&
         <>
@@ -1135,8 +1177,6 @@ export default function EnhancedTable({pairs}) {
                         return null;
                       }
                       const labelId = `enhanced-table-checkbox-${index}`;
-
-                      console.log('!!!', order, orderBy)
 
                       return (
                         <TableRow
