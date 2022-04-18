@@ -1,0 +1,74 @@
+.tokenSelect {
+  width: 215px !important;
+  margin-left: 20px;
+  background: #DBE6EC !important;
+  border: 1px solid #86B9D6 !important;
+  border-radius: 100px !important;
+}
+
+.tokenSelect--dark {
+  background: #151718 !important;
+  border: 1px solid #5F7285 !important;
+}
+
+.tokenSelect > svg,
+.tokenSelect--dark > svg {
+  color: #5F7285 !important;
+}
+
+.tokenSelect > fieldset,
+.tokenSelect--dark > fieldset {
+  display: none !important;
+}
+
+.tokenSelectInput {
+  padding: 3px !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.tokenSelectInput--dark {
+  padding: 3px !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.menuOption {
+  padding: 0 20px;
+}
+
+.menuOptionSec {
+  padding-right: 20px;
+}
+
+.list,
+.list--dark {
+  padding: 0 !important;
+  background: #DBE6EC !important;
+}
+
+.list--dark {
+  background: #151718 !important;
+}
+
+.list > li,
+.list--dark > li {
+  padding: 0 !important;
+}
+
+.list > li > .menuOption,
+.list--dark > li > .menuOption {
+  width: 100%;
+  padding: 10px 20px !important;
+  border: 1px solid #0B5E8E !important;
+}
+
+.list > li:not(:last-of-type) > .menuOption,
+.list--dark > li:not(:last-of-type) > .menuOption {
+  border-bottom: none !important;
+}
+
+.list > li > .menuOption > .menuOptionSec,
+.list--dark > li > .menuOption > .menuOptionSec {
+  padding-right: 0 !important;
+}

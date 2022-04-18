@@ -1,27 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  Button,
-  Typography,
-  Tooltip,
-  IconButton,
-  TextField,
-  InputAdornment,
-  Popper,
-  Fade,
-  Grid,
-  Switch,
-  Select,
-  MenuItem,
-} from '@mui/material';
+import { Typography } from '@mui/material';
 import classes from './ssRewards.module.css';
-
 import RewardsTable from './ssRewardsTable.js';
-import { Add, AddCircleOutline, ArrowDropDownCircleOutlined } from '@mui/icons-material';
-
-import { formatCurrency } from '../../utils';
+import { Add } from '@mui/icons-material';
 import stores from '../../stores';
 import { ACTIONS } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import TokenSelect from '../select-token/select-token'
 
 export default function ssRewards() {
 
@@ -44,7 +29,9 @@ export default function ssRewards() {
     setVestNFTs(nfts);
     setVeToken(stores.stableSwapStore.getStore('veToken'));
 
-    if (nfts && nfts.length > 0) {
+    if (nfts?.length > 0) {
+      nfts.sort((a, b) => (+a.id) - (+b.id));
+
       if (!token) {
         setToken(nfts[0]);
         window.setTimeout(() => {
@@ -144,58 +131,6 @@ export default function ssRewards() {
     setWindowWidth(window.innerWidth);
   });
 
-  const renderTokenSelect = (value, options) => {
-    return (
-      <Select
-        className={[classes.tokenSelect, classes[`tokenSelect--${appTheme}`]].join(' ')}
-        fullWidth
-        value={value}
-        onChange={handleChange}
-        IconComponent={ArrowDropDownCircleOutlined}
-        inputProps={{
-          className: appTheme === 'dark' ? classes['tokenSelectInput--dark'] : classes.tokenSelectInput,
-        }}>
-        {options && options.map((option) => {
-          return (
-            <MenuItem key={option.id} value={option}>
-              <div
-                className={[classes.menuOption, 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
-                <Typography
-                  style={{
-                    fontWeight: 500,
-                    fontSize: 24,
-                    color: appTheme === 'dark' ? '#ffffff' : '#0B5E8E',
-                  }}>
-                  #{option.id}
-                </Typography>
-
-                <div className={[classes.menuOptionSec, 'g-flex-column'].join(' ')}>
-                  <Typography
-                    style={{
-                      fontWeight: 500,
-                      fontSize: 12,
-                      color: appTheme === 'dark' ? '#ffffff' : '#0B5E8E',
-                    }}>
-                    {formatCurrency(option.lockValue)}
-                  </Typography>
-
-                  <Typography
-                    style={{
-                      fontWeight: 500,
-                      fontSize: 12,
-                      color: appTheme === 'dark' ? '#7C838A' : '#86B9D6',
-                    }}>
-                    {veToken?.symbol}
-                  </Typography>
-                </div>
-              </div>
-            </MenuItem>
-          );
-        })}
-      </Select>
-    );
-  };
-
   return (
     <>
       <div
@@ -242,7 +177,7 @@ export default function ssRewards() {
             }
           </div>
 
-          {renderTokenSelect(token, vestNFTs)}
+          {TokenSelect({value: token, options: vestNFTs, symbol: veToken?.symbol, handleChange})}
         </div>
       </div>
 

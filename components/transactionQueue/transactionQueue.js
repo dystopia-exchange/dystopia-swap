@@ -210,6 +210,7 @@ export default function TransactionQueue({ setQueueLength }) {
         lineHeight: '120%',
         color: '#0A2C40',
         background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+        borderBottom: `1px solid ${appTheme === "dark" ? '#86B9D6' : '#86B9D6'}`,
       }}>
         <div style={{
           display: 'flex',
@@ -217,7 +218,7 @@ export default function TransactionQueue({ setQueueLength }) {
           justifyContent: 'space-between',
         }}>
           <div style={{
-            color: appTheme === "dark" ? '#ffffff' : '#0A2C40'
+            color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
           }}>
             Notification History
           </div>

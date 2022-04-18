@@ -163,50 +163,6 @@ export default function ssBribeCreate() {
             <AssetSelect type={type} value={value} assetOptions={options} onSelect={onChange} manageLocal={false}/>
           </div>
         </div>
-        {/*<Select
-          fullWidth
-          value={value}
-          onChange={onChange}
-          inputProps={{
-            className: classes.largeInput,
-          }}>
-          {options && options.map((option) => {
-            return (
-              <MenuItem key={option.id} value={option}>
-                <div className={classes.menuOption}>
-                  <div className={classes.doubleImages}>
-                    <img
-                      className={`${classes.someIcon} ${classes.img1Logo}`}
-                      alt=""
-                      src={(option && option.token0) ? `${option.token0.logoURI}` : ''}
-                      height="70px"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "/tokens/unknown-logo.png";
-                      }}
-                    />
-                    <img
-                      className={`${classes.someIcon} ${classes.img2Logo}`}
-                      alt=""
-                      src={(option && option.token1) ? `${option.token1.logoURI}` : ''}
-                      height="70px"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "/tokens/unknown-logo.png";
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <Typography
-                      className={classes.fillerText}>{option.token0.symbol}/{option.token1.symbol}</Typography>
-                    <Typography color="textSecondary"
-                                className={classes.smallerText}>{option?.isStable ? 'Stable Pool' : 'Volatile Pool'}</Typography>
-                  </div>
-                </div>
-              </MenuItem>
-            );
-          })}
-        </Select>*/}
       </div>
     );
   };

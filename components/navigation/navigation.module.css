@@ -455,3 +455,38 @@ a.linkz {
     transform: translateX(-50%);
   }
 }
+
+@media (max-width: 720px) {
+  .nav-button {
+    height: 39px;
+    padding: 10px !important;
+  }
+
+  .subtitleText {
+    font-size: 14px !important;
+  }
+
+  .nav-button-corner-top::before,
+  .nav-button-corner-bottom::before {
+    left: -16px;
+  }
+
+  .nav-button-corner-top::after,
+  .nav-button-corner-bottom::after {
+    right: -16px;
+  }
+
+  .nav-button-corner-top::before,
+  .nav-button-corner-top::after {
+    top: -14.5px;
+  }
+
+  .nav-button-corner-bottom::before,
+  .nav-button-corner-bottom::after {
+    bottom: -14.5px;
+  }
+
+  .navToggles {
+    height: 39px;
+  }
+}

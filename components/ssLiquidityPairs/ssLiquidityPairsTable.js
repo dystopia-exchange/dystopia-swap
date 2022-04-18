@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, styled, useTheme, withStyles } from '@mui/styles';
-import Skeleton from '@mui/lab/Skeleton';
+import { makeStyles, styled, useTheme } from '@mui/styles';
 import {
-  Paper,
   Button,
   Table,
   TableBody,
@@ -23,7 +21,10 @@ import {
   Fade,
   Grid,
   Switch,
-  Box,
+  Skeleton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material';
 import { useRouter } from "next/router";
 import BigNumber from 'bignumber.js';
@@ -33,14 +34,14 @@ import {
   Add,
   Close,
   ArrowDropDown,
-  KeyboardDoubleArrowLeft,
-  KeyboardDoubleArrowRight, KeyboardArrowRight, KeyboardArrowLeft,
+  ExpandMore,
+  ExpandLess,
 } from '@mui/icons-material';
-
+import SortSelect from '../select-sort/select-sort';
 import { formatCurrency } from '../../utils';
-
 import classes from './ssLiquidityPairs.module.css';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import TablePaginationActions from '../table-pagination/table-pagination';
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
@@ -150,6 +151,7 @@ const headCells = [
     disablePadding: false,
     label: 'Pool',
     isSticky: true,
+    isHideInDetails: true,
   },
   {
     id: 'balance',
@@ -174,6 +176,7 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Total Pool Amount',
+    isHideInDetails: true,
   },
   {
     id: 'stakedAmount',
@@ -192,6 +195,7 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Actions',
+    isHideInDetails: true,
   },
 ];
 
@@ -466,6 +470,18 @@ const useStyles = makeStyles({
       top: 40,
       right: 0,
     },
+    ["@media (max-width:660px)"]: {
+      top: 30,
+      left: 0,
+      width: 'calc(100% - 60px)',
+    },
+  },
+  actionsButtons: {
+    ["@media (max-width:660px)"]: {
+      position: 'absolute',
+      right: 0,
+      top: 60,
+    },
   },
   myDeposits: {
     display: 'flex',
@@ -473,6 +489,11 @@ const useStyles = makeStyles({
     paddingLeft: 30,
     borderRadius: 100,
     marginLeft: 20,
+    ["@media (max-width:660px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      padding: '5px 0',
+      paddingLeft: 20,
+    },
   },
   'myDeposits--light': {
     background: '#DBE6EC',
@@ -485,6 +506,9 @@ const useStyles = makeStyles({
   toolbar: {
     marginBottom: 30,
     padding: 0,
+    ["@media (max-width:660px)"]: {
+      paddingBottom: 40,
+    },
   },
   filterButton: {
     width: 50,
@@ -668,6 +692,14 @@ const useStyles = makeStyles({
   table: {
     tableLayout: 'auto',
   },
+  accordionSummaryContent: {
+    margin: 0,
+    padding: 0,
+  },
+  sortSelect: {
+    position: 'absolute',
+    top: 60,
+  },
 });
 
 const getLocalToggles = () => {
@@ -697,6 +729,19 @@ const EnhancedTableToolbar = (props) => {
 
   const localToggles = getLocalToggles();
 
+  const options = [
+    {id: 'balance--desc', label: 'Wallet: high to low'},
+    {id: 'balance--asc', label: 'Wallet: low to high'},
+    {id: 'poolBalance--desc', label: 'My Pool Amount: high to low'},
+    {id: 'poolBalance--asc', label: 'My Pool Amount: low to high'},
+    {id: 'stakedBalance--desc', label: 'My Staked Amount: high to low'},
+    {id: 'stakedBalance--asc', label: 'My Staked Amount: low to high'},
+    {id: 'poolAmount--desc', label: 'Total Pool Amount: high to low'},
+    {id: 'poolAmount--asc', label: 'Total Pool Amount: low to high'},
+    {id: 'stakedAmount--desc', label: 'Total Pool Staked: high to low'},
+    {id: 'stakedAmount--asc', label: 'Total Pool Staked: low to high'},
+  ];
+
   const [search, setSearch] = useState('');
   const [toggleActive, setToggleActive] = useState(localToggles.toggleActive);
   const [toggleActiveGauge, setToggleActiveGauge] = useState(localToggles.toggleActiveGauge);
@@ -704,6 +749,8 @@ const EnhancedTableToolbar = (props) => {
   const [toggleVariable, setToggleVariable] = useState(localToggles.toggleVariable);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [showSearch, setShowSearch] = useState(localToggles.showSearch);
+  const [sortValueId, setSortValueId] = useState(options[0].id);
+  const [sortDirection, setSortDirection] = useState('asc');
 
   window.addEventListener('resize', () => {
     setWindowWidth(window.innerWidth);
@@ -773,6 +820,16 @@ const EnhancedTableToolbar = (props) => {
   const open = Boolean(anchorEl);
   const id = open ? 'transitions-popper' : undefined;
 
+  const handleChangeSort = ({target: {value}}) => {
+    const property = value.substring(0, value.indexOf('--'));
+    const event = value.substring(value.indexOf('--') + 2);
+
+    setSortValueId(value);
+    setSortDirection(event);
+
+    props.handleRequestSort(event, property)
+  };
+
   const {appTheme} = useAppThemeContext();
 
   return (
@@ -788,6 +845,12 @@ const EnhancedTableToolbar = (props) => {
           Add Liquidity
         </Typography>
       </div>
+
+      {windowWidth <= 660 &&
+        <div className={classes.sortSelect}>
+          {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
+        </div>
+      }
 
       <div className={classes.searchContainer}>
         {(windowWidth > 1360 || showSearch) &&
@@ -818,7 +881,7 @@ const EnhancedTableToolbar = (props) => {
             }}
             inputProps={{
               style: {
-                padding: 10,
+                padding: 11.5,
                 borderRadius: 0,
                 border: 'none',
                 fontSize: 18,
@@ -848,6 +911,7 @@ const EnhancedTableToolbar = (props) => {
                 fontWeight: 600,
                 fontSize: 18,
                 color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                whiteSpace: 'nowrap',
               }}>
               My Deposits
             </span>
@@ -860,23 +924,25 @@ const EnhancedTableToolbar = (props) => {
             onChange={onToggle}/>
         </div>
 
-        <Tooltip placement="top" title="Filter list">
-          <IconButton
-            className={[classes.filterButton, classes[`filterButton--${appTheme}`]].join(' ')}
-            onClick={handleClick}
-            aria-label="filter list">
-            <FilterAltOutlined/>
-          </IconButton>
-        </Tooltip>
+        <div className={[classes.actionsButtons, 'g-flex', 'g-flex--align-center'].join(' ')}>
+          <Tooltip placement="top" title="Filter list">
+            <IconButton
+              className={[classes.filterButton, classes[`filterButton--${appTheme}`]].join(' ')}
+              onClick={handleClick}
+              aria-label="filter list">
+              <FilterAltOutlined/>
+            </IconButton>
+          </Tooltip>
 
-        {windowWidth <= 1360 &&
-          <IconButton
-            className={[classes.searchButton, classes[`searchButton--${appTheme}`]].join(' ')}
-            onClick={handleSearch}
-            aria-label="filter list">
-            <Search/>
-          </IconButton>
-        }
+          {windowWidth <= 1360 &&
+            <IconButton
+              className={[classes.searchButton, classes[`searchButton--${appTheme}`]].join(' ')}
+              onClick={handleSearch}
+              aria-label="filter list">
+              <Search/>
+            </IconButton>
+          }
+        </div>
       </div>
 
       <Popper id={id} open={open} anchorEl={anchorEl} transition placement="bottom-end" style={{zIndex: 100}}>
@@ -974,6 +1040,8 @@ export default function EnhancedTable({pairs}) {
   const [toggleVariable, setToggleVariable] = useState(localToggles.toggleVariable);
   const [showSearch, setShowSearch] = useState(localToggles.showSearch);
   const [tableHeight, setTableHeight] = useState(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
+  const [expanded, setExpanded] = useState('');
+  const [sortDirection, setSortDirection] = useState('asc');
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -1057,93 +1125,13 @@ export default function EnhancedTable({pairs}) {
     setWindowWidth(window.innerWidth);
   });
 
-  function TablePaginationActions(props) {
-    const theme = useTheme();
-    const {count, page, rowsPerPage, onPageChange} = props;
-
-    const handleFirstPageButtonClick = (event) => {
-      onPageChange(event, 0);
-    };
-
-    const handleBackButtonClick = (event) => {
-      onPageChange(event, page - 1);
-    };
-
-    const handleNextButtonClick = (event) => {
-      onPageChange(event, page + 1);
-    };
-
-    const handleLastPageButtonClick = (event) => {
-      onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-    };
-
-    return (
-      <Box sx={{flexShrink: 0, ml: 2.5}}>
-        <IconButton
-          onClick={handleFirstPageButtonClick}
-          disabled={page === 0}
-          aria-label="first page"
-          style={{
-            width: 30,
-            height: 30,
-            border: '1px solid #86B9D6',
-            borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-            color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-          }}>
-          {theme.direction === 'rtl' ? <KeyboardDoubleArrowRight/> : <KeyboardDoubleArrowLeft/>}
-        </IconButton>
-
-        <IconButton
-          onClick={handleBackButtonClick}
-          disabled={page === 0}
-          aria-label="previous page"
-          style={{
-            width: 30,
-            height: 30,
-            marginLeft: 10,
-            border: '1px solid #86B9D6',
-            borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-            color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-          }}>
-          {theme.direction === 'rtl' ? <KeyboardArrowRight/> : <KeyboardArrowLeft/>}
-        </IconButton>
-
-        <IconButton
-          onClick={handleNextButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label="next page"
-          style={{
-            width: 30,
-            height: 30,
-            marginLeft: 10,
-            border: '1px solid #86B9D6',
-            borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-            color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-          }}>
-          {theme.direction === 'rtl' ? <KeyboardArrowLeft/> : <KeyboardArrowRight/>}
-        </IconButton>
-
-        <IconButton
-          onClick={handleLastPageButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label="last page"
-          style={{
-            width: 30,
-            height: 30,
-            marginLeft: 10,
-            border: '1px solid #86B9D6',
-            borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-            color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-          }}>
-          {theme.direction === 'rtl' ? <KeyboardDoubleArrowLeft/> : <KeyboardDoubleArrowRight/>}
-        </IconButton>
-      </Box>
-    );
-  }
-
   window.addEventListener('resize', () => {
     setTableHeight(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
   });
+
+  const handleChangeAccordion = (panel) => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
+  };
 
   return (
     <>
@@ -1153,355 +1141,297 @@ export default function EnhancedTable({pairs}) {
         setToggleActiveGauge={setToggleActiveGauge}
         setToggleStable={setToggleStable}
         setToggleVariable={setToggleVariable}
-        setShowSearch={setShowSearch}/>
+        setShowSearch={setShowSearch}
+        handleRequestSort={handleRequestSort}
+        setSortDirection={setSortDirection}/>
 
-      <div
-        style={{
-          marginTop: windowWidth <= 1360 && showSearch ? 45 : 0,
-        }}
-        className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
-        <TableContainer
-          style={{
-            overflow: 'auto',
-            height: tableHeight,
-          }}>
-          <Table
-            stickyHeader
-            className={classes.table}
-            aria-labelledby="tableTitle"
-            size={'medium'}
-            aria-label="enhanced table">
-            <EnhancedTableHead
-              classes={classes}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}/>
+      {windowWidth > 660 &&
+        <>
+          <div
+            style={{
+              marginTop: windowWidth <= 1360 && showSearch ? 45 : 0,
+            }}
+            className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
+            <TableContainer
+              style={{
+                overflow: 'auto',
+                height: tableHeight,
+              }}>
+              <Table
+                stickyHeader
+                className={classes.table}
+                aria-labelledby="tableTitle"
+                size={'medium'}
+                aria-label="enhanced table">
+                <EnhancedTableHead
+                  classes={classes}
+                  order={order}
+                  orderBy={orderBy}
+                  onRequestSort={handleRequestSort}/>
 
-            <TableBody>
-              {stableSort(filteredPairs, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  if (!row) {
-                    return null;
-                  }
-                  const labelId = `enhanced-table-checkbox-${index}`;
+                <TableBody>
+                  {stableSort(filteredPairs, getComparator(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => {
+                      if (!row) {
+                        return null;
+                      }
+                      const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      key={labelId}
-                      className={classes.assetTableRow}>
-                      <StickyTableCell
-                        style={{
-                          background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                          border: '1px dashed #CFE5F2',
-                          borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                        }}
-                        className={classes.cell}>
-                        <div className={classes.inline}>
-                          <div className={classes.doubleImages}>
-                            <img
-                              className={classes.img1Logo}
-                              src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
-                              width="37"
-                              height="37"
-                              alt=""
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = '/tokens/unknown-logo.png';
-                              }}
-                            />
-                            <img
-                              className={classes.img2Logo}
-                              src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
-                              width="37"
-                              height="37"
-                              alt=""
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = '/tokens/unknown-logo.png';
-                              }}
-                            />
-                          </div>
-                          <div>
-                            <Typography
-                              className={classes.textSpaced}
-                              style={{
-                                fontWeight: 500,
-                                fontSize: 14,
-                                lineHeight: '120%',
-                                color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
-                              }}
-                              noWrap>
-                              {row?.symbol}
-                            </Typography>
-                            <Typography
-                              className={classes.textSpaced}
-                              style={{
-                                fontWeight: 400,
-                                fontSize: 14,
-                                lineHeight: '120%',
-                                color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                              }}
-                              noWrap>
-                              {row?.isStable ? 'Stable Pool' : 'Volatile Pool'}
-                            </Typography>
-                          </div>
-                        </div>
-                      </StickyTableCell>
-
-                      <TableCell
-                        className={[classes.cell, classes.hiddenMobile].join(' ')}
-                        style={{
-                          background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                          border: '1px dashed #CFE5F2',
-                          borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                          overflow: 'hidden',
-                        }}
-                        align="right">
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                          }}>
-                          {(row && row.token0 && row.token0.balance) &&
-                            <div
-                              className={classes.inlineEnd}
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-end',
-
-                              }}>
-                              <Typography
-                                className={classes.textSpaced}
-                                style={{
-                                  fontWeight: 500,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
-                                }}>
-                                {formatCurrency(row.token0.balance)}
-                              </Typography>
-
-                              <Typography
-                                className={classes.textSpaced}
-                                style={{
-                                  fontWeight: 500,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
-                                }}>
-                                {formatCurrency(row.token1.balance)}
-                              </Typography>
-                            </div>
-                          }
-                          {!(row && row.token0 && row.token0.balance) &&
-                            <div
-                              className={classes.inlineEnd}
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-end',
-                                paddingLeft: 10,
-                              }}>
-                              <Skeleton
-                                variant="rect"
-                                width={120}
-                                height={16}
-                                style={{marginTop: '1px', marginBottom: '1px'}}/>
-                            </div>
-                          }
-                          {(row && row.token1 && row.token1.balance) &&
-                            <div
-                              className={classes.inlineEnd}
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-end',
-                                paddingLeft: 10,
-                              }}>
-                              <Typography
-                                className={`${classes.textSpaced} ${classes.symbol}`}
-                                style={{
-                                  fontWeight: 400,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                                }}>
-                                {row.token0.symbol}
-                              </Typography>
-
-                              <Typography
-                                className={`${classes.textSpaced} ${classes.symbol}`}
-                                style={{
-                                  fontWeight: 400,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                                }}>
-                                {row.token1.symbol}
-                              </Typography>
-                            </div>
-                          }
-                          {!(row && row.token1 && row.token1.balance) &&
-                            <div
-                              className={classes.inlineEnd}
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-end',
-                                paddingLeft: 10,
-                              }}>
-                              <Skeleton
-                                variant="rect"
-                                width={120}
-                                height={16}
-                                style={{marginTop: '1px', marginBottom: '1px'}}/>
-                            </div>
-                          }
-                        </div>
-                      </TableCell>
-
-                      <TableCell
-                        className={[classes.cell, classes.hiddenMobile].join(' ')}
-                        style={{
-                          background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                          border: '1px dashed #CFE5F2',
-                          borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                        }}
-                        align="right">
-                        {(row && row.balance && row.totalSupply) &&
-                          <div
+                      return (
+                        <TableRow
+                          key={labelId}
+                          className={classes.assetTableRow}>
+                          <StickyTableCell
                             style={{
-                              display: 'flex',
-                              justifyContent: 'flex-end',
-                            }}>
-                            <div
-                              className={classes.inlineEnd}
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-end',
-                              }}>
-                              <Typography
-                                className={classes.textSpaced}
-                                style={{
-                                  fontWeight: 500,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
-                                }}>
-                                {formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve0))}
-                              </Typography>
-
-                              <Typography
-                                className={classes.textSpaced}
-                                style={{
-                                  fontWeight: 500,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
-                                }}>
-                                {formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve1))}
-                              </Typography>
+                              background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                              border: '1px dashed #CFE5F2',
+                              borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            }}
+                            className={classes.cell}>
+                            <div className={classes.inline}>
+                              <div className={classes.doubleImages}>
+                                <img
+                                  className={classes.img1Logo}
+                                  src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
+                                  width="37"
+                                  height="37"
+                                  alt=""
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = '/tokens/unknown-logo.png';
+                                  }}
+                                />
+                                <img
+                                  className={classes.img2Logo}
+                                  src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
+                                  width="37"
+                                  height="37"
+                                  alt=""
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = '/tokens/unknown-logo.png';
+                                  }}
+                                />
+                              </div>
+                              <div>
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                  }}
+                                  noWrap>
+                                  {row?.symbol}
+                                </Typography>
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 400,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                  }}
+                                  noWrap>
+                                  {row?.isStable ? 'Stable Pool' : 'Volatile Pool'}
+                                </Typography>
+                              </div>
                             </div>
+                          </StickyTableCell>
 
-                            <div
-                              className={classes.inlineEnd}
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-end',
-                                paddingLeft: 10,
-                              }}>
-                              <Typography
-                                className={`${classes.textSpaced} ${classes.symbol}`}
-                                style={{
-                                  fontWeight: 400,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                                }}>
-                                {row.token0.symbol}
-                              </Typography>
-
-                              <Typography
-                                className={`${classes.textSpaced} ${classes.symbol}`}
-                                style={{
-                                  fontWeight: 400,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                                }}>
-                                {row.token1.symbol}
-                              </Typography>
-                            </div>
-                          </div>
-                        }
-                        {!(row && row.balance && row.totalSupply) &&
-                          <div
-                            className={classes.inlineEnd}
+                          <TableCell
+                            className={[classes.cell, classes.hiddenMobile].join(' ')}
                             style={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              alignItems: 'flex-end',
-                              paddingLeft: 10,
-                            }}>
-                            <Skeleton
-                              variant="rect"
-                              width={120}
-                              height={16}
-                              style={{marginTop: '1px', marginBottom: '1px'}}/>
-                          </div>
-                        }
-                      </TableCell>
-
-                      {
-                        (row && row.gauge && row.gauge.address) &&
-                        <TableCell
-                          className={[classes.cell, classes.hiddenMobile].join(' ')}
-                          style={{
-                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                          }}
-                          align="right">
-                          {(row && row.gauge && row.gauge.balance && row.gauge.totalSupply) &&
+                              background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                              border: '1px dashed #CFE5F2',
+                              borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                              overflow: 'hidden',
+                            }}
+                            align="right">
                             <div
                               style={{
                                 display: 'flex',
                                 justifyContent: 'flex-end',
                               }}>
+                              {(row && row.token0 && row.token0.balance) &&
+                                <div
+                                  className={classes.inlineEnd}
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
+
+                                  }}>
+                                  <Typography
+                                    className={classes.textSpaced}
+                                    style={{
+                                      fontWeight: 500,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    }}>
+                                    {formatCurrency(row.token0.balance)}
+                                  </Typography>
+
+                                  <Typography
+                                    className={classes.textSpaced}
+                                    style={{
+                                      fontWeight: 500,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    }}>
+                                    {formatCurrency(row.token1.balance)}
+                                  </Typography>
+                                </div>
+                              }
+                              {!(row && row.token0 && row.token0.balance) &&
+                                <div
+                                  className={classes.inlineEnd}
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
+                                    paddingLeft: 10,
+                                  }}>
+                                  <Skeleton
+                                    variant="rect"
+                                    width={120}
+                                    height={16}
+                                    style={{marginTop: '1px', marginBottom: '1px'}}/>
+                                </div>
+                              }
+                              {(row && row.token1 && row.token1.balance) &&
+                                <div
+                                  className={classes.inlineEnd}
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
+                                    paddingLeft: 10,
+                                  }}>
+                                  <Typography
+                                    className={`${classes.textSpaced} ${classes.symbol}`}
+                                    style={{
+                                      fontWeight: 400,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                    }}>
+                                    {row.token0.symbol}
+                                  </Typography>
+
+                                  <Typography
+                                    className={`${classes.textSpaced} ${classes.symbol}`}
+                                    style={{
+                                      fontWeight: 400,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                    }}>
+                                    {row.token1.symbol}
+                                  </Typography>
+                                </div>
+                              }
+                              {!(row && row.token1 && row.token1.balance) &&
+                                <div
+                                  className={classes.inlineEnd}
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
+                                    paddingLeft: 10,
+                                  }}>
+                                  <Skeleton
+                                    variant="rect"
+                                    width={120}
+                                    height={16}
+                                    style={{marginTop: '1px', marginBottom: '1px'}}/>
+                                </div>
+                              }
+                            </div>
+                          </TableCell>
+
+                          <TableCell
+                            className={[classes.cell, classes.hiddenMobile].join(' ')}
+                            style={{
+                              background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                              border: '1px dashed #CFE5F2',
+                              borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            }}
+                            align="right">
+                            {(row && row.balance && row.totalSupply) &&
                               <div
-                                className={classes.inlineEnd}
                                 style={{
                                   display: 'flex',
-                                  flexDirection: 'column',
-                                  alignItems: 'flex-end',
+                                  justifyContent: 'flex-end',
                                 }}>
-                                <Typography
-                                  className={classes.textSpaced}
+                                <div
+                                  className={classes.inlineEnd}
                                   style={{
-                                    fontWeight: 500,
-                                    fontSize: 14,
-                                    lineHeight: '120%',
-                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
                                   }}>
-                                  {formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve0))}
-                                </Typography>
+                                  <Typography
+                                    className={classes.textSpaced}
+                                    style={{
+                                      fontWeight: 500,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    }}>
 
-                                <Typography
-                                  className={classes.textSpaced}
+                                    {formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve0))}
+                                  </Typography>
+
+                                  <Typography
+                                    className={classes.textSpaced}
+                                    style={{
+                                      fontWeight: 500,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    }}>
+                                    {formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve1))}
+                                  </Typography>
+                                </div>
+
+                                <div
+                                  className={classes.inlineEnd}
                                   style={{
-                                    fontWeight: 500,
-                                    fontSize: 14,
-                                    lineHeight: '120%',
-                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
+                                    paddingLeft: 10,
                                   }}>
-                                  {formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve1))}
-                                </Typography>
+                                  <Typography
+                                    className={`${classes.textSpaced} ${classes.symbol}`}
+                                    style={{
+                                      fontWeight: 400,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                    }}>
+                                    {row.token0.symbol}
+                                  </Typography>
+
+                                  <Typography
+                                    className={`${classes.textSpaced} ${classes.symbol}`}
+                                    style={{
+                                      fontWeight: 400,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                    }}>
+                                    {row.token1.symbol}
+                                  </Typography>
+                                </div>
                               </div>
-
+                            }
+                            {!(row && row.balance && row.totalSupply) &&
                               <div
                                 className={classes.inlineEnd}
                                 style={{
@@ -1510,62 +1440,518 @@ export default function EnhancedTable({pairs}) {
                                   alignItems: 'flex-end',
                                   paddingLeft: 10,
                                 }}>
-                                <Typography
-                                  className={`${classes.textSpaced} ${classes.symbol}`}
-                                  style={{
-                                    fontWeight: 400,
-                                    fontSize: 14,
-                                    lineHeight: '120%',
-                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                                  }}>
-                                  {row.token0.symbol}
-                                </Typography>
-
-                                <Typography
-                                  className={`${classes.textSpaced} ${classes.symbol}`}
-                                  style={{
-                                    fontWeight: 400,
-                                    fontSize: 14,
-                                    lineHeight: '120%',
-                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                                  }}>
-                                  {row.token1.symbol}
-                                </Typography>
+                                <Skeleton
+                                  variant="rect"
+                                  width={120}
+                                  height={16}
+                                  style={{marginTop: '1px', marginBottom: '1px'}}/>
                               </div>
-                            </div>
+                            }
+                          </TableCell>
+
+                          {
+                            row?.gauge?.address &&
+                            <TableCell
+                              className={[classes.cell, classes.hiddenMobile].join(' ')}
+                              style={{
+                                background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                                border: '1px dashed #CFE5F2',
+                                borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                              }}
+                              align="right">
+                              {(row && row.gauge && row.gauge.balance && row.gauge.totalSupply) &&
+                                <div
+                                  style={{
+                                    display: 'flex',
+                                    justifyContent: 'flex-end',
+                                  }}>
+                                  <div
+                                    className={classes.inlineEnd}
+                                    style={{
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      alignItems: 'flex-end',
+                                    }}>
+                                    <Typography
+                                      className={classes.textSpaced}
+                                      style={{
+                                        fontWeight: 500,
+                                        fontSize: 14,
+                                        lineHeight: '120%',
+                                        color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      }}>
+                                      {formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve0))}
+                                    </Typography>
+
+                                    <Typography
+                                      className={classes.textSpaced}
+                                      style={{
+                                        fontWeight: 500,
+                                        fontSize: 14,
+                                        lineHeight: '120%',
+                                        color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      }}>
+                                      {formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve1))}
+                                    </Typography>
+                                  </div>
+
+                                  <div
+                                    className={classes.inlineEnd}
+                                    style={{
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      alignItems: 'flex-end',
+                                      paddingLeft: 10,
+                                    }}>
+                                    <Typography
+                                      className={`${classes.textSpaced} ${classes.symbol}`}
+                                      style={{
+                                        fontWeight: 400,
+                                        fontSize: 14,
+                                        lineHeight: '120%',
+                                        color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                      }}>
+                                      {row.token0.symbol}
+                                    </Typography>
+
+                                    <Typography
+                                      className={`${classes.textSpaced} ${classes.symbol}`}
+                                      style={{
+                                        fontWeight: 400,
+                                        fontSize: 14,
+                                        lineHeight: '120%',
+                                        color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                      }}>
+                                      {row.token1.symbol}
+                                    </Typography>
+                                  </div>
+                                </div>
+                              }
+                              {!(row && row.gauge && row.gauge.balance && row.gauge.totalSupply) &&
+                                <div
+                                  className={classes.inlineEnd}
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
+                                    paddingLeft: 10,
+                                  }}>
+                                  <Skeleton
+                                    variant="rect"
+                                    width={120}
+                                    height={16}
+                                    style={{
+                                      marginTop: '1px',
+                                      marginBottom: '1px',
+                                    }}/>
+                                </div>
+                              }
+                            </TableCell>
                           }
-                          {!(row && row.gauge && row.gauge.balance && row.gauge.totalSupply) &&
+
+                          {
+                            !row?.gauge?.address &&
+                            <TableCell
+                              className={[classes.cell, classes.hiddenMobile].join(' ')}
+                              style={{
+                                background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                                border: '1px dashed #CFE5F2',
+                                borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                              }}
+                              align="right">
+                              <Typography
+                                className={classes.textSpaced}
+                                style={{
+                                  fontWeight: 500,
+                                  fontSize: 14,
+                                  lineHeight: '120%',
+                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                  whiteSpace: 'nowrap',
+                                }}>
+                                Gauge not available
+                              </Typography>
+                            </TableCell>
+                          }
+
+                          <TableCell
+                            className={[classes.cell, classes.hiddenSmallMobile].join(' ')}
+                            style={{
+                              background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                              border: '1px dashed #CFE5F2',
+                              borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            }}
+                            align="right">
                             <div
-                              className={classes.inlineEnd}
                               style={{
                                 display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-end',
-                                paddingLeft: 10,
+                                justifyContent: 'flex-end',
                               }}>
-                              <Skeleton
-                                variant="rect"
-                                width={120}
-                                height={16}
-                                style={{
-                                  marginTop: '1px',
-                                  marginBottom: '1px',
-                                }}/>
-                            </div>
-                          }
-                        </TableCell>
-                      }
+                              {(row && row.reserve0 && row.token0) &&
+                                <div
+                                  className={classes.inlineEnd}
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
+                                  }}>
+                                  <Typography
+                                    className={classes.textSpaced}
+                                    style={{
+                                      fontWeight: 500,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      whiteSpace: 'nowrap',
+                                    }}>
+                                    {formatCurrency(row.reserve0)}
+                                  </Typography>
 
-                      {
-                        !(row && row.gauge && row.gauge.address) &&
-                        <TableCell
-                          className={[classes.cell, classes.hiddenMobile].join(' ')}
-                          style={{
-                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                          }}
-                          align="right">
+                                  <Typography
+                                    className={classes.textSpaced}
+                                    style={{
+                                      fontWeight: 500,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      whiteSpace: 'nowrap',
+                                    }}>
+                                    {formatCurrency(row.reserve1)}
+                                  </Typography>
+                                </div>
+                              }
+                              {!(row && row.reserve0 && row.token0) &&
+                                <div
+                                  className={classes.inlineEnd}
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
+                                    paddingLeft: 10,
+                                  }}>
+                                  <Skeleton
+                                    variant="rect"
+                                    width={120}
+                                    height={16}
+                                    style={{marginTop: '1px', marginBottom: '1px'}}/>
+                                </div>
+                              }
+                              {(row && row.reserve1 && row.token1) &&
+                                <div
+                                  className={classes.inlineEnd}
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
+                                    paddingLeft: 10,
+                                  }}>
+                                  <Typography
+                                    className={`${classes.textSpaced} ${classes.symbol}`}
+                                    style={{
+                                      fontWeight: 400,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                    }}>
+                                    {row.token0.symbol}
+                                  </Typography>
+
+                                  <Typography
+                                    className={`${classes.textSpaced} ${classes.symbol}`}
+                                    style={{
+                                      fontWeight: 400,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                    }}>
+                                    {row.token1.symbol}
+                                  </Typography>
+                                </div>
+                              }
+                              {!(row && row.reserve1 && row.token1) &&
+                                <div
+                                  className={classes.inlineEnd}
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
+                                    paddingLeft: 10,
+                                  }}>
+                                  <Skeleton
+                                    variant="rect"
+                                    width={120}
+                                    height={16}
+                                    style={{marginTop: '1px', marginBottom: '1px'}}/>
+                                </div>
+                              }
+                            </div>
+                          </TableCell>
+
+                          {
+                            row?.gauge?.address &&
+                            <TableCell
+                              className={[classes.cell, classes.hiddenMobile].join(' ')}
+                              style={{
+                                background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                                border: '1px dashed #CFE5F2',
+                                borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                              }}
+                              align="right">
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  justifyContent: 'flex-end',
+                                }}>
+                                {(row && row.gauge && row.gauge.reserve0 && row.token0) &&
+                                  <div
+                                    className={classes.inlineEnd}
+                                    style={{
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      alignItems: 'flex-end',
+                                    }}>
+                                    <Typography
+                                      className={classes.textSpaced}
+                                      style={{
+                                        fontWeight: 500,
+                                        fontSize: 14,
+                                        lineHeight: '120%',
+                                        color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                        whiteSpace: 'nowrap',
+                                      }}>
+                                      {formatCurrency(row.gauge.reserve0)}
+                                    </Typography>
+
+                                    <Typography
+                                      className={classes.textSpaced}
+                                      style={{
+                                        fontWeight: 500,
+                                        fontSize: 14,
+                                        lineHeight: '120%',
+                                        color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                        whiteSpace: 'nowrap',
+                                      }}>
+                                      {formatCurrency(row.gauge.reserve1)}
+                                    </Typography>
+                                  </div>
+                                }
+                                {!(row && row.gauge && row.gauge.reserve0 && row.token0) &&
+                                  <div
+                                    className={classes.inlineEnd}
+                                    style={{
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      alignItems: 'flex-end',
+                                      paddingLeft: 10,
+                                    }}>
+                                    <Skeleton
+                                      variant="rect"
+                                      width={120}
+                                      height={16}
+                                      style={{marginTop: '1px', marginBottom: '1px'}}/>
+                                  </div>
+                                }
+                                {(row && row.gauge && row.gauge.reserve1 && row.token1) &&
+                                  <div
+                                    className={classes.inlineEnd}
+                                    style={{
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      alignItems: 'flex-end',
+                                      paddingLeft: 10,
+                                    }}>
+                                    <Typography
+                                      className={`${classes.textSpaced} ${classes.symbol}`}
+                                      style={{
+                                        fontWeight: 400,
+                                        fontSize: 14,
+                                        lineHeight: '120%',
+                                        color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                      }}>
+                                      {row.token0.symbol}
+                                    </Typography>
+
+                                    <Typography
+                                      className={`${classes.textSpaced} ${classes.symbol}`}
+                                      style={{
+                                        fontWeight: 400,
+                                        fontSize: 14,
+                                        lineHeight: '120%',
+                                        color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                      }}>
+                                      {row.token1.symbol}
+                                    </Typography>
+                                  </div>
+                                }
+                                {!(row && row.gauge && row.gauge.reserve1 && row.token1) &&
+                                  <div
+                                    className={classes.inlineEnd}
+                                    style={{
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      alignItems: 'flex-end',
+                                      paddingLeft: 10,
+                                    }}>
+                                    <Skeleton
+                                      variant="rect"
+                                      width={120}
+                                      height={16}
+                                      style={{marginTop: '1px', marginBottom: '1px'}}/>
+                                  </div>
+                                }
+                              </div>
+                            </TableCell>
+                          }
+
+                          {
+                            !row?.gauge?.address &&
+                            <TableCell
+                              className={[classes.cell, classes.hiddenMobile].join(' ')}
+                              style={{
+                                background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                                border: '1px dashed #CFE5F2',
+                                borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                              }}
+                              align="right">
+                              <Typography
+                                className={classes.textSpaced}
+                                style={{
+                                  fontWeight: 500,
+                                  fontSize: 14,
+                                  lineHeight: '120%',
+                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                  whiteSpace: 'nowrap',
+                                }}>
+                                Gauge not available
+                              </Typography>
+                            </TableCell>
+                          }
+
+                          <TableCell
+                            className={classes.cell}
+                            style={{
+                              background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                              border: '1px dashed #CFE5F2',
+                              borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            }}
+                            align="right">
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              style={{
+                                padding: '7px 14px',
+                                border: '1px solid #5688A5',
+                                borderColor: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                                borderRadius: 100,
+                                fontWeight: 500,
+                                fontSize: 14,
+                                lineHeight: '120%',
+                                color: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                              }}
+                              onClick={() => {
+                                onView(row);
+                              }}>
+                              Manage
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{height: 61 * emptyRows}}>
+                      <TableCell colSpan={7}/>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+
+            <TablePagination
+              style={{
+                width: '100%',
+                marginTop: 20,
+                padding: '0 30px',
+                background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
+                border: '1px solid #86B9D6',
+                borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
+                borderRadius: 100,
+                color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+              }}
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={filteredPairs.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              ActionsComponent={TablePaginationActions}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </div>
+        </>
+      }
+
+      {windowWidth <= 660 &&
+        <>
+          {stableSort(filteredPairs, getComparator(order, orderBy))
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((row, index) => {
+              if (!row) {
+                return null;
+              }
+              const labelId = `accordion-${index}`;
+
+              return (
+                <Accordion
+                  key={labelId}
+                  style={{
+                    margin: 0,
+                    marginBottom: 20,
+                    background: appTheme === 'dark' ? '#24292D' : '#DBE6EC',
+                    border: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                  }}
+                  disableGutters={true}
+                  expanded={expanded === labelId}
+                  onChange={handleChangeAccordion(labelId)}>
+                  <AccordionSummary
+                    style={{
+                      padding: 0,
+                    }}
+                    classes={{
+                      content: classes.accordionSummaryContent,
+                    }}
+                    expandIcon={null}
+                    aria-controls="panel1a-content">
+                    <div className={['g-flex-column', 'g-flex-column__item'].join(' ')}>
+                      <div
+                        style={{
+                          padding: '15px 20px',
+                        }}
+                        className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                        <div className={classes.doubleImages}>
+                          <img
+                            className={classes.img1Logo}
+                            src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
+                            width="37"
+                            height="37"
+                            alt=""
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/tokens/unknown-logo.png';
+                            }}
+                          />
+                          <img
+                            className={classes.img2Logo}
+                            src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
+                            width="37"
+                            height="37"
+                            alt=""
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/tokens/unknown-logo.png';
+                            }}
+                          />
+                        </div>
+
+                        <div>
                           <Typography
                             className={classes.textSpaced}
                             style={{
@@ -1573,27 +1959,102 @@ export default function EnhancedTable({pairs}) {
                               fontSize: 14,
                               lineHeight: '120%',
                               color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
-                              whiteSpace: 'nowrap',
-                            }}>
-                            Gauge not available
+                            }}
+                            noWrap>
+                            {row?.symbol}
                           </Typography>
-                        </TableCell>
-                      }
+                          <Typography
+                            className={classes.textSpaced}
+                            style={{
+                              fontWeight: 400,
+                              fontSize: 14,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                            }}
+                            noWrap>
+                            {row?.isStable ? 'Stable Pool' : 'Volatile Pool'}
+                          </Typography>
+                        </div>
+                      </div>
 
-                      <TableCell
-                        className={[classes.cell, classes.hiddenSmallMobile].join(' ')}
+                      <div
                         style={{
-                          background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                          border: '1px dashed #CFE5F2',
-                          borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                          borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                          borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
                         }}
-                        align="right">
+                        className={['g-flex', 'g-flex--align-center'].join(' ')}>
                         <div
                           style={{
-                            display: 'flex',
-                            justifyContent: 'flex-end',
+                            width: '50%',
+                            borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
                           }}>
-                          {(row && row.reserve0 && row.token0) &&
+                          <Typography
+                            style={{
+                              background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
+                              padding: '5px 20px',
+                              fontWeight: 500,
+                              fontSize: 12,
+                              lineHeight: '120%',
+                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                            }}
+                            noWrap>
+                            Action
+                          </Typography>
+
+                          <div
+                            style={{
+                              padding: '11px 20px',
+                            }}>
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              style={{
+                                padding: '7px 14px',
+                                border: `1px solid ${appTheme === 'dark' ? '#C6CDD2' : '#5688A5'}`,
+                                borderColor: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                                borderRadius: 100,
+                                fontWeight: 500,
+                                fontSize: 14,
+                                lineHeight: '120%',
+                                color: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                              }}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                event.preventDefault();
+
+                                onView(row);
+                              }}>
+                              Manage
+                            </Button>
+                          </div>
+                        </div>
+
+                        <div
+                          style={{
+                            width: '50%',
+                          }}>
+                          <Typography
+                            style={{
+                              background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
+                              padding: '5px 20px',
+                              fontWeight: 500,
+                              fontSize: 12,
+                              lineHeight: '120%',
+                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                              textAlign: 'right',
+                            }}
+                            noWrap>
+                            Total Pool Amount
+                          </Typography>
+
+                          <div
+                            style={{
+                              padding: '11px 20px',
+                              display: 'flex',
+                              justifyContent: 'flex-end',
+                            }}>
                             <div
                               className={classes.inlineEnd}
                               style={{
@@ -1625,24 +2086,7 @@ export default function EnhancedTable({pairs}) {
                                 {formatCurrency(row.reserve1)}
                               </Typography>
                             </div>
-                          }
-                          {!(row && row.reserve0 && row.token0) &&
-                            <div
-                              className={classes.inlineEnd}
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-end',
-                                paddingLeft: 10,
-                              }}>
-                              <Skeleton
-                                variant="rect"
-                                width={120}
-                                height={16}
-                                style={{marginTop: '1px', marginBottom: '1px'}}/>
-                            </div>
-                          }
-                          {(row && row.reserve1 && row.token1) &&
+
                             <div
                               className={classes.inlineEnd}
                               style={{
@@ -1673,42 +2117,81 @@ export default function EnhancedTable({pairs}) {
                                 {row.token1.symbol}
                               </Typography>
                             </div>
-                          }
-                          {!(row && row.reserve1 && row.token1) &&
-                            <div
-                              className={classes.inlineEnd}
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-end',
-                                paddingLeft: 10,
-                              }}>
-                              <Skeleton
-                                variant="rect"
-                                width={120}
-                                height={16}
-                                style={{marginTop: '1px', marginBottom: '1px'}}/>
-                            </div>
-                          }
+                          </div>
                         </div>
-                      </TableCell>
+                      </div>
 
-                      {
-                        (row && row.gauge && row.gauge.address) &&
-                        <TableCell
-                          className={[classes.cell, classes.hiddenMobile].join(' ')}
+                      <div
+                        style={{
+                          padding: '6px 20px',
+                          background: appTheme === 'dark' ? '#151718' : '#9BC9E4',
+                        }}
+                        className={['g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                        <Typography
                           style={{
-                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            fontWeight: 500,
+                            fontSize: 12,
+                            lineHeight: '120%',
+                            color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
                           }}
-                          align="right">
+                          noWrap>
+                          {expanded !== labelId ? 'Show' : 'Hide'} Details
+                        </Typography>
+
+                        {expanded !== labelId &&
+                          <ExpandMore
+                            style={{
+                              color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                            }}/>
+                        }
+
+                        {expanded === labelId &&
+                          <ExpandLess
+                            style={{
+                              color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                            }}/>
+                        }
+                      </div>
+                    </div>
+                  </AccordionSummary>
+
+                  <AccordionDetails
+                    style={{
+                      padding: 0,
+                    }}>
+                    {headCells.map((headCell) => (
+                      <>
+                        {!headCell.isHideInDetails &&
                           <div
                             style={{
-                              display: 'flex',
-                              justifyContent: 'flex-end',
-                            }}>
-                            {(row && row.gauge && row.gauge.reserve0 && row.token0) &&
+                              height: 56,
+                              borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                            }}
+                            className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                            <Typography
+                              style={{
+                                width: '50%',
+                                height: '100%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                padding: '5px 20px',
+                                fontWeight: 500,
+                                fontSize: 12,
+                                lineHeight: '120%',
+                                color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                                borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              }}
+                              noWrap>
+                              {headCell.label}
+                            </Typography>
+
+                            <div
+                              style={{
+                                width: '50%',
+                                padding: '11px 20px',
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                              }}>
                               <div
                                 className={classes.inlineEnd}
                                 style={{
@@ -1725,7 +2208,12 @@ export default function EnhancedTable({pairs}) {
                                     color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                     whiteSpace: 'nowrap',
                                   }}>
-                                  {formatCurrency(row.gauge.reserve0)}
+                                  {headCell.id === 'balance' && formatCurrency(row.token0.balance)}
+                                  {headCell.id === 'poolBalance' && formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve0))}
+                                  {headCell.id === 'stakedBalance' && row?.gauge?.address && formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve0))}
+                                  {headCell.id === 'stakedBalance' && !row?.gauge?.address && 'Gauge not available'}
+                                  {headCell.id === 'stakedAmount' && row?.gauge?.address && formatCurrency(row.gauge.reserve0)}
+                                  {headCell.id === 'stakedAmount' && !row?.gauge?.address && 'Gauge not available'}
                                 </Typography>
 
                                 <Typography
@@ -1737,27 +2225,15 @@ export default function EnhancedTable({pairs}) {
                                     color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                     whiteSpace: 'nowrap',
                                   }}>
-                                  {formatCurrency(row.gauge.reserve1)}
+                                  {headCell.id === 'balance' && formatCurrency(row.token1.balance)}
+                                  {headCell.id === 'poolBalance' && formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve1))}
+                                  {headCell.id === 'stakedBalance' && row?.gauge?.address && formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve1))}
+                                  {headCell.id === 'stakedBalance' && !row?.gauge?.address && 'Gauge not available'}
+                                  {headCell.id === 'stakedAmount' && row?.gauge?.address && formatCurrency(row.gauge.reserve1)}
+                                  {headCell.id === 'stakedAmount' && !row?.gauge?.address && 'Gauge not available'}
                                 </Typography>
                               </div>
-                            }
-                            {!(row && row.gauge && row.gauge.reserve0 && row.token0) &&
-                              <div
-                                className={classes.inlineEnd}
-                                style={{
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                  alignItems: 'flex-end',
-                                  paddingLeft: 10,
-                                }}>
-                                <Skeleton
-                                  variant="rect"
-                                  width={120}
-                                  height={16}
-                                  style={{marginTop: '1px', marginBottom: '1px'}}/>
-                              </div>
-                            }
-                            {(row && row.gauge && row.gauge.reserve1 && row.token1) &&
+
                               <div
                                 className={classes.inlineEnd}
                                 style={{
@@ -1788,111 +2264,18 @@ export default function EnhancedTable({pairs}) {
                                   {row.token1.symbol}
                                 </Typography>
                               </div>
-                            }
-                            {!(row && row.gauge && row.gauge.reserve1 && row.token1) &&
-                              <div
-                                className={classes.inlineEnd}
-                                style={{
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                  alignItems: 'flex-end',
-                                  paddingLeft: 10,
-                                }}>
-                                <Skeleton
-                                  variant="rect"
-                                  width={120}
-                                  height={16}
-                                  style={{marginTop: '1px', marginBottom: '1px'}}/>
-                              </div>
-                            }
+                            </div>
                           </div>
-                        </TableCell>
-                      }
-
-                      {
-                        !(row && row.gauge && row.gauge.address) &&
-                        <TableCell
-                          className={[classes.cell, classes.hiddenMobile].join(' ')}
-                          style={{
-                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                          }}
-                          align="right">
-                          <Typography
-                            className={classes.textSpaced}
-                            style={{
-                              fontWeight: 500,
-                              fontSize: 14,
-                              lineHeight: '120%',
-                              color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
-                              whiteSpace: 'nowrap',
-                            }}>
-                            Gauge not available
-                          </Typography>
-                        </TableCell>
-                      }
-
-                      <TableCell
-                        className={classes.cell}
-                        style={{
-                          background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                          border: '1px dashed #CFE5F2',
-                          borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                        }}
-                        align="right">
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          style={{
-                            padding: '7px 14px',
-                            border: '1px solid #5688A5',
-                            borderColor: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
-                            borderRadius: 100,
-                            fontWeight: 500,
-                            fontSize: 14,
-                            lineHeight: '120%',
-                            color: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
-                          }}
-                          onClick={() => {
-                            onView(row);
-                          }}>
-                          Manage
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{height: 61 * emptyRows}}>
-                  <TableCell colSpan={7}/>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-        <TablePagination
-          style={{
-            width: '100%',
-            marginTop: 20,
-            padding: '0 30px',
-            background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
-            border: '1px solid #86B9D6',
-            borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-            borderRadius: 100,
-            color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-          }}
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={filteredPairs.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          ActionsComponent={TablePaginationActions}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </div>
+                        }
+                      </>
+                    ))}
+                  </AccordionDetails>
+                </Accordion>
+              );
+            })
+          }
+        </>
+      }
     </>
   );
 }

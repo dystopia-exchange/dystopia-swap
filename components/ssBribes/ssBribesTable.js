@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@mui/styles';
-import Skeleton from '@mui/lab/Skeleton';
 import {
   Button,
   Table,
@@ -17,6 +16,7 @@ import {
   IconButton,
   TextField,
   InputAdornment,
+  Skeleton,
 } from '@mui/material';
 import { useRouter } from "next/router";
 import BigNumber from 'bignumber.js';

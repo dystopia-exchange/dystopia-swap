@@ -985,3 +985,15 @@
   background: #24292D !important;
   color: #A2E3A9 !important;
 }
+
+@media (max-width:660px) {
+  .container {
+    position: relative;
+    margin-top: 60px;
+  }
+
+  .titleSection {
+    margin-left: 16px;
+    top: -72px;
+  }
+}

@@ -1,5 +1,3 @@
-
-
 .container {
   height: 100%;
   width: 100%;
@@ -8,18 +6,4 @@
   margin-top: 0px;
   position: relative;
   margin-bottom: 60px;
-}
-
-@media screen and (max-width: 1200px) {
-  .container {
-    padding-top: 180px;
-    margin-bottom: 60px;
-  }
-}
-
-@media screen and (max-width: 560px) {
-  .container {
-    padding-top: 140px;
-    margin-bottom: 60px;
-  }
 }

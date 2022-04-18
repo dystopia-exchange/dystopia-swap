@@ -1,0 +1,77 @@
+.sortSelect {
+  min-width: 215px !important;
+  padding: 9.5px 35px 9.5px 60px;
+  background: #B9DFF5 !important;
+  border: 1px solid #0B5E8E !important;
+  border-radius: 100px !important;
+}
+
+.sortSelect--dark {
+  background: #151718 !important;
+  border: 1px solid #5F7285 !important;
+}
+
+.sortSelect > svg,
+.sortSelect--dark > svg {
+  color: #5F7285 !important;
+}
+
+.sortSelect > fieldset,
+.sortSelect--dark > fieldset {
+  display: none !important;
+}
+
+.sortSelectInput {
+  padding: 3px !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.sortSelectInput--dark {
+  padding: 3px !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.list,
+.list--dark {
+  padding: 0 !important;
+  background: #DBE6EC !important;
+}
+
+.list--dark {
+  background: #151718 !important;
+}
+
+.list > li,
+.list--dark > li {
+  padding: 0 !important;
+  border: 1px solid #0B5E8E !important;
+}
+
+.list > li > .menuOption,
+.list--dark > li > .menuOption {
+  width: 100%;
+  padding: 10px 20px !important;
+}
+
+.list > li > .menuOption > .sortIcon,
+.list--dark > li > .menuOption > .sortIcon {
+  display: none;
+}
+
+.list > li:not(:last-of-type),
+.list--dark > li:not(:last-of-type) {
+  border-bottom: none !important;
+}
+
+.list > li > .menuOption > .menuOptionSec,
+.list--dark > li > .menuOption > .menuOptionSec {
+  padding-right: 0 !important;
+}
+
+.sortIcon {
+  position: absolute;
+  left: -0.5px;
+  top: -0.5px;
+}

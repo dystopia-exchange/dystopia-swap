@@ -1,4 +1,3 @@
-
 .container {
   max-width: 1400px;
   width: calc(100% - 180px);
@@ -161,53 +160,10 @@
   border: none !important;
 }
 
-.menuOption {
-  padding: 0 20px;
-}
-
-.menuOptionSec {
-  padding-right: 20px;
-}
-
 .smallerText {
   font-size: 12px !important;
   margin-top: 0px !important;
   margin-bottom: 0px !important;
-}
-
-.tokenSelect {
-  width: 215px !important;
-  margin-left: 20px;
-  background: #DBE6EC !important;
-  border: 1px solid #86B9D6 !important;
-  border-radius: 100px !important;
-}
-
-.tokenSelect--dark {
-  background: #151718 !important;
-  border: 1px solid #5F7285 !important;
-}
-
-.tokenSelect > svg,
-.tokenSelect--dark > svg {
-  color: #5F7285 !important;
-}
-
-.tokenSelect > fieldset,
-.tokenSelect--dark > fieldset {
-  display: none !important;
-}
-
-.tokenSelectInput {
-  padding: 3px !important;
-  border: none !important;
-  border-radius: 0 !important;
-}
-
-.tokenSelectInput--dark {
-  padding: 3px !important;
-  border: none !important;
-  border-radius: 0 !important;
 }
 
 .addButton {
@@ -311,14 +267,16 @@
 }
 
 @media (max-width: 935px) {
+  .searchInput {
+    width: 300px !important;
+  }
+}
+
+@media (max-width: 935px) {
   .tokenSelect {
     position: absolute !important;
     top: -30px;
     left: 0;
     margin: 0;
-  }
-
-  .searchInput {
-    width: 300px !important;
   }
 }

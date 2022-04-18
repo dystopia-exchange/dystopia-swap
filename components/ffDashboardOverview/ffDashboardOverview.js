@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Grid, Typography, SvgIcon, Button, TextField, InputAdornment, CircularProgress } from '@mui/material';
-import Autocomplete from '@mui/lab/Autocomplete';
-import Skeleton from '@mui/lab/Skeleton';
+import { Paper, Grid, Typography, SvgIcon } from '@mui/material';
 import BigNumber from 'bignumber.js';
 
 import { formatCurrency } from '../../utils';

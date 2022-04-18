@@ -646,31 +646,3 @@
   justify-content: flex-end;
 }
 
-@media screen and (max-width: 1280px) {
-  .actionsContainer {
-    border-left: 0px solid rgba(104, 108, 122, 0.25) !important;
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  .container {
-    margin-top: 0px;
-  }
-
-  .buttonWrap {
-    margin-top: 20px !important;
-  }
-
-  .actionsContainer {
-    border-left: 0px solid rgba(104, 108, 122, 0.25);
-  }
-}
-
-@media screen and (max-width: 960px) {
-  .container {
-    margin-top: 0px;
-    width: calc(100% - 60px);
-  }
-
-  .helpIcon { display: none; }
-}

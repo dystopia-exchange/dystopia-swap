@@ -387,6 +387,6 @@
 
 @media (max-width: 1280px) {
   .headerContainer {
-    border-bottom: 1px solid #86B9D6;
+    outline: 1px solid #86B9D6;
   }
 }
