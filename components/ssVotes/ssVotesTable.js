@@ -891,7 +891,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           min={-100}
                           max={100}
                           marks
-                          step={25}
+                          step={1}
                         />
                       </div>
                     </TableCell>

@@ -159,7 +159,7 @@ export default function ssVotes() {
             </Typography>
 
             <Typography className={`${BigNumber(totalVotes).gt(100) ? classes.errorText : classes.helpText}`}>
-              {formatCurrency(totalVotes / 1e24)}%
+              {formatCurrency(totalVotes)}%
             </Typography>
 
             <Button
@@ -173,7 +173,7 @@ export default function ssVotes() {
                 style={{
                   fontWeight: 700,
                   fontSize: 16,
-                  color: appTheme === 'dark' ? '#7F828B' : '#8F5AE8',
+                  color: appTheme === 'dark' ? '#8F5AE8' : '#8F5AE8',
                   whiteSpace: 'nowrap',
                 }}>
                 {voteLoading ? `Casting Votes` : `Cast Votes`}
