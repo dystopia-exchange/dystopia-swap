@@ -1233,7 +1233,6 @@ class Store {
       } else {
         pairs = this.getStore("pairs");
       }
-      console.log(pairs, "yeahh55");
       const factoryContract = new web3.eth.Contract(
         CONTRACTS.FACTORY_ABI,
         CONTRACTS.FACTORY_ADDRESS
@@ -1283,16 +1282,6 @@ class Store {
                 pairContract.methods.claimable0(account.address),
                 pairContract.methods.claimable1(account.address),
               ]);
-
-            console.log(
-              pair,
-              totalSupply,
-              reserves,
-              balanceOf,
-              claimable0,
-              claimable1,
-              "yeahh5"
-            );
 
             pair.token0 = token0 != null ? token0 : pair.token0;
             pair.token1 = token1 != null ? token1 : pair.token1;
@@ -2052,8 +2041,6 @@ class Store {
       const utcMilllisecondsSinceEpoch = now.getTime();
       const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000 + 1800);
 
-      console.log(utcSecondsSinceEpoch,"hehehe")
-
       let func = "migrate";
       let params = [
          token0.address,
@@ -2515,7 +2502,6 @@ updatePairsCall = async (web3, account) => {
   try {
     const response = await client.query(queryone).toPromise();
     const pairsCall = response;
-    console.log(pairsCall, "yeahh6");
     this.setStore({ pairs: pairsCall.data.pairs });
 
     await this._getPairInfo(web3, account, pairsCall.data.pairs);

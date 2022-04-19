@@ -166,7 +166,6 @@ export default function Setup() {
             };
             setAmount(parseFloat(lpBalance).toFixed(5));
             setPairDetails(pairDetails);
-            console.log(pairDetails, "hehe4");
           } else {
             const pairDetails = {
               isValid: false,
@@ -217,7 +216,6 @@ export default function Setup() {
         if (baseAsset.length > 0 && fromAssetValue == null) {
           setFromAssetValue(baseAsset[1]);
         }
-        console.log(baseAsset[0]?.address, baseAsset[1]?.address, "hehe2");
         //await getPairDetails(baseAsset[0].address,baseAsset[1].address)
         // forceUpdate()
       };
@@ -717,25 +715,20 @@ export default function Setup() {
           </div>
         </div>
       </Form>
-      <div
-        className={[classes[`buttonOverrideContainer--${appTheme}`]].join(" ")}
-      >
-        <Button
-          variant="contained"
-          size="large"
-          color="primary"
-          onClick={migrateLiquidity}
-          disabled={disableButton}
-          className={[
-            classes.buttonOverride,
-            classes[`buttonOverride--${appTheme}`],
-          ].join(" ")}
-        >
-          <span className={classes.actionButtonText}>{buttonText}</span>
-          {loading && (
-            <CircularProgress size={10} className={classes.loadingCircle} />
-          )}
-        </Button>
+      <div style={{display: 'flex', justifyContent: 'center'}}>
+        <div className={[classes[`buttonOverrideContainer--${appTheme}`]].join(' ')}>
+          <Button
+            variant='contained'
+            size='large'
+            color='primary'
+            onClick={migrateLiquidity}
+            disabled={disableButton}
+            className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(' ')}
+          >
+            <span className={classes.actionButtonText}>{buttonText}</span>
+            {loading && <CircularProgress size={10} className={classes.loadingCircle} />}
+          </Button>
+        </div>
       </div>
     </div>
   );

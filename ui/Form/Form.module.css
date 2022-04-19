@@ -1,6 +1,7 @@
 .form {
   position: relative;
-  width: 463px;
+  width: 100%;
+  max-width: 460px;
   height: auto;
   margin-left: 1px;
   background: var(--background-dark);
@@ -51,4 +52,9 @@
 .form--light {
   background: var(--background-light);
   border-color: var(--border-light);
+}
+@media screen and (max-width: 400px) {
+  .form {
+    max-width: 300px;
+  }
 }

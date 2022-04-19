@@ -30,7 +30,6 @@ import BigNumber from 'bignumber.js';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 function Setup() {
-   console.log(useParams(),"hehe")
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
 
@@ -351,11 +350,11 @@ function Setup() {
             </div>
             <div className={[classes.routeLinesRight, classes[`routeLinesRight--${appTheme}`]].join(' ')}>
             </div>
-
-            {/*<div className={classes.stabIndicatorContainer}>
+            {console.log(quote.output.routes[0].stable,"sexy")}
+            <div className={classes.stabIndicatorContainer}>
               <Typography
                 className={classes.stabIndicator}>{quote.output.routes[0].stable ? 'Stable' : 'Volatile'}</Typography>
-            </div>*/}
+            </div>
           </div>
           {quote && quote.output && quote.output.routeAsset &&
             <>
