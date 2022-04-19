@@ -1044,6 +1044,7 @@ export default function EnhancedTable({pairs}) {
   const [sortDirection, setSortDirection] = useState('asc');
 
   const handleRequestSort = (event, property) => {
+    console.log('--2', event, property)
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -1890,7 +1891,7 @@ export default function EnhancedTable({pairs}) {
       }
 
       {windowWidth <= 660 &&
-        <>
+        <div style={{overflow: 'auto'}}>
           {stableSort(filteredPairs, getComparator(order, orderBy))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
@@ -2274,7 +2275,7 @@ export default function EnhancedTable({pairs}) {
               );
             })
           }
-        </>
+        </div>
       }
     </>
   );

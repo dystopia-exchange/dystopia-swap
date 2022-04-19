@@ -691,3 +691,16 @@
 .vestPeriodLabel--dark.vestPeriodLabel--checked {
   background: #4CADE6;
 }
+
+@media (max-width:660px) {
+  .container,
+  .container3 {
+    position: relative;
+    margin-top: 60px;
+  }
+
+  .titleSection {
+    margin-left: 16px;
+    top: -72px;
+  }
+}
