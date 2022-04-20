@@ -125,3 +125,17 @@
   width: 100%;
 }
 
+.notiyText {
+  font-family: 'PPNeueMachina UltraBold', serif !important;
+  font-weight: 700 !important;
+  font-size: 72px !important;
+  color: #ffffff !important;
+  text-align: center !important;
+}
+
+@media (max-width: 430px) {
+  .notiyText {
+    font-size: 45px !important;
+  }
+}
+
