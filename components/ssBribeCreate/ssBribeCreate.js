@@ -148,6 +148,7 @@ export default function ssBribeCreate() {
   };
 
   const onGagugeSelect = (event) => {
+    console.log('--event', event)
     setGauge(event.target.value);
   };
 

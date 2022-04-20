@@ -2,8 +2,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 100vw;
-  min-height: 100vh;
+  min-width: auto;
+  min-height: auto;
+  padding: 50px 0;
 }
 
 .dialogWrapper {
@@ -72,6 +73,11 @@
   color: #5688A5 !important;
 }
 
+.paragraph1 {
+  font-weight: 400 !important;
+  font-size: 18 !important;
+}
+
 .paragraph--dark {
   color: #7C838A !important;
 }
@@ -127,4 +133,57 @@
 
 .buttonTextSecondary--dark {
   color: #7C838A !important;
+}
+
+@media (max-width: 720px) {
+  .dialogContainer {
+    min-width: auto;
+    min-height: auto;
+    padding: 50px 0;
+  }
+
+  .warningContainer {
+    width: 90%;
+    padding: 10px 20px 20px;
+  }
+
+  .warningIcon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .title1,
+  .title2 {
+    font-size: 18px !important;
+  }
+
+  .paragraph {
+    font-size: 12px !important;
+  }
+
+  .paragraph1 {
+    font-size: 14px !important;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  .primaryButton {
+    border-right: 1px solid #8F5AE8;
+  }
+
+  .primaryButton--dark {
+    border-right: 1px solid #7F828B;
+  }
+
+  .secondaryButton {
+    border-right: 1px solid #5688A5;
+  }
+
+  .secondaryButton--dark {
+    border-right: 1px solid #7C838A;
+  }
 }

@@ -281,3 +281,52 @@
     margin-top: 30px !important;
   }
 }
+
+@media (max-width: 430px) {
+  .mainTitle {
+    font-size: 32px !important;
+  }
+
+  .bigLogo,
+  .bigLogoSec {
+    width: 224px;
+  }
+
+  .bigLogo {
+    margin-top: 20px;
+  }
+
+  .homeContentMain,
+  .homeContentMainSec {
+    padding: 10px 0 80px;
+  }
+
+  .homeContentMainSec {
+    min-width: 85%;
+  }
+
+  .mainDescription {
+    font-size: 16px !important;
+  }
+
+  .feeTitle {
+    margin-top: 34px !important;
+  }
+
+  .buttonEnter {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .buttonInfo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 144px !important;
+  }
+
+  .secDescription {
+    margin-top: 30px;
+  }
+}

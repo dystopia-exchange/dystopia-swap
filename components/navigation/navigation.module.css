@@ -490,3 +490,11 @@ a.linkz {
     height: 39px;
   }
 }
+
+@media (max-width: 430px) {
+  .navigationContainer {
+    width: 100%;
+    padding: 0 10px;
+    overflow-x: auto;
+  }
+}

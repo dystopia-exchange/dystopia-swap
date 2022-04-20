@@ -51,9 +51,21 @@ function Home({changeTheme}) {
               src={appTheme === "dark" ? "/images/big-logo--dark.svg" : "/images/big-logo.svg"}
               className={classes.bigLogo}/>
 
-            <Typography className={classes.feeTitle}>
-              0.001% FEE • TOKENIZED LOCKS AS NFT’s • POLYGON (MATIC)
-            </Typography>
+            {windowWidth > 430 &&
+              <Typography className={classes.feeTitle}>
+                0.001% FEE • TOKENIZED LOCKS AS NFT’s • POLYGON (MATIC)
+              </Typography>
+            }
+
+            {windowWidth <= 430 &&
+              <Typography className={classes.feeTitle}>
+                <div>0.001% FEE</div>
+                <div>•</div>
+                <div>TOKENIZED LOCKS AS NFT’s</div>
+                <div>•</div>
+                <div>POLYGON (MATIC)</div>
+              </Typography>
+            }
 
             <div
               className={[classes.buttonEnter, classes[`buttonEnter--${appTheme}`]].join(' ')}
