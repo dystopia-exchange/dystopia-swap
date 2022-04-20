@@ -16,7 +16,7 @@ import GaugesTable from './ssVotesTable.js';
 import stores from '../../stores';
 import { ACTIONS } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
-import TokenSelect from '../select-token/select-token'
+import TokenSelect from '../select-token/select-token';
 
 export default function ssVotes() {
   const router = useRouter();
@@ -197,7 +197,7 @@ export default function ssVotes() {
           </div>
         </div>
 
-        <div className={['g-flex', 'g-flex--align-center'].join(' ')}>
+        <div className={[classes.controls, 'g-flex', 'g-flex--align-center'].join(' ')}>
           {(windowWidth > 1360 || showSearch) &&
             <TextField
               className={classes.searchInput}
@@ -226,7 +226,7 @@ export default function ssVotes() {
               }}
               inputProps={{
                 style: {
-                  padding: 10,
+                  padding: 12,
                   borderRadius: 0,
                   border: 'none',
                   fontSize: 18,
@@ -238,7 +238,9 @@ export default function ssVotes() {
             />
           }
 
-          {TokenSelect({value: token, options: vestNFTs, symbol: veToken?.symbol, handleChange})}
+          <div className={classes.tokenSelect}>
+            {TokenSelect({value: token, options: vestNFTs, symbol: veToken?.symbol, handleChange})}
+          </div>
 
           {windowWidth <= 1360 &&
             <IconButton
@@ -251,23 +253,28 @@ export default function ssVotes() {
         </div>
       </div>
 
-      <GaugesTable gauges={gauges.filter((pair) => {
-        if (!search || search === '') {
-          return true;
-        }
+      <GaugesTable
+        gauges={gauges.filter((pair) => {
+          if (!search || search === '') {
+            return true;
+          }
 
-        const searchLower = search.toLowerCase();
+          const searchLower = search.toLowerCase();
 
-        if (pair.symbol.toLowerCase().includes(searchLower) || pair.address.toLowerCase().includes(searchLower) ||
-          pair.token0.symbol.toLowerCase().includes(searchLower) || pair.token0.address.toLowerCase().includes(searchLower) || pair.token0.name.toLowerCase().includes(searchLower) ||
-          pair.token1.symbol.toLowerCase().includes(searchLower) || pair.token1.address.toLowerCase().includes(searchLower) || pair.token1.name.toLowerCase().includes(searchLower)) {
-          return true;
-        }
+          if (pair.symbol.toLowerCase().includes(searchLower) || pair.address.toLowerCase().includes(searchLower) ||
+            pair.token0.symbol.toLowerCase().includes(searchLower) || pair.token0.address.toLowerCase().includes(searchLower) || pair.token0.name.toLowerCase().includes(searchLower) ||
+            pair.token1.symbol.toLowerCase().includes(searchLower) || pair.token1.address.toLowerCase().includes(searchLower) || pair.token1.name.toLowerCase().includes(searchLower)) {
+            return true;
+          }
 
-        return false;
+          return false;
 
-      })} setParentSliderValues={setVotes} defaultVotes={votes} veToken={veToken} token={token}
-                   showSearch={showSearch}/>
+        })}
+        setParentSliderValues={setVotes}
+        defaultVotes={votes}
+        veToken={veToken}
+        token={token}
+        showSearch={showSearch}/>
     </>
   );
 }

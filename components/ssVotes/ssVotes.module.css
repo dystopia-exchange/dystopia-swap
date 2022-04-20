@@ -280,3 +280,48 @@
     margin: 0;
   }
 }
+
+.sortSelect {
+  position: absolute;
+  top: 60px;
+}
+
+@media (max-width: 660px) {
+  .infoSection {
+    display: none;
+  }
+
+  .controls > .tokenSelect {
+    position: absolute !important;
+    top: 0;
+    left: auto;
+    right: 0;
+  }
+
+  .addButton {
+    top: 0;
+  }
+
+  .controls {
+    position: absolute;
+    top: 26px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .searchInput {
+    position: absolute !important;
+    top: 29px;
+    left: 0;
+    right: auto;
+    z-index: 9;
+    width: 440px !important;
+  }
+
+  .searchButton {
+    position: absolute;
+    top: 60px;
+  }
+}

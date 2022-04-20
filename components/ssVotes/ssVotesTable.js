@@ -13,13 +13,17 @@ import {
   Typography,
   Slider,
   Skeleton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails, Button,
 } from '@mui/material';
 import BigNumber from 'bignumber.js';
 
 import { formatCurrency } from '../../utils';
-import { ArrowDropDown } from '@mui/icons-material';
+import { ArrowDropDown, ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import TablePaginationActions from '../table-pagination/table-pagination';
+import SortSelect from '../select-sort/select-sort';
 
 const CustomSlider = styled(Slider)(({theme, appTheme}) => {
   return ({
@@ -162,6 +166,7 @@ const headCells = [
     disablePadding: false,
     label: 'Asset',
     isSticky: true,
+    isHideInDetails: true,
   },
   {
     id: 'balance',
@@ -180,6 +185,7 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Total Votes',
+    isHideInDetails: true,
   },
   {
     id: 'apy',
@@ -199,6 +205,7 @@ const headCells = [
     disablePadding: false,
     label: 'My Vote %',
     width: 200,
+    isHideInDetails: true,
   },
 ];
 
@@ -311,12 +318,6 @@ function EnhancedTableHead(props) {
                 </StyledTableCell>
             }
           </>
-          /*<TableCell className={classes.overrideTableHead} key={headCell.id} align={headCell.numeric ? 'right' : 'left'} padding={'normal'} sortDirection={orderBy === headCell.id ? order : false}>
-            <TableSortLabel active={orderBy === headCell.id} direction={orderBy === headCell.id ? order : 'asc'} onClick={createSortHandler(headCell.id)}>
-              <Typography variant="h5" className={ classes.headerText }>{headCell.label}</Typography>
-              {orderBy === headCell.id ? <span className={classes.visuallyHidden}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</span> : null}
-            </TableSortLabel>
-          </TableCell>*/
         ))}
       </TableRow>
     </TableHead>
@@ -506,6 +507,14 @@ const useStyles = makeStyles((theme) => {
     tableBody: {
       background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
     },
+    sortSelect: {
+      position: 'absolute',
+      top: 125,
+    },
+    accordionSummaryContent: {
+      margin: 0,
+      padding: 0,
+    },
   });
 });
 
@@ -518,6 +527,23 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
   const [page, setPage] = useState(0);
   const [tableHeight, setTableHeight] = useState(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const options = [
+    {id: 'balance--desc', label: 'My Stake: high to low'},
+    {id: 'balance--asc', label: 'My Stake: low to high'},
+    {id: 'liquidity--desc', label: 'Total Liquidity: high to low'},
+    {id: 'liquidity--asc', label: 'Total Liquidity: low to high'},
+    {id: 'totalVotes--desc', label: 'Total Votes: high to low'},
+    {id: 'totalVotes--asc', label: 'Total Votes: low to high'},
+    {id: 'apy--desc', label: 'Bribes: high to low'},
+    {id: 'apy--asc', label: 'Bribes: low to high'},
+    {id: 'myVotes--desc', label: 'My Votes: high to low'},
+    {id: 'myVotes--asc', label: 'My Votes: low to high'},
+  ];
+
+  const [sortValueId, setSortValueId] = useState(options[0].id);
+  const [sortDirection, setSortDirection] = useState('asc');
+  const [expanded, setExpanded] = useState('');
 
   const {appTheme} = useAppThemeContext();
 
@@ -536,6 +562,16 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
     });
 
     setParentSliderValues(newSliderValues);
+  };
+
+  const handleChangeSort = ({target: {value}}) => {
+    const property = value.substring(0, value.indexOf('--'));
+    const event = value.substring(value.indexOf('--') + 2);
+
+    setSortValueId(value);
+    setSortDirection(event);
+
+    handleRequestSort(event, property);
   };
 
   const handleRequestSort = (event, property) => {
@@ -655,6 +691,10 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
       </div>
     );
   }
+
+  const handleChangeAccordion = (panel) => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
+  };
 
   window.addEventListener('resize', () => {
     setTableHeight(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
@@ -932,8 +972,401 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
         </div>
       }
 
+
       {windowWidth <= 660 &&
-        <></>
+        <div className={classes.sortSelect}>
+          {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
+        </div>
+      }
+
+      {windowWidth <= 660 &&
+        <div style={{
+          overflow: 'auto',
+          marginTop: 100,
+        }}>
+          {stableSort(gauges, getComparator(order, orderBy))
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((row, index) => {
+              if (!row) {
+                return null;
+              }
+              const labelId = `accordion-${index}`;
+
+              let sliderValue = sliderValues.find((el) => el.address === row?.address)?.value;
+              if (sliderValue) {
+                sliderValue = BigNumber(sliderValue).toNumber(0);
+              } else {
+                sliderValue = 0;
+              }
+
+              return (
+                <Accordion
+                  key={labelId}
+                  style={{
+                    margin: 0,
+                    marginBottom: 20,
+                    background: appTheme === 'dark' ? '#24292D' : '#DBE6EC',
+                    border: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                  }}
+                  disableGutters={true}
+                  expanded={expanded === labelId}
+                  onChange={handleChangeAccordion(labelId)}>
+                  <AccordionSummary
+                    style={{
+                      padding: 0,
+                    }}
+                    classes={{
+                      content: classes.accordionSummaryContent,
+                    }}
+                    expandIcon={null}
+                    aria-controls="panel1a-content">
+                    <div className={['g-flex-column', 'g-flex-column__item'].join(' ')}>
+                      <div
+                        style={{
+                          padding: '15px 20px',
+                        }}
+                        className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                        <div className={classes.doubleImages}>
+                          <img
+                            className={classes.img1Logo}
+                            src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
+                            width="37"
+                            height="37"
+                            alt=""
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/tokens/unknown-logo.png';
+                            }}
+                          />
+                          <img
+                            className={classes.img2Logo}
+                            src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
+                            width="37"
+                            height="37"
+                            alt=""
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/tokens/unknown-logo.png';
+                            }}
+                          />
+                        </div>
+
+                        <div>
+                          <Typography
+                            className={classes.textSpaced}
+                            style={{
+                              fontWeight: 500,
+                              fontSize: 14,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                            }}
+                            noWrap>
+                            {row?.symbol}
+                          </Typography>
+                          <Typography
+                            className={classes.textSpaced}
+                            style={{
+                              fontWeight: 400,
+                              fontSize: 14,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                            }}
+                            noWrap>
+                            {row?.isStable ? 'Stable Pool' : 'Volatile Pool'}
+                          </Typography>
+                        </div>
+                      </div>
+
+                      <div
+                        style={{
+                          borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                          borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                        }}
+                        className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                        <div
+                          style={{
+                            width: '50%',
+                            borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                          }}>
+                          <Typography
+                            style={{
+                              background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
+                              padding: '5px 20px',
+                              fontWeight: 500,
+                              fontSize: 12,
+                              lineHeight: '120%',
+                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                            }}
+                            noWrap>
+                            Action
+                          </Typography>
+
+                          <div
+                            style={{
+                              padding: '11px 20px',
+                            }}>
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              style={{
+                                padding: '7px 14px',
+                                border: `1px solid ${appTheme === 'dark' ? '#C6CDD2' : '#5688A5'}`,
+                                borderColor: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                                borderRadius: 100,
+                                fontWeight: 500,
+                                fontSize: 14,
+                                lineHeight: '120%',
+                                color: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                              }}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                event.preventDefault();
+                                // onView(row);
+                              }}>
+                              Vote
+                            </Button>
+                          </div>
+                        </div>
+
+                        <div
+                          style={{
+                            width: '50%',
+                          }}>
+                          <Typography
+                            style={{
+                              background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
+                              padding: '5px 20px',
+                              fontWeight: 500,
+                              fontSize: 12,
+                              lineHeight: '120%',
+                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                              textAlign: 'right',
+                            }}
+                            noWrap>
+                            Total Votes
+                          </Typography>
+
+                          <div
+                            style={{
+                              padding: '11px 20px',
+                              display: 'flex',
+                              justifyContent: 'flex-end',
+                            }}>
+                            <div
+                              className={classes.inlineEnd}
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-end',
+                              }}>
+                              <Typography
+                                className={classes.textSpaced}
+                                style={{
+                                  fontWeight: 500,
+                                  fontSize: 14,
+                                  lineHeight: '120%',
+                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                  whiteSpace: 'nowrap',
+                                }}>
+                                {formatCurrency(row?.gauge?.weight)}
+                              </Typography>
+
+                              <Typography
+                                className={classes.textSpaced}
+                                style={{
+                                  fontWeight: 500,
+                                  fontSize: 14,
+                                  lineHeight: '120%',
+                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                  whiteSpace: 'nowrap',
+                                }}>
+                                {formatCurrency(row?.gauge?.weight)} %
+                              </Typography>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        style={{
+                          padding: '6px 20px',
+                          background: appTheme === 'dark' ? '#151718' : '#9BC9E4',
+                        }}
+                        className={['g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                        <Typography
+                          style={{
+                            fontWeight: 500,
+                            fontSize: 12,
+                            lineHeight: '120%',
+                            color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                          }}
+                          noWrap>
+                          {expanded !== labelId ? 'Show' : 'Hide'} Details
+                        </Typography>
+
+                        {expanded !== labelId &&
+                          <ExpandMore
+                            style={{
+                              color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                            }}/>
+                        }
+
+                        {expanded === labelId &&
+                          <ExpandLess
+                            style={{
+                              color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                            }}/>
+                        }
+                      </div>
+                    </div>
+                  </AccordionSummary>
+
+                  <AccordionDetails
+                    style={{
+                      padding: 0,
+                    }}>
+                    {headCells.map((headCell) => (
+                      <>
+                        {!headCell.isHideInDetails &&
+                          <div
+                            style={{
+                              height: 56,
+                              borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                            }}
+                            className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                            <Typography
+                              style={{
+                                width: '50%',
+                                height: '100%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                padding: '5px 20px',
+                                fontWeight: 500,
+                                fontSize: 12,
+                                lineHeight: '120%',
+                                color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                                borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              }}
+                              noWrap>
+                              {headCell.label}
+                            </Typography>
+
+                            <div
+                              style={{
+                                width: '50%',
+                                padding: '11px 20px',
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                              }}>
+                              <div
+                                className={classes.inlineEnd}
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'flex-end',
+                                }}>
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    whiteSpace: 'nowrap',
+                                  }}>
+                                  {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.reserve0))}
+                                  {headCell.id === 'liquidity' && formatCurrency(BigNumber(row?.reserve0))}
+                                  {headCell.id === 'apy' && row?.gaugebribes.length ? (
+                                      row?.gaugebribes.map((bribe, idx) => {
+                                        return (
+                                          <>
+                                            {
+                                              formatCurrency(bribe.rewardAmount)
+                                            }
+                                          </>
+                                        );
+                                      })
+                                    )
+                                    : null}
+                                  {headCell.id === 'myVotes' && formatCurrency(BigNumber(sliderValue).div(100).times(token?.lockValue))}
+                                </Typography>
+
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    whiteSpace: 'nowrap',
+                                  }}>
+                                  {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.reserve1))}
+                                  {headCell.id === 'liquidity' && formatCurrency(BigNumber(row?.reserve1))}
+                                  {headCell.id === 'apy' && ''}
+                                  {headCell.id === 'myVotes' && `${formatCurrency(sliderValue)} %`}
+                                </Typography>
+                              </div>
+
+                              <div
+                                className={classes.inlineEnd}
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'flex-end',
+                                  paddingLeft: 10,
+                                }}>
+                                <Typography
+                                  className={`${classes.textSpaced} ${classes.symbol}`}
+                                  style={{
+                                    fontWeight: 400,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                  }}>
+                                  {headCell.id === 'balance' && row.token0.symbol}
+                                  {headCell.id === 'liquidity' && row.token0.symbol}
+                                  {headCell.id === 'apy' && row?.gaugebribes.length ? (
+                                    row?.gaugebribes.map((bribe, idx) => {
+                                      return (
+                                        <>
+                                          {
+                                            bribe.symbol
+                                          }
+                                        </>
+                                      );
+                                    })
+                                  )
+                                  : null}
+                                  {headCell.id === 'myVotes' && row.token0.symbol}
+                                </Typography>
+
+                                <Typography
+                                  className={`${classes.textSpaced} ${classes.symbol}`}
+                                  style={{
+                                    fontWeight: 400,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                  }}>
+                                  {headCell.id === 'balance' && row.token1.symbol}
+                                  {headCell.id === 'liquidity' && row.token1.symbol}
+                                  {headCell.id === 'apy' && ''}
+                                  {headCell.id === 'myVotes' && row.token1.symbol}
+                                </Typography>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                      </>
+                    ))}
+                  </AccordionDetails>
+                </Accordion>
+              );
+            })
+          }
+        </div>
       }
     </>
   );
