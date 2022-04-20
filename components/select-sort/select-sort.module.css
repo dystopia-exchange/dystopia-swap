@@ -75,3 +75,13 @@
   left: -0.5px;
   top: -0.5px;
 }
+
+@media (max-width: 430px) {
+  .sortSelect {
+    min-width: auto !important;
+  }
+
+  .sortSelectInput {
+    width: 95px !important;
+  }
+}

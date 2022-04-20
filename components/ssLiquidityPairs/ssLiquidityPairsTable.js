@@ -489,10 +489,22 @@ const useStyles = makeStyles({
     paddingLeft: 30,
     borderRadius: 100,
     marginLeft: 20,
+    fontSize: '18px !important',
     ["@media (max-width:660px)"]: {
       // eslint-disable-line no-useless-computed-key
       padding: '5px 0',
       paddingLeft: 20,
+    },
+    ["@media (max-width:430px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      fontSize: '12px !important',
+    },
+  },
+  myDepositsText: {
+    ["@media (max-width:430px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      display: 'flex',
+      flexDirection: 'column',
     },
   },
   'myDeposits--light': {
@@ -682,6 +694,12 @@ const useStyles = makeStyles({
     background: '#D2D0F2',
     color: '#8F5AE8',
     transition: 'all ease 300ms',
+    ["@media (max-width:430px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      width: 100,
+      fontSize: 14,
+      padding: '8px 10px',
+    },
   },
   'actionButtonText--light': {
     background: '#D2D0F2',
@@ -700,7 +718,21 @@ const useStyles = makeStyles({
     position: 'absolute',
     top: 60,
   },
-});
+  cellPaddings: {
+    padding: '11px 20px',
+    ["@media (max-width:430px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      padding: 10,
+    },
+  },
+  cellHeadPaddings: {
+    padding: '5px 20px',
+    ["@media (max-width:430px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      padding: '5px 10px',
+    },
+  },
+})
 
 const getLocalToggles = () => {
   let localToggles = {
@@ -827,7 +859,7 @@ const EnhancedTableToolbar = (props) => {
     setSortValueId(value);
     setSortDirection(event);
 
-    props.handleRequestSort(event, property)
+    props.handleRequestSort(event, property);
   };
 
   const {appTheme} = useAppThemeContext();
@@ -895,11 +927,15 @@ const EnhancedTableToolbar = (props) => {
 
         <div
           className={[classes.myDeposits, classes[`myDeposits--${appTheme}`]].join(' ')}>
-          <Typography>
+          <Typography
+            className={classes.myDepositsText}
+            style={{
+              fontSize: 'inherit',
+            }}>
             <span
               style={{
+                fontSize: 'inherit',
                 fontWeight: 600,
-                fontSize: 18,
                 color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
                 paddingRight: 4,
               }}>
@@ -908,8 +944,8 @@ const EnhancedTableToolbar = (props) => {
 
             <span
               style={{
+                fontSize: 'inherit',
                 fontWeight: 600,
-                fontSize: 18,
                 color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
                 whiteSpace: 'nowrap',
               }}>
@@ -1044,7 +1080,7 @@ export default function EnhancedTable({pairs}) {
   const [sortDirection, setSortDirection] = useState('asc');
 
   const handleRequestSort = (event, property) => {
-    console.log('--2', event, property)
+    console.log('--2', event, property);
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -1987,9 +2023,9 @@ export default function EnhancedTable({pairs}) {
                             borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
                           }}>
                           <Typography
+                            className={classes.cellHeadPaddings}
                             style={{
                               background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
-                              padding: '5px 20px',
                               fontWeight: 500,
                               fontSize: 12,
                               lineHeight: '120%',
@@ -2000,10 +2036,7 @@ export default function EnhancedTable({pairs}) {
                             Action
                           </Typography>
 
-                          <div
-                            style={{
-                              padding: '11px 20px',
-                            }}>
+                          <div className={classes.cellPaddings}>
                             <Button
                               variant="outlined"
                               color="primary"
@@ -2033,9 +2066,9 @@ export default function EnhancedTable({pairs}) {
                             width: '50%',
                           }}>
                           <Typography
+                            className={classes.cellHeadPaddings}
                             style={{
                               background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
-                              padding: '5px 20px',
                               fontWeight: 500,
                               fontSize: 12,
                               lineHeight: '120%',
@@ -2048,8 +2081,8 @@ export default function EnhancedTable({pairs}) {
                           </Typography>
 
                           <div
+                            className={classes.cellPaddings}
                             style={{
-                              padding: '11px 20px',
                               display: 'flex',
                               justifyContent: 'flex-end',
                             }}>
@@ -2121,10 +2154,9 @@ export default function EnhancedTable({pairs}) {
 
                       <div
                         style={{
-                          padding: '6px 20px',
                           background: appTheme === 'dark' ? '#151718' : '#9BC9E4',
                         }}
-                        className={['g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                        className={[classes.cellHeadPaddings, 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
                         <Typography
                           style={{
                             fontWeight: 500,
@@ -2167,12 +2199,12 @@ export default function EnhancedTable({pairs}) {
                             }}
                             className={['g-flex', 'g-flex--align-center'].join(' ')}>
                             <Typography
+                              className={classes.cellHeadPaddings}
                               style={{
                                 width: '50%',
                                 height: '100%',
                                 display: 'flex',
                                 alignItems: 'center',
-                                padding: '5px 20px',
                                 fontWeight: 500,
                                 fontSize: 12,
                                 lineHeight: '120%',
@@ -2184,9 +2216,9 @@ export default function EnhancedTable({pairs}) {
                             </Typography>
 
                             <div
+                              className={classes.cellPaddings}
                               style={{
                                 width: '50%',
-                                padding: '11px 20px',
                                 display: 'flex',
                                 justifyContent: 'flex-end',
                               }}>
