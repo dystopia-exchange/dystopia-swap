@@ -300,6 +300,7 @@
 
   .addButton {
     top: 0;
+    z-index: 11;
   }
 
   .controls {

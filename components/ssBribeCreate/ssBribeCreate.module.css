@@ -829,3 +829,15 @@
   justify-content: flex-end;
 }
 
+@media (max-width:660px) {
+  .container {
+    position: relative;
+    margin-top: 60px;
+  }
+
+  .titleSection {
+    margin-left: 16px;
+    top: -72px;
+  }
+}
+

@@ -1124,9 +1124,6 @@ export default function EnhancedTable({pairs}) {
 
   window.addEventListener('resize', () => {
     setWindowWidth(window.innerWidth);
-  });
-
-  window.addEventListener('resize', () => {
     setTableHeight(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
   });
 

@@ -1,5 +1,4 @@
 
-
 .container {
   max-width: 1400px;
   width: calc(100% - 180px);
@@ -17,7 +16,7 @@
 }
 
 .helpText {
-  color: rgba(126,153,176,0.9);
+  color: rgba(126, 153, 176, 0.9);
   margin: 0 15px 0 0 !important;
   padding: 15px 0;
 }
@@ -59,14 +58,14 @@
   margin-top: 15px;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 10px 20px 0 rgba(0,0,0,0.2);
-  border: 1px solid rgba(126,153,176,0.2);
+  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(126, 153, 176, 0.2);
 }
 
 .filterListTitle {
   margin-bottom: 10px;
   padding-bottom: 20px;
-  border-bottom: 1px solid rgba(126,153,176,0.2);
+  border-bottom: 1px solid rgba(126, 153, 176, 0.2);
 }
 
 .filterButton {
@@ -195,5 +194,13 @@
 
   .toolbarContainer {
     margin-top: 68px;
+  }
+}
+
+@media (max-width:660px) {
+  .disclaimerContainer {
+    left: 20px;
+    top: 20px;
+    width: calc(100% - 40px);
   }
 }
