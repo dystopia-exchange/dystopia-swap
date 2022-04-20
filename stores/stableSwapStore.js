@@ -18,6 +18,7 @@ query {
     pairs(first:1000) {
      address
      decimals
+     name
      symbol
      isStable 
      rewardType
@@ -1037,10 +1038,6 @@ class Store {
       let baseAssets = baseAssetsCall.data.tokens;
       const response2 = await axios.get(`https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`)
 
-      console.log(baseAssets, response2.data, "hiii")
-
-
-
       const nativeFTM = {
         address: CONTRACTS.FTM_ADDRESS,
         decimals: CONTRACTS.FTM_DECIMALS,
@@ -1052,16 +1049,12 @@ class Store {
       baseAssets.unshift(nativeFTM);
 
       for (let i = 0; i < response2.data.length; i++) {
-        console.log(response2.data[i], "hiii3")
         for (let j = 0; j < baseAssets.length; j++) {
-          console.log(response2.data[i].address.toLowerCase(), baseAssets[j].address.toLowerCase(), "hiii4")
           if (response2.data[i].address.toLowerCase() == baseAssets[j].address.toLowerCase()) {
-            console.log("true", "hiii4")
             baseAssets[j].logoURI = response2.data[i].logoURI
           }
         }
       }
-      console.log(baseAssets, response2.data, "hiii2")
       let localBaseAssets = this.getLocalAssets();
 
       return [...baseAssets, ...localBaseAssets];
