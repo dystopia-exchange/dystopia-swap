@@ -24,6 +24,7 @@ import {
   ACTIONS,
   ETHERSCAN_URL,
 } from '../../stores/constants';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 export default function SSLiquidityCreate() {
 
@@ -50,6 +51,8 @@ export default function SSLiquidityCreate() {
   const [ advanced, setAdvanced ] = useState(false)
 
   const [ pair, setPair ] = useState(null)
+
+  const {appTheme} = useAppThemeContext();
 
   //might not be correct to d this every time store updates.
   const ssUpdated = async () => {
@@ -340,8 +343,13 @@ export default function SSLiquidityCreate() {
     return (
       <div className={ classes.depositInfoContainer }>
         <Typography className={ classes.depositInfoHeading } >Starting Liquidity Info</Typography>
-        <div className={ classes.createPriceInfos}>
-          <div className={ classes.priceInfo }>
+        <div
+          style={{
+            width: '100%',
+            border: `1px solid ${appTheme === 'dark' ? '#5F7285' : '#86B9D6'}`,
+          }}
+          className={['g-flex'].join(' ')}>
+          <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
             <Typography className={ classes.title } >{ BigNumber(amount1).gt(0) ? formatCurrency(BigNumber(amount0).div(amount1)) : '0.00' }</Typography>
             <Typography className={ classes.text } >{ `${asset0?.symbol} per ${asset1?.symbol}` }</Typography>
           </div>

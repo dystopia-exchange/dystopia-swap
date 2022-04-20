@@ -911,7 +911,12 @@ export default function ssLiquidityManage() {
       return (
         <div className={classes.depositInfoContainer}>
           <Typography className={classes.depositInfoHeading}>Starting Liquidity Info</Typography>
-          <div className={classes.createPriceInfos}>
+          <div
+            style={{
+              width: '100%',
+              border: `1px solid ${appTheme === 'dark' ? '#5F7285' : '#86B9D6'}`,
+            }}
+            className={['g-flex'].join(' ')}>
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
               <Typography className={classes.title}>
                 {BigNumber(amount1).gt(0) ? formatCurrency(BigNumber(amount0).div(amount1)) : '0.00'}
