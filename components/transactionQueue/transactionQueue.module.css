@@ -144,9 +144,11 @@
 .orangeIcon {
   color: #ffc512 !important;
 }
+
 .greenIcon {
   color: #49a766 !important;
 }
+
 .redIcon {
   color: #dc3545 !important;
 }
@@ -218,7 +220,7 @@
   text-align: center !important;
   line-height: 1.5rem !important;
   margin-bottom: 40px !important;
-  color: rgba(126,153,176,0.8) !important;
+  color: rgba(126, 153, 176, 0.8) !important;
 }
 
 .viewDetailsText {
@@ -241,7 +243,7 @@
   margin-left: 3px;
 }
 
-@media (max-width:660px) {
+@media (max-width: 660px) {
   .paperBody--dark,
   .paperBody--light {
     top: 0 !important;
@@ -250,5 +252,21 @@
 
   .transactionsContainer {
     padding-top: 40px;
+  }
+}
+
+@media (max-width: 430px) {
+  .dialogTitle {
+    padding: 20px !important;
+    font-size: 18px !important;
+  }
+
+  .dialogContent {
+    padding: 0 20px 20px !important;
+  }
+
+  .transaction,
+  .transactionTopBg {
+    width: 100%;
   }
 }

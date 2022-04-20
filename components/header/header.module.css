@@ -403,4 +403,8 @@
   .userBlock {
     margin-right: 20px;
   }
+
+  .notificationsButton {
+    margin-left: 0 !important;
+  }
 }
