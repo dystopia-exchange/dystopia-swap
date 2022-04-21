@@ -85,7 +85,13 @@ export default function ssLiquidityManage() {
   const [slippage, setSlippage] = useState('2');
   const [slippageError, setSlippageError] = useState(false);
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
   const {appTheme} = useAppThemeContext();
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
 
   const ssUpdated = async () => {
     console.log(router.query.address);
@@ -844,7 +850,11 @@ export default function ssLiquidityManage() {
     return (
       <div className={[classes.textField, classes[`textField--${type}-${appTheme}`]].join(' ')}>
         <Typography className={classes.inputTitleText} noWrap>
-          {type === 'amount0' ? '1st token' : '2nd token'}
+          {
+            type === 'amount0'
+              ? `1st ${windowWidth > 430 ? 'token' : ''}`
+              : type !== 'withdraw' ? (`2nd ${windowWidth > 430 ? 'token' : ''}`) : 'Liq. Pair'
+          }
         </Typography>
 
         {type !== 'withdraw' &&
@@ -1219,14 +1229,11 @@ export default function ssLiquidityManage() {
           {
             activeTab === 'deposit' &&
             <>
-              {renderMassiveInput('amount0', amount0, amount0Error, amount0Changed, asset0, null, assetOptions, onAssetSelect, amount0Focused, amount0Ref)}
-              {/*<div className={ classes.swapIconContainer }>
-                  <div className={ classes.swapIconSubContainer }>
-                    <Add className={ classes.swapIcon } />
-                  </div>
-                </div>*/}
-              <div className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}></div>
-              {renderMassiveInput('amount1', amount1, amount1Error, amount1Changed, asset1, null, assetOptions, onAssetSelect, amount1Focused, amount1Ref)}
+              <div className={classes.amountsContainer}>
+                {renderMassiveInput('amount0', amount0, amount0Error, amount0Changed, asset0, null, assetOptions, onAssetSelect, amount0Focused, amount0Ref)}
+                <div className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}></div>
+                {renderMassiveInput('amount1', amount1, amount1Error, amount1Changed, asset1, null, assetOptions, onAssetSelect, amount1Focused, amount1Ref)}
+              </div>
               {renderMediumInputToggle('stable', stable)}
               {renderTokenSelect()}
               {renderDepositInformation()}
@@ -1236,8 +1243,7 @@ export default function ssLiquidityManage() {
             activeTab === 'withdraw' &&
             <>
               {renderMassiveInput('withdraw', withdrawAmount, withdrawAmountError, withdrawAmountChanged, withdrawAsset, null, withdrawAassetOptions, onAssetSelect, null, null)}
-              <div
-                className={[classes.swapIconContainerWithdraw, classes[`swapIconContainerWithdraw--${appTheme}`]].join(' ')}></div>
+              <div className={[classes.swapIconContainerWithdraw, classes[`swapIconContainerWithdraw--${appTheme}`]].join(' ')}></div>
               <div className={classes.receiveAssets}>
                 {renderMediumInput('withdrawAmount0', withdrawAmount0, pair?.token0?.logoURI, pair?.token0?.symbol)}
                 {renderMediumInput('withdrawAmount1', withdrawAmount1, pair?.token1?.logoURI, pair?.token1?.symbol)}
