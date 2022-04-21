@@ -17,14 +17,8 @@ export default function VestingInfo({currentNFT, futureNFT, veToken, govToken, s
               marginTop: 20,
               border: appTheme === 'dark' ? '1px solid #5F7285' : '1px solid #86B9D6',
             }}
-            className={['g-flex'].join(' ')}>
-            <div
-              style={{
-                width: '50%',
-                padding: '20px 15px',
-                borderRight: appTheme === 'dark' ? '1px solid #5F7285' : '1px solid #86B9D6',
-              }}
-              className={['g-flex-column'].join(' ')}>
+            className={classes.vestInfo}>
+            <div className={[classes.vestInfoText, classes[`vestInfoTextTop--${appTheme}`], 'g-flex-column'].join(' ')}>
               <Typography className={[classes.amount, classes[`amount--${appTheme}`]].join(' ')}>>
                 {formatCurrency(currentNFT?.lockValue)} <span style={{fontSize: 14}}>{veToken?.symbol}</span>
               </Typography>
@@ -40,12 +34,7 @@ export default function VestingInfo({currentNFT, futureNFT, veToken, govToken, s
               </Typography>
             </div>
 
-            <div
-              style={{
-                width: '50%',
-                padding: '20px 15px',
-              }}
-              className={['g-flex-column'].join(' ')}>
+            <div className={[classes.vestInfoText, classes.vestInfoTextSec, 'g-flex-column'].join(' ')}>
               <Typography
                 style={{
                   fontWeight: 400,
@@ -78,14 +67,9 @@ export default function VestingInfo({currentNFT, futureNFT, veToken, govToken, s
               marginTop: 20,
               border: appTheme === 'dark' ? '1px solid #5F7285' : '1px solid #86B9D6',
             }}
-            className={['g-flex'].join(' ')}>
+            className={classes.vestInfo}>
             <div
-              style={{
-                width: '50%',
-                padding: '20px 15px',
-                borderRight: appTheme === 'dark' ? '1px solid #5F7285' : '1px solid #86B9D6',
-              }}
-              className={['g-flex-column'].join(' ')}>
+              className={[classes.vestInfoText, classes[`vestInfoTextTop--${appTheme}`], 'g-flex-column'].join(' ')}>
               <Typography className={[classes.amount, classes[`amount--${appTheme}`]].join(' ')}>
                 {formatCurrency(futureNFT?.lockValue)} <span style={{fontSize: 14}}>{veToken?.symbol}</span>
               </Typography>
@@ -101,12 +85,7 @@ export default function VestingInfo({currentNFT, futureNFT, veToken, govToken, s
               </Typography>
             </div>
 
-            <div
-              style={{
-                width: '50%',
-                padding: '20px 15px',
-              }}
-              className={['g-flex-column'].join(' ')}>
+            <div className={[classes.vestInfoText, classes.vestInfoTextSec, 'g-flex-column'].join(' ')}>
               <Typography
                 style={{
                   fontWeight: 400,
