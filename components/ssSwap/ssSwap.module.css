@@ -1127,6 +1127,10 @@
     width: 100% !important;
   }
 
+  .dialogTitle {
+    padding: 20px 20px 0;
+  }
+
   .displayDualIconContainerSmall,
   .assetOptionIcon {
     width: 40px;

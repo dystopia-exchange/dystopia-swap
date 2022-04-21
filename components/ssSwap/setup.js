@@ -866,14 +866,16 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
             border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
             borderRadius: 0,
           }}>
-          <DialogTitle style={{
-            padding: 30,
-            paddingBottom: 0,
-            fontWeight: 500,
-            fontSize: 18,
-            lineHeight: '140%',
-            color: '#0A2C40',
-          }}>
+          <DialogTitle
+            className={classes.dialogTitle}
+            style={{
+              padding: 30,
+              paddingBottom: 0,
+              fontWeight: 500,
+              fontSize: 18,
+              lineHeight: '140%',
+              color: '#0A2C40',
+            }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',

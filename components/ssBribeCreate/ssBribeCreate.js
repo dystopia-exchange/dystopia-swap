@@ -148,7 +148,7 @@ export default function ssBribeCreate() {
   };
 
   const onGagugeSelect = (event) => {
-    console.log('--event', event)
+    console.log('--event', event);
     setGauge(event.target.value);
   };
 
@@ -187,7 +187,8 @@ export default function ssBribeCreate() {
 
         <div className={`${classes.massiveInputContainer} ${(amountError || assetError) && classes.error}`}>
           <div className={classes.massiveInputAssetSelect}>
-            <AssetSelect type={type} value={assetValue} assetOptions={assetOptions} onSelect={onAssetSelect} manageLocal={true}/>
+            <AssetSelect type={type} value={assetValue} assetOptions={assetOptions} onSelect={onAssetSelect}
+                         manageLocal={true}/>
           </div>
 
           <InputBase
@@ -398,6 +399,7 @@ function AssetSelect({type, value, assetOptions, onSelect, manageLocalAssets}) {
         <div className={classes.assetSelectIconName}>
           <Typography
             variant="h5"
+            className={classes.assetSymbolName}
             style={{
               fontWeight: 500,
               fontSize: 18,
@@ -409,6 +411,7 @@ function AssetSelect({type, value, assetOptions, onSelect, manageLocalAssets}) {
 
           <Typography
             variant="subtitle1"
+            className={classes.assetSymbolName2}
             style={{
               fontWeight: 400,
               fontSize: 14,
@@ -598,21 +601,25 @@ function AssetSelect({type, value, assetOptions, onSelect, manageLocalAssets}) {
         aria-labelledby="simple-dialog-title"
         open={open}
         style={{borderRadius: 0}}>
-        <div style={{
-          width: 460,
-          height: 710,
-          background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-          border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
-          borderRadius: 0,
-        }}>
-          <DialogTitle style={{
-            padding: 30,
-            paddingBottom: 0,
-            fontWeight: 500,
-            fontSize: 18,
-            lineHeight: '140%',
-            color: '#0A2C40',
+        <div
+          className={classes.dialogContainer}
+          style={{
+            width: 460,
+            height: 710,
+            background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+            border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
+            borderRadius: 0,
           }}>
+          <DialogTitle
+            className={classes.dialogTitle}
+            style={{
+              padding: 30,
+              paddingBottom: 0,
+              fontWeight: 500,
+              fontSize: 18,
+              lineHeight: '140%',
+              color: '#0A2C40',
+            }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -641,9 +648,7 @@ function AssetSelect({type, value, assetOptions, onSelect, manageLocalAssets}) {
             </div>
           </DialogTitle>
 
-          <DialogContent style={{
-            padding: '20px 30px 30px',
-          }}>
+          <DialogContent className={classes.dialogContent}>
             {!manageLocal && renderOptions(manageLocalAssets)}
             {manageLocalAssets && manageLocal && renderManageLocal()}
           </DialogContent>

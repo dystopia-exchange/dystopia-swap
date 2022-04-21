@@ -522,6 +522,20 @@ const useStyles = makeStyles((theme) => {
       background: 'rgba(0, 0, 0, 0.1) !important',
       backdropFilter: 'blur(10px) !important',
     },
+    cellPaddings: {
+      padding: '11px 20px',
+      ["@media (max-width:430px)"]: {
+        // eslint-disable-line no-useless-computed-key
+        padding: 10,
+      },
+    },
+    cellHeadPaddings: {
+      padding: '5px 20px',
+      ["@media (max-width:430px)"]: {
+        // eslint-disable-line no-useless-computed-key
+        padding: '5px 10px',
+      },
+    },
   });
 });
 
@@ -1023,6 +1037,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                     fullWidth={false}
                     maxWidth="false"
                     fullScreen={false}
+                    BackdropProps={{style: {backgroundColor: 'transparent'}}}
                     classes={{
                       paper: classes.dialogPaper,
                       scrollPaper: classes.dialogBody,
@@ -1121,11 +1136,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                       expandIcon={null}
                       aria-controls="panel1a-content">
                       <div className={['g-flex-column', 'g-flex-column__item'].join(' ')}>
-                        <div
-                          style={{
-                            padding: '15px 20px',
-                          }}
-                          className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                        <div className={[classes.cellHeadPaddings, 'g-flex', 'g-flex--align-center'].join(' ')}>
                           <div className={classes.doubleImages}>
                             <img
                               className={classes.img1Logo}
@@ -1189,9 +1200,9 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
                             }}>
                             <Typography
+                              className={classes.cellHeadPaddings}
                               style={{
                                 background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
-                                padding: '5px 20px',
                                 fontWeight: 500,
                                 fontSize: 12,
                                 lineHeight: '120%',
@@ -1202,10 +1213,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               Action
                             </Typography>
 
-                            <div
-                              style={{
-                                padding: '11px 20px',
-                              }}>
+                            <div className={classes.cellPaddings}>
                               <Button
                                 variant="outlined"
                                 color="primary"
@@ -1235,9 +1243,9 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               width: '50%',
                             }}>
                             <Typography
+                              className={classes.cellHeadPaddings}
                               style={{
                                 background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
-                                padding: '5px 20px',
                                 fontWeight: 500,
                                 fontSize: 12,
                                 lineHeight: '120%',
@@ -1250,8 +1258,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                             </Typography>
 
                             <div
+                              className={classes.cellPaddings}
                               style={{
-                                padding: '11px 20px',
                                 display: 'flex',
                                 justifyContent: 'flex-end',
                               }}>
@@ -1338,12 +1346,12 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               }}
                               className={['g-flex', 'g-flex--align-center'].join(' ')}>
                               <Typography
+                                className={classes.cellHeadPaddings}
                                 style={{
                                   width: '50%',
                                   height: '100%',
                                   display: 'flex',
                                   alignItems: 'center',
-                                  padding: '5px 20px',
                                   fontWeight: 500,
                                   fontSize: 12,
                                   lineHeight: '120%',
@@ -1355,9 +1363,9 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               </Typography>
 
                               <div
+                                className={classes.cellPaddings}
                                 style={{
                                   width: '50%',
-                                  padding: '11px 20px',
                                   display: 'flex',
                                   justifyContent: 'flex-end',
                                 }}>

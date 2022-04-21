@@ -1243,7 +1243,8 @@ export default function ssLiquidityManage() {
             activeTab === 'withdraw' &&
             <>
               {renderMassiveInput('withdraw', withdrawAmount, withdrawAmountError, withdrawAmountChanged, withdrawAsset, null, withdrawAassetOptions, onAssetSelect, null, null)}
-              <div className={[classes.swapIconContainerWithdraw, classes[`swapIconContainerWithdraw--${appTheme}`]].join(' ')}></div>
+              <div
+                className={[classes.swapIconContainerWithdraw, classes[`swapIconContainerWithdraw--${appTheme}`]].join(' ')}></div>
               <div className={classes.receiveAssets}>
                 {renderMediumInput('withdrawAmount0', withdrawAmount0, pair?.token0?.logoURI, pair?.token0?.symbol)}
                 {renderMediumInput('withdrawAmount1', withdrawAmount1, pair?.token1?.logoURI, pair?.token1?.symbol)}
@@ -1846,21 +1847,25 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
         aria-labelledby="simple-dialog-title"
         open={open}
         style={{borderRadius: 0}}>
-        <div style={{
-          width: 460,
-          height: 710,
-          background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-          border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
-          borderRadius: 0,
-        }}>
-          <DialogTitle style={{
-            padding: 30,
-            paddingBottom: 0,
-            fontWeight: 500,
-            fontSize: 18,
-            lineHeight: '140%',
-            color: '#0A2C40',
+        <div
+          className={classes.dialogContainer}
+          style={{
+            width: 460,
+            height: 710,
+            background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+            border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
+            borderRadius: 0,
           }}>
+          <DialogTitle
+            className={classes.dialogTitle}
+            style={{
+              padding: 30,
+              paddingBottom: 0,
+              fontWeight: 500,
+              fontSize: 18,
+              lineHeight: '140%',
+              color: '#0A2C40',
+            }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -1889,9 +1894,7 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
             </div>
           </DialogTitle>
 
-          <DialogContent style={{
-            padding: '20px 30px 30px',
-          }}>
+          <DialogContent className={classes.dialogContent}>
             {!manageLocal && renderOptions()}
             {manageLocal && renderManageLocal()}
           </DialogContent>
