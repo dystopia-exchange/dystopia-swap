@@ -1336,7 +1336,7 @@ class Store {
                 pair.gauge.bribeAddress
               );
               const [rewardsListLength] = await multicall.aggregate([
-                bribeContract.methods.rewardsListLength(),
+                bribeContract.methods.rewardTokensLength(),
               ]);
 
               if (rewardsListLength > 0) {
@@ -1345,7 +1345,7 @@ class Store {
                 ];
                 for (let i = 0; i < rewardsListLength; i++) {
                   let [bribeTokenAddress] = await multicall.aggregate([
-                    bribeContract.methods.rewards(i),
+                    bribeContract.methods.rewardTokens(i),
                   ]);
 
                   bribeTokens.push({
@@ -4668,7 +4668,7 @@ createVest = async (payload) => {
     this._callContractWait(
       web3,
       veTokenContract,
-      "create_lock",
+      "createLock",
       [sendAmount, unlockTime + ""],
       account,
       gasPrice,
@@ -4816,7 +4816,7 @@ increaseVestAmount = async (payload) => {
     this._callContractWait(
       web3,
       veTokenContract,
-      "increase_amount",
+      "increaseAmount",
       [tokenID, sendAmount],
       account,
       gasPrice,
@@ -4884,7 +4884,7 @@ increaseVestDuration = async (payload) => {
     this._callContractWait(
       web3,
       veTokenContract,
-      "increase_unlock_time",
+      "increaseUnlockTime",
       [tokenID, unlockTime + ""],
       account,
       gasPrice,
@@ -5307,7 +5307,7 @@ getVestBalances = async (payload) => {
           pair.gauge.bribeAddress
         );
         const [rewardsListLength] = await multicall.aggregate([
-          bribeContract.methods.rewardsListLength(),
+          bribeContract.methods.rewardTokensLength(),
         ]);
 
         if (rewardsListLength > 0) {
@@ -5316,7 +5316,7 @@ getVestBalances = async (payload) => {
           ];
           for (let i = 0; i < rewardsListLength; i++) {
             let [bribeTokenAddress] = await multicall.aggregate([
-              bribeContract.methods.rewards(i),
+              bribeContract.methods.rewardTokens(i),
             ]);
 
             bribeTokens.push({
@@ -5413,7 +5413,7 @@ getRewardBalances = async (payload) => {
             pair.gauge.bribeAddress
           );
           const [rewardsListLength] = await multicall.aggregate([
-            bribeContract.methods.rewardsListLength(),
+            bribeContract.methods.rewardTokensLength(),
           ]);
 
           const bribeTokens = [
@@ -5421,7 +5421,7 @@ getRewardBalances = async (payload) => {
           ];
           for (let i = 0; i < rewardsListLength; i++) {
             let [bribeTokenAddress] = await multicall.aggregate([
-              bribeContract.methods.rewards(i),
+              bribeContract.methods.rewardTokens(i),
             ]);
 
             bribeTokens.push({
@@ -6126,7 +6126,7 @@ searchWhitelist = async (payload) => {
 
     const [isWhitelisted, listingFee] = await Promise.all([
       voterContract.methods.isWhitelisted(search).call(),
-      voterContract.methods.listing_fee().call(),
+      voterContract.methods.listingFee().call(),
     ]);
 
     const token = await this.getBaseAsset(search);
