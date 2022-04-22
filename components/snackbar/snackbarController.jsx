@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@mui/styles";
 
 import Snackbar from "./snackbar.jsx";
 
@@ -79,7 +79,7 @@ class SnackbarController extends Component {
         <Snackbar type={snackbarType} message={snackbarMessage} open={true} />
       );
     } else {
-      return <div></div>;
+      return <></>;
     }
   }
 }

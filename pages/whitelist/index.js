@@ -1,4 +1,4 @@
-import { Typography, Button, Paper, SvgIcon } from "@material-ui/core";
+import { Typography, Button, Paper, SvgIcon } from "@mui/material";
 import WhitelistTokens from '../../components/ssWhitelist';
 
 import React, { useState, useEffect } from 'react';
@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import Unlock from '../../components/unlock';
 
 import classes from './whitelist.module.css';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 function Vesting({ changeTheme }) {
 
@@ -43,31 +44,43 @@ function Vesting({ changeTheme }) {
     setUnlockOpen(false);
   };
 
+  const {appTheme} = useAppThemeContext();
+
   return (
-    <div className={classes.ffContainer}>
+    <>
       {account && account.address ?
-        <div className={classes.connected}>
-          <WhitelistTokens />
-        </div>
-      :
+        <WhitelistTokens />
+        :
         <Paper className={classes.notConnectedContent}>
-          <div className={classes.sphere}></div>
           <div className={classes.contentFloat}>
-            <Typography className={classes.mainHeadingNC} variant='h1'>Whitelist Tokens</Typography>
-            <Typography className={classes.mainDescNC} variant='body2'>Whitelist tokens to be used in Solidly Gauges.</Typography>
+            <Typography
+              style={{
+                fontFamily: 'PPNeueMachina UltraBold',
+                fontWeight: 700,
+                fontSize: 72,
+                color: '#ffffff',
+              }}>
+              Whitelist
+            </Typography>
+
+            <div className={classes.mainDescBg}>
+              <Typography className={classes.mainDescNC} variant="body2">
+                Whitelist tokens to be used in Dystopia Gauges.
+              </Typography>
+            </div>
+
             <Button
               disableElevation
-              className={classes.buttonConnect}
+              className={[classes.buttonConnect, classes[`buttonConnect--${appTheme}`]].join(' ')}
               variant="contained"
               onClick={onAddressClicked}>
-                {account && account.address && <div className={`${classes.accountIcon} ${classes.metamask}`}></div>}
-                <Typography>Connect Wallet to Continue</Typography>
+              {account && account.address && <div className={`${classes.accountIcon} ${classes.metamask}`}></div>}
             </Button>
           </div>
         </Paper>
       }
       {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
-    </div>
+    </>
   );
 }
 

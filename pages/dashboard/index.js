@@ -1,4 +1,4 @@
-import { Typography, Button, Paper, SvgIcon, Grid, Avatar } from "@material-ui/core";
+import { Typography, Button, Paper, SvgIcon, Grid, Avatar } from "@mui/material";
 import Overview from '../../components/ffDashboardOverview';
 import VoteOverview from '../../components/ffDashboardVoteOverview';
 import ClaimAll from '../../components/ffDashboardClaimAll';

@@ -10,13 +10,18 @@ const coreTheme = {
     borderRadius: "12px"
   },
   typography: {
+    allVariants: {
+      fontFamily: 'serif',
+      textTransform: 'none',
+      fontSize: 16,
+    },
     fontFamily: [
+      "'Roboto Mono'",
       "Inter",
       "Arial",
       "-apple-system",
       "BlinkMacSystemFont",
       '"Segoe UI"',
-      "Roboto",
       '"Helvetica Neue"',
       "sans-serif",
       '"Apple Color Emoji"',
@@ -46,13 +51,13 @@ const coreTheme = {
     h3: {
       // yearn title text YEARN
       fontFamily: [
+        "'Roboto Mono'",
         "Druk Wide Bold",
         "Inter",
         "Arial",
         "-apple-system",
         "BlinkMacSystemFont",
         '"Segoe UI"',
-        "Roboto",
         '"Helvetica Neue"',
         "sans-serif"
       ],
@@ -112,6 +117,9 @@ const coreTheme = {
         // eslint-disable-line no-useless-computed-key
         fontSize: "0.8rem"
       }
+    },
+    body: {
+      fontFamily: "Roboto Mono",
     }
   },
   palette: {
@@ -227,10 +235,16 @@ const coreTheme = {
       }
     },
     Mui: {
+      fontFamily: "Roboto Mono",
       '&$disabled': {
         '&:before': {
           borderBottom: 'none'
         }
+      }
+    },
+    MuiTouchRipple: {
+      root: {
+        display: 'none',
       }
     }
   }

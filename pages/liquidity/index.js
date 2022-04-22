@@ -1,4 +1,4 @@
-import { Typography, Button, Paper, SvgIcon } from "@material-ui/core"
+import { Typography, Button, Paper, SvgIcon } from "@mui/material"
 import LiquidityPairs from '../../components/ssLiquidityPairs'
 
 import React, { useState, useEffect } from 'react';
@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import Unlock from '../../components/unlock';
 
 import classes from './liquidity.module.css';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 function Liquidity({ changeTheme }) {
 
@@ -43,34 +44,43 @@ function Liquidity({ changeTheme }) {
     setUnlockOpen(false);
   };
 
+  const {appTheme} = useAppThemeContext();
+
   return (
-    <div className={classes.ffContainer}>
+    <>
       {account && account.address ?
-        <div className={classes.connected}>
-          <LiquidityPairs />
-        </div>
-         :
+        <LiquidityPairs />
+        :
         <Paper className={classes.notConnectedContent}>
-          <div className={classes.sphere}></div>
           <div className={classes.contentFloat}>
-            <Typography className={classes.mainHeadingNC} variant='h1'>Liquidity Pools</Typography>
-            <Typography className={classes.mainDescNC} variant='body2'>
-            Create a pair or add liquidity to existing stable or volatile Liquidity Pairs.
+            <Typography
+              style={{
+                fontFamily: 'PPNeueMachina UltraBold',
+                fontWeight: 700,
+                fontSize: 72,
+                color: '#ffffff',
+              }}>
+              Liquidity
             </Typography>
+
+            <div className={classes.mainDescBg}>
+              <Typography className={classes.mainDescNC} variant="body2">
+                Create a pair or add liquidity to existing stable or volatile Liquidity Pairs.
+              </Typography>
+            </div>
+
             <Button
-            disableElevation
-            className={classes.buttonConnect}
-            variant="contained"
-            onClick={onAddressClicked}>
-            {account && account.address && <div className={`${classes.accountIcon} ${classes.metamask}`}></div>}
-            <Typography>Connect Wallet to Continue</Typography>
+              disableElevation
+              className={[classes.buttonConnect, classes[`buttonConnect--${appTheme}`]].join(' ')}
+              variant="contained"
+              onClick={onAddressClicked}>
+              {account && account.address && <div className={`${classes.accountIcon} ${classes.metamask}`}></div>}
             </Button>
           </div>
         </Paper>
        }
        {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
-
-    </div>
+    </>
   );
 }
 

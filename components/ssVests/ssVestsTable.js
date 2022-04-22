@@ -1,27 +1,78 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Skeleton from '@material-ui/lab/Skeleton';
-import { Paper, Button, Table, TableBody, TableCell, InputAdornment, TableContainer, TableHead, TableRow, TableSortLabel, TablePagination, Typography, Tooltip, Toolbar, Grid } from '@material-ui/core';
+import { makeStyles, styled } from '@mui/styles';
+import {
+  Paper,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+  TablePagination,
+  Typography,
+  Toolbar,
+  Skeleton, Accordion, AccordionSummary, AccordionDetails,
+} from '@mui/material';
 import { useRouter } from "next/router";
-import BigNumber from 'bignumber.js';
-import EnhancedEncryptionOutlinedIcon from '@material-ui/icons/EnhancedEncryptionOutlined';
+import {
+  ArrowDropDown, ExpandLess, ExpandMore,
+  LockOutlined,
+} from '@mui/icons-material';
 import moment from 'moment';
-
 import { formatCurrency } from '../../utils';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import TablePaginationActions from '../table-pagination/table-pagination';
+import SortSelect from '../select-sort/select-sort';
+import BigNumber from 'bignumber.js';
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
     return 0;
   }
 
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
+  switch (orderBy) {
+    case 'Locked Amount':
+      let amountA = BigNumber(a?.lockAmount).toNumber();
+      let amountB = BigNumber(b?.lockAmount).toNumber();
+
+      if (BigNumber(amountB).lt(amountA)) {
+        return -1;
+      }
+      if (BigNumber(amountB).gt(amountA)) {
+        return 1;
+      }
+      return 0;
+
+    case 'Lock Value':
+      let valueA = BigNumber(a?.lockValue).toNumber();
+      let valueB = BigNumber(b?.lockValue).toNumber();
+
+      if (BigNumber(valueB).lt(valueA)) {
+        return -1;
+      }
+      if (BigNumber(valueB).gt(valueA)) {
+        return 1;
+      }
+      return 0;
+
+    case 'Lock Expires':
+      let expiresA = a?.lockEnds;
+      let expiresB = b?.lockEnds;
+
+      if (expiresA < expiresB) {
+        return -1;
+      }
+      if (expiresB < expiresA) {
+        return 1;
+      }
+      return 0;
+
+    default:
+      return 0;
   }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
 }
 
 function getComparator(order, orderBy) {
@@ -39,7 +90,14 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'NFT', numeric: false, disablePadding: false, label: 'Pair' },
+  {
+    id: 'NFT',
+    numeric: false,
+    disablePadding: false,
+    label: 'Locked NFT',
+    isSticky: true,
+    isHideInDetails: true,
+  },
   {
     id: 'Locked Amount',
     numeric: true,
@@ -51,6 +109,7 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Vest Value',
+    isHideInDetails: true,
   },
   {
     id: 'Lock Expires',
@@ -63,31 +122,117 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Actions',
+    isHideInDetails: true,
   },
 ];
 
+const StickyTableCell = styled(TableCell)(({theme, appTheme}) => ({
+  color: appTheme === 'dark' ? '#C6CDD2 !important' : '#325569 !important',
+  width: 310,
+  left: 0,
+  position: "sticky",
+  zIndex: 5,
+  whiteSpace: 'nowrap',
+  padding: '20px 25px 15px',
+}));
+
+const StyledTableCell = styled(TableCell)(({theme, appTheme}) => ({
+  background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
+  width: 'auto',
+  whiteSpace: 'nowrap',
+  padding: '20px 25px 15px',
+}));
+
 function EnhancedTableHead(props) {
-  const { classes, order, orderBy, onRequestSort } = props;
+  const {classes, order, orderBy, onRequestSort} = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  const {appTheme} = useAppThemeContext();
 
   return (
     <TableHead>
-      <TableRow>
+      <TableRow
+        style={{
+          border: '1px solid #9BC9E4',
+          borderColor: appTheme === 'dark' ? '#5F7285' : '#9BC9E4',
+          whiteSpace: 'nowrap',
+        }}>
         {headCells.map((headCell) => (
-          <TableCell
-            className={classes.overrideTableHead}
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel active={orderBy === headCell.id} direction={orderBy === headCell.id ? order : 'asc'} onClick={createSortHandler(headCell.id)}>
-              <Typography variant='h5' className={ classes.headerText }>{headCell.label}</Typography>
-              {orderBy === headCell.id ? <span className={classes.visuallyHidden}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</span> : null}
-            </TableSortLabel>
-          </TableCell>
+          <>
+            {
+              headCell.isSticky
+                ? <StickyTableCell
+                  appTheme={appTheme}
+                  key={headCell.id}
+                  align={headCell.numeric ? 'right' : 'left'}
+                  padding={'normal'}
+                  sortDirection={orderBy === headCell.id ? order : false}
+                  style={{
+                    background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
+                    borderBottom: '1px solid #9BC9E4',
+                    borderColor: appTheme === 'dark' ? '#5F7285' : '#9BC9E4',
+                    zIndex: 10,
+                  }}>
+                  <TableSortLabel
+                    active={orderBy === headCell.id}
+                    direction={orderBy === headCell.id ? order : 'asc'}
+                    onClick={createSortHandler(headCell.id)}>
+                    <Typography
+                      className={classes.headerText}
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 12,
+                        lineHeight: '120%',
+                      }}>
+                      {headCell.label}
+                    </Typography>
+                    {/*{orderBy === headCell.id
+                        ? <span className={classes.visuallyHidden}>
+                            {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                          </span>
+                        : null
+                      }*/}
+                  </TableSortLabel>
+                </StickyTableCell>
+                : <StyledTableCell
+                  style={{
+                    background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
+                    borderBottom: '1px solid #9BC9E4',
+                    borderColor: appTheme === 'dark' ? '#5F7285' : '#9BC9E4',
+                    color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                  }}
+                  key={headCell.id}
+                  align={headCell.numeric ? 'right' : 'left'}
+                  padding={'normal'}
+                  sortDirection={orderBy === headCell.id ? order : false}>
+                  <TableSortLabel
+                    active={orderBy === headCell.id}
+                    direction={orderBy === headCell.id ? order : 'asc'}
+                    IconComponent={ArrowDropDown}
+                    style={{
+                      color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                    }}
+                    onClick={createSortHandler(headCell.id)}>
+                    <Typography
+                      className={classes.headerText}
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 12,
+                        lineHeight: '120%',
+                      }}>
+                      {headCell.label}
+                    </Typography>
+                    {/*{orderBy === headCell.id
+                        ? <span className={classes.visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </span>
+                        : null
+                      }*/}
+                  </TableSortLabel>
+                </StyledTableCell>
+            }
+          </>
         ))}
       </TableRow>
     </TableHead>
@@ -135,11 +280,16 @@ const useStyles = makeStyles((theme) => ({
   textSpaced: {
     lineHeight: '1.5',
     fontWeight: '200',
-    fontSize: '12px'
+    fontSize: '12px',
+  },
+  inlineEnd: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   headerText: {
     fontWeight: '200',
-    fontSize: '12px'
+    fontSize: '12px',
   },
   cell: {},
   cellSuccess: {
@@ -215,13 +365,13 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     left: '0px',
     top: '0px',
-    borderRadius: '30px'
+    borderRadius: '30px',
   },
   img2Logo: {
     position: 'absolute',
     left: '20px',
     zIndex: '1',
-    top: '0px'
+    top: '0px',
   },
   overrideTableHead: {
     borderBottom: '1px solid rgba(104,108,122,0.2) !important',
@@ -230,7 +380,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     position: 'relative',
     width: '70px',
-    height: '35px'
+    height: '35px',
   },
   buttonOverride: {
     color: 'rgb(6, 211, 215)',
@@ -238,73 +388,180 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '700',
     width: '100%',
     '&:hover': {
-      background: 'rgb(19, 44, 60)'
+      background: 'rgb(19, 44, 60)',
     },
   },
   toolbar: {
-    margin: '24px 0px',
-    padding: '0px',
+    marginBottom: 30,
+    padding: 0,
+    ["@media (max-width:660px)"]: {
+      paddingBottom: 70,
+    },
   },
   tableContainer: {
-    border: '1px solid rgba(104, 108, 122, 0.25)',
+    border: 'none',
+    borderRadius: 0,
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
+    background: 'transparent',
+  },
+  table: {
+    tableLayout: 'auto',
+  },
+  addButton: {
+    display: 'flex',
+    alignItems: 'center',
+    width: 215,
+    height: 50,
+    cursor: 'pointer',
+  },
+  'addButton--light': {
+    '&:hover > p': {
+      background: '#C6BAF0',
+    },
+    '&:active > p': {
+      background: '#B9A4EE',
+    },
+  },
+  'addButton--dark': {
+    '&:hover > p': {
+      background: '#402E61',
+    },
+    '&:active > p': {
+      background: '#523880',
+    },
+  },
+  addButtonIcon: {
+    width: 50,
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: '#8F5AE8',
   },
   actionButtonText: {
-    fontSize: '15px',
-    fontWeight: '700',
-  }
+    width: 200,
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 700,
+    fontSize: 16,
+    lineHeight: '120%',
+    background: '#D2D0F2',
+    color: '#8F5AE8',
+    transition: 'all ease 300ms',
+  },
+  'actionButtonText--light': {
+    background: '#D2D0F2',
+  },
+  'actionButtonText--dark': {
+    background: '#33284C',
+  },
+  accordionSummaryContent: {
+    margin: 0,
+    padding: 0,
+  },
+  sortSelect: {
+    position: 'absolute',
+    top: 45,
+  },
+  cellPaddings: {
+    padding: '11px 20px',
+    ["@media (max-width:430px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      padding: 10,
+    },
+  },
+  cellHeadPaddings: {
+    padding: '5px 20px',
+    ["@media (max-width:430px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      padding: '5px 10px',
+    },
+  },
 }));
 
 const EnhancedTableToolbar = (props) => {
-  const classes = useStyles()
-  const router = useRouter()
+  const classes = useStyles();
+  const router = useRouter();
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [search, setSearch] = useState('');
+  const [sortDirection, setSortDirection] = useState('asc');
+
+  const options = [
+    {id: 'Locked Amount--desc', label: 'Vest Amount: high to low'},
+    {id: 'Locked Amount--asc', label: 'Vest Amount: low to high'},
+    {id: 'Lock Value--desc', label: 'Vest Value: high to low'},
+    {id: 'Lock Value--asc', label: 'Vest Value: low to high'},
+    {id: 'Lock Expires--desc', label: 'Vest Expires: high to low'},
+    {id: 'Lock Expires--asc', label: 'Vest Expires: low to high'},
+  ];
+
+  const [sortValueId, setSortValueId] = useState(options[0].id);
 
   const onSearchChanged = (event) => {
     setSearch(event.target.value);
   };
 
   const onCreate = () => {
-    router.push('/vest/create')
-  }
+    router.push('/vest/create');
+  };
+
+  const handleChangeSort = ({target: {value}}) => {
+    const property = value.substring(0, value.indexOf('--'));
+    const event = value.substring(value.indexOf('--') + 2);
+
+    setSortValueId(value);
+    setSortDirection(event);
+
+    props.handleRequestSort(event, property);
+  };
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
+
+  const {appTheme} = useAppThemeContext();
 
   return (
-    <Toolbar className={ classes.toolbar }>
+    <Toolbar className={classes.toolbar}>
+      <div
+        className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
+        onClick={onCreate}>
+        <div className={classes.addButtonIcon}>
+          <LockOutlined style={{width: 20, color: '#fff'}}/>
+        </div>
 
-      <Grid container spacing={1}>
-        <Grid lg='auto' md={12} sm={12} xs={12} item>
-          <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<EnhancedEncryptionOutlinedIcon />}
-            size='large'
-            className={ classes.buttonOverride }
-            color='primary'
-            onClick={ onCreate }
-          >
-            <Typography className={ classes.actionButtonText }>Create Lock</Typography>
-          </Button>
-        </Grid>
-        <Grid item lg={true} md={true} sm={false} xs={false}></Grid>
-      </Grid>
+        <Typography className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}>
+          Create Lock
+        </Typography>
+      </div>
 
-
+      {windowWidth <= 660 &&
+        <div className={classes.sortSelect}>
+          {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
+        </div>
+      }
     </Toolbar>
   );
 };
 
-export default function EnhancedTable({ vestNFTs, govToken, veToken }) {
+export default function EnhancedTable({vestNFTs, govToken, veToken}) {
   const classes = useStyles();
   const router = useRouter();
 
   const [order, setOrder] = React.useState('desc');
-  const [orderBy, setOrderBy] = React.useState('balance');
+  const [orderBy, setOrderBy] = React.useState('Locked Amount');
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [tableHeight, setTableHeight] = useState((window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30) - (windowWidth < 1280 ? 50 : 0));
+  const [sortDirection, setSortDirection] = useState('asc');
+  const [expanded, setExpanded] = useState('');
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -324,12 +581,12 @@ export default function EnhancedTable({ vestNFTs, govToken, veToken }) {
   if (!vestNFTs) {
     return (
       <div className={classes.root}>
-        <Skeleton variant="rect" width={'100%'} height={40} className={classes.skelly1} />
-        <Skeleton variant="rect" width={'100%'} height={70} className={classes.skelly} />
-        <Skeleton variant="rect" width={'100%'} height={70} className={classes.skelly} />
-        <Skeleton variant="rect" width={'100%'} height={70} className={classes.skelly} />
-        <Skeleton variant="rect" width={'100%'} height={70} className={classes.skelly} />
-        <Skeleton variant="rect" width={'100%'} height={70} className={classes.skelly} />
+        <Skeleton variant="rect" width={'100%'} height={40} className={classes.skelly1}/>
+        <Skeleton variant="rect" width={'100%'} height={70} className={classes.skelly}/>
+        <Skeleton variant="rect" width={'100%'} height={70} className={classes.skelly}/>
+        <Skeleton variant="rect" width={'100%'} height={70} className={classes.skelly}/>
+        <Skeleton variant="rect" width={'100%'} height={70} className={classes.skelly}/>
+        <Skeleton variant="rect" width={'100%'} height={70} className={classes.skelly}/>
       </div>
     );
   }
@@ -340,36 +597,297 @@ export default function EnhancedTable({ vestNFTs, govToken, veToken }) {
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, vestNFTs.length - page * rowsPerPage);
 
-  return (
-    <div className={classes.root}>
-      <EnhancedTableToolbar />
-      <Paper elevation={0} className={ classes.tableContainer}>
-        <TableContainer>
-          <Table className={classes.table} aria-labelledby='tableTitle' size={'medium'} aria-label='enhanced table'>
-            <EnhancedTableHead classes={classes} order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
-            <TableBody>
-              {stableSort(vestNFTs, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                if (!row) {
-                  return null;
-                }
-                const labelId = `enhanced-table-checkbox-${index}`;
+  const {appTheme} = useAppThemeContext();
 
-                return (
-                  <TableRow
-                    key={labelId}
-                    className={classes.assetTableRow}
-                  >
-                    <TableCell className={classes.cell}>
-                      <div className={classes.inline}>
-                        <div className={ classes.doubleImages}>
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+    setTableHeight((window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30) - (windowWidth < 1280 ? 50 : 0));
+  });
+
+  const handleChangeAccordion = (panel) => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
+  };
+
+  return (
+    <>
+      <EnhancedTableToolbar
+        handleRequestSort={handleRequestSort}
+        setSortDirection={setSortDirection}/>
+
+      {windowWidth > 660 &&
+        <Paper elevation={0} className={classes.tableContainer}>
+          <TableContainer
+            style={{
+              overflow: 'auto',
+              height: tableHeight,
+            }}>
+            <Table
+              stickyHeader
+              className={classes.table}
+              aria-labelledby="tableTitle"
+              size={'medium'}
+              aria-label="enhanced table">
+              <EnhancedTableHead
+                classes={classes}
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}/>
+
+              <TableBody>
+                {stableSort(vestNFTs, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    if (!row) {
+                      return null;
+                    }
+                    const labelId = `enhanced-table-checkbox-${index}`;
+
+                    return (
+                      <TableRow
+                        key={labelId}
+                        className={classes.assetTableRow}>
+                        <StickyTableCell
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                          }}
+                          className={classes.cell}>
+                          <div className={classes.inline}>
+                            <div className={classes.doubleImages}>
+                              <img
+                                className={classes.img1Logo}
+                                src={govToken?.logoURI}
+                                width="35"
+                                height="35"
+                                alt=""
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = '/tokens/unknown-logo.png';
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <Typography
+                                className={classes.textSpaced}
+                                style={{
+                                  fontWeight: 500,
+                                  fontSize: 14,
+                                  lineHeight: '120%',
+                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                }}>
+                                {row.id}
+                              </Typography>
+
+                              <Typography
+                                className={classes.textSpaced}
+                                style={{
+                                  fontWeight: 400,
+                                  fontSize: 14,
+                                  lineHeight: '120%',
+                                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                }}>
+                                NFT ID
+                              </Typography>
+                            </div>
+                          </div>
+                        </StickyTableCell>
+
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          <Typography
+                            className={classes.textSpaced}
+                            style={{
+                              fontWeight: 500,
+                              fontSize: 14,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                            }}>
+                            {formatCurrency(row.lockAmount)}
+                          </Typography>
+
+                          <Typography
+                            className={classes.textSpaced}
+                            style={{
+                              fontWeight: 400,
+                              fontSize: 14,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                            }}>
+                            {govToken?.symbol}
+                          </Typography>
+                        </TableCell>
+
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          <Typography
+                            className={classes.textSpaced}
+                            style={{
+                              fontWeight: 500,
+                              fontSize: 14,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                            }}>
+                            {formatCurrency(row.lockValue)}
+                          </Typography>
+
+                          <Typography
+                            className={classes.textSpaced}
+                            style={{
+                              fontWeight: 400,
+                              fontSize: 14,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                            }}>
+                            {veToken?.symbol}
+                          </Typography>
+                        </TableCell>
+
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          <Typography
+                            className={classes.textSpaced}
+                            style={{
+                              fontWeight: 500,
+                              fontSize: 14,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                            }}>
+                            {moment.unix(row.lockEnds).format('YYYY-MM-DD')}
+                          </Typography>
+
+                          <Typography
+                            className={classes.textSpaced}
+                            style={{
+                              fontWeight: 400,
+                              fontSize: 14,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                            }}>
+                            Expires {moment.unix(row.lockEnds).fromNow()}
+                          </Typography>
+                        </TableCell>
+
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            style={{
+                              padding: '7px 14px',
+                              border: '1px solid #5688A5',
+                              borderColor: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                              borderRadius: 100,
+                              fontWeight: 500,
+                              fontSize: 14,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                            }}
+                            onClick={() => {
+                              onView(row);
+                            }}
+                          >
+                            Manage
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <TablePagination
+            style={{
+              width: '100%',
+              marginTop: 20,
+              padding: '0 30px',
+              background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
+              border: '1px solid #86B9D6',
+              borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
+              borderRadius: 100,
+              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+            }}
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={vestNFTs.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            ActionsComponent={TablePaginationActions}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      }
+
+      {windowWidth <= 660 &&
+        <div style={{overflow: 'auto'}}>
+          {stableSort(vestNFTs, getComparator(order, orderBy))
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((row, index) => {
+              if (!row) {
+                return null;
+              }
+              const labelId = `accordion-${index}`;
+
+              return (
+                <Accordion
+                  key={labelId}
+                  style={{
+                    margin: 0,
+                    marginBottom: 20,
+                    background: appTheme === 'dark' ? '#24292D' : '#DBE6EC',
+                    border: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                  }}
+                  disableGutters={true}
+                  expanded={expanded === labelId}
+                  onChange={handleChangeAccordion(labelId)}>
+                  <AccordionSummary
+                    style={{
+                      padding: 0,
+                    }}
+                    classes={{
+                      content: classes.accordionSummaryContent,
+                    }}
+                    expandIcon={null}
+                    aria-controls="panel1a-content">
+                    <div className={['g-flex-column', 'g-flex-column__item'].join(' ')}>
+                      <div className={[classes.cellHeadPaddings, 'g-flex', 'g-flex--align-center'].join(' ')}>
+                        <div className={classes.doubleImages}>
                           <img
                             className={classes.img1Logo}
-                            src={ govToken?.logoURI }
-                            width='35'
-                            height='35'
-                            alt=''
+                            src={govToken?.logoURI}
+                            width="35"
+                            height="35"
+                            alt=""
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src = '/tokens/unknown-logo.png';
@@ -377,66 +895,241 @@ export default function EnhancedTable({ vestNFTs, govToken, veToken }) {
                           />
                         </div>
                         <div>
-                          <Typography variant='h2' className={classes.textSpaced}>
+                          <Typography
+                            className={classes.textSpaced}
+                            style={{
+                              fontWeight: 500,
+                              fontSize: 14,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                            }}>
                             {row.id}
                           </Typography>
-                          <Typography variant='h5' className={classes.textSpaced} color='textSecondary'>
+
+                          <Typography
+                            className={classes.textSpaced}
+                            style={{
+                              fontWeight: 400,
+                              fontSize: 14,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                            }}>
                             NFT ID
                           </Typography>
                         </div>
                       </div>
-                    </TableCell>
-                    <TableCell className={classes.cell} align='right'>
-                      <Typography variant='h2' className={classes.textSpaced}>
-                        {formatCurrency(row.lockAmount)}
-                      </Typography>
-                      <Typography variant='h5' className={classes.textSpaced} color='textSecondary'>
-                        { govToken?.symbol }
-                      </Typography>
-                    </TableCell>
-                    <TableCell className={classes.cell} align='right'>
-                      <Typography variant='h2' className={classes.textSpaced}>
-                        {formatCurrency(row.lockValue)}
-                      </Typography>
-                      <Typography variant='h5' className={classes.textSpaced} color='textSecondary'>
-                        { veToken?.symbol }
-                      </Typography>
-                    </TableCell>
-                    <TableCell className={classes.cell} align='right'>
-                      <Typography variant="h2" className={classes.textSpaced}>
-                        { moment.unix(row.lockEnds).format('YYYY-MM-DD') }
-                      </Typography>
-                      <Typography variant="h5" className={classes.textSpaced} color='textSecondary'>
-                        Expires { moment.unix(row.lockEnds).fromNow() }
-                      </Typography>
-                    </TableCell>
-                    <TableCell className={classes.cell} align='right'>
-                      <Button
-                        variant='outlined'
-                        color='primary'
-                        onClick={() => {
-                          onView(row);
+
+                      <div
+                        style={{
+                          borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                          borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
                         }}
-                      >
-                        Manage
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={vestNFTs.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-    </div>
+                        className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                        <div
+                          style={{
+                            width: '50%',
+                            borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                          }}>
+                          <Typography
+                            className={classes.cellHeadPaddings}
+                            style={{
+                              background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
+                              fontWeight: 500,
+                              fontSize: 12,
+                              lineHeight: '120%',
+                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                            }}
+                            noWrap>
+                            Action
+                          </Typography>
+
+                          <div
+                            className={classes.cellPaddings}>
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              style={{
+                                padding: '7px 14px',
+                                border: `1px solid ${appTheme === 'dark' ? '#C6CDD2' : '#5688A5'}`,
+                                borderColor: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                                borderRadius: 100,
+                                fontWeight: 500,
+                                fontSize: 14,
+                                lineHeight: '120%',
+                                color: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                              }}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                event.preventDefault();
+
+                                onView(row);
+                              }}>
+                              Manage
+                            </Button>
+                          </div>
+                        </div>
+
+                        <div
+                          style={{
+                            width: '50%',
+                          }}>
+                          <Typography
+                            className={classes.cellHeadPaddings}
+                            style={{
+                              background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
+                              fontWeight: 500,
+                              fontSize: 12,
+                              lineHeight: '120%',
+                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                              textAlign: 'right',
+                            }}
+                            noWrap>
+                            Vest Value
+                          </Typography>
+
+                          <div
+                            className={classes.cellPaddings}
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'flex-end',
+                            }}>
+                            <Typography
+                              className={classes.textSpaced}
+                              style={{
+                                fontWeight: 500,
+                                fontSize: 14,
+                                lineHeight: '120%',
+                                color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                whiteSpace: 'nowrap',
+                              }}>
+                              {formatCurrency(row.lockValue)}
+                            </Typography>
+
+                            <Typography
+                              className={`${classes.textSpaced} ${classes.symbol}`}
+                              style={{
+                                fontWeight: 400,
+                                fontSize: 14,
+                                lineHeight: '120%',
+                                color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                              }}>
+                              {veToken?.symbol}
+                            </Typography>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        style={{
+                          padding: '6px 20px',
+                          background: appTheme === 'dark' ? '#151718' : '#9BC9E4',
+                        }}
+                        className={['g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                        <Typography
+                          style={{
+                            fontWeight: 500,
+                            fontSize: 12,
+                            lineHeight: '120%',
+                            color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                          }}
+                          noWrap>
+                          {expanded !== labelId ? 'Show' : 'Hide'} Details
+                        </Typography>
+
+                        {expanded !== labelId &&
+                          <ExpandMore
+                            style={{
+                              color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                            }}/>
+                        }
+
+                        {expanded === labelId &&
+                          <ExpandLess
+                            style={{
+                              color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                            }}/>
+                        }
+                      </div>
+                    </div>
+                  </AccordionSummary>
+
+                  <AccordionDetails
+                    style={{
+                      padding: 0,
+                    }}>
+                    {headCells.map((headCell) => (
+                      <>
+                        {!headCell.isHideInDetails &&
+                          <div
+                            style={{
+                              height: 56,
+                              borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                            }}
+                            className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                            <Typography
+                              className={classes.cellHeadPaddings}
+                              style={{
+                                width: '50%',
+                                height: '100%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                fontWeight: 500,
+                                fontSize: 12,
+                                lineHeight: '120%',
+                                color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                                borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              }}
+                              noWrap>
+                              {headCell.label}
+                            </Typography>
+
+                            <div
+                              className={classes.cellPaddings}
+                              style={{
+                                width: '50%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-end',
+                              }}>
+                              <Typography
+                                className={classes.textSpaced}
+                                style={{
+                                  fontWeight: 500,
+                                  fontSize: 14,
+                                  lineHeight: '120%',
+                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                  whiteSpace: 'nowrap',
+                                }}>
+                                {headCell.id === 'Locked Amount' && formatCurrency(row.lockAmount)}
+                                {headCell.id === 'Lock Expires' && moment.unix(row.lockEnds).format('YYYY-MM-DD')}
+                              </Typography>
+
+                              <Typography
+                                className={`${classes.textSpaced} ${classes.symbol}`}
+                                style={{
+                                  fontWeight: 400,
+                                  fontSize: 14,
+                                  lineHeight: '120%',
+                                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                }}>
+                                {headCell.id === 'Locked Amount' && govToken?.symbol}
+                                {headCell.id === 'Lock Expires' && `Expires ${moment.unix(row.lockEnds).fromNow()}`}
+                              </Typography>
+                            </div>
+                          </div>
+                        }
+                      </>
+                    ))}
+                  </AccordionDetails>
+                </Accordion>
+              );
+            })
+          }
+        </div>
+      }
+    </>
   );
 }

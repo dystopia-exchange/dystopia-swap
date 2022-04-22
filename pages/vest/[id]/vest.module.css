@@ -1,13 +1,3 @@
-.ffContainer {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  margin-top: 0px;
-  padding-top: 120px;
-  position: relative;
-}
-
 .gridWrapper {
   width: calc(100% - 180px) !important;
   margin: auto;
@@ -81,57 +71,4 @@
   padding: 12px 24px !important;
   font-weight: 700 !important;
   text-transform: none !important;
-}
-
-@media screen and (max-width: 1280px) {
-  .xxx {
-    padding-left: 0px !important;
-  }
-}
-
-@media screen and (max-width: 1200px) {
-
-  .notConnectedContent {
-    width: calc(100% - 80px) !important;
-    margin: 100px auto 0 auto;
-    height: calc(100vh - 150px);
-  }
-
-  .ffContainer {
-    padding-top: 180px;
-  }
-
-  .gridWrapper {
-    width: calc(100% - 80px) !important;
-    margin: 290px auto 60px auto;
-    padding: 0 !important;
-  }
-
-  .xxx {
-    padding-left: 0px !important;
-  }
-
-}
-
-@media screen and (max-width: 960px) {
-  .gridWrapper {
-    margin: 490px auto 60px auto;
-  }
-}
-
-
-@media screen and (max-width: 600px) {
-  .mainHeadingNC {
-    text-align: center !important;
-    font-size: 24px !important;
-  }
-
-  .mainDescNC {
-    font-size: 15px !important;
-    line-height: 1.4rem !important;
-  }
-
-  .overviewIcon {
-    font-size: 80px !important;
-  }
 }

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Paper, TextField, InputAdornment, CircularProgress, Typography, Tooltip, Button, Select, MenuItem, Grid } from '@material-ui/core'
+import { Paper, TextField, InputAdornment, CircularProgress, Typography, Tooltip, Button, Select, MenuItem, Grid } from '@mui/material'
 import BigNumber from 'bignumber.js'
 
 import classes from './ssWhitelist.module.css'
-import SearchIcon from '@material-ui/icons/Search'
+import { Search } from '@mui/icons-material'
 
 import stores from '../../stores'
 import { ACTIONS, ETHERSCAN_URL } from '../../stores/constants'
@@ -169,7 +169,7 @@ export default function ssWhitelist() {
                   fullWidth
                   value={ value }
                   onChange={handleChange}
-                  InputProps={{
+                  inputProps={{
                     className: classes.mediumInput,
                   }}
                 >
@@ -196,6 +196,12 @@ export default function ssWhitelist() {
   }
 
   return (
+    <>
+      <Typography className={classes.notiyText}>
+        The page is under<br/>development
+      </Typography>
+    </>
+    /*
     <div className={ classes.container}>
       <div className={ classes.searchBar }>
       <Grid container spacing={2}>
@@ -207,10 +213,10 @@ export default function ssWhitelist() {
           placeholder="0x..."
           value={search}
           onChange={onSearchChanged}
-          InputProps={{
+          inputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon />
+                <Search />
               </InputAdornment>
             ),
           }}
@@ -227,5 +233,6 @@ export default function ssWhitelist() {
         { token && token.address && renderToken()}
       </div>
     </div>
+    */
   )
 }

@@ -1,14 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { lighten, makeStyles } from '@material-ui/core/styles';
-import Skeleton from '@material-ui/lab/Skeleton';
-import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Typography, Button, CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
+import {
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+  Button,
+  CircularProgress,
+  Skeleton,
+} from '@mui/material';
 import BigNumber from 'bignumber.js';
-import classes from './ffDashboardClaimAll.module.css';
-
-import stores from '../../stores'
+import stores from '../../stores';
 import { ACTIONS } from '../../stores/constants';
-
 import { formatCurrency } from '../../utils';
 
 function descendingComparator(a, b, orderBy) {

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Paper, Typography, Button, CircularProgress, IconButton } from '@material-ui/core';
+import { Paper, Typography, Button, CircularProgress, IconButton, Tooltip } from '@mui/material';
 import classes from "./ssVest.module.css";
 
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { ArrowBack, ArrowBackIosNew } from '@mui/icons-material';
 import VestingInfo from './vestingInfo'
 import stores from '../../stores'
 import {
   ACTIONS
 } from '../../stores/constants';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 export default function Unlock({ nft, govToken, veToken }) {
 
@@ -42,14 +43,29 @@ export default function Unlock({ nft, govToken, veToken }) {
     router.push('/vest')
   }
 
+  const {appTheme} = useAppThemeContext();
+
   return (
-    <Paper elevation={0} className={ classes.container2 }>
-      <div className={ classes.titleSection }>
+    <Paper
+      elevation={0}
+      className={[classes.container3, classes[`container3--${appTheme}`, 'g-flex-column']].join(' ')}>
+      {/*<div className={ classes.titleSection }>
         <IconButton className={ classes.backButton } onClick={ onBack }>
-          <ArrowBackIcon className={ classes.backIcon } />
+          <ArrowBack className={ classes.backIcon } />
         </IconButton>
         <Typography className={ classes.titleText }>Manage Existing Lock</Typography>
+      </div>*/}
+
+      <div
+        className={[classes.titleSection, classes[`titleSection--${appTheme}`]].join(' ')}>
+        <Tooltip title="Manage Existing Lock" placement="top">
+          <IconButton onClick={onBack}>
+            <ArrowBackIosNew className={[classes.backIcon, classes[`backIcon--${appTheme}`]].join(' ')}/>
+          </IconButton>
+        </Tooltip>
       </div>
+
+
       <VestingInfo currentNFT={nft} veToken={veToken} />
       <div className={classes.contentBox}>
         <Typography className={ classes.para }>Your lock has expired. Please withdraw your lock before you can re-lock.</Typography>

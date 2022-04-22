@@ -1,0 +1,11 @@
+<svg width="400px" height="80px" viewBox="0 0 400 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="wallet-bg" transform="translate(-0.000000, 0.000000)">
+            <rect id="Rectangle" stroke="#86B9D6" x="0.500000175" y="0.5" width="399" height="79"></rect>
+            <polygon id="Path" fill="#0B5E8E" points="1.00000017 0 1.74846008e-07 0 1.74846008e-07 1 1.74846008e-07 4 1.00000017 4 1.00000017 1 4.00000017 1 4.00000017 0"></polygon>
+            <polygon id="Path" fill="#0B5E8E" points="399 8.74228e-08 400 0 400 1 400 4 399 4 399 1 396 1 396 3.49691e-07"></polygon>
+            <polygon id="Path" fill="#0B5E8E" points="1.31134608e-07 79 1.74846008e-07 80 1.00000017 80 4.00000017 80 4.00000017 79 1.00000017 79 1.00000017 76 7.99360578e-15 76"></polygon>
+            <polygon id="Path" fill="#0B5E8E" points="400 79 400 80 399 80 396 80 396 79 399 79 399 76 400 76"></polygon>
+        </g>
+    </g>
+</svg>

@@ -1,14 +1,3 @@
-.container {
-  max-width: 1400px;
-  width: calc(100% - 180px);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin: auto;
-  margin-bottom: 60px;
-  padding: 0 0 10px 0px;
-}
-
 .title {
   font-size: 20px !important;
   margin-bottom: 24px !important;
@@ -21,13 +10,4 @@
 
 .assetTableRow {
   cursor: pointer !important;
-}
-
-@media screen and (max-width: 1200px) {
-  .container {
-    width: calc(100% - 40px);
-    margin: auto;
-    padding: 0 0 10px 0px;
-    margin-bottom: 20px;
-  }
 }

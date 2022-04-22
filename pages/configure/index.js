@@ -1,5 +1,4 @@
-import { SvgIcon } from "@material-ui/core";
-import { withTheme } from "@material-ui/core/styles";
+import { withTheme } from "@mui/styles";
 import classes from "./configure.module.css";
 
 function ProjectIcon(props) {
@@ -16,16 +15,12 @@ function Configure({ theme }) {
     <div className={classes.configureContainer}>
       <ProjectIcon
         color={
-          (theme.palette.type === "dark"
-          ? true
-          : false)
+          (theme?.palette.mode === "dark")
             ? "white"
             : "rgb(33, 37, 41)"
         }
         altColor={
-          (theme.palette.type === "dark"
-          ? true
-          : false)
+          (theme?.palette.mode === "dark")
             ? "rgb(33, 37, 41)"
             : "white"
         }

@@ -1,20 +1,22 @@
 import React, { Component } from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { Typography, Button, CircularProgress } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
+import { withStyles } from "@mui/styles";
+import { Typography, Button, CircularProgress } from "@mui/material";
+import { Close } from "@mui/icons-material";
 
 import { Web3ReactProvider, useWeb3React } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 
 import { ACTIONS } from '../../stores/constants';
+
 const {
   ERROR,
   CONNECTION_DISCONNECTED,
   CONNECTION_CONNECTED,
-  CONFIGURE_SS
-} = ACTIONS
+  CONFIGURE_SS,
+} = ACTIONS;
 
 import stores from "../../stores";
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 const styles = theme => ({
   root: {
@@ -26,13 +28,8 @@ const styles = theme => ({
   contentContainer: {
     margin: "auto",
     textAlign: "center",
-    padding: "12px",
     display: "flex",
     flexWrap: "wrap",
-
-    '@media (max-width: 960px)': {
-        paddingTop: '160px',
-      },
   },
   cardContainer: {
     marginTop: "60px",
@@ -47,12 +44,12 @@ const styles = theme => ({
   },
   buttonText: {
     marginLeft: "12px",
-    fontWeight: "700"
+    fontWeight: "700",
   },
   instruction: {
     maxWidth: "400px",
     marginBottom: "32px",
-    marginTop: "32px"
+    marginTop: "32px",
   },
   actionButton: {
     padding: "12px",
@@ -61,18 +58,18 @@ const styles = theme => ({
     border: "1px solid #E1E1E1",
     fontWeight: 500,
     [theme.breakpoints.up("md")]: {
-      padding: "15px"
-    }
+      padding: "15px",
+    },
   },
   connect: {
-    width: "100%"
+    width: "100%",
   },
   closeIcon: {
     position: "absolute",
     right: "-8px",
     top: "-8px",
-    cursor: "pointer"
-  }
+    cursor: "pointer",
+  },
 });
 
 class Unlock extends Component {
@@ -81,7 +78,7 @@ class Unlock extends Component {
 
     this.state = {
       loading: false,
-      error: null
+      error: null,
     };
   }
 
@@ -94,23 +91,23 @@ class Unlock extends Component {
   componentWillUnmount() {
     stores.emitter.removeListener(
       CONNECTION_CONNECTED,
-      this.connectionConnected
+      this.connectionConnected,
     );
     stores.emitter.removeListener(
       CONNECTION_DISCONNECTED,
-      this.connectionDisconnected
+      this.connectionDisconnected,
     );
     stores.emitter.removeListener(ERROR, this.error);
   }
 
   error = err => {
-    this.setState({ loading: false, error: err });
+    this.setState({loading: false, error: err});
   };
 
   connectionConnected = () => {
     stores.dispatcher.dispatch({
       type: CONFIGURE_SS,
-      content: { connected: true }
+      content: {connected: true},
     });
 
     if (this.props.closeModal != null) {
@@ -121,7 +118,7 @@ class Unlock extends Component {
   connectionDisconnected = () => {
     stores.dispatcher.dispatch({
       type: CONFIGURE_SS,
-      content: { connected: false}
+      content: {connected: false},
     });
     if (this.props.closeModal != null) {
       this.props.closeModal();
@@ -129,16 +126,13 @@ class Unlock extends Component {
   };
 
   render() {
-    const { classes, closeModal } = this.props;
+    const {classes, closeModal} = this.props;
 
     return (
       <div className={classes.root}>
-        <div className={classes.closeIcon} onClick={closeModal}>
-          <CloseIcon />
-        </div>
         <div className={classes.contentContainer}>
           <Web3ReactProvider getLibrary={getLibrary}>
-            <MyComponent closeModal={closeModal} />
+            <MyComponent closeModal={closeModal}/>
           </Web3ReactProvider>
         </div>
       </div>
@@ -156,7 +150,7 @@ function onConnectionClicked(
   currentConnector,
   name,
   setActivatingConnector,
-  activate
+  activate,
 ) {
   const connectorsByName = stores.accountStore.getStore("connectorsByName");
   setActivatingConnector(currentConnector);
@@ -170,7 +164,7 @@ function onDeactivateClicked(deactivate, connector) {
   if (connector && connector.close) {
     connector.close();
   }
-  stores.accountStore.setStore({ account: {}, web3context: null });
+  stores.accountStore.setStore({account: {}, web3context: null});
   stores.emitter.emit(CONNECTION_DISCONNECTED);
 }
 
@@ -188,11 +182,11 @@ function MyComponent(props) {
     activate,
     deactivate,
     active,
-    error
+    error,
   } = context;
   var connectorsByName = stores.accountStore.getStore("connectorsByName");
 
-  const { closeModal } = props;
+  const {closeModal} = props;
 
   const [activatingConnector, setActivatingConnector] = React.useState();
   React.useEffect(() => {
@@ -204,8 +198,8 @@ function MyComponent(props) {
   React.useEffect(() => {
     if (account && active && library) {
       stores.accountStore.setStore({
-        account: { address: account },
-        web3context: context
+        account: {address: account},
+        web3context: context,
       });
       stores.emitter.emit(CONNECTION_CONNECTED);
       stores.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
@@ -213,6 +207,7 @@ function MyComponent(props) {
   }, [account, active, closeModal, context, library]);
 
   const width = window.innerWidth;
+  const {appTheme} = useAppThemeContext();
 
   return (
     <div
@@ -220,7 +215,7 @@ function MyComponent(props) {
         display: "flex",
         flexWrap: "wrap",
         justifyContent: width > 576 ? "space-between" : "center",
-        alignItems: "center"
+        alignItems: "center",
       }}
     >
       {Object.keys(connectorsByName).map(name => {
@@ -235,38 +230,28 @@ function MyComponent(props) {
         let descriptor = "";
         if (name === "MetaMask") {
           url = "/connectors/icn-metamask.svg";
-          descriptor = "Connect to your MetaMask wallet";
-        } else if (name === "WalletConnect") {
-          url = "/connectors/walletConnectIcon.svg";
-          descriptor = "Scan with WalletConnect to connect";
         } else if (name === "TrustWallet") {
-          url = "/connectors/trustWallet.png";
-          descriptor = "Connect to your TrustWallet";
+          url = "/connectors/trustWallet.svg";
         } else if (name === "Portis") {
           url = "/connectors/portisIcon.png";
-          descriptor = "Connect with your Portis account";
         } else if (name === "Fortmatic") {
           url = "/connectors/fortmaticIcon.png";
-          descriptor = "Connect with your Fortmatic account";
         } else if (name === "Ledger") {
           url = "/connectors/icn-ledger.svg";
-          descriptor = "Connect with your Ledger Device";
         } else if (name === "Squarelink") {
           url = "/connectors/squarelink.png";
-          descriptor = "Connect with your Squarelink account";
         } else if (name === "Trezor") {
           url = "/connectors/trezor.png";
-          descriptor = "Connect with your Trezor Device";
         } else if (name === "Torus") {
           url = "/connectors/torus.jpg";
-          descriptor = "Connect with your Torus account";
         } else if (name === "Authereum") {
           url = "/connectors/icn-aethereum.svg";
-          descriptor = "Connect with your Authereum account";
         } else if (name === "WalletLink") {
           display = "Coinbase Wallet";
           url = "/connectors/coinbaseWalletIcon.svg";
-          descriptor = "Connect to your Coinbase wallet";
+        } else if (name === "WalletConnect") {
+          url = "/connectors/walletConnectIcon.svg";
+          descriptor = "Scan with WalletConnect to connect";
         } else if (name === "Frame") {
           return "";
         }
@@ -277,16 +262,17 @@ function MyComponent(props) {
             style={{
               padding: "0px",
               display: "flex",
-              margin: width > 576 ? "12px 0px" : "0px",
+              marginBottom: "10px",
             }}
           >
             <Button
               style={{
-                width: width > 576 ? "350px" : "calc(100vw - 100px)",
-                height: "200px",
-                backgroundColor: "rgba(0,0,0,0.05)",
-                border: "1px solid rgba(108,108,123,0.2)",
-                color: "rgba(108,108,123,1)"
+                width: width > 576 ? "400px" : "calc(100vw - 100px)",
+                padding: '10px 20px',
+                backgroundColor: appTheme === "dark" ? '#24292D' : '#CFE5F2',
+                border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
+                borderRadius: 0,
+                color: "rgba(108,108,123,1)",
               }}
               variant="contained"
               onClick={() => {
@@ -294,7 +280,7 @@ function MyComponent(props) {
                   currentConnector,
                   name,
                   setActivatingConnector,
-                  activate
+                  activate,
                 );
               }}
               disableElevation
@@ -303,27 +289,63 @@ function MyComponent(props) {
             >
               <div
                 style={{
-                  height: "160px",
                   width: "100%",
                   display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "space-evenly"
-                }}
-              >
-                <img
+                  flexDirection: 'column',
+                  justifyContent: "space-between",
+                }}>
+                <div
                   style={{
-                    width: "60px",
-                    height: "60px"
-                  }}
-                  src={url}
-                  alt=""
-                />
-                <Typography style={{ color: "#FFFFFF", marginBottom: "-15px"}} variant={"h2"}>{display}</Typography>
-                <Typography style={{ color: "#7E99B0",}} variant={"body2"}>{descriptor}</Typography>
-                {activating && (
-                  <CircularProgress size={15} style={{ marginRight: "10px" }} />
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}>
+                    {activating && (
+                      <CircularProgress size={15} style={{marginRight: "10px"}}/>
+                    )}
+
+                    <Typography
+                      style={{
+                        fontWeight: 500,
+                        fontSize: '24px',
+                        lineHeight: '120%',
+                        color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                      }}>
+                      {display}
+                    </Typography>
+                  </div>
+
+                  <img
+                    style={{
+                      width: "60px",
+                      height: "60px",
+                    }}
+                    src={url}
+                    alt=""
+                  />
+                </div>
+
+                {descriptor && (
+                  <Typography
+                    style={{
+                      paddingTop: '10px',
+                      borderTop: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
+                      textAlign: 'left',
+                      fontSize: '18px',
+                      color: appTheme === "dark" ? '#C6CDD2' : '#325569',
+                    }}
+                    variant={"body2"}>
+                    {descriptor}
+                  </Typography>
                 )}
+
                 {!activating && connected && (
                   <div
                     style={{
@@ -334,7 +356,7 @@ function MyComponent(props) {
                       marginRight: "0px",
                       position: "absolute",
                       top: "15px",
-                      right: "15px"
+                      right: "15px",
                     }}
                   ></div>
                 )}

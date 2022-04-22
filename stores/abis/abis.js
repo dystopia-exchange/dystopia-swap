@@ -11,6 +11,7 @@ import { veDistABI } from './veDistABI'
 import { minterABI } from './minterABI'
 import { wftmABI } from './wftmABI'
 
+
 export default {
   erc20ABI,
   veTokenABI,
@@ -23,5 +24,5 @@ export default {
   veDistABI,
   tokenABI,
   minterABI,
-  wftmABI
+  wftmABI,
 }

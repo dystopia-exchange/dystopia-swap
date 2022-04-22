@@ -1,20 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Paper, Grid, Typography, Button, TextField, InputAdornment, CircularProgress, Tooltip, Dialog, MenuItem, IconButton, Select, FormControlLabel, Switch } from '@material-ui/core';
+import {
+  Paper,
+  Typography,
+  Button,
+  TextField,
+  InputAdornment,
+  CircularProgress,
+  Tooltip,
+  Dialog,
+  MenuItem,
+  IconButton,
+  Select,
+  FormControlLabel,
+  Switch,
+} from '@mui/material';
+import { Add, Search, ArrowBack, DeleteOutline } from '@mui/icons-material';
 import BigNumber from 'bignumber.js';
 import { formatCurrency } from '../../utils';
 import classes from './ssLiquidityCreate.module.css';
-
-import AddIcon from '@material-ui/icons/Add';
-import SearchIcon from '@material-ui/icons/Search';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-
-import stores from '../../stores'
+import stores from '../../stores';
 import {
   ACTIONS,
-  ETHERSCAN_URL
+  ETHERSCAN_URL,
 } from '../../stores/constants';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 export default function SSLiquidityCreate() {
 
@@ -41,6 +51,8 @@ export default function SSLiquidityCreate() {
   const [ advanced, setAdvanced ] = useState(false)
 
   const [ pair, setPair ] = useState(null)
+
+  const {appTheme} = useAppThemeContext();
 
   //might not be correct to d this every time store updates.
   const ssUpdated = async () => {
@@ -316,7 +328,7 @@ export default function SSLiquidityCreate() {
               value={ amountValue }
               onChange={ amountChanged }
               disabled={ createLoading }
-              InputProps={{
+              inputProps={{
                 className: classes.largeInput
               }}
             />
@@ -331,8 +343,13 @@ export default function SSLiquidityCreate() {
     return (
       <div className={ classes.depositInfoContainer }>
         <Typography className={ classes.depositInfoHeading } >Starting Liquidity Info</Typography>
-        <div className={ classes.createPriceInfos}>
-          <div className={ classes.priceInfo }>
+        <div
+          style={{
+            width: '100%',
+            border: `1px solid ${appTheme === 'dark' ? '#5F7285' : '#86B9D6'}`,
+          }}
+          className={['g-flex'].join(' ')}>
+          <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
             <Typography className={ classes.title } >{ BigNumber(amount1).gt(0) ? formatCurrency(BigNumber(amount0).div(amount1)) : '0.00' }</Typography>
             <Typography className={ classes.text } >{ `${asset0?.symbol} per ${asset1?.symbol}` }</Typography>
           </div>
@@ -354,7 +371,7 @@ export default function SSLiquidityCreate() {
               fullWidth
               value={ token }
               onChange={ handleChange }
-              InputProps={{
+              inputProps={{
                 className: classes.mediumInput,
               }}
             >
@@ -392,7 +409,7 @@ export default function SSLiquidityCreate() {
         <div className={ classes.titleSection }>
           <Tooltip title="Back to Liquidity" placement="top">
           <IconButton className={ classes.backButton } onClick={ onBack }>
-            <ArrowBackIcon className={ classes.backIcon } />
+            <ArrowBack className={ classes.backIcon } />
           </IconButton>
           </Tooltip>
           <Typography className={ classes.titleText }>Create Liquidity Pair</Typography>
@@ -402,7 +419,7 @@ export default function SSLiquidityCreate() {
             { renderMassiveInput('amount0', amount0, amount0Error, amount0Changed, asset0, null, assetOptions, onAssetSelect) }
             <div className={ classes.swapIconContainer }>
               <div className={ classes.swapIconSubContainer }>
-                <AddIcon className={ classes.swapIcon } />
+                <Add className={ classes.swapIcon } />
               </div>
             </div>
             { renderMassiveInput('amount1', amount1, amount1Error, amount1Changed, asset1, null, assetOptions, onAssetSelect) }
@@ -588,7 +605,7 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
         </div>
         <div className={ classes.assetSelectActions}>
           <IconButton onClick={ () => { deleteOption(asset) } }>
-            <DeleteOutlineIcon />
+            <DeleteOutline />
           </IconButton>
           <IconButton onClick={ () => { viewOption(asset) } }>
             ↗
@@ -636,9 +653,9 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               placeholder="MATIC, MIM, 0x..."
               value={ search }
               onChange={ onSearchChanged }
-              InputProps={{
+              inputProps={{
                 startAdornment: <InputAdornment position="start">
-                  <SearchIcon />
+                  <Search />
                 </InputAdornment>,
               }}
             />
@@ -676,9 +693,9 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               placeholder="MATIC, MIM, 0x..."
               value={ search }
               onChange={ onSearchChanged }
-              InputProps={{
+              inputProps={{
                 startAdornment: <InputAdornment position="start">
-                  <SearchIcon />
+                  <Search />
                 </InputAdornment>,
               }}
             />

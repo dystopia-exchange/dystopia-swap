@@ -10,7 +10,7 @@
 }
 
 .smallText {
-  color: rgba(126,153,176,0.9);
+  color: rgba(126, 153, 176, 0.9);
   margin: 0 15px 0 0 !important;
   padding: 18px 0;
 }
@@ -40,33 +40,37 @@
   width: 200px;
 }
 
-.actionButtonText {
-  font-size: 15px !important;
-  text-transform: capitalize !important;
-  font-weight: 700 !important;
-}
-
 .loadingCircle {
   margin-left: 6px !important;
 }
 
 .infoSection {
-  display: flex;
-  padding: 10px 24px;
-  align-items: center;
-  justify-content: flex-end;
+  padding: 0 20px;
+  padding-right: 0;
+  background: #DBE6EC;
+  border: 1px solid #86B9D6;
+}
+
+.infoSection--dark {
+  background: #151718;
+  border: 1px solid #5F7285;
 }
 
 .helpText {
-  margin-left: 6px !important;
-  font-size: 20px !important;
-  color: #52af77 !important;
+  font-weight: 500 !important;
+  font-size: 18px !important;
+  line-height: 140% !important;
+  color: #15B525 !important;
+  white-space: nowrap !important;
 }
 
 .errorText {
-  margin-left: 6px !important;
-  font-size: 20px !important;
+  margin-left: 10px !important;
+  font-weight: 500 !important;
+  font-size: 18px !important;
+  line-height: 140% !important;
   color: #da0052 !important;
+  white-space: nowrap !important;
 }
 
 .buttonOverride {
@@ -83,15 +87,17 @@
 
 
 .buttonOverrideFixed {
-  background: rgb(23, 52, 72) !important;
-  color: rgb(6, 211, 215) !important;
-  font-weight: 700 !important;
-  min-width: 200px !important;
-  max-height: 48px;
+  padding: 12px 20px !important;
+  margin-left: 20px !important;
+  background: #D2D0F2 !important;
+  outline: 1px solid #8F5AE8 !important;
+  border-radius: 0 !important;
+  border: none !important;
 }
 
-.buttonOverrideFixed:hover {
-  background: rgb(19, 44, 60) !important;
+.buttonOverrideFixed--dark {
+  background: #494B51 !important;
+  outline: 1px solid #7F828B !important;
 }
 
 .tokenIDContainer {
@@ -107,11 +113,14 @@
 }
 
 .topBarContainer {
+  position: relative;
   padding: 24px 0px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   width: 100%;
+}
+
+.textField {
+  margin-bottom: 4px;
+  position: relative;
 }
 
 .mediumInputContainer {
@@ -121,7 +130,6 @@
   width: 100%;
   align-items: center;
   background: rgb(33, 43, 72);
-  padding: 0 20px;
 }
 
 .mediumInputAssetSelect {
@@ -133,7 +141,6 @@
 .mediumInputAmount {
   flex: 1;
   height: 100%;
-  width: 300px;
 }
 
 .mediumInputAddress {
@@ -145,61 +152,534 @@
   font-size: 32px !important;
 }
 
-.menuOption {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  width: calc(100% - 24px);
-  padding: 6px 12px;
+.searchInput {
+  width: 430px !important;
+}
+
+.searchInput > fieldset {
+  border: none !important;
 }
 
 .smallerText {
   font-size: 12px !important;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
 }
 
-@media screen and (max-width: 1200px) {
-  .container {
-    width: calc(100% - 80px);
+.addButton {
+  width: 215px;
+  height: 50px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.addButton--light:hover > p {
+  background: #C6BAF0;
+}
+
+.addButton--light:active > p {
+  background: #B9A4EE;
+}
+
+.addButton--dark:hover > p {
+  background: #402E61;
+}
+
+.addButton--dark:active > p {
+  background: #523880;
+}
+
+.addButtonIcon {
+  width: 50px;
+  height: 100%;
+  background: #8F5AE8;
+}
+
+.actionButtonText {
+  width: 200px;
+  height: 100%;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 120%;
+  background: #D2D0F2;
+  color: #8F5AE8;
+  transition: all ease 300ms;
+}
+
+.actionButtonText--light {
+  background: #D2D0F2;
+}
+
+.actionButtonText--dark {
+  background: #33284C;
+}
+
+.searchButton {
+  width: 50px !important;
+  height: 50px !important;
+  margin-left: 10px !important;
+  border-radius: 100px !important;
+}
+
+.searchButton--light {
+  background: #0B5E8E !important;
+  color: #fff !important;
+}
+
+.searchButton--light:hover {
+  background: #86B9D6 !important;
+}
+
+.searchButton--light:active {
+  background: #86B9D6 !important;
+  border: 1px solid #0B5E8E !important;
+}
+
+.searchButton--dark {
+  background: #4CADE6 !important;
+  color: #0A2C40 !important;
+}
+
+.searchButton--dark:hover {
+  background: #5F7285;
+}
+
+.searchButton--dark:active {
+  background: #5F7285;
+  border: 1px solid #4CADE6;
+}
+
+@media (max-width: 1360px) {
+  .searchInput {
+    position: absolute !important;
+    top: 42px;
+    right: 0;
+  }
+}
+
+@media (max-width: 1210px) {
+  .addButton {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    margin: 0;
+  }
+}
+
+@media (max-width: 935px) {
+  .searchInput {
+    width: 300px !important;
+  }
+}
+
+@media (max-width: 935px) {
+  .tokenSelect {
+    position: absolute !important;
+    top: -30px;
+    left: 0;
+    margin: 0;
+  }
+}
+
+.sortSelect {
+  position: absolute;
+  top: 60px;
+}
+
+@media (max-width: 660px) {
+  .infoSection {
+    display: none;
+  }
+
+  .controls > .tokenSelect {
+    position: absolute !important;
+    top: 0;
+    left: auto;
+    right: 0;
+  }
+
+  .addButton {
+    top: 0;
+    z-index: 11;
+  }
+
+  .controls {
+    position: absolute;
+    top: 26px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .searchInput {
+    position: absolute !important;
+    top: 29px;
+    left: 0;
+    right: auto;
+    z-index: 9;
+    width: 440px !important;
+  }
+
+  .searchButton {
+    position: absolute;
+    top: 60px;
+  }
+}
+
+@media (max-width: 430px) {
+  .container,
+  .container3,
+  .reAddPadding3 {
+    width: 100%;
+  }
+
+  .top {
+    width: calc(100% + 2px);
+  }
+
+  .textField {
+    width: 100%;
+  }
+
+  .textField--amount0-dark,
+  .textField--withdraw-dark {
+    width: 280px;
+    height: 114px;
+    background-image: url("/images/ui/swap-coin-top-360--light.svg");
+  }
+
+  .textField--amount0-light,
+  .textField--withdraw-light {
+    width: 280px;
+    height: 114px;
+    background-image: url("/images/ui/swap-coin-top-360--light.svg");
+  }
+
+  .textField--amount1-light {
+    margin-top: -30px;
+    width: 280px;
+    height: 114px;
+    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+  }
+
+  .textField--amount1-dark {
+    margin-top: -30px;
+    width: 280px;
+    height: 114px;
+    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+  }
+
+  .textField--To-light,
+  .textField--To-dark {
+    margin-top: -50px;
+  }
+
+  .swapIconContainer--dark {
+    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
+  }
+
+  .swapIconContainer--light {
+    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
+  }
+
+  .inputBalanceText,
+  .inputTitleText {
+    font-size: 12px !important;
+  }
+
+  .swapIconContainer,
+  .swapIconContainerWithdraw {
+    position: static;
+    background-repeat: no-repeat;
+    margin-left: 220px;
+    margin-top: -22px;
+  }
+
+  .swapIconContainerWithdraw {
+    margin-left: 0;
+  }
+
+  .mediumInputContainer {
+    width: 135px;
+    height: 61px;
+  }
+
+  .mediumdisplayDualIconContainer {
+    margin-left: 10px;
+  }
+
+  .mediumInputContainer {
+    background-image: url("/images/ui/liquidity-swap-token-360--light.svg");
+  }
+
+  .mediumInputContainer--dark {
+    background-image: url("/images/ui/liquidity-swap-token-360--light.svg");
+  }
+
+  .mediumInputContainer--withdrawAmount0 {
+    margin-right: 10px;
+  }
+
+  .swapInputs {
+    align-items: center;
+  }
+
+  .inputBalanceText {
+    left: 90px;
+  }
+
+  .displayDualIconContainer {
+    width: 60px;
+    height: 60px;
+  }
+
+  .displayDualIconContainer--light {
+    background-image: url("/images/ui/swap-currency-circle-360--light.svg");
+  }
+
+  .displayDualIconContainer--dark {
+    background-image: url("/images/ui/swap-currency-circle-360--light.svg");
+  }
+
+  .displayAssetIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .displaySelectContainer,
+  .displaySelectContainerDate {
+    padding: 43px 10px 10px;
+  }
+
+  .largeInput {
+    font-size: 18px !important;
+  }
+
+  .massiveInputAmount,
+  .massiveInputAmountDate {
+    top: 51px;
+    left: 100px;
+  }
+
+  .smallerText,
+  .smallerTextDate {
+    font-size: 12px !important;
+    top: 79px;
+    left: 100px;
+  }
+
+  .warningWarning,
+  .depositInfoHeading,
+  .priceInfo > .text {
+    font-size: 12px !important;
+  }
+
+  .priceInfos {
+    background-image: none !important;
+    border: 1px solid #86B9D6;
+  }
+
+  .priceInfos--dark {
+    border: 1px solid #5F7285;
+  }
+
+  .priceInfo {
+    padding: 10px;
+  }
+
+  .priceInfo:not(:last-child) {
+    border-right: 1px solid #86B9D6;
+  }
+
+  .priceInfos--dark .priceInfo:not(:last-of-type) {
+    border-right: 1px solid #5F7285;
+  }
+
+  .routeLinesLeft,
+  .routeLinesRight {
+    width: 35%;
+  }
+
+  .routeArrow--light {
+    background: var(--background-light) url("/images/ui/swap-route-arrow--light.svg");
+  }
+
+  .routeArrow--dark {
+    background: var(--background-dark) url("/images/ui/swap-route-arrow--dark.svg");
+  }
+
+  .routeArrow {
+    position: absolute;
+  }
+
+  .slippage {
+    bottom: -45px;
+    left: 20px;
+  }
+
+  .buttonOverride {
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0 !important;
+    width: 320px !important;
+    height: 50px;
+  }
+
+  .buttonOverride--light {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--light:hover {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--light:active {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--dark {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--dark:hover {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--dark:active {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .dialogContainer {
+    width: 100% !important;
+  }
+
+  .displayDualIconContainerSmall,
+  .assetOptionIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .dialogContent {
+    padding: 20px !important;
+  }
+
+  .assetSelectBalance {
+    margin-left: 10px;
+  }
+
+  .assetSymbolName,
+  .assetSelectBalanceText {
+    font-size: 14px !important;
+  }
+
+  .assetSymbolName2,
+  .assetSelectBalanceText2 {
+    font-size: 12px !important;
+  }
+
+  .assetSearchResults {
+    min-width: auto;
+  }
+
+  .vestPeriodLabel {
+    padding: 9px 8px;
+    white-space: nowrap;
+  }
+
+  .vestInfo {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    margin: auto;
-    margin-bottom: 60px;
-    margin-top: 80px;
-    padding: 0 0 10px 0px;
-  }
-}
-
-@media screen and (max-width: 960px) {
-  .container {
-    padding: 0 0 60px 0px;
   }
 
-  .actionButtons {
-    padding: 10px 0;
-    min-width: 100% !important;
-    background: #11172a !important;
-    position: fixed;
-    bottom: 0px;
-    left: 0;
-    transform: translatex(0);
-    border-radius: 0 !important;
-    border-top: 1px solid rgba(126, 153, 176, 0.2);
+  .vestInfoText {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
   }
 
-  .searchContainer {
-    padding: 0px !important;
-  }
-}
-
-@media screen and (max-width: 560px) {
-  .buttonOverrideFixed {
-    min-width: 100% !important;
-    max-height: 48px;
+  .vestInfoTextSec {
+    flex-direction: row;
   }
 
-  .container {
-    width: calc(100% - 40px);
-    padding: 0 0 30px 0px;
+  .vestInfoTextTop--light {
+    border-right: none;
+    border-bottom: 1px solid #86B9D6;
+  }
+
+  .vestInfoTextTop--dark {
+    border-right: none;
+    border-bottom: 1px solid #5F7285;
+  }
+
+  .amount {
+    font-size: 14px !important;
+  }
+
+  .toggleOptionText {
+    font-size: 12px !important;
+  }
+
+  .toggleOption:first-child {
+    margin-right: 10px;
+  }
+
+  .inputsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  .amountsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .receiveAssets {
+    margin-top: -38px;
+  }
+
+  .inputTitleText {
+    left: 10px;
+  }
+
+  .disclaimerDivider {
+    width: 100%;
+  }
+
+  .multiApprovalButton {
+    width: 320px !important;
+    height: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0 !important;
+    background: transparent url("/images/ui/btn-simple-disabled.svg") !important;
+  }
+
+  .multiApprovalButton--dark {
+    width: 320px !important;
+    height: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0 !important;
+    background: transparent url("/images/ui/btn-simple-disabled.svg") !important;
+  }
+
+  .searchInput {
+    width: 280px !important;
+  }
+
+  .addButton {
+    width: auto;
+  }
+
+  .actionButtonText {
+    width: 85px;
+    padding: 8px 15px;
   }
 }

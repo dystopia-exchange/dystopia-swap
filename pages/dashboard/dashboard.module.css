@@ -1,3 +1,5 @@
+
+
 .ffContainer {
   height: 100%;
   width: 100%;
@@ -32,7 +34,7 @@
 
 .notConnectedContent {
   width: calc(100%) !important;
-  background: rgba(17,23,41,0.2) !important;
+  background: transparent !important;
   text-align: center;
   padding: 50px;
   height: calc(100vh);
@@ -151,51 +153,4 @@
 .viewVoting,
 .viewRewards {
   float: left;
-}
-
-@media screen and (max-width: 1600px) {
-
-}
-
-@media screen and (max-width: 1200px) {
-
-  .ffContainer {
-    padding-top: 120px;
-  }
-
-}
-
-@media screen and (max-width: 600px) {
-
-  .mainHeadingNC {
-    text-align: center !important;
-    font-size: 24px !important;
-  }
-
-  .mainDescNC {
-    font-size: 15px !important;
-    line-height: 1.4rem !important;
-  }
-
-  .overviewIcon {
-    font-size: 80px !important;
-  }
-
-  .connected {
-    width: calc(100% - 60px);
-    margin: 0 auto;
-    padding-top: 0px;
-    margin-bottom: 130px;
-  }
-
-  .accountInfo {
-    display: none;
-  }
-
-  .viewCollateral,
-  .viewVesting,
-  .viewVoting,
-  .viewRewards {
-    float: right;
-  }
 }

@@ -1,21 +1,5 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin: auto;
-  margin-top: 90px;
-  max-width: 485px;
-  width: calc(100% - 180px);
-}
-
 .retain {
   position: relative;
-}
-
-.smallerText {
-  font-size: 12px !important;
-  margin-top: 0px !important;
-  margin-bottom: 0px !important;
 }
 
 .helpIcon {
@@ -67,13 +51,81 @@
   position: relative;
 }
 
-.textField {
-  margin-bottom: 4px;
+.textField,
+.textFieldTop {
+  /*width: 400px;*/
+  margin-top: 2px;
+  margin-bottom: 2px;
   position: relative;
 }
 
+.textField--dark {
+  height: 172px;
+  background-image: url("/images/ui/swap-coin-bottom--dark.svg");
+}
+
+.textField--light {
+  margin-top: 20px;
+  height: 172px;
+  background-image: url("/images/ui/swap-coin-bottom--light.svg");
+}
+
+.textFieldTop--dark {
+  margin-top: 20px;
+  height: 172px;
+  background-image: url("/images/ui/swap-coin-top--dark.svg");
+}
+
+.textFieldTop--light {
+  height: 172px;
+  background-image: url("/images/ui/swap-coin-top--light.svg");
+}
+
+.searchInline {
+  display: flex;
+  align-items: center;
+}
+
+.searchInput > fieldset {
+  border: none;
+}
+
+.inputBalanceText,
+.inputTitleText {
+  position: absolute;
+  top: 12px;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  color: #ffffff;
+}
+
+.inputBalanceText {
+  left: 151px;
+}
+
+.inputTitleText {
+  left: 20px;
+}
+
 .largeInput {
-  font-size: 46px !important;
+  padding: 0 !important;
+  font-weight: 400 !important;
+  font-size: 30px !important;
+  line-height: 100% !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.largeInput--light {
+  color: #325569 !important;
+  -webkit-text-fill-color: #325569 !important;
+}
+
+.largeInput--dark {
+  color: #C6CDD2 !important;
+  -webkit-text-fill-color: #C6CDD2 !important;
 }
 
 .activeIcon {
@@ -97,10 +149,22 @@
 
 .assetSearchResults {
   width: 100%;
+  max-height: 490px;
+  overflow: auto;
   display: flex;
   flex-direction: column;
-  margin-top: 12px;
+  margin-top: 30px;
   min-width: 390px;
+}
+
+.assetSearchResults--light {
+  background: #9BC9E4;
+  border: 1px solid #86B9D6;
+}
+
+.assetSearchResults--dark {
+  background: #2D3741;
+  border: 1px solid #5F7285;
 }
 
 @keyframes gradient {
@@ -129,22 +193,6 @@
   margin-left: 6px;
 }
 
-.inputBalance {
-  display: flex;
-  justify-content: flex-end;
-  padding-right: 12px;
-  padding-bottom: 6px;
-  cursor: pointer;
-}
-
-.inputBalanceText {
-  font-weight: 100 !important;
-  font-size: 12px !important;
-  color: #7e99b0;
-  margin-right: 6px !important;
-  margin-top: 6px !important;
-}
-
 .balances {
   display: flex;
   justify-content: flex-end;
@@ -155,11 +203,6 @@
 .value {
   cursor: pointer;
   font-size: 14px !important;
-}
-
-.inputTitleText {
-  font-size: 15px !important;
-  margin-top: 10px !important;
 }
 
 .infoContainer {
@@ -210,9 +253,37 @@
   width: 100%;
 }
 
+.container {
+  align-self: center;
+  width: 460px;
+  background: transparent !important;
+}
+
 .reAddPadding {
-  padding: 24px 0px;
-  width: 100%;
+  width: 462px;
+  padding: 12px 30px 30px;
+  background: #DBE6EC !important;
+  border: 1px solid #86B9D6 !important;
+  border-top: none !important;
+}
+
+.reAddPadding--dark {
+  background: #151718 !important;
+  border: 1px solid #5F7285 !important;
+  border-top: none !important;
+}
+
+.top {
+  top: 1px;
+  width: 464px;
+  height: 18px;
+  margin-bottom: -1px;
+  margin-left: -2px;
+  background-image: url("/images/ui/swap-popup-top-slice.svg");
+}
+
+.top--dark {
+  background-image: url("/images/ui/swap-popup-top-slice--dark.svg");
 }
 
 .loadingCircle {
@@ -268,17 +339,31 @@
 }
 
 .buttonOverride {
-  background: rgb(23, 52, 72) !important;
-  color: rgb(6, 211, 215) !important;
+  width: 460px;
+  height: 65px;
+  margin-left: 1px;
+  margin-top: 20px !important;
+  background: transparent url("/images/ui/liquidity-add-button-deposit--light.svg") !important;
   font-weight: 700 !important;
+  font-size: 16px !important;
+  line-height: 120% !important;
+  text-align: center !important;
+  color: #8F5AE8 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
 }
 
 .buttonOverride:hover {
-  background: rgb(19, 44, 60) !important;
+  background: transparent url("/images/ui/liquidity-add-button-deposit--light.svg") !important;
 }
 
+.buttonOverride--dark {
+  background: transparent url("/images/ui/liquidity-add-button-deposit--dark.svg") !important;
+}
 
-
+.buttonOverride--dark:hover {
+  background: transparent url("/images/ui/liquidity-add-button-deposit--dark.svg") !important;
+}
 
 .swapIconContainer {
   width: 100%;
@@ -313,20 +398,19 @@
   display: flex;
   flex-wrap: wrap;
   border-radius: 10px;
-  width: 100%;
   align-items: center;
-  background: rgb(33, 43, 72);
 }
 
 .massiveInputAssetSelect {
-  width: 124px;
-  min-height: 124px;
   height: 100%;
 }
 
 .massiveInputAmount {
-  flex: 1;
-  height: 100%;
+  position: absolute !important;
+  left: 151px;
+  top: 76px;
+  border: none !important;
+  margin-right: 20px !important;
 }
 
 .massiveInputAddress {
@@ -342,13 +426,26 @@
 }
 
 .displaySelectContainer {
-  padding: 12px;
-  min-height: 100px;
+  padding: 61px 20px 20px;
+  cursor: pointer;
 }
 
+
 .displayDualIconContainer {
-  width: 100px;
   position: relative;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.displayDualIconContainer--light {
+  background-image: url("/images/ui/swap-currency-circle--light.svg");
+}
+
+.displayDualIconContainer--dark {
+  background-image: url("/images/ui/swap-currency-circle--dark.svg");
 }
 
 .displayDualIconContainerConfirm {
@@ -358,18 +455,35 @@
 }
 
 .displayDualIconContainerSmall {
-  width: 60px;
+  width: 50px;
+  height: 50px;
   position: relative;
-  margin-right: 12px;
+  margin-right: 15px;
+}
+
+.assetOptionIcon {
+  width: 50px;
+  height: 50px;
+  padding: 4px;
+  border-radius: 100px;
+  border: 1px solid #9BC9E4;
+  background: #CFE5F2;
+}
+
+.assetOptionIcon--light {
+  background: #CFE5F2;
+  border: 1px solid #86B9D6;
+}
+
+.assetOptionIcon--dark {
+  background: #304E61;
+  border: 1px solid #5F7285;
 }
 
 .displayAssetIcon {
-  border: 1px solid rgba(128, 128, 128, 0.5);
-  border-radius: 50px;
-  background: rgb(33, 43, 72);
-  width: 100px;
-  height: 100px;
-  padding: 10px;
+  width: 60px;
+  height: 60px;
+  border-radius: 100px;
 }
 
 .someIcon {
@@ -531,24 +645,49 @@
 }
 
 .assetSelectMenu {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
+  padding: 10px !important;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1px !important;
+  transition: all ease 300ms;
+}
+
+.assetSelectMenu--light {
+  background: #B9DFF5 !important;
+  box-shadow: 0 1px 0 rgba(11, 94, 142, 0);
+}
+
+.assetSelectMenu--light:hover {
+  background: #CFE5F2 !important;
+  box-shadow: 0 1px 0 rgba(11, 94, 142, 0.5);
+}
+
+.assetSelectMenu--dark {
+  background: #24292D !important;
+  box-shadow: 0 1px 0 rgba(76, 173, 229, 0);
+}
+
+.assetSelectMenu--dark:hover {
+  background: #2D3741 !important;
+  box-shadow: 0 1px 0 rgba(76, 173, 229, 0.5);
 }
 
 .titleSection {
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: none;
-  border: 1px solid #212B48;
-  border-radius: 10px;
-  width: calc(100% - 52px);
-  margin: 25px 25px 0px 25px;
-  position: relative;
-  min-height: 60px;
+  width: 58px;
+  height: 58px;
+  margin-left: -95px;
+  background: #DBE6EC;
+  border: 1px solid #86B9D6;
+}
+
+.titleSection--dark {
+  background: #151718;
+  border: 1px solid #5F7285;
 }
 
 .backButton {
@@ -658,16 +797,32 @@
 }
 
 .smallerText {
-  font-size: 12px !important;
-  margin-top: 5px !important;
+  position: absolute !important;
+  left: 151px;
+  top: 118px;
+  font-style: normal;
+  font-weight: 500 !important;
+  font-size: 18px !important;
+  line-height: 140% !important;
+  color: #0A2C40 !important;
+  text-transform: uppercase;
+}
+
+.smallerText--light {
+  color: #0A2C40 !important;
+}
+
+.smallerText--dark {
+  color: #FFFFFF !important;
 }
 
 .manageLocalContainer {
-  width: 100%;
+  position: absolute;
+  bottom: 30px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 6px;
+  justify-content: flex-start;
+  margin-top: 20px;
 }
 
 .assetSelectActions {
@@ -676,31 +831,368 @@
   justify-content: flex-end;
 }
 
-@media screen and (max-width: 1280px) {
-  .actionsContainer {
-    border-left: 0px solid rgba(104, 108, 122, 0.25) !important;
-  }
-}
-
-@media screen and (max-width: 1200px) {
+@media (max-width:660px) {
   .container {
-    margin-top: 0px;
+    position: relative;
+    margin-top: 60px;
   }
 
-  .buttonWrap {
-    margin-top: 20px !important;
-  }
-
-  .actionsContainer {
-    border-left: 0px solid rgba(104, 108, 122, 0.25);
+  .titleSection {
+    margin-left: 16px;
+    top: -72px;
   }
 }
 
-@media screen and (max-width: 960px) {
-  .container {
-    margin-top: 0px;
-    width: calc(100% - 60px);
+
+@media (max-width: 430px) {
+  .container,
+  .container3,
+  .reAddPadding {
+    width: 100%;
   }
 
-  .helpIcon { display: none; }
+  .reAddPadding {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .top {
+    width: calc(100% + 2px);
+  }
+
+  .textField {
+    width: 100%;
+  }
+
+  .textFieldTop--dark {
+    width: 280px;
+    height: 114px;
+    background-image: url("/images/ui/swap-coin-top-360--light.svg");
+  }
+
+  .textFieldTop--light {
+    width: 280px;
+    height: 114px;
+    background-image: url("/images/ui/swap-coin-top-360--light.svg");
+  }
+
+  .textField--light {
+    margin-top: 10px;
+    width: 280px;
+    height: 114px;
+    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+  }
+
+  .textField--dark {
+    margin-top: 10px;
+    width: 280px;
+    height: 114px;
+    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+  }
+
+  .textField--To-light,
+  .textField--To-dark {
+    margin-top: -50px;
+  }
+
+  .swapIconContainer--dark {
+    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
+  }
+
+  .swapIconContainer--light {
+    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
+  }
+
+  .inputBalanceText,
+  .inputTitleText {
+    font-size: 12px !important;
+  }
+
+  .swapIconContainer,
+  .swapIconContainerWithdraw {
+    position: static;
+    background-repeat: no-repeat;
+    margin-left: 220px;
+    margin-top: -22px;
+  }
+
+  .swapIconContainerWithdraw {
+    margin-left: 0;
+  }
+
+  .mediumInputContainer {
+    width: 135px;
+    height: 61px;
+  }
+
+  .mediumdisplayDualIconContainer {
+    margin-left: 10px;
+  }
+
+  .mediumInputContainer {
+    background-image: url("/images/ui/liquidity-swap-token-360--light.svg");
+  }
+
+  .mediumInputContainer--dark {
+    background-image: url("/images/ui/liquidity-swap-token-360--light.svg");
+  }
+
+  .mediumInputContainer--withdrawAmount0 {
+    margin-right: 10px;
+  }
+
+  .swapInputs {
+    align-items: center;
+  }
+
+  .inputBalanceText {
+    left: 90px;
+  }
+
+  .displayDualIconContainer {
+    width: 60px;
+    height: 60px;
+  }
+
+  .displayDualIconContainer--light {
+    background-image: url("/images/ui/swap-currency-circle-360--light.svg");
+  }
+
+  .displayDualIconContainer--dark {
+    background-image: url("/images/ui/swap-currency-circle-360--light.svg");
+  }
+
+  .displayAssetIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .displaySelectContainer,
+  .displaySelectContainerDate {
+    padding: 43px 10px 10px;
+  }
+
+  .largeInput {
+    font-size: 18px !important;
+  }
+
+  .massiveInputAmount,
+  .massiveInputAmountDate {
+    top: 51px;
+    left: 100px;
+  }
+
+  .smallerText,
+  .smallerTextDate {
+    font-size: 12px !important;
+    top: 79px;
+    left: 100px;
+  }
+
+  .warningWarning,
+  .depositInfoHeading,
+  .priceInfo > .text {
+    font-size: 12px !important;
+  }
+
+  .priceInfos {
+    background-image: none !important;
+    border: 1px solid #86B9D6;
+  }
+
+  .priceInfos--dark {
+    border: 1px solid #5F7285;
+  }
+
+  .priceInfo {
+    padding: 10px;
+  }
+
+  .priceInfo:not(:last-child) {
+    border-right: 1px solid #86B9D6;
+  }
+
+  .priceInfos--dark .priceInfo:not(:last-of-type) {
+    border-right: 1px solid #5F7285;
+  }
+
+  .routeLinesLeft,
+  .routeLinesRight {
+    width: 35%;
+  }
+
+  .routeArrow--light {
+    background: var(--background-light) url("/images/ui/swap-route-arrow--light.svg");
+  }
+
+  .routeArrow--dark {
+    background: var(--background-dark) url("/images/ui/swap-route-arrow--dark.svg");
+  }
+
+  .routeArrow {
+    position: absolute;
+  }
+
+  .slippage {
+    bottom: -45px;
+    left: 20px;
+  }
+
+  .buttonOverride {
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0 !important;
+    width: 320px !important;
+    height: 50px;
+  }
+
+  .buttonOverride--light {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--light:hover {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--light:active {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--dark {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--dark:hover {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--dark:active {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .dialogContainer {
+    width: 100% !important;
+  }
+
+  .dialogTitle {
+    padding: 20px 20px 0 !important;
+  }
+
+  .displayDualIconContainerSmall,
+  .assetOptionIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .dialogContent {
+    padding: 20px !important;
+  }
+
+  .assetSelectBalance {
+    margin-left: 10px;
+  }
+
+  .assetSymbolName,
+  .assetSelectBalanceText {
+    font-size: 14px !important;
+  }
+
+  .assetSymbolName2,
+  .assetSelectBalanceText2 {
+    font-size: 12px !important;
+  }
+
+  .assetSearchResults {
+    min-width: auto;
+  }
+
+  .vestPeriodLabel {
+    padding: 9px 8px;
+    white-space: nowrap;
+  }
+
+  .vestInfo {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .vestInfoText {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .vestInfoTextSec {
+    flex-direction: row;
+  }
+
+  .vestInfoTextTop--light {
+    border-right: none;
+    border-bottom: 1px solid #86B9D6;
+  }
+
+  .vestInfoTextTop--dark {
+    border-right: none;
+    border-bottom: 1px solid #5F7285;
+  }
+
+  .amount {
+    font-size: 14px !important;
+  }
+
+  .toggleOptionText {
+    font-size: 12px !important;
+  }
+
+  .toggleOption:first-child {
+    margin-right: 10px;
+  }
+
+  .inputsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  .amountsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .receiveAssets {
+    margin-top: -38px;
+  }
+
+  .inputTitleText {
+    left: 10px;
+  }
+
+  .disclaimerDivider {
+    width: 100%;
+  }
+
+  .multiApprovalButton {
+    width: 320px !important;
+    height: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0 !important;
+    background: transparent url("/images/ui/btn-simple-disabled.svg") !important;
+  }
+
+  .multiApprovalButton--dark {
+    width: 320px !important;
+    height: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0 !important;
+    background: transparent url("/images/ui/btn-simple-disabled.svg") !important;
+  }
 }
+

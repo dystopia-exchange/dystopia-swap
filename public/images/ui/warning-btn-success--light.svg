@@ -1,0 +1,11 @@
+
+<svg width="625px" height="65px" viewBox="0 0 625 65" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="warning-btn-success--light" transform="translate(0.000000, -0.000001)">
+            <rect id="Rectangle" fill="#D2D0F2" fill-rule="nonzero" x="0.5" y="0.500001399" width="624" height="64"></rect>
+            <rect id="Rectangle" stroke="#8F5AE8" x="0.5" y="0.500001399" width="624" height="64"></rect>
+            <polygon id="Path" fill="#8F5AE8" fill-rule="nonzero" points="0 16.0000014 16 1.39876e-06 1.39876e-06 -1.77635684e-15"></polygon>
+            <polygon id="Path" fill="#8F5AE8" fill-rule="nonzero" points="625 49.0000014 609 65.0000014 625 65.0000014"></polygon>
+        </g>
+    </g>
+</svg>

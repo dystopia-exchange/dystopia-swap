@@ -1,0 +1,21 @@
+:root {
+  --background-dark: rgba(21, 23, 24, 1);
+  --background-light: rgba(219, 230, 236, 1);
+
+  --main-white: rgba(255, 255, 255, 1);
+
+  --main-secondary-dark: rgba(76, 173, 229, 1);
+  --main-secondary-light: rgba(11, 94, 142, 1);
+
+  --menu-highlight-dark: rgba(48, 78, 97, 1);
+  --menu-highlight-light: rgba(207, 229, 242, 1);
+
+  --menu-links-dark: rgba(137, 140, 149, 1);
+  --menu-links-light: rgba(132, 162, 180, 1);
+
+  --border-dark: rgba(95, 114, 133, 1);
+  --border-light: rgba(134, 185, 214, 1);
+
+  --input-font-color-dark: #5688A5;
+  --input-font-color-light: #5688A5;
+}
