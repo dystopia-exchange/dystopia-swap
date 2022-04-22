@@ -12,6 +12,9 @@ import {
   TablePagination,
   Typography,
   Skeleton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material';
 import { makeStyles, styled, useTheme } from '@mui/styles';
 import { useRouter } from "next/router";
@@ -20,8 +23,8 @@ import { formatCurrency } from '../../utils';
 import stores from '../../stores';
 import { ACTIONS } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
-import { ArrowDropDown } from '@mui/icons-material';
-import TablePaginationActions from '../table-pagination/table-pagination'
+import { ArrowDropDown, ExpandLess, ExpandMore } from '@mui/icons-material';
+import TablePaginationActions from '../table-pagination/table-pagination';
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
@@ -118,6 +121,7 @@ const headCells = [
     disablePadding: false,
     label: 'Reward Source',
     isSticky: true,
+    isHideInDetails: true,
   },
   {
     id: 'balance',
@@ -130,12 +134,14 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'You Earned',
+    isHideInDetails: true,
   },
   {
     id: 'bruh',
     numeric: true,
     disablePadding: false,
     label: 'Actions',
+    isHideInDetails: true,
   },
 ];
 
@@ -248,12 +254,6 @@ function EnhancedTableHead(props) {
                 </StyledTableCell>
             }
           </>
-          /*<TableCell className={classes.overrideTableHead} key={headCell.id} align={headCell.numeric ? 'right' : 'left'} padding={'normal'} sortDirection={orderBy === headCell.id ? order : false}>
-            <TableSortLabel active={orderBy === headCell.id} direction={orderBy === headCell.id ? order : 'asc'} onClick={createSortHandler(headCell.id)}>
-              <Typography variant="h5" className={ classes.headerText }>{headCell.label}</Typography>
-              {orderBy === headCell.id ? <span className={classes.visuallyHidden}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</span> : null}
-            </TableSortLabel>
-          </TableCell>*/
         ))}
       </TableRow>
     </TableHead>
@@ -495,6 +495,28 @@ const useStyles = makeStyles((theme) => {
     tableBody: {
       background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
     },
+    accordionSummaryContent: {
+      margin: 0,
+      padding: 0,
+    },
+    sortSelect: {
+      position: 'absolute',
+      top: 60,
+    },
+    cellPaddings: {
+      padding: '11px 20px',
+      ["@media (max-width:430px)"]: {
+        // eslint-disable-line no-useless-computed-key
+        padding: 10,
+      },
+    },
+    cellHeadPaddings: {
+      padding: '5px 20px',
+      ["@media (max-width:430px)"]: {
+        // eslint-disable-line no-useless-computed-key
+        padding: '5px 10px',
+      },
+    },
   });
 });
 
@@ -507,6 +529,8 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [tableHeight, setTableHeight] = useState(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [expanded, setExpanded] = useState('');
 
   const {appTheme} = useAppThemeContext();
 
@@ -660,302 +684,710 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
     );
   }
 
+  const handleChangeAccordion = (panel) => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
+  };
+
   window.addEventListener('resize', () => {
     setTableHeight(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
+    setWindowWidth(window.innerWidth);
   });
 
   return (
-    <div className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
-      <TableContainer
-        style={{
-          overflow: 'auto',
-          height: tableHeight,
-        }}>
-        <Table
-          stickyHeader
-          className={classes.table}
-          aria-labelledby="tableTitle"
-          size={'medium'}
-          aria-label="enhanced table">
-          <EnhancedTableHead
-            classes={classes}
-            order={order}
-            orderBy={orderBy}
-            onRequestSort={handleRequestSort}/>
+    <>
+      {windowWidth > 660 &&
+        <div className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
+          <TableContainer
+            style={{
+              overflow: 'auto',
+              height: tableHeight,
+            }}>
+            <Table
+              stickyHeader
+              className={classes.table}
+              aria-labelledby="tableTitle"
+              size={'medium'}
+              aria-label="enhanced table">
+              <EnhancedTableHead
+                classes={classes}
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}/>
 
-          <TableBody classes={{
-            root: classes.tableBody,
-          }}>
-            {Array.isArray(rewards) > 0 ? stableSort(rewards, getComparator(order, orderBy))
+              <TableBody classes={{
+                root: classes.tableBody,
+              }}>
+                {Array.isArray(rewards) > 0 ? stableSort(rewards, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    if (!row) {
+                      return null;
+                    }
+
+                    return (
+                      <TableRow
+                        key={'ssRewardsTable' + index}
+                        className={classes.assetTableRow}
+                      >
+                        <StickyTableCell
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                          }}
+                          className={classes.cell}>
+                          {['Bribe', 'Fees', 'Reward'].includes(row.rewardType) &&
+                            <div className={classes.inline}>
+                              <div className={classes.doubleImages}>
+                                <img
+                                  className={classes.img1Logo}
+                                  src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
+                                  width="37"
+                                  height="37"
+                                  alt=""
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = '/tokens/unknown-logo.png';
+                                  }}
+                                />
+                                <img
+                                  className={classes.img2Logo}
+                                  src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
+                                  width="37"
+                                  height="37"
+                                  alt=""
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = '/tokens/unknown-logo.png';
+                                  }}
+                                />
+                              </div>
+
+                              <div>
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                  }}
+                                  noWrap>
+                                  {row?.symbol}
+                                </Typography>
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 400,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                  }}
+                                  noWrap>
+                                  {row?.rewardType}
+                                </Typography>
+                              </div>
+                            </div>
+                          }
+                          {['Distribution'].includes(row.rewardType) &&
+                            <div className={classes.inline}>
+                              <div className={classes.doubleImages}>
+                                <img
+                                  className={classes.img1Logo}
+                                  src={(row && row.lockToken && row.lockToken.logoURI) ? row.lockToken.logoURI : ``}
+                                  width="37"
+                                  height="37"
+                                  alt=""
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = '/tokens/unknown-logo.png';
+                                  }}
+                                />
+                              </div>
+
+                              <div>
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                  }}
+                                  noWrap>
+                                  {row?.lockToken?.symbol}
+                                </Typography>
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 400,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                  }}
+                                  noWrap>
+                                  {row?.rewardType}
+                                </Typography>
+                              </div>
+                            </div>
+                          }
+                        </StickyTableCell>
+
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          {(row && row.rewardType === 'Bribe' && row.gauge && row.gauge.balance && row.gauge.totalSupply) &&
+                            tableCellContent(
+                              formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve0)),
+                              formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve1)),
+                              row.token0.symbol,
+                              row.token1.symbol,
+                            )
+                          }
+
+                          {(row && row.rewardType === 'Fees' && row.balance && row.totalSupply) &&
+                            tableCellContent(
+                              formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve0)),
+                              formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve1)),
+                              row.token0.symbol,
+                              row.token1.symbol,
+                            )
+                          }
+
+                          {(row && row.rewardType === 'Reward' && row.gauge && row.gauge.balance && row.gauge.totalSupply) &&
+                            tableCellContent(
+                              formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve0)),
+                              formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve1)),
+                              row.token0.symbol,
+                              row.token1.symbol,
+                            )
+                          }
+
+                          {(row && row.rewardType === 'Distribution') &&
+                            tableCellContent(
+                              formatCurrency(row.token?.lockValue),
+                              null,
+                              row.lockToken.symbol,
+                              null,
+                            )
+                          }
+                        </TableCell>
+
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          {
+                            row && row.rewardType === 'Bribe' && row.gauge && row.gauge.bribesEarned && row.gauge.bribesEarned.map((bribe) => {
+                              return (
+                                tableCellContent(
+                                  formatCurrency(bribe.earned),
+                                  null,
+                                  bribe.token?.symbol,
+                                  null,
+                                  (bribe && bribe.token && bribe.token.logoURI) ? bribe.token.logoURI : '/tokens/unknown-logo.png',
+                                )
+                              );
+                            })
+                          }
+
+                          {row && row.rewardType === 'Fees' &&
+                            tableCellContent(
+                              formatCurrency(row.claimable0),
+                              formatCurrency(row.claimable1),
+                              row.token0?.symbol,
+                              row.token1?.symbol,
+                              (row.token0 && row.token0.logoURI) ? row.token0.logoURI : '/tokens/unknown-logo.png',
+                              (row.token1 && row.token1.logoURI) ? row.token1.logoURI : '/tokens/unknown-logo.png',
+                            )
+                          }
+
+                          {(row && row.rewardType === 'Reward') &&
+                            tableCellContent(
+                              formatCurrency(row.gauge.rewardsEarned),
+                              null,
+                              'SOLID',
+                              null,
+                            )
+                          }
+
+                          {(row && row.rewardType === 'Distribution') &&
+                            tableCellContent(
+                              formatCurrency(row.earned),
+                              null,
+                              row.rewardToken.symbol,
+                              null,
+                            )
+                          }
+                        </TableCell>
+
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            style={{
+                              padding: '7px 14px',
+                              border: '1px solid #5688A5',
+                              borderColor: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                              borderRadius: 100,
+                              fontWeight: 500,
+                              fontSize: 14,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                            }}
+                            onClick={() => {
+                              onClaim(row);
+                            }}>
+                            Claim
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  }) : null}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <TablePagination
+            style={{
+              width: '100%',
+              marginTop: 20,
+              padding: '0 30px',
+              background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
+              border: '1px solid #86B9D6',
+              borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
+              borderRadius: 100,
+              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+            }}
+            ActionsComponent={TablePaginationActions}
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rewards.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </div>
+      }
+
+      {windowWidth <= 660 &&
+        <div style={{overflow: 'auto'}}>
+          {Array.isArray(rewards) > 0
+            ? stableSort(rewards, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 if (!row) {
                   return null;
                 }
+                const labelId = `accordion-${index}`;
 
                 return (
-                  <TableRow
-                    key={'ssRewardsTable' + index}
-                    className={classes.assetTableRow}
-                  >
-                    <StickyTableCell
+                  <Accordion
+                    key={labelId}
+                    style={{
+                      margin: 0,
+                      marginBottom: 20,
+                      background: appTheme === 'dark' ? '#24292D' : '#DBE6EC',
+                      border: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                    }}
+                    disableGutters={true}
+                    expanded={expanded === labelId}
+                    onChange={handleChangeAccordion(labelId)}>
+                    <AccordionSummary
                       style={{
-                        background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                        border: '1px dashed #CFE5F2',
-                        borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                        padding: 0,
                       }}
-                      className={classes.cell}>
-                      {['Bribe', 'Fees', 'Reward'].includes(row.rewardType) &&
-                        <div className={classes.inline}>
-                          <div className={classes.doubleImages}>
-                            <img
-                              className={classes.img1Logo}
-                              src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
-                              width="37"
-                              height="37"
-                              alt=""
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = '/tokens/unknown-logo.png';
+                      classes={{
+                        content: classes.accordionSummaryContent,
+                      }}
+                      expandIcon={null}
+                      aria-controls="panel1a-content">
+                      <div className={['g-flex-column', 'g-flex-column__item'].join(' ')}>
+                        <div className={[classes.cellHeadPaddings, 'g-flex', 'g-flex--align-center'].join(' ')}>
+                          {['Bribe', 'Fees', 'Reward'].includes(row.rewardType) &&
+                            <div className={classes.inline}>
+                              <div className={classes.doubleImages}>
+                                <img
+                                  className={classes.img1Logo}
+                                  src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
+                                  width="37"
+                                  height="37"
+                                  alt=""
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = '/tokens/unknown-logo.png';
+                                  }}
+                                />
+                                <img
+                                  className={classes.img2Logo}
+                                  src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
+                                  width="37"
+                                  height="37"
+                                  alt=""
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = '/tokens/unknown-logo.png';
+                                  }}
+                                />
+                              </div>
+
+                              <div>
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                  }}
+                                  noWrap>
+                                  {row?.symbol}
+                                </Typography>
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 400,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                  }}
+                                  noWrap>
+                                  {row?.rewardType}
+                                </Typography>
+                              </div>
+                            </div>
+                          }
+                          {['Distribution'].includes(row.rewardType) &&
+                            <div className={classes.inline}>
+                              <div className={classes.doubleImages}>
+                                <img
+                                  className={classes.img1Logo}
+                                  src={(row && row.lockToken && row.lockToken.logoURI) ? row.lockToken.logoURI : ``}
+                                  width="37"
+                                  height="37"
+                                  alt=""
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = '/tokens/unknown-logo.png';
+                                  }}
+                                />
+                              </div>
+
+                              <div>
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                  }}
+                                  noWrap>
+                                  {row?.lockToken?.symbol}
+                                </Typography>
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 400,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                  }}
+                                  noWrap>
+                                  {row?.rewardType}
+                                </Typography>
+                              </div>
+                            </div>
+                          }
+                        </div>
+
+                        <div
+                          style={{
+                            borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                          }}
+                          className={['g-flex'].join(' ')}>
+                          <div
+                            style={{
+                              width: '50%',
+                              borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                            }}>
+                            <Typography
+                              className={classes.cellHeadPaddings}
+                              style={{
+                                background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
+                                fontWeight: 500,
+                                fontSize: 12,
+                                lineHeight: '120%',
+                                borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                                color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
                               }}
-                            />
-                            <img
-                              className={classes.img2Logo}
-                              src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
-                              width="37"
-                              height="37"
-                              alt=""
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = '/tokens/unknown-logo.png';
-                              }}
-                            />
+                              noWrap>
+                              Action
+                            </Typography>
+
+                            <div className={classes.cellPaddings}>
+                              <Button
+                                variant="outlined"
+                                color="primary"
+                                style={{
+                                  padding: '7px 14px',
+                                  border: `1px solid ${appTheme === 'dark' ? '#C6CDD2' : '#5688A5'}`,
+                                  borderColor: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                                  borderRadius: 100,
+                                  fontWeight: 500,
+                                  fontSize: 14,
+                                  lineHeight: '120%',
+                                  color: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                                }}
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  event.preventDefault();
+
+                                  onClaim(row);
+                                }}>
+                                Claim
+                              </Button>
+                            </div>
                           </div>
 
-                          <div>
+                          <div
+                            style={{
+                              width: '50%',
+                            }}>
                             <Typography
-                              className={classes.textSpaced}
+                              className={classes.cellHeadPaddings}
                               style={{
+                                background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
                                 fontWeight: 500,
-                                fontSize: 14,
+                                fontSize: 12,
                                 lineHeight: '120%',
-                                color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                                color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                                textAlign: 'right',
                               }}
                               noWrap>
-                              {row?.symbol}
+                              You Earned
                             </Typography>
-                            <Typography
-                              className={classes.textSpaced}
+
+                            <div
+                              className={classes.cellPaddings}
                               style={{
-                                fontWeight: 400,
-                                fontSize: 14,
-                                lineHeight: '120%',
-                                color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                              }}
-                              noWrap>
-                              {row?.rewardType}
-                            </Typography>
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                              }}>
+                              {
+                                row && row.rewardType === 'Bribe' && row.gauge && row.gauge.bribesEarned && row.gauge.bribesEarned.map((bribe) => {
+                                  return (
+                                    tableCellContent(
+                                      formatCurrency(bribe.earned),
+                                      null,
+                                      bribe.token?.symbol,
+                                      null,
+                                      (bribe && bribe.token && bribe.token.logoURI) ? bribe.token.logoURI : '/tokens/unknown-logo.png',
+                                    )
+                                  );
+                                })
+                              }
+
+                              {row && row.rewardType === 'Fees' &&
+                                tableCellContent(
+                                  formatCurrency(row.claimable0),
+                                  formatCurrency(row.claimable1),
+                                  row.token0?.symbol,
+                                  row.token1?.symbol,
+                                  (row.token0 && row.token0.logoURI) ? row.token0.logoURI : '/tokens/unknown-logo.png',
+                                  (row.token1 && row.token1.logoURI) ? row.token1.logoURI : '/tokens/unknown-logo.png',
+                                )
+                              }
+
+                              {(row && row.rewardType === 'Reward') &&
+                                tableCellContent(
+                                  formatCurrency(row.gauge.rewardsEarned),
+                                  null,
+                                  'SOLID',
+                                  null,
+                                )
+                              }
+
+                              {(row && row.rewardType === 'Distribution') &&
+                                tableCellContent(
+                                  formatCurrency(row.earned),
+                                  null,
+                                  row.rewardToken.symbol,
+                                  null,
+                                )
+                              }
+                            </div>
                           </div>
                         </div>
-                      }
-                      {['Distribution'].includes(row.rewardType) &&
-                        <div className={classes.inline}>
-                          <div className={classes.doubleImages}>
-                            <img
-                              className={classes.img1Logo}
-                              src={(row && row.lockToken && row.lockToken.logoURI) ? row.lockToken.logoURI : ``}
-                              width="37"
-                              height="37"
-                              alt=""
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = '/tokens/unknown-logo.png';
-                              }}
-                            />
-                          </div>
 
-                          <div>
-                            <Typography
-                              className={classes.textSpaced}
+                        <div
+                          style={{
+                            padding: '6px 20px',
+                            background: appTheme === 'dark' ? '#151718' : '#9BC9E4',
+                          }}
+                          className={['g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                          <Typography
+                            style={{
+                              fontWeight: 500,
+                              fontSize: 12,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                            }}
+                            noWrap>
+                            {expanded !== labelId ? 'Show' : 'Hide'} Details
+                          </Typography>
+
+                          {expanded !== labelId &&
+                            <ExpandMore
                               style={{
-                                fontWeight: 500,
-                                fontSize: 14,
-                                lineHeight: '120%',
-                                color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
-                              }}
-                              noWrap>
-                              {row?.lockToken?.symbol}
-                            </Typography>
-                            <Typography
-                              className={classes.textSpaced}
+                                color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                              }}/>
+                          }
+
+                          {expanded === labelId &&
+                            <ExpandLess
                               style={{
-                                fontWeight: 400,
-                                fontSize: 14,
-                                lineHeight: '120%',
-                                color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                              }}
-                              noWrap>
-                              {row?.rewardType}
-                            </Typography>
-                          </div>
+                                color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                              }}/>
+                          }
                         </div>
-                      }
-                    </StickyTableCell>
+                      </div>
+                    </AccordionSummary>
 
-                    <TableCell
-                      className={classes.cell}
-                      align="right"
+                    <AccordionDetails
                       style={{
-                        background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                        border: '1px dashed #CFE5F2',
-                        borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                        overflow: 'hidden',
+                        padding: 0,
                       }}>
-                      {(row && row.rewardType === 'Bribe' && row.gauge && row.gauge.balance && row.gauge.totalSupply) &&
-                        tableCellContent(
-                          formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve0)),
-                          formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve1)),
-                          row.token0.symbol,
-                          row.token1.symbol,
-                        )
-                      }
+                      {headCells.map((headCell) => (
+                        <>
+                          {!headCell.isHideInDetails &&
+                            <div
+                              style={{
+                                height: 56,
+                                borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              }}
+                              className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                              <Typography
+                                className={classes.cellHeadPaddings}
+                                style={{
+                                  width: '50%',
+                                  height: '100%',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  fontWeight: 500,
+                                  fontSize: 12,
+                                  lineHeight: '120%',
+                                  color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                                  borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                                }}
+                                noWrap>
+                                {headCell.label}
+                              </Typography>
 
-                      {(row && row.rewardType === 'Fees' && row.balance && row.totalSupply) &&
-                        tableCellContent(
-                          formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve0)),
-                          formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve1)),
-                          row.token0.symbol,
-                          row.token1.symbol,
-                        )
-                      }
+                              <div
+                                className={classes.cellPaddings}
+                                style={{
+                                  width: '50%',
+                                  display: 'flex',
+                                  justifyContent: 'flex-end',
+                                }}>
+                                <div
+                                  className={classes.inlineEnd}
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
+                                  }}>
+                                  <Typography
+                                    className={classes.textSpaced}
+                                    style={{
+                                      fontWeight: 500,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      whiteSpace: 'nowrap',
+                                    }}>
+                                    {headCell.id === 'balance' && formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve0))}
+                                  </Typography>
 
-                      {(row && row.rewardType === 'Reward' && row.gauge && row.gauge.balance && row.gauge.totalSupply) &&
-                        tableCellContent(
-                          formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve0)),
-                          formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve1)),
-                          row.token0.symbol,
-                          row.token1.symbol,
-                        )
-                      }
+                                  <Typography
+                                    className={classes.textSpaced}
+                                    style={{
+                                      fontWeight: 500,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      whiteSpace: 'nowrap',
+                                    }}>
+                                    {headCell.id === 'balance' && formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve1))}
+                                  </Typography>
+                                </div>
 
-                      {(row && row.rewardType === 'Distribution') &&
-                        tableCellContent(
-                          formatCurrency(row.token?.lockValue),
-                          null,
-                          row.lockToken.symbol,
-                          null,
-                        )
-                      }
-                    </TableCell>
+                                <div
+                                  className={classes.inlineEnd}
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
+                                    paddingLeft: 10,
+                                  }}>
+                                  <Typography
+                                    className={`${classes.textSpaced} ${classes.symbol}`}
+                                    style={{
+                                      fontWeight: 400,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                    }}>
+                                    {row.token0.symbol}
+                                  </Typography>
 
-                    <TableCell
-                      className={classes.cell}
-                      align="right"
-                      style={{
-                        background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                        border: '1px dashed #CFE5F2',
-                        borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                        overflow: 'hidden',
-                      }}>
-                      {
-                        row && row.rewardType === 'Bribe' && row.gauge && row.gauge.bribesEarned && row.gauge.bribesEarned.map((bribe) => {
-                          return (
-                            tableCellContent(
-                              formatCurrency(bribe.earned),
-                              null,
-                              bribe.token?.symbol,
-                              null,
-                              (bribe && bribe.token && bribe.token.logoURI) ? bribe.token.logoURI : '/tokens/unknown-logo.png',
-                            )
-                          );
-                        })
-                      }
-
-                      {row && row.rewardType === 'Fees' &&
-                        tableCellContent(
-                          formatCurrency(row.claimable0),
-                          formatCurrency(row.claimable1),
-                          row.token0?.symbol,
-                          row.token1?.symbol,
-                          (row.token0 && row.token0.logoURI) ? row.token0.logoURI : '/tokens/unknown-logo.png',
-                          (row.token1 && row.token1.logoURI) ? row.token1.logoURI : '/tokens/unknown-logo.png',
-                        )
-                      }
-
-                      {(row && row.rewardType === 'Reward') &&
-                        tableCellContent(
-                          formatCurrency(row.gauge.rewardsEarned),
-                          null,
-                          'SOLID',
-                          null,
-                        )
-                      }
-
-                      {(row && row.rewardType === 'Distribution') &&
-                        tableCellContent(
-                          formatCurrency(row.earned),
-                          null,
-                          row.rewardToken.symbol,
-                          null,
-                        )
-                      }
-                    </TableCell>
-
-                    <TableCell
-                      className={classes.cell}
-                      align="right"
-                      style={{
-                        background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                        border: '1px dashed #CFE5F2',
-                        borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                        overflow: 'hidden',
-                      }}>
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        style={{
-                          padding: '7px 14px',
-                          border: '1px solid #5688A5',
-                          borderColor: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
-                          borderRadius: 100,
-                          fontWeight: 500,
-                          fontSize: 14,
-                          lineHeight: '120%',
-                          color: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
-                        }}
-                        onClick={() => {
-                          onClaim(row);
-                        }}>
-                        Claim
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                                  <Typography
+                                    className={`${classes.textSpaced} ${classes.symbol}`}
+                                    style={{
+                                      fontWeight: 400,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                    }}>
+                                    {row.token1.symbol}
+                                  </Typography>
+                                </div>
+                              </div>
+                            </div>
+                          }
+                        </>
+                      ))}
+                    </AccordionDetails>
+                  </Accordion>
                 );
-              }) : null}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <TablePagination
-        style={{
-          width: '100%',
-          marginTop: 20,
-          padding: '0 30px',
-          background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
-          border: '1px solid #86B9D6',
-          borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-          borderRadius: 100,
-          color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-        }}
-        ActionsComponent={TablePaginationActions}
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={rewards.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </div>
+              })
+            : null
+          }
+        </div>
+      }
+    </>
   );
 }

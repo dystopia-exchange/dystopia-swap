@@ -91,9 +91,8 @@ export default function ffWarning({close}) {
             className={[classes.paragraph, classes[`paragraph--${appTheme}`]].join(' ')}
             align="center">
             <span
+              className={classes.paragraph1}
               style={{
-                fontWeight: 400,
-                fontSize: 18,
                 color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
               }}>
               Use of the Dystopia.exchange website, services, dapp, or application is subject to the following Terms & Conditions and hereby confirm that by proceeding and interacting with the protocoL I am aware of these and accept them in full:

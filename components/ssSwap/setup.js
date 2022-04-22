@@ -601,13 +601,11 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
           </div>
         </div>
 
-        <div className={classes.assetSelectIconName}>
+        <div>
           <Typography
             variant="h5"
+            className={classes.assetSymbolName}
             style={{
-              fontWeight: 500,
-              fontSize: 24,
-              lineHeight: '120%',
               color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
             }}>
             {asset ? asset.symbol : ''}
@@ -615,10 +613,8 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
 
           <Typography
             variant="subtitle1"
+            className={classes.assetSymbolName2}
             style={{
-              fontWeight: 400,
-              fontSize: 14,
-              lineHeight: '120%',
               color: appTheme === "dark" ? '#7C838A' : '#5688A5',
             }}>
             {asset ? asset.name : ''}
@@ -667,10 +663,8 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
         <div className={classes.assetSelectIconName}>
           <Typography
             variant="h5"
+            className={classes.assetSymbolName}
             style={{
-              fontWeight: 500,
-              fontSize: 24,
-              lineHeight: '120%',
               color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
             }}>
             {asset ? asset.symbol : ''}
@@ -678,10 +672,8 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
 
           <Typography
             variant="subtitle1"
+            className={classes.assetSymbolName2}
             style={{
-              fontWeight: 400,
-              fontSize: 14,
-              lineHeight: '120%',
               color: appTheme === "dark" ? '#7C838A' : '#5688A5',
             }}>
             {asset ? asset.name : ''}
@@ -691,10 +683,8 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
         <div className={classes.assetSelectBalance}>
           <Typography
             variant="h5"
+            className={classes.assetSelectBalanceText}
             style={{
-              fontWeight: 500,
-              fontSize: 18,
-              lineHeight: '120%',
               color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
             }}>
             {(asset && asset.balance) ? formatCurrency(asset.balance) : '0.00'}
@@ -702,10 +692,8 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
 
           <Typography
             variant="subtitle1"
+            className={classes.assetSelectBalanceText2}
             style={{
-              fontWeight: 400,
-              fontSize: 14,
-              lineHeight: '120%',
               color: appTheme === "dark" ? '#7C838A' : '#5688A5',
             }}>
             {'Balance'}
@@ -868,21 +856,25 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
         aria-labelledby="simple-dialog-title"
         open={open}
         style={{borderRadius: 0}}>
-        <div style={{
-          width: 460,
-          height: 710,
-          background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-          border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
-          borderRadius: 0,
-        }}>
-          <DialogTitle style={{
-            padding: 30,
-            paddingBottom: 0,
-            fontWeight: 500,
-            fontSize: 18,
-            lineHeight: '140%',
-            color: '#0A2C40',
+        <div
+          className={classes.dialogContainer}
+          style={{
+            width: 460,
+            height: 710,
+            background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+            border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
+            borderRadius: 0,
           }}>
+          <DialogTitle
+            className={classes.dialogTitle}
+            style={{
+              padding: 30,
+              paddingBottom: 0,
+              fontWeight: 500,
+              fontSize: 18,
+              lineHeight: '140%',
+              color: '#0A2C40',
+            }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -911,9 +903,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
             </div>
           </DialogTitle>
 
-          <DialogContent style={{
-            padding: '20px 30px 30px',
-          }}>
+          <DialogContent className={classes.dialogContent}>
             {!manageLocal && renderOptions()}
             {manageLocal && renderManageLocal()}
           </DialogContent>

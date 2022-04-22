@@ -390,3 +390,21 @@
     outline: 1px solid #86B9D6;
   }
 }
+
+@media (max-width: 430px) {
+  .testnetDisclaimer {
+    display: none;
+  }
+
+  .logoContainer {
+    margin-left: 20px;
+  }
+
+  .userBlock {
+    margin-right: 20px;
+  }
+
+  .notificationsButton {
+    margin-left: 0 !important;
+  }
+}

@@ -85,7 +85,13 @@ export default function ssLiquidityManage() {
   const [slippage, setSlippage] = useState('2');
   const [slippageError, setSlippageError] = useState(false);
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
   const {appTheme} = useAppThemeContext();
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
 
   const ssUpdated = async () => {
     console.log(router.query.address);
@@ -844,7 +850,11 @@ export default function ssLiquidityManage() {
     return (
       <div className={[classes.textField, classes[`textField--${type}-${appTheme}`]].join(' ')}>
         <Typography className={classes.inputTitleText} noWrap>
-          {type === 'amount0' ? '1st token' : '2nd token'}
+          {
+            type === 'amount0'
+              ? `1st ${windowWidth > 430 ? 'token' : ''}`
+              : type !== 'withdraw' ? (`2nd ${windowWidth > 430 ? 'token' : ''}`) : 'Liq. Pair'
+          }
         </Typography>
 
         {type !== 'withdraw' &&
@@ -1219,14 +1229,11 @@ export default function ssLiquidityManage() {
           {
             activeTab === 'deposit' &&
             <>
-              {renderMassiveInput('amount0', amount0, amount0Error, amount0Changed, asset0, null, assetOptions, onAssetSelect, amount0Focused, amount0Ref)}
-              {/*<div className={ classes.swapIconContainer }>
-                  <div className={ classes.swapIconSubContainer }>
-                    <Add className={ classes.swapIcon } />
-                  </div>
-                </div>*/}
-              <div className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}></div>
-              {renderMassiveInput('amount1', amount1, amount1Error, amount1Changed, asset1, null, assetOptions, onAssetSelect, amount1Focused, amount1Ref)}
+              <div className={classes.amountsContainer}>
+                {renderMassiveInput('amount0', amount0, amount0Error, amount0Changed, asset0, null, assetOptions, onAssetSelect, amount0Focused, amount0Ref)}
+                <div className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}></div>
+                {renderMassiveInput('amount1', amount1, amount1Error, amount1Changed, asset1, null, assetOptions, onAssetSelect, amount1Focused, amount1Ref)}
+              </div>
               {renderMediumInputToggle('stable', stable)}
               {renderTokenSelect()}
               {renderDepositInformation()}
@@ -1840,21 +1847,25 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
         aria-labelledby="simple-dialog-title"
         open={open}
         style={{borderRadius: 0}}>
-        <div style={{
-          width: 460,
-          height: 710,
-          background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-          border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
-          borderRadius: 0,
-        }}>
-          <DialogTitle style={{
-            padding: 30,
-            paddingBottom: 0,
-            fontWeight: 500,
-            fontSize: 18,
-            lineHeight: '140%',
-            color: '#0A2C40',
+        <div
+          className={classes.dialogContainer}
+          style={{
+            width: 460,
+            height: 710,
+            background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+            border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
+            borderRadius: 0,
           }}>
+          <DialogTitle
+            className={classes.dialogTitle}
+            style={{
+              padding: 30,
+              paddingBottom: 0,
+              fontWeight: 500,
+              fontSize: 18,
+              lineHeight: '140%',
+              color: '#0A2C40',
+            }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -1883,9 +1894,7 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
             </div>
           </DialogTitle>
 
-          <DialogContent style={{
-            padding: '20px 30px 30px',
-          }}>
+          <DialogContent className={classes.dialogContent}>
             {!manageLocal && renderOptions()}
             {manageLocal && renderManageLocal()}
           </DialogContent>

@@ -197,14 +197,7 @@ export default function ssWhitelist() {
 
   return (
     <>
-      <Typography
-        style={{
-          fontFamily: 'PPNeueMachina UltraBold',
-          fontWeight: 700,
-          fontSize: 72,
-          color: '#ffffff',
-          textAlign: 'center',
-        }}>
+      <Typography className={classes.notiyText}>
         The page is under<br/>development
       </Typography>
     </>

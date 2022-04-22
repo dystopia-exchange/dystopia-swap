@@ -13,13 +13,17 @@ import {
   Typography,
   Slider,
   Skeleton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails, Button, DialogTitle, DialogContent, Dialog,
 } from '@mui/material';
 import BigNumber from 'bignumber.js';
 
 import { formatCurrency } from '../../utils';
-import { ArrowDropDown } from '@mui/icons-material';
+import { ArrowDropDown, Close, ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
-import TablePaginationActions from '../table-pagination/table-pagination'
+import TablePaginationActions from '../table-pagination/table-pagination';
+import SortSelect from '../select-sort/select-sort';
 
 const CustomSlider = styled(Slider)(({theme, appTheme}) => {
   return ({
@@ -116,10 +120,10 @@ function descendingComparator(a, b, orderBy) {
 
     case 'apy':
 
-      if (BigNumber(b?.gauge?.bribes.length).lt(a?.gauge?.bribes.length)) {
+      if (BigNumber(b?.gauge?.bribes?.length).lt(a?.gauge?.bribes?.length)) {
         return -1;
       }
-      if (BigNumber(b?.gauge?.bribes.length).gt(a?.gauge?.bribes.length)) {
+      if (BigNumber(b?.gauge?.bribes?.length).gt(a?.gauge?.bribes?.length)) {
         return 1;
       }
       return 0;
@@ -127,10 +131,10 @@ function descendingComparator(a, b, orderBy) {
     case 'myVotes':
     case 'mvp':
 
-      if (BigNumber(b?.gauge?.bribes.length).lt(a?.gauge?.bribes.length)) {
+      if (BigNumber(b?.gauge?.bribes?.length).lt(a?.gauge?.bribes?.length)) {
         return -1;
       }
-      if (BigNumber(b?.gauge?.bribes.length).gt(a?.gauge?.bribes.length)) {
+      if (BigNumber(b?.gauge?.bribes?.length).gt(a?.gauge?.bribes?.length)) {
         return 1;
       }
       return 0;
@@ -162,6 +166,7 @@ const headCells = [
     disablePadding: false,
     label: 'Asset',
     isSticky: true,
+    isHideInDetails: true,
   },
   {
     id: 'balance',
@@ -180,6 +185,7 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Total Votes',
+    isHideInDetails: true,
   },
   {
     id: 'apy',
@@ -199,6 +205,7 @@ const headCells = [
     disablePadding: false,
     label: 'My Vote %',
     width: 200,
+    isHideInDetails: true,
   },
 ];
 
@@ -311,12 +318,6 @@ function EnhancedTableHead(props) {
                 </StyledTableCell>
             }
           </>
-          /*<TableCell className={classes.overrideTableHead} key={headCell.id} align={headCell.numeric ? 'right' : 'left'} padding={'normal'} sortDirection={orderBy === headCell.id ? order : false}>
-            <TableSortLabel active={orderBy === headCell.id} direction={orderBy === headCell.id ? order : 'asc'} onClick={createSortHandler(headCell.id)}>
-              <Typography variant="h5" className={ classes.headerText }>{headCell.label}</Typography>
-              {orderBy === headCell.id ? <span className={classes.visuallyHidden}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</span> : null}
-            </TableSortLabel>
-          </TableCell>*/
         ))}
       </TableRow>
     </TableHead>
@@ -506,6 +507,35 @@ const useStyles = makeStyles((theme) => {
     tableBody: {
       background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
     },
+    sortSelect: {
+      position: 'absolute',
+      top: 125,
+    },
+    accordionSummaryContent: {
+      margin: 0,
+      padding: 0,
+    },
+    dialogPaper: {
+      borderRadius: 0,
+    },
+    dialogBody: {
+      background: 'rgba(0, 0, 0, 0.1) !important',
+      backdropFilter: 'blur(10px) !important',
+    },
+    cellPaddings: {
+      padding: '11px 20px',
+      ["@media (max-width:430px)"]: {
+        // eslint-disable-line no-useless-computed-key
+        padding: 10,
+      },
+    },
+    cellHeadPaddings: {
+      padding: '5px 20px',
+      ["@media (max-width:430px)"]: {
+        // eslint-disable-line no-useless-computed-key
+        padding: '5px 10px',
+      },
+    },
   });
 });
 
@@ -518,6 +548,24 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
   const [page, setPage] = useState(0);
   const [tableHeight, setTableHeight] = useState(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const options = [
+    {id: 'balance--desc', label: 'My Stake: high to low'},
+    {id: 'balance--asc', label: 'My Stake: low to high'},
+    {id: 'liquidity--desc', label: 'Total Liquidity: high to low'},
+    {id: 'liquidity--asc', label: 'Total Liquidity: low to high'},
+    {id: 'totalVotes--desc', label: 'Total Votes: high to low'},
+    {id: 'totalVotes--asc', label: 'Total Votes: low to high'},
+    {id: 'apy--desc', label: 'Bribes: high to low'},
+    {id: 'apy--asc', label: 'Bribes: low to high'},
+    {id: 'myVotes--desc', label: 'My Votes: high to low'},
+    {id: 'myVotes--asc', label: 'My Votes: low to high'},
+  ];
+
+  const [sortValueId, setSortValueId] = useState(options[0].id);
+  const [sortDirection, setSortDirection] = useState('asc');
+  const [expanded, setExpanded] = useState('');
+  const [voteDialogOpen, setVoteDialogOpen] = useState(false);
 
   const {appTheme} = useAppThemeContext();
 
@@ -536,6 +584,16 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
     });
 
     setParentSliderValues(newSliderValues);
+  };
+
+  const handleChangeSort = ({target: {value}}) => {
+    const property = value.substring(0, value.indexOf('--'));
+    const event = value.substring(value.indexOf('--') + 2);
+
+    setSortValueId(value);
+    setSortDirection(event);
+
+    handleRequestSort(event, property);
   };
 
   const handleRequestSort = (event, property) => {
@@ -656,230 +714,372 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
     );
   }
 
+  const handleChangeAccordion = (panel) => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
+  };
+
+  const closeModal = () => {
+    setVoteDialogOpen(false);
+  };
+
+  const openVoteDialog = () => {
+    setVoteDialogOpen(true);
+  };
+
   window.addEventListener('resize', () => {
     setTableHeight(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
     setWindowWidth(window.innerWidth);
   });
 
   return (
-    <div
-      style={{
-        marginTop: ((windowWidth <= 1360 && showSearch) || windowWidth <= 1210) ? 45 : 0,
-      }}
-      className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
-      <TableContainer
-        style={{
+    <>
+      {windowWidth > 660 &&
+        <div
+          style={{
+            marginTop: ((windowWidth <= 1360 && showSearch) || windowWidth <= 1210) ? 45 : 0,
+          }}
+          className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
+          <TableContainer
+            style={{
+              overflow: 'auto',
+              height: tableHeight,
+            }}>
+            <Table
+              stickyHeader
+              className={classes.table}
+              aria-labelledby="tableTitle"
+              size={'medium'}
+              aria-label="enhanced table">
+              <EnhancedTableHead
+                classes={classes}
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}/>
+
+              <TableBody classes={{
+                root: classes.tableBody,
+              }}>
+                {stableSort(gauges, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    if (!row) {
+                      return null;
+                    }
+                    let sliderValue = sliderValues.find((el) => el.address === row?.address)?.value;
+                    if (sliderValue) {
+                      sliderValue = BigNumber(sliderValue).toNumber(0);
+                    } else {
+                      sliderValue = 0;
+                    }
+
+                    return (
+                      <TableRow key={row?.gauge?.address}>
+                        <StickyTableCell
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                          }}
+                          className={classes.cell}>
+                          <div className={classes.inline}>
+                            <div className={classes.doubleImages}>
+                              <img
+                                className={classes.img1Logo}
+                                src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
+                                width="37"
+                                height="37"
+                                alt=""
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = '/tokens/unknown-logo.png';
+                                }}
+                              />
+                              <img
+                                className={classes.img2Logo}
+                                src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
+                                width="37"
+                                height="37"
+                                alt=""
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = '/tokens/unknown-logo.png';
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <Typography
+                                className={classes.textSpaced}
+                                style={{
+                                  fontWeight: 500,
+                                  fontSize: 14,
+                                  lineHeight: '120%',
+                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                }}
+                                noWrap>
+                                {row?.symbol}
+                              </Typography>
+                              <Typography
+                                className={classes.textSpaced}
+                                style={{
+                                  fontWeight: 400,
+                                  fontSize: 14,
+                                  lineHeight: '120%',
+                                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                }}
+                                noWrap>
+                                {row?.isStable ? 'Stable Pool' : 'Volatile Pool'}
+                              </Typography>
+                            </div>
+                          </div>
+                        </StickyTableCell>
+
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          {
+                            tableCellContent(
+                              formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.reserve0)),
+                              formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.reserve1)),
+                              row.token0.symbol,
+                              row.token1.symbol,
+                            )
+                          }
+                        </TableCell>
+
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          {
+                            tableCellContent(
+                              formatCurrency(BigNumber(row?.reserve0)),
+                              formatCurrency(BigNumber(row?.reserve1)),
+                              row.token0.symbol,
+                              row.token1.symbol,
+                            )
+                          }
+                        </TableCell>
+
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          {
+                            tableCellContent(
+                              formatCurrency(row?.gauge?.weight),
+                              `${formatCurrency(row?.gauge?.weight)} %`,
+                              null,
+                              null,
+                            )
+                          }
+                        </TableCell>
+
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          {
+                            row?.gaugebribes.length ? (
+                                row?.gaugebribes.map((bribe, idx) => {
+                                  return (
+                                    <>
+                                      {
+                                        tableCellContent(
+                                          formatCurrency(bribe.rewardAmount),
+                                          null,
+                                          bribe.symbol,
+                                          null,
+                                        )
+                                      }
+                                    </>
+                                  );
+                                })
+                              )
+                              : null
+                          }
+                        </TableCell>
+
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          {
+                            tableCellContent(
+                              formatCurrency(BigNumber(sliderValue).div(100).times(token?.lockValue)),
+                              `${formatCurrency(sliderValue)} %`,
+                              null,
+                              null,
+                            )
+                          }
+                        </TableCell>
+
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          <div style={{
+                            paddingTop: 12,
+                            paddingLeft: 12,
+                            paddingRight: 12,
+                          }}>
+                            <CustomSlider
+                              appTheme={appTheme}
+                              valueLabelDisplay="auto"
+                              value={sliderValue}
+                              onChange={(event, value) => {
+                                onSliderChange(event, value, row);
+                              }}
+                              min={-100}
+                              max={100}
+                              marks
+                              step={1}
+                            />
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow style={{height: 61 * emptyRows}}>
+                    <TableCell colSpan={7}/>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <TablePagination
+            style={{
+              width: '100%',
+              marginTop: 20,
+              padding: '0 30px',
+              background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
+              border: '1px solid #86B9D6',
+              borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
+              borderRadius: 100,
+              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+            }}
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={gauges.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            ActionsComponent={TablePaginationActions}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </div>
+      }
+
+
+      {windowWidth <= 660 &&
+        <div className={classes.sortSelect}>
+          {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
+        </div>
+      }
+
+      {windowWidth <= 660 &&
+        <div style={{
           overflow: 'auto',
-          height: tableHeight,
+          marginTop: 100,
         }}>
-        <Table
-          stickyHeader
-          className={classes.table}
-          aria-labelledby="tableTitle"
-          size={'medium'}
-          aria-label="enhanced table">
-          <EnhancedTableHead
-            classes={classes}
-            order={order}
-            orderBy={orderBy}
-            onRequestSort={handleRequestSort}/>
+          {stableSort(gauges, getComparator(order, orderBy))
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((row, index) => {
+              if (!row) {
+                return null;
+              }
+              const labelId = `accordion-${index}`;
 
-          <TableBody classes={{
-            root: classes.tableBody,
-          }}>
-            {stableSort(gauges, getComparator(order, orderBy))
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                if (!row) {
-                  return null;
-                }
-                let sliderValue = sliderValues.find((el) => el.address === row?.address)?.value;
-                if (sliderValue) {
-                  sliderValue = BigNumber(sliderValue).toNumber(0);
-                } else {
-                  sliderValue = 0;
-                }
+              let sliderValue = sliderValues.find((el) => el.address === row?.address)?.value;
+              if (sliderValue) {
+                sliderValue = BigNumber(sliderValue).toNumber(0);
+              } else {
+                sliderValue = 0;
+              }
 
-                return (
-                  <TableRow key={row?.gauge?.address}>
-                    <StickyTableCell
-                      style={{
-                        background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                        border: '1px dashed #CFE5F2',
-                        borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                      }}
-                      className={classes.cell}>
-                      <div className={classes.inline}>
-                        <div className={classes.doubleImages}>
-                          <img
-                            className={classes.img1Logo}
-                            src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
-                            width="37"
-                            height="37"
-                            alt=""
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = '/tokens/unknown-logo.png';
-                            }}
-                          />
-                          <img
-                            className={classes.img2Logo}
-                            src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
-                            width="37"
-                            height="37"
-                            alt=""
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = '/tokens/unknown-logo.png';
-                            }}
-                          />
-                        </div>
-                        <div>
-                          <Typography
-                            className={classes.textSpaced}
+              return (
+                <>
+                  <Dialog
+                    open={voteDialogOpen}
+                    onClose={closeModal}
+                    fullWidth={false}
+                    maxWidth="false"
+                    fullScreen={false}
+                    BackdropProps={{style: {backgroundColor: 'transparent'}}}
+                    classes={{
+                      paper: classes.dialogPaper,
+                      scrollPaper: classes.dialogBody,
+                    }}>
+                    <div style={{
+                      background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+                      border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
+                      borderRadius: 0,
+                    }}>
+                      <DialogTitle style={{
+                        padding: 30,
+                        paddingBottom: 16,
+                        fontWeight: 500,
+                        fontSize: 18,
+                        lineHeight: '140%',
+                        color: '#0A2C40',
+                        background: appTheme === "dark" ? '#151718' : '#CFE5F2',
+                      }}>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                        }}>
+                          <div style={{
+                            color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                          }}>
+                            My Vote %
+                          </div>
+
+                          {/*<Close
                             style={{
-                              fontWeight: 500,
-                              fontSize: 14,
-                              lineHeight: '120%',
-                              color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                              cursor: 'pointer',
+                              color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
                             }}
-                            noWrap>
-                            {row?.symbol}
-                          </Typography>
-                          <Typography
-                            className={classes.textSpaced}
-                            style={{
-                              fontWeight: 400,
-                              fontSize: 14,
-                              lineHeight: '120%',
-                              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                            }}
-                            noWrap>
-                            {row?.isStable ? 'Stable Pool' : 'Volatile Pool'}
-                          </Typography>
+                            onClick={closeModal}/>*/}
                         </div>
-                      </div>
-                    </StickyTableCell>
+                      </DialogTitle>
 
-                    <TableCell
-                      className={classes.cell}
-                      align="right"
-                      style={{
-                        background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                        border: '1px dashed #CFE5F2',
-                        borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                        overflow: 'hidden',
-                      }}>
-                      {
-                        tableCellContent(
-                          formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.reserve0)),
-                          formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.reserve1)),
-                          row.token0.symbol,
-                          row.token1.symbol,
-                        )
-                      }
-                    </TableCell>
-
-                    <TableCell
-                      className={classes.cell}
-                      align="right"
-                      style={{
-                        background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                        border: '1px dashed #CFE5F2',
-                        borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                        overflow: 'hidden',
-                      }}>
-                      {
-                        tableCellContent(
-                          formatCurrency(BigNumber(row?.reserve0)),
-                          formatCurrency(BigNumber(row?.reserve1)),
-                          row.token0.symbol,
-                          row.token1.symbol,
-                        )
-                      }
-                    </TableCell>
-
-                    <TableCell
-                      className={classes.cell}
-                      align="right"
-                      style={{
-                        background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                        border: '1px dashed #CFE5F2',
-                        borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                        overflow: 'hidden',
-                      }}>
-                      {
-                        tableCellContent(
-                          formatCurrency(row?.gauge?.weight),
-                          `${formatCurrency(row?.gauge?.weight)} %`,
-                          null,
-                          null,
-                        )
-                      }
-                    </TableCell>
-
-                    <TableCell
-                      className={classes.cell}
-                      align="right"
-                      style={{
-                        background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                        border: '1px dashed #CFE5F2',
-                        borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                        overflow: 'hidden',
-                      }}>
-                      {
-                        row?.gaugebribes.length ? (
-                            row?.gaugebribes.map((bribe, idx) => {
-                              return (
-                                <>
-                                  {
-                                    tableCellContent(
-                                      formatCurrency(bribe.rewardAmount),
-                                      null,
-                                      bribe.symbol,
-                                      null,
-                                    )
-                                  }
-                                </>
-                              );
-                            })
-                          )
-                          : null
-                      }
-                    </TableCell>
-
-                    <TableCell
-                      className={classes.cell}
-                      align="right"
-                      style={{
-                        background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                        border: '1px dashed #CFE5F2',
-                        borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                        overflow: 'hidden',
-                      }}>
-                      {
-                        tableCellContent(
-                          formatCurrency(BigNumber(sliderValue).div(100).times(token?.lockValue)),
-                          `${formatCurrency(sliderValue)} %`,
-                          null,
-                          null,
-                        )
-                      }
-                    </TableCell>
-
-                    <TableCell
-                      className={classes.cell}
-                      align="right"
-                      style={{
-                        background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                        border: '1px dashed #CFE5F2',
-                        borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                        overflow: 'hidden',
-                      }}>
-                      <div style={{
-                        paddingTop: 12,
-                        paddingLeft: 12,
-                        paddingRight: 12,
+                      <DialogContent style={{
+                        padding: 30,
+                        paddingBottom: 20,
+                        background: appTheme === 'dark' ? '#24292D' : '#DBE6EC',
                       }}>
                         <CustomSlider
                           appTheme={appTheme}
@@ -893,40 +1093,391 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           marks
                           step={1}
                         />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            {emptyRows > 0 && (
-              <TableRow style={{height: 61 * emptyRows}}>
-                <TableCell colSpan={7}/>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
 
-      <TablePagination
-        style={{
-          width: '100%',
-          marginTop: 20,
-          padding: '0 30px',
-          background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
-          border: '1px solid #86B9D6',
-          borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-          borderRadius: 100,
-          color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-        }}
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={gauges.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        ActionsComponent={TablePaginationActions}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </div>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          style={{
+                            width: 199,
+                            height: 50,
+                            marginTop: 20,
+                            backgroundImage: 'url("/images/ui/btn-simple.svg")',
+                            border: 'none',
+                            borderRadius: 0,
+                            fontWeight: 700,
+                            fontSize: 16,
+                            color: appTheme === 'dark' ? '#7F828B' : '#8F5AE8',
+                          }}
+                          onClick={closeModal}>
+                          Save & Close
+                        </Button>
+                      </DialogContent>
+                    </div>
+                  </Dialog>
+
+                  <Accordion
+                    key={labelId}
+                    style={{
+                      margin: 0,
+                      marginBottom: 20,
+                      background: appTheme === 'dark' ? '#24292D' : '#DBE6EC',
+                      border: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                    }}
+                    disableGutters={true}
+                    expanded={expanded === labelId}
+                    onChange={handleChangeAccordion(labelId)}>
+                    <AccordionSummary
+                      style={{
+                        padding: 0,
+                      }}
+                      classes={{
+                        content: classes.accordionSummaryContent,
+                      }}
+                      expandIcon={null}
+                      aria-controls="panel1a-content">
+                      <div className={['g-flex-column', 'g-flex-column__item'].join(' ')}>
+                        <div className={[classes.cellHeadPaddings, 'g-flex', 'g-flex--align-center'].join(' ')}>
+                          <div className={classes.doubleImages}>
+                            <img
+                              className={classes.img1Logo}
+                              src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
+                              width="37"
+                              height="37"
+                              alt=""
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = '/tokens/unknown-logo.png';
+                              }}
+                            />
+                            <img
+                              className={classes.img2Logo}
+                              src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
+                              width="37"
+                              height="37"
+                              alt=""
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = '/tokens/unknown-logo.png';
+                              }}
+                            />
+                          </div>
+
+                          <div>
+                            <Typography
+                              className={classes.textSpaced}
+                              style={{
+                                fontWeight: 500,
+                                fontSize: 14,
+                                lineHeight: '120%',
+                                color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                              }}
+                              noWrap>
+                              {row?.symbol}
+                            </Typography>
+                            <Typography
+                              className={classes.textSpaced}
+                              style={{
+                                fontWeight: 400,
+                                fontSize: 14,
+                                lineHeight: '120%',
+                                color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                              }}
+                              noWrap>
+                              {row?.isStable ? 'Stable Pool' : 'Volatile Pool'}
+                            </Typography>
+                          </div>
+                        </div>
+
+                        <div
+                          style={{
+                            borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                          }}
+                          className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                          <div
+                            style={{
+                              width: '50%',
+                              borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                            }}>
+                            <Typography
+                              className={classes.cellHeadPaddings}
+                              style={{
+                                background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
+                                fontWeight: 500,
+                                fontSize: 12,
+                                lineHeight: '120%',
+                                borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                                color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                              }}
+                              noWrap>
+                              Action
+                            </Typography>
+
+                            <div className={classes.cellPaddings}>
+                              <Button
+                                variant="outlined"
+                                color="primary"
+                                style={{
+                                  padding: '7px 14px',
+                                  border: `1px solid ${appTheme === 'dark' ? '#C6CDD2' : '#5688A5'}`,
+                                  borderColor: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                                  borderRadius: 100,
+                                  fontWeight: 500,
+                                  fontSize: 14,
+                                  lineHeight: '120%',
+                                  color: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                                }}
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  event.preventDefault();
+
+                                  openVoteDialog(row);
+                                }}>
+                                Vote
+                              </Button>
+                            </div>
+                          </div>
+
+                          <div
+                            style={{
+                              width: '50%',
+                            }}>
+                            <Typography
+                              className={classes.cellHeadPaddings}
+                              style={{
+                                background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
+                                fontWeight: 500,
+                                fontSize: 12,
+                                lineHeight: '120%',
+                                borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                                color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                                textAlign: 'right',
+                              }}
+                              noWrap>
+                              Total Votes
+                            </Typography>
+
+                            <div
+                              className={classes.cellPaddings}
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                              }}>
+                              <div
+                                className={classes.inlineEnd}
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'flex-end',
+                                }}>
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    whiteSpace: 'nowrap',
+                                  }}>
+                                  {formatCurrency(row?.gauge?.weight)}
+                                </Typography>
+
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    whiteSpace: 'nowrap',
+                                  }}>
+                                  {formatCurrency(row?.gauge?.weight)} %
+                                </Typography>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div
+                          style={{
+                            padding: '6px 20px',
+                            background: appTheme === 'dark' ? '#151718' : '#9BC9E4',
+                          }}
+                          className={['g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                          <Typography
+                            style={{
+                              fontWeight: 500,
+                              fontSize: 12,
+                              lineHeight: '120%',
+                              color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                            }}
+                            noWrap>
+                            {expanded !== labelId ? 'Show' : 'Hide'} Details
+                          </Typography>
+
+                          {expanded !== labelId &&
+                            <ExpandMore
+                              style={{
+                                color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                              }}/>
+                          }
+
+                          {expanded === labelId &&
+                            <ExpandLess
+                              style={{
+                                color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                              }}/>
+                          }
+                        </div>
+                      </div>
+                    </AccordionSummary>
+
+                    <AccordionDetails
+                      style={{
+                        padding: 0,
+                      }}>
+                      {headCells.map((headCell) => (
+                        <>
+                          {!headCell.isHideInDetails &&
+                            <div
+                              style={{
+                                height: 56,
+                                borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              }}
+                              className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                              <Typography
+                                className={classes.cellHeadPaddings}
+                                style={{
+                                  width: '50%',
+                                  height: '100%',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  fontWeight: 500,
+                                  fontSize: 12,
+                                  lineHeight: '120%',
+                                  color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                                  borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                                }}
+                                noWrap>
+                                {headCell.label}
+                              </Typography>
+
+                              <div
+                                className={classes.cellPaddings}
+                                style={{
+                                  width: '50%',
+                                  display: 'flex',
+                                  justifyContent: 'flex-end',
+                                }}>
+                                <div
+                                  className={classes.inlineEnd}
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
+                                  }}>
+                                  <Typography
+                                    className={classes.textSpaced}
+                                    style={{
+                                      fontWeight: 500,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      whiteSpace: 'nowrap',
+                                    }}>
+                                    {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.reserve0))}
+                                    {headCell.id === 'liquidity' && formatCurrency(BigNumber(row?.reserve0))}
+                                    {headCell.id === 'apy' && row?.gaugebribes.length ? (
+                                        row?.gaugebribes.map((bribe, idx) => {
+                                          return (
+                                            <>
+                                              {
+                                                formatCurrency(bribe.rewardAmount)
+                                              }
+                                            </>
+                                          );
+                                        })
+                                      )
+                                      : null}
+                                    {headCell.id === 'myVotes' && formatCurrency(BigNumber(sliderValue).div(100).times(token?.lockValue))}
+                                  </Typography>
+
+                                  <Typography
+                                    className={classes.textSpaced}
+                                    style={{
+                                      fontWeight: 500,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      whiteSpace: 'nowrap',
+                                    }}>
+                                    {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.reserve1))}
+                                    {headCell.id === 'liquidity' && formatCurrency(BigNumber(row?.reserve1))}
+                                    {headCell.id === 'apy' && ''}
+                                    {headCell.id === 'myVotes' && `${formatCurrency(sliderValue)} %`}
+                                  </Typography>
+                                </div>
+
+                                <div
+                                  className={classes.inlineEnd}
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-end',
+                                    paddingLeft: 10,
+                                  }}>
+                                  <Typography
+                                    className={`${classes.textSpaced} ${classes.symbol}`}
+                                    style={{
+                                      fontWeight: 400,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                    }}>
+                                    {headCell.id === 'balance' && row.token0.symbol}
+                                    {headCell.id === 'liquidity' && row.token0.symbol}
+                                    {headCell.id === 'apy' && row?.gaugebribes.length ? (
+                                        row?.gaugebribes.map((bribe, idx) => {
+                                          return (
+                                            <>
+                                              {
+                                                bribe.symbol
+                                              }
+                                            </>
+                                          );
+                                        })
+                                      )
+                                      : null}
+                                    {headCell.id === 'myVotes' && row.token0.symbol}
+                                  </Typography>
+
+                                  <Typography
+                                    className={`${classes.textSpaced} ${classes.symbol}`}
+                                    style={{
+                                      fontWeight: 400,
+                                      fontSize: 14,
+                                      lineHeight: '120%',
+                                      color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                    }}>
+                                    {headCell.id === 'balance' && row.token1.symbol}
+                                    {headCell.id === 'liquidity' && row.token1.symbol}
+                                    {headCell.id === 'apy' && ''}
+                                    {headCell.id === 'myVotes' && row.token1.symbol}
+                                  </Typography>
+                                </div>
+                              </div>
+                            </div>
+                          }
+                        </>
+                      ))}
+                    </AccordionDetails>
+                  </Accordion>
+                </>
+              );
+            })
+          }
+        </div>
+      }
+    </>
   );
 }

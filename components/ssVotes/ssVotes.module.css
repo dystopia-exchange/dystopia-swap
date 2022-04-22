@@ -280,3 +280,406 @@
     margin: 0;
   }
 }
+
+.sortSelect {
+  position: absolute;
+  top: 60px;
+}
+
+@media (max-width: 660px) {
+  .infoSection {
+    display: none;
+  }
+
+  .controls > .tokenSelect {
+    position: absolute !important;
+    top: 0;
+    left: auto;
+    right: 0;
+  }
+
+  .addButton {
+    top: 0;
+    z-index: 11;
+  }
+
+  .controls {
+    position: absolute;
+    top: 26px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .searchInput {
+    position: absolute !important;
+    top: 29px;
+    left: 0;
+    right: auto;
+    z-index: 9;
+    width: 440px !important;
+  }
+
+  .searchButton {
+    position: absolute;
+    top: 60px;
+  }
+}
+
+@media (max-width: 430px) {
+  .container,
+  .container3,
+  .reAddPadding3 {
+    width: 100%;
+  }
+
+  .top {
+    width: calc(100% + 2px);
+  }
+
+  .textField {
+    width: 100%;
+  }
+
+  .textField--amount0-dark,
+  .textField--withdraw-dark {
+    width: 280px;
+    height: 114px;
+    background-image: url("/images/ui/swap-coin-top-360--light.svg");
+  }
+
+  .textField--amount0-light,
+  .textField--withdraw-light {
+    width: 280px;
+    height: 114px;
+    background-image: url("/images/ui/swap-coin-top-360--light.svg");
+  }
+
+  .textField--amount1-light {
+    margin-top: -30px;
+    width: 280px;
+    height: 114px;
+    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+  }
+
+  .textField--amount1-dark {
+    margin-top: -30px;
+    width: 280px;
+    height: 114px;
+    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+  }
+
+  .textField--To-light,
+  .textField--To-dark {
+    margin-top: -50px;
+  }
+
+  .swapIconContainer--dark {
+    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
+  }
+
+  .swapIconContainer--light {
+    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
+  }
+
+  .inputBalanceText,
+  .inputTitleText {
+    font-size: 12px !important;
+  }
+
+  .swapIconContainer,
+  .swapIconContainerWithdraw {
+    position: static;
+    background-repeat: no-repeat;
+    margin-left: 220px;
+    margin-top: -22px;
+  }
+
+  .swapIconContainerWithdraw {
+    margin-left: 0;
+  }
+
+  .mediumInputContainer {
+    width: 135px;
+    height: 61px;
+  }
+
+  .mediumdisplayDualIconContainer {
+    margin-left: 10px;
+  }
+
+  .mediumInputContainer {
+    background-image: url("/images/ui/liquidity-swap-token-360--light.svg");
+  }
+
+  .mediumInputContainer--dark {
+    background-image: url("/images/ui/liquidity-swap-token-360--light.svg");
+  }
+
+  .mediumInputContainer--withdrawAmount0 {
+    margin-right: 10px;
+  }
+
+  .swapInputs {
+    align-items: center;
+  }
+
+  .inputBalanceText {
+    left: 90px;
+  }
+
+  .displayDualIconContainer {
+    width: 60px;
+    height: 60px;
+  }
+
+  .displayDualIconContainer--light {
+    background-image: url("/images/ui/swap-currency-circle-360--light.svg");
+  }
+
+  .displayDualIconContainer--dark {
+    background-image: url("/images/ui/swap-currency-circle-360--light.svg");
+  }
+
+  .displayAssetIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .displaySelectContainer,
+  .displaySelectContainerDate {
+    padding: 43px 10px 10px;
+  }
+
+  .largeInput {
+    font-size: 18px !important;
+  }
+
+  .massiveInputAmount,
+  .massiveInputAmountDate {
+    top: 51px;
+    left: 100px;
+  }
+
+  .smallerText,
+  .smallerTextDate {
+    font-size: 12px !important;
+    top: 79px;
+    left: 100px;
+  }
+
+  .warningWarning,
+  .depositInfoHeading,
+  .priceInfo > .text {
+    font-size: 12px !important;
+  }
+
+  .priceInfos {
+    background-image: none !important;
+    border: 1px solid #86B9D6;
+  }
+
+  .priceInfos--dark {
+    border: 1px solid #5F7285;
+  }
+
+  .priceInfo {
+    padding: 10px;
+  }
+
+  .priceInfo:not(:last-child) {
+    border-right: 1px solid #86B9D6;
+  }
+
+  .priceInfos--dark .priceInfo:not(:last-of-type) {
+    border-right: 1px solid #5F7285;
+  }
+
+  .routeLinesLeft,
+  .routeLinesRight {
+    width: 35%;
+  }
+
+  .routeArrow--light {
+    background: var(--background-light) url("/images/ui/swap-route-arrow--light.svg");
+  }
+
+  .routeArrow--dark {
+    background: var(--background-dark) url("/images/ui/swap-route-arrow--dark.svg");
+  }
+
+  .routeArrow {
+    position: absolute;
+  }
+
+  .slippage {
+    bottom: -45px;
+    left: 20px;
+  }
+
+  .buttonOverride {
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0 !important;
+    width: 320px !important;
+    height: 50px;
+  }
+
+  .buttonOverride--light {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--light:hover {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--light:active {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--dark {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--dark:hover {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .buttonOverride--dark:active {
+    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+  }
+
+  .dialogContainer {
+    width: 100% !important;
+  }
+
+  .displayDualIconContainerSmall,
+  .assetOptionIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .dialogContent {
+    padding: 20px !important;
+  }
+
+  .assetSelectBalance {
+    margin-left: 10px;
+  }
+
+  .assetSymbolName,
+  .assetSelectBalanceText {
+    font-size: 14px !important;
+  }
+
+  .assetSymbolName2,
+  .assetSelectBalanceText2 {
+    font-size: 12px !important;
+  }
+
+  .assetSearchResults {
+    min-width: auto;
+  }
+
+  .vestPeriodLabel {
+    padding: 9px 8px;
+    white-space: nowrap;
+  }
+
+  .vestInfo {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .vestInfoText {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .vestInfoTextSec {
+    flex-direction: row;
+  }
+
+  .vestInfoTextTop--light {
+    border-right: none;
+    border-bottom: 1px solid #86B9D6;
+  }
+
+  .vestInfoTextTop--dark {
+    border-right: none;
+    border-bottom: 1px solid #5F7285;
+  }
+
+  .amount {
+    font-size: 14px !important;
+  }
+
+  .toggleOptionText {
+    font-size: 12px !important;
+  }
+
+  .toggleOption:first-child {
+    margin-right: 10px;
+  }
+
+  .inputsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  .amountsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .receiveAssets {
+    margin-top: -38px;
+  }
+
+  .inputTitleText {
+    left: 10px;
+  }
+
+  .disclaimerDivider {
+    width: 100%;
+  }
+
+  .multiApprovalButton {
+    width: 320px !important;
+    height: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0 !important;
+    background: transparent url("/images/ui/btn-simple-disabled.svg") !important;
+  }
+
+  .multiApprovalButton--dark {
+    width: 320px !important;
+    height: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0 !important;
+    background: transparent url("/images/ui/btn-simple-disabled.svg") !important;
+  }
+
+  .searchInput {
+    width: 280px !important;
+  }
+
+  .addButton {
+    width: auto;
+  }
+
+  .actionButtonText {
+    width: 85px;
+    padding: 8px 15px;
+  }
+}
