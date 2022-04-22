@@ -94,8 +94,6 @@ export default function ssLiquidityManage() {
   });
 
   const ssUpdated = async () => {
-    console.log(router.query.address);
-
     const storeAssetOptions = stores.stableSwapStore.getStore('baseAssets');
     const nfts = stores.stableSwapStore.getStore('vestNFTs');
     const veTok = stores.stableSwapStore.getStore('veToken');

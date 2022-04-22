@@ -1080,7 +1080,6 @@ export default function EnhancedTable({pairs}) {
   const [sortDirection, setSortDirection] = useState('asc');
 
   const handleRequestSort = (event, property) => {
-    console.log('--2', event, property);
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);

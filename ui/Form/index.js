@@ -15,8 +15,8 @@ const Form = (props) => {
         {props.children}
       </form>
 
-       {/* <div className={[classes[`bottom`], classes[`bottom--${appTheme}`]].join(' ')}>
-      </div> */}
+      <div className={[classes[`bottom`], classes[`bottom--${appTheme}`]].join(' ')}>
+      </div>
     </div>
   );
 };

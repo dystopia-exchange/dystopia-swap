@@ -119,7 +119,6 @@ export default function existingLock({nft, govToken, veToken}) {
   };
 
   const handleChange = (value) => {
-    console.log('--value', value);
     setSelectedValue(value);
 
     let days = 0;
