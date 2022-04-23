@@ -1372,12 +1372,13 @@ class Store {
                       tokenContract.methods.decimals(),
                       tokenContract.methods.symbol(),
                     ]);
-
+                    
                     bribe = { ...bribe, symbol: symbol };
                     bribe = { ...bribe, decimals: parseInt(decimals) };
                     bribe = {
                       ...bribe,
                       rewardRate: BigNumber(rewardRate)
+                        .div(10 ** 18)
                         .div(10 ** parseInt(decimals))
                         .toFixed(parseInt(decimals)),
                     };
@@ -1385,6 +1386,7 @@ class Store {
                       ...bribe,
                       rewardAmount: BigNumber(rewardRate)
                         .times(604800)
+                        .div(10 ** 18)
                         .div(10 ** parseInt(decimals))
                         .toFixed(parseInt(decimals)),
                     };
