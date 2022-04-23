@@ -169,7 +169,7 @@ export default function ssWhitelist() {
                   fullWidth
                   value={ value }
                   onChange={handleChange}
-                  InputProps={{
+                  inputProps={{
                     className: classes.mediumInput,
                   }}
                 >
@@ -196,6 +196,12 @@ export default function ssWhitelist() {
   }
 
   return (
+    <>
+      <Typography className={classes.notiyText}>
+        The page is under<br/>development
+      </Typography>
+    </>
+    /*
     <div className={ classes.container}>
       <div className={ classes.searchBar }>
       <Grid container spacing={2}>
@@ -207,7 +213,7 @@ export default function ssWhitelist() {
           placeholder="0x..."
           value={search}
           onChange={onSearchChanged}
-          InputProps={{
+          inputProps={{
             startAdornment: (
               <InputAdornment position="start">
                 <Search />
@@ -227,5 +233,6 @@ export default function ssWhitelist() {
         { token && token.address && renderToken()}
       </div>
     </div>
+    */
   )
 }

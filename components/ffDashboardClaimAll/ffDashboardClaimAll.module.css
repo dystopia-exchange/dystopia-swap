@@ -57,14 +57,3 @@
   /* margin-right: 0px !important; */
   margin: 20px 0 0 0 !important;
 }
-
-@media screen and (max-width: 1200px) {
-}
-
-@media screen and (max-width: 600px) {
-  .container {
-    margin-top: 60px;
-    padding: 20px;
-    height: calc(100%);
-  }
-}

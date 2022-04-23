@@ -6,7 +6,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useRouter } from "next/router";
 
 import { AppThemeProvider, useAppTheme } from "../ui/AppThemeProvider";
-import darkTheme from "../theme/dark";
 
 import Configure from "./configure";
 
@@ -15,6 +14,7 @@ import stores from "../stores/index.js";
 import { ACTIONS } from "../stores/constants";
 import "../styles/global.css";
 import "../styles/variables.css";
+import "../styles/grid.css";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 export default function MyApp({ Component, pageProps }) {
@@ -33,8 +33,9 @@ export default function MyApp({ Component, pageProps }) {
   }, []);
 
   const changeTheme = (dark) => {
-    // setThemeConfig(dark ? darkTheme : lightTheme);
-    // localStorage.setItem('yearn.finance-dark-mode', dark ? 'dark' : 'light');
+    setAppTheme(dark ? 'dark' : 'light')
+
+    localStorage.setItem('dystopia.finance-dark-mode', dark ? 'dark' : 'light');
   };
 
   const accountConfigureReturned = () => {
@@ -47,7 +48,7 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(function () {
     const localStorageDarkMode = window.localStorage.getItem(
-      "yearn.finance-dark-mode"
+      "dystopia.finance-dark-mode"
     );
     changeTheme(localStorageDarkMode ? localStorageDarkMode === "dark" : false);
   }, []);
@@ -80,18 +81,18 @@ export default function MyApp({ Component, pageProps }) {
   };
 
   const theme = createTheme({
-    components: {
-      typography: {
-        fontFamily: 'Roboto-Mono, Arial',
+    typography: {
+      allVariants: {
+        fontFamily: '"Roboto Mono", serif',
       },
     },
-  });
+  })
 
   return (
     <ThemeProvider theme={theme}>
       <React.Fragment>
         <Head>
-          <title>Solidly</title>
+          <title>Dystopia</title>
           <meta
             name="viewport"
             content="minimum-scale=1, initial-scale=1, width=device-width"

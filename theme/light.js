@@ -44,6 +44,11 @@ const theme = createTheme({
         color: "#FFF",
         fontSize: "13px"
       }
+    },
+    MuiTouchRipple: {
+      root: {
+        display: 'none',
+      }
     }
   }
 });

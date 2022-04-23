@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import Unlock from '../../components/unlock';
 
 import classes from './rewards.module.css';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 function Rewards({ changeTheme }) {
 
@@ -43,34 +44,44 @@ function Rewards({ changeTheme }) {
     setUnlockOpen(false);
   };
 
+  const {appTheme} = useAppThemeContext();
+
   return (
-    <div className={classes.ffContainer}>
+    <>
       {account && account.address ?
-        <div className={classes.connected}>
-          <SSRewards />
-        </div>
-         :
+        <SSRewards />
+       :
         <Paper className={classes.notConnectedContent}>
-          <div className={classes.sphere}></div>
           <div className={classes.contentFloat}>
-            <Typography className={classes.mainHeadingNC} variant='h1'>Rewards</Typography>
-            <Typography className={classes.mainDescNC} variant='body2'>
-              Claim your share of rewards!
+            <Typography
+              style={{
+                fontFamily: 'PPNeueMachina UltraBold',
+                fontWeight: 700,
+                fontSize: 72,
+                color: '#ffffff',
+              }}>
+              Rewards
             </Typography>
+
+            <div className={classes.mainDescBg}>
+              <Typography className={classes.mainDescNC} variant="body2">
+                Claim your share of rewards!
+              </Typography>
+            </div>
+
             <Button
-            disableElevation
-            className={classes.buttonConnect}
-            variant="contained"
-            onClick={onAddressClicked}>
-            {account && account.address && <div className={`${classes.accountIcon} ${classes.metamask}`}></div>}
-            <Typography>Connect Wallet to Continue</Typography>
+              disableElevation
+              className={[classes.buttonConnect, classes[`buttonConnect--${appTheme}`]].join(' ')}
+              variant="contained"
+              onClick={onAddressClicked}>
+              {account && account.address && <div className={`${classes.accountIcon} ${classes.metamask}`}></div>}
             </Button>
           </div>
         </Paper>
        }
        {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
 
-    </div>
+    </>
   );
 }
 

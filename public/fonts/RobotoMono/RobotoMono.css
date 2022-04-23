@@ -1,0 +1,98 @@
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+  src: url('RobotoMono-Thin.ttf');
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: italic;
+  font-weight: 100;
+  font-display: swap;
+  src: url('RobotoMono-ThinItalic.ttf');
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url('RobotoMono-ExtraLight.ttf');
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: italic;
+  font-weight: 200;
+  font-display: swap;
+  src: url('RobotoMono-ExtraLightItalic.ttf');
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('RobotoMono-Light.ttf');
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url('RobotoMono-LightItalic.ttf');
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('RobotoMono-Medium.ttf');
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('RobotoMono-MediumItalic.ttf');
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('RobotoMono-Regular.ttf');
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('RobotoMono-Italic.ttf');
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('RobotoMono-SemiBold.ttf');
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url('RobotoMono-SemiBoldItalic.ttf');
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('RobotoMono-Bold.ttf');
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url('RobotoMono-BoldItalic.ttf');
+}

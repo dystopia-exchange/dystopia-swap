@@ -14,7 +14,12 @@ import {
   ListItemText,
 } from "@mui/material";
 import { withStyles, withTheme } from "@mui/styles";
-import { List, ArrowDropDown, AccountBalanceWalletOutlined, DashboardOutlined } from "@mui/icons-material";
+import {
+  ArrowDropDown,
+  AccountBalanceWalletOutlined,
+  DashboardOutlined,
+  NotificationsNoneOutlined,
+} from "@mui/icons-material";
 
 import Navigation from "../navigation";
 import Unlock from "../unlock";
@@ -29,6 +34,7 @@ import classes from "./header.module.css";
 import TopHeader from "../../ui/TopHeader";
 import Logo from "../../ui/Logo";
 import ThemeSwitcher from "../../ui/ThemeSwitcher";
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 const {
   CONNECT_WALLET,
@@ -181,8 +187,12 @@ const StyledSwitch = withStyles((theme) => ({
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
-    background: "#06D3D7",
-    color: "#000",
+    background: "#15B525",
+    color: "#ffffff",
+    width: 12,
+    height: 12,
+    minWidth: 12,
+    fontSize: 8,
   },
 }))(Badge);
 
@@ -236,7 +246,7 @@ function Header(props) {
 
   useEffect(function () {
     const localStorageDarkMode = window.localStorage.getItem(
-      "yearn.finance-dark-mode"
+      "dystopia.finance-dark-mode"
     );
     setDarkMode(localStorageDarkMode ? localStorageDarkMode === "dark" : false);
   }, []);
@@ -279,6 +289,8 @@ function Header(props) {
     setAnchorEl(null);
   };
 
+  const { appTheme } = useAppThemeContext();
+
   return (
     <TopHeader>
       <div className={classes.headerContainer}>
@@ -294,36 +306,24 @@ function Header(props) {
         <div className={classes.userBlock}>
           {process.env.NEXT_PUBLIC_CHAINID == "80001" && (
             <div className={classes.testnetDisclaimer}>
-              <Typography className={classes.testnetDisclaimerText}>
-                Testnet
+              <Typography className={[classes.testnetDisclaimerText, classes[`testnetDisclaimerText--${appTheme}`]].join(' ')}>
+                Mumbai Testnet
               </Typography>
             </div>
           )}
-
-          {transactionQueueLength > 0 && (
-            <IconButton
-              className={classes.accountButton}
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                stores.emitter.emit(ACTIONS.TX_OPEN);
-              }}
-            >
-              <StyledBadge
-                badgeContent={transactionQueueLength}
-                color="secondary"
-                overlap="circular"
-              >
-                <List className={classes.iconColor} />
-              </StyledBadge>
-            </IconButton>
+          {process.env.NEXT_PUBLIC_CHAINID == "137" && (
+            <div className={classes.testnetDisclaimer}>
+              <Typography className={[classes.testnetDisclaimerText, classes[`testnetDisclaimerText--${appTheme}`]].join(' ')}>
+                Matic Mainnet
+              </Typography>
+            </div>
           )}
 
           {account && account.address ? (
             <div>
               <Button
                 disableElevation
-                className={classes.accountButton}
+                className={[classes.accountButton, classes[`accountButton--${appTheme}`]].join(' ')}
                 variant="contained"
                 aria-controls="simple-menu"
                 aria-haspopup="true"
@@ -376,7 +376,7 @@ function Header(props) {
           ) : (
             <Button
               disableElevation
-              className={classes.accountButton}
+              className={[classes.accountButton, classes[`accountButton--${appTheme}`]].join(' ')}
               variant="contained"
               onClick={onAddressClicked}
             >
@@ -385,6 +385,16 @@ function Header(props) {
                   className={`${classes.accountIcon} ${classes.metamask}`}
                 ></div>
               )}
+
+              {!account?.address && (
+                <img src="/images/ui/icon-wallet.svg" className={classes.walletIcon}/>
+              )}
+
+              <div className={classes.walletPointContainer}>
+                <div className={classes.walletPoint}>
+                </div>
+              </div>
+
               <Typography className={classes.headBtnTxt}>
                 {account && account.address
                   ? formatAddress(account.address)
@@ -393,6 +403,28 @@ function Header(props) {
             </Button>
           )}
           <ThemeSwitcher />
+
+          {transactionQueueLength > 0 && (
+            <IconButton
+              className={[classes.notificationsButton, classes[`notificationsButton--${appTheme}`]].join(' ')}
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                stores.emitter.emit(ACTIONS.TX_OPEN);
+              }}
+            >
+              <StyledBadge
+                badgeContent={transactionQueueLength}
+                overlap="circular"
+              >
+                <NotificationsNoneOutlined style={{
+                  width: 20,
+                  height: 20,
+                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                }} />
+              </StyledBadge>
+            </IconButton>
+          )}
         </div>
         {unlockOpen && (
           <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />
@@ -415,7 +447,7 @@ function Header(props) {
               Switch to{" "}
               {process.env.NEXT_PUBLIC_CHAINID == "80001"
                 ? "Matic Testnet"
-                : "Fantom Mainnet"}
+                : "Matic Mainnet"}
             </Button>
           </div>
         </div>

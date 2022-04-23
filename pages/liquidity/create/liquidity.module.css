@@ -4,21 +4,6 @@
   display: flex;
   flex-direction: column;
   margin-top: 0px;
-  padding-top: 60px;
   position: relative;
   margin-bottom: 60px;
-}
-
-@media screen and (max-width: 1200px) {
-  .container {
-    padding-top: 180px;
-    margin-bottom: 60px;
-  }
-}
-
-@media screen and (max-width: 560px) {
-  .container {
-    padding-top: 140px;
-    margin-bottom: 60px;
-  }
 }

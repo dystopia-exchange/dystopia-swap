@@ -1,9 +1,8 @@
 import Head from "next/head";
 import classes from "./layout.module.css";
 import Header from "../header";
-import Navigation from "../navigation";
-import AppWrapper from "../../ui/AppWrapper";
 import SnackbarController from "../snackbar";
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 export default function Layout({
   children,
@@ -12,8 +11,10 @@ export default function Layout({
   changeTheme,
   title
 }) {
+  const {appTheme} = useAppThemeContext();
+
   return (
-    <AppWrapper>
+    <>
       <Head>
         <link rel="icon" href="/favicon.png" />
         <link
@@ -28,17 +29,19 @@ export default function Layout({
           as="font"
           crossOrigin=""
         />
-        <meta name="description" content="Solidly allows low cost, near 0 slippage trades on uncorrelated or tightly correlated assets built on Fantom." />
-        <meta name="og:title" content="Solidly" />
+        <meta name="description" content="Dystopia allows low cost, near 0 slippage trades on uncorrelated or tightly correlated assets built on Fantom." />
+        <meta name="og:title" content="Dystopia" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <div className={classes.content}>
+      <div className={[classes.content, classes[`content--${appTheme}`], 'g-flex-column'].join(' ')}>
         {!configure && (
           <Header backClicked={backClicked} changeTheme={changeTheme} title={ title } />
         )}
         <SnackbarController />
-        <main>{children}</main>
+        <main className={[classes.main, 'g-flex-column__item', 'g-flex-column', 'g-scroll-y'].join(' ')}>
+          {children}
+        </main>
       </div>
-    </AppWrapper>
+    </>
   );
 }

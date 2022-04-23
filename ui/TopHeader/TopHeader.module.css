@@ -1,11 +1,8 @@
 .top-header {
-  display: flex;
-  justify-content: space-between;
   width: 100%;
-  align-items: center;
   padding-left: 1rem;
   padding-right: 1rem;
-  height: 64px;
+  height: 50px;
 }
 
 .top-header--light {
@@ -22,11 +19,14 @@
   border-bottom: 1px solid #5f7285;
 }
 
-@media (min-width: 1024px) {
+@media (max-width: 1280px) {
   .top-header {
-    height: 50px;
-    display: block;
-    z-index: 20;
-    position: fixed;
+    height: 100px;
+  }
+}
+
+@media (max-width: 720px) {
+  .top-header {
+    height: 89px;
   }
 }

@@ -1,11 +1,11 @@
+
+
 .container {
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
   margin-top: 0px;
-  padding-top: 60px;
-  position: relative;
   position: relative;
   margin-bottom: 60px;
 }
@@ -73,31 +73,4 @@
   border: 3px solid rgba(104,108,122,0.2);
   padding: 20px;
   height: 100%;
-}
-
-@media screen and (max-width: 1600px) {
-
-}
-
-@media screen and (max-width: 1200px) {
-  .container {
-    padding-top: 180px;
-    margin-bottom: 60px;
-  }
-
-  .xxxContainer {
-    margin: auto;
-    background: none;
-    position: relative;
-    width: calc(100% - 80px) !important;
-    margin-top: -30px !important;
-  }
-
-  .columnRight {
-    padding-left: 0px;
-  }
-}
-
-@media screen and (max-width: 1000px) {
-
 }

@@ -73,12 +73,10 @@ function Vest({ changeTheme }) {
   }, []);
 
   return (
-    <div className={classes.ffContainer}>
+    <>
       {
         account && account.address ?
-          <div className={classes.connected}>
-            <Vesting />
-          </div>
+          <Vesting />
           :
           <Paper className={classes.notConnectedContent}>
             <BalanceIcon className={ classes.overviewIcon } />
@@ -97,7 +95,7 @@ function Vest({ changeTheme }) {
           </Paper>
        }
        {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
-    </div>
+    </>
   );
 }
 
