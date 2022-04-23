@@ -197,15 +197,15 @@ export default function existingLock({nft, govToken, veToken}) {
               </div>
             </div>
           </div>
-
           <InputBase
             className={classes.massiveInputAmount}
             placeholder="0.00"
+            autoFocus={true}
             error={amountError}
             helperText={amountError}
             value={amount}
             onChange={amountChanged}
-            disabled={lockAmountLoading}
+            disabled={lockLoading}
             inputProps={{
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}

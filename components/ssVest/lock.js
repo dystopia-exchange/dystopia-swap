@@ -178,7 +178,7 @@ export default function ssLock({govToken, veToken}) {
     return (
       <div className={[classes.textField, classes[`textField--${appTheme}`]].join(' ')}>
         <Typography className={classes.inputTitleText} noWrap>
-          {'Lock'}
+          {'Manage Lock'}
         </Typography>
 
         <Typography className={classes.inputBalanceText} noWrap onClick={() => {
