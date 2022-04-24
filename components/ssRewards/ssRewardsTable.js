@@ -676,6 +676,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
             style={{
               overflow: 'auto',
               height: tableHeight,
+              background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
             }}>
             <Table
               stickyHeader

@@ -619,6 +619,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
             style={{
               overflow: 'auto',
               height: tableHeight,
+              background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
             }}>
             <Table
               stickyHeader

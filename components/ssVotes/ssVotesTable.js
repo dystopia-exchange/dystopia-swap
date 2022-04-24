@@ -743,6 +743,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
             style={{
               overflow: 'auto',
               height: tableHeight,
+              background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
             }}>
             <Table
               stickyHeader
