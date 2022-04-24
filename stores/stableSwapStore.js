@@ -5407,7 +5407,7 @@ getRewardBalances = async (payload) => {
 
     const multicall = await stores.accountStore.getMulticall();
 
-    if (tokenID) {
+     if (tokenID) {
       const bribesEarned = await Promise.all(
         filteredPairs.map(async (pair) => {
           const bribeContract = new web3.eth.Contract(
@@ -5425,7 +5425,7 @@ getRewardBalances = async (payload) => {
             let [bribeTokenAddress] = await multicall.aggregate([
               bribeContract.methods.rewardTokens(i),
             ]);
-
+          
             bribeTokens.push({
               address: bribeTokenAddress,
               rewardAmount: 0,
@@ -5433,10 +5433,10 @@ getRewardBalances = async (payload) => {
             });
           }
 
-          bribeTokens.shift();
+           bribeTokens.shift();
 
-          const bribesEarned = await Promise.all(
-            bribeTokens.map(async (bribe) => {
+           const bribesEarned = await Promise.all(
+             bribeTokens.map(async (bribe) => {
               const bribeContract = new web3.eth.Contract(
                 CONTRACTS.BRIBE_ABI,
                 pair.gauge.bribeAddress
@@ -5444,7 +5444,7 @@ getRewardBalances = async (payload) => {
 
               const [earned] = await Promise.all([
                 bribeContract.methods
-                  .earned(bribe.address, tokenID)
+                  .earned(bribe.address, account.address)
                   .call(),
               ]);
               const tokenContract = new web3.eth.Contract(
@@ -5459,14 +5459,14 @@ getRewardBalances = async (payload) => {
                 .div(10 ** decimals)
                 .toFixed(parseInt(decimals));
               return bribe;
-            })
-          );
+             })
+           );
 
-          pair.gauge.bribesEarned = bribesEarned;
+           pair.gauge.bribesEarned = bribesEarned;
 
           return pair;
-        })
-      );
+         })
+       );
       filteredBribes = bribesEarned
         .filter((pair) => {
           if (
@@ -5528,7 +5528,6 @@ getRewardBalances = async (payload) => {
         filteredFees.push(pair);
       }
     }
-
     const rewardsEarned = await Promise.all(
       filteredPairs2.map(async (pair) => {
         const gaugeContract = new web3.eth.Contract(
@@ -5560,17 +5559,12 @@ getRewardBalances = async (payload) => {
         pair.rewardType = "Reward";
         filteredRewards.push(pair);
       }
-    }
-
-    console.log(filteredBribes);
-    console.log(filteredFees);
-    console.log(filteredRewards);
-    console.log(veDistReward);
+     }
 
     const rewards = {
       bribes: filteredBribes,
       fees: filteredFees,
-      rewards: filteredRewards,
+      rewards:filteredRewards,
       veDist: veDistReward,
     };
 
