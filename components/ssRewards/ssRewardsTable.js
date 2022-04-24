@@ -596,19 +596,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
               display: 'flex',
               alignItems: 'center',
             }}>
-            {imgSource1 &&
-              <img
-                className={classes.imgLogo}
-                src={imgSource1}
-                width="24"
-                height="24"
-                alt=""
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = '/tokens/unknown-logo.png';
-                }}
-              />
-            }
+            
 
             <Typography
               className={classes.textSpaced}
@@ -643,19 +631,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
               alignItems: 'flex-end',
               paddingLeft: 10,
             }}>
-            {imgSource2 &&
-              <img
-                className={classes.imgLogo}
-                src={imgSource2}
-                width="24"
-                height="24"
-                alt=""
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = '/tokens/unknown-logo.png';
-                }}
-              />
-            }
+           
 
             <Typography
               className={`${classes.textSpaced} ${classes.symbol}`}
