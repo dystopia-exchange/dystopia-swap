@@ -340,7 +340,7 @@ function Setup() {
             height="40px"
             onError={(e) => {
               e.target.onerror = null;
-              e.target.src = "/tokens/unknown-logo.png";
+              e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
             }}
           />
           <div className={classes.line}>
@@ -360,7 +360,7 @@ function Setup() {
                 height="40px"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "/tokens/unknown-logo.png";
+                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                 }}
               />
               <div className={classes.line}>
@@ -381,7 +381,7 @@ function Setup() {
             height="40px"
             onError={(e) => {
               e.target.onerror = null;
-              e.target.src = "/tokens/unknown-logo.png";
+              e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
             }}
           />
         </div>
@@ -590,7 +590,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
               height="60px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
           </div>
@@ -650,7 +650,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
               height="50px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
           </div>
@@ -841,7 +841,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
               height="100px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
           </div>

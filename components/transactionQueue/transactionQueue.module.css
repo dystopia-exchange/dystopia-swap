@@ -255,7 +255,7 @@
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 530px) {
   .dialogTitle {
     padding: 20px !important;
     font-size: 18px !important;

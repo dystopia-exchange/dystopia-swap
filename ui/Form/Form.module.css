@@ -25,6 +25,7 @@
   width: 464px;
   height: 18px;
   background-image: url("/images/ui/swap-popup-top-slice.svg");
+  background-repeat: no-repeat;
 }
 
 .bottom {
@@ -37,10 +38,12 @@
 
 .top--dark {
   background-image: url("/images/ui/swap-popup-top-slice--dark.svg");
+  background-repeat: no-repeat;
 }
 
 .bottom--dark {
   background-image: url("/images/ui/swap-popup-bottom-slice--dark.svg");
+  background-repeat: no-repeat;
 }
 
 .form--dark {
@@ -53,7 +56,7 @@
   border-color: var(--border-light);
 }
 
-@media (max-width: 430px) {
+@media (max-width: 470px) {
   .form,
   .top,
   .bottom {

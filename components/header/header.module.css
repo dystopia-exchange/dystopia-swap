@@ -385,13 +385,13 @@
   background-color: rgb(33, 43, 72) !important;
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1460px) {
   .headerContainer {
     outline: 1px solid #86B9D6;
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 530px) {
   .testnetDisclaimer {
     display: none;
   }

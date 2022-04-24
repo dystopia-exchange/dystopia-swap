@@ -379,7 +379,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
               height="60px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
             
@@ -424,7 +424,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
               height="30px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
            
@@ -614,7 +614,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
               height="100px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
           </div>
@@ -753,7 +753,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
               height="60px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
             
@@ -798,7 +798,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
               height="30px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />}
             {asset?.token1?.logoURI && <img
@@ -809,7 +809,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
               style={{marginLeft:"-25px"}}
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />}
              
@@ -1013,7 +1013,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
               height="100px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
             <img
@@ -1023,7 +1023,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
               height="100px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
           </div>

@@ -176,7 +176,7 @@ export default function existingLock({nft, govToken, veToken}) {
                     height="100px"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = "/tokens/unknown-logo.png";
+                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                     }}
                   />
                 }
@@ -185,11 +185,11 @@ export default function existingLock({nft, govToken, veToken}) {
                   <img
                     className={classes.displayAssetIcon}
                     alt=""
-                    src={'/tokens/unknown-logo.png'}
+                    src={`/tokens/unknown-logo--${appTheme}.svg`}
                     height="100px"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = "/tokens/unknown-logo.png";
+                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                     }}
                   />
                 }

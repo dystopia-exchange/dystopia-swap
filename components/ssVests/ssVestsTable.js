@@ -470,14 +470,14 @@ const useStyles = makeStyles((theme) => ({
   },
   cellPaddings: {
     padding: '11px 20px',
-    ["@media (max-width:430px)"]: {
+    ["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       padding: 10,
     },
   },
   cellHeadPaddings: {
     padding: '5px 20px',
-    ["@media (max-width:430px)"]: {
+    ["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       padding: '5px 10px',
     },
@@ -595,8 +595,6 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
     router.push(`/vest/${nft.id}`);
   };
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, vestNFTs.length - page * rowsPerPage);
-
   const {appTheme} = useAppThemeContext();
 
   window.addEventListener('resize', () => {
@@ -617,6 +615,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
       {windowWidth > 660 &&
         <Paper elevation={0} className={classes.tableContainer}>
           <TableContainer
+            className={'g-flex-column__item'}
             style={{
               overflow: 'auto',
               height: tableHeight,
@@ -663,7 +662,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                                 alt=""
                                 onError={(e) => {
                                   e.target.onerror = null;
-                                  e.target.src = '/tokens/unknown-logo.png';
+                                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                 }}
                               />
                             </div>
@@ -826,6 +825,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
           </TableContainer>
 
           <TablePagination
+            className={'g-flex-column__item-fixed'}
             style={{
               width: '100%',
               marginTop: 20,
@@ -890,7 +890,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                             alt=""
                             onError={(e) => {
                               e.target.onerror = null;
-                              e.target.src = '/tokens/unknown-logo.png';
+                              e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                             }}
                           />
                         </div>

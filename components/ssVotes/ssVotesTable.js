@@ -524,14 +524,14 @@ const useStyles = makeStyles((theme) => {
     },
     cellPaddings: {
       padding: '11px 20px',
-      ["@media (max-width:430px)"]: {
+      ["@media (max-width:530px)"]: {
         // eslint-disable-line no-useless-computed-key
         padding: 10,
       },
     },
     cellHeadPaddings: {
       padding: '5px 20px',
-      ["@media (max-width:430px)"]: {
+      ["@media (max-width:530px)"]: {
         // eslint-disable-line no-useless-computed-key
         padding: '5px 10px',
       },
@@ -624,7 +624,6 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
     );
   }
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, gauges.length - page * rowsPerPage);
   const marks = [
     {
       value: -100,
@@ -740,6 +739,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
           }}
           className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
           <TableContainer
+            className={'g-flex-column__item'}
             style={{
               overflow: 'auto',
               height: tableHeight,
@@ -791,7 +791,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                 alt=""
                                 onError={(e) => {
                                   e.target.onerror = null;
-                                  e.target.src = '/tokens/unknown-logo.png';
+                                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                 }}
                               />
                               <img
@@ -802,7 +802,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                 alt=""
                                 onError={(e) => {
                                   e.target.onerror = null;
-                                  e.target.src = '/tokens/unknown-logo.png';
+                                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                 }}
                               />
                             </div>
@@ -970,16 +970,12 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                       </TableRow>
                     );
                   })}
-                {emptyRows > 0 && (
-                  <TableRow style={{height: 61 * emptyRows}}>
-                    <TableCell colSpan={7}/>
-                  </TableRow>
-                )}
               </TableBody>
             </Table>
           </TableContainer>
 
           <TablePagination
+            className={'g-flex-column__item-fixed'}
             style={{
               width: '100%',
               marginTop: 20,
@@ -1146,7 +1142,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               alt=""
                               onError={(e) => {
                                 e.target.onerror = null;
-                                e.target.src = '/tokens/unknown-logo.png';
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                               }}
                             />
                             <img
@@ -1157,7 +1153,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               alt=""
                               onError={(e) => {
                                 e.target.onerror = null;
-                                e.target.src = '/tokens/unknown-logo.png';
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                               }}
                             />
                           </div>

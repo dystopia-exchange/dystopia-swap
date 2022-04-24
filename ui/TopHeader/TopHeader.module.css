@@ -19,13 +19,13 @@
   border-bottom: 1px solid #5f7285;
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1460px) {
   .top-header {
     height: 100px;
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 900px) {
   .top-header {
     height: 89px;
   }

@@ -805,7 +805,7 @@ export default function ssLiquidityManage() {
                 height="50px"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "/tokens/unknown-logo.png";
+                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                 }}
               />
             }
@@ -814,11 +814,11 @@ export default function ssLiquidityManage() {
               <img
                 className={classes.mediumdisplayAssetIcon}
                 alt=""
-                src={'/tokens/unknown-logo.png'}
+                src={`/tokens/unknown-logo--${appTheme}.svg`}
                 height="50px"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "/tokens/unknown-logo.png";
+                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                 }}
               />
             }
@@ -850,8 +850,8 @@ export default function ssLiquidityManage() {
         <Typography className={classes.inputTitleText} noWrap>
           {
             type === 'amount0'
-              ? `1st ${windowWidth > 430 ? 'token' : ''}`
-              : type !== 'withdraw' ? (`2nd ${windowWidth > 430 ? 'token' : ''}`) : 'Liq. Pair'
+              ? `1st ${windowWidth > 730 ? 'token' : ''}`
+              : type !== 'withdraw' ? (`2nd ${windowWidth > 530 ? 'token' : ''}`) : 'Liq. Pair'
           }
         </Typography>
 
@@ -1597,7 +1597,7 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
               height="60px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
           </div>
@@ -1640,7 +1640,7 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
               height="60px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
           </div>
@@ -1835,7 +1835,7 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
               height="100px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
           </div>

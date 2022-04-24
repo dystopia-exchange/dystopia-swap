@@ -478,7 +478,7 @@ export default function Setup() {
                               style={{ width: "40px", height: "40px" }}
                               onError={(e) => {
                                 e.target.onerror = null;
-                                e.target.src = "/tokens/unknown-logo.png";
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                               }}
                             />
                           </div>
@@ -510,7 +510,7 @@ export default function Setup() {
                               style={{ width: "40px", height: "40px" }}
                               onError={(e) => {
                                 e.target.onerror = null;
-                                e.target.src = "/tokens/unknown-logo.png";
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                               }}
                             />
                           </div>
@@ -581,7 +581,7 @@ export default function Setup() {
                           style={{ width: "30px", height: "30px" }}
                           onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = "/tokens/unknown-logo.png";
+                            e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                           }}
                         />
                       </div>
@@ -608,7 +608,7 @@ export default function Setup() {
                           style={{ width: "30px", height: "30px" }}
                           onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = "/tokens/unknown-logo.png";
+                            e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                           }}
                         />
                       </div>
@@ -824,7 +824,7 @@ export default function Setup() {
                 height="50px"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "public/tokens/unknown-logo.png";
+                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                 }}
               />
             </div>
@@ -874,7 +874,7 @@ export default function Setup() {
                 height="60px"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "/tokens/unknown-logo.png";
+                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                 }}
               />
             </div>
@@ -1005,7 +1005,7 @@ export default function Setup() {
                 height="100px"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "/tokens/unknown-logo.png";
+                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                 }}
               />
               {/* <Typography variant='subtitle1' color='primary'>{value ? value.name : type === 'from' ? 'Select Token 0' : 'Select Token 1'}</Typography> */}

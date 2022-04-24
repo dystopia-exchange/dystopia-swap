@@ -73,7 +73,7 @@
   padding-right: 0 !important;
 }
 
-@media (max-width: 430px) {
+@media (max-width: 530px) {
   .tokenSelect {
     width: 100% !important;
     margin-left: 0;

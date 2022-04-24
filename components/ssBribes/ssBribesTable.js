@@ -390,7 +390,7 @@ export default function EnhancedTable({ gauges }) {
                             alt=''
                             onError={(e) => {
                               e.target.onerror = null;
-                              e.target.src = '/tokens/unknown-logo.png';
+                              e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                             }}
                           />
                           <img
@@ -401,7 +401,7 @@ export default function EnhancedTable({ gauges }) {
                             alt=''
                             onError={(e) => {
                               e.target.onerror = null;
-                              e.target.src = '/tokens/unknown-logo.png';
+                              e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                             }}
                           />
                         </div>

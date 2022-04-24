@@ -280,10 +280,12 @@
   margin-bottom: -1px;
   margin-left: -2px;
   background-image: url("/images/ui/swap-popup-top-slice.svg");
+  background-repeat: no-repeat;
 }
 
 .top--dark {
   background-image: url("/images/ui/swap-popup-top-slice--dark.svg");
+  background-repeat: no-repeat;
 }
 
 .loadingCircle {
@@ -844,7 +846,7 @@
 }
 
 
-@media (max-width: 430px) {
+@media (max-width: 530px) {
   .container,
   .container3,
   .reAddPadding {

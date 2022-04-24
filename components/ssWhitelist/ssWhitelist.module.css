@@ -133,7 +133,7 @@
   text-align: center !important;
 }
 
-@media (max-width: 430px) {
+@media (max-width: 530px) {
   .notiyText {
     font-size: 45px !important;
   }

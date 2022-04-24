@@ -595,7 +595,7 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               alt=""
               src={ asset ? `${asset.logoURI}` : '' }
               height='60px'
-              onError={(e)=>{e.target.onerror = null; e.target.src="/tokens/unknown-logo.png"}}
+              onError={(e)=>{e.target.onerror = null; e.target.src=`/tokens/unknown-logo--${appTheme}.svg`}}
             />
           </div>
         </div>
@@ -625,7 +625,7 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               alt=""
               src={ asset ? `${asset.logoURI}` : '' }
               height='60px'
-              onError={(e)=>{e.target.onerror = null; e.target.src="/tokens/unknown-logo.png"}}
+              onError={(e)=>{e.target.onerror = null; e.target.src=`/tokens/unknown-logo--${appTheme}.svg`}}
             />
           </div>
         </div>
@@ -729,7 +729,7 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               alt=""
               src={ value ? `${value.logoURI}` : '' }
               height='100px'
-              onError={(e)=>{e.target.onerror = null; e.target.src="/tokens/unknown-logo.png"}}
+              onError={(e)=>{e.target.onerror = null; e.target.src=`/tokens/unknown-logo--${appTheme}.svg`}}
             />
           </div>
         </div>

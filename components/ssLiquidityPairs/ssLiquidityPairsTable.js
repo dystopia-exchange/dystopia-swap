@@ -495,13 +495,13 @@ const useStyles = makeStyles({
       padding: '5px 0',
       paddingLeft: 20,
     },
-    ["@media (max-width:430px)"]: {
+    ["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       fontSize: '12px !important',
     },
   },
   myDepositsText: {
-    ["@media (max-width:430px)"]: {
+    ["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       display: 'flex',
       flexDirection: 'column',
@@ -694,7 +694,7 @@ const useStyles = makeStyles({
     background: '#D2D0F2',
     color: '#8F5AE8',
     transition: 'all ease 300ms',
-    ["@media (max-width:430px)"]: {
+    ["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       width: 100,
       fontSize: 14,
@@ -720,14 +720,14 @@ const useStyles = makeStyles({
   },
   cellPaddings: {
     padding: '11px 20px',
-    ["@media (max-width:430px)"]: {
+    ["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       padding: 10,
     },
   },
   cellHeadPaddings: {
     padding: '5px 20px',
-    ["@media (max-width:430px)"]: {
+    ["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       padding: '5px 10px',
     },
@@ -1153,7 +1153,6 @@ export default function EnhancedTable({pairs}) {
 
     return true;
   });
-  const emptyRows = 5 - Math.min(5, filteredPairs.length - page * 5);
 
   const {appTheme} = useAppThemeContext();
 
@@ -1186,6 +1185,7 @@ export default function EnhancedTable({pairs}) {
             }}
             className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
             <TableContainer
+              className={'g-flex-column__item'}
               style={{
                 overflow: 'auto',
                 height: tableHeight,
@@ -1232,7 +1232,7 @@ export default function EnhancedTable({pairs}) {
                                   alt=""
                                   onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = '/tokens/unknown-logo.png';
+                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                   }}
                                 />
                                 <img
@@ -1243,7 +1243,7 @@ export default function EnhancedTable({pairs}) {
                                   alt=""
                                   onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = '/tokens/unknown-logo.png';
+                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                   }}
                                 />
                               </div>
@@ -1889,16 +1889,12 @@ export default function EnhancedTable({pairs}) {
                         </TableRow>
                       );
                     })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{height: 61 * emptyRows}}>
-                      <TableCell colSpan={7}/>
-                    </TableRow>
-                  )}
                 </TableBody>
               </Table>
             </TableContainer>
 
             <TablePagination
+              className={'g-flex-column__item-fixed'}
               style={{
                 width: '100%',
                 marginTop: 20,
@@ -1968,7 +1964,7 @@ export default function EnhancedTable({pairs}) {
                             alt=""
                             onError={(e) => {
                               e.target.onerror = null;
-                              e.target.src = '/tokens/unknown-logo.png';
+                              e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                             }}
                           />
                           <img
@@ -1979,7 +1975,7 @@ export default function EnhancedTable({pairs}) {
                             alt=""
                             onError={(e) => {
                               e.target.onerror = null;
-                              e.target.src = '/tokens/unknown-logo.png';
+                              e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                             }}
                           />
                         </div>
