@@ -350,11 +350,6 @@ function Setup() {
             </div>
             <div className={[classes.routeLinesRight, classes[`routeLinesRight--${appTheme}`]].join(' ')}>
             </div>
-            {console.log(quote.output.routes[0].stable,"sexy")}
-            <div className={classes.stabIndicatorContainer}>
-              <Typography
-                className={classes.stabIndicator}>{quote.output.routes[0].stable ? 'Stable' : 'Volatile'}</Typography>
-            </div>
           </div>
           {quote && quote.output && quote.output.routeAsset &&
             <>

@@ -1,7 +1,6 @@
 .form {
   position: relative;
-  width: 100%;
-  max-width: 460px;
+  width: 463px;
   height: auto;
   margin-left: 1px;
   background: var(--background-dark);

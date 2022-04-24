@@ -94,8 +94,6 @@ export default function ssLiquidityManage() {
   });
 
   const ssUpdated = async () => {
-    console.log(router.query.address);
-
     const storeAssetOptions = stores.stableSwapStore.getStore('baseAssets');
     const nfts = stores.stableSwapStore.getStore('vestNFTs');
     const veTok = stores.stableSwapStore.getStore('veToken');
@@ -971,9 +969,10 @@ export default function ssLiquidityManage() {
                 {formatCurrency(pair?.reserve1)}
               </Typography>
             </div>
-            {/*<div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
-              {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
-            </div>*/}
+            <div className={[classes.priceInfo, classes[`priceInfos--${appTheme}`]].join(' ')}>
+            {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
+            </div>
+        
           </div>
 
           <Typography className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`]].join(' ')}>
@@ -1019,9 +1018,9 @@ export default function ssLiquidityManage() {
             <Typography className={classes.text}>{`${pair?.token1?.symbol}`}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.reserve1)}</Typography>
           </div>
-          {/*<div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+          <div className={[classes.priceInfo, classes[`priceInfos--${appTheme}`]].join(' ')}>
             {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
-          </div>*/}
+          </div>
         </div>
         <Typography className={classes.depositInfoHeading}>Your Balances</Typography>
         <div className={classes.priceInfos}>
@@ -1056,7 +1055,7 @@ export default function ssLiquidityManage() {
           </div>
         </div>
         <div className={classes.smallInputContainer}>
-          <TextField
+          <InputBase
             placeholder="0.00"
             fullWidth
             error={amountError}

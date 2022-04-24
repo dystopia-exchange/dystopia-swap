@@ -129,7 +129,7 @@ export default function ssBribeCreate() {
       setAmountError('From asset is required');
       error = true;
     }
-console.log(asset,amount,gauge,"yeahh6")
+
     if (!error) {
       setCreateLoading(true);
       stores.dispatcher.dispatch({
@@ -153,7 +153,6 @@ console.log(asset,amount,gauge,"yeahh6")
   };
 
   const onGagugeSelect = (event,asset) => {
-    console.log(event,asset,"yeahh4")
     setGauge(asset);
   };
 
@@ -407,7 +406,6 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
   };
 
   const renderAssetOption = (type, asset, idx) => {
-    console.log(type, asset, idx,"yeahh3")
     return (
       <MenuItem
         val={asset.address}
@@ -572,7 +570,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
             }}
           />
         </div>
-        {console.log(filteredAssetOptions,"yeahh2")}
+
         <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
           {
             filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
@@ -782,7 +780,6 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
   };
 
   const renderAssetOption = (type, asset, idx) => {
-    console.log(type, asset, idx,"yeahh3")
     return (
       <MenuItem
         val={asset.address}
