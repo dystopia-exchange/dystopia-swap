@@ -884,7 +884,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           {
                             tableCellContent(
                               formatCurrency(row?.gauge?.weight),
-                              `${formatCurrency(row?.gauge?.weight)} %`,
+                              `${formatCurrency(row?.gauge?.weightPercent)} %`,
                               null,
                               null,
                             )

@@ -5328,7 +5328,7 @@ getVestBalances = async (payload) => {
             });
           }
 
-          bribeTokens.shift();
+          bribeTokens.unshift();
 
           const bribesEarned = await Promise.all(
             bribeTokens.map(async (bribe) => {
@@ -5336,9 +5336,11 @@ getVestBalances = async (payload) => {
                 CONTRACTS.BRIBE_ABI,
                 pair.gauge.bribeAddress
               );
-
+              const [add] = await Promise.all([
+                bribeContract.methods.tokenIdToAddress(tokenID).call(),
+              ]);
               const [earned] = await Promise.all([
-                bribeContract.methods.earned(bribe.address, tokenID).call(),
+                bribeContract.methods.earned(bribe.address,add).call(),
               ]);
               const tokenContract = new web3.eth.Contract(
                 CONTRACTS.ERC20_ABI,
@@ -5433,6 +5435,7 @@ getRewardBalances = async (payload) => {
             });
           }
 
+          console.log(bribeTokens,"yeahhhhhh")
            bribeTokens.shift();
 
            const bribesEarned = await Promise.all(
@@ -5441,12 +5444,15 @@ getRewardBalances = async (payload) => {
                 CONTRACTS.BRIBE_ABI,
                 pair.gauge.bribeAddress
               );
-
+              const [add] = await Promise.all([
+                bribeContract.methods.tokenIdToAddress(tokenID).call(),
+              ]);
               const [earned] = await Promise.all([
                 bribeContract.methods
-                  .earned(bribe.address, account.address)
+                  .earned(bribe.address, add)
                   .call(),
               ]);
+              console.log(add,earned,"yeahhh")
               const tokenContract = new web3.eth.Contract(
                 CONTRACTS.ERC20_ABI,
                 bribe.address
