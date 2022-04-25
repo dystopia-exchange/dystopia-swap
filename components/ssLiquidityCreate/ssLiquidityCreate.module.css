@@ -497,8 +497,8 @@
 }
 
 .assetSelectMenu {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
   display: flex;
   justify-content: space-between;
   align-items: center;

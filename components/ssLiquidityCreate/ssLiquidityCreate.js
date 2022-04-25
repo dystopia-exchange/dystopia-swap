@@ -353,7 +353,8 @@ export default function SSLiquidityCreate() {
             <Typography className={ classes.title } >{ BigNumber(amount1).gt(0) ? formatCurrency(BigNumber(amount0).div(amount1)) : '0.00' }</Typography>
             <Typography className={ classes.text } >{ `${asset0?.symbol} per ${asset1?.symbol}` }</Typography>
           </div>
-          <div className={ classes.priceInfo }>
+
+          <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
             <Typography className={ classes.title } >{ BigNumber(amount0).gt(0) ? formatCurrency(BigNumber(amount1).div(amount0)) : '0.00' }</Typography>
             <Typography className={ classes.text } >{ `${asset1?.symbol} per ${asset0?.symbol}` }</Typography>
           </div>
