@@ -14,7 +14,7 @@ import {
   Switch,
   Select,
   MenuItem,
-  Dialog, InputBase, DialogTitle, DialogContent,
+  Dialog, InputBase, DialogTitle, DialogContent, Popover,
 } from '@mui/material';
 import BigNumber from 'bignumber.js';
 import { formatCurrency } from '../../utils';
@@ -30,7 +30,7 @@ import {
   ArrowBackIosNew,
   RadioButtonUnchecked,
   RadioButtonChecked,
-  Close,
+  Close, Settings,
 } from '@mui/icons-material';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
@@ -87,11 +87,23 @@ export default function ssLiquidityManage() {
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
   const {appTheme} = useAppThemeContext();
 
   window.addEventListener('resize', () => {
     setWindowWidth(window.innerWidth);
   });
+
+  const handleClickPopover = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClosePopover = () => {
+    setAnchorEl(null);
+  };
+
+  const openSlippage = Boolean(anchorEl);
 
   const ssUpdated = async () => {
     const storeAssetOptions = stores.stableSwapStore.getStore('baseAssets');
@@ -969,10 +981,6 @@ export default function ssLiquidityManage() {
                 {formatCurrency(pair?.reserve1)}
               </Typography>
             </div>
-            <div className={[classes.priceInfo, classes[`priceInfos--${appTheme}`]].join(' ')}>
-            {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
-            </div>
-        
           </div>
 
           <Typography className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`]].join(' ')}>
@@ -1018,9 +1026,6 @@ export default function ssLiquidityManage() {
             <Typography className={classes.text}>{`${pair?.token1?.symbol}`}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.reserve1)}</Typography>
           </div>
-          <div className={[classes.priceInfo, classes[`priceInfos--${appTheme}`]].join(' ')}>
-            {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
-          </div>
         </div>
         <Typography className={classes.depositInfoHeading}>Your Balances</Typography>
         <div className={classes.priceInfos}>
@@ -1048,14 +1053,15 @@ export default function ssLiquidityManage() {
 
   const renderSmallInput = (type, amountValue, amountError, amountChanged) => {
     return (
-      <div className={classes.textField}>
-        <div className={classes.inputTitleContainerSlippage}>
-          <div className={classes.inputBalanceSlippage}>
-            <Typography className={classes.inputBalanceText} noWrap> Slippage </Typography>
-          </div>
-        </div>
-        <div className={classes.smallInputContainer}>
-          <InputBase
+      <div className={['g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+        <div className={['g-flex', 'g-flex--align-center'].join(' ')}>
+          {windowWidth > 530 &&
+            <div style={{marginRight: 5}}>
+              Slippage:
+            </div>
+          }
+
+          <TextField
             placeholder="0.00"
             fullWidth
             error={amountError}
@@ -1064,12 +1070,39 @@ export default function ssLiquidityManage() {
             onChange={amountChanged}
             disabled={depositLoading || stakeLoading || depositStakeLoading || createLoading}
             InputProps={{
-              className: classes.smallInput,
+              style: {
+                border: 'none',
+                borderRadius: 0,
+              },
+              classes: {
+                root: classes.searchInput,
+              },
               endAdornment: <InputAdornment position="end">
                 %
               </InputAdornment>,
             }}
+            inputProps={{
+              className: [classes.smallInput, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
+              style: {
+                textAlign: 'right',
+                padding: 0,
+                borderRadius: 0,
+                border: 'none',
+                fontSize: 14,
+                fontWeight: 400,
+                lineHeight: '120%',
+                color: appTheme === "dark" ? '#C6CDD2' : '#325569',
+              },
+            }}
           />
+        </div>
+
+        <div
+          onClick={handleClickPopover}
+          className={classes.slippageIconContainer}>
+          <img
+            src="/images/ui/slippage-icon.svg"
+            className={classes.slippageIcon}/>
         </div>
       </div>
     );
@@ -1234,7 +1267,159 @@ export default function ssLiquidityManage() {
                 {renderMassiveInput('amount1', amount1, amount1Error, amount1Changed, asset1, null, assetOptions, onAssetSelect, amount1Focused, amount1Ref)}
               </div>
               {renderMediumInputToggle('stable', stable)}
-              {renderTokenSelect()}
+
+              <div className={classes.controls}>
+                <div className={classes.controlItem}>
+                  {renderTokenSelect()}
+                </div>
+
+                <div
+                  className={[classes.controlItem, classes.controlPopover, classes[`controlPopover--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
+                  {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
+                </div>
+
+                <Popover
+                  classes={{
+                    paper: [classes.popoverPaper, appTheme === "dark" ? classes['popoverPaper--dark'] : classes['popoverPaper--light']].join(' '),
+                  }}
+                  open={openSlippage}
+                  anchorEl={anchorEl}
+                  onClose={handleClosePopover}
+                  anchorOrigin={{
+                    vertical: -300,
+                    horizontal: windowWidth > 530 ? -295 : -257,
+                  }}>
+                  <div
+                    style={{
+                      marginBottom: 30,
+                    }}
+                    className={['g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                    <div
+                      style={{
+                        fontWeight: 500,
+                        fontSize: 18,
+                        color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                      }}>
+                      Settings
+                    </div>
+
+                    <Close
+                      style={{
+                        cursor: 'pointer',
+                        color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                      }}
+                      onClick={handleClosePopover}/>
+                  </div>
+
+                  <div
+                    style={{
+                      fontWeight: 500,
+                      fontSize: 14,
+                      marginBottom: 10,
+                      color: appTheme === "dark" ? '#7C838A' : '#5688A5',
+                    }}>
+                    Slippage Tolerance
+                  </div>
+
+                  <TextField
+                    placeholder="0.00"
+                    fullWidth
+                    error={slippageError}
+                    helperText={slippageError}
+                    value={slippage}
+                    onChange={onSlippageChanged}
+                    disabled={depositLoading || stakeLoading || depositStakeLoading || createLoading}
+                    classes={{
+                      root: [classes.slippageRoot, appTheme === "dark" ? classes['slippageRoot--dark'] : classes['slippageRoot--light']].join(' '),
+                    }}
+                    InputProps={{
+                      style: {
+                        border: 'none',
+                        borderRadius: 0,
+                      },
+                      classes: {
+                        root: classes.searchInput,
+                      },
+                      endAdornment: <InputAdornment position="end">
+                        <span
+                          style={{
+                            color: appTheme === "dark" ? '#ffffff' : '#5688A5',
+                          }}>
+                          %
+                        </span>
+                      </InputAdornment>,
+                    }}
+                    inputProps={{
+                      className: [classes.smallInput, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
+                      style: {
+                        padding: 0,
+                        borderRadius: 0,
+                        border: 'none',
+                        fontSize: 14,
+                        fontWeight: 400,
+                        lineHeight: '120%',
+                        color: appTheme === "dark" ? '#C6CDD2' : '#325569',
+                      },
+                    }}
+                  />
+
+                  <div className={[classes.slippageDivider, classes[`slippageDivider--${appTheme}`]].join(" ")}>
+                  </div>
+
+                  <div
+                    style={{
+                      fontWeight: 500,
+                      fontSize: 14,
+                      marginBottom: 10,
+                      color: appTheme === "dark" ? '#7C838A' : '#5688A5',
+                    }}>
+                    Transaction Deadline
+                  </div>
+
+                  <TextField
+                    placeholder="0"
+                    fullWidth
+                    // error={slippageError}
+                    // helperText={slippageError}
+                    // value={slippage}
+                    // onChange={onSlippageChanged}
+                    disabled={depositLoading || stakeLoading || depositStakeLoading || createLoading}
+                    classes={{
+                      root: [classes.slippageRoot, appTheme === "dark" ? classes['slippageRoot--dark'] : classes['slippageRoot--light']].join(' '),
+                    }}
+                    InputProps={{
+                      style: {
+                        border: 'none',
+                        borderRadius: 0,
+                      },
+                      classes: {
+                        root: classes.searchInput,
+                      },
+                      endAdornment: <InputAdornment position="end">
+                        <span
+                          style={{
+                            color: appTheme === "dark" ? '#ffffff' : '#5688A5',
+                          }}>
+                          minutes
+                        </span>
+                      </InputAdornment>,
+                    }}
+                    inputProps={{
+                      className: [classes.smallInput, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
+                      style: {
+                        padding: 0,
+                        borderRadius: 0,
+                        border: 'none',
+                        fontSize: 14,
+                        fontWeight: 400,
+                        lineHeight: '120%',
+                        color: appTheme === "dark" ? '#C6CDD2' : '#325569',
+                      },
+                    }}
+                  />
+                </Popover>
+              </div>
+
               {renderDepositInformation()}
             </>
           }

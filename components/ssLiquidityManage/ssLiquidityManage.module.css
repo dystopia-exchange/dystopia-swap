@@ -239,6 +239,33 @@
   background: transparent url("/images/ui/liquidity-tab-left--active--dark.svg") !important;
 }
 
+.slippageIconContainer {
+  display: flex;
+  padding: 11px;
+  background: #0B5E8E;
+  cursor: pointer;
+}
+
+.slippageIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.popoverPaper {
+  width: 337px !important;
+  height: 300px !important;
+  padding: 30px !important;
+  background: #DBE6EC !important;
+  border: 1px solid #0B5E8E !important;
+  box-shadow: 5px 5px 20px rgba(14, 44, 79, 0.25) !important;
+  border-radius: 0 !important;
+}
+
+.popoverPaper--dark {
+  background: #151718 !important;
+  border: 1px solid #5F7285 !important;
+}
+
 .textField {
   margin-top: 2px;
   margin-bottom: 2px;
@@ -788,6 +815,34 @@
   padding: 6px 12px;
 }
 
+.controls {
+  width: 100%;
+  display: flex;
+  margin-top: 20px;
+}
+
+.controlItem {
+  width: 50%;
+}
+
+.controlItem:first-child {
+  margin-right: 20px;
+}
+
+.controlPopover {
+  padding-left: 20px;
+  border: 1px solid #86B9D6;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  color: #5688A5;
+}
+
+.controlPopover--dark {
+  border: 1px solid #5F7285;
+  color: #4CADE6;
+}
+
 .toggles {
   width: 100%;
   display: flex;
@@ -856,7 +911,6 @@
 }
 
 .tokenSelect {
-  margin-top: 20px;
   border-radius: 0 !important;
 }
 
@@ -905,6 +959,35 @@
 
 .searchInput > fieldset {
   border: none;
+}
+
+.slippageRoot {
+  padding: 9px 12px !important;
+  border: 1px solid #86B9D6 !important;
+  margin-bottom: 20px !important;
+}
+
+.slippageRoot--dark {
+  border-color: #5F7285 !important;
+}
+
+.slippageDivider {
+  border-bottom: 1px solid #86B9D6;
+  margin-bottom: 20px;
+}
+
+.slippageDivider--dark {
+  border-color: #5F7285;
+}
+
+.inputBalanceSlippageText--light,
+.inputAdornment--light {
+  color: #5688A5 !important;
+}
+
+.inputBalanceSlippageText--dark,
+.inputAdornment--dark {
+  color: #ffffff !important;
 }
 
 .manageLocalContainer {
@@ -1325,6 +1408,15 @@
 
   .toggleOption:first-child {
     margin-right: 10px;
+  }
+
+  .controlItem:first-child {
+    margin-right: 10px;
+  }
+
+  .popoverPaper {
+    width: 300px !important;
+    padding: 20px !important;
   }
 
   .inputsContainer {
