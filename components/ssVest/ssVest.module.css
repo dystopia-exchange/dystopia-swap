@@ -712,6 +712,13 @@
     width: 100%;
   }
 
+  .reAddPadding3 {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .top {
     width: calc(100% + 2px);
   }
@@ -723,7 +730,7 @@
   .textField--dark {
     width: 280px;
     height: 114px;
-    background-image: url("/images/ui/swap-coin-top-360--light.svg");
+    background-image: url("/images/ui/swap-coin-top-360--dark.svg");
   }
 
   .textField--light {
@@ -734,14 +741,14 @@
 
   .textFieldDate--light {
     width: 280px;
-    height: 114px;
-    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+    height: 81px;
+    background-image: url("/images/ui/calendar-bg-360--light.svg");
   }
 
   .textFieldDate--dark {
     width: 280px;
-    height: 114px;
-    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+    height: 81px;
+    background-image: url("/images/ui/calendar-bg-360--dark.svg");
   }
 
   .textField--To-light,
@@ -750,7 +757,7 @@
   }
 
   .swapIconContainer--dark {
-    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
+    background-image: url("/images/ui/swap-coin-btn-360--dark.svg");
   }
 
   .swapIconContainer--light {
@@ -799,6 +806,10 @@
     padding: 43px 10px 10px;
   }
 
+  .displaySelectContainerDate {
+    padding: 10px 10px 10px;
+  }
+
   .largeInput {
     font-size: 18px !important;
   }
@@ -809,11 +820,19 @@
     left: 100px;
   }
 
+  .massiveInputAmountDate {
+    top: 18px;
+  }
+
   .smallerText,
   .smallerTextDate {
     font-size: 12px !important;
     top: 79px;
     left: 100px;
+  }
+
+  .smallerTextDate {
+    top: 46px;
   }
 
   .warningWarning,
@@ -886,15 +905,15 @@
   }
 
   .buttonOverride--dark {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .buttonOverride--dark:hover {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .buttonOverride--dark:active {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .dialogContainer {

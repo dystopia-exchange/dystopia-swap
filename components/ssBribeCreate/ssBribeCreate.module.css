@@ -60,25 +60,30 @@
 }
 
 .textField--dark {
+  width: 400px;
   height: 172px;
   background-image: url("/images/ui/swap-coin-bottom--dark.svg");
+  background-repeat: no-repeat;
 }
 
 .textField--light {
   margin-top: 20px;
+  width: 400px;
   height: 172px;
   background-image: url("/images/ui/swap-coin-bottom--light.svg");
+  background-repeat: no-repeat;
 }
 
 .textFieldTop--dark {
-  margin-top: 20px;
   height: 172px;
   background-image: url("/images/ui/swap-coin-top--dark.svg");
+  background-repeat: no-repeat;
 }
 
 .textFieldTop--light {
   height: 172px;
   background-image: url("/images/ui/swap-coin-top--light.svg");
+  background-repeat: no-repeat;
 }
 
 .searchInline {
@@ -442,11 +447,11 @@
   justify-content: center;
 }
 
-.displayDualIconContainer--light {
+.displayDualIconContainerSec--light {
   background-image: url("/images/ui/swap-currency-circle--light.svg");
 }
 
-.displayDualIconContainer--dark {
+.displayDualIconContainerSec--dark {
   background-image: url("/images/ui/swap-currency-circle--dark.svg");
 }
 
@@ -488,7 +493,8 @@
   border-radius: 100px;
 }
 
-.someIcon {
+.displayAssetIconSec {
+  margin-left: -10px;
 }
 
 .img1Logo {
@@ -818,6 +824,22 @@
   color: #FFFFFF !important;
 }
 
+.assetSelectIconName {
+  margin-left: 32px;
+}
+
+.assetSymbolName {
+  font-weight: 500 !important;
+  font-size: 18px !important;
+  line-height: 120% !important;
+}
+
+.assetSymbolName2 {
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+}
+
 .manageLocalContainer {
   position: absolute;
   bottom: 30px;
@@ -870,7 +892,7 @@
   .textFieldTop--dark {
     width: 280px;
     height: 114px;
-    background-image: url("/images/ui/swap-coin-top-360--light.svg");
+    background-image: url("/images/ui/swap-coin-top-360--dark.svg");
   }
 
   .textFieldTop--light {
@@ -890,7 +912,7 @@
     margin-top: 10px;
     width: 280px;
     height: 114px;
-    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+    background-image: url("/images/ui/swap-coin-bottom-360--dark.svg");
   }
 
   .textField--To-light,
@@ -899,7 +921,7 @@
   }
 
   .swapIconContainer--dark {
-    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
+    background-image: url("/images/ui/swap-coin-btn-360--dark.svg");
   }
 
   .swapIconContainer--light {
@@ -937,7 +959,7 @@
   }
 
   .mediumInputContainer--dark {
-    background-image: url("/images/ui/liquidity-swap-token-360--light.svg");
+    background-image: url("/images/ui/liquidity-swap-token-360--dark.svg");
   }
 
   .mediumInputContainer--withdrawAmount0 {
@@ -957,17 +979,21 @@
     height: 60px;
   }
 
-  .displayDualIconContainer--light {
+  .displayDualIconContainerSec--light {
     background-image: url("/images/ui/swap-currency-circle-360--light.svg");
   }
 
-  .displayDualIconContainer--dark {
+  .displayDualIconContainerSec--dark {
     background-image: url("/images/ui/swap-currency-circle-360--light.svg");
   }
 
   .displayAssetIcon {
     width: 40px;
     height: 40px;
+  }
+
+  .displayAssetIconSec {
+    margin-left: -10px;
   }
 
   .displaySelectContainer,
@@ -1062,15 +1088,15 @@
   }
 
   .buttonOverride--dark {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .buttonOverride--dark:hover {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .buttonOverride--dark:active {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .dialogContainer {
@@ -1172,7 +1198,7 @@
   }
 
   .inputTitleText {
-    left: 10px;
+    left: 5px;
   }
 
   .disclaimerDivider {
@@ -1194,7 +1220,12 @@
     left: 50%;
     transform: translateX(-50%);
     margin-left: 0 !important;
-    background: transparent url("/images/ui/btn-simple-disabled.svg") !important;
+    background: transparent url("/images/ui/btn-simple-disabled--dark.svg") !important;
+  }
+
+  .assetSelectIconName {
+    margin-top: 30px;
+    margin-left: 20px;
   }
 }
 

@@ -717,6 +717,10 @@ const useStyles = makeStyles({
   sortSelect: {
     position: 'absolute',
     top: 60,
+    ["@media (max-width:530px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      width: '60%',
+    },
   },
   cellPaddings: {
     padding: '11px 20px',

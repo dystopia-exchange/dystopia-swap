@@ -38,6 +38,7 @@ export default function ssLock({govToken, veToken}) {
   const [selectedValue, setSelectedValue] = useState('week');
   const [selectedDate, setSelectedDate] = useState(moment().add(7, 'days').format('YYYY-MM-DD'));
   const [selectedDateError, setSelectedDateError] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const lockReturned = () => {
@@ -55,6 +56,10 @@ export default function ssLock({govToken, veToken}) {
       stores.emitter.removeListener(ACTIONS.CREATE_VEST_RETURNED, lockReturned);
     };
   }, []);
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
 
   const setAmountPercent = (percent) => {
     setAmount(BigNumber(govToken.balance).times(percent).div(100).toFixed(govToken.decimals));
@@ -178,7 +183,7 @@ export default function ssLock({govToken, veToken}) {
     return (
       <div className={[classes.textField, classes[`textField--${appTheme}`]].join(' ')}>
         <Typography className={classes.inputTitleText} noWrap>
-          {'Manage Lock'}
+          {windowWidth > 530 ? 'Manage Lock' : 'Lock'}
         </Typography>
 
         <Typography className={classes.inputBalanceText} noWrap onClick={() => {

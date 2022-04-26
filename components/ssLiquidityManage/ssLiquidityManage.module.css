@@ -239,6 +239,33 @@
   background: transparent url("/images/ui/liquidity-tab-left--active--dark.svg") !important;
 }
 
+.slippageIconContainer {
+  display: flex;
+  padding: 11px;
+  background: #0B5E8E;
+  cursor: pointer;
+}
+
+.slippageIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.popoverPaper {
+  width: 337px !important;
+  height: 300px !important;
+  padding: 30px !important;
+  background: #DBE6EC !important;
+  border: 1px solid #0B5E8E !important;
+  box-shadow: 5px 5px 20px rgba(14, 44, 79, 0.25) !important;
+  border-radius: 0 !important;
+}
+
+.popoverPaper--dark {
+  background: #151718 !important;
+  border: 1px solid #5F7285 !important;
+}
+
 .textField {
   margin-top: 2px;
   margin-bottom: 2px;
@@ -632,6 +659,7 @@
 }
 
 .priceInfos {
+  position: relative;
   display: flex;
   width: 100%;
   margin-top: 7px;
@@ -683,6 +711,48 @@
 
 .priceInfo--dark > .text {
   color: #5F7285 !important;
+}
+
+
+
+.priceInfo::before,
+.priceInfo::after {
+  margin-top: 3.5px;
+}
+
+.priceInfo::before,
+.priceInfo::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  z-index: 999;
+}
+
+.priceInfo::before,
+.priceInfo::after {
+  top: -4.5px;
+  border-top: 1px solid var(--main-secondary-dark);
+}
+
+.priceInfo::before {
+  left: -1px;
+  border-left: 1px solid var(--main-secondary-dark);
+}
+
+.priceInfo::after {
+  right: -1px;
+  border-right: 1px solid var(--main-secondary-dark);
+}
+
+.priceInfo--dark::before,
+.priceInfo--dark::after {
+  border-color: var(--main-secondary-dark);
+}
+
+.priceInfo--light::before,
+.priceInfo--light::after {
+  border-color: var(--main-secondary-light);
 }
 
 .titleSection {
@@ -743,6 +813,34 @@
   justify-content: space-between !important;
   width: calc(100% - 24px);
   padding: 6px 12px;
+}
+
+.controls {
+  width: 100%;
+  display: flex;
+  margin-top: 20px;
+}
+
+.controlItem {
+  width: 50%;
+}
+
+.controlItem:first-child {
+  margin-right: 20px;
+}
+
+.controlPopover {
+  padding-left: 20px;
+  border: 1px solid #86B9D6;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  color: #5688A5;
+}
+
+.controlPopover--dark {
+  border: 1px solid #5F7285;
+  color: #4CADE6;
 }
 
 .toggles {
@@ -813,7 +911,6 @@
 }
 
 .tokenSelect {
-  margin-top: 20px;
   border-radius: 0 !important;
 }
 
@@ -862,6 +959,35 @@
 
 .searchInput > fieldset {
   border: none;
+}
+
+.slippageRoot {
+  padding: 9px 12px !important;
+  border: 1px solid #86B9D6 !important;
+  margin-bottom: 20px !important;
+}
+
+.slippageRoot--dark {
+  border-color: #5F7285 !important;
+}
+
+.slippageDivider {
+  border-bottom: 1px solid #86B9D6;
+  margin-bottom: 20px;
+}
+
+.slippageDivider--dark {
+  border-color: #5F7285;
+}
+
+.inputBalanceSlippageText--light,
+.inputAdornment--light {
+  color: #5688A5 !important;
+}
+
+.inputBalanceSlippageText--dark,
+.inputAdornment--dark {
+  color: #ffffff !important;
 }
 
 .manageLocalContainer {
@@ -999,7 +1125,7 @@
   .textField--withdraw-dark {
     width: 280px;
     height: 114px;
-    background-image: url("/images/ui/swap-coin-top-360--light.svg");
+    background-image: url("/images/ui/swap-coin-top-360--dark.svg");
   }
 
   .textField--amount0-light,
@@ -1020,7 +1146,7 @@
     margin-top: -30px;
     width: 280px;
     height: 114px;
-    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+    background-image: url("/images/ui/swap-coin-bottom-360--dark.svg");
   }
 
   .textField--To-light,
@@ -1029,7 +1155,7 @@
   }
 
   .swapIconContainer--dark {
-    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
+    background-image: url("/images/ui/swap-coin-btn-360--dark.svg");
   }
 
   .swapIconContainer--light {
@@ -1067,7 +1193,7 @@
   }
 
   .mediumInputContainer--dark {
-    background-image: url("/images/ui/liquidity-swap-token-360--light.svg");
+    background-image: url("/images/ui/liquidity-swap-token-360--dark.svg");
   }
 
   .mediumInputContainer--withdrawAmount0 {
@@ -1192,15 +1318,15 @@
   }
 
   .buttonOverride--dark {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .buttonOverride--dark:hover {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .buttonOverride--dark:active {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .dialogContainer {
@@ -1284,6 +1410,15 @@
     margin-right: 10px;
   }
 
+  .controlItem:first-child {
+    margin-right: 10px;
+  }
+
+  .popoverPaper {
+    width: 300px !important;
+    padding: 20px !important;
+  }
+
   .inputsContainer {
     display: flex;
     flex-direction: column;
@@ -1324,6 +1459,6 @@
     left: 50%;
     transform: translateX(-50%);
     margin-left: 0 !important;
-    background: transparent url("/images/ui/btn-simple-disabled.svg") !important;
+    background: transparent url("/images/ui/btn-simple-disabled--dark.svg") !important;
   }
 }

@@ -229,7 +229,7 @@
   .textField--withdraw-dark {
     width: 280px;
     height: 114px;
-    background-image: url("/images/ui/swap-coin-top-360--light.svg");
+    background-image: url("/images/ui/swap-coin-top-360--dark.svg");
   }
 
   .textField--amount0-light,
@@ -250,7 +250,7 @@
     margin-top: -30px;
     width: 280px;
     height: 114px;
-    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+    background-image: url("/images/ui/swap-coin-bottom-360--dark.svg");
   }
 
   .textField--To-light,
@@ -259,7 +259,7 @@
   }
 
   .swapIconContainer--dark {
-    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
+    background-image: url("/images/ui/swap-coin-btn-360--dark.svg");
   }
 
   .swapIconContainer--light {
@@ -297,7 +297,7 @@
   }
 
   .mediumInputContainer--dark {
-    background-image: url("/images/ui/liquidity-swap-token-360--light.svg");
+    background-image: url("/images/ui/liquidity-swap-token-360--dark.svg");
   }
 
   .mediumInputContainer--withdrawAmount0 {
@@ -422,15 +422,15 @@
   }
 
   .buttonOverride--dark {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .buttonOverride--dark:hover {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .buttonOverride--dark:active {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .dialogContainer {
@@ -550,7 +550,7 @@
     left: 50%;
     transform: translateX(-50%);
     margin-left: 0 !important;
-    background: transparent url("/images/ui/btn-simple-disabled.svg") !important;
+    background: transparent url("/images/ui/btn-simple-disabled--dark.svg") !important;
   }
 
   .searchInput {
