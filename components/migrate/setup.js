@@ -24,7 +24,8 @@ import {
   KeyboardArrowDown,
   ArrowForwardIos,
   DeleteOutline,
-  Close
+  Close,
+  ArrowBackIosNew
 } from "@mui/icons-material";
 import migrate from "../../stores/configurations/migrators";
 import FactoryAbi from "../../stores/abis/FactoryAbi.json";
@@ -930,57 +931,59 @@ export default function Setup() {
     const renderManageLocal = () => {
       return (
         <>
-          <div className={classes.searchContainer}>
-            <div className={classes.searchInline}>
-              <TextField
-                autoFocus
-                variant="outlined"
-                fullWidth
-                placeholder="MATIC, DAI, 0x..."
-                value={search}
-                onChange={onSearchChanged}
-                InputProps={{
-                  style: {
-                    background: 'transparent',
-                    border: '1px solid',
-                    borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-                    borderRadius: 0,
-                  },
-                  classes: {
-                    root: classes.searchInput,
-                  },
-                  startAdornment: <InputAdornment position="start">
-                    <Search style={{
-                      color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                    }}/>
-                  </InputAdornment>,
-                }}
-                inputProps={{
-                  style: {
-                    padding: '10px',
-                    borderRadius: 0,
-                    border: 'none',
-                    fontSize: '14px',
-                    lineHeight: '120%',
-                    color: '#86B9D6',
-                  },
-                }}
-              />
-            </div>
-            <div className={classes.assetSearchResults}>
-              {filteredAssetOptions
-                ? filteredAssetOptions
-                    .filter((option) => {
-                      return option.local === true;
-                    })
-                    .map((asset, idx) => {
-                      return renderManageOption(type, asset, idx);
-                    })
-                : []}
-            </div>
+          <div className={classes.searchInline}>
+            <TextField
+              autoFocus
+              variant="outlined"
+              fullWidth
+              placeholder="Search by name or paste address"
+              value={search}
+              onChange={onSearchChanged}
+              InputProps={{
+                style: {
+                  background: 'transparent',
+                  border: '1px solid',
+                  borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
+                  borderRadius: 0,
+                },
+                classes: {
+                  root: classes.searchInput,
+                },
+                startAdornment: <InputAdornment position="start">
+                  <Search style={{
+                    color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  }}/>
+                </InputAdornment>,
+              }}
+              inputProps={{
+                style: {
+                  padding: '10px',
+                  borderRadius: 0,
+                  border: 'none',
+                  fontSize: '14px',
+                  lineHeight: '120%',
+                  color: '#86B9D6',
+                },
+              }}
+            />
           </div>
+  
+          <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
+            {
+              filteredAssetOptions ? filteredAssetOptions.filter((option) => {
+                return option.local === true;
+              }).map((asset, idx) => {
+                return renderManageOption(type, asset, idx);
+              }) : []
+            }
+          </div>
+  
           <div className={classes.manageLocalContainer}>
-            <Button onClick={toggleLocal}>Back to Assets</Button>
+            <Button
+              onClick={toggleLocal}
+            >
+              Back to Assets
+            </Button>
           </div>
         </>
       );
@@ -989,63 +992,63 @@ export default function Setup() {
     const renderOptions = () => {
       return (
         <>
-          <div className={classes.searchContainer}>
-            <div className={classes.searchInline}>
-              <TextField
-                autoFocus
-                variant="outlined"
-                fullWidth
-                placeholder="MATIC,UST, 0x..."
-                value={search}
-                onChange={onSearchChanged}
-                InputProps={{
-              style: {
-                background: 'transparent',
-                border: '1px solid',
-                borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-                borderRadius: 0,
-              },
-              classes: {
-                root: classes.searchInput,
-              },
-              startAdornment: <InputAdornment position="start">
-                <Search style={{
-                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                }}/>
-              </InputAdornment>,
-            }}
-            inputProps={{
-              style: {
-                padding: '10px',
-                borderRadius: 0,
-                border: 'none',
-                fontSize: '14px',
-                lineHeight: '120%',
-                color: '#86B9D6',
-              },
-            }}
-              />
-            </div>
-            <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
-              {filteredAssetOptions
-                ? filteredAssetOptions
-                    .sort((a, b) => {
-                      if (BigNumber(a.balance).lt(b.balance)) return 1;
-                      if (BigNumber(a.balance).gt(b.balance)) return -1;
-                      if (a.symbol.toLowerCase() < b.symbol.toLowerCase())
-                        return -1;
-                      if (a.symbol.toLowerCase() > b.symbol.toLowerCase())
-                        return 1;
-                      return 0;
-                    })
-                    .map((asset, idx) => {
-                      return renderAssetOption(type, asset, idx);
-                    })
-                : []}
-            </div>
+          <div className={classes.searchInline}>
+            <TextField
+              autoFocus
+              variant="outlined"
+              fullWidth
+              placeholder="Search by name or paste address"
+              value={search}
+              onChange={onSearchChanged}
+              InputProps={{
+                style: {
+                  background: 'transparent',
+                  border: '1px solid',
+                  borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
+                  borderRadius: 0,
+                },
+                classes: {
+                  root: classes.searchInput,
+                },
+                startAdornment: <InputAdornment position="start">
+                  <Search style={{
+                    color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  }}/>
+                </InputAdornment>,
+              }}
+              inputProps={{
+                style: {
+                  padding: '10px',
+                  borderRadius: 0,
+                  border: 'none',
+                  fontSize: '14px',
+                  lineHeight: '120%',
+                  color: '#86B9D6',
+                },
+              }}
+            />
           </div>
+  
+          <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
+            {
+              filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
+                if (BigNumber(a.balance).lt(b.balance)) return 1;
+                if (BigNumber(a.balance).gt(b.balance)) return -1;
+                if (a.symbol.toLowerCase() < b.symbol.toLowerCase()) return -1;
+                if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
+                return 0;
+              }).map((asset, idx) => {
+                return renderAssetOption(type, asset, idx);
+              }) : []
+            }
+          </div>
+  
           <div className={classes.manageLocalContainer}>
-            <Button className={classes.manageLocalBtn} onClick={toggleLocal}>Manage Local Assets</Button>
+            <Button
+              className={classes.manageLocalBtn}
+              onClick={toggleLocal}>
+              Manage Local Assets
+            </Button>
           </div>
         </>
       );
@@ -1132,7 +1135,7 @@ export default function Setup() {
           </DialogTitle>
 
           <DialogContent className={classes.dialogContent}>
-            {!manageLocal && renderOptions()}
+             {!manageLocal && renderOptions()} 
             {manageLocal && renderManageLocal()}
           </DialogContent>
         </div>
