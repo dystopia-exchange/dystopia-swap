@@ -287,6 +287,7 @@ function Setup() {
 
     return (
       <div className={classes.depositInfoContainer}>
+        {console.log( BigNumber(quote.priceImpact).gt(0.5),quote,"helllooo")}
         {
           BigNumber(quote.priceImpact).gt(0.5) &&
           <div

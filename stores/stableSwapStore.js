@@ -12,6 +12,7 @@ import { assertValidExecutionArguments } from "graphql/execution/execute";
 import axios from 'axios'
 import pairContractAbi from "./abis/pairOldRouter.json";
 import migratorAbi from "./abis/migrator.json";
+import { ConstructionOutlined } from "@mui/icons-material";
 const queryone = `
 query {
   
@@ -1073,7 +1074,7 @@ class Store {
         name: CONTRACTS.WFTM_NAME,
         symbol: CONTRACTS.WFTM_SYMBOL,
       };
-      return nativeFTM;
+      return [nativeFTM];
     } catch (ex) {
       console.log(ex);
       return [];
@@ -4068,15 +4069,14 @@ quoteSwap = async (payload) => {
       addy1 = CONTRACTS.WFTM_ADDRESS;
     }
 
-    const includesRouteAddress = Array.isArray(routeAssets)
-      ? routeAssets.filter((asset) => {
+    const includesRouteAddress =  routeAssets.filter((asset) => {
         return (
           asset.address.toLowerCase() == addy0.toLowerCase() ||
           asset.address.toLowerCase() == addy1.toLowerCase()
         );
       })
-      : routeAssets;
-
+     
+console.log(includesRouteAddress,routeAssets,"routeAssets")
     let amountOuts = [];
 
     if (includesRouteAddress.length === 0) {
@@ -4235,13 +4235,13 @@ quoteSwap = async (payload) => {
         const amIn = BigNumber(amountIn).div(reserves.reserveA);
         const amOut = BigNumber(amountOut).div(reserves.reserveB);
         const ratio = BigNumber(amOut).div(amIn);
-
+        console.log(ratio,"helloooo")
         totalRatio = BigNumber(totalRatio).times(ratio).toFixed(18);
       }
     }
-
+   
     const priceImpact = BigNumber(1).minus(totalRatio).times(100).toFixed(18);
-
+    
     const returnValue = {
       inputs: {
         fromAmount: fromAmount,
