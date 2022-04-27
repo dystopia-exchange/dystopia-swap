@@ -347,17 +347,7 @@ function Setup() {
           <div className={classes.line}>
             <div className={[classes.routeLinesLeft, classes[`routeLinesLeft--${appTheme}`]].join(' ')}>
             </div>
-            <div className={[classes.routeArrow, classes[`routeArrow--${appTheme}`]].join(' ')}>
-            </div>
-            <div className={ classes.stabIndicatorContainer }>
-              <Typography className={ classes.stabIndicator }>{ quote.output.routes[0].stable ? 'Stable' : 'Volatile' }</Typography>
-            </div>
-            <div className={[classes.routeLinesRight, classes[`routeLinesRight--${appTheme}`]].join(' ')}>
-            </div>
-          </div>
-          {quote && quote.output && quote.output.routeAsset &&
-            <>
-              <img
+            {quote && quote.output && quote.output.routeAsset? <img
                 className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
                 alt=""
                 src={quote.output.routeAsset ? `${quote.output.routeAsset.logoURI}` : ''}
@@ -366,14 +356,22 @@ function Setup() {
                   e.target.onerror = null;
                   e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                 }}
-              />
+              />:<div className={[classes.routeArrow, classes[`routeArrow--${appTheme}`]].join(' ')}>
+              </div>}
+            
+            <div className={ classes.stabIndicatorContainer }>
+              <Typography className={ classes.stabIndicator }style={quote.output.routeAsset?{marginRight:"150px"}:null}>{ quote.output.routes[0].stable ? 'Stable' : 'Volatile' }</Typography>
+            </div>
+            <div className={[classes.routeLinesRight, classes[`routeLinesRight--${appTheme}`]].join(' ')}>
+            </div>
+          </div>
+          {quote && quote.output && quote.output.routeAsset &&
+            <>
               <div className={classes.line}>
-                <div className={classes.routeArrow}>
-                  <ArrowForwardIos className={classes.routeArrowIcon}/>
-                </div>
+                
                 <div className={classes.stabIndicatorContainer}>
                   <Typography
-                    className={classes.stabIndicator}>{quote.output.routes[1].stable ? 'Stable' : 'Volatile'}</Typography>
+                    className={classes.stabIndicator} style={{marginLeft:"150px"}}>{quote.output.routes[1].stable ? 'Stable' : 'Volatile'}</Typography>
                 </div>
               </div>
             </>

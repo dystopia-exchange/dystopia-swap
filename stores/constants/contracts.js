@@ -45,4 +45,4 @@ export const GAUGE_ABI = abis.gaugeABI
 export const BRIBE_ABI = abis.bribeABI
 export const TOKEN_ABI = abis.tokenABI
 
-export const MULTICALL_ADDRESS = '0x08411ADd0b5AA8ee47563b146743C13b3556c9Cc'
+export const MULTICALL_ADDRESS = '0x11ce4B23bD875D7F5C6a31084f55fDe1e9A87507'
