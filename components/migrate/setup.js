@@ -30,7 +30,7 @@ import {
 import migrate from "../../stores/configurations/migrators";
 import FactoryAbi from "../../stores/abis/FactoryAbi.json";
 import pairContractAbi from "../../stores/abis/pairOldRouter.json";
-import Form from "../../ui/Form";
+import Form from "../../ui/MigratorForm";
 import {
   formatCurrency,
   formatAddress,
@@ -65,6 +65,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+
 export default function Setup() {
   const [fromAssetValue, setFromAssetValue] = useState(null);
   const [toAssetValue, setToAssetValue] = useState(null);
