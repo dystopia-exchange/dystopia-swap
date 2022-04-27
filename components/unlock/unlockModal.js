@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { DialogContent, DialogTitle, Dialog, Slide } from "@mui/material";
 import Unlock from "./unlock.js";
 import { Close } from '@mui/icons-material';
@@ -10,8 +10,12 @@ function Transition(props) {
 
 export default function UnlockModal(props) {
   const {closeModal, modalOpen} = props;
-  const fullScreen = window.innerWidth < 576;
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const {appTheme} = useAppThemeContext();
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
 
   return (
     <Dialog
@@ -20,17 +24,16 @@ export default function UnlockModal(props) {
       fullWidth={false}
       maxWidth="false"
       TransitionComponent={Transition}
-      fullScreen={fullScreen}
       style={{borderRadius: 0}}
     >
       <div style={{
-        width: 460,
+        width: windowWidth > 530 ? 460 : '100%',
         background: appTheme === "dark" ? '#151718' : '#DBE6EC',
         border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
         borderRadius: 0,
       }}>
         <DialogTitle style={{
-          padding: 30,
+          padding: windowWidth > 530 ? 30 : 15,
           paddingBottom: 0,
           fontWeight: 500,
           fontSize: 18,
@@ -58,8 +61,8 @@ export default function UnlockModal(props) {
         </DialogTitle>
 
         <DialogContent style={{
-          padding: 30,
-          paddingBottom: 20,
+          padding: windowWidth > 530 ? 30 : 15,
+          paddingBottom: windowWidth > 530 ? 20 : 10,
         }}>
           <Unlock closeModal={closeModal}/>
         </DialogContent>

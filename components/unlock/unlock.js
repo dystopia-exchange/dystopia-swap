@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { withStyles } from "@mui/styles";
 import { Typography, Button, CircularProgress } from "@mui/material";
 import { Close } from "@mui/icons-material";
@@ -206,15 +206,19 @@ function MyComponent(props) {
     }
   }, [account, active, closeModal, context, library]);
 
-  const width = window.innerWidth;
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const {appTheme} = useAppThemeContext();
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
 
   return (
     <div
       style={{
         display: "flex",
         flexWrap: "wrap",
-        justifyContent: width > 576 ? "space-between" : "center",
+        justifyContent: windowWidth > 530 ? "space-between" : "center",
         alignItems: "center",
       }}
     >
@@ -267,7 +271,7 @@ function MyComponent(props) {
           >
             <Button
               style={{
-                width: width > 576 ? "400px" : "calc(100vw - 100px)",
+                width: windowWidth > 530 ? "400px" : "calc(100vw - 100px)",
                 padding: '10px 20px',
                 backgroundColor: appTheme === "dark" ? '#24292D' : '#CFE5F2',
                 border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
@@ -314,8 +318,9 @@ function MyComponent(props) {
                     <Typography
                       style={{
                         fontWeight: 500,
-                        fontSize: '24px',
+                        fontSize: windowWidth > 530 ? 24 : 18,
                         lineHeight: '120%',
+                        textAlign: 'left',
                         color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
                       }}>
                       {display}
@@ -338,7 +343,7 @@ function MyComponent(props) {
                       paddingTop: '10px',
                       borderTop: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
                       textAlign: 'left',
-                      fontSize: '18px',
+                      fontSize: windowWidth > 530 ? 18 : 14,
                       color: appTheme === "dark" ? '#C6CDD2' : '#325569',
                     }}
                     variant={"body2"}>
@@ -357,8 +362,8 @@ function MyComponent(props) {
                       position: "absolute",
                       top: "15px",
                       right: "15px",
-                    }}
-                  ></div>
+                    }}>
+                  </div>
                 )}
               </div>
             </Button>

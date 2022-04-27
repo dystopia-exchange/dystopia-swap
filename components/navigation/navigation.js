@@ -1,22 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-import {
-  Typography,
-  Paper,
-  Switch,
-  Button,
-  Tooltip,
-  Grid,
-  SvgIcon,
-} from "@mui/material";
+import { Typography, Switch } from "@mui/material";
 import { ToggleButton, ToggleButtonGroup } from "@mui/lab";
 import { withTheme, withStyles } from "@mui/styles";
 
 import SSWarning from "../ssWarning";
 
-import stores from "../../stores";
-import { formatAddress } from "../../utils";
 import classes from "./navigation.module.css";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 
