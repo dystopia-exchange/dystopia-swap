@@ -6,7 +6,7 @@ import * as actions from './actions'
 let isTestnet = process.env.NEXT_PUBLIC_CHAINID == 80001
 
 // URLS
-let scan = 'https://ftmscan.com/'
+let scan = 'https://polygonscan.com/'
 let cont = contracts
 
 if(isTestnet) {
