@@ -285,9 +285,10 @@ function Setup() {
 
         {quote &&
           <div style={{
-            marginTop: 20,
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
           }}>
-            {console.log(BigNumber(quote.priceImpact).gt(0.5), quote, "helllooo")}
             {BigNumber(quote.priceImpact).gt(0.5) &&
               <div
                 className={[classes.warningContainer, classes[`warningContainer--${appTheme}`], BigNumber(quote.priceImpact).gt(5) ? classes.warningContainerError : classes.warningContainerWarning].join(" ")}>
@@ -347,10 +348,6 @@ function Setup() {
                 </div>
                 <div className={[classes.routeArrow, classes[`routeArrow--${appTheme}`]].join(' ')}>
                 </div>
-                <div className={classes.stabIndicatorContainer}>
-                  <Typography
-                    className={classes.stabIndicator}>{quote.output.routes[0].stable ? 'Stable' : 'Volatile'}</Typography>
-                </div>
                 <div className={[classes.routeLinesRight, classes[`routeLinesRight--${appTheme}`]].join(' ')}>
                 </div>
               </div>
@@ -369,10 +366,6 @@ function Setup() {
                   <div className={classes.line}>
                     <div className={classes.routeArrow}>
                       <ArrowForwardIos className={classes.routeArrowIcon}/>
-                    </div>
-                    <div className={classes.stabIndicatorContainer}>
-                      <Typography
-                        className={classes.stabIndicator}>{quote.output.routes[1].stable ? 'Stable' : 'Volatile'}</Typography>
                     </div>
                   </div>
                 </>
@@ -469,15 +462,11 @@ function Setup() {
             className={classes.massiveInputAmount}
             placeholder="0.00"
             error={amountError}
-            helperText={amountError}
             value={amountValue}
             onChange={amountChanged}
             disabled={loading || type === 'To'}
             inputProps={{
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
-            }}
-            InputProps={{
-              disableUnderline: true,
             }}
           />
 

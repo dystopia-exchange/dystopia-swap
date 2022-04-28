@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-
-import { Typography, Switch } from "@mui/material";
-import { ToggleButton, ToggleButtonGroup } from "@mui/lab";
+import { Typography, Switch, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { withTheme, withStyles } from "@mui/styles";
 
 import SSWarning from "../ssWarning";

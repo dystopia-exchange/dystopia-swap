@@ -359,6 +359,7 @@ function Header(props) {
                 </div>
 
                 <Typography
+                  title={'25 MATIC'}
                   className={[classes.headBalanceTxt, classes[`headBalanceTxt--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
                   25 MATIC
                 </Typography>

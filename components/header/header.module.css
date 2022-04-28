@@ -468,7 +468,7 @@
   }
 
   .userBlock {
-    margin-right: 20px;
+    margin-right: 10px;
   }
 
   .notificationsButton {
@@ -477,8 +477,10 @@
 
   .headBalanceTxt {
     padding-right: 10px !important;
-    max-width: 80px;
-    white-space: nowrap;
+    max-width: 70px;
+    font-size: 8px !important;
+    text-align: left !important;
+    white-space: pre-wrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
