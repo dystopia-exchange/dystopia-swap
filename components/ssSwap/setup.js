@@ -346,13 +346,8 @@ function Setup() {
               <div className={classes.line}>
                 <div className={[classes.routeLinesLeft, classes[`routeLinesLeft--${appTheme}`]].join(' ')}>
                 </div>
-                <div className={[classes.routeArrow, classes[`routeArrow--${appTheme}`]].join(' ')}>
-                </div>
-                <div className={[classes.routeLinesRight, classes[`routeLinesRight--${appTheme}`]].join(' ')}>
-                </div>
-              </div>
-              {quote && quote.output && quote.output.routeAsset &&
-                <>
+
+                {quote?.output?.routeAsset &&
                   <img
                     className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
                     alt=""
@@ -363,13 +358,17 @@ function Setup() {
                       e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                     }}
                   />
-                  <div className={classes.line}>
-                    <div className={classes.routeArrow}>
-                      <ArrowForwardIos className={classes.routeArrowIcon}/>
-                    </div>
+                }
+
+                {!quote?.output?.routeAsset &&
+                  <div className={[classes.routeArrow, classes[`routeArrow--${appTheme}`]].join(' ')}>
                   </div>
-                </>
-              }
+                }
+
+                <div className={[classes.routeLinesRight, classes[`routeLinesRight--${appTheme}`]].join(' ')}>
+                </div>
+              </div>
+
               <img
                 className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
                 alt=""
