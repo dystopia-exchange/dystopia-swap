@@ -447,7 +447,15 @@ a.linkz {
   background-color: var(--main-secondary-light) !important;
 }
 
-@media (max-width: 1460px) {
+@media (min-width: 1950px) {
+  .navigationContainer {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 1550px) {
   .navigationContainer {
     position: absolute;
     top: 50px;
@@ -496,5 +504,11 @@ a.linkz {
     width: 100%;
     padding: 0 10px;
     overflow-x: auto;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  .navigationContainer::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
   }
 }

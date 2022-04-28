@@ -57,6 +57,7 @@
   display: flex;
   font-size: 0;
   line-height: 0;
+  cursor: pointer;
 }
 
 .userBlock {
@@ -454,7 +455,7 @@
   background: #0B5E8E;
 }
 
-@media (max-width: 1460px) {
+@media (max-width: 1550px) {
   .headerContainer {
     outline: 1px solid #86B9D6;
   }
