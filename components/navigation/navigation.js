@@ -94,9 +94,9 @@ function Navigation(props) {
   };
 
   const onActiveClick = (event, val) => {
-    if (val) {
-      setActive(val);
-      handleNavigate("/" + val);
+    if (val || (!val && active)) {
+      setActive(val || active);
+      handleNavigate("/" + (val || active));
     }
   };
 

@@ -384,41 +384,14 @@ function Header(props) {
                   </div>
                 </div>
               }
-              {/*<Menu
-                id="customized-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-                className={classes.userMenu}
-                classes={{
-                  paper: appTheme === "dark" ? classes['menuBody--dark'] : classes['menuBody--light'],
-                }}>
-                <MenuItem
-                  className={classes.hidden}
-                  onClick={() => router.push("/dashboard")}>
-                  <ListItemIcon className={classes.userMenuIcon}>
-                    <DashboardOutlined fontSize="small"/>
-                  </ListItemIcon>
-                  <ListItemText
-                    className={classes.userMenuText}
-                    primary="Dashboard"/>
-                </MenuItem>
-
-                <MenuItem onClick={onAddressClicked}>
-                  <ListItemIcon className={classes.userMenuIcon}>
-                    <AccountBalanceWalletOutlined fontSize="small"/>
-                  </ListItemIcon>
-                  <ListItemText
-                    className={classes.userMenuText}
-                    primary="Switch Wallet Provider"/>
-                </MenuItem>
-              </Menu>*/}
             </div>
           ) : (
             <Button
+              style={{
+                marginLeft: !account?.address ? 14 : 0,
+              }}
               disableElevation
-              className={[classes.accountButton, classes[`accountButton--${appTheme}`]].join(' ')}
+              className={[classes.accountButton, classes[`accountButton--${appTheme}`], !account?.address ? classes[`accountButtonConnect--${appTheme}`] : ''].join(' ')}
               variant="contained"
               onClick={onAddressClicked}
             >
@@ -437,7 +410,8 @@ function Header(props) {
                 </div>
               </div>
 
-              <Typography className={classes.headBtnTxt}>
+              <Typography
+                className={classes.headBtnTxt}>
                 {account && account.address
                   ? formatAddress(account.address)
                   : "Connect Wallet"}

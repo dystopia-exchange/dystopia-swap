@@ -842,6 +842,99 @@
   border: 2px solid #DB3434;
 }
 
+.notConnectedContent {
+  width: calc(100%) !important;
+  background: transparent !important;
+  text-align: center;
+  height: calc(100vh);
+  box-shadow: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  flex-direction: column;
+  border-radius: 0 !important;
+}
+
+.contentFloat {
+  position: relative;
+  z-index: 9;
+}
+
+.contentFloatText {
+  font-family: 'PPNeueMachina UltraBold', serif !important;
+  font-weight: 700 !important;
+  font-size: 72px !important;
+  color: #ffffff !important;
+}
+
+.mainDescBg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 460px;
+  width: 100%;
+  height: 110px;
+  margin-top: 20px;
+  padding: 30px;
+  background-image: url("/images/ui/swap-bg.svg");
+}
+
+.mainDescNC {
+  text-align: center !important;
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  line-height: 140% !important;
+  color: #0A2C40 !important;
+}
+
+.buttonConnect {
+  width: 292px;
+  height: 65px;
+  margin-top: 40px !important;
+  padding: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.buttonConnect--light {
+  background-image: url("/images/ui/btn-connect-wallet--light.svg");
+}
+
+.buttonConnect--light:hover {
+  background-image: url("/images/ui/btn-connect-wallet-hover--light.svg");
+}
+
+.buttonConnect--light:active {
+  background-image: url("/images/ui/btn-connect-wallet-click--light.svg");
+}
+
+.buttonConnect--dark {
+  background-image: url("/images/ui/btn-connect-wallet--dark.svg");
+}
+
+.buttonConnect--dark:hover {
+  background-image: url("/images/ui/btn-connect-wallet-hover--dark.svg");
+}
+
+.buttonConnect--dark:active {
+  background-image: url("/images/ui/btn-connect-wallet-click--dark.svg");
+}
+
+@media (max-width: 530px) {
+  .contentFloatText {
+    font-size: 58px !important;
+  }
+
+  .mainDescNC {
+    font-size: 16px !important;
+  }
+
+  .mainDescBg {
+    padding: 20px 16px;
+  }
+}
+
 @media screen and (max-width: 1200px) {
   .swapContainer {
     padding: 12px;
