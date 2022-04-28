@@ -281,8 +281,6 @@ function Setup() {
 
     return (
       <div className={classes.depositInfoContainer}>
-        {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
-
         {quote &&
           <div style={{
             display: 'flex',
@@ -392,7 +390,7 @@ function Setup() {
         <Typography
           className={[classes.inputBalanceSlippage, classes[`inputBalanceSlippage--${appTheme}`]].join(" ")}
           noWrap>
-          Slippage %
+          Slippage
         </Typography>
 
         <TextField
@@ -405,6 +403,7 @@ function Setup() {
           InputProps={{
             style: {
               border: 'none',
+              borderBottom: '1px solid #86B9D6',
               borderRadius: 0,
             },
             classes: {
@@ -488,6 +487,8 @@ function Setup() {
       </div>
 
       {renderMassiveInput('To', toAmountValue, toAmountError, toAmountChanged, toAssetValue, toAssetError, toAssetOptions, onAssetSelect)}
+
+      {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
 
       {renderSwapInformation()}
 

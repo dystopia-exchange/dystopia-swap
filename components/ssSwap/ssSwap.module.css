@@ -259,6 +259,7 @@
   position: absolute;
   left: 30px;
   bottom: -80px;
+  width: min-content;
 }
 
 .textField {
@@ -709,6 +710,11 @@
   box-shadow: none !important;
   animation: none !important;
   transition: none !important;
+}
+
+.actionButtonText {
+  font-weight: 700 !important;
+  font-size: 16px !important;
 }
 
 .buttonOverride--light {
