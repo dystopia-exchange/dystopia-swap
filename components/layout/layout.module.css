@@ -31,6 +31,16 @@
   padding: 60px 90px 30px;
 }
 
+@media screen and (min-width: 1920px) {
+  .content--light {
+    background: var(--background-light);
+  }
+
+  .content--dark {
+    background: var(--background-dark);
+  }
+}
+
 @media screen and (max-width: 680px) {
   .main {
     padding: 40px 20px;

@@ -10,7 +10,9 @@ import {
   InputLabel,
   InputBase,
   FormControl,
+  DialogTitle,
   CircularProgress,
+  DialogContent,
   Tooltip,
   Stack,
   Radio,
@@ -22,11 +24,13 @@ import {
   KeyboardArrowDown,
   ArrowForwardIos,
   DeleteOutline,
+  Close,
+  ArrowBackIosNew
 } from "@mui/icons-material";
 import migrate from "../../stores/configurations/migrators";
 import FactoryAbi from "../../stores/abis/FactoryAbi.json";
 import pairContractAbi from "../../stores/abis/pairOldRouter.json";
-import Form from "../../ui/Form";
+import Form from "../../ui/MigratorForm";
 import {
   formatCurrency,
   formatAddress,
@@ -61,6 +65,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+
 export default function Setup() {
   const [fromAssetValue, setFromAssetValue] = useState(null);
   const [toAssetValue, setToAssetValue] = useState(null);
@@ -805,23 +810,15 @@ export default function Setup() {
     const renderManageOption = (type, asset, idx) => {
       return (
         <MenuItem
-          val={asset.address}
-          key={asset.address + "_" + idx}
-          className={[
-            classes.assetSelectMenu,
-            classes[`assetSelectMenu--${appTheme}`],
-          ].join(" ")}
-        >
+          val={asset.address} key={asset.address + '_' + idx}
+          className={[classes.assetSelectMenu, classes[`assetSelectMenu--${appTheme}`]].join(' ')}>
           <div className={classes.assetSelectMenuItem}>
             <div className={classes.displayDualIconContainerSmall}>
               <img
-                className={[
-                  classes.assetOptionIcon,
-                  classes[`assetOptionIcon--${appTheme}`],
-                ].join(" ")}
+                className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
                 alt=""
-                src={asset ? `${asset.logoURI}` : ""}
-                height="50px"
+                src={asset ? `${asset.logoURI}` : ''}
+                height="60px"
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -829,25 +826,36 @@ export default function Setup() {
               />
             </div>
           </div>
-          <div className={classes.assetSelectIconName}>
-            <Typography variant="h5">{asset ? asset.symbol : ""}</Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              {asset ? asset.name : ""}
+  
+          <div>
+            <Typography
+              variant="h5"
+              className={classes.assetSymbolName}
+              style={{
+                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+              }}>
+              {asset ? asset.symbol : ''}
+            </Typography>
+  
+            <Typography
+              variant="subtitle1"
+              className={classes.assetSymbolName2}
+              style={{
+                color: appTheme === "dark" ? '#7C838A' : '#5688A5',
+              }}>
+              {asset ? asset.name : ''}
             </Typography>
           </div>
+  
           <div className={classes.assetSelectActions}>
-            <IconButton
-              onClick={() => {
-                deleteOption(asset);
-              }}
-            >
-              <DeleteOutline />
+            <IconButton onClick={() => {
+              deleteOption(asset);
+            }}>
+              <DeleteOutline/>
             </IconButton>
-            <IconButton
-              onClick={() => {
-                viewOption(asset);
-              }}
-            >
+            <IconButton onClick={() => {
+              viewOption(asset);
+            }}>
               ↗
             </IconButton>
           </div>
@@ -859,19 +867,18 @@ export default function Setup() {
       return (
         <MenuItem
           val={asset.address}
-          key={asset.address + "_" + idx}
-          className={classes.assetSelectMenu}
+          key={asset.address + '_' + idx}
+          className={[classes.assetSelectMenu, classes[`assetSelectMenu--${appTheme}`]].join(' ')}
           onClick={() => {
             onLocalSelect(type, asset);
-          }}
-        >
+          }}>
           <div className={classes.assetSelectMenuItem}>
             <div className={classes.displayDualIconContainerSmall}>
               <img
-                className={classes.displayAssetIconSmall}
+                className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
                 alt=""
-                src={asset ? `${asset.logoURI}` : ""}
-                height="60px"
+                src={asset ? `${asset.logoURI}` : ''}
+                height="50px"
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -880,17 +887,42 @@ export default function Setup() {
             </div>
           </div>
           <div className={classes.assetSelectIconName}>
-            <Typography variant="h5">{asset ? asset.symbol : ""}</Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              {asset ? asset.name : ""}
+            <Typography
+              variant="h5"
+              className={classes.assetSymbolName}
+              style={{
+                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+              }}>
+              {asset ? asset.symbol : ''}
+            </Typography>
+  
+            <Typography
+              variant="subtitle1"
+              className={classes.assetSymbolName2}
+              style={{
+                color: appTheme === "dark" ? '#7C838A' : '#5688A5',
+              }}>
+              {asset ? asset.name : ''}
             </Typography>
           </div>
+  
           <div className={classes.assetSelectBalance}>
-            <Typography variant="h5">
-              {asset && asset.balance ? formatCurrency(asset.balance) : "0.00"}
+            <Typography
+              variant="h5"
+              className={classes.assetSelectBalanceText}
+              style={{
+                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+              }}>
+              {(asset && asset.balance) ? formatCurrency(asset.balance) : '0.00'}
             </Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              {"Balance"}
+  
+            <Typography
+              variant="subtitle1"
+              className={classes.assetSelectBalanceText2}
+              style={{
+                color: appTheme === "dark" ? '#7C838A' : '#5688A5',
+              }}>
+              {'Balance'}
             </Typography>
           </div>
         </MenuItem>
@@ -900,38 +932,59 @@ export default function Setup() {
     const renderManageLocal = () => {
       return (
         <>
-          <div className={classes.searchContainer}>
-            <div className={classes.searchInline}>
-              <TextField
-                autoFocus
-                variant="outlined"
-                fullWidth
-                placeholder="MATIC, DAI, 0x..."
-                value={search}
-                onChange={onSearchChanged}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Search />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </div>
-            <div className={classes.assetSearchResults}>
-              {filteredAssetOptions
-                ? filteredAssetOptions
-                    .filter((option) => {
-                      return option.local === true;
-                    })
-                    .map((asset, idx) => {
-                      return renderManageOption(type, asset, idx);
-                    })
-                : []}
-            </div>
+          <div className={classes.searchInline}>
+            <TextField
+              autoFocus
+              variant="outlined"
+              fullWidth
+              placeholder="Search by name or paste address"
+              value={search}
+              onChange={onSearchChanged}
+              InputProps={{
+                style: {
+                  background: 'transparent',
+                  border: '1px solid',
+                  borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
+                  borderRadius: 0,
+                },
+                classes: {
+                  root: classes.searchInput,
+                },
+                startAdornment: <InputAdornment position="start">
+                  <Search style={{
+                    color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  }}/>
+                </InputAdornment>,
+              }}
+              inputProps={{
+                style: {
+                  padding: '10px',
+                  borderRadius: 0,
+                  border: 'none',
+                  fontSize: '14px',
+                  lineHeight: '120%',
+                  color: '#86B9D6',
+                },
+              }}
+            />
           </div>
+  
+          <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
+            {
+              filteredAssetOptions ? filteredAssetOptions.filter((option) => {
+                return option.local === true;
+              }).map((asset, idx) => {
+                return renderManageOption(type, asset, idx);
+              }) : []
+            }
+          </div>
+  
           <div className={classes.manageLocalContainer}>
-            <Button onClick={toggleLocal}>Back to Assets</Button>
+            <Button
+              onClick={toggleLocal}
+            >
+              Back to Assets
+            </Button>
           </div>
         </>
       );
@@ -940,44 +993,63 @@ export default function Setup() {
     const renderOptions = () => {
       return (
         <>
-          <div className={classes.searchContainer}>
-            <div className={classes.searchInline}>
-              <TextField
-                autoFocus
-                variant="outlined"
-                fullWidth
-                placeholder="MATIC,UST, 0x..."
-                value={search}
-                onChange={onSearchChanged}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Search />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </div>
-            <div className={classes.assetSearchResults}>
-              {filteredAssetOptions
-                ? filteredAssetOptions
-                    .sort((a, b) => {
-                      if (BigNumber(a.balance).lt(b.balance)) return 1;
-                      if (BigNumber(a.balance).gt(b.balance)) return -1;
-                      if (a.symbol.toLowerCase() < b.symbol.toLowerCase())
-                        return -1;
-                      if (a.symbol.toLowerCase() > b.symbol.toLowerCase())
-                        return 1;
-                      return 0;
-                    })
-                    .map((asset, idx) => {
-                      return renderAssetOption(type, asset, idx);
-                    })
-                : []}
-            </div>
+          <div className={classes.searchInline}>
+            <TextField
+              autoFocus
+              variant="outlined"
+              fullWidth
+              placeholder="Search by name or paste address"
+              value={search}
+              onChange={onSearchChanged}
+              InputProps={{
+                style: {
+                  background: 'transparent',
+                  border: '1px solid',
+                  borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
+                  borderRadius: 0,
+                },
+                classes: {
+                  root: classes.searchInput,
+                },
+                startAdornment: <InputAdornment position="start">
+                  <Search style={{
+                    color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  }}/>
+                </InputAdornment>,
+              }}
+              inputProps={{
+                style: {
+                  padding: '10px',
+                  borderRadius: 0,
+                  border: 'none',
+                  fontSize: '14px',
+                  lineHeight: '120%',
+                  color: '#86B9D6',
+                },
+              }}
+            />
           </div>
+  
+          <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
+            {
+              filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
+                if (BigNumber(a.balance).lt(b.balance)) return 1;
+                if (BigNumber(a.balance).gt(b.balance)) return -1;
+                if (a.symbol.toLowerCase() < b.symbol.toLowerCase()) return -1;
+                if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
+                return 0;
+              }).map((asset, idx) => {
+                return renderAssetOption(type, asset, idx);
+              }) : []
+            }
+          </div>
+  
           <div className={classes.manageLocalContainer}>
-            <Button onClick={toggleLocal}>Manage Local Assets</Button>
+            <Button
+              className={classes.manageLocalBtn}
+              onClick={toggleLocal}>
+              Manage Local Assets
+            </Button>
           </div>
         </>
       );
@@ -1013,13 +1085,62 @@ export default function Setup() {
           </div>
         </div>
         <Dialog
-          onClose={onClose}
-          aria-labelledby="simple-dialog-title"
-          open={open}
-        >
-          {!manageLocal && renderOptions()}
-          {manageLocal && renderManageLocal()}
-        </Dialog>
+        aria-labelledby="simple-dialog-title"
+        open={open}
+        style={{borderRadius: 0}}>
+        <div
+          className={classes.dialogContainer}
+          style={{
+            width: 460,
+            height: 710,
+            background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+            border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
+            borderRadius: 0,
+          }}>
+          <DialogTitle
+            className={classes.dialogTitle}
+            style={{
+              padding: 30,
+              paddingBottom: 0,
+              fontWeight: 500,
+              fontSize: 18,
+              lineHeight: '140%',
+              color: '#0A2C40',
+            }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+              }}>
+                {manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
+                  marginRight: 10,
+                  width: 18,
+                  height: 18,
+                  cursor: 'pointer',
+                }}/>}
+                {manageLocal ? 'Manage local assets' : 'Select a token'}
+              </div>
+
+              <Close
+                style={{
+                  cursor: 'pointer',
+                  color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                }}
+                onClick={onClose}/>
+            </div>
+          </DialogTitle>
+
+          <DialogContent className={classes.dialogContent}>
+             {!manageLocal && renderOptions()} 
+            {manageLocal && renderManageLocal()}
+          </DialogContent>
+        </div>
+      </Dialog>
       </React.Fragment>
     );
   }

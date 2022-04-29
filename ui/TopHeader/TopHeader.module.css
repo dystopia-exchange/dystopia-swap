@@ -19,7 +19,7 @@
   border-bottom: 1px solid #5f7285;
 }
 
-@media (max-width: 1460px) {
+@media (max-width: 1550px) {
   .top-header {
     height: 100px;
   }

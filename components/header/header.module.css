@@ -23,8 +23,9 @@
   z-index: 10030 !important;
 }
 
-.userMenuText {
-  transform: scale(0.85);
+.userMenuText > span {
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .ddIcon {
@@ -56,6 +57,7 @@
   display: flex;
   font-size: 0;
   line-height: 0;
+  cursor: pointer;
 }
 
 .userBlock {
@@ -152,28 +154,87 @@
   background: transparent !important;
 }
 
+.accountButtonContainer {
+  position: relative;
+  margin-left: 14px;
+}
+
 .accountButton {
-  display: flex;
-  align-items: center;
-  margin-left: 14px !important;
-  min-width: 168px;
-  height: 28px;
-  border-radius: 40px !important;
-  color: #ffffff !important;
-  padding-left: 10px !important;
-  padding-right: 10px !important;
+  min-width: 168px !important;
+  padding: 0 !important;
   position: fixed;
   z-index: 10030 !important;
-  background: #9BC9E4 !important;
+  border-radius: 40px !important;
   border: 1px solid #0B5E8E !important;
+  background: none !important;
 }
 
 .accountButton--dark {
-  background-color: rgb(33, 43, 72) !important;
+  border-color: #4CADE6 !important;
 }
 
-.accountButton--light {
-  background-color: #9BC9E4 !important;
+.accountButtonConnect--light {
+  background: #9BC9E4 !important;
+}
+
+.accountButtonConnect--dark {
+  background: #5F7285 !important;
+}
+
+.accountButtonAddress {
+  height: 28px;
+  border-radius: 40px !important;
+  outline: 1px solid #0B5E8E !important;
+  color: #ffffff !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  background: #9BC9E4 !important;
+  z-index: 2;
+}
+
+.accountButtonAddress--dark {
+  background-color: #2D3741 !important;
+  outline-color: #4CADE6 !important;
+}
+
+.headBalanceTxt {
+  height: 28px;
+  border-radius: 40px;
+  margin-left: -22px !important;
+  padding-left: 32px !important;
+  padding-right: 15px !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  color: #0A2C40 !important;
+  background: #DBE6EC !important;
+}
+
+.headBalanceTxt--dark {
+  color: #ffffff !important;
+  background: #151718 !important;
+}
+
+.headSwitchBtn {
+  position: absolute;
+  top: 0;
+  height: 68px;
+  width: 100%;
+  background: #0B5E8E;
+  border-radius: 16px;
+  padding-left: 12.5px;
+  padding-top: 30px;
+  cursor: pointer;
+}
+
+.headSwitchBtn--dark {
+  background: #4CADE6;
+}
+
+.headSwitchBtnText {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 120%;
+  color: #FFFFFF;
 }
 
 .switchNetworkBtn {
@@ -240,7 +301,6 @@
   width: 20px;
   height: 20px;
   background-size: 100%;
-  margin-right: 12px;
 }
 
 .headBtnTxt {
@@ -254,15 +314,19 @@
 .metamask {
   background-image: url("/connectors/icn-metamask.svg");
 }
+
 .ledger {
   background-image: url("/connectors/icn-ledger.svg");
 }
+
 .coinbase {
   background-image: url("/connectors/coinbaseWalletIcon.svg");
 }
+
 .torus {
   background-image: url("/connectors/torus.jpg");
 }
+
 .trust {
   background-image: url("/connectors/trustWallet.svg");
 }
@@ -385,9 +449,21 @@
   background-color: rgb(33, 43, 72) !important;
 }
 
-@media (max-width: 1460px) {
+.menuBody--light {
+  border-radius: 0;
+  border: 1px solid rgba(126, 153, 176, 0.2);
+  background: #0B5E8E;
+}
+
+@media (max-width: 1550px) {
   .headerContainer {
     outline: 1px solid #86B9D6;
+  }
+}
+
+@media (max-width: 630px) {
+  .testnetDisclaimer {
+    display: none;
   }
 }
 
@@ -401,10 +477,20 @@
   }
 
   .userBlock {
-    margin-right: 20px;
+    margin-right: 10px;
   }
 
   .notificationsButton {
     margin-left: 0 !important;
+  }
+
+  .headBalanceTxt {
+    padding-right: 10px !important;
+    max-width: 70px;
+    font-size: 8px !important;
+    text-align: left !important;
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

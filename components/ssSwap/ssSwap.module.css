@@ -57,10 +57,6 @@
   align-items: center;
 }
 
-.error {
-  border: 1px solid #dc3545;
-}
-
 .whiteBackground {
   background: #fff;
 }
@@ -263,6 +259,7 @@
   position: absolute;
   left: 30px;
   bottom: -80px;
+  width: min-content;
 }
 
 .textField {
@@ -620,7 +617,6 @@
 }
 
 .depositInfoContainer {
-  margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
   border-radius: 10px;
@@ -633,6 +629,7 @@
   line-height: 120%;
   font-weight: 500 !important;
   color: #06D3D7 !important;
+  margin-top: 20px !important;
   margin-bottom: 6px !important;
   font-size: 14px !important;
 }
@@ -649,11 +646,11 @@
 }
 
 .priceInfos--light {
-  background: transparent url("/images/ui/price-info-bg--light.svg") !important;
+  background: transparent url("/images/ui/price-info-bg--light.svg") no-repeat !important;
 }
 
 .priceInfos--dark {
-  background: transparent url("/images/ui/price-info-bg--dark.svg") !important;
+  background: transparent url("/images/ui/price-info-bg--dark.svg") no-repeat !important;
 }
 
 .priceInfo {
@@ -713,6 +710,11 @@
   box-shadow: none !important;
   animation: none !important;
   transition: none !important;
+}
+
+.actionButtonText {
+  font-weight: 700 !important;
+  font-size: 16px !important;
 }
 
 .buttonOverride--light {
@@ -898,7 +900,7 @@
 }
 
 .warningContainer {
-  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .warningContainer--light {

@@ -36,7 +36,6 @@
   width: calc(100%) !important;
   background: transparent !important;
   text-align: center;
-  padding: 50px;
   height: calc(100vh);
   box-shadow: none !important;
   display: flex;
@@ -148,9 +147,30 @@
   z-index: 9;
 }
 
+.contentFloatText {
+  font-family: 'PPNeueMachina UltraBold', serif !important;
+  font-weight: 700 !important;
+  font-size: 72px !important;
+  color: #ffffff !important;
+}
+
 .viewCollateral,
 .viewVesting,
 .viewVoting,
 .viewRewards {
   float: left;
+}
+
+@media (max-width: 530px) {
+  .contentFloatText {
+    font-size: 58px !important;
+  }
+
+  .mainDescNC {
+    font-size: 16px !important;
+  }
+
+  .mainDescBg {
+    padding: 20px 16px;
+  }
 }

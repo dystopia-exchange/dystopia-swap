@@ -53,13 +53,13 @@ function Home({changeTheme}) {
 
             {windowWidth > 530 &&
               <Typography className={classes.feeTitle}>
-                0.001% FEE • TOKENIZED LOCKS AS NFT’s • POLYGON (MATIC)
+                0.05% FEE • TOKENIZED LOCKS AS NFT’s • POLYGON (MATIC)
               </Typography>
             }
 
             {windowWidth <= 530 &&
               <Typography className={classes.feeTitle}>
-                <div>0.001% FEE</div>
+                <div>0.05% FEE</div>
                 <div>•</div>
                 <div>TOKENIZED LOCKS AS NFT’s</div>
                 <div>•</div>
@@ -87,7 +87,7 @@ function Home({changeTheme}) {
               className={classes.bigLogoSec}/>
 
             <Typography className={[classes.mainDescription, classes[`mainDescription--${appTheme}`]].join(' ')}>
-              Dystopia officially launched in April 2022 with a collective goal
+              Dystopia officially launched in May 2022 with a collective goal
               of <span style={{fontWeight: 700}}>fair and balanced access to DeFi.</span>
               <br/>
               <br/>
