@@ -27,6 +27,7 @@ import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import TablePaginationActions from '../table-pagination/table-pagination';
 import SortSelect from '../select-sort/select-sort';
 import BigNumber from 'bignumber.js';
+import css from './ssVests.module.css'
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
@@ -528,24 +529,26 @@ const EnhancedTableToolbar = (props) => {
   const {appTheme} = useAppThemeContext();
 
   return (
-    <Toolbar className={classes.toolbar}>
+    <Toolbar className={classes.toolbar} style={{ marginBottom: 30 }}>
       <div
         className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
         onClick={onCreate}>
         <div className={classes.addButtonIcon}>
           <LockOutlined style={{width: 20, color: '#fff'}}/>
         </div>
-
-        <Typography className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}>
+          
+        <Typography
+          className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
+        >
           Create Lock
         </Typography>
       </div>
 
-      {windowWidth <= 660 &&
-        <div className={classes.sortSelect}>
+      {windowWidth <= 660 && (
+        <div className={[classes.sortSelect, css.sortSelect].join(' ')}>
           {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
         </div>
-      }
+      )}
     </Toolbar>
   );
 };
@@ -606,6 +609,17 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
     setExpanded(newExpanded ? panel : false);
   };
 
+  const isEmptyTable = vestNFTs.length === 0
+  const emptyMessage = <div
+    style={{
+      background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+      border: '1px dashed #CFE5F2',
+      borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+      color: appTheme === 'dark' ? '#C6CDD2' : '#325569'
+    }}
+    className={css.tableEmptyMessage}
+  >You have not created any Lock yet</div>
+
   return (
     <>
       <EnhancedTableToolbar
@@ -618,7 +632,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
             className={'g-flex-column__item'}
             style={{
               overflow: 'auto',
-              height: tableHeight,
+              height: isEmptyTable ? 'auto' : tableHeight,
               background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
             }}>
             <Table
@@ -632,8 +646,8 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}/>
-
-              <TableBody>
+                {isEmptyTable ? null : (
+                <TableBody>
                 {stableSort(vestNFTs, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
@@ -822,7 +836,9 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                     );
                   })}
               </TableBody>
+              )}
             </Table>
+            {isEmptyTable && emptyMessage}
           </TableContainer>
 
           <TablePagination
@@ -849,7 +865,9 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
         </Paper>
       }
 
-      {windowWidth <= 660 &&
+      {windowWidth <= 660 && (
+        <>
+        {isEmptyTable && emptyMessage}
         <div style={{overflow: 'auto'}}>
           {stableSort(vestNFTs, getComparator(order, orderBy))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -1130,7 +1148,8 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
             })
           }
         </div>
-      }
+        </>
+      )}
     </>
   );
 }
