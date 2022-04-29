@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import BigNumber from 'bignumber.js'
 
 import {
   Typography,
@@ -192,6 +193,7 @@ function Header(props) {
   const router = useRouter();
 
   const [account, setAccount] = useState(accountStore);
+  const [maticBalance, setMaticBalance] = useState();
   const [darkMode, setDarkMode] = useState(
     props.theme.palette.mode === "dark" ? true : false,
   );
@@ -201,9 +203,18 @@ function Header(props) {
   const [transactionQueueLength, setTransactionQueueLength] = useState(0);
   const [warningOpen, setWarningOpen] = useState(false);
 
+  const web = async(add)=>{
+    const maticbalance = await stores.accountStore.getWeb3Provider();
+    let bal = await maticbalance.eth.getBalance(add);
+    setMaticBalance(BigNumber(bal).div(10**18).toFixed(2))
+   
+  }
   useEffect(() => {
+  
     const accountConfigure = () => {
       const accountStore = stores.accountStore.getStore("account");
+      const bb = stores.stableSwapStore.getStore("baseAssets");
+      web(accountStore.address)
       setAccount(accountStore);
       closeUnlock();
     };
@@ -224,12 +235,14 @@ function Header(props) {
     stores.emitter.on(ACCOUNT_CONFIGURED, accountConfigure);
     stores.emitter.on(CONNECT_WALLET, connectWallet);
     stores.emitter.on(ACCOUNT_CHANGED, accountChanged);
+
+    accountConfigure()
     return () => {
       stores.emitter.removeListener(ACCOUNT_CONFIGURED, accountConfigure);
       stores.emitter.removeListener(CONNECT_WALLET, connectWallet);
       stores.emitter.removeListener(ACCOUNT_CHANGED, accountChanged);
     };
-  }, []);
+  }, [maticBalance]);
 
   const openWarning = () => {
     setWarningOpen(true);
@@ -361,7 +374,7 @@ function Header(props) {
                 <Typography
                   title={'25 MATIC'}
                   className={[classes.headBalanceTxt, classes[`headBalanceTxt--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
-                  25 MATIC
+                   {maticBalance  ?maticBalance:0} MATIC
                 </Typography>
               </Button>
 

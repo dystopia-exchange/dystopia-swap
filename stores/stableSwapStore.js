@@ -1478,6 +1478,7 @@ class Store {
               let bal = await web3.eth.getBalance(account.address);
               return {
                 balanceOf: bal,
+                maticBalance:bal,
                 isWhitelisted: true,
               };
             }
@@ -1486,7 +1487,7 @@ class Store {
               CONTRACTS.ERC20_ABI,
               asset.address,
             );
-
+            let bal = await web3.eth.getBalance(account.address);
             const [isWhitelisted, balanceOf] = await Promise.all([
               voterContract.methods.isWhitelisted(asset.address).call(),
               assetContract.methods.balanceOf(account.address).call(),
@@ -1494,6 +1495,7 @@ class Store {
 
             return {
               balanceOf,
+              bal,
               isWhitelisted,
             };
           } catch (ex) {
@@ -1502,6 +1504,7 @@ class Store {
             console.log(ex);
             return {
               balanceOf: "0",
+              maticBalance:"0",
               isWhitelisted: false,
             };
           }
