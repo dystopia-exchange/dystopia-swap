@@ -1,7 +1,7 @@
 @font-face {
   font-family: "PPNeueMachina UltraBold";
-  src: url("PPNeueMachina-UltraBold.ttf");
-  font-style: medium;
+  font-style: normal;
   font-weight: 700;
   font-display: swap;
+  src: url("/fonts/PPNeueMachina-UltraBold/PPNeueMachina-UltraBold.ttf");
 }
