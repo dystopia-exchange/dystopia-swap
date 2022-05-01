@@ -39,7 +39,7 @@ export default function Layout({
         />
         <link
           rel="preload"
-          href="/fonts/PPNeueMachina-UltraBold/PPNeueMachina-UltraBold.ttf"
+          href="/fonts/PPNeueMachina/PPNeueMachina.ttf"
           as="font"
           crossOrigin=""
         />
