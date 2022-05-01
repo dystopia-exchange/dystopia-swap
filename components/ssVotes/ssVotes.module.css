@@ -73,6 +73,10 @@
   white-space: nowrap !important;
 }
 
+.infoSectionPercentDisabled {
+  color: #7C838A !important;
+}
+
 .buttonOverride {
   background: rgb(23, 52, 72) !important;
   color: rgb(6, 211, 215) !important;
@@ -97,6 +101,18 @@
 
 .buttonOverrideFixed--dark {
   background: #494B51 !important;
+  outline: 1px solid #7F828B !important;
+}
+
+.buttonOverrideFixedDisabled--light {
+  background: #D4D5DB!important;
+  color: #A3A9BA !important;
+  outline: 1px solid #A3A9BA !important;
+}
+
+.buttonOverrideFixedDisabled--dark {
+  background: #494B51 !important;
+  color: #7F828B !important;
   outline: 1px solid #7F828B !important;
 }
 

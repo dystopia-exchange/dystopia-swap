@@ -138,6 +138,8 @@ export default function ssVotes() {
     setWindowWidth(window.innerWidth);
   });
 
+  const noTokenSelected = token === null
+
   return (
     <>
       <div className={[classes.topBarContainer, 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
@@ -158,12 +160,21 @@ export default function ssVotes() {
               Voting Power Used:
             </Typography>
 
-            <Typography className={`${BigNumber(totalVotes).gt(100) ? classes.errorText : classes.helpText}`}>
+            <Typography
+              className={[
+                `${BigNumber(totalVotes).gt(100) ? classes.errorText : classes.helpText}`,
+                noTokenSelected ? classes.infoSectionPercentDisabled : ''
+              ].join(' ')}
+            >
               {formatCurrency(totalVotes)}%
             </Typography>
 
             <Button
-              className={[classes.buttonOverrideFixed, classes[`buttonOverrideFixed--${appTheme}`]].join(' ')}
+              className={[
+                classes.buttonOverrideFixed,
+                classes[`buttonOverrideFixed--${appTheme}`],
+                noTokenSelected ? classes[`buttonOverrideFixedDisabled--${appTheme}`] : null,
+              ].join(' ')}
               variant="contained"
               size="large"
               color="primary"
@@ -173,7 +184,7 @@ export default function ssVotes() {
                 style={{
                   fontWeight: 700,
                   fontSize: 16,
-                  color: appTheme === 'dark' ? '#8F5AE8' : '#8F5AE8',
+                  // color: appTheme === 'dark' ? '#8F5AE8' : '#8F5AE8',
                   whiteSpace: 'nowrap',
                 }}>
                 {voteLoading ? `Casting Votes` : `Cast Votes`}
@@ -239,7 +250,13 @@ export default function ssVotes() {
           }
 
           <div className={classes.tokenSelect}>
-            {TokenSelect({value: token, options: vestNFTs, symbol: veToken?.symbol, handleChange})}
+            {TokenSelect({
+              value: token,
+              options: vestNFTs,
+              symbol: veToken?.symbol,
+              handleChange,
+              placeholder: 'Click to select veNFT'
+            })}
           </div>
 
           {windowWidth <= 1360 &&
@@ -274,6 +291,7 @@ export default function ssVotes() {
         defaultVotes={votes}
         veToken={veToken}
         token={token}
+        noTokenSelected={noTokenSelected}
         showSearch={showSearch}/>
     </>
   );

@@ -7,7 +7,9 @@ import { ArrowDropDownCircleOutlined } from '@mui/icons-material';
 
 function TokenSelect(props) {
   const {appTheme} = useAppThemeContext();
-  const {value, options, symbol, handleChange} = props;
+  const {value, options, symbol, handleChange, placeholder = ''} = props;
+
+  const noValue = value === null
 
   return (
     <Select
@@ -19,6 +21,14 @@ function TokenSelect(props) {
         },
       }}
       value={value}
+      {...{
+        displayEmpty: noValue ? true : undefined,
+        renderValue: noValue ? (selected) => {
+          if (selected === null) {
+            return <em>{placeholder}</em>
+          }
+        } : undefined
+      }}
       onChange={handleChange}
       IconComponent={ArrowDropDownCircleOutlined}
       inputProps={{

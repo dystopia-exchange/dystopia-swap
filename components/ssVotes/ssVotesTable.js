@@ -25,7 +25,21 @@ import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import TablePaginationActions from '../table-pagination/table-pagination';
 import SortSelect from '../select-sort/select-sort';
 
-const CustomSlider = styled(Slider)(({theme, appTheme}) => {
+const CustomSlider = styled(Slider)(({theme, appTheme, disabled}) => {
+
+  const MuiSliderthumb = {
+    backgroundColor: appTheme === 'dark' ? '#4CADE6' : '#5688A5'
+  }
+
+  const MuiSliderTrack = {
+    backgroundColor: '#9BC9E4',
+  }
+
+  if (disabled) {
+    MuiSliderthumb.backgroundColor = appTheme === 'dark' ? '#7F828B' : '#A3A9BA'
+    MuiSliderTrack.backgroundColor = '#D4D5DB'
+  }
+
   return ({
     color: appTheme === 'dark' ? '#3880ff' : '#3880ff',
     height: 2,
@@ -33,7 +47,7 @@ const CustomSlider = styled(Slider)(({theme, appTheme}) => {
     '& .MuiSlider-thumb': {
       height: 10,
       width: 10,
-      backgroundColor: appTheme === 'dark' ? '#4CADE6' : '#5688A5',
+      backgroundColor: MuiSliderthumb.backgroundColor,
       boxShadow: 'none',
       '&:focus, &:hover, &.Mui-active': {
         boxShadow: 'none',
@@ -60,7 +74,7 @@ const CustomSlider = styled(Slider)(({theme, appTheme}) => {
     },
     '& .MuiSlider-track': {
       border: 'none',
-      backgroundColor: '#9BC9E4',
+      backgroundColor: MuiSliderTrack.backgroundColor,
     },
     '& .MuiSlider-rail': {
       opacity: 1,
@@ -68,11 +82,11 @@ const CustomSlider = styled(Slider)(({theme, appTheme}) => {
     },
     '& .MuiSlider-mark': {
       opacity: 1,
-      backgroundColor: '#CFE5F2',
+      backgroundColor: disabled ? MuiSliderTrack.backgroundColor : '#CFE5F2',
       height: 2,
       width: 2,
       '&.MuiSlider-markActive': {
-        backgroundColor: '#CFE5F2',
+        backgroundColor: disabled ? MuiSliderTrack.backgroundColor : '#CFE5F2',
         opacity: 1,
       },
     },
@@ -539,7 +553,7 @@ const useStyles = makeStyles((theme) => {
   });
 });
 
-export default function EnhancedTable({gauges, setParentSliderValues, defaultVotes, veToken, token, showSearch}) {
+export default function EnhancedTable({gauges, setParentSliderValues, defaultVotes, veToken, token, showSearch, noTokenSelected}) {
   const classes = useStyles();
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('totalVotes');
@@ -965,6 +979,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               max={100}
                               marks
                               step={1}
+                              disabled={noTokenSelected}
                             />
                           </div>
                         </TableCell>
