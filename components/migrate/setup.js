@@ -43,6 +43,7 @@ import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import stores from "../../stores";
 import { ACTIONS, ETHERSCAN_URL } from "../../stores/constants";
 import BigNumber from "bignumber.js";
+import { formatSymbol } from '../../utils';
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -834,7 +835,7 @@ export default function Setup() {
               style={{
                 color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
               }}>
-              {asset ? asset.symbol : ''}
+              {asset ? formatSymbol(asset.symbol) : ''}
             </Typography>
   
             <Typography
@@ -893,7 +894,7 @@ export default function Setup() {
               style={{
                 color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
               }}>
-              {asset ? asset.symbol : ''}
+              {asset ? formatSymbol(asset.symbol) : ''}
             </Typography>
   
             <Typography

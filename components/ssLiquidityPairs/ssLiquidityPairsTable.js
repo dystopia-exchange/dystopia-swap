@@ -42,6 +42,7 @@ import { formatCurrency } from '../../utils';
 import classes from './ssLiquidityPairs.module.css';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import TablePaginationActions from '../table-pagination/table-pagination';
+import { formatSymbol } from '../../utils';
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
@@ -1169,6 +1170,11 @@ export default function EnhancedTable({pairs}) {
     setExpanded(newExpanded ? panel : false);
   };
 
+  console.log(
+    '------',
+    stableSort(filteredPairs, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+  )
+
   return (
     <>
       <EnhancedTableToolbar
@@ -1262,7 +1268,7 @@ export default function EnhancedTable({pairs}) {
                                     color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   }}
                                   noWrap>
-                                  {row?.symbol}
+                                  {formatSymbol(row?.symbol)}
                                 </Typography>
                                 <Typography
                                   className={classes.textSpaced}
@@ -1358,7 +1364,7 @@ export default function EnhancedTable({pairs}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {row.token0.symbol}
+                                    {formatSymbol(row.token0.symbol)}
                                   </Typography>
 
                                   <Typography
@@ -1369,7 +1375,7 @@ export default function EnhancedTable({pairs}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {row.token1.symbol}
+                                    {formatSymbol(row.token1.symbol)}
                                   </Typography>
                                 </div>
                               }
@@ -1549,7 +1555,7 @@ export default function EnhancedTable({pairs}) {
                                         lineHeight: '120%',
                                         color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                       }}>
-                                      {row.token0.symbol}
+                                      {formatSymbol(row.token0.symbol)}
                                     </Typography>
 
                                     <Typography
@@ -1560,7 +1566,7 @@ export default function EnhancedTable({pairs}) {
                                         lineHeight: '120%',
                                         color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                       }}>
-                                      {row.token1.symbol}
+                                      {formatSymbol(row.token1.symbol)}
                                     </Typography>
                                   </div>
                                 </div>
@@ -1690,7 +1696,7 @@ export default function EnhancedTable({pairs}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {row.token0.symbol}
+                                    {formatSymbol(row.token0.symbol)}
                                   </Typography>
 
                                   <Typography
@@ -1701,7 +1707,7 @@ export default function EnhancedTable({pairs}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {row.token1.symbol}
+                                    {formatSymbol(row.token1.symbol)}
                                   </Typography>
                                 </div>
                               }
@@ -1805,7 +1811,7 @@ export default function EnhancedTable({pairs}) {
                                         lineHeight: '120%',
                                         color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                       }}>
-                                      {row.token0.symbol}
+                                      {formatSymbol(row.token0.symbol)}
                                     </Typography>
 
                                     <Typography
@@ -1816,7 +1822,7 @@ export default function EnhancedTable({pairs}) {
                                         lineHeight: '120%',
                                         color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                       }}>
-                                      {row.token1.symbol}
+                                      {formatSymbol(row.token1.symbol)}
                                     </Typography>
                                   </div>
                                 }
@@ -2134,7 +2140,7 @@ export default function EnhancedTable({pairs}) {
                                   lineHeight: '120%',
                                   color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                 }}>
-                                {row.token0.symbol}
+                                {formatSymbol(row.token0.symbol)}
                               </Typography>
 
                               <Typography
@@ -2145,7 +2151,7 @@ export default function EnhancedTable({pairs}) {
                                   lineHeight: '120%',
                                   color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                 }}>
-                                {row.token1.symbol}
+                                {formatSymbol(row.token1.symbol)}
                               </Typography>
                             </div>
                           </div>
@@ -2280,7 +2286,7 @@ export default function EnhancedTable({pairs}) {
                                     lineHeight: '120%',
                                     color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                   }}>
-                                  {row.token0.symbol}
+                                  {formatSymbol(row.token0.symbol)}
                                 </Typography>
 
                                 <Typography
@@ -2291,7 +2297,7 @@ export default function EnhancedTable({pairs}) {
                                     lineHeight: '120%',
                                     color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                   }}>
-                                  {row.token1.symbol}
+                                  {formatSymbol(row.token1.symbol)}
                                 </Typography>
                               </div>
                             </div>

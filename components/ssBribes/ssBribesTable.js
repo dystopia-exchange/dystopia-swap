@@ -21,7 +21,7 @@ import {
 import { useRouter } from "next/router";
 import BigNumber from 'bignumber.js';
 import { FilterList, Search } from '@mui/icons-material';
-
+import { formatSymbol } from '../../utils';
 import { formatCurrency } from '../../utils';
 
 function descendingComparator(a, b, orderBy) {
@@ -407,7 +407,7 @@ export default function EnhancedTable({ gauges }) {
                         </div>
                         <div>
                           <Typography variant='h2' noWrap>
-                            {row?.symbol}
+                            {formatSymbol(row?.symbol)}
                           </Typography>
                         </div>
                       </div>
@@ -438,7 +438,7 @@ export default function EnhancedTable({ gauges }) {
                                 {formatCurrency(bribe?.rewardForDuration)}
                               </Typography>
                               <Typography variant='h5' className={classes.textSpaced} color='textSecondary'>
-                                { bribe?.token?.symbol }
+                                { formatSymbol(bribe?.token?.symbol) }
                               </Typography>
                             </TableCell>
                             <TableCell className={classes.cell} align='right'>
@@ -446,7 +446,7 @@ export default function EnhancedTable({ gauges }) {
                                 {formatCurrency(bribe?.earned)}
                               </Typography>
                               <Typography variant='h5' className={classes.textSpaced} color='textSecondary'>
-                                { bribe?.token?.symbol }
+                                { formatSymbol(bribe?.token?.symbol) }
                               </Typography>
                             </TableCell>
                             <TableCell className={classes.cell} align='right'>

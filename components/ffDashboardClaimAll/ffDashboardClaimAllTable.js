@@ -16,6 +16,7 @@ import BigNumber from 'bignumber.js';
 import stores from '../../stores';
 import { ACTIONS } from '../../stores/constants';
 import { formatCurrency } from '../../utils';
+import { formatSymbol } from '../../utils';
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
@@ -317,7 +318,7 @@ export default function EnhancedTable({ claimable, crv, ibEUR, rKP3R }) {
 
                             <Grid item lg={9} md={9} sm={9} xs={9}>
                               <Typography variant="h2" className={classes.textSpaced}>
-                                { formatCurrency(row?.earned) } { row.symbol }
+                                { formatCurrency(row?.earned) } { formatSymbol(row.symbol) }
                               </Typography>
                               <Typography variant="h5" className={classes.textSpaced} color='textSecondary'>
                                 ${

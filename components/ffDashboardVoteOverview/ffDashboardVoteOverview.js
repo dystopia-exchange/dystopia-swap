@@ -6,6 +6,7 @@ import classes from './ffDashboardVoteOverview.module.css';
 
 import stores from '../../stores'
 import { ACTIONS } from '../../stores/constants';
+import { formatSymbol } from '../../utils';
 
 function MyVotesIcon(props) {
   const { color, className } = props;
@@ -56,7 +57,7 @@ export default function ffVoteOverview() {
               <Typography className={ classes.title }>Your Voting Power:</Typography>
               <div className={ classes.inline }>
                 <Typography className={ classes.value }>{ formatCurrency((veToken && veToken.vestingInfo) ? veToken.vestingInfo.votePower : 0) }</Typography>
-                <Typography className={ classes.valueSymbol }>{ veToken ? veToken.symbol : '' }</Typography>
+                <Typography className={ classes.valueSymbol }>{ veToken ? formatSymbol(veToken.symbol) : '' }</Typography>
               </div>
             </Grid>
           </Grid>
@@ -73,7 +74,7 @@ export default function ffVoteOverview() {
               <Typography className={ classes.title }>Total Voting Power:</Typography>
               <div className={ classes.inline }>
                 <Typography className={ classes.value }>{ formatCurrency((veToken && veToken.vestingInfo) ? veToken.vestingInfo.totalSupply : 0) }</Typography>
-                <Typography className={ classes.valueSymbol }>{ veToken ? veToken.symbol : '' }</Typography>
+                <Typography className={ classes.valueSymbol }>{ veToken ? formatSymbol(veToken.symbol) : '' }</Typography>
               </div>
             </Grid>
           </Grid>

@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js';
 import classes from './ssBribeCard.module.css'
 import stores from '../../stores/index.js'
 import { formatCurrency } from '../../utils'
+import { formatSymbol } from '../../utils';
 
 import { ACTIONS } from '../../stores/constants';
 
@@ -95,8 +96,8 @@ export default function BribeCard({ pair, bribe }) {
   const renderClaimable = () => {
     return (
       <>
-        <Typography className={ classes.descriptionText} align='center' >{ formatCurrency(bribe.earned) } { bribe.token.symbol }</Typography>
-        <Typography className={ classes.descriptionSubText } align='center'>Your bribe for voting for {pair.symbol}</Typography>
+        <Typography className={ classes.descriptionText} align='center' >{ formatCurrency(bribe.earned) } { formatSymbol(bribe.token.symbol) }</Typography>
+        <Typography className={ classes.descriptionSubText } align='center'>Your bribe for voting for { formatSymbol(pair.symbol) }</Typography>
         {
           bribe.hasClaimed &&
           <Button
@@ -129,8 +130,8 @@ export default function BribeCard({ pair, bribe }) {
     return (
       <>
         <Typography className={ classes.descriptionPreText } align='center'>Current receive amount:</Typography>
-        <Typography className={ classes.descriptionText} align='center' >{ formatCurrency(BigNumber(bribe.rewardPerToken).times( 100 ).div(100)) } { bribe.token.symbol }</Typography>
-        <Typography className={ classes.descriptionSubText } align='center'>100% vote for {pair.symbol} gives you {formatCurrency(bribe.rewardPerToken)} { bribe.token.symbol }</Typography>
+        <Typography className={ classes.descriptionText} align='center' >{ formatCurrency(BigNumber(bribe.rewardPerToken).times( 100 ).div(100)) } { formatSymbol(bribe.token.symbol) }</Typography>
+        <Typography className={ classes.descriptionSubText } align='center'>100% vote for {formatSymbol(pair.symbol)} gives you {formatCurrency(bribe.rewardPerToken)} { formatSymbol(bribe.token.symbol) }</Typography>
         <Button
           className={ classes.tryButton }
           variant='outlined'

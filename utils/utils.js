@@ -97,3 +97,10 @@ export function floatToFixed (float, decimals = 0) {
 export function multiplyArray (numbers) {
   return numbers.reduce((total, n) => total * n, 1)
 }
+
+export const formatSymbol = (symbol) => {
+  if (typeof symbol !== 'string') return symbol
+  if (symbol.includes('sAMM')) return symbol.replace('sAMM-', '')
+  if (symbol.includes('vAMM')) return symbol.replace('vAMM-', '')
+  return symbol
+}

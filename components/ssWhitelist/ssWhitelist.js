@@ -8,6 +8,7 @@ import { Search } from '@mui/icons-material'
 import stores from '../../stores'
 import { ACTIONS, ETHERSCAN_URL } from '../../stores/constants'
 import { formatAddress, formatCurrency } from '../../utils'
+import { formatSymbol } from '../../utils';
 
 export default function ssWhitelist() {
 
@@ -118,7 +119,7 @@ export default function ssWhitelist() {
               <Tooltip title='Listing fee either needs to be locked in your veToken NFT or be paid and burnt on list'>
                 <div>
                   <Typography className={ classes.listingFee} color='textSecondary'>Listing Fee</Typography>
-                  <Typography className={ classes.listingFee}>{formatCurrency(token.listingFee)} {veToken?.symbol}</Typography>
+                  <Typography className={ classes.listingFee}>{formatCurrency(token.listingFee)} {formatSymbol(veToken?.symbol)}</Typography>
                 </div>
               </Tooltip>
             }
@@ -180,7 +181,7 @@ export default function ssWhitelist() {
                           <Typography>Token #{option.id}</Typography>
                           <div>
                             <Typography align='right' className={ classes.smallerText }>{ formatCurrency(option.lockValue) }</Typography>
-                            <Typography color='textSecondary' className={ classes.smallerText }>{veToken?.symbol}</Typography>
+                            <Typography color='textSecondary' className={ classes.smallerText }>{formatSymbol(veToken?.symbol)}</Typography>
                           </div>
                         </div>
                       </MenuItem>

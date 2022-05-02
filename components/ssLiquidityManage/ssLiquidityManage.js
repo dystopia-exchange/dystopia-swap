@@ -33,6 +33,7 @@ import {
   Close, Settings,
 } from '@mui/icons-material';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import { formatSymbol } from '../../utils'
 
 export default function ssLiquidityManage() {
 
@@ -919,7 +920,7 @@ export default function ssLiquidityManage() {
 
           <Typography
             className={[classes.smallerText, classes[`smallerText--${appTheme}`]].join(" ")}>
-            {assetValue?.symbol}
+            {formatSymbol(assetValue?.symbol)}
           </Typography>
         </div>
       </div>
@@ -943,13 +944,13 @@ export default function ssLiquidityManage() {
               </Typography>
 
               <Typography className={classes.text}>
-                {`${asset0?.symbol} per ${asset1?.symbol}`}
+                {`${formatSymbol(asset0?.symbol)} per ${formatSymbol(asset1?.symbol)}`}
               </Typography>
             </div>
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
               <Typography
                 className={classes.title}>{BigNumber(amount0).gt(0) ? formatCurrency(BigNumber(amount1).div(amount0)) : '0.00'}</Typography>
-              <Typography className={classes.text}>{`${asset1?.symbol} per ${asset0?.symbol}`}</Typography>
+              <Typography className={classes.text}>{`${formatSymbol(asset1?.symbol)} per ${formatSymbol(asset0?.symbol)}`}</Typography>
             </div>
           </div>
         </div>
@@ -964,7 +965,7 @@ export default function ssLiquidityManage() {
           <div className={[classes.priceInfos, classes[`priceInfos--${appTheme}`]].join(' ')}>
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
               <Typography className={classes.text}>
-                {`${pair?.token0?.symbol}`}
+                {`${formatSymbol(pair?.token0?.symbol)}`}
               </Typography>
 
               <Typography className={classes.title}>
@@ -974,7 +975,7 @@ export default function ssLiquidityManage() {
 
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
               <Typography className={classes.text}>
-                {`${pair?.token1?.symbol}`}
+                {`${formatSymbol(pair?.token1?.symbol)}`}
               </Typography>
 
               <Typography className={classes.title}>
@@ -984,7 +985,7 @@ export default function ssLiquidityManage() {
           </div>
 
           <Typography className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`]].join(' ')}>
-            {`Your Balances - ${pair?.symbol}`}
+            {`Your Balances - ${formatSymbol(pair?.symbol)}`}
           </Typography>
 
           <div className={[classes.priceInfos, classes[`priceInfos--${appTheme}`]].join(' ')}>
@@ -1019,22 +1020,22 @@ export default function ssLiquidityManage() {
         <Typography className={classes.depositInfoHeading}>Reserve Info</Typography>
         <div className={classes.priceInfos}>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
-            <Typography className={classes.text}>{`${pair?.token0?.symbol}`}</Typography>
+            <Typography className={classes.text}>{`${formatSymbol(pair?.token0?.symbol)}`}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.reserve0)}</Typography>
           </div>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
-            <Typography className={classes.text}>{`${pair?.token1?.symbol}`}</Typography>
+            <Typography className={classes.text}>{`${formatSymbol(pair?.token1?.symbol)}`}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.reserve1)}</Typography>
           </div>
         </div>
         <Typography className={classes.depositInfoHeading}>Your Balances</Typography>
         <div className={classes.priceInfos}>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
-            <Typography className={classes.text}>{`Pooled ${pair?.symbol}`}</Typography>
+            <Typography className={classes.text}>{`Pooled ${formatSymbol(pair?.symbol)}`}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.balance)}</Typography>
           </div>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
-            <Typography className={classes.text}>{`Staked ${pair?.symbol} `}</Typography>
+            <Typography className={classes.text}>{`Staked ${formatSymbol(pair?.symbol)} `}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.gauge?.balance)}</Typography>
           </div>
         </div>

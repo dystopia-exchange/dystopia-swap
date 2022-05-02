@@ -25,6 +25,7 @@ import { ACTIONS } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import { ArrowDropDown, ExpandLess, ExpandMore } from '@mui/icons-material';
 import TablePaginationActions from '../table-pagination/table-pagination';
+import { formatSymbol } from '../../utils';
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
@@ -749,7 +750,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                     color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   }}
                                   noWrap>
-                                  {row?.symbol}
+                                  {formatSymbol(row?.symbol)}
                                 </Typography>
                                 <Typography
                                   className={classes.textSpaced}
@@ -791,7 +792,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                     color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   }}
                                   noWrap>
-                                  {row?.lockToken?.symbol}
+                                  {formatSymbol(row?.lockToken?.symbol)}
                                 </Typography>
                                 <Typography
                                   className={classes.textSpaced}
@@ -1038,7 +1039,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                     color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   }}
                                   noWrap>
-                                  {row?.symbol}
+                                  {formatSymbol(row?.symbol)}
                                 </Typography>
                                 <Typography
                                   className={classes.textSpaced}
@@ -1080,7 +1081,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                     color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   }}
                                   noWrap>
-                                  {row?.lockToken?.symbol}
+                                  {formatSymbol(row?.lockToken?.symbol)}
                                 </Typography>
                                 <Typography
                                   className={classes.textSpaced}
@@ -1338,7 +1339,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {row.token0.symbol}
+                                    {formatSymbol(row.token0.symbol)}
                                   </Typography>
 
                                   <Typography
@@ -1349,7 +1350,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {row.token1.symbol}
+                                    {formatSymbol(row.token1.symbol)}
                                   </Typography>
                                 </div>
                               </div>

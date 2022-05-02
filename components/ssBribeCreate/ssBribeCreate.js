@@ -17,7 +17,7 @@ import { Add, Search, ArrowBack, DeleteOutline, ArrowBackIosNew, Close } from '@
 import BigNumber from 'bignumber.js';
 import { formatCurrency } from '../../utils';
 import classes from './ssBribeCreate.module.css';
-
+import { formatSymbol } from '../../utils';
 
 import stores from '../../stores';
 import {
@@ -173,7 +173,7 @@ export default function ssBribeCreate() {
               style={{
                 color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
               }}>
-              {gauge?.symbol}
+              {formatSymbol(gauge?.symbol)}
             </Typography>
 
             <Typography
@@ -232,7 +232,7 @@ export default function ssBribeCreate() {
 
           <Typography
             className={[classes.smallerText, classes[`smallerText--${appTheme}`]].join(" ")}>
-            {assetValue?.symbol}
+            {formatSymbol(assetValue?.symbol)}
           </Typography>
         </div>
       </div>
@@ -247,9 +247,9 @@ export default function ssBribeCreate() {
     return (
       <div className={classes.depositInfoContainer}>
         <Typography className={classes.depositInfoHeading}>You are creating a bribe of <span
-          className={classes.highlight}>{formatCurrency(amount)} {asset?.symbol}</span> to incentivize Vesters to vote
+          className={classes.highlight}>{formatCurrency(amount)} {formatSymbol(asset?.symbol)}</span> to incentivize Vesters to vote
           for the <span
-            className={classes.highlight}>{gauge?.token0?.symbol}/{gauge?.token1?.symbol} Pool</span></Typography>
+            className={classes.highlight}>{formatSymbol(gauge?.token0?.symbol)}/{formatSymbol(gauge?.token1?.symbol)} Pool</span></Typography>
       </div>
     );
   };
@@ -380,7 +380,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
           </div>
         </div>
         <div className={classes.assetSelectIconName}>
-          <Typography variant="h5">{asset ? asset.symbol : ''}</Typography>
+          <Typography variant="h5">{asset ? formatSymbol(asset.symbol) : ''}</Typography>
           <Typography variant="subtitle1" color="textSecondary">{asset ? asset.name : ''}</Typography>
         </div>
         <div className={classes.assetSelectActions}>
@@ -431,7 +431,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
               lineHeight: '120%',
               color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
             }}>
-            {asset ? asset.symbol : ''}
+            {asset ? formatSymbol(asset.symbol) : ''}
           </Typography>
         </div>
 

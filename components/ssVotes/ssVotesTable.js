@@ -25,6 +25,7 @@ import { ArrowDropDown, Close, ExpandLess, ExpandMore } from '@mui/icons-materia
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import TablePaginationActions from '../table-pagination/table-pagination';
 import SortSelect from '../select-sort/select-sort';
+import { formatSymbol } from '../../utils';
 
 const CustomSlider = styled(Slider)(({theme, appTheme, disabled}) => {
 
@@ -858,7 +859,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                   color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                 }}
                                 noWrap>
-                                {row?.symbol}
+                                {formatSymbol(row?.symbol)}
                               </Typography>
                               <Typography
                                 className={classes.textSpaced}
@@ -1510,21 +1511,21 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {headCell.id === 'balance' && row.token0.symbol}
-                                    {headCell.id === 'liquidity' && row.token0.symbol}
+                                    {headCell.id === 'balance' && formatSymbol(row.token0.symbol)}
+                                    {headCell.id === 'liquidity' && formatSymbol(row.token0.symbol)}
                                     {headCell.id === 'apy' && row?.gaugebribes.length ? (
                                         row?.gaugebribes.map((bribe, idx) => {
                                           return (
                                             <>
                                               {
-                                                bribe.symbol
+                                                formatSymbol(bribe.symbol)
                                               }
                                             </>
                                           );
                                         })
                                       )
                                       : null}
-                                    {headCell.id === 'myVotes' && row.token0.symbol}
+                                    {headCell.id === 'myVotes' && formatSymbol(row.token0.symbol)}
                                   </Typography>
 
                                   <Typography
@@ -1535,10 +1536,10 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {headCell.id === 'balance' && row.token1.symbol}
-                                    {headCell.id === 'liquidity' && row.token1.symbol}
+                                    {headCell.id === 'balance' && formatSymbol(row.token1.symbol)}
+                                    {headCell.id === 'liquidity' && formatSymbol(row.token1.symbol)}
                                     {headCell.id === 'apy' && ''}
-                                    {headCell.id === 'myVotes' && row.token1.symbol}
+                                    {headCell.id === 'myVotes' && formatSymbol(row.token1.symbol)}
                                   </Typography>
                                 </div>
                               </div>
