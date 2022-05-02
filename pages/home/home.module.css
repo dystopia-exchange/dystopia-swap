@@ -17,7 +17,7 @@
 .contentContainerFull {
   display: flex;
   justify-content: space-between;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   position: relative;
   padding: 30px;
