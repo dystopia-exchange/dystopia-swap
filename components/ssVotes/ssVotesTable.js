@@ -15,8 +15,9 @@ import {
   Skeleton,
   Accordion,
   AccordionSummary,
-  AccordionDetails, Button, DialogTitle, DialogContent, Dialog,
+  AccordionDetails, Button, DialogTitle, DialogContent, Dialog, Hidden,
 } from '@mui/material';
+import numeral from "numeral";
 import BigNumber from 'bignumber.js';
 
 import { formatCurrency } from '../../utils';
@@ -194,6 +195,20 @@ const headCells = [
     isHideInDetails: true,
   },
   {
+    id: 'tvl',
+    numeric: true,
+    disablePadding: false,
+    label: 'TVL',
+    isHideInDetails: true,
+  },
+  {
+    id: 'apr',
+    numeric: true,
+    disablePadding: false,
+    label: 'APR %',
+    isHideInDetails: true,
+  },
+  {
     id: 'balance',
     numeric: true,
     disablePadding: false,
@@ -232,6 +247,7 @@ const headCells = [
     width: 200,
     isHideInDetails: true,
   },
+  
 ];
 
 const StickyTableCell = styled(TableCell)(({theme, appTheme}) => ({
@@ -858,7 +874,43 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                             </div>
                           </div>
                         </StickyTableCell>
-
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                            
+                          {
+                            tableCellContent(
+                              `${(numeral(BigNumber(row?.tvl).toLocaleString()).format('($ 0a)'))} `,
+                              null,
+                              null,
+                              null,
+                            )
+                          }
+                        </TableCell>
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          {
+                            tableCellContent(
+                              `${formatCurrency(BigNumber(row?.gauge?.apr))} %`,
+                              null,
+                              null,
+                              null
+                            )
+                          }
+                        </TableCell>
                         <TableCell
                           className={classes.cell}
                           align="right"
@@ -994,6 +1046,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                             />
                           </div>
                         </TableCell>
+                        
                       </TableRow>
                     );
                   })}

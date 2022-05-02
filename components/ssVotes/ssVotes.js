@@ -36,7 +36,7 @@ export default function ssVotes() {
 
   const {appTheme} = useAppThemeContext();
 
-  const ssUpdated = () => {
+  const ssUpdated = async() => {
     setVeToken(stores.stableSwapStore.getStore('veToken'));
     const as = stores.stableSwapStore.getStore('pairs');
 
@@ -44,7 +44,9 @@ export default function ssVotes() {
       return asset.gauge && asset.gauge.address;
     });
     setGauges(filteredAssets);
-
+    
+    const tvldata = await stores.stableSwapStore.getStore("tvls");
+    console.log(tvldata,"tvl2")
 
     const nfts = stores.stableSwapStore.getStore('vestNFTs');
     setVestNFTs(nfts);
@@ -89,7 +91,7 @@ export default function ssVotes() {
 
     ssUpdated();
 
-    // stores.dispatcher.dispatch({ type: ACTIONS.GET_VEST_NFTS, content: {} })
+    
 
     stores.emitter.on(ACTIONS.UPDATED, stableSwapUpdated);
     stores.emitter.on(ACTIONS.VOTE_RETURNED, voteReturned);

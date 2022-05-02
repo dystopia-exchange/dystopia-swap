@@ -213,11 +213,9 @@ function Header(props) {
   
     const accountConfigure = () => {
       const accountStore = stores.accountStore.getStore("account");
-
-      if (accountStore) {
-        web(accountStore.address);
-      }
-
+      const bb = stores.stableSwapStore.getStore("baseAssets");
+      if(accountStore)
+      web(accountStore.address)
       setAccount(accountStore);
       closeUnlock();
     };
