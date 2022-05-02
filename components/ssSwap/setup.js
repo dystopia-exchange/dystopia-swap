@@ -28,6 +28,7 @@ import {
 } from '../../stores/constants';
 import BigNumber from 'bignumber.js';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import BtnSwap from '../../ui/BtnSwap';
 
 function Setup() {
   const [, updateState] = React.useState();
@@ -492,16 +493,13 @@ function Setup() {
 
       {renderSwapInformation()}
 
-      <Button
-        variant="contained"
-        size="large"
-        color="primary"
-        className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(' ')}
-        disabled={loading || quoteLoading}
-        onClick={onSwap}>
-        <Typography className={classes.actionButtonText}>{loading ? `Swapping` : `Swap`}</Typography>
-        {loading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-      </Button>
+      <BtnSwap
+        onClick={onSwap}
+        className={classes.btnSwap}
+        labelClassName={!fromAmountValue ? classes['actionButtonText--disabled'] : classes.actionButtonText}
+        isDisabled={!fromAmountValue}
+        label={loading ? `Swapping` : (!fromAmountValue ? 'Enter Amount' : `Swap`)}>
+      </BtnSwap>
     </div>
   );
 }

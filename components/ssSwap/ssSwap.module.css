@@ -692,53 +692,23 @@
   color: #5F7285 !important;
 }
 
-.buttonOverride {
+.btnSwap {
   position: absolute !important;
-  bottom: -92px;
+  bottom: -98px;
   margin-left: 26px !important;
   left: 118px;
-  width: 292px;
-  height: 65px;
-  font-style: normal !important;
-  font-weight: 700 !important;
-  font-size: 16px !important;
-  line-height: 120% !important;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: #8F5AE8 !important;
-  box-shadow: none !important;
-  animation: none !important;
-  transition: none !important;
 }
 
 .actionButtonText {
   font-weight: 700 !important;
   font-size: 16px !important;
+  color: #8F5AE8 !important;
 }
 
-.buttonOverride--light {
-  background: transparent url("/images/ui/swap-btn--light.svg") !important;
-}
-
-.buttonOverride--light:hover {
-  background: transparent url("/images/ui/swap-btn--hover--light.svg") !important;
-}
-
-.buttonOverride--light:active {
-  background: transparent url("/images/ui/swap-btn--active--light.svg") !important;
-}
-
-.buttonOverride--dark {
-  background: transparent url("/images/ui/swap-btn--dark.svg") !important;
-}
-
-.buttonOverride--dark:hover {
-  background: transparent url("/images/ui/swap-btn--hover--dark.svg") !important;
-}
-
-.buttonOverride--dark:active {
-  background: transparent url("/images/ui/swap-btn--active--dark.svg") !important;
+.actionButtonText--disabled {
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  color: #A3A9BA !important;
 }
 
 .assetSymbolName {
@@ -1089,37 +1059,11 @@
     left: 20px;
   }
 
-  .buttonOverride {
+  .btnSwap {
     left: 50%;
     bottom: -120px;
     transform: translateX(-50%);
     margin-left: 0 !important;
-    width: 320px;
-    height: 50px;
-  }
-
-  .buttonOverride--light {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") !important;
-  }
-
-  .buttonOverride--light:hover {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") !important;
-  }
-
-  .buttonOverride--light:active {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") !important;
-  }
-
-  .buttonOverride--dark {
-    background: transparent url("/images/ui/swap-btn-360--dark.svg") !important;
-  }
-
-  .buttonOverride--dark:hover {
-    background: transparent url("/images/ui/swap-btn-360--dark.svg") !important;
-  }
-
-  .buttonOverride--dark:active {
-    background: transparent url("/images/ui/swap-btn-360--dark.svg") !important;
   }
 
   .dialogContainer {
