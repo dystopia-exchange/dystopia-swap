@@ -366,7 +366,8 @@ function Setup() {
                       }}
                     />
 
-                    <div className={[classes.routeLinesRightText, classes[`routeLinesRightText--${appTheme}`]].join(' ')}>
+                    <div
+                      className={[classes.routeLinesRightText, classes[`routeLinesRightText--${appTheme}`]].join(' ')}>
                       Volatile
                     </div>
                   </>
@@ -402,11 +403,19 @@ function Setup() {
   const renderSmallInput = (type, amountValue, amountError, amountChanged) => {
     return (
       <div className={classes.slippage}>
-        <Typography
-          className={[classes.inputBalanceSlippage, classes[`inputBalanceSlippage--${appTheme}`]].join(" ")}
-          noWrap>
-          Slippage
-        </Typography>
+        <div
+          style={{marginBottom: 10}}
+          className={['g-flex', 'g-flex--align-center'].join(' ')}>
+          <Typography
+            className={[classes.inputBalanceSlippage, classes[`inputBalanceSlippage--${appTheme}`]].join(" ")}
+            noWrap>
+            Slippage
+          </Typography>
+
+          <img
+            src={'/images/ui/question-icon.svg'}
+            className={classes.questionIcon}/>
+        </div>
 
         <TextField
           placeholder="0.00"
@@ -416,16 +425,17 @@ function Setup() {
           onChange={amountChanged}
           disabled={loading}
           InputProps={{
-            style: {
-              border: 'none',
-              borderBottom: '1px solid #86B9D6',
-              borderRadius: 0,
-            },
+            style: {},
             classes: {
-              root: classes.searchInput,
+              root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(" "),
             },
             endAdornment: <InputAdornment position="end">
-              %
+              <span
+                style={{
+                  color: appTheme === "dark" ? '#ffffff' : '#5688A5',
+                }}>
+                %
+              </span>
             </InputAdornment>,
           }}
           inputProps={{

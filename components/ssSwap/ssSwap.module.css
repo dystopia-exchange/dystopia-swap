@@ -258,8 +258,12 @@
 .slippage {
   position: absolute;
   left: 30px;
-  bottom: -80px;
+  bottom: -75px;
   width: min-content;
+}
+
+.questionIcon {
+  margin-left: 10px;
 }
 
 .textField {
@@ -932,6 +936,24 @@
 .quoteLoaderError {
   min-width: 100%;
   border: 2px solid #DB3434;
+}
+
+.searchInput {
+  border: none !important;
+  border-bottom: 1px solid #86B9D6 !important;
+  border-radius: 0 !important;
+}
+
+.searchInput:hover {
+  border-bottom: 1px solid #325569 !important;
+}
+
+.searchInput--dark {
+  border-bottom: 1px solid #5F7285 !important;
+}
+
+.searchInput--dark:hover {
+  border-bottom: 1px solid #C6CDD2 !important;
 }
 
 .searchInput > fieldset {
