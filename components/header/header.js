@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import BigNumber from 'bignumber.js'
+import BigNumber from 'bignumber.js';
 
 import {
   Typography,
@@ -12,7 +12,7 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
-  ListItemText, TableCell,
+  ListItemText, TableCell, ClickAwayListener,
 } from "@mui/material";
 import { styled, withStyles, withTheme } from "@mui/styles";
 import {
@@ -203,19 +203,19 @@ function Header(props) {
   const [transactionQueueLength, setTransactionQueueLength] = useState(0);
   const [warningOpen, setWarningOpen] = useState(false);
 
-  const web = async(add)=>{
+  const web = async (add) => {
     const maticbalance = await stores.accountStore.getWeb3Provider();
     let bal = await maticbalance.eth.getBalance(add);
-    setMaticBalance(BigNumber(bal).div(10**18).toFixed(2))
-   
-  }
+    setMaticBalance(BigNumber(bal).div(10 ** 18).toFixed(2));
+
+  };
   useEffect(() => {
-  
+
     const accountConfigure = () => {
       const accountStore = stores.accountStore.getStore("account");
       const bb = stores.stableSwapStore.getStore("baseAssets");
-      if(accountStore)
-      web(accountStore.address)
+      if (accountStore)
+        web(accountStore.address);
       setAccount(accountStore);
       closeUnlock();
     };
@@ -237,7 +237,7 @@ function Header(props) {
     stores.emitter.on(CONNECT_WALLET, connectWallet);
     stores.emitter.on(ACCOUNT_CHANGED, accountChanged);
 
-    accountConfigure()
+    accountConfigure();
     return () => {
       stores.emitter.removeListener(ACCOUNT_CONFIGURED, accountConfigure);
       stores.emitter.removeListener(CONNECT_WALLET, connectWallet);
@@ -257,6 +257,10 @@ function Header(props) {
     setUnlockOpen(true);
     setWarningOpen(false);
   };
+
+  const handleClickAway = () => {
+    setAnchorEl(false);
+  }
 
   const closeUnlock = () => {
     setUnlockOpen(false);
@@ -373,30 +377,31 @@ function Header(props) {
                 </div>
 
                 <Typography
-                  title={'25 MATIC'}
                   className={[classes.headBalanceTxt, classes[`headBalanceTxt--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
-                   {maticBalance  ?maticBalance:0} MATIC
+                  {maticBalance ? maticBalance : 0} MATIC
                 </Typography>
               </Button>
 
               {anchorEl &&
-                <div
-                  className={[classes.headSwitchBtn, classes[`headSwitchBtn--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}
-                  onClick={onAddressClicked}>
-                  <img src="/images/ui/icon-wallet.svg" className={classes.walletIcon}/>
+                <ClickAwayListener onClickAway={handleClickAway}>
+                  <div
+                    className={[classes.headSwitchBtn, classes[`headSwitchBtn--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}
+                    onClick={onAddressClicked}>
+                    <img src="/images/ui/icon-wallet.svg" className={classes.walletIcon}/>
 
-                  <div style={{
-                    marginLeft: 5,
-                    marginRight: 5,
-                    color: '#ffffff',
-                  }}>
-                    •
-                  </div>
+                    <div style={{
+                      marginLeft: 5,
+                      marginRight: 5,
+                      color: '#ffffff',
+                    }}>
+                      •
+                    </div>
 
-                  <div className={classes.headSwitchBtnText}>
-                    Switch Wallet Provider
+                    <div className={classes.headSwitchBtnText}>
+                      Switch Wallet Provider
+                    </div>
                   </div>
-                </div>
+                </ClickAwayListener>
               }
             </div>
           ) : (
