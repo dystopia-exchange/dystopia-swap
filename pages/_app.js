@@ -16,6 +16,7 @@ import "../styles/global.css";
 import "../styles/variables.css";
 import "../styles/grid.css";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import classes from './home/home.module.css';
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -106,7 +107,21 @@ export default function MyApp({ Component, pageProps }) {
               <Component {...pageProps} changeTheme={changeTheme}/>
             </Layout>
           )}
-          {!validateConfigured() && <Configure {...pageProps} />}
+
+          {!validateConfigured() && (
+            <div>
+              <img
+                src={appTheme === "dark" ? "/images/big-logo--dark.svg" : "/images/big-logo.svg"}
+                style={{
+                  position: 'absolute',
+                  width: '242px',
+                  height: '30px',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                }}/>
+            </div>
+          )}
         </AppThemeProvider>
       </React.Fragment>
     </ThemeProvider>
