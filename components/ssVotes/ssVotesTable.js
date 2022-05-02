@@ -75,20 +75,31 @@ const CustomSlider = styled(Slider)(({theme, appTheme, disabled}) => {
     '& .MuiSlider-track': {
       border: 'none',
       backgroundColor: MuiSliderTrack.backgroundColor,
+      opacity: 0,
     },
     '& .MuiSlider-rail': {
       opacity: 1,
       backgroundColor: '#9BC9E4',
+      background: appTheme === 'dark'
+        ? 'linear-gradient(to left, #1B4F20 50%, #631515 50%)'
+        : 'linear-gradient(to left, #EC9999 50%, #A2E3A9 50%)',
     },
     '& .MuiSlider-mark': {
-      opacity: 1,
+      opacity: 0,
       backgroundColor: disabled ? MuiSliderTrack.backgroundColor : '#CFE5F2',
       height: 2,
       width: 2,
       '&.MuiSlider-markActive': {
         backgroundColor: disabled ? MuiSliderTrack.backgroundColor : '#CFE5F2',
-        opacity: 1,
+        opacity: 0,
       },
+    },
+    '& .MuiSlider-mark:nth-of-type(20n)': {
+      opacity: 1,
+
+      '&.MuiSlider-markActive': {
+        opacity: 1,
+      }
     },
   });
 });
