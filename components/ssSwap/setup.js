@@ -303,7 +303,8 @@ function Setup() {
               </div>
             }
 
-            <Typography className={[classes.depositInfoHeading, classes.depositInfoHeadingPrice].join(" ")}>
+            <Typography
+              className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`], classes.depositInfoHeadingPrice].join(" ")}>
               Price Info
             </Typography>
 
@@ -329,7 +330,9 @@ function Setup() {
               </div>
             </div>
 
-            <Typography className={classes.depositInfoHeading}>Route</Typography>
+            <Typography className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`]].join(' ')}>
+              Route
+            </Typography>
 
             <div className={[classes.route, classes[`route--${appTheme}`]].join(' ')}>
               <img
@@ -347,20 +350,31 @@ function Setup() {
                 </div>
 
                 {quote?.output?.routeAsset &&
-                  <img
-                    className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
-                    alt=""
-                    src={quote.output.routeAsset ? `${quote.output.routeAsset.logoURI}` : ''}
-                    height="40px"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                    }}
-                  />
+                  <>
+                    <div className={[classes.routeLinesLeftText, classes[`routeLinesLeftText--${appTheme}`]].join(' ')}>
+                      Stale
+                    </div>
+
+                    <img
+                      className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
+                      alt=""
+                      src={quote.output.routeAsset ? `${quote.output.routeAsset.logoURI}` : ''}
+                      height="40px"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                      }}
+                    />
+
+                    <div className={[classes.routeLinesRightText, classes[`routeLinesRightText--${appTheme}`]].join(' ')}>
+                      Volatile
+                    </div>
+                  </>
                 }
 
                 {!quote?.output?.routeAsset &&
                   <div className={[classes.routeArrow, classes[`routeArrow--${appTheme}`]].join(' ')}>
+                    Stable
                   </div>
                 }
 

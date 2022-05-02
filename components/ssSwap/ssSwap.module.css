@@ -628,10 +628,14 @@
   width: 100%;
   line-height: 120%;
   font-weight: 500 !important;
-  color: #06D3D7 !important;
+  color: #5688A5 !important;
   margin-top: 20px !important;
   margin-bottom: 6px !important;
   font-size: 14px !important;
+}
+
+.depositInfoHeading--dark {
+  color: #7C838A !important;
 }
 
 .depositInfoHeadingPrice {
@@ -772,16 +776,38 @@
 }
 
 .routeArrow {
-  width: 34px;
-  height: 34px;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .routeArrow--light {
-  background-image: url("/images/ui/swap-route-arrow--light.svg");
+  color: #0B5E8E !important;
 }
 
 .routeArrow--dark {
-  background-image: url("/images/ui/swap-route-arrow--dark.svg");
+  color: #4CADE6 !important;
+}
+
+.routeLinesLeftText,
+.routeLinesRightText {
+  position: absolute;
+  left: calc(25% - 15px);
+  padding: 2px 10px;
+  background: var(--background-light);
+  font-weight: 500;
+  font-size: 12px;
+  color: #0B5E8E;
+}
+
+.routeLinesRightText {
+  left: auto;
+  right: calc(25% - 15px);
+}
+
+.routeLinesLeftText--dark,
+.routeLinesRightText--dark {
+  background: var(--background-dark);
+  color: #4CADE6;
 }
 
 .routeLinesLeft,
@@ -1042,16 +1068,9 @@
     width: 35%;
   }
 
-  .routeArrow--light {
-    background: var(--background-light) url("/images/ui/swap-route-arrow--light.svg");
-  }
-
-  .routeArrow--dark {
-    background: var(--background-dark) url("/images/ui/swap-route-arrow--dark.svg");
-  }
-
   .routeArrow {
-    position: absolute;
+    font-weight: 500;
+    font-size: 12px;
   }
 
   .slippage {
