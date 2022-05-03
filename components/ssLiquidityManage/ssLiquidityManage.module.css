@@ -252,6 +252,16 @@
   border: 1px solid #0b5e8e;
 }
 
+.slippageIconContainer--dark {
+  background: transparent;
+  border: 1px solid #5F7285;
+}
+
+.slippageIconContainer--dark.slippageIconContainer--active {
+  background: #5F7285;
+  border: 1px solid #5F7285;
+}
+
 .slippageTextContainer {
   padding: 11px 0 11px 20px;
   border: 1px solid #86b9d6;
@@ -271,6 +281,10 @@
 
 .slippageIcon--active {
   fill: #ffffff;
+}
+
+.slippageIcon--dark {
+  fill: #4CADE6;
 }
 
 .popoverPaper {
