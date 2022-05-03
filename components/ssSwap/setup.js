@@ -352,7 +352,7 @@ function Setup() {
                 {quote?.output?.routeAsset &&
                   <>
                     <div className={[classes.routeLinesLeftText, classes[`routeLinesLeftText--${appTheme}`]].join(' ')}>
-                      Stale
+                    {quote.output.routes[0].stable ? 'Stable' : 'Volatile'}
                     </div>
 
                     <img
@@ -368,14 +368,14 @@ function Setup() {
 
                     <div
                       className={[classes.routeLinesRightText, classes[`routeLinesRightText--${appTheme}`]].join(' ')}>
-                      Volatile
+                      {quote.output.routes[1].stable ? 'Stable' : 'Volatile'}
                     </div>
                   </>
                 }
 
                 {!quote?.output?.routeAsset &&
                   <div className={[classes.routeArrow, classes[`routeArrow--${appTheme}`]].join(' ')}>
-                    Stable
+                    {quote.output.routes[0].stable ? 'Stable' : 'Volatile'}
                   </div>
                 }
 
