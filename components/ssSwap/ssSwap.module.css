@@ -900,6 +900,10 @@
   margin-top: 20px;
 }
 
+.quoteError {
+  color: #631515 !important;
+}
+
 .warningContainer--light {
   background: #CFE5F2;
 }
