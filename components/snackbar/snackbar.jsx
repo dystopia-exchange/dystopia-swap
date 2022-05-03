@@ -77,7 +77,6 @@ export default function MySnackbar(props) {
   };
 
   const handleClose = (event) => {
-    console.log('=handleClose', event);
     setOpen(false);
   };
 

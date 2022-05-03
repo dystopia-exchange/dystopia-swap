@@ -28,6 +28,7 @@ import {
 } from '../../stores/constants';
 import BigNumber from 'bignumber.js';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import BtnSwap from '../../ui/BtnSwap';
 
 function Setup() {
   const [, updateState] = React.useState();
@@ -302,7 +303,8 @@ function Setup() {
               </div>
             }
 
-            <Typography className={[classes.depositInfoHeading, classes.depositInfoHeadingPrice].join(" ")}>
+            <Typography
+              className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`], classes.depositInfoHeadingPrice].join(" ")}>
               Price Info
             </Typography>
 
@@ -328,7 +330,9 @@ function Setup() {
               </div>
             </div>
 
-            <Typography className={classes.depositInfoHeading}>Route</Typography>
+            <Typography className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`]].join(' ')}>
+              Route
+            </Typography>
 
             <div className={[classes.route, classes[`route--${appTheme}`]].join(' ')}>
               <img
@@ -346,20 +350,32 @@ function Setup() {
                 </div>
 
                 {quote?.output?.routeAsset &&
-                  <img
-                    className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
-                    alt=""
-                    src={quote.output.routeAsset ? `${quote.output.routeAsset.logoURI}` : ''}
-                    height="40px"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                    }}
-                  />
+                  <>
+                    <div className={[classes.routeLinesLeftText, classes[`routeLinesLeftText--${appTheme}`]].join(' ')}>
+                      Stale
+                    </div>
+
+                    <img
+                      className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
+                      alt=""
+                      src={quote.output.routeAsset ? `${quote.output.routeAsset.logoURI}` : ''}
+                      height="40px"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                      }}
+                    />
+
+                    <div
+                      className={[classes.routeLinesRightText, classes[`routeLinesRightText--${appTheme}`]].join(' ')}>
+                      Volatile
+                    </div>
+                  </>
                 }
 
                 {!quote?.output?.routeAsset &&
                   <div className={[classes.routeArrow, classes[`routeArrow--${appTheme}`]].join(' ')}>
+                    Stable
                   </div>
                 }
 
@@ -387,11 +403,19 @@ function Setup() {
   const renderSmallInput = (type, amountValue, amountError, amountChanged) => {
     return (
       <div className={classes.slippage}>
-        <Typography
-          className={[classes.inputBalanceSlippage, classes[`inputBalanceSlippage--${appTheme}`]].join(" ")}
-          noWrap>
-          Slippage
-        </Typography>
+        <div
+          style={{marginBottom: 10}}
+          className={['g-flex', 'g-flex--align-center'].join(' ')}>
+          <Typography
+            className={[classes.inputBalanceSlippage, classes[`inputBalanceSlippage--${appTheme}`]].join(" ")}
+            noWrap>
+            Slippage
+          </Typography>
+
+          <img
+            src={'/images/ui/question-icon.svg'}
+            className={classes.questionIcon}/>
+        </div>
 
         <TextField
           placeholder="0.00"
@@ -401,16 +425,17 @@ function Setup() {
           onChange={amountChanged}
           disabled={loading}
           InputProps={{
-            style: {
-              border: 'none',
-              borderBottom: '1px solid #86B9D6',
-              borderRadius: 0,
-            },
+            style: {},
             classes: {
-              root: classes.searchInput,
+              root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(" "),
             },
             endAdornment: <InputAdornment position="end">
-              %
+              <span
+                style={{
+                  color: appTheme === "dark" ? '#ffffff' : '#5688A5',
+                }}>
+                %
+              </span>
             </InputAdornment>,
           }}
           inputProps={{
@@ -492,16 +517,13 @@ function Setup() {
 
       {renderSwapInformation()}
 
-      <Button
-        variant="contained"
-        size="large"
-        color="primary"
-        className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(' ')}
-        disabled={loading || quoteLoading}
-        onClick={onSwap}>
-        <Typography className={classes.actionButtonText}>{loading ? `Swapping` : `Swap`}</Typography>
-        {loading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-      </Button>
+      <BtnSwap
+        onClick={onSwap}
+        className={classes.btnSwap}
+        labelClassName={!fromAmountValue ? classes['actionButtonText--disabled'] : classes.actionButtonText}
+        isDisabled={!fromAmountValue}
+        label={loading ? `Swapping` : (!fromAmountValue ? 'Enter Amount' : `Swap`)}>
+      </BtnSwap>
     </div>
   );
 }

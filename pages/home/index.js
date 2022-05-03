@@ -24,10 +24,7 @@ function Home({changeTheme}) {
 
   return (
     <div
-      className={[classes.ffContainer, classes[`ffContainer--${appTheme}`]].join(' ')}
-      style={{
-        width: windowWidth <= 1360 ? '100%' : 'auto',
-      }}>
+      className={[classes.ffContainer, classes[`ffContainer--${appTheme}`]].join(' ')}>
       <div
         className={classes.contentContainerFull}
         style={{
