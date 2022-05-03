@@ -615,7 +615,13 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
       <Dialog
         aria-labelledby="simple-dialog-title"
         open={open}
-        style={{borderRadius: 0}}>
+        style={{borderRadius: 0}}
+        onClick={(e) => {
+          if (e.target.classList.contains('MuiDialog-container')) {
+            onClose()
+          }
+        }}
+        >
         <div style={{
           width: 460,
           height: 710,
@@ -1014,7 +1020,13 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
       <Dialog
         aria-labelledby="simple-dialog-title"
         open={open}
-        style={{borderRadius: 0}}>
+        style={{borderRadius: 0}}
+        onClick={(e) => {
+          if (e.target.classList.contains('MuiDialog-container')) {
+            onClose()
+          }
+        }}
+        >
         <div
           className={classes.dialogContainer}
           style={{
@@ -1043,6 +1055,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
                 display: 'flex',
                 alignItems: 'center',
                 color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                paddingBottom: 8,
               }}>
                 {manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
                   marginRight: 10,

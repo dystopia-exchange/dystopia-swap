@@ -14,6 +14,11 @@ export default function ffWarning({close, title, subTitle, icon, description, bt
       fullScreen
       open={true}
       onClose={close}
+      onClick={(e) => {
+        if (e.target.classList.contains('MuiDialog-container')) {
+          close()
+        }
+      }}
       className={classes.dialogWrapper}
       classes={{
         paper: appTheme === "dark" ? classes['paperBody--dark'] : classes['paperBody--light'],

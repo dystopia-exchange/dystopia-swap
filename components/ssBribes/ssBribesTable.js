@@ -249,7 +249,7 @@ const useStyles = makeStyles((theme) => ({
   },
   img2Logo: {
     position: 'absolute',
-    left: '20px',
+    left: '28px',
     zIndex: '1',
     top: '0px'
   },
@@ -259,8 +259,8 @@ const useStyles = makeStyles((theme) => ({
   doubleImages: {
     display: 'flex',
     position: 'relative',
-    width: '70px',
-    height: '35px'
+    width: '80px',
+    height: '35px',
   },
   searchContainer: {
     flex: 1,

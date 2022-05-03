@@ -25,7 +25,7 @@ function TokenSelect(props) {
         displayEmpty: noValue ? true : undefined,
         renderValue: noValue ? (selected) => {
           if (selected === null) {
-            return <em>{placeholder}</em>
+            return <em style={{ padding: 10 }}>{placeholder}</em>
           }
         } : undefined
       }}

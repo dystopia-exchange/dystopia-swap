@@ -408,7 +408,7 @@ const useStyles = makeStyles((theme) => {
     },
     img2Logo: {
       position: 'absolute',
-      left: '23px',
+      left: '28px',
       zIndex: '1',
       top: '0px',
       border: '2px solid #DBE6EC',
@@ -421,7 +421,7 @@ const useStyles = makeStyles((theme) => {
     doubleImages: {
       display: 'flex',
       position: 'relative',
-      width: '70px',
+      width: '80px',
       height: '35px',
     },
     searchContainer: {

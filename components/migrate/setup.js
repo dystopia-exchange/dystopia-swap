@@ -1088,6 +1088,11 @@ export default function Setup() {
         <Dialog
         aria-labelledby="simple-dialog-title"
         open={open}
+        onClick={(e) => {
+          if (e.target.classList.contains('MuiDialog-container')) {
+            onClose()
+          }
+        }}
         style={{borderRadius: 0}}>
         <div
           className={classes.dialogContainer}

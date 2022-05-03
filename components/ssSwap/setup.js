@@ -843,7 +843,13 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
       <Dialog
         aria-labelledby="simple-dialog-title"
         open={open}
-        style={{borderRadius: 0}}>
+        style={{borderRadius: 0}}
+        onClick={(e) => {
+        if (e.target.classList.contains('MuiDialog-container')) {
+          onClose()
+        }
+      }}
+        >
         <div
           className={classes.dialogContainer}
           style={{

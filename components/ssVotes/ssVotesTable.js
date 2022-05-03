@@ -37,9 +37,16 @@ const CustomSlider = styled(Slider)(({theme, appTheme, disabled}) => {
     backgroundColor: '#9BC9E4',
   }
 
+  const MuiSliderRail = {
+    background: appTheme === 'dark'
+      ? 'linear-gradient(to left, #1B4F20 50%, #631515 50%)'
+      : 'linear-gradient(to left, #A2E3A9 50%, #EC9999 50%)'
+  }
+
   if (disabled) {
     MuiSliderthumb.backgroundColor = appTheme === 'dark' ? '#7F828B' : '#A3A9BA'
     MuiSliderTrack.backgroundColor = '#D4D5DB'
+    MuiSliderRail.background = 'rgb(210 210 210)'
   }
 
   return ({
@@ -81,10 +88,8 @@ const CustomSlider = styled(Slider)(({theme, appTheme, disabled}) => {
     },
     '& .MuiSlider-rail': {
       opacity: 1,
-      backgroundColor: '#9BC9E4',
-      background: appTheme === 'dark'
-        ? 'linear-gradient(to left, #1B4F20 50%, #631515 50%)'
-        : 'linear-gradient(to left, #EC9999 50%, #A2E3A9 50%)',
+      // backgroundColor: '#9BC9E4',
+      background: MuiSliderRail.background,
     },
     '& .MuiSlider-mark': {
       opacity: 0,
@@ -518,7 +523,7 @@ const useStyles = makeStyles((theme) => {
     doubleImages: {
       display: 'flex',
       position: 'relative',
-      width: '70px',
+      width: '80px',
       height: '35px',
     },
     img1Logo: {
@@ -531,7 +536,7 @@ const useStyles = makeStyles((theme) => {
     },
     img2Logo: {
       position: 'absolute',
-      left: '23px',
+      left: '28px',
       zIndex: '1',
       top: '0px',
       border: '2px solid #DBE6EC',
@@ -1111,6 +1116,11 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                   <Dialog
                     open={voteDialogOpen}
                     onClose={closeModal}
+                    onClick={(e) => {
+                      if (e.target.classList.contains('MuiDialog-container')) {
+                        closeModal()
+                      }
+                    }}
                     fullWidth={false}
                     maxWidth="false"
                     fullScreen={false}

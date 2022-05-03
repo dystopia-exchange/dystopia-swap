@@ -25,6 +25,11 @@ export default function UnlockModal(props) {
       maxWidth="false"
       TransitionComponent={Transition}
       style={{borderRadius: 0}}
+      onClick={(e) => {
+        if (e.target.classList.contains('MuiDialog-container')) {
+          closeModal()
+        }
+      }}
     >
       <div style={{
         width: windowWidth > 530 ? 460 : '100%',
