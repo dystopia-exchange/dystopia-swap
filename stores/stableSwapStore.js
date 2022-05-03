@@ -2170,7 +2170,7 @@ class Store {
             gasPrice,
             null,
             null,
-            allowance1TXID,
+            allowanceTXID,
             (err) => {
               if (err) {
                 reject(err);
