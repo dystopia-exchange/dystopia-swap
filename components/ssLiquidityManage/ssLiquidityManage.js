@@ -76,7 +76,7 @@ export default function ssLiquidityManage() {
   const [withdrawQuote, setWithdrawQuote] = useState(null);
 
   const [priorityAsset, setPriorityAsset] = useState(0);
-  const [advanced, setAdvanced] = useState(false);
+  const [advanced, setAdvanced] = useState(true);
 
   const [token, setToken] = useState(null);
   const [vestNFTs, setVestNFTs] = useState([]);
@@ -1451,21 +1451,6 @@ export default function ssLiquidityManage() {
               {renderWithdrawInformation()}
             </>
           }
-        </div>
-        <div className={classes.advancedToggleContainer}>
-          <FormControlLabel
-            control={
-              <Switch
-                size="small"
-                checked={advanced}
-                onChange={toggleAdvanced}
-                color={'primary'}
-              />
-            }
-            className={classes.some}
-            label="Advanced"
-            labelPlacement="start"
-          />
         </div>
       </div>
 
