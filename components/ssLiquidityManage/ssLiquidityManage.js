@@ -33,7 +33,7 @@ import {
   Close, Settings,
 } from '@mui/icons-material';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
-import { formatSymbol } from '../../utils'
+import { formatSymbol } from '../../utils';
 
 export default function ssLiquidityManage() {
 
@@ -950,7 +950,8 @@ export default function ssLiquidityManage() {
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
               <Typography
                 className={classes.title}>{BigNumber(amount0).gt(0) ? formatCurrency(BigNumber(amount1).div(amount0)) : '0.00'}</Typography>
-              <Typography className={classes.text}>{`${formatSymbol(asset1?.symbol)} per ${formatSymbol(asset0?.symbol)}`}</Typography>
+              <Typography
+                className={classes.text}>{`${formatSymbol(asset1?.symbol)} per ${formatSymbol(asset0?.symbol)}`}</Typography>
             </div>
           </div>
         </div>
@@ -1055,7 +1056,8 @@ export default function ssLiquidityManage() {
   const renderSmallInput = (type, amountValue, amountError, amountChanged) => {
     return (
       <div className={['g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
-        <div className={['g-flex', 'g-flex--align-center'].join(' ')}>
+        <div
+          className={[classes.slippageTextContainer, classes[`slippageTextContainer--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
           {windowWidth > 530 &&
             <div style={{marginRight: 5}}>
               Slippage:
@@ -1069,7 +1071,7 @@ export default function ssLiquidityManage() {
             helperText={amountError}
             value={amountValue}
             onChange={amountChanged}
-            disabled={depositLoading || stakeLoading || depositStakeLoading || createLoading}
+            disabled={true}
             InputProps={{
               style: {
                 border: 'none',
@@ -1079,7 +1081,12 @@ export default function ssLiquidityManage() {
                 root: classes.searchInput,
               },
               endAdornment: <InputAdornment position="end">
-                %
+                <span
+                  style={{
+                    color: appTheme === "dark" ? '#ffffff' : '#5688A5',
+                  }}>
+                  %
+                </span>
               </InputAdornment>,
             }}
             inputProps={{
@@ -1100,10 +1107,13 @@ export default function ssLiquidityManage() {
 
         <div
           onClick={handleClickPopover}
-          className={classes.slippageIconContainer}>
-          <img
-            src="/images/ui/slippage-icon.svg"
-            className={classes.slippageIcon}/>
+          className={[classes.slippageIconContainer, (anchorEl ? classes['slippageIconContainer--active'] : '')].join(' ')}>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              className={[classes.slippageIcon, (anchorEl ? classes['slippageIcon--active'] : '')].join(' ')}
+              d="M9.99998 0.833496L17.9166 5.41683V14.5835L9.99998 19.1668L2.08331 14.5835V5.41683L9.99998 0.833496ZM9.99998 2.75933L3.74998 6.37766V13.6227L9.99998 17.241L16.25 13.6227V6.37766L9.99998 2.75933ZM9.99998 13.3335C9.11592 13.3335 8.26808 12.9823 7.64296 12.3572C7.01784 11.7321 6.66665 10.8842 6.66665 10.0002C6.66665 9.11611 7.01784 8.26826 7.64296 7.64314C8.26808 7.01802 9.11592 6.66683 9.99998 6.66683C10.884 6.66683 11.7319 7.01802 12.357 7.64314C12.9821 8.26826 13.3333 9.11611 13.3333 10.0002C13.3333 10.8842 12.9821 11.7321 12.357 12.3572C11.7319 12.9823 10.884 13.3335 9.99998 13.3335ZM9.99998 11.6668C10.442 11.6668 10.8659 11.4912 11.1785 11.1787C11.4911 10.8661 11.6666 10.4422 11.6666 10.0002C11.6666 9.55813 11.4911 9.13421 11.1785 8.82165C10.8659 8.50909 10.442 8.3335 9.99998 8.3335C9.55795 8.3335 9.13403 8.50909 8.82147 8.82165C8.50891 9.13421 8.33331 9.55813 8.33331 10.0002C8.33331 10.4422 8.50891 10.8661 8.82147 11.1787C9.13403 11.4912 9.55795 11.6668 9.99998 11.6668Z"
+            />
+          </svg>
         </div>
       </div>
     );
@@ -2034,7 +2044,7 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
         style={{borderRadius: 0}}
         onClick={(e) => {
           if (e.target.classList.contains('MuiDialog-container')) {
-            onClose()
+            onClose();
           }
         }}
       >

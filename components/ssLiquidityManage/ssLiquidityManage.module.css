@@ -242,13 +242,35 @@
 .slippageIconContainer {
   display: flex;
   padding: 11px;
-  background: #0B5E8E;
+  background: transparent;
+  border: 1px solid #86b9d6;
   cursor: pointer;
+}
+
+.slippageIconContainer--active {
+  background: #0b5e8e;
+  border: 1px solid #0b5e8e;
+}
+
+.slippageTextContainer {
+  padding: 11px 0 11px 20px;
+  border: 1px solid #86b9d6;
+  border-right: none;
+}
+
+.slippageTextContainer--dark {
+  border: 1px solid #5F7285;
+  border-right: none;
 }
 
 .slippageIcon {
   width: 20px;
   height: 20px;
+  fill: #0B5E8E;
+}
+
+.slippageIcon--active {
+  fill: #ffffff;
 }
 
 .popoverPaper {
@@ -830,8 +852,6 @@
 }
 
 .controlPopover {
-  padding-left: 20px;
-  border: 1px solid #86B9D6;
   font-weight: 400;
   font-size: 14px;
   line-height: 120%;
@@ -839,7 +859,6 @@
 }
 
 .controlPopover--dark {
-  border: 1px solid #5F7285;
   color: #4CADE6;
 }
 
@@ -983,11 +1002,13 @@
 .inputBalanceSlippageText--light,
 .inputAdornment--light {
   color: #5688A5 !important;
+  -webkit-text-fill-color: #5688A5 !important;
 }
 
 .inputBalanceSlippageText--dark,
 .inputAdornment--dark {
   color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
 .manageLocalContainer {
