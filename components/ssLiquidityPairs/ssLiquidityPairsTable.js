@@ -438,8 +438,8 @@ const useStyles = makeStyles({
     position: 'absolute',
     left: '0px',
     top: '0px',
-    border: '1px solid #DBE6EC',
-    borderRadius: '30px',
+    outline: '1px solid #DBE6EC',
+    borderRadius: '100px',
     background: 'rgb(25, 33, 56)',
   },
   img2Logo: {
@@ -447,8 +447,8 @@ const useStyles = makeStyles({
     left: '28px',
     zIndex: '1',
     top: '0px',
-    border: '1px solid #DBE6EC',
-    borderRadius: '30px',
+    outline: '1px solid #DBE6EC',
+    borderRadius: '100px',
     background: 'rgb(25, 33, 56)',
   },
   doubleImages: {
