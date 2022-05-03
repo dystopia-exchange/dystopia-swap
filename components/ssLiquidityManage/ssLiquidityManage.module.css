@@ -252,6 +252,12 @@
   border: 1px solid #0b5e8e;
 }
 
+.selectTokenIconContainer--active {
+  background: #0b5e8e;
+  border: 1px solid #0b5e8e;
+  transform: rotate(180deg);
+}
+
 .slippageIconContainer--dark {
   background: transparent;
   border: 1px solid #5F7285;
@@ -847,7 +853,7 @@
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  width: calc(100% - 24px);
+  width: 100%;
   padding: 6px 12px;
 }
 
@@ -956,17 +962,63 @@
 }
 
 .tokenSelectInput {
-  padding: 3px !important;
+  padding: 4.5px !important;
   border: 1px solid #86B9D6 !important;
+  border-right: none !important;
   border-radius: 0 !important;
 }
 
 .tokenSelectInput--dark {
-  padding: 3px !important;
+  padding: 4.5px !important;
   border: 1px solid #5F7285 !important;
+  border-right: none !important;
   border-radius: 0 !important;
   color: #4CADE6 !important;
 }
+
+.tokenSelectInput > .menuOption > .menuOptionSec,
+.tokenSelectInput--dark > .menuOption > .menuOptionSec {
+  display: none !important;
+}
+
+.tokenSelectInput > .menuOption > .menuOptionLabel,
+.tokenSelectInput--dark > .menuOption > .menuOptionLabel {
+  font-weight: 400 !important;
+  font-size: 14px !important;
+}
+
+.list,
+.list--dark {
+  padding: 0 !important;
+  background: #DBE6EC !important;
+}
+
+.list--dark {
+  background: #151718 !important;
+}
+
+.list > li,
+.list--dark > li {
+  padding: 0 !important;
+}
+
+.list > li > .menuOption,
+.list--dark > li > .menuOption {
+  width: 100%;
+  padding: 10px !important;
+  border: 1px solid #0B5E8E !important;
+}
+
+.list > li:not(:last-of-type) > .menuOption,
+.list--dark > li:not(:last-of-type) > .menuOption {
+  border-bottom: none !important;
+}
+
+.list > li > .menuOption > .menuOptionSec,
+.list--dark > li > .menuOption > .menuOptionSec {
+  padding-right: 0 !important;
+}
+
 
 .assetSelectBalance {
   flex: 1;
@@ -1015,8 +1067,8 @@
 
 .inputBalanceSlippageText--light,
 .inputAdornment--light {
-  color: #5688A5 !important;
-  -webkit-text-fill-color: #5688A5 !important;
+  color: #325569 !important;
+  -webkit-text-fill-color: #325569 !important;
 }
 
 .inputBalanceSlippageText--dark,

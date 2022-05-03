@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import {
   Paper,
@@ -10,11 +10,12 @@ import {
   CircularProgress,
   Tooltip,
   IconButton,
-  FormControlLabel,
-  Switch,
-  Select,
   MenuItem,
-  Dialog, InputBase, DialogTitle, DialogContent, Popover,
+  Dialog,
+  InputBase,
+  DialogTitle,
+  DialogContent,
+  Popover, Select, ClickAwayListener,
 } from '@mui/material';
 import BigNumber from 'bignumber.js';
 import { formatCurrency } from '../../utils';
@@ -28,7 +29,7 @@ import {
   Search,
   DeleteOutline,
   ArrowBackIosNew,
-  Close, Settings,
+  Close, Settings, ArrowDropDownCircleOutlined,
 } from '@mui/icons-material';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import { formatSymbol } from '../../utils';
@@ -210,6 +211,8 @@ export default function ssLiquidityManage() {
       setAssetOptions(stores.stableSwapStore.getStore('baseAssets'));
     };
 
+    ssUpdated();
+
     stores.emitter.on(ACTIONS.UPDATED, ssUpdated);
     stores.emitter.on(ACTIONS.LIQUIDITY_ADDED, depositReturned);
     stores.emitter.on(ACTIONS.ADD_LIQUIDITY_AND_STAKED, depositReturned);
@@ -223,8 +226,6 @@ export default function ssLiquidityManage() {
     stores.emitter.on(ACTIONS.CREATE_GAUGE_RETURNED, createGaugeReturned);
     stores.emitter.on(ACTIONS.BASE_ASSETS_UPDATED, assetsUpdated);
     stores.emitter.on(ACTIONS.ERROR, errorReturned);
-
-    ssUpdated();
 
     return () => {
       stores.emitter.removeListener(ACTIONS.UPDATED, ssUpdated);
@@ -333,6 +334,7 @@ export default function ssLiquidityManage() {
 
   const handleChange = (event) => {
     setToken(event.target.value);
+    setOpenSelectToken(false);
   };
 
   const onSlippageChanged = (event) => {
@@ -1081,7 +1083,7 @@ export default function ssLiquidityManage() {
               endAdornment: <InputAdornment position="end">
                 <span
                   style={{
-                    color: appTheme === "dark" ? '#ffffff' : '#5688A5',
+                    color: appTheme === "dark" ? '#ffffff' : '#325569',
                   }}>
                   %
                 </span>
@@ -1189,26 +1191,81 @@ export default function ssLiquidityManage() {
     );
   };
 
+  const [openSelectToken, setOpenSelectToken] = useState(false);
+
+  const openSelect = () => {
+    setOpenSelectToken(!openSelectToken);
+  };
+
+  const selectArrow = () => {
+    return (
+      <ClickAwayListener onClickAway={openSelect}>
+        <div
+          onClick={openSelect}
+          className={[classes.slippageIconContainer, (openSelectToken ? classes['selectTokenIconContainer--active'] : ''), classes[`slippageIconContainer--${appTheme}`]].join(' ')}>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              className={[classes.slippageIcon, (openSelectToken ? classes['slippageIcon--active'] : ''), classes[`slippageIcon--${appTheme}`]].join(' ')}
+              d="M9.99999 10.9766L14.125 6.85156L15.3033 8.0299L9.99999 13.3332L4.69666 8.0299L5.87499 6.85156L9.99999 10.9766Z"
+            />
+          </svg>
+        </div>
+      </ClickAwayListener>
+    );
+  };
+
   const renderTokenSelect = () => {
     return (
       <Select
         className={[classes.tokenSelect, classes[`tokenSelect--${appTheme}`]].join(' ')}
         fullWidth
         value={token}
+        {...{
+          displayEmpty: token === null ? true : undefined,
+          renderValue: token === null ? (selected) => {
+            if (selected === null) {
+              return <em style={{padding: 10}}>Select veDYST</em>;
+            }
+          } : undefined,
+        }}
+        MenuProps={{
+          classes: {
+            list: appTheme === 'dark' ? classes['list--dark'] : classes.list,
+          },
+        }}
+        open={openSelectToken}
         onChange={handleChange}
+        IconComponent={selectArrow}
         inputProps={{
           className: appTheme === 'dark' ? classes['tokenSelectInput--dark'] : classes.tokenSelectInput,
         }}>
         {vestNFTs && vestNFTs.map((option) => {
           return (
             <MenuItem key={option.id} value={option}>
-              <div className={classes.menuOption}>
-                <Typography>Token #{option.id}</Typography>
-                {/*<div>
-                  <Typography align="right"
-                              className={classes.smallerText}>{formatCurrency(option.lockValue)}</Typography>
-                  <Typography color="textSecondary" className={classes.smallerText}>{veToken?.symbol}</Typography>
-                </div>*/}
+              <div
+                className={[classes.menuOption, 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                <Typography
+                  className={classes.menuOptionLabel}
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 12,
+                    marginRight: 30,
+                    color: appTheme === 'dark' ? '#ffffff' : '#325569',
+                  }}>
+                  Token #{option.id}
+                </Typography>
+
+                <div className={[classes.menuOptionSec, 'g-flex', 'g-flex--align-center'].join(' ')}>
+                  <Typography
+                    style={{
+                      fontWeight: 400,
+                      fontSize: 10,
+                      color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                      textAlign: 'right',
+                    }}>
+                    {formatCurrency(option.lockValue)} {veToken?.symbol}
+                  </Typography>
+                </div>
               </div>
             </MenuItem>
           );
@@ -1358,7 +1415,7 @@ export default function ssLiquidityManage() {
                       endAdornment: <InputAdornment position="end">
                         <span
                           style={{
-                            color: appTheme === "dark" ? '#ffffff' : '#5688A5',
+                            color: appTheme === "dark" ? '#ffffff' : '#325569',
                           }}>
                           %
                         </span>
