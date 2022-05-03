@@ -60,7 +60,17 @@
   .form,
   .top,
   .bottom {
-    width: 100%;
+    width: 320px;
+  }
+
+  .top {
+    border-right: 1px solid var(--border-light);
+    margin-left: 0;
+    width: 321px;
+  }
+
+  .top {
+    border-right: 1px solid var(--border-dark);
   }
 
   .bottom {
@@ -68,6 +78,7 @@
     background: var(--background-light);
     border: 1px solid var(--border-light);
     border-top: none;
+    display: none;
   }
 
   .bottom--dark {
@@ -78,6 +89,14 @@
   }
 
   .form {
-    padding: 13px 20px;
+    padding: 2px 20px 20px;
+  }
+
+  .form--dark {
+    border-bottom: 1px solid var(--border-dark);
+  }
+
+  .form--light {
+    border-bottom: 1px solid var(--border-light);
   }
 }

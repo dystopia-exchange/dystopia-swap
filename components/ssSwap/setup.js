@@ -404,8 +404,7 @@ function Setup() {
     return (
       <div className={classes.slippage}>
         <div
-          style={{marginBottom: 10}}
-          className={['g-flex', 'g-flex--align-center'].join(' ')}>
+          className={['g-flex', 'g-flex--align-center', classes.slippageLabel].join(' ')}>
           <Typography
             className={[classes.inputBalanceSlippage, classes[`inputBalanceSlippage--${appTheme}`]].join(" ")}
             noWrap>
