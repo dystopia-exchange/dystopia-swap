@@ -1947,6 +1947,7 @@ export default function EnhancedTable({pairs}) {
                     marginBottom: 20,
                     background: appTheme === 'dark' ? '#24292D' : '#DBE6EC',
                     border: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                    borderRadius: 0,
                   }}
                   disableGutters={true}
                   expanded={expanded === labelId}

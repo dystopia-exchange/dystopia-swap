@@ -1058,11 +1058,9 @@ export default function ssLiquidityManage() {
       <div className={['g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
         <div
           className={[classes.slippageTextContainer, classes[`slippageTextContainer--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
-          {windowWidth > 530 &&
-            <div style={{marginRight: 5}}>
-              Slippage:
-            </div>
-          }
+          <div style={{marginRight: 5}}>
+            Slippage:
+          </div>
 
           <TextField
             placeholder="0.00"
@@ -1304,7 +1302,7 @@ export default function ssLiquidityManage() {
               disabled={depositLoading}>
               <Typography
                 style={{
-                  fontWeight: 600,
+                  fontWeight: 500,
                   fontSize: 18,
                   color: appTheme === 'dark' ? (activeTab === 'deposit' ? '#ffffff' : '#7C838A') : (activeTab === 'deposit' ? '#0A2C40' : '#5688A5'),
                 }}>
@@ -1320,7 +1318,7 @@ export default function ssLiquidityManage() {
               disabled={depositLoading}>
               <Typography
                 style={{
-                  fontWeight: 600,
+                  fontWeight: 500,
                   fontSize: 18,
                   color: appTheme === 'dark' ? (activeTab === 'withdraw' ? '#ffffff' : '#7C838A') : (activeTab === 'withdraw' ? '#0A2C40' : '#5688A5'),
                 }}>
@@ -2057,8 +2055,13 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
 
         <div className={classes.manageLocalContainer}>
           <Button
-            onClick={toggleLocal}
-          >
+            style={{
+              padding: 0,
+              fontWeight: 500,
+              fontSize: 14,
+              color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+            }}
+            onClick={toggleLocal}>
             Manage Local Assets
           </Button>
         </div>
@@ -2091,6 +2094,9 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
       <Dialog
         aria-labelledby="simple-dialog-title"
         open={open}
+        classes={{
+          paperScrollPaper: classes.paperScrollPaper,
+        }}
         style={{borderRadius: 0}}
         onClick={(e) => {
           if (e.target.classList.contains('MuiDialog-container')) {
@@ -2121,6 +2127,7 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
+              marginBottom: 20,
             }}>
               <div style={{
                 display: 'flex',
