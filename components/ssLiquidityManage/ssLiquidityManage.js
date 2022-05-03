@@ -1197,9 +1197,13 @@ export default function ssLiquidityManage() {
     setOpenSelectToken(!openSelectToken);
   };
 
+  const closeSelect = () => {
+    setOpenSelectToken(false);
+  };
+
   const selectArrow = () => {
     return (
-      <ClickAwayListener onClickAway={openSelect}>
+      <ClickAwayListener onClickAway={closeSelect}>
         <div
           onClick={openSelect}
           className={[classes.slippageIconContainer, (openSelectToken ? classes['selectTokenIconContainer--active'] : ''), classes[`slippageIconContainer--${appTheme}`]].join(' ')}>
@@ -1224,7 +1228,7 @@ export default function ssLiquidityManage() {
           displayEmpty: token === null ? true : undefined,
           renderValue: token === null ? (selected) => {
             if (selected === null) {
-              return <em style={{padding: 10}}>Select veDYST</em>;
+              return <div style={{padding: 5, fontSize: 12}}>Select veDYST</div>;
             }
           } : undefined,
         }}
