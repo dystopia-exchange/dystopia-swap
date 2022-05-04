@@ -54,7 +54,7 @@ function Vote({ changeTheme }) {
 
             <div className={classes.mainDescBg}>
               <Typography className={classes.mainDescNC} variant="body2">
-                Use your veSolid to vote for your selected liquidity pair’s rewards distribution or create a bribe to encourage others to do the same.
+                Use your veDyst to vote for your selected liquidity pair’s rewards distribution or create a bribe to encourage others to do the same.
               </Typography>
             </div>
 

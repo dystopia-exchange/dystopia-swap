@@ -17,13 +17,13 @@
 }
 
 .content--light {
-  background-size: cover;
   background: var(--background-light) url("/images/background/background-light.jpg") no-repeat top left;
+  background-size: cover;
 }
 
 .content--dark {
-  background-size: cover;
   background: var(--background-dark) url("/images/background/background-dark.jpg") no-repeat top left;
+  background-size: cover;
 }
 
 .main {
