@@ -1,3 +1,75 @@
+.blurbg{
+  background: rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.nav-button-corner-top,
+.nav-button-corner-bottom {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-button-corner-top::before,
+.nav-button-corner-top::after {
+  margin-top: 3.5px;
+}
+
+.nav-button-corner-bottom::before,
+.nav-button-corner-bottom::after {
+  margin-bottom: 3.5px;
+}
+
+.nav-button-corner-top::before,
+.nav-button-corner-top::after,
+.nav-button-corner-bottom::before,
+.nav-button-corner-bottom::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  z-index: 999;
+}
+
+.nav-button-corner-top::before,
+.nav-button-corner-top::after {
+  top: -14.5px;
+  border-top: 1px solid var(--main-secondary-dark);
+}
+
+.nav-button-corner-top::before,
+.nav-button-corner-bottom::before {
+  left: -11px;
+  border-left: 1px solid var(--main-secondary-dark);
+}
+
+.nav-button-corner-top::after,
+.nav-button-corner-bottom::after {
+  right: -11px;
+  border-right: 1px solid var(--main-secondary-dark);
+}
+
+.nav-button-corner-bottom::before,
+.nav-button-corner-bottom::after {
+  bottom: -14.5px;
+  border-bottom: 1px solid var(--main-secondary-dark);
+}
+
+.nav-button-corner-top--dark::before,
+.nav-button-corner-top--dark::after,
+.nav-button-corner-bottom--dark::before,
+.nav-button-corner-bottom--dark::after {
+  border-color: var(--main-secondary-dark);
+}
+
+.nav-button-corner-top--light::before,
+.nav-button-corner-top--light::after,
+.nav-button-corner-bottom--light::before,
+.nav-button-corner-bottom--light::after {
+  border-color: var(--main-secondary-light);
+}
 .newSwapContainer {
   display: flex;
   justify-content: space-evenly;
@@ -1041,19 +1113,19 @@
   margin-top: 20px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .radioButton {
   font-size: 16px;
   font-weight: 800;
-  padding: 0px 15px;.newSwapContainer {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    min-height: calc(100vh - 423px);
-    align-items: center;
+  padding: 0px 15px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  align-items: center;
   }
   
   .infoContainer {
@@ -1967,6 +2039,7 @@
     margin-top: 20px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
   }
   
   .radioButton {
@@ -1987,7 +2060,3 @@
   .assetSearchResults {
     min-width: auto;
   }
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
