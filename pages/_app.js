@@ -96,7 +96,7 @@ export default function MyApp({ Component, pageProps }) {
           <title>Dystopia</title>
           <meta
             name="viewport"
-            content="minimum-scale=1, initial-scale=1, width=device-width"
+            content="width=device-width, initial-scale=1"
           />
         </Head>
         <AppThemeProvider value={{appTheme, setAppTheme}}>

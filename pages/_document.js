@@ -19,6 +19,7 @@ export default class MyDocument extends Document {
             overflow: 'hidden',
             width: '100%',
             height: '100%',
+            zoom: '0.8',
           }}>
 
         <Main style={{display: 'flex', flexDirection: 'column'}}/>
