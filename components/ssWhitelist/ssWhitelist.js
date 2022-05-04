@@ -7,9 +7,6 @@ import {
   Typography,
   Tooltip,
   Button,
-  Select,
-  MenuItem,
-  Grid,
 } from '@mui/material';
 import BigNumber from 'bignumber.js';
 import TokenSelect from '../select-token/select-token';
@@ -31,6 +28,7 @@ export default function ssWhitelist() {
   const [nft, setNFT] = useState(null);
   const [veToken, setVeToken] = useState(null);
   const {appTheme} = useAppThemeContext();
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const onSearchChanged = (event) => {
     setSearch(event.target.value);
@@ -165,6 +163,10 @@ export default function ssWhitelist() {
     setNFT(event.target.value);
   };
 
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
+
   const renderToken = () => {
     return (
 
@@ -236,11 +238,11 @@ export default function ssWhitelist() {
 
   return (
     <>
-      <div className={['g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+      <div className={[classes.controls, 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
         <TextField
           autoFocus
           fullWidth
-          placeholder="Paste the token address you want to whitelist: 0x..."
+          placeholder={windowWidth > 540 ? "Paste the token address you want to whitelist: 0x..." : 'Token to whitelist: 0x'}
           value={search}
           onChange={onSearchChanged}
           InputProps={{

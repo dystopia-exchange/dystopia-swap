@@ -132,5 +132,13 @@
   .notiyText {
     font-size: 45px !important;
   }
+
+  .controls {
+    flex-direction: column-reverse;
+  }
+
+  .searchInput {
+    margin-top: 10px;
+  }
 }
 
