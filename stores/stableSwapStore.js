@@ -12,6 +12,7 @@ import { assertValidExecutionArguments } from "graphql/execution/execute";
 import axios from "axios";
 import pairContractAbi from "./abis/pairOldRouter.json";
 import migratorAbi from "./abis/migrator.json";
+import FactoryAbi from "./abis/FactoryAbi.json";
 import { ConstructionOutlined } from "@mui/icons-material";
 
 const queryone = `
@@ -112,6 +113,7 @@ class Store {
       veToken: null,
       pairs: [],
       vestNFTs: [],
+      migratePair:[],
       rewards: {
         bribes: [],
         fees: [],
@@ -242,7 +244,7 @@ class Store {
           // migrate
           case ACTIONS.MIGRATE:
             this.migrate(payload);
-            break;
+            break; 
           default: {
           }
         }
@@ -328,7 +330,6 @@ class Store {
             .balanceOfNFT(tokenIndex)
             .call();
 
-          // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
           return {
             id: tokenIndex,
             lockEnds: locked.end,
@@ -1179,7 +1180,6 @@ class Store {
             .balanceOfNFT(tokenIndex)
             .call();
 
-          // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
           return {
             id: tokenIndex,
             lockEnds: locked.end,
@@ -2055,6 +2055,8 @@ class Store {
     }
   };
 
+ 
+
   migrate = async (payload) => {
     try {
       const context = this;
@@ -2080,6 +2082,8 @@ class Store {
         allowance,
         pairDetails,
       } = payload.content;
+
+      console.log(BigNumber(allowance).lt(amount),"supp")
 
       const migratorContract = new web3.eth.Contract(
         migratorAbi,
@@ -2200,6 +2204,7 @@ class Store {
             }
           }
         );
+       
       } else {
         this._callContractWait(
           web3,
@@ -4590,7 +4595,6 @@ class Store {
             .balanceOfNFT(tokenIndex)
             .call();
 
-          // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
           return {
             id: tokenIndex,
             lockEnds: locked.end,

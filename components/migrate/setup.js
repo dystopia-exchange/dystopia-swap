@@ -96,14 +96,15 @@ export default function Setup() {
   }
 
   const getPairDetails = async (token0, token1) => {
-    console.log(token0, token1, "tokensAddress");
+    const multicall = await stores.accountStore.getMulticall();
+
     if(token0 == 'MATIC'){
       token0 = CONTRACTS.WFTM_ADDRESS
     }
     if(token1 == 'MATIC'){
       token1 = CONTRACTS.WFTM_ADDRESS
     }
-    console.log(token0, token1, "tokensAddress");
+
     try {
       const web3 = await stores.accountStore.getWeb3Provider();
       if (!web3) {
@@ -118,39 +119,57 @@ export default function Setup() {
             .getPair(token0, token1)
             .call();
           console.log("ftech noww", pairAddress);
+
           if (pairAddress !== "0x0000000000000000000000000000000000000000") {
             const pairContract = new web3.eth.Contract(
               pairContractAbi,
               pairAddress
             );
-            console.log(pairContract, "pairContract");
-            let lpBalance = await pairContract.methods
-              .balanceOf(account.address)
-              .call();
-            const getTotalSupply = await pairContract.methods
-              .totalSupply()
-              .call();
-            lpBalance = web3.utils.fromWei(lpBalance.toString(), "ether");
+
             const migrator = migrate.find(
               (eachMigrate) => eachMigrate.value === platform
             );
-            const allowence = await pairContract.methods
+            
+            let [getReserves, symbol,allowence,getTotalSupply,lpBalance,token0Add,token1Add] = await multicall.aggregate([
+              pairContract.methods.getReserves(),
+              pairContract.methods.symbol(),
+              pairContract.methods
               .allowance(
                 account.address,
                 migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
-              )
-              .call();
-            console.log({ getTotalSupply });
-            const totalSupply = web3.utils.fromWei(
+              ),
+              pairContract.methods.totalSupply(),
+              pairContract.methods
+              .balanceOf(account.address),
+              pairContract.methods.token0(),
+              pairContract.methods.token1(),
+
+            ]);
+
+          const token0Contract = new web3.eth.Contract(pairContractAbi, token0Add);
+          const token1Contract = new web3.eth.Contract(pairContractAbi, token1Add);
+            let [token0symbol,token1symbol] = await multicall.aggregate([
+              token0Contract.methods.symbol(),
+              token1Contract.methods.symbol(),
+              pairContract.methods
+              .allowance(
+                account.address,
+                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
+              ),
+              pairContract.methods.totalSupply(),
+              pairContract.methods
+              .balanceOf(account.address)
+            ]);
+            
+            let totalSupply = web3.utils.fromWei(
               getTotalSupply.toString(),
               "ether"
             );
-            const getReserves = await pairContract.methods.getReserves().call();
-            const symbol = await pairContract.methods.symbol().call();
-            console.log({ getReserves });
-            const weiReserve1 =  getReserves._reserve0/(10**toAssetValue.decimals)
+            lpBalance = web3.utils.fromWei(lpBalance.toString(), "ether");
 
-            const weiReserve2 = getReserves._reserve1/(10**fromAssetValue.decimals)
+            const weiReserve1 =  getReserves[0]/(10**toAssetValue.decimals)
+
+            const weiReserve2 = getReserves[1]/(10**fromAssetValue.decimals)
             console.log(getReserves,fromAssetValue,toAssetValue,weiReserve1,weiReserve2,lpBalance,totalSupply,"migrate info")
             const token0Bal =
               (parseFloat(lpBalance.toString()) /
@@ -162,9 +181,12 @@ export default function Setup() {
               parseFloat(weiReserve2.toString());
             const poolTokenPercentage =
               (parseFloat(lpBalance) * 100) / parseFloat(totalSupply);
-            const pairDetails = {
+              
+            let pairDetails = {
               isValid: true,
               symbol:symbol,
+              token0symbol:token0symbol,
+              token1symbol:token1symbol,
               lpBalance: parseFloat(lpBalance).toFixed(18),
               totalSupply,
               token0Bal: parseFloat(token0Bal).toFixed(18),
@@ -173,15 +195,16 @@ export default function Setup() {
               pairAddress,
               poolTokenPercentage: Math.floor(poolTokenPercentage),
             };
+           
             setAmount(parseFloat(lpBalance).toFixed(5));
             setPairDetails(pairDetails);
           } else {
-            const pairDetails = {
+            let pairDetails =   {
               isValid: false,
               lpBalance: 0,
               allowence: 0,
             };
-            setPairDetails(pairDetails);
+           setPairDetails(pairDetails);
           }
         }
       }
@@ -656,7 +679,7 @@ export default function Setup() {
                       classes[`pairDetails--${appTheme}`],
                     ].join(" ")}
                   >
-                    {toAssetValue?.symbol}:
+                    {pairDetails?.token0symbol}:
                     <span style={{ color: "#304C5E", fontWeight: "800" }}>
                       {Number(pairDetails.token0Bal).toFixed(2)}
                     </span>
@@ -667,7 +690,7 @@ export default function Setup() {
                       classes[`pairDetails--${appTheme}`],
                     ].join(" ")}
                   >
-                    {fromAssetValue?.symbol}
+                    {pairDetails?.token1symbol}
                     <span style={{ color: "#304C5E", fontWeight: "800" }}>
                    {Number(pairDetails.token1Bal).toFixed(2)}
                     </span>
