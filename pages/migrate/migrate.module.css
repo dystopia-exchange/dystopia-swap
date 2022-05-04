@@ -946,8 +946,8 @@
 }
 
 @media screen and (max-width: 576px) {
-  .newSwapContainer {
-    margin-top: -100px;
+  .ffContainer {
+    margin-top: 30px;
   }
 
   .swapContainer {
