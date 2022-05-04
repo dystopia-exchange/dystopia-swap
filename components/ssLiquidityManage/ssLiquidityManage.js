@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import {
   Paper,
@@ -10,11 +10,12 @@ import {
   CircularProgress,
   Tooltip,
   IconButton,
-  FormControlLabel,
-  Switch,
-  Select,
   MenuItem,
-  Dialog, InputBase, DialogTitle, DialogContent, Popover,
+  Dialog,
+  InputBase,
+  DialogTitle,
+  DialogContent,
+  Popover, Select, ClickAwayListener,
 } from '@mui/material';
 import BigNumber from 'bignumber.js';
 import { formatCurrency } from '../../utils';
@@ -28,12 +29,10 @@ import {
   Search,
   DeleteOutline,
   ArrowBackIosNew,
-  RadioButtonUnchecked,
-  RadioButtonChecked,
-  Close, Settings,
+  Close, Settings, ArrowDropDownCircleOutlined,
 } from '@mui/icons-material';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
-import { formatSymbol } from '../../utils'
+import { formatSymbol } from '../../utils';
 
 export default function ssLiquidityManage() {
 
@@ -78,7 +77,7 @@ export default function ssLiquidityManage() {
   const [withdrawQuote, setWithdrawQuote] = useState(null);
 
   const [priorityAsset, setPriorityAsset] = useState(0);
-  const [advanced, setAdvanced] = useState(false);
+  const [advanced, setAdvanced] = useState(true);
 
   const [token, setToken] = useState(null);
   const [vestNFTs, setVestNFTs] = useState([]);
@@ -212,6 +211,8 @@ export default function ssLiquidityManage() {
       setAssetOptions(stores.stableSwapStore.getStore('baseAssets'));
     };
 
+    ssUpdated();
+
     stores.emitter.on(ACTIONS.UPDATED, ssUpdated);
     stores.emitter.on(ACTIONS.LIQUIDITY_ADDED, depositReturned);
     stores.emitter.on(ACTIONS.ADD_LIQUIDITY_AND_STAKED, depositReturned);
@@ -225,8 +226,6 @@ export default function ssLiquidityManage() {
     stores.emitter.on(ACTIONS.CREATE_GAUGE_RETURNED, createGaugeReturned);
     stores.emitter.on(ACTIONS.BASE_ASSETS_UPDATED, assetsUpdated);
     stores.emitter.on(ACTIONS.ERROR, errorReturned);
-
-    ssUpdated();
 
     return () => {
       stores.emitter.removeListener(ACTIONS.UPDATED, ssUpdated);
@@ -335,6 +334,7 @@ export default function ssLiquidityManage() {
 
   const handleChange = (event) => {
     setToken(event.target.value);
+    setOpenSelectToken(false);
   };
 
   const onSlippageChanged = (event) => {
@@ -950,7 +950,8 @@ export default function ssLiquidityManage() {
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
               <Typography
                 className={classes.title}>{BigNumber(amount0).gt(0) ? formatCurrency(BigNumber(amount1).div(amount0)) : '0.00'}</Typography>
-              <Typography className={classes.text}>{`${formatSymbol(asset1?.symbol)} per ${formatSymbol(asset0?.symbol)}`}</Typography>
+              <Typography
+                className={classes.text}>{`${formatSymbol(asset1?.symbol)} per ${formatSymbol(asset0?.symbol)}`}</Typography>
             </div>
           </div>
         </div>
@@ -1055,12 +1056,11 @@ export default function ssLiquidityManage() {
   const renderSmallInput = (type, amountValue, amountError, amountChanged) => {
     return (
       <div className={['g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
-        <div className={['g-flex', 'g-flex--align-center'].join(' ')}>
-          {windowWidth > 530 &&
-            <div style={{marginRight: 5}}>
-              Slippage:
-            </div>
-          }
+        <div
+          className={[classes.slippageTextContainer, classes[`slippageTextContainer--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
+          <div style={{marginRight: 5}}>
+            Slippage:
+          </div>
 
           <TextField
             placeholder="0.00"
@@ -1069,7 +1069,7 @@ export default function ssLiquidityManage() {
             helperText={amountError}
             value={amountValue}
             onChange={amountChanged}
-            disabled={depositLoading || stakeLoading || depositStakeLoading || createLoading}
+            disabled={true}
             InputProps={{
               style: {
                 border: 'none',
@@ -1079,7 +1079,12 @@ export default function ssLiquidityManage() {
                 root: classes.searchInput,
               },
               endAdornment: <InputAdornment position="end">
-                %
+                <span
+                  style={{
+                    color: appTheme === "dark" ? '#ffffff' : '#325569',
+                  }}>
+                  %
+                </span>
               </InputAdornment>,
             }}
             inputProps={{
@@ -1100,10 +1105,13 @@ export default function ssLiquidityManage() {
 
         <div
           onClick={handleClickPopover}
-          className={classes.slippageIconContainer}>
-          <img
-            src="/images/ui/slippage-icon.svg"
-            className={classes.slippageIcon}/>
+          className={[classes.slippageIconContainer, (anchorEl ? classes['slippageIconContainer--active'] : ''), classes[`slippageIconContainer--${appTheme}`]].join(' ')}>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              className={[classes.slippageIcon, (anchorEl ? classes['slippageIcon--active'] : ''), classes[`slippageIcon--${appTheme}`]].join(' ')}
+              d="M9.99998 0.833496L17.9166 5.41683V14.5835L9.99998 19.1668L2.08331 14.5835V5.41683L9.99998 0.833496ZM9.99998 2.75933L3.74998 6.37766V13.6227L9.99998 17.241L16.25 13.6227V6.37766L9.99998 2.75933ZM9.99998 13.3335C9.11592 13.3335 8.26808 12.9823 7.64296 12.3572C7.01784 11.7321 6.66665 10.8842 6.66665 10.0002C6.66665 9.11611 7.01784 8.26826 7.64296 7.64314C8.26808 7.01802 9.11592 6.66683 9.99998 6.66683C10.884 6.66683 11.7319 7.01802 12.357 7.64314C12.9821 8.26826 13.3333 9.11611 13.3333 10.0002C13.3333 10.8842 12.9821 11.7321 12.357 12.3572C11.7319 12.9823 10.884 13.3335 9.99998 13.3335ZM9.99998 11.6668C10.442 11.6668 10.8659 11.4912 11.1785 11.1787C11.4911 10.8661 11.6666 10.4422 11.6666 10.0002C11.6666 9.55813 11.4911 9.13421 11.1785 8.82165C10.8659 8.50909 10.442 8.3335 9.99998 8.3335C9.55795 8.3335 9.13403 8.50909 8.82147 8.82165C8.50891 9.13421 8.33331 9.55813 8.33331 10.0002C8.33331 10.4422 8.50891 10.8661 8.82147 11.1787C9.13403 11.4912 9.55795 11.6668 9.99998 11.6668Z"
+            />
+          </svg>
         </div>
       </div>
     );
@@ -1119,21 +1127,24 @@ export default function ssLiquidityManage() {
           }}>
 
           {!stable &&
-            <RadioButtonUnchecked
-              style={{
-                width: 20,
-                height: 20,
-                color: '#0B5E8E',
-              }}/>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
+                fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
+                stroke={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+            </svg>
           }
 
           {stable &&
-            <RadioButtonChecked
-              style={{
-                width: 20,
-                height: 20,
-                color: '#0B5E8E',
-              }}/>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
+                fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
+                stroke={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+              <path
+                d="M5 10C5 7.23858 7.23858 5 10 5C12.7614 5 15 7.23858 15 10C15 12.7614 12.7614 15 10 15C7.23858 15 5 12.7614 5 10Z"
+                fill={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+            </svg>
           }
 
           <Typography
@@ -1149,21 +1160,24 @@ export default function ssLiquidityManage() {
           }}>
 
           {stable &&
-            <RadioButtonUnchecked
-              style={{
-                width: 20,
-                height: 20,
-                color: '#0B5E8E',
-              }}/>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
+                fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
+                stroke={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+            </svg>
           }
 
           {!stable &&
-            <RadioButtonChecked
-              style={{
-                width: 20,
-                height: 20,
-                color: '#0B5E8E',
-              }}/>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
+                fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
+                stroke={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+              <path
+                d="M5 10C5 7.23858 7.23858 5 10 5C12.7614 5 15 7.23858 15 10C15 12.7614 12.7614 15 10 15C7.23858 15 5 12.7614 5 10Z"
+                fill={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+            </svg>
           }
 
           <Typography
@@ -1175,26 +1189,85 @@ export default function ssLiquidityManage() {
     );
   };
 
+  const [openSelectToken, setOpenSelectToken] = useState(false);
+
+  const openSelect = () => {
+    setOpenSelectToken(!openSelectToken);
+  };
+
+  const closeSelect = () => {
+    setOpenSelectToken(false);
+  };
+
+  const selectArrow = () => {
+    return (
+      <ClickAwayListener onClickAway={closeSelect}>
+        <div
+          onClick={openSelect}
+          className={[classes.slippageIconContainer, (openSelectToken ? classes['selectTokenIconContainer--active'] : ''), classes[`slippageIconContainer--${appTheme}`]].join(' ')}>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              className={[classes.slippageIcon, (openSelectToken ? classes['slippageIcon--active'] : ''), classes[`slippageIcon--${appTheme}`]].join(' ')}
+              d="M9.99999 10.9766L14.125 6.85156L15.3033 8.0299L9.99999 13.3332L4.69666 8.0299L5.87499 6.85156L9.99999 10.9766Z"
+            />
+          </svg>
+        </div>
+      </ClickAwayListener>
+    );
+  };
+
   const renderTokenSelect = () => {
     return (
       <Select
         className={[classes.tokenSelect, classes[`tokenSelect--${appTheme}`]].join(' ')}
         fullWidth
         value={token}
+        {...{
+          displayEmpty: token === null ? true : undefined,
+          renderValue: token === null ? (selected) => {
+            if (selected === null) {
+              return <div style={{padding: 5, fontSize: 12}}>Select veDYST</div>;
+            }
+          } : undefined,
+        }}
+        MenuProps={{
+          classes: {
+            list: appTheme === 'dark' ? classes['list--dark'] : classes.list,
+          },
+        }}
+        open={openSelectToken}
         onChange={handleChange}
+        IconComponent={selectArrow}
         inputProps={{
           className: appTheme === 'dark' ? classes['tokenSelectInput--dark'] : classes.tokenSelectInput,
         }}>
         {vestNFTs && vestNFTs.map((option) => {
           return (
             <MenuItem key={option.id} value={option}>
-              <div className={classes.menuOption}>
-                <Typography>Token #{option.id}</Typography>
-                {/*<div>
-                  <Typography align="right"
-                              className={classes.smallerText}>{formatCurrency(option.lockValue)}</Typography>
-                  <Typography color="textSecondary" className={classes.smallerText}>{veToken?.symbol}</Typography>
-                </div>*/}
+              <div
+                className={[classes.menuOption, 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                <Typography
+                  className={classes.menuOptionLabel}
+                  style={{
+                    fontWeight: 500,
+                    fontSize: 12,
+                    marginRight: 30,
+                    color: appTheme === 'dark' ? '#ffffff' : '#325569',
+                  }}>
+                  Token #{option.id}
+                </Typography>
+
+                <div className={[classes.menuOptionSec, 'g-flex', 'g-flex--align-center'].join(' ')}>
+                  <Typography
+                    style={{
+                      fontWeight: 400,
+                      fontSize: 10,
+                      color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                      textAlign: 'right',
+                    }}>
+                    {formatCurrency(option.lockValue)} {veToken?.symbol}
+                  </Typography>
+                </div>
               </div>
             </MenuItem>
           );
@@ -1229,7 +1302,7 @@ export default function ssLiquidityManage() {
               disabled={depositLoading}>
               <Typography
                 style={{
-                  fontWeight: 600,
+                  fontWeight: 500,
                   fontSize: 18,
                   color: appTheme === 'dark' ? (activeTab === 'deposit' ? '#ffffff' : '#7C838A') : (activeTab === 'deposit' ? '#0A2C40' : '#5688A5'),
                 }}>
@@ -1245,7 +1318,7 @@ export default function ssLiquidityManage() {
               disabled={depositLoading}>
               <Typography
                 style={{
-                  fontWeight: 600,
+                  fontWeight: 500,
                   fontSize: 18,
                   color: appTheme === 'dark' ? (activeTab === 'withdraw' ? '#ffffff' : '#7C838A') : (activeTab === 'withdraw' ? '#0A2C40' : '#5688A5'),
                 }}>
@@ -1344,7 +1417,7 @@ export default function ssLiquidityManage() {
                       endAdornment: <InputAdornment position="end">
                         <span
                           style={{
-                            color: appTheme === "dark" ? '#ffffff' : '#5688A5',
+                            color: appTheme === "dark" ? '#ffffff' : '#325569',
                           }}>
                           %
                         </span>
@@ -1437,21 +1510,6 @@ export default function ssLiquidityManage() {
               {renderWithdrawInformation()}
             </>
           }
-        </div>
-        <div className={classes.advancedToggleContainer}>
-          <FormControlLabel
-            control={
-              <Switch
-                size="small"
-                checked={advanced}
-                onChange={toggleAdvanced}
-                color={'primary'}
-              />
-            }
-            className={classes.some}
-            label="Advanced"
-            labelPlacement="start"
-          />
         </div>
       </div>
 
@@ -1997,8 +2055,13 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
 
         <div className={classes.manageLocalContainer}>
           <Button
-            onClick={toggleLocal}
-          >
+            style={{
+              padding: 0,
+              fontWeight: 500,
+              fontSize: 14,
+              color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+            }}
+            onClick={toggleLocal}>
             Manage Local Assets
           </Button>
         </div>
@@ -2031,10 +2094,13 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
       <Dialog
         aria-labelledby="simple-dialog-title"
         open={open}
+        classes={{
+          paperScrollPaper: classes.paperScrollPaper,
+        }}
         style={{borderRadius: 0}}
         onClick={(e) => {
           if (e.target.classList.contains('MuiDialog-container')) {
-            onClose()
+            onClose();
           }
         }}
       >
@@ -2061,6 +2127,7 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
+              marginBottom: 20,
             }}>
               <div style={{
                 display: 'flex',

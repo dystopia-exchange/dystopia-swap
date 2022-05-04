@@ -242,13 +242,55 @@
 .slippageIconContainer {
   display: flex;
   padding: 11px;
-  background: #0B5E8E;
+  background: transparent;
+  border: 1px solid #86b9d6;
   cursor: pointer;
+}
+
+.slippageIconContainer--active {
+  background: #0b5e8e;
+  border: 1px solid #0b5e8e;
+}
+
+.selectTokenIconContainer--active {
+  background: #0b5e8e;
+  border: 1px solid #0b5e8e;
+  transform: rotate(180deg);
+}
+
+.slippageIconContainer--dark {
+  background: transparent;
+  border: 1px solid #5F7285;
+}
+
+.slippageIconContainer--dark.slippageIconContainer--active {
+  background: #5F7285;
+  border: 1px solid #5F7285;
+}
+
+.slippageTextContainer {
+  padding: 11px 0 11px 20px;
+  border: 1px solid #86b9d6;
+  border-right: none;
+}
+
+.slippageTextContainer--dark {
+  border: 1px solid #5F7285;
+  border-right: none;
 }
 
 .slippageIcon {
   width: 20px;
   height: 20px;
+  fill: #0B5E8E;
+}
+
+.slippageIcon--active {
+  fill: #ffffff;
+}
+
+.slippageIcon--dark {
+  fill: #4CADE6;
 }
 
 .popoverPaper {
@@ -259,6 +301,7 @@
   border: 1px solid #0B5E8E !important;
   box-shadow: 5px 5px 20px rgba(14, 44, 79, 0.25) !important;
   border-radius: 0 !important;
+  overflow: hidden !important;
 }
 
 .popoverPaper--dark {
@@ -646,10 +689,14 @@
   align-items: center;
 }
 
+.paperScrollPaper {
+  border-radius: 0 !important;
+}
+
 .depositInfoHeading {
   width: 100%;
   margin-top: 20px !important;
-  font-weight: 700 !important;
+  font-weight: 500 !important;
   color: #5688A5 !important;
   font-size: 14px !important;
 }
@@ -811,7 +858,7 @@
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  width: calc(100% - 24px);
+  width: 100%;
   padding: 6px 12px;
 }
 
@@ -830,8 +877,6 @@
 }
 
 .controlPopover {
-  padding-left: 20px;
-  border: 1px solid #86B9D6;
   font-weight: 400;
   font-size: 14px;
   line-height: 120%;
@@ -839,7 +884,6 @@
 }
 
 .controlPopover--dark {
-  border: 1px solid #5F7285;
   color: #4CADE6;
 }
 
@@ -923,17 +967,63 @@
 }
 
 .tokenSelectInput {
-  padding: 3px !important;
+  padding: 4.5px !important;
   border: 1px solid #86B9D6 !important;
+  border-right: none !important;
   border-radius: 0 !important;
 }
 
 .tokenSelectInput--dark {
-  padding: 3px !important;
+  padding: 4.5px !important;
   border: 1px solid #5F7285 !important;
+  border-right: none !important;
   border-radius: 0 !important;
   color: #4CADE6 !important;
 }
+
+.tokenSelectInput > .menuOption > .menuOptionSec,
+.tokenSelectInput--dark > .menuOption > .menuOptionSec {
+  display: none !important;
+}
+
+.tokenSelectInput > .menuOption > .menuOptionLabel,
+.tokenSelectInput--dark > .menuOption > .menuOptionLabel {
+  font-weight: 400 !important;
+  font-size: 14px !important;
+}
+
+.list,
+.list--dark {
+  padding: 0 !important;
+  background: #DBE6EC !important;
+}
+
+.list--dark {
+  background: #151718 !important;
+}
+
+.list > li,
+.list--dark > li {
+  padding: 0 !important;
+}
+
+.list > li > .menuOption,
+.list--dark > li > .menuOption {
+  width: 100%;
+  padding: 10px !important;
+  border: 1px solid #0B5E8E !important;
+}
+
+.list > li:not(:last-of-type) > .menuOption,
+.list--dark > li:not(:last-of-type) > .menuOption {
+  border-bottom: none !important;
+}
+
+.list > li > .menuOption > .menuOptionSec,
+.list--dark > li > .menuOption > .menuOptionSec {
+  padding-right: 0 !important;
+}
+
 
 .assetSelectBalance {
   flex: 1;
@@ -982,12 +1072,14 @@
 
 .inputBalanceSlippageText--light,
 .inputAdornment--light {
-  color: #5688A5 !important;
+  color: #325569 !important;
+  -webkit-text-fill-color: #325569 !important;
 }
 
 .inputBalanceSlippageText--dark,
 .inputAdornment--dark {
   color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
 .manageLocalContainer {
@@ -1080,8 +1172,8 @@
 }
 
 .disclaimer {
-  font-size: 13px !important;
-  font-weight: 200 !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
   border-radius: 0;
   background: #CFE5F2 !important;
   border: 2px solid #15B525 !important;
@@ -1110,7 +1202,20 @@
   .container,
   .container3,
   .reAddPadding3 {
+    width: 320px;
+  }
+
+  .controls {
+    flex-direction: column;
+  }
+
+  .controlItem {
     width: 100%;
+  }
+
+  .controlItem:first-child {
+    margin-right: 0;
+    margin-bottom: 20px;
   }
 
   .top {
@@ -1180,7 +1285,7 @@
   }
 
   .mediumInputContainer {
-    width: 135px;
+    width: 130px;
     height: 61px;
   }
 
@@ -1197,7 +1302,17 @@
   }
 
   .mediumInputContainer--withdrawAmount0 {
-    margin-right: 10px;
+    margin-right: 20px;
+  }
+
+  .mediumInputContainer--withdrawAmount0,
+  .mediumInputContainer--withdrawAmount1 {
+    border-right: 1px solid #86B9D6;
+  }
+
+  .mediumInputContainer--dark.mediumInputContainer--withdrawAmount0,
+  .mediumInputContainer--dark.mediumInputContainer--withdrawAmount1 {
+    border-right: 1px solid #5F7285;
   }
 
   .swapInputs {
@@ -1410,8 +1525,8 @@
     margin-right: 10px;
   }
 
-  .controlItem:first-child {
-    margin-right: 10px;
+  .tokenSelectInput {
+    padding: 5px 0 5px 15px !important;
   }
 
   .popoverPaper {

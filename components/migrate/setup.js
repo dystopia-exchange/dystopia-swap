@@ -41,7 +41,7 @@ import migratorAbi from "../../stores/abis/migrator.json";
 import classes from "./ssSwap.module.css";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import stores from "../../stores";
-import { ACTIONS, ETHERSCAN_URL } from "../../stores/constants";
+import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
 import BigNumber from "bignumber.js";
 import { formatSymbol } from '../../utils';
 
@@ -97,6 +97,13 @@ export default function Setup() {
 
   const getPairDetails = async (token0, token1) => {
     console.log(token0, token1, "tokensAddress");
+    if(token0 == 'MATIC'){
+      token0 = CONTRACTS.WFTM_ADDRESS
+    }
+    if(token1 == 'MATIC'){
+      token1 = CONTRACTS.WFTM_ADDRESS
+    }
+    console.log(token0, token1, "tokensAddress");
     try {
       const web3 = await stores.accountStore.getWeb3Provider();
       if (!web3) {
@@ -141,14 +148,10 @@ export default function Setup() {
             const getReserves = await pairContract.methods.getReserves().call();
             const symbol = await pairContract.methods.symbol().call();
             console.log({ getReserves });
-            const weiReserve1 = web3.utils.fromWei(
-              getReserves._reserve0.toString(),
-              "ether"
-            );
-            const weiReserve2 = web3.utils.fromWei(
-              getReserves._reserve1.toString(),
-              "ether"
-            );
+            const weiReserve1 =  getReserves._reserve0/(10**toAssetValue.decimals)
+
+            const weiReserve2 = getReserves._reserve1/(10**fromAssetValue.decimals)
+            console.log(getReserves,fromAssetValue,toAssetValue,weiReserve1,weiReserve2,lpBalance,totalSupply,"migrate info")
             const token0Bal =
               (parseFloat(lpBalance.toString()) /
                 parseFloat(totalSupply.toString())) *
@@ -162,10 +165,10 @@ export default function Setup() {
             const pairDetails = {
               isValid: true,
               symbol:symbol,
-              lpBalance: parseFloat(lpBalance).toFixed(5),
+              lpBalance: parseFloat(lpBalance).toFixed(18),
               totalSupply,
-              token0Bal: parseFloat(token0Bal).toFixed(5),
-              token1Bal: parseFloat(token1Bal).toFixed(5),
+              token0Bal: parseFloat(token0Bal).toFixed(18),
+              token1Bal: parseFloat(token1Bal).toFixed(18),
               allowence,
               pairAddress,
               poolTokenPercentage: Math.floor(poolTokenPercentage),
@@ -222,8 +225,6 @@ export default function Setup() {
         if (baseAsset.length > 0 && fromAssetValue == null) {
           setFromAssetValue(baseAsset[1]);
         }
-        //await getPairDetails(baseAsset[0].address,baseAsset[1].address)
-        // forceUpdate()
       };
 
       stores.emitter.on(ACTIONS.UPDATED, ssUpdated);
@@ -442,7 +443,7 @@ export default function Setup() {
                     Balance:
                     <span>
                       {pairDetails && pairDetails.lpBalance
-                        ? pairDetails.lpBalance
+                        ? Number(pairDetails.lpBalance).toFixed(5)
                         : "0"}
                     </span>
                   </Typography>
@@ -634,7 +635,7 @@ export default function Setup() {
                     </div>
                   </div>
                   <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                    {pairDetails.lpBalance}
+                    {Number(pairDetails.lpBalance).toFixed(5)}
                   </span>
                 </div>
                 <div
@@ -655,9 +656,9 @@ export default function Setup() {
                       classes[`pairDetails--${appTheme}`],
                     ].join(" ")}
                   >
-                    {fromAssetValue?.symbol}:
+                    {toAssetValue?.symbol}:
                     <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                      {pairDetails.token0Bal}
+                      {Number(pairDetails.token0Bal).toFixed(2)}
                     </span>
                   </div>
                   <div
@@ -666,9 +667,9 @@ export default function Setup() {
                       classes[`pairDetails--${appTheme}`],
                     ].join(" ")}
                   >
-                    {toAssetValue?.symbol}
+                    {fromAssetValue?.symbol}
                     <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                      {pairDetails.token1Bal}
+                   {Number(pairDetails.token1Bal).toFixed(2)}
                     </span>
                   </div>
                 </div>

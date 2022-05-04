@@ -438,8 +438,8 @@ const useStyles = makeStyles({
     position: 'absolute',
     left: '0px',
     top: '0px',
-    border: '1px solid #DBE6EC',
-    borderRadius: '30px',
+    outline: '1px solid #DBE6EC',
+    borderRadius: '100px',
     background: 'rgb(25, 33, 56)',
   },
   img2Logo: {
@@ -447,8 +447,8 @@ const useStyles = makeStyles({
     left: '28px',
     zIndex: '1',
     top: '0px',
-    border: '1px solid #DBE6EC',
-    borderRadius: '30px',
+    outline: '1px solid #DBE6EC',
+    borderRadius: '100px',
     background: 'rgb(25, 33, 56)',
   },
   doubleImages: {
@@ -1947,6 +1947,7 @@ export default function EnhancedTable({pairs}) {
                     marginBottom: 20,
                     background: appTheme === 'dark' ? '#24292D' : '#DBE6EC',
                     border: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                    borderRadius: 0,
                   }}
                   disableGutters={true}
                   expanded={expanded === labelId}

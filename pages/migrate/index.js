@@ -46,7 +46,11 @@ export default function Migrate() {
   return (
     <>
       {account && account.address ?
+      <div className={classes.ffContainer}>
+      <div className={classes.newSwapContainer}>
         <Setup/>
+        </div>
+        </div>
         :
         <Paper className={classes.notConnectedContent}>
           <div className={classes.contentFloat}>

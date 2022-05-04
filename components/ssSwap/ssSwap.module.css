@@ -262,6 +262,10 @@
   width: min-content;
 }
 
+.slippageLabel {
+  margin-bottom: 10px;
+}
+
 .questionIcon {
   margin-left: 10px;
 }
@@ -900,6 +904,10 @@
   margin-top: 20px;
 }
 
+.quoteError {
+  color: #631515 !important;
+}
+
 .warningContainer--light {
   background: #CFE5F2;
 }
@@ -1006,6 +1014,7 @@
     background-repeat: no-repeat;
     margin-left: 220px;
     margin-top: -22px;
+    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
   }
 
   .textField--To-light,
@@ -1096,13 +1105,21 @@
   }
 
   .slippage {
-    bottom: -45px;
-    left: 20px;
+    width: 280px;
+    position: static;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .slippageLabel {
+    margin-bottom: 0;
+    margin-right: 20px;
   }
 
   .btnSwap {
     left: 50%;
-    bottom: -120px;
+    bottom: -76px;
     transform: translateX(-50%);
     margin-left: 0 !important;
   }
