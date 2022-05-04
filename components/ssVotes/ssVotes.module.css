@@ -291,7 +291,7 @@
 @media (max-width: 935px) {
   .tokenSelect {
     position: absolute !important;
-    top: -30px;
+    top: -42px;
     left: 0;
     margin: 0;
   }
@@ -308,10 +308,11 @@
   }
 
   .controls > .tokenSelect {
-    position: absolute !important;
+    margin-bottom: 12px;
+    /* position: absolute !important;
     top: 0;
     left: auto;
-    right: 0;
+    right: 0; */
   }
 
   .addButton {
