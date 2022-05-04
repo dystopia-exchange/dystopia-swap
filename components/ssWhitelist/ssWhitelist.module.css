@@ -1,14 +1,9 @@
+.searchInput > fieldset {
+  border: none;
+}
 
-
-.container {
-  max-width: 1400px;
-  width: calc(100% - 180px);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin: auto;
-  margin-bottom: 60px;
-  padding: 0 0 10px 0px;
+.searchInputText::placeholder {
+  color: #5688A5 !important;
 }
 
 .results {
