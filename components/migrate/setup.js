@@ -98,10 +98,10 @@ export default function Setup() {
   const getPairDetails = async (token0, token1) => {
     const multicall = await stores.accountStore.getMulticall();
 
-    if(token0 == 'MATIC'){
+    if (token0 == 'MATIC') {
       token0 = CONTRACTS.WFTM_ADDRESS
     }
-    if(token1 == 'MATIC'){
+    if (token1 == 'MATIC') {
       token1 = CONTRACTS.WFTM_ADDRESS
     }
 
@@ -129,48 +129,48 @@ export default function Setup() {
             const migrator = migrate.find(
               (eachMigrate) => eachMigrate.value === platform
             );
-            
-            let [getReserves, symbol,allowence,getTotalSupply,lpBalance,token0Add,token1Add] = await multicall.aggregate([
+
+            let [getReserves, symbol, allowence, getTotalSupply, lpBalance, token0Add, token1Add] = await multicall.aggregate([
               pairContract.methods.getReserves(),
               pairContract.methods.symbol(),
               pairContract.methods
-              .allowance(
-                account.address,
-                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
-              ),
+                .allowance(
+                  account.address,
+                  migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
+                ),
               pairContract.methods.totalSupply(),
               pairContract.methods
-              .balanceOf(account.address),
+                .balanceOf(account.address),
               pairContract.methods.token0(),
               pairContract.methods.token1(),
 
             ]);
 
-          const token0Contract = new web3.eth.Contract(pairContractAbi, token0Add);
-          const token1Contract = new web3.eth.Contract(pairContractAbi, token1Add);
-            let [token0symbol,token1symbol] = await multicall.aggregate([
+            const token0Contract = new web3.eth.Contract(pairContractAbi, token0Add);
+            const token1Contract = new web3.eth.Contract(pairContractAbi, token1Add);
+            let [token0symbol, token1symbol] = await multicall.aggregate([
               token0Contract.methods.symbol(),
               token1Contract.methods.symbol(),
               pairContract.methods
-              .allowance(
-                account.address,
-                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
-              ),
+                .allowance(
+                  account.address,
+                  migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
+                ),
               pairContract.methods.totalSupply(),
               pairContract.methods
-              .balanceOf(account.address)
+                .balanceOf(account.address)
             ]);
-            
+
             let totalSupply = web3.utils.fromWei(
               getTotalSupply.toString(),
               "ether"
             );
             lpBalance = web3.utils.fromWei(lpBalance.toString(), "ether");
 
-            const weiReserve1 =  getReserves[0]/(10**toAssetValue.decimals)
+            const weiReserve1 = getReserves[0] / (10 ** toAssetValue.decimals)
 
-            const weiReserve2 = getReserves[1]/(10**fromAssetValue.decimals)
-            console.log(getReserves,fromAssetValue,toAssetValue,weiReserve1,weiReserve2,lpBalance,totalSupply,"migrate info")
+            const weiReserve2 = getReserves[1] / (10 ** fromAssetValue.decimals)
+            console.log(getReserves, fromAssetValue, toAssetValue, weiReserve1, weiReserve2, lpBalance, totalSupply, "migrate info")
             const token0Bal =
               (parseFloat(lpBalance.toString()) /
                 parseFloat(totalSupply.toString())) *
@@ -181,12 +181,12 @@ export default function Setup() {
               parseFloat(weiReserve2.toString());
             const poolTokenPercentage =
               (parseFloat(lpBalance) * 100) / parseFloat(totalSupply);
-              
+
             let pairDetails = {
               isValid: true,
-              symbol:symbol,
-              token0symbol:token0symbol,
-              token1symbol:token1symbol,
+              symbol: symbol,
+              token0symbol: token0symbol,
+              token1symbol: token1symbol,
               lpBalance: parseFloat(lpBalance).toFixed(18),
               totalSupply,
               token0Bal: parseFloat(token0Bal).toFixed(18),
@@ -195,16 +195,16 @@ export default function Setup() {
               pairAddress,
               poolTokenPercentage: Math.floor(poolTokenPercentage),
             };
-           
+
             setAmount(parseFloat(lpBalance).toFixed(5));
             setPairDetails(pairDetails);
           } else {
-            let pairDetails =   {
+            let pairDetails = {
               isValid: false,
               lpBalance: 0,
               allowence: 0,
             };
-           setPairDetails(pairDetails);
+            setPairDetails(pairDetails);
           }
         }
       }
@@ -292,6 +292,11 @@ export default function Setup() {
     } else {
       setAmount(event.target.value);
     }
+  };
+  const handleMax = (lpBalance) => {
+    
+      setAmount(lpBalance);
+    
   };
 
   let buttonText = "Approve";
@@ -461,7 +466,6 @@ export default function Setup() {
                   <Typography className={classes.inputTitleText} noWrap>
                     Liq. Pair
                   </Typography>
-
                   <Typography className={classes.inputBalanceText} noWrap>
                     Balance:
                     <span>
@@ -470,6 +474,9 @@ export default function Setup() {
                         : "0"}
                     </span>
                   </Typography>
+                  <Button onClick={()=>handleMax(Number(pairDetails.lpBalance).toFixed(5))} style={{ position: 'absolute', marginLeft: "340px", top: '10px', padding: '0' }} variant="text" size="small" >
+                    MAX
+                  </Button>
                   <div className={`${classes.massiveInputContainer}`}>
                     <div className={classes.massiveInputAssetSelect}>
                       <div
@@ -667,10 +674,24 @@ export default function Setup() {
                     classes[`pairDetails--${appTheme}`],
                   ].join(" ")}
                 >
-                  Your Pool Share:
-                  <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                    {pairDetails.poolTokenPercentage}%
-                  </span>
+                 <div
+                    className={[
+                      classes[`nav-button-corner-bottom`],
+                      classes[`nav-button-corner-bottom--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    <div
+                      className={[
+                        classes[`nav-button-corner-top`],
+                        classes[`nav-button-corner-top--${appTheme}`],
+                      ].join(" ")}
+                    >
+                      Your Pool Share:
+                      <span style={{ color: "#304C5E", fontWeight: "800" ,marginLeft:"175px"}}>
+                        {pairDetails.poolTokenPercentage}%
+                      </span>
+                    </div>
+                  </div>
                 </div>
                 <div style={{ display: "flex", width: "100%" }}>
                   <div
@@ -679,10 +700,24 @@ export default function Setup() {
                       classes[`pairDetails--${appTheme}`],
                     ].join(" ")}
                   >
-                    {pairDetails?.token0symbol}:
-                    <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                      {Number(pairDetails.token0Bal).toFixed(2)}
-                    </span>
+                     <div
+                      className={[
+                        classes[`nav-button-corner-bottom`],
+                        classes[`nav-button-corner-bottom--${appTheme}`],
+                      ].join(" ")}
+                    >
+                      <div
+                        className={[
+                          classes[`nav-button-corner-top`],
+                          classes[`nav-button-corner-top--${appTheme}`],
+                        ].join(" ")}
+                      >
+                        {pairDetails?.token0symbol}:
+                        <span style={{ color: "#304C5E", fontWeight: "800",marginLeft:"50px" }}>
+                          {Number(pairDetails.token0Bal).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <div
                     className={[
@@ -690,10 +725,24 @@ export default function Setup() {
                       classes[`pairDetails--${appTheme}`],
                     ].join(" ")}
                   >
-                    {pairDetails?.token1symbol}
-                    <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                   {Number(pairDetails.token1Bal).toFixed(2)}
-                    </span>
+                      <div
+                      className={[
+                        classes[`nav-button-corner-bottom`],
+                        classes[`nav-button-corner-bottom--${appTheme}`],
+                      ].join(" ")}
+                    >
+                      <div
+                        className={[
+                          classes[`nav-button-corner-top`],
+                          classes[`nav-button-corner-top--${appTheme}`],
+                        ].join(" ")}
+                      >
+                        {pairDetails?.token1symbol}
+                        <span style={{ color: "#304C5E", fontWeight: "800" ,marginLeft:"50px"}}>
+                          {Number(pairDetails.token1Bal).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className={classes.radioContainer}>
@@ -707,6 +756,8 @@ export default function Setup() {
                           ? "#86B9D6"
                           : "#5F7285"
                         : "transparent",
+                        border: "1px solid #0C5E8E",
+                        marginRight: '10px'
                     }}
                   >
                     <Radio
@@ -728,6 +779,8 @@ export default function Setup() {
                           ? "#86B9D6"
                           : "#5F7285"
                         : "transparent",
+                        border: "1px solid #0C5E8E",
+                        marginRight: '0px'
                     }}
                   >
                     <Radio
@@ -745,7 +798,7 @@ export default function Setup() {
           </div>
         </div>
       </Form>
-      <div style={{display: 'flex', justifyContent: 'center'}}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div className={[classes[`buttonOverrideContainer--${appTheme}`]].join(' ')}>
           <Button
             variant='contained'
@@ -798,7 +851,7 @@ export default function Setup() {
           );
         }
 
-        return () => {};
+        return () => { };
       },
       [assetOptions, search]
     );
@@ -851,7 +904,7 @@ export default function Setup() {
               />
             </div>
           </div>
-  
+
           <div>
             <Typography
               variant="h5"
@@ -861,7 +914,7 @@ export default function Setup() {
               }}>
               {asset ? formatSymbol(asset.symbol) : ''}
             </Typography>
-  
+
             <Typography
               variant="subtitle1"
               className={classes.assetSymbolName2}
@@ -871,12 +924,12 @@ export default function Setup() {
               {asset ? asset.name : ''}
             </Typography>
           </div>
-  
+
           <div className={classes.assetSelectActions}>
             <IconButton onClick={() => {
               deleteOption(asset);
             }}>
-              <DeleteOutline/>
+              <DeleteOutline />
             </IconButton>
             <IconButton onClick={() => {
               viewOption(asset);
@@ -920,7 +973,7 @@ export default function Setup() {
               }}>
               {asset ? formatSymbol(asset.symbol) : ''}
             </Typography>
-  
+
             <Typography
               variant="subtitle1"
               className={classes.assetSymbolName2}
@@ -930,7 +983,7 @@ export default function Setup() {
               {asset ? asset.name : ''}
             </Typography>
           </div>
-  
+
           <div className={classes.assetSelectBalance}>
             <Typography
               variant="h5"
@@ -940,7 +993,7 @@ export default function Setup() {
               }}>
               {(asset && asset.balance) ? formatCurrency(asset.balance) : '0.00'}
             </Typography>
-  
+
             <Typography
               variant="subtitle1"
               className={classes.assetSelectBalanceText2}
@@ -1014,7 +1067,7 @@ export default function Setup() {
         </>
       );
     };
-
+  
     const renderOptions = () => {
       return (
         <>
@@ -1110,6 +1163,7 @@ export default function Setup() {
           </div>
         </div>
         <Dialog
+        // className={classes.blurbg}
         aria-labelledby="simple-dialog-title"
         open={open}
         onClick={(e) => {
@@ -1127,50 +1181,51 @@ export default function Setup() {
             border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
             borderRadius: 0,
           }}>
-          <DialogTitle
-            className={classes.dialogTitle}
-            style={{
-              padding: 30,
-              paddingBottom: 0,
-              fontWeight: 500,
-              fontSize: 18,
-              lineHeight: '140%',
-              color: '#0A2C40',
-            }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
+            <DialogTitle
+              className={classes.dialogTitle}
+              style={{
+                padding: 30,
+                paddingBottom: 0,
+                fontWeight: 500,
+                fontSize: 18,
+                lineHeight: '140%',
+                color: '#0A2C40',
+              }}>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                justifyContent: 'space-between',
               }}>
-                {manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
-                  marginRight: 10,
-                  width: 18,
-                  height: 18,
-                  cursor: 'pointer',
-                }}/>}
-                {manageLocal ? 'Manage local assets' : 'Select a token'}
-              </div>
-
-              <Close
-                style={{
-                  cursor: 'pointer',
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
                   color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-                }}
-                onClick={onClose}/>
-            </div>
-          </DialogTitle>
+                }}>
+                  {manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
+                    marginRight: 10,
+                    width: 18,
+                    height: 18,
+                    cursor: 'pointer',
+                  }} />}
+                  {manageLocal ? 'Manage local assets' : 'Select a token'}
+                </div>
 
-          <DialogContent className={classes.dialogContent}>
-             {!manageLocal && renderOptions()} 
-            {manageLocal && renderManageLocal()}
-          </DialogContent>
-        </div>
-      </Dialog>
+                <Close
+                  style={{
+                    cursor: 'pointer',
+                    color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                  }}
+                  onClick={onClose} />
+              </div>
+              
+            </DialogTitle>
+
+            <DialogContent className={classes.dialogContent}>
+              {!manageLocal && renderOptions()}
+              {manageLocal && renderManageLocal()}
+            </DialogContent>
+          </div>
+        </Dialog>
       </React.Fragment>
     );
   }

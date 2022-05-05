@@ -2121,7 +2121,7 @@ class Store {
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let allowanceTXID = this.getTXUUID();
       let depositTXID = this.getTXUUID();
-
+      console.log(allowanceTXID)
       this.emitter.emit(ACTIONS.TX_ADDED, {
         title: `Migrating liquidity pool for ${token0.symbol}/${token1.symbol}`,
         type: "Migrate Liquidity",
@@ -2139,24 +2139,26 @@ class Store {
           },
         ],
       });
-
+      console.log(BigNumber(allowance).lt(amount),"hi1")
       // CHECK ALLOWANCES AND SET TX DISPLAY
-      if (token0.address !== "MATIC") {
-        if (BigNumber(allowance).lt(amount)) {
+
+        if (!BigNumber(allowance).lt(amount)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
             uuid: allowanceTXID,
             description: `Allow the router to spend your ${pairDetails.symbol}`,
           });
+          console.log(BigNumber(allowance).lt(amount),"hi2")
         } else {
           this.emitter.emit(ACTIONS.TX_STATUS, {
             uuid: allowanceTXID,
             description: `Allowance on ${pairDetails.symbol} sufficient`,
             status: "DONE",
           });
+          console.log(BigNumber(allowance).lt(amount),"hi3")
         }
-      }
+      
 
-      if (parseFloat(allowance) === 0) {
+      if (!BigNumber(allowance).lt(amount)) {
         const pairContract = new web3.eth.Contract(
           pairContractAbi,
           pairDetails.pairAddress
@@ -2187,25 +2189,9 @@ class Store {
         });
 
         allowanceCallsPromises.push(tokenPromise);
-
-        this._callContractWait(
-          web3,
-          migratorContract,
-          func,
-          params,
-          account,
-          gasPrice,
-          null,
-          null,
-          depositTXID,
-          async (err) => {
-            if (err) {
-              return this.emitter.emit(ACTIONS.ERROR, err);
-            }
-          }
-        );
+      }
+      const done = await Promise.all(allowanceCallsPromises);
        
-      } else {
         this._callContractWait(
           web3,
           migratorContract,
@@ -2223,7 +2209,7 @@ class Store {
           }
         );
       }
-    } catch (ex) {
+     catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);
     }
