@@ -3,7 +3,7 @@ import classes from "./layout.module.css";
 import Header from "../header";
 import SnackbarController from "../snackbar";
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
-import { useState } from "react";
+
 
 export default function Layout({
   children,
@@ -14,10 +14,7 @@ export default function Layout({
 }) {
   const { appTheme } = useAppThemeContext();
 
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  window.addEventListener('resize', () => {
-    setWindowWidth(window.innerWidth);
-  });
+  
 
   return (
     <>
@@ -39,27 +36,15 @@ export default function Layout({
         <meta name="og:title" content="Dystopia" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      {windowWidth > 600 ? (
-        <div className={[classes.content, classes[`content--${appTheme}`], 'g-flex-column'].join(' ')}>
-          {!configure && (
-            <Header backClicked={backClicked} changeTheme={changeTheme} title={title} />
-          )}
-          <SnackbarController />
-          <main className={[classes.main, 'g-flex-column__item', 'g-flex-column', 'g-scroll-y'].join(' ')}>
-            {children}
-          </main>
-        </div>
-      ) : (
-        <div className={[classes.content, classes[`content--mobile`], 'g-flex-column'].join(' ')}>
-          {!configure && (
-            <Header backClicked={backClicked} changeTheme={changeTheme} title={title} />
-          )}
-          <SnackbarController />
-          <main className={[classes.main, 'g-flex-column__item', 'g-flex-column', 'g-scroll-y'].join(' ')}>
-            {children}
-          </main>
-        </div>
-      )}
+      <div className={[classes.content, classes[`content--${appTheme}`], 'g-flex-column'].join(' ')}>
+        {!configure && (
+          <Header backClicked={backClicked} changeTheme={changeTheme} title={ title } />
+        )}
+        <SnackbarController />
+        <main className={[classes.main, 'g-flex-column__item', 'g-flex-column', 'g-scroll-y'].join(' ')}>
+          {children}
+        </main>
+      </div>
     </>
   );
 }

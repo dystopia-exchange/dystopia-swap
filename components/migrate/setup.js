@@ -1031,7 +1031,7 @@ export default function Setup() {
                 startAdornment: <InputAdornment position="start">
                   <Search style={{
                     color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                  }} />
+                  }}/>
                 </InputAdornment>,
               }}
               inputProps={{
@@ -1046,7 +1046,7 @@ export default function Setup() {
               }}
             />
           </div>
-
+  
           <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
             {
               filteredAssetOptions ? filteredAssetOptions.filter((option) => {
@@ -1056,7 +1056,7 @@ export default function Setup() {
               }) : []
             }
           </div>
-
+  
           <div className={classes.manageLocalContainer}>
             <Button
               onClick={toggleLocal}
@@ -1067,7 +1067,7 @@ export default function Setup() {
         </>
       );
     };
-
+  
     const renderOptions = () => {
       return (
         <>
@@ -1092,7 +1092,7 @@ export default function Setup() {
                 startAdornment: <InputAdornment position="start">
                   <Search style={{
                     color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                  }} />
+                  }}/>
                 </InputAdornment>,
               }}
               inputProps={{
@@ -1107,7 +1107,7 @@ export default function Setup() {
               }}
             />
           </div>
-
+  
           <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
             {
               filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
@@ -1121,7 +1121,7 @@ export default function Setup() {
               }) : []
             }
           </div>
-
+  
           <div className={classes.manageLocalContainer}>
             <Button
               className={classes.manageLocalBtn}
@@ -1163,7 +1163,7 @@ export default function Setup() {
           </div>
         </div>
         <Dialog
-        className={classes.blurbg}
+        // className={classes.blurbg}
         aria-labelledby="simple-dialog-title"
         open={open}
         onClick={(e) => {
@@ -1181,15 +1181,6 @@ export default function Setup() {
             border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
             borderRadius: 0,
           }}>
-          <DialogTitle
-            className={classes.dialogTitle}
-            style={{
-              width: 460,
-              height: 710,
-              background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-              border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
-              borderRadius: 0,
-            }}>
             <DialogTitle
               className={classes.dialogTitle}
               style={{
@@ -1226,7 +1217,7 @@ export default function Setup() {
                   }}
                   onClick={onClose} />
               </div>
-              </DialogTitle>
+              
             </DialogTitle>
 
             <DialogContent className={classes.dialogContent}>
