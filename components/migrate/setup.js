@@ -293,6 +293,11 @@ export default function Setup() {
       setAmount(event.target.value);
     }
   };
+  const handleMax = (lpBalance) => {
+    
+      setAmount(lpBalance);
+    
+  };
 
   let buttonText = "Approve";
 
@@ -470,6 +475,9 @@ export default function Setup() {
                         : "0"}
                     </span>
                   </Typography>
+                  <Button onClick={()=>handleMax(Number(pairDetails.lpBalance).toFixed(5))} style={{ position: 'absolute', marginLeft: "340px", top: '10px', padding: '0' }} variant="text" size="small" >
+                    MAX
+                  </Button>
                   <div className={`${classes.massiveInputContainer}`}>
                     <div className={classes.massiveInputAssetSelect}>
                       <div
@@ -667,10 +675,24 @@ export default function Setup() {
                     classes[`pairDetails--${appTheme}`],
                   ].join(" ")}
                 >
-                  Your Pool Share:
-                  <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                    {pairDetails.poolTokenPercentage}%
-                  </span>
+                 <div
+                    className={[
+                      classes[`nav-button-corner-bottom`],
+                      classes[`nav-button-corner-bottom--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    <div
+                      className={[
+                        classes[`nav-button-corner-top`],
+                        classes[`nav-button-corner-top--${appTheme}`],
+                      ].join(" ")}
+                    >
+                      Your Pool Share:
+                      <span style={{ color: "#304C5E", fontWeight: "800" ,marginLeft:"175px"}}>
+                        {pairDetails.poolTokenPercentage}%
+                      </span>
+                    </div>
+                  </div>
                 </div>
                 <div style={{ display: "flex", width: "100%" }}>
                   <div
@@ -679,10 +701,24 @@ export default function Setup() {
                       classes[`pairDetails--${appTheme}`],
                     ].join(" ")}
                   >
-                    {pairDetails?.token0symbol}:
-                    <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                      {Number(pairDetails.token0Bal).toFixed(2)}
-                    </span>
+                     <div
+                      className={[
+                        classes[`nav-button-corner-bottom`],
+                        classes[`nav-button-corner-bottom--${appTheme}`],
+                      ].join(" ")}
+                    >
+                      <div
+                        className={[
+                          classes[`nav-button-corner-top`],
+                          classes[`nav-button-corner-top--${appTheme}`],
+                        ].join(" ")}
+                      >
+                        {pairDetails?.token0symbol}:
+                        <span style={{ color: "#304C5E", fontWeight: "800",marginLeft:"50px" }}>
+                          {Number(pairDetails.token0Bal).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <div
                     className={[
@@ -690,10 +726,24 @@ export default function Setup() {
                       classes[`pairDetails--${appTheme}`],
                     ].join(" ")}
                   >
-                    {pairDetails?.token1symbol}
-                    <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                   {Number(pairDetails.token1Bal).toFixed(2)}
-                    </span>
+                      <div
+                      className={[
+                        classes[`nav-button-corner-bottom`],
+                        classes[`nav-button-corner-bottom--${appTheme}`],
+                      ].join(" ")}
+                    >
+                      <div
+                        className={[
+                          classes[`nav-button-corner-top`],
+                          classes[`nav-button-corner-top--${appTheme}`],
+                        ].join(" ")}
+                      >
+                        {pairDetails?.token1symbol}
+                        <span style={{ color: "#304C5E", fontWeight: "800" ,marginLeft:"50px"}}>
+                          {Number(pairDetails.token1Bal).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className={classes.radioContainer}>
@@ -707,6 +757,8 @@ export default function Setup() {
                           ? "#86B9D6"
                           : "#5F7285"
                         : "transparent",
+                        border: "1px solid #0C5E8E",
+                        marginRight: '10px'
                     }}
                   >
                     <Radio
@@ -728,6 +780,8 @@ export default function Setup() {
                           ? "#86B9D6"
                           : "#5F7285"
                         : "transparent",
+                        border: "1px solid #0C5E8E",
+                        marginRight: '0px'
                     }}
                   >
                     <Radio
@@ -1110,6 +1164,7 @@ export default function Setup() {
           </div>
         </div>
         <Dialog
+        className={classes.blurbg}
         aria-labelledby="simple-dialog-title"
         open={open}
         onClick={(e) => {
