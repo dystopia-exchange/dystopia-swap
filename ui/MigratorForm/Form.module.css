@@ -6,7 +6,8 @@
   margin-left: 1px;
   background: var(--background-dark);
   padding: 13px 30px;
-  border: 1px solid var(--border-dark);
+  /* border: 1px solid var(--border-dark); */
+  border: 1px solid var(--border-light);
   border-top: none;
   border-bottom: none;
   z-index: 2;

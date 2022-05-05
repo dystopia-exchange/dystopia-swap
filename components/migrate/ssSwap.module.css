@@ -2063,7 +2063,3 @@
   .assetSearchResults {
     min-width: auto;
   }
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}

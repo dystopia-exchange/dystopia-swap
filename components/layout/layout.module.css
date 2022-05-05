@@ -26,6 +26,11 @@
   background-size: cover;
 }
 
+.content--mobile {
+  background-size: cover;
+  background: var(--background-dark) url("/images/background/Distopia_768.jpg") no-repeat center center;
+}
+
 .main {
   position: relative;
   padding: 60px 90px 30px;
