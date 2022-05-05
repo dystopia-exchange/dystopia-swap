@@ -917,7 +917,7 @@
 }
 
 .toggleOption.active {
-  border: 1px solid #06D3D7;
+  border: 1px solid #86B9D6;
   background: #86B9D6 !important;
   color: #FFFFFF !important;
 }
@@ -927,6 +927,7 @@
 }
 
 .toggleOption--dark.active {
+  border: 1px solid #5F7285;
   background: #5F7285 !important;
 }
 
@@ -1526,7 +1527,7 @@
   }
 
   .tokenSelectInput {
-    padding: 5px 0 5px 15px !important;
+    padding: 4.5px 0 4.5px 5px !important;
   }
 
   .popoverPaper {

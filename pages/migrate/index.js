@@ -60,7 +60,7 @@ export default function Migrate() {
 
             <div className={classes.mainDescBg}>
               <Typography className={classes.mainDescNC} variant="body2">
-                Migrate your tokens.
+                Migrate your LP tokens.
               </Typography>
             </div>
 

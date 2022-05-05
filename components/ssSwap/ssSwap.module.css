@@ -478,6 +478,7 @@
   margin-top: -32px;
   z-index: 1;
   cursor: pointer;
+  -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
 }
 
 .swapIconContainer--dark {
@@ -820,7 +821,7 @@
 
 .routeLinesLeft,
 .routeLinesRight {
-  width: 116px;
+  width: 50%;
   height: 5px;
   margin: 0 5px;
 }
@@ -1014,7 +1015,6 @@
     background-repeat: no-repeat;
     margin-left: 220px;
     margin-top: -22px;
-    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
   }
 
   .textField--To-light,

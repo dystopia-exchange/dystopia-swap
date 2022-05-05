@@ -1226,7 +1226,17 @@ export default function ssLiquidityManage() {
           displayEmpty: token === null ? true : undefined,
           renderValue: token === null ? (selected) => {
             if (selected === null) {
-              return <div style={{padding: 5, fontSize: 12}}>Select veDYST</div>;
+              return <div
+                style={{
+                  padding: 5,
+                  paddingLeft: 15.5,
+                  paddingRight: 10,
+                  fontWeight: 400,
+                  fontSize: 14,
+                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                }}>
+                Select veDYST
+              </div>;
             }
           } : undefined,
         }}
