@@ -134,7 +134,7 @@
 .transactionExpanded {
 }
 
-.transaactionHash {
+.transactionHash {
   display: flex;
   align-items: center;
   justify-content: space-between;

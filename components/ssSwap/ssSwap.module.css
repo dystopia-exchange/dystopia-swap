@@ -220,15 +220,20 @@
   background: rgb(33, 43, 72);
 }
 
-.inputBalanceText {
-  display: flex;
-  align-items: center;
+.inputBalanceTextContainer {
+  position: absolute;
+  left: 151px;
+  top: 12px;
+  width: 225px;
+}
+
+.inputTitleText {
+  position: absolute;
+  top: 12px;
 }
 
 .inputBalanceText,
 .inputTitleText {
-  position: absolute;
-  top: 12px;
   font-style: normal !important;
   font-weight: 400 !important;
   font-size: 14px !important;
@@ -260,10 +265,6 @@
 
 .inputTitleText {
   left: 20px;
-}
-
-.inputBalanceText {
-  left: 151px;
 }
 
 .slippage {
@@ -1039,6 +1040,13 @@
 
   .inputBalanceText {
     left: 100px;
+  }
+
+  .inputBalanceTextContainer {
+    position: absolute;
+    left: 94px;
+    top: 10px;
+    width: 172px;
   }
 
   .displayDualIconContainer {
