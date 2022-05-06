@@ -241,7 +241,7 @@ export default function ssWhitelist() {
                   </div>
                 }
 
-                {((!nft && BigNumber(nft.lockValue).lt(token.listingFee)) || (token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee))) &&
+                {(!nft || (token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee))) &&
                   <>
                     {!token.isWhitelisted &&
                       <Hint
@@ -332,7 +332,7 @@ export default function ssWhitelist() {
                     </div>
                   }
 
-                  {((!nft && BigNumber(nft.lockValue).lt(token.listingFee)) || (token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee))) &&
+                  {(!nft || (token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee))) &&
                     <>
                       {!token.isWhitelisted &&
                         <Hint
