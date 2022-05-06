@@ -54,7 +54,7 @@ function Hint(props) {
           <svg
             style={{
               position: 'absolute',
-              top: -20,
+              top: -22,
               left: -22,
             }}
             width="88"

@@ -137,33 +137,17 @@ export default function TransactionQueue({setQueueLength}) {
   const renderDone = (txs) => {
     if (!(transactions && transactions.filter((tx) => {
       return ['DONE', 'CONFIRMED'].includes(tx.status);
-    }).length === transactions.length)) {
+    })
+      .map(it => ({...it, description: it.status === 'DONE' ? 'Transaction has been confirmed by the blockchain' : it.default}))
+      .length === transactions.length)) {
       return null;
     }
 
-    let lottie = <Lottie loop={false} className={classes.animClass} animationData={successAnim}/>;
-    if (type === 'Liquidity') {
-      lottie = <Lottie loop={false} className={classes.animClass} animationData={pairSuccessAnim}/>;
-    } else if (type === 'Swap') {
-      lottie = <Lottie loop={false} className={classes.animClass} animationData={swapSuccessAnim}/>;
-    } else if (type === 'Vest') {
-      lottie = <Lottie loop={false} className={classes.animClass} animationData={lockSuccessAnim}/>;
-    }
-
     return (
-      <div className={classes.successDialog}>
-        {lottie}
-        <Typography className={classes.successTitle}>{action ? action : 'Transaction Successful!'}</Typography>
-        <Typography className={classes.successText}>Transaction has been confirmed by the blockchain.</Typography>
+      <div className={classes.transactionsContainer}>
         {
-          txs && txs.length > 0 && txs.filter((tx) => {
-            return tx.txHash != null;
-          }).map((tx, idx) => {
-            return (<Typography className={classes.viewDetailsText} key={`tx_key_${idx}`}>
-              <a href={`${ETHERSCAN_URL}tx/${tx?.txHash}`}
-                 target="_blank">{tx && tx.description ? tx.description : 'View in Explorer'} <OpenInNew
-                className={classes.newWindowIcon}/></a>
-            </Typography>);
+          transactions && transactions.map((tx) => {
+            return <Transaction transaction={tx}/>;
           })
         }
       </div>
@@ -179,9 +163,6 @@ export default function TransactionQueue({setQueueLength}) {
 
     return (
       <>
-        {/*<div className={ classes.headingContainer }>
-          <Typography className={ classes.heading }>{ purpose ? purpose : 'Pending Transactions'}</Typography>
-        </div>*/}
         <div className={classes.transactionsContainer}>
           {
             transactions && transactions.map((tx, idx) => {
@@ -205,7 +186,7 @@ export default function TransactionQueue({setQueueLength}) {
       onClose={handleClose}
       onClick={(e) => {
         if (e.target.classList.contains('MuiDialog-container')) {
-          handleClose()
+          handleClose();
         }
       }}
       fullWidth={true}
@@ -223,7 +204,6 @@ export default function TransactionQueue({setQueueLength}) {
           lineHeight: '120%',
           color: '#0A2C40',
           background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-          borderBottom: `1px solid ${appTheme === "dark" ? '#86B9D6' : '#86B9D6'}`,
         }}>
         <div style={{
           display: 'flex',

@@ -174,8 +174,28 @@
   cursor: pointer;
 }
 
+.buttonOverride:hover {
+  background: #C6BAF0;
+  border: 1px solid #8F5AE8;
+}
+
+.buttonOverride:active {
+  background: #B9A4EE;
+  border: 1px solid #8F5AE8;
+}
+
 .buttonOverride--dark {
   background: #33284C;
+  border: 1px solid #8F5AE8;
+}
+
+.buttonOverride--dark:hover {
+  background: #402E61;
+  border: 1px solid #8F5AE8;
+}
+
+.buttonOverride--dark:active {
+  background: #523880;
   border: 1px solid #8F5AE8;
 }
 
@@ -189,6 +209,7 @@
   font-size: 14px;
   line-height: 120%;
   color: #A3A9BA;
+  white-space: nowrap;
 }
 
 .buttonOverrideDisabled--dark {
