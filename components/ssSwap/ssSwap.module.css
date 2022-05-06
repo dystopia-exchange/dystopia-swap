@@ -50,6 +50,12 @@
   padding: 20px 30px 30px !important;
 }
 
+.walletIcon {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+}
+
 .massiveInputContainer {
   display: flex;
   flex-wrap: wrap;
@@ -212,6 +218,11 @@
   top: 30px;
   right: -5px;
   background: rgb(33, 43, 72);
+}
+
+.inputBalanceText {
+  display: flex;
+  align-items: center;
 }
 
 .inputBalanceText,
@@ -708,7 +719,7 @@
 .btnSwap {
   position: absolute !important;
   bottom: -98px;
-  margin-left: 26px !important;
+  margin-left: 24px !important;
   left: 118px;
 }
 

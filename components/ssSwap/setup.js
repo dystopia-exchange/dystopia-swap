@@ -467,7 +467,10 @@ function Setup() {
             setBalance100();
           }
         }}>
-          Balance:
+          <img
+            src="/images/ui/icon-wallet.svg"
+            className={classes.walletIcon}/>
+
           <span>
             {(assetValue && assetValue.balance) ?
               ' ' + formatCurrency(assetValue.balance) :
@@ -521,7 +524,7 @@ function Setup() {
         className={classes.btnSwap}
         labelClassName={!fromAmountValue ? classes['actionButtonText--disabled'] : classes.actionButtonText}
         isDisabled={!fromAmountValue}
-        label={loading ? `Swapping` : (!fromAmountValue ? 'Enter Amount' : `Swap`)}>
+        label={loading ? 'Swapping' : (!fromAmountValue ? 'Enter Amount' : 'Swap')}>
       </BtnSwap>
     </div>
   );
