@@ -16,11 +16,8 @@ import {
 import { Search, ArrowDownward, ArrowForwardIos, DeleteOutline, Close, ArrowBackIosNew } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import { withTheme } from '@mui/styles';
-
 import { formatCurrency, formatAddress, formatCurrencyWithSymbol, formatCurrencySmall } from '../../utils';
-
 import classes from './ssSwap.module.css';
-
 import stores from '../../stores';
 import {
   ACTIONS,
@@ -29,6 +26,7 @@ import {
 import BigNumber from 'bignumber.js';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import BtnSwap from '../../ui/BtnSwap';
+import Hint from '../hint/hint';
 
 function Setup() {
   const [, updateState] = React.useState();
@@ -55,8 +53,19 @@ function Setup() {
 
   const [quoteError, setQuoteError] = useState(null);
   const [quote, setQuote] = useState(null);
+  const [hintAnchor, setHintAnchor] = React.useState(null);
 
   const {appTheme} = useAppThemeContext();
+
+  const handleClickPopover = (event) => {
+    setHintAnchor(event.currentTarget);
+  };
+
+  const handleClosePopover = () => {
+    setHintAnchor(null);
+  };
+
+  const openHint = Boolean(hintAnchor);
 
   useEffect(function () {
     const errorReturned = () => {
@@ -426,9 +435,14 @@ function Setup() {
             Slippage
           </Typography>
 
-          <img
-            src={'/images/ui/question-icon.svg'}
-            className={classes.questionIcon}/>
+          <Hint
+            hintText={'Slippage is the difference between the price you expect to get on the crypto you have ordered and the price you actually get when the order executes.'}
+            open={openHint}
+            anchor={hintAnchor}
+            handleClick={handleClickPopover}
+            handleClose={handleClosePopover}
+            vertical={-110}>
+          </Hint>
         </div>
 
         <TextField
