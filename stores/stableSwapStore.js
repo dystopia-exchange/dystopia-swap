@@ -1527,19 +1527,21 @@ class Store {
               CONTRACTS.ERC20_ABI,
               asset.address
             );
+            console.log(asset.address,assetContract,"balanceof")
             let bal = await web3.eth.getBalance(account.address);
-            const [isWhitelisted, balanceOf] = await Promise.all([
-              voterContract.methods.isWhitelisted(asset.address).call(),
+            //rechange isWhitelisted!!
+            const [ balanceOf] = await Promise.all([
+            //  voterContract.methods.isWhitelisted(asset.address).call(),
               assetContract.methods.balanceOf(account.address).call(),
             ]);
-
+            console.log(asset.address,balanceOf,"balanceof")
             return {
               balanceOf,
               bal,
-              isWhitelisted,
+              false:Boolean, //rechange isWhitelisted!!
             };
           } catch (ex) {
-            console.log("EXCEPTION 3");
+            console.log("EXCEPTION 3 balanceof");
             console.log(asset);
             console.log(ex);
             return {
