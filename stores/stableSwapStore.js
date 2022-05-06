@@ -2083,7 +2083,7 @@ class Store {
         pairDetails,
       } = payload.content;
 
-      console.log(BigNumber(allowance).lt(amount),"supp")
+      console.log(BigNumber(allowance).gt(amount),"supp")
 
       const migratorContract = new web3.eth.Contract(
         migratorAbi,
@@ -2139,26 +2139,26 @@ class Store {
           },
         ],
       });
-      console.log(BigNumber(allowance).lt(amount),"hi1")
+      console.log(BigNumber(allowance).gt(amount),"hi1")
       // CHECK ALLOWANCES AND SET TX DISPLAY
 
-        if (!BigNumber(allowance).lt(amount)) {
+        if (!BigNumber(allowance).gt(amount)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
             uuid: allowanceTXID,
             description: `Allow the router to spend your ${pairDetails.symbol}`,
           });
-          console.log(BigNumber(allowance).lt(amount),"hi2")
+          console.log(BigNumber(allowance).gt(amount),"hi2")
         } else {
           this.emitter.emit(ACTIONS.TX_STATUS, {
             uuid: allowanceTXID,
             description: `Allowance on ${pairDetails.symbol} sufficient`,
             status: "DONE",
           });
-          console.log(BigNumber(allowance).lt(amount),"hi3")
+          console.log(BigNumber(allowance).gt(amount),"hi3")
         }
       
 
-      if (!BigNumber(allowance).lt(amount)) {
+      if (!BigNumber(allowance).gt(amount)) {
         const pairContract = new web3.eth.Contract(
           pairContractAbi,
           pairDetails.pairAddress

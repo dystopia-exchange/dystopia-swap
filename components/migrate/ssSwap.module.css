@@ -2,7 +2,9 @@
   background: rgba(0, 0, 0, 0.1) !important;
   backdrop-filter: blur(10px) !important;
 }
-
+.dialogContent {
+  padding: 20px 30px 30px !important;
+}
 .nav-button-corner-top,
 .nav-button-corner-bottom {
   position: relative;
@@ -637,7 +639,35 @@
   z-index: 1;
   height: 0px;
 }
+.assetSelectBalanceText {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 120%;
+}
 
+.assetSelectBalanceText2 {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+}
+
+
+.searchInput {
+  border: none !important;
+  border-bottom: 1px solid #86B9D6 !important;
+  border-radius: 0 !important;
+}
+.searchInput:hover {
+  border-bottom: 1px solid #325569 !important;
+}
+
+.searchInput--dark {
+  border-bottom: 1px solid #5F7285 !important;
+}
+
+.searchInput--dark:hover {
+  border-bottom: 1px solid #C6CDD2 !important;
+}
 .swapIconSubContainer {
   background: #161B2C;
   border-radius: 9px;
@@ -948,7 +978,15 @@
   .newSwapContainer {
     margin-top: -100px;
   }
+.assetSymbolName,
+.assetSelectBalanceText {
+  font-size: 14px !important;
+}
 
+.assetSymbolName2,
+.assetSelectBalanceText2 {
+  font-size: 12px !important;
+}
   .swapContainer {
     padding: 12px;
   }
@@ -2054,12 +2092,22 @@
     align-items: center;
     cursor: pointer;
   }
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 359px) {
     .buttonOverrideContainer--dark,
     .buttonOverrideContainer--light,
     .textField {
       max-width: 300px;
     }
+  }
+  .dialogContainer {
+    width: 100% !important;
+  }
+
+  .dialogTitle {
+    padding: 20px 20px 0;
+  }
+  .dialogContent {
+    padding: 20px !important;
   }
   .assetSearchResults {
     min-width: auto;

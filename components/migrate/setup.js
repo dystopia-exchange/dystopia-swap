@@ -187,7 +187,7 @@ export default function Setup() {
               symbol: symbol,
               token0symbol: token0symbol,
               token1symbol: token1symbol,
-              lpBalance: parseFloat(lpBalance).toFixed(18),
+              lpBalance: parseFloat(lpBalance).toFixed(4),
               totalSupply,
               token0Bal: parseFloat(token0Bal).toFixed(18),
               token1Bal: parseFloat(token1Bal).toFixed(18),
@@ -196,7 +196,7 @@ export default function Setup() {
               poolTokenPercentage: Math.floor(poolTokenPercentage),
             };
 
-            setAmount(parseFloat(lpBalance).toFixed(5));
+            setAmount(parseFloat(lpBalance).toFixed(4));
             setPairDetails(pairDetails);
           } else {
             let pairDetails = {
@@ -474,7 +474,7 @@ export default function Setup() {
                         : "0"}
                     </span>
                   </Typography>
-                  <Button onClick={()=>handleMax(Number(pairDetails.lpBalance).toFixed(5))} style={{ position: 'absolute', marginLeft: "340px", top: '10px', padding: '0' }} variant="text" size="small" >
+                  <Button onClick={()=>handleMax(Number(pairDetails.lpBalance).toFixed(5))} style={{ position: 'absolute', marginLeft: "325px", top: '10px', padding: '0' }} variant="text" size="small" >
                     MAX
                   </Button>
                   <div className={`${classes.massiveInputContainer}`}>
@@ -566,7 +566,6 @@ export default function Setup() {
                       InputProps={{
                         disableUnderline: true,
                       }}
-                      type="number"
                       max
                       fullWidth
                       value={amount}
@@ -1158,12 +1157,11 @@ export default function Setup() {
                   e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                 }}
               />
-              {/* <Typography variant='subtitle1' color='primary'>{value ? value.name : type === 'from' ? 'Select Token 0' : 'Select Token 1'}</Typography> */}
             </div>
           </div>
         </div>
         <Dialog
-        // className={classes.blurbg}
+        className={classes.blurbg}
         aria-labelledby="simple-dialog-title"
         open={open}
         onClick={(e) => {
