@@ -1044,7 +1044,7 @@ export default function Setup() {
                 },
               }}
             />
-          </div>
+          </div> 
   
           <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
             {
