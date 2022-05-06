@@ -72,7 +72,7 @@ const BtnSwap = (props) => {
       onMouseUp={mouseOut}
     >
       <>
-      <Button variant="text" onClick={onClick}>
+      <div variant="text" onClick={onClick}>
         {windowWidth > 470 && (
           <svg
             width="292"
@@ -166,7 +166,7 @@ const BtnSwap = (props) => {
           
         </Typography>
         
-        </Button>
+        </div>
       </>
     </div>
   );

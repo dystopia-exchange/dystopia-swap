@@ -1364,7 +1364,7 @@ export default function ssLiquidityManage() {
 
                 <Popover
                   classes={{
-                    paper: [classes.popoverPaper, appTheme === "dark" ? classes['popoverPaper--dark'] : classes['popoverPaper--light']].join(' '),
+                    paper: [classes.popoverPaper, classes[`popoverPaper--${appTheme}`]].join(' '),
                   }}
                   open={openSlippage}
                   anchorEl={anchorEl}
