@@ -6,7 +6,7 @@ import {
   CircularProgress,
   Typography,
   Tooltip,
-  Button,
+  Button, Popover,
 } from '@mui/material';
 import BigNumber from 'bignumber.js';
 import TokenSelect from '../select-token/select-token';
@@ -16,6 +16,7 @@ import { ACTIONS, ETHERSCAN_URL } from '../../stores/constants';
 import { formatAddress, formatCurrency } from '../../utils';
 import { formatSymbol } from '../../utils';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import Hint from '../hint/hint';
 
 export default function ssWhitelist() {
 
@@ -29,12 +30,35 @@ export default function ssWhitelist() {
   const [veToken, setVeToken] = useState(null);
   const {appTheme} = useAppThemeContext();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [feeHintAnchor, setFeeHintAnchor] = React.useState(null);
+  const [actionHintAnchor, setActionHintAnchor] = React.useState(null);
+
+  const handleClickFeePopover = (event) => {
+    setFeeHintAnchor(event.currentTarget);
+  };
+
+  const handleCloseFeePopover = () => {
+    setFeeHintAnchor(null);
+  };
+
+  const handleClickActionPopover = (event) => {
+    setActionHintAnchor(event.currentTarget);
+  };
+
+  const handleCloseActionPopover = () => {
+    setActionHintAnchor(null);
+  };
+
+  const openFeeHint = Boolean(feeHintAnchor);
+  const openActionHint = Boolean(actionHintAnchor);
 
   const onSearchChanged = (event) => {
     setSearch(event.target.value);
-    if (web3 && web3.utils.isAddress(event.target.value)) {
+    if (web3?.utils.isAddress(event.target.value)) {
       setLoading(true);
       stores.dispatcher.dispatch({type: ACTIONS.SEARCH_WHITELIST, content: {search: event.target.value}});
+    } else {
+      setToken(null);
     }
   };
 
@@ -52,72 +76,9 @@ export default function ssWhitelist() {
       setVeToken(stores.stableSwapStore.getStore('veToken'));
 
       const nfts = stores.stableSwapStore.getStore('vestNFTs');
-      /*const nfts = [
-        {
-          "id": "3",
-          "lockEnds": "1776297600",
-          "lockAmount": "1331994.000000000000000000",
-          "lockValue": "1316652.680121337436847399",
-        },
-        {
-          "id": "4",
-          "lockEnds": "1776297600",
-          "lockAmount": "1118072.000000000000000000",
-          "lockValue": "1105194.539441336798729261",
-        },
-        {
-          "id": "15",
-          "lockEnds": "1776297600",
-          "lockAmount": "676304.000000000000000000",
-          "lockValue": "668514.628576991346531549",
-        },
-        {
-          "id": "6",
-          "lockEnds": "1776297600",
-          "lockAmount": "1023840.000000000000000000",
-          "lockValue": "1012047.862089041025858407",
-        },
-        {
-          "id": "14",
-          "lockEnds": "1776297600",
-          "lockAmount": "677507.000000000000000000",
-          "lockValue": "669703.772953156656524642",
-        },
-        {
-          "id": "13",
-          "lockEnds": "1776297600",
-          "lockAmount": "681101.000000000000000000",
-          "lockValue": "673256.378845042060782790",
-        },
-        {
-          "id": "9",
-          "lockEnds": "1776297600",
-          "lockAmount": "795726.000000000000000000",
-          "lockValue": "786561.178610587794780056",
-        },
-        {
-          "id": "10",
-          "lockEnds": "1776297600",
-          "lockAmount": "763362.000000000000000000",
-          "lockValue": "754569.932899686001888625",
-        },
-        {
-          "id": "11",
-          "lockEnds": "1776297600",
-          "lockAmount": "727329.000000000000000000",
-          "lockValue": "718951.945113846051442262",
-        },
-        {
-          "id": "12",
-          "lockEnds": "1776297600",
-          "lockAmount": "688233.000000000000000000",
-          "lockValue": "680306.235612133731215627",
-        },
-      ];*/
-
       setNFTS(nfts);
 
-      if (nfts && nfts.length > 0) {
+      if (nfts?.length > 0) {
         setNFT(nfts[0]);
       }
     };
@@ -167,72 +128,263 @@ export default function ssWhitelist() {
     setWindowWidth(window.innerWidth);
   });
 
+
   const renderToken = () => {
     return (
+      <>
+        {windowWidth > 820 &&
+          <div className={[classes.results, classes[`results--${appTheme}`]].join(' ')}>
+            <div
+              className={[classes.tokenHeader, classes[`tokenHeader--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
+              <div className={[classes.tokenHeaderLabel, classes.tokenCellName, 'g-flex__item'].join(' ')}>
+                Asset to Whitelist
+              </div>
 
-      <Paper className={classes.tokenContainer}>
-        <div className={classes.inline}>
-          <img src={token.logoURI} alt="" width="70" height="70" className={classes.tokenLogo}/>
-          <div>
-            <Typography className={classes.tokenName} variant="h2">{token.name}</Typography>
-            <Tooltip title="View in explorer">
-              <Typography className={classes.tokenAddress} color="textSecondary" onClick={() => {
-                onAddressClick(token.address);
-              }}>{formatAddress(token.address)}</Typography>
-            </Tooltip>
-          </div>
-        </div>
-        <div className={classes.whitelistStatus}>
-          <div className={classes.whitelistContainer}>
-            <div>
-              <Typography className={classes.listingFee} color="textSecondary">Whitelist Status</Typography>
-              {token.isWhitelisted &&
-                <Typography className={classes.isWhitelist}>{'Whitelisted'}</Typography>
-              }
-              {!token.isWhitelisted &&
-                <Typography className={classes.notWhitelist}>{'Not Whitelisted'}</Typography>
-              }
-            </div>
-            {
-              !token.isWhitelisted &&
-              <Tooltip title="Listing fee either needs to be locked in your veToken NFT or be paid and burnt on list">
-                <div>
-                  <Typography className={classes.listingFee} color="textSecondary">Listing Fee</Typography>
-                  <Typography
-                    className={classes.listingFee}>{formatCurrency(token.listingFee)} {formatSymbol(veToken?.symbol)}</Typography>
+              <div className={[classes.tokenHeaderLabel, classes.cellStatus].join(' ')}>
+                Whitelist Status
+              </div>
+
+              <div
+                className={[classes.tokenHeaderLabel, classes.cellFee, 'g-flex', 'g-flex--align-center', 'g-flex--justify-end'].join(' ')}>
+                <Hint
+                  hintText={'Listing fee either needs to be locked in your veDYST NFT or be paid and burnt on the list.'}
+                  open={openFeeHint}
+                  anchor={feeHintAnchor}
+                  handleClick={handleClickFeePopover}
+                  handleClose={handleCloseFeePopover}>
+                </Hint>
+
+                <div
+                  style={{
+                    marginLeft: 10,
+                  }}>
+                  Listing Fee
                 </div>
-              </Tooltip>
-            }
-          </div>
-          <div>
-            {!token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee) &&
-              <Button
-                variant="contained"
-                size="large"
-                color="primary"
-                onClick={onWhitelist}
-                className={classes.buttonOverride}
-                disabled={whitelistLoading}
-              >
+              </div>
+
+              <div className={[classes.tokenHeaderLabel, classes.cellAction].join(' ')}>
+                Action
+              </div>
+            </div>
+
+            <div
+              className={[classes.tokenBody, classes[`tokenBody--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
+              <div
+                className={[classes.tokenBodyCell, classes.tokenCellName, 'g-flex', 'g-flex--align-center', 'g-flex__item'].join(' ')}>
+                <img
+                  src={token.logoURI || ''}
+                  alt=""
+                  width="70"
+                  height="70"
+                  className={classes.tokenLogo}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                  }}/>
+
+                <div>
+                  <Typography
+                    className={[classes.tokenName, classes[`tokenName--${appTheme}`]].join(' ')}>
+                    {token.name}
+                  </Typography>
+
+                  <Tooltip title="View in explorer">
+                    <Typography
+                      className={[classes.tokenAddress, classes[`tokenAddress--${appTheme}`]].join(' ')}
+                      onClick={() => {
+                        onAddressClick(token.address);
+                      }}>
+                      {formatAddress(token.address)}
+                    </Typography>
+                  </Tooltip>
+                </div>
+              </div>
+
+              <div
+                className={[classes.tokenBodyCell, classes.cellStatus, 'g-flex', 'g-flex--align-center', 'g-flex--justify-end'].join(' ')}>
+                {token.isWhitelisted &&
+                  <Typography className={[classes.isWhitelist, classes[`isWhitelist--${appTheme}`]].join(' ')}>
+                    Already Whitelisted
+                  </Typography>
+                }
+
+                {!token.isWhitelisted &&
+                  <Typography className={[classes.notWhitelist, classes[`notWhitelist--${appTheme}`]].join(' ')}>
+                    Not Whitelisted
+                  </Typography>
+                }
+              </div>
+
+              <div
+                className={[classes.tokenBodyCell, classes.cellFee, 'g-flex', 'g-flex--align-center', 'g-flex--justify-end'].join(' ')}>
                 <Typography
-                  className={classes.actionButtonText}>{whitelistLoading ? `Whitelisting` : `Whitelist`}</Typography>
-                {whitelistLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-              </Button>
-            }
-            {!token.isWhitelisted && (!nft || BigNumber(nft.lockValue).lt(token.listingFee)) &&
-              <Button
-                variant="contained"
-                size="large"
-                color="primary"
-                className={classes.buttonOverride}
-                disabled={true}
-              >
-                <Typography className={classes.actionButtonText}>{`Vest value < Fee`}</Typography>
-              </Button>
-            }
+                  className={[classes.listingFee, classes[`listingFee--${appTheme}`]].join(' ')}>
+                  {formatCurrency(token.listingFee)}
+                </Typography>
+
+                <Typography
+                  className={[classes.listingFeeSymbol, classes[`listingFeeSymbol--${appTheme}`]].join(' ')}>
+                  {formatSymbol(veToken?.symbol)}
+                </Typography>
+              </div>
+
+              <div
+                className={[classes.tokenBodyCell, classes.cellAction, 'g-flex', 'g-flex--align-center', 'g-flex--justify-end'].join(' ')}>
+                {!token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee) &&
+                  <div
+                    onClick={onWhitelist}
+                    className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}>
+                    <Typography
+                      className={classes.actionButtonText}>
+                      {whitelistLoading ? `Whitelisting` : `Whitelist`}
+                    </Typography>
+                  </div>
+                }
+
+                {((!nft && BigNumber(nft.lockValue).lt(token.listingFee)) || (token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee))) &&
+                  <>
+                    {!token.isWhitelisted &&
+                      <Hint
+                        hintText={'Vest Value < Fee means you cannot proceed with the whitelisting as there is not enough funds locked in the chosen veDYST.'}
+                        open={openActionHint}
+                        anchor={actionHintAnchor}
+                        handleClick={handleClickActionPopover}
+                        handleClose={handleCloseActionPopover}>
+                      </Hint>
+                    }
+
+                    <div
+                      color="primary"
+                      className={[classes.buttonOverrideDisabled, classes[`buttonOverrideDisabled--${appTheme}`]].join(' ')}>
+                      {token.isWhitelisted ? 'Nothing to do' : 'Vest value < Fee'}
+                    </div>
+                  </>
+                }
+              </div>
+            </div>
           </div>
-        </div>
-      </Paper>
+        }
+
+        {windowWidth <= 820 &&
+          <div
+            className={[classes.adaptiveContainer, classes[`adaptiveContainer--${appTheme}`], 'g-flex--column'].join(' ')}>
+            <div className={[classes.adaptiveHeader, classes[`adaptiveHeader--${appTheme}`], 'g-flex'].join(' ')}>
+              <div className={['g-flex', 'g-flex--align-center', 'g-flex__item'].join(' ')}>
+                <img
+                  src={token.logoURI || ''}
+                  alt=""
+                  width="70"
+                  height="70"
+                  className={classes.tokenLogo}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                  }}/>
+
+                <div>
+                  <Typography
+                    className={[classes.tokenName, classes[`tokenName--${appTheme}`]].join(' ')}>
+                    {token.name}
+                  </Typography>
+
+                  <Tooltip title="View in explorer">
+                    <Typography
+                      className={[classes.tokenAddress, classes[`tokenAddress--${appTheme}`]].join(' ')}
+                      onClick={() => {
+                        onAddressClick(token.address);
+                      }}>
+                      {formatAddress(token.address)}
+                    </Typography>
+                  </Tooltip>
+                </div>
+              </div>
+
+              <div className={[classes.adaptiveHeaderStatus, 'g-flex', 'g-flex--align-center', 'g-flex--justify-end'].join(' ')}>
+                {token.isWhitelisted &&
+                  <Typography className={[classes.isWhitelist, classes[`isWhitelist--${appTheme}`]].join(' ')}>
+                    Already Whitelisted
+                  </Typography>
+                }
+
+                {!token.isWhitelisted &&
+                  <Typography className={[classes.notWhitelist, classes[`notWhitelist--${appTheme}`]].join(' ')}>
+                    Not Whitelisted
+                  </Typography>
+                }
+              </div>
+            </div>
+
+            <div className={[classes.adaptiveTable, 'g-flex'].join(' ')}>
+              <div className={[classes.adaptive, 'g-flex-column'].join(' ')}>
+                <div className={[classes.adaptiveActionLabel, classes[`adaptiveActionLabel--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex__item'].join(' ')}>
+                  Action
+                </div>
+
+                <div className={[classes.adaptiveActionItem, classes[`adaptiveActionItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex__item'].join(' ')}>
+                  {!token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee) &&
+                    <div
+                      onClick={onWhitelist}
+                      className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}>
+                      <Typography
+                        className={classes.actionButtonText}>
+                        {whitelistLoading ? `Whitelisting` : `Whitelist`}
+                      </Typography>
+                    </div>
+                  }
+
+                  {((!nft && BigNumber(nft.lockValue).lt(token.listingFee)) || (token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee))) &&
+                    <>
+                      {!token.isWhitelisted &&
+                        <Hint
+                          hintText={'Vest Value < Fee means you cannot proceed with the whitelisting as there is not enough funds locked in the chosen veDYST.'}
+                          open={openActionHint}
+                          anchor={actionHintAnchor}
+                          handleClick={handleClickActionPopover}
+                          handleClose={handleCloseActionPopover}>
+                        </Hint>
+                      }
+
+                      <div
+                        color="primary"
+                        className={[classes.buttonOverrideDisabled, classes[`buttonOverrideDisabled--${appTheme}`]].join(' ')}>
+                        {token.isWhitelisted ? 'Nothing to do' : 'Vest value < Fee'}
+                      </div>
+                    </>
+                  }
+                </div>
+              </div>
+
+              <div className={[classes.adaptive, 'g-flex-column'].join(' ')}>
+                <div className={[classes.adaptiveActionLabel, classes[`adaptiveActionLabel--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-end', 'g-flex__item'].join(' ')}>
+                  <Hint
+                    hintText={'Listing fee either needs to be locked in your veDYST NFT or be paid and burnt on the list.'}
+                    open={openFeeHint}
+                    anchor={feeHintAnchor}
+                    handleClick={handleClickFeePopover}
+                    handleClose={handleCloseFeePopover}>
+                  </Hint>
+
+                  <div style={{marginLeft: 10}}>
+                    Listing Fee
+                  </div>
+                </div>
+
+                <div className={[classes.adaptiveActionItem, classes[`adaptiveActionItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-end', 'g-flex__item'].join(' ')}>
+                  <Typography
+                    className={[classes.listingFee, classes[`listingFee--${appTheme}`]].join(' ')}>
+                    {formatCurrency(token.listingFee)}
+                  </Typography>
+
+                  <Typography
+                    className={[classes.listingFeeSymbol, classes[`listingFeeSymbol--${appTheme}`]].join(' ')}>
+                    {formatSymbol(veToken?.symbol)}
+                  </Typography>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </>
     );
   };
 
@@ -245,6 +397,7 @@ export default function ssWhitelist() {
           placeholder={windowWidth > 540 ? "Paste the token address you want to whitelist: 0x..." : 'Token to whitelist: 0x'}
           value={search}
           onChange={onSearchChanged}
+          autoComplete={'off'}
           InputProps={{
             style: {
               background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
@@ -252,6 +405,7 @@ export default function ssWhitelist() {
               borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
               borderRadius: 0,
               maxWidth: 700,
+              height: 50,
             },
             classes: {
               root: classes.searchInput,
@@ -266,37 +420,32 @@ export default function ssWhitelist() {
             </InputAdornment>,
           }}
           inputProps={{
-            className: classes.searchInputText,
-            style: {
-              padding: '10px',
-              borderRadius: 0,
-              border: 'none',
-              fontWeight: 400,
-              fontSize: '18px',
-              lineHeight: '120%',
-              color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
-            },
+            className: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
           }}
         />
 
-        {TokenSelect({
-          value: nft,
-          options: nfts,
-          symbol: veToken?.symbol,
-          handleChange,
-          placeholder: 'Click to select veNFT'
-        })}
+        <div style={{maxWidth: 300}}>
+          {TokenSelect({
+            value: nft,
+            options: nfts,
+            symbol: veToken?.symbol,
+            handleChange,
+            placeholder: 'Click to select veNFT',
+          })}
+        </div>
       </div>
 
-      <div className={classes.results}>
-        {loading && <CircularProgress style={{
-          position: 'absolute',
-          top: 200,
-          left: '50%',
-          color: '#ffffff',
-        }}/>}
-        {token && token.address && renderToken()}
-      </div>
+      {(loading || token?.address) &&
+        <div className={['g-flex-column'].join(' ')}>
+          {loading && <CircularProgress style={{
+            position: 'absolute',
+            top: 200,
+            left: '50%',
+            color: '#ffffff',
+          }}/>}
+          {token?.address && renderToken()}
+        </div>
+      }
     </>
   );
 }

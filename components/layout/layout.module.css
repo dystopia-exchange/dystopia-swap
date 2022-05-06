@@ -31,6 +31,12 @@
   padding: 60px 90px 30px;
 }
 
+@media screen and (max-width: 1024px) {
+  .main {
+    padding: 60px 47px;
+  }
+}
+
 @media screen and (max-width: 680px) {
   .main {
     padding: 40px 20px;

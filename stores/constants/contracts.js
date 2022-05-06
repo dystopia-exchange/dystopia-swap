@@ -14,7 +14,7 @@ export const VE_TOKEN_DECIMALS = 18
 export const VE_TOKEN_LOGO = 'https://dystopia-swap-seven.vercel.app/logo.svg'
 export const VE_TOKEN_ABI = abis.veTokenABI
 
-export const WFTM_ADDRESS = '0xe02f20BB33F8Bfb48eB907523435CA886e139A08'
+export const WFTM_ADDRESS = '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270'
 export const WFTM_NAME = 'Wrapped MATIC'
 export const WFTM_SYMBOL = 'WMATIC'
 export const WFTM_DECIMALS = 18
@@ -27,10 +27,10 @@ export const FTM_SYMBOL = 'MATIC'
 export const FTM_DECIMALS = 18
 export const FTM_LOGO = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png'
 
-export const FACTORY_ADDRESS = '0xD0692d6C30cd7a383f227Ba1cB28EeCE2F050926'
+export const FACTORY_ADDRESS = '0x1d21Db6cde1b18c7E47B0F7F42f4b3F68b9beeC9'
 export const FACTORY_ABI = abis.factoryABI
 
-export const ROUTER_ADDRESS = '0xe9EdEb5576ea876014e76A496B4c564756ddDAEF'
+export const ROUTER_ADDRESS = '0xbE75Dd16D029c6B32B7aD57A0FD9C1c20Dd2862e'
 export const ROUTER_ABI = abis.routerABI
 
 export const VE_DIST_ADDRESS = '0x67fef6a7908Faf1d89B659b9bbE76D82837Ee6E2'

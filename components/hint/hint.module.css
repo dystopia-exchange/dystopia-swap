@@ -1,0 +1,16 @@
+.popoverPaper {
+  width: 400px !important;
+  padding: 18px 20px !important;
+  padding-bottom: 15px !important;
+  background: #CFE5F2 !important;
+  border: 2px solid #86B9D6 !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0px 5px 20px rgba(32, 68, 101, 0.25)) !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+}
+
+.popoverPaper--dark {
+  background: #2D3741 !important;
+  border: 2px solid #5F7285 !important;
+}
