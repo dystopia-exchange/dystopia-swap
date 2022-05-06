@@ -553,9 +553,9 @@ function Setup() {
       <BtnSwap
         onClick={onSwap}
         className={classes.btnSwap}
-        labelClassName={!fromAmountValue || fromAmountValue > Number(fromAssetValue.balance) ? classes['actionButtonText--disabled'] : classes.actionButtonText}
-        isDisabled={!fromAmountValue || fromAmountValue > Number(fromAssetValue.balance)}
-        label={loading ? 'Swapping' : (!fromAmountValue ? 'Enter Amount' : 'Swap')}>
+        labelClassName={!fromAmountValue || fromAmountValue > Number(fromAssetValue.balance) || Number(fromAmountValue) <= 0 ? classes['actionButtonText--disabled'] : classes.actionButtonText}
+        isDisabled={!fromAmountValue || fromAmountValue > Number(fromAssetValue.balance) || Number(fromAmountValue) <= 0}
+        label={loading ? 'Swapping' : (!fromAmountValue || Number(fromAmountValue) <= 0 ? 'Enter Amount' : 'Swap')}>
       </BtnSwap>
     </div>
   );
