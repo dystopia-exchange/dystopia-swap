@@ -120,10 +120,10 @@
 .transactionDescription {
   margin-left: 10px !important;
   margin-top: 10px !important;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 120%;
-  color: #5688A5;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  color: #5688A5 !important;
   text-align: left;
 }
 
@@ -255,7 +255,7 @@
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 530px) {
   .dialogTitle {
     padding: 20px !important;
     font-size: 18px !important;

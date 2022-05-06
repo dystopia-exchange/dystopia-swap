@@ -4,6 +4,7 @@ import Header from "../header";
 import SnackbarController from "../snackbar";
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
+
 export default function Layout({
   children,
   configure,
@@ -11,7 +12,9 @@ export default function Layout({
   changeTheme,
   title
 }) {
-  const {appTheme} = useAppThemeContext();
+  const { appTheme } = useAppThemeContext();
+
+  
 
   return (
     <>

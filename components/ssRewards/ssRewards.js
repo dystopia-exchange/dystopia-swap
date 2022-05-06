@@ -25,19 +25,20 @@ export default function ssRewards() {
   const {appTheme} = useAppThemeContext();
 
   const stableSwapUpdated = (rew) => {
-    const nfts = stores.stableSwapStore.getStore('vestNFTs');
-    setVestNFTs(nfts);
-    setVeToken(stores.stableSwapStore.getStore('veToken'));
+     const nfts = stores.stableSwapStore.getStore('vestNFTs');
+     setVestNFTs(nfts);
+     setVeToken(stores.stableSwapStore.getStore('veToken'));
 
-    if (nfts?.length > 0) {
-      nfts.sort((a, b) => (+a.id) - (+b.id));
+      if (nfts?.length > 0) {
+       nfts.sort((a, b) => (+a.id) - (+b.id));
 
-      if (!token) {
-        setToken(nfts[0]);
+       if (!token) {
+         setToken(nfts[0]);
         window.setTimeout(() => {
           stores.dispatcher.dispatch({type: ACTIONS.GET_REWARD_BALANCES, content: {tokenID: nfts[0].id}});
         });
-      } else {
+       } 
+     else {
         window.setTimeout(() => {
           stores.dispatcher.dispatch({type: ACTIONS.GET_REWARD_BALANCES, content: {tokenID: token.id}});
         });
@@ -46,7 +47,7 @@ export default function ssRewards() {
       window.setTimeout(() => {
         stores.dispatcher.dispatch({type: ACTIONS.GET_REWARD_BALANCES, content: {tokenID: 0}});
       });
-    }
+     }
 
     forceUpdate();
   };
@@ -64,17 +65,17 @@ export default function ssRewards() {
     }
   };
 
-  useEffect(() => {
-    rewardBalancesReturned();
-    stableSwapUpdated();
+   useEffect(() => {
+      rewardBalancesReturned();
+      stableSwapUpdated();
 
-    stores.emitter.on(ACTIONS.UPDATED, stableSwapUpdated);
-    stores.emitter.on(ACTIONS.REWARD_BALANCES_RETURNED, rewardBalancesReturned);
-    return () => {
-      stores.emitter.removeListener(ACTIONS.UPDATED, stableSwapUpdated);
-      stores.emitter.removeListener(ACTIONS.REWARD_BALANCES_RETURNED, rewardBalancesReturned);
-    };
-  }, [token]);
+     stores.emitter.on(ACTIONS.UPDATED, stableSwapUpdated);
+     stores.emitter.on(ACTIONS.REWARD_BALANCES_RETURNED, rewardBalancesReturned);
+      return () => {
+       stores.emitter.removeListener(ACTIONS.UPDATED, stableSwapUpdated);
+       stores.emitter.removeListener(ACTIONS.REWARD_BALANCES_RETURNED, rewardBalancesReturned);
+       };
+   }, [token]);
 
   useEffect(() => {
 

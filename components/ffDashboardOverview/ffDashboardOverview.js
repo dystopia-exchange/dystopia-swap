@@ -7,6 +7,7 @@ import classes from './ffDashboardOverview.module.css';
 
 import stores from '../../stores'
 import { ACTIONS } from '../../stores/constants';
+import { formatSymbol } from '../../utils'
 
 function BalanceIcon(props) {
   const { color, className } = props;
@@ -102,7 +103,7 @@ export default function ffOverview() {
                 <Typography className={ classes.title }>DYST Balance:</Typography>
                 <div className={ classes.inline }>
                 <Typography className={ classes.value }>{ formatCurrency(govToken ? govToken.balance : 0) }</Typography>
-                <Typography className={ classes.valueSymbol }>{ govToken ? govToken.symbol : '' }</Typography>
+                <Typography className={ classes.valueSymbol }>{ govToken ? formatSymbol(govToken.symbol) : '' }</Typography>
                 </div>
               </Grid>
             </Grid>
@@ -119,7 +120,7 @@ export default function ffOverview() {
                 <Typography className={ classes.title }>Vested Balance:</Typography>
                 <div className={ classes.inline }>
                   <Typography className={ classes.value }>{ formatCurrency((veToken && veToken.vestingInfo) ? veToken.vestingInfo.lockValue : 0) }</Typography>
-                  <Typography className={ classes.valueSymbol }>{ veToken ? veToken.symbol : '' }</Typography>
+                  <Typography className={ classes.valueSymbol }>{ veToken ? formatSymbol(veToken.symbol) : '' }</Typography>
                 </div>
               </Grid>
             </Grid>

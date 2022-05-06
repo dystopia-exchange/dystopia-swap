@@ -203,6 +203,11 @@ export default function TransactionQueue({setQueueLength}) {
       }}
       open={open}
       onClose={handleClose}
+      onClick={(e) => {
+        if (e.target.classList.contains('MuiDialog-container')) {
+          handleClose()
+        }
+      }}
       fullWidth={true}
       maxWidth={"sm"}
       TransitionComponent={Transition}

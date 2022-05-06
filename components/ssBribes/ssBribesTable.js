@@ -21,7 +21,7 @@ import {
 import { useRouter } from "next/router";
 import BigNumber from 'bignumber.js';
 import { FilterList, Search } from '@mui/icons-material';
-
+import { formatSymbol } from '../../utils';
 import { formatCurrency } from '../../utils';
 
 function descendingComparator(a, b, orderBy) {
@@ -249,7 +249,7 @@ const useStyles = makeStyles((theme) => ({
   },
   img2Logo: {
     position: 'absolute',
-    left: '20px',
+    left: '28px',
     zIndex: '1',
     top: '0px'
   },
@@ -259,8 +259,8 @@ const useStyles = makeStyles((theme) => ({
   doubleImages: {
     display: 'flex',
     position: 'relative',
-    width: '70px',
-    height: '35px'
+    width: '80px',
+    height: '35px',
   },
   searchContainer: {
     flex: 1,
@@ -390,7 +390,7 @@ export default function EnhancedTable({ gauges }) {
                             alt=''
                             onError={(e) => {
                               e.target.onerror = null;
-                              e.target.src = '/tokens/unknown-logo.png';
+                              e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                             }}
                           />
                           <img
@@ -401,13 +401,13 @@ export default function EnhancedTable({ gauges }) {
                             alt=''
                             onError={(e) => {
                               e.target.onerror = null;
-                              e.target.src = '/tokens/unknown-logo.png';
+                              e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                             }}
                           />
                         </div>
                         <div>
                           <Typography variant='h2' noWrap>
-                            {row?.symbol}
+                            {formatSymbol(row?.symbol)}
                           </Typography>
                         </div>
                       </div>
@@ -438,7 +438,7 @@ export default function EnhancedTable({ gauges }) {
                                 {formatCurrency(bribe?.rewardForDuration)}
                               </Typography>
                               <Typography variant='h5' className={classes.textSpaced} color='textSecondary'>
-                                { bribe?.token?.symbol }
+                                { formatSymbol(bribe?.token?.symbol) }
                               </Typography>
                             </TableCell>
                             <TableCell className={classes.cell} align='right'>
@@ -446,7 +446,7 @@ export default function EnhancedTable({ gauges }) {
                                 {formatCurrency(bribe?.earned)}
                               </Typography>
                               <Typography variant='h5' className={classes.textSpaced} color='textSecondary'>
-                                { bribe?.token?.symbol }
+                                { formatSymbol(bribe?.token?.symbol) }
                               </Typography>
                             </TableCell>
                             <TableCell className={classes.cell} align='right'>

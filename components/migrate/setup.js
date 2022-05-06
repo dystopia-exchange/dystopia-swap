@@ -10,7 +10,9 @@ import {
   InputLabel,
   InputBase,
   FormControl,
+  DialogTitle,
   CircularProgress,
+  DialogContent,
   Tooltip,
   Stack,
   Radio,
@@ -22,11 +24,13 @@ import {
   KeyboardArrowDown,
   ArrowForwardIos,
   DeleteOutline,
+  Close,
+  ArrowBackIosNew
 } from "@mui/icons-material";
 import migrate from "../../stores/configurations/migrators";
 import FactoryAbi from "../../stores/abis/FactoryAbi.json";
 import pairContractAbi from "../../stores/abis/pairOldRouter.json";
-import Form from "../../ui/Form";
+import Form from "../../ui/MigratorForm";
 import {
   formatCurrency,
   formatAddress,
@@ -37,8 +41,9 @@ import migratorAbi from "../../stores/abis/migrator.json";
 import classes from "./ssSwap.module.css";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import stores from "../../stores";
-import { ACTIONS, ETHERSCAN_URL } from "../../stores/constants";
+import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
 import BigNumber from "bignumber.js";
+import { formatSymbol } from '../../utils';
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -61,6 +66,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+
 export default function Setup() {
   const [fromAssetValue, setFromAssetValue] = useState(null);
   const [toAssetValue, setToAssetValue] = useState(null);
@@ -90,7 +96,15 @@ export default function Setup() {
   }
 
   const getPairDetails = async (token0, token1) => {
-    console.log(token0, token1, "tokensAddress");
+    const multicall = await stores.accountStore.getMulticall();
+
+    if (token0 == 'MATIC') {
+      token0 = CONTRACTS.WFTM_ADDRESS
+    }
+    if (token1 == 'MATIC') {
+      token1 = CONTRACTS.WFTM_ADDRESS
+    }
+
     try {
       const web3 = await stores.accountStore.getWeb3Provider();
       if (!web3) {
@@ -105,44 +119,58 @@ export default function Setup() {
             .getPair(token0, token1)
             .call();
           console.log("ftech noww", pairAddress);
+
           if (pairAddress !== "0x0000000000000000000000000000000000000000") {
             const pairContract = new web3.eth.Contract(
               pairContractAbi,
               pairAddress
             );
-            console.log(pairContract, "pairContract");
-            let lpBalance = await pairContract.methods
-              .balanceOf(account.address)
-              .call();
-            const getTotalSupply = await pairContract.methods
-              .totalSupply()
-              .call();
-            lpBalance = web3.utils.fromWei(lpBalance.toString(), "ether");
+
             const migrator = migrate.find(
               (eachMigrate) => eachMigrate.value === platform
             );
-            const allowence = await pairContract.methods
-              .allowance(
-                account.address,
-                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
-              )
-              .call();
-            console.log({ getTotalSupply });
-            const totalSupply = web3.utils.fromWei(
+
+            let [getReserves, symbol, allowence, getTotalSupply, lpBalance, token0Add, token1Add] = await multicall.aggregate([
+              pairContract.methods.getReserves(),
+              pairContract.methods.symbol(),
+              pairContract.methods
+                .allowance(
+                  account.address,
+                  migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
+                ),
+              pairContract.methods.totalSupply(),
+              pairContract.methods
+                .balanceOf(account.address),
+              pairContract.methods.token0(),
+              pairContract.methods.token1(),
+
+            ]);
+
+            const token0Contract = new web3.eth.Contract(pairContractAbi, token0Add);
+            const token1Contract = new web3.eth.Contract(pairContractAbi, token1Add);
+            let [token0symbol, token1symbol] = await multicall.aggregate([
+              token0Contract.methods.symbol(),
+              token1Contract.methods.symbol(),
+              pairContract.methods
+                .allowance(
+                  account.address,
+                  migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
+                ),
+              pairContract.methods.totalSupply(),
+              pairContract.methods
+                .balanceOf(account.address)
+            ]);
+
+            let totalSupply = web3.utils.fromWei(
               getTotalSupply.toString(),
               "ether"
             );
-            const getReserves = await pairContract.methods.getReserves().call();
-            const symbol = await pairContract.methods.symbol().call();
-            console.log({ getReserves });
-            const weiReserve1 = web3.utils.fromWei(
-              getReserves._reserve0.toString(),
-              "ether"
-            );
-            const weiReserve2 = web3.utils.fromWei(
-              getReserves._reserve1.toString(),
-              "ether"
-            );
+            lpBalance = web3.utils.fromWei(lpBalance.toString(), "ether");
+
+            const weiReserve1 = getReserves[0] / (10 ** toAssetValue.decimals)
+
+            const weiReserve2 = getReserves[1] / (10 ** fromAssetValue.decimals)
+            console.log(getReserves, fromAssetValue, toAssetValue, weiReserve1, weiReserve2, lpBalance, totalSupply, "migrate info")
             const token0Bal =
               (parseFloat(lpBalance.toString()) /
                 parseFloat(totalSupply.toString())) *
@@ -153,21 +181,25 @@ export default function Setup() {
               parseFloat(weiReserve2.toString());
             const poolTokenPercentage =
               (parseFloat(lpBalance) * 100) / parseFloat(totalSupply);
-            const pairDetails = {
+
+            let pairDetails = {
               isValid: true,
-              symbol:symbol,
-              lpBalance: parseFloat(lpBalance).toFixed(5),
+              symbol: symbol,
+              token0symbol: token0symbol,
+              token1symbol: token1symbol,
+              lpBalance: parseFloat(lpBalance).toFixed(4),
               totalSupply,
-              token0Bal: parseFloat(token0Bal).toFixed(5),
-              token1Bal: parseFloat(token1Bal).toFixed(5),
+              token0Bal: parseFloat(token0Bal).toFixed(18),
+              token1Bal: parseFloat(token1Bal).toFixed(18),
               allowence,
               pairAddress,
               poolTokenPercentage: Math.floor(poolTokenPercentage),
             };
-            setAmount(parseFloat(lpBalance).toFixed(5));
+
+            setAmount(parseFloat(lpBalance).toFixed(4));
             setPairDetails(pairDetails);
           } else {
-            const pairDetails = {
+            let pairDetails = {
               isValid: false,
               lpBalance: 0,
               allowence: 0,
@@ -216,8 +248,6 @@ export default function Setup() {
         if (baseAsset.length > 0 && fromAssetValue == null) {
           setFromAssetValue(baseAsset[1]);
         }
-        //await getPairDetails(baseAsset[0].address,baseAsset[1].address)
-        // forceUpdate()
       };
 
       stores.emitter.on(ACTIONS.UPDATED, ssUpdated);
@@ -262,6 +292,11 @@ export default function Setup() {
     } else {
       setAmount(event.target.value);
     }
+  };
+  const handleMax = (lpBalance) => {
+    
+      setAmount(lpBalance);
+    
   };
 
   let buttonText = "Approve";
@@ -431,15 +466,17 @@ export default function Setup() {
                   <Typography className={classes.inputTitleText} noWrap>
                     Liq. Pair
                   </Typography>
-
                   <Typography className={classes.inputBalanceText} noWrap>
                     Balance:
                     <span>
                       {pairDetails && pairDetails.lpBalance
-                        ? pairDetails.lpBalance
+                        ? Number(pairDetails.lpBalance).toFixed(5)
                         : "0"}
                     </span>
                   </Typography>
+                  <Button onClick={()=>handleMax(Number(pairDetails.lpBalance).toFixed(5))} style={{ position: 'absolute', marginLeft: "325px", top: '10px', padding: '0' }} variant="text" size="small" >
+                    MAX
+                  </Button>
                   <div className={`${classes.massiveInputContainer}`}>
                     <div className={classes.massiveInputAssetSelect}>
                       <div
@@ -478,7 +515,7 @@ export default function Setup() {
                               style={{ width: "40px", height: "40px" }}
                               onError={(e) => {
                                 e.target.onerror = null;
-                                e.target.src = "/tokens/unknown-logo.png";
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                               }}
                             />
                           </div>
@@ -510,7 +547,7 @@ export default function Setup() {
                               style={{ width: "40px", height: "40px" }}
                               onError={(e) => {
                                 e.target.onerror = null;
-                                e.target.src = "/tokens/unknown-logo.png";
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                               }}
                             />
                           </div>
@@ -529,7 +566,6 @@ export default function Setup() {
                       InputProps={{
                         disableUnderline: true,
                       }}
-                      type="number"
                       max
                       fullWidth
                       value={amount}
@@ -581,7 +617,7 @@ export default function Setup() {
                           style={{ width: "30px", height: "30px" }}
                           onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = "/tokens/unknown-logo.png";
+                            e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                           }}
                         />
                       </div>
@@ -608,7 +644,7 @@ export default function Setup() {
                           style={{ width: "30px", height: "30px" }}
                           onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = "/tokens/unknown-logo.png";
+                            e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                           }}
                         />
                       </div>
@@ -628,7 +664,7 @@ export default function Setup() {
                     </div>
                   </div>
                   <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                    {pairDetails.lpBalance}
+                    {Number(pairDetails.lpBalance).toFixed(5)}
                   </span>
                 </div>
                 <div
@@ -637,10 +673,24 @@ export default function Setup() {
                     classes[`pairDetails--${appTheme}`],
                   ].join(" ")}
                 >
-                  Your Pool Share:
-                  <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                    {pairDetails.poolTokenPercentage}%
-                  </span>
+                 <div
+                    className={[
+                      classes[`nav-button-corner-bottom`],
+                      classes[`nav-button-corner-bottom--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    <div
+                      className={[
+                        classes[`nav-button-corner-top`],
+                        classes[`nav-button-corner-top--${appTheme}`],
+                      ].join(" ")}
+                    >
+                      Your Pool Share:
+                      <span style={{ color: "#304C5E", fontWeight: "800" ,marginLeft:"175px"}}>
+                        {pairDetails.poolTokenPercentage}%
+                      </span>
+                    </div>
+                  </div>
                 </div>
                 <div style={{ display: "flex", width: "100%" }}>
                   <div
@@ -649,10 +699,24 @@ export default function Setup() {
                       classes[`pairDetails--${appTheme}`],
                     ].join(" ")}
                   >
-                    {fromAssetValue?.symbol}:
-                    <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                      {pairDetails.token0Bal}
-                    </span>
+                     <div
+                      className={[
+                        classes[`nav-button-corner-bottom`],
+                        classes[`nav-button-corner-bottom--${appTheme}`],
+                      ].join(" ")}
+                    >
+                      <div
+                        className={[
+                          classes[`nav-button-corner-top`],
+                          classes[`nav-button-corner-top--${appTheme}`],
+                        ].join(" ")}
+                      >
+                        {pairDetails?.token0symbol}:
+                        <span style={{ color: "#304C5E", fontWeight: "800",marginLeft:"50px" }}>
+                          {Number(pairDetails.token0Bal).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <div
                     className={[
@@ -660,10 +724,24 @@ export default function Setup() {
                       classes[`pairDetails--${appTheme}`],
                     ].join(" ")}
                   >
-                    {toAssetValue?.symbol}
-                    <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                      {pairDetails.token1Bal}
-                    </span>
+                      <div
+                      className={[
+                        classes[`nav-button-corner-bottom`],
+                        classes[`nav-button-corner-bottom--${appTheme}`],
+                      ].join(" ")}
+                    >
+                      <div
+                        className={[
+                          classes[`nav-button-corner-top`],
+                          classes[`nav-button-corner-top--${appTheme}`],
+                        ].join(" ")}
+                      >
+                        {pairDetails?.token1symbol}
+                        <span style={{ color: "#304C5E", fontWeight: "800" ,marginLeft:"50px"}}>
+                          {Number(pairDetails.token1Bal).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className={classes.radioContainer}>
@@ -677,6 +755,8 @@ export default function Setup() {
                           ? "#86B9D6"
                           : "#5F7285"
                         : "transparent",
+                        border: "1px solid #0C5E8E",
+                        marginRight: '10px'
                     }}
                   >
                     <Radio
@@ -698,6 +778,8 @@ export default function Setup() {
                           ? "#86B9D6"
                           : "#5F7285"
                         : "transparent",
+                        border: "1px solid #0C5E8E",
+                        marginRight: '0px'
                     }}
                   >
                     <Radio
@@ -715,7 +797,7 @@ export default function Setup() {
           </div>
         </div>
       </Form>
-      <div style={{display: 'flex', justifyContent: 'center'}}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div className={[classes[`buttonOverrideContainer--${appTheme}`]].join(' ')}>
           <Button
             variant='contained'
@@ -768,7 +850,7 @@ export default function Setup() {
           );
         }
 
-        return () => {};
+        return () => { };
       },
       [assetOptions, search]
     );
@@ -805,49 +887,52 @@ export default function Setup() {
     const renderManageOption = (type, asset, idx) => {
       return (
         <MenuItem
-          val={asset.address}
-          key={asset.address + "_" + idx}
-          className={[
-            classes.assetSelectMenu,
-            classes[`assetSelectMenu--${appTheme}`],
-          ].join(" ")}
-        >
+          val={asset.address} key={asset.address + '_' + idx}
+          className={[classes.assetSelectMenu, classes[`assetSelectMenu--${appTheme}`]].join(' ')}>
           <div className={classes.assetSelectMenuItem}>
             <div className={classes.displayDualIconContainerSmall}>
               <img
-                className={[
-                  classes.assetOptionIcon,
-                  classes[`assetOptionIcon--${appTheme}`],
-                ].join(" ")}
+                className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
                 alt=""
-                src={asset ? `${asset.logoURI}` : ""}
-                height="50px"
+                src={asset ? `${asset.logoURI}` : ''}
+                height="60px"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "public/tokens/unknown-logo.png";
+                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                 }}
               />
             </div>
           </div>
-          <div className={classes.assetSelectIconName}>
-            <Typography variant="h5">{asset ? asset.symbol : ""}</Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              {asset ? asset.name : ""}
+
+          <div>
+            <Typography
+              variant="h5"
+              className={classes.assetSymbolName}
+              style={{
+                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+              }}>
+              {asset ? formatSymbol(asset.symbol) : ''}
+            </Typography>
+
+            <Typography
+              variant="subtitle1"
+              className={classes.assetSymbolName2}
+              style={{
+                color: appTheme === "dark" ? '#7C838A' : '#5688A5',
+              }}>
+              {asset ? asset.name : ''}
             </Typography>
           </div>
+
           <div className={classes.assetSelectActions}>
-            <IconButton
-              onClick={() => {
-                deleteOption(asset);
-              }}
-            >
+            <IconButton onClick={() => {
+              deleteOption(asset);
+            }}>
               <DeleteOutline />
             </IconButton>
-            <IconButton
-              onClick={() => {
-                viewOption(asset);
-              }}
-            >
+            <IconButton onClick={() => {
+              viewOption(asset);
+            }}>
               ↗
             </IconButton>
           </div>
@@ -859,38 +944,62 @@ export default function Setup() {
       return (
         <MenuItem
           val={asset.address}
-          key={asset.address + "_" + idx}
-          className={classes.assetSelectMenu}
+          key={asset.address + '_' + idx}
+          className={[classes.assetSelectMenu, classes[`assetSelectMenu--${appTheme}`]].join(' ')}
           onClick={() => {
             onLocalSelect(type, asset);
-          }}
-        >
+          }}>
           <div className={classes.assetSelectMenuItem}>
             <div className={classes.displayDualIconContainerSmall}>
               <img
-                className={classes.displayAssetIconSmall}
+                className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
                 alt=""
-                src={asset ? `${asset.logoURI}` : ""}
-                height="60px"
+                src={asset ? `${asset.logoURI}` : ''}
+                height="50px"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "/tokens/unknown-logo.png";
+                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                 }}
               />
             </div>
           </div>
           <div className={classes.assetSelectIconName}>
-            <Typography variant="h5">{asset ? asset.symbol : ""}</Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              {asset ? asset.name : ""}
+            <Typography
+              variant="h5"
+              className={classes.assetSymbolName}
+              style={{
+                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+              }}>
+              {asset ? formatSymbol(asset.symbol) : ''}
+            </Typography>
+
+            <Typography
+              variant="subtitle1"
+              className={classes.assetSymbolName2}
+              style={{
+                color: appTheme === "dark" ? '#7C838A' : '#5688A5',
+              }}>
+              {asset ? asset.name : ''}
             </Typography>
           </div>
+
           <div className={classes.assetSelectBalance}>
-            <Typography variant="h5">
-              {asset && asset.balance ? formatCurrency(asset.balance) : "0.00"}
+            <Typography
+              variant="h5"
+              className={classes.assetSelectBalanceText}
+              style={{
+                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+              }}>
+              {(asset && asset.balance) ? formatCurrency(asset.balance) : '0.00'}
             </Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              {"Balance"}
+
+            <Typography
+              variant="subtitle1"
+              className={classes.assetSelectBalanceText2}
+              style={{
+                color: appTheme === "dark" ? '#7C838A' : '#5688A5',
+              }}>
+              {'Balance'}
             </Typography>
           </div>
         </MenuItem>
@@ -900,84 +1009,124 @@ export default function Setup() {
     const renderManageLocal = () => {
       return (
         <>
-          <div className={classes.searchContainer}>
-            <div className={classes.searchInline}>
-              <TextField
-                autoFocus
-                variant="outlined"
-                fullWidth
-                placeholder="MATIC, DAI, 0x..."
-                value={search}
-                onChange={onSearchChanged}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Search />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </div>
-            <div className={classes.assetSearchResults}>
-              {filteredAssetOptions
-                ? filteredAssetOptions
-                    .filter((option) => {
-                      return option.local === true;
-                    })
-                    .map((asset, idx) => {
-                      return renderManageOption(type, asset, idx);
-                    })
-                : []}
-            </div>
+          <div className={classes.searchInline}>
+            <TextField
+              autoFocus
+              variant="outlined"
+              fullWidth
+              placeholder="Search by name or paste address"
+              value={search}
+              onChange={onSearchChanged}
+              InputProps={{
+                style: {
+                  background: 'transparent',
+                  border: '1px solid',
+                  borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
+                  borderRadius: 0,
+                },
+                classes: {
+                  root: classes.searchInput,
+                },
+                startAdornment: <InputAdornment position="start">
+                  <Search style={{
+                    color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  }}/>
+                </InputAdornment>,
+              }}
+              inputProps={{
+                style: {
+                  padding: '10px',
+                  borderRadius: 0,
+                  border: 'none',
+                  fontSize: '14px',
+                  lineHeight: '120%',
+                  color: '#86B9D6',
+                },
+              }}
+            />
           </div>
+  
+          <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
+            {
+              filteredAssetOptions ? filteredAssetOptions.filter((option) => {
+                return option.local === true;
+              }).map((asset, idx) => {
+                return renderManageOption(type, asset, idx);
+              }) : []
+            }
+          </div>
+  
           <div className={classes.manageLocalContainer}>
-            <Button onClick={toggleLocal}>Back to Assets</Button>
+            <Button
+              onClick={toggleLocal}
+            >
+              Back to Assets
+            </Button>
           </div>
         </>
       );
     };
-
+  
     const renderOptions = () => {
       return (
         <>
-          <div className={classes.searchContainer}>
-            <div className={classes.searchInline}>
-              <TextField
-                autoFocus
-                variant="outlined"
-                fullWidth
-                placeholder="MATIC,UST, 0x..."
-                value={search}
-                onChange={onSearchChanged}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Search />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </div>
-            <div className={classes.assetSearchResults}>
-              {filteredAssetOptions
-                ? filteredAssetOptions
-                    .sort((a, b) => {
-                      if (BigNumber(a.balance).lt(b.balance)) return 1;
-                      if (BigNumber(a.balance).gt(b.balance)) return -1;
-                      if (a.symbol.toLowerCase() < b.symbol.toLowerCase())
-                        return -1;
-                      if (a.symbol.toLowerCase() > b.symbol.toLowerCase())
-                        return 1;
-                      return 0;
-                    })
-                    .map((asset, idx) => {
-                      return renderAssetOption(type, asset, idx);
-                    })
-                : []}
-            </div>
+          <div className={classes.searchInline}>
+            <TextField
+              autoFocus
+              variant="outlined"
+              fullWidth
+              placeholder="Search by name or paste address"
+              value={search}
+              onChange={onSearchChanged}
+              InputProps={{
+                style: {
+                  background: 'transparent',
+                  border: '1px solid',
+                  borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
+                  borderRadius: 0,
+                },
+                classes: {
+                  root: classes.searchInput,
+                },
+                startAdornment: <InputAdornment position="start">
+                  <Search style={{
+                    color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  }}/>
+                </InputAdornment>,
+              }}
+              inputProps={{
+                style: {
+                  padding: '10px',
+                  borderRadius: 0,
+                  border: 'none',
+                  fontSize: '14px',
+                  lineHeight: '120%',
+                  color: '#86B9D6',
+                },
+              }}
+            />
           </div>
+  
+          <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
+            {
+              filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
+                if (BigNumber(a.balance).lt(b.balance)) return 1;
+                if (BigNumber(a.balance).gt(b.balance)) return -1;
+                if (a.symbol.toLowerCase() < b.symbol.toLowerCase()) return -1;
+                if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
+                return 0;
+              }).map((asset, idx) => {
+                return renderAssetOption(type, asset, idx);
+              }) : []
+            }
+          </div>
+  
           <div className={classes.manageLocalContainer}>
-            <Button onClick={toggleLocal}>Manage Local Assets</Button>
+            <Button
+              className={classes.manageLocalBtn}
+              onClick={toggleLocal}>
+              Manage Local Assets
+            </Button>
           </div>
         </>
       );
@@ -1005,22 +1154,77 @@ export default function Setup() {
                 height="100px"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "/tokens/unknown-logo.png";
+                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                 }}
               />
-              {/* <Typography variant='subtitle1' color='primary'>{value ? value.name : type === 'from' ? 'Select Token 0' : 'Select Token 1'}</Typography> */}
             </div>
           </div>
         </div>
         <Dialog
-          onClose={onClose}
-          aria-labelledby="simple-dialog-title"
-          open={open}
-        >
-          {!manageLocal && renderOptions()}
-          {manageLocal && renderManageLocal()}
+        className={classes.blurbg}
+        aria-labelledby="simple-dialog-title"
+        open={open}
+        onClick={(e) => {
+          if (e.target.classList.contains('MuiDialog-container')) {
+            onClose()
+          }
+        }}
+        style={{borderRadius: 0}}>
+        <div
+          className={classes.dialogContainer}
+          style={{
+            width: 460,
+            height: 710,
+            background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+            border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
+            borderRadius: 0,
+          }}>
+            <DialogTitle
+              className={classes.dialogTitle}
+              style={{
+                padding: 30,
+                paddingBottom: 0,
+                fontWeight: 500,
+                fontSize: 18,
+                lineHeight: '140%',
+                color: '#0A2C40',
+              }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                }}>
+                  {manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
+                    marginRight: 10,
+                    width: 18,
+                    height: 18,
+                    cursor: 'pointer',
+                  }} />}
+                  {manageLocal ? 'Manage local assets' : 'Select a token'}
+                </div>
+
+                <Close
+                  style={{
+                    cursor: 'pointer',
+                    color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                  }}
+                  onClick={onClose} />
+              </div>
+              
+            </DialogTitle>
+
+            <DialogContent className={classes.dialogContent}>
+              {!manageLocal && renderOptions()}
+              {manageLocal && renderManageLocal()}
+            </DialogContent>
+          </div>
         </Dialog>
       </React.Fragment>
     );
   }
-}
+} 

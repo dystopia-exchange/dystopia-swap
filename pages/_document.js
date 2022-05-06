@@ -11,7 +11,7 @@ export default class MyDocument extends Document {
           <link rel="stylesheet" href="/fonts/Inter/Inter.css"/>
           <link rel="stylesheet" href="/fonts/MonumentExt/Monument.css"/>
           <link rel="stylesheet" href="/fonts/Druk/Druk.css"/>
-          <link rel="stylesheet" href="/fonts/PPNeueMachina-UltraBold/PPNeueMachina-UltraBold.css"/>
+          <link rel="stylesheet" href="/fonts/PPNeueMachina/PPNeueMachina.css"/>
           <link rel="stylesheet" href="/fonts/RobotoMono/RobotoMono.css"/>
         </Head>
         <body
@@ -19,6 +19,7 @@ export default class MyDocument extends Document {
             overflow: 'hidden',
             width: '100%',
             height: '100%',
+            zoom: '0.8',
           }}>
 
         <Main style={{display: 'flex', flexDirection: 'column'}}/>

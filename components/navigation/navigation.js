@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-
-import {
-  Typography,
-  Paper,
-  Switch,
-  Button,
-  Tooltip,
-  Grid,
-  SvgIcon,
-} from "@mui/material";
-import { ToggleButton, ToggleButtonGroup } from "@mui/lab";
+import { Typography, Switch, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { withTheme, withStyles } from "@mui/styles";
 
 import SSWarning from "../ssWarning";
 
-import stores from "../../stores";
-import { formatAddress } from "../../utils";
 import classes from "./navigation.module.css";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 
@@ -106,9 +94,9 @@ function Navigation(props) {
   };
 
   const onActiveClick = (event, val) => {
-    if (val) {
-      setActive(val);
-      handleNavigate("/" + val);
+    if (val || (!val && active)) {
+      setActive(val || active);
+      handleNavigate("/" + (val || active));
     }
   };
 

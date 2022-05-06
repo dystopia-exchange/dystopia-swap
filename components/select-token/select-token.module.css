@@ -1,5 +1,8 @@
 .tokenSelect {
-  width: 215px !important;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  width: auto !important;
   margin-left: 20px;
   background: #DBE6EC !important;
   border: 1px solid #86B9D6 !important;
@@ -34,11 +37,12 @@
 }
 
 .menuOption {
-  padding: 0 20px;
+  padding-left: 30px;
 }
 
 .menuOptionSec {
-  padding-right: 20px;
+  margin-left: 15px;
+  margin-right: 20px;
 }
 
 .list,
@@ -70,10 +74,10 @@
 
 .list > li > .menuOption > .menuOptionSec,
 .list--dark > li > .menuOption > .menuOptionSec {
-  padding-right: 0 !important;
+  margin-right: 0 !important;
 }
 
-@media (max-width: 430px) {
+@media (max-width: 530px) {
   .tokenSelect {
     width: 100% !important;
     margin-left: 0;

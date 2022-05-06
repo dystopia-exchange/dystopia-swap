@@ -176,7 +176,7 @@ export default function existingLock({nft, govToken, veToken}) {
                     height="100px"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = "/tokens/unknown-logo.png";
+                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                     }}
                   />
                 }
@@ -185,26 +185,26 @@ export default function existingLock({nft, govToken, veToken}) {
                   <img
                     className={classes.displayAssetIcon}
                     alt=""
-                    src={'/tokens/unknown-logo.png'}
+                    src={`/tokens/unknown-logo--${appTheme}.svg`}
                     height="100px"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = "/tokens/unknown-logo.png";
+                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                     }}
                   />
                 }
               </div>
             </div>
           </div>
-
           <InputBase
             className={classes.massiveInputAmount}
             placeholder="0.00"
+            autoFocus={true}
             error={amountError}
             helperText={amountError}
             value={amount}
             onChange={amountChanged}
-            disabled={lockAmountLoading}
+            disabled={lockLoading}
             inputProps={{
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}

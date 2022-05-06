@@ -15,8 +15,9 @@ import {
   Skeleton,
   Accordion,
   AccordionSummary,
-  AccordionDetails, Button, DialogTitle, DialogContent, Dialog,
+  AccordionDetails, Button, DialogTitle, DialogContent, Dialog, Hidden,
 } from '@mui/material';
+import numeral from "numeral";
 import BigNumber from 'bignumber.js';
 
 import { formatCurrency } from '../../utils';
@@ -24,8 +25,30 @@ import { ArrowDropDown, Close, ExpandLess, ExpandMore } from '@mui/icons-materia
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import TablePaginationActions from '../table-pagination/table-pagination';
 import SortSelect from '../select-sort/select-sort';
+import { formatSymbol } from '../../utils';
 
-const CustomSlider = styled(Slider)(({theme, appTheme}) => {
+const CustomSlider = styled(Slider)(({theme, appTheme, disabled}) => {
+
+  const MuiSliderthumb = {
+    backgroundColor: appTheme === 'dark' ? '#4CADE6' : '#5688A5'
+  }
+
+  const MuiSliderTrack = {
+    backgroundColor: '#9BC9E4',
+  }
+
+  const MuiSliderRail = {
+    background: appTheme === 'dark'
+      ? 'linear-gradient(to left, #1B4F20 50%, #631515 50%)'
+      : 'linear-gradient(to left, #A2E3A9 50%, #EC9999 50%)'
+  }
+
+  if (disabled) {
+    MuiSliderthumb.backgroundColor = appTheme === 'dark' ? '#7F828B' : '#A3A9BA'
+    MuiSliderTrack.backgroundColor = '#D4D5DB'
+    MuiSliderRail.background = 'rgb(210 210 210)'
+  }
+
   return ({
     color: appTheme === 'dark' ? '#3880ff' : '#3880ff',
     height: 2,
@@ -33,7 +56,7 @@ const CustomSlider = styled(Slider)(({theme, appTheme}) => {
     '& .MuiSlider-thumb': {
       height: 10,
       width: 10,
-      backgroundColor: appTheme === 'dark' ? '#4CADE6' : '#5688A5',
+      backgroundColor: MuiSliderthumb.backgroundColor,
       boxShadow: 'none',
       '&:focus, &:hover, &.Mui-active': {
         boxShadow: 'none',
@@ -60,21 +83,30 @@ const CustomSlider = styled(Slider)(({theme, appTheme}) => {
     },
     '& .MuiSlider-track': {
       border: 'none',
-      backgroundColor: '#9BC9E4',
+      backgroundColor: MuiSliderTrack.backgroundColor,
+      opacity: 0,
     },
     '& .MuiSlider-rail': {
       opacity: 1,
-      backgroundColor: '#9BC9E4',
+      // backgroundColor: '#9BC9E4',
+      background: MuiSliderRail.background,
     },
     '& .MuiSlider-mark': {
-      opacity: 1,
-      backgroundColor: '#CFE5F2',
+      opacity: 0,
+      backgroundColor: disabled ? MuiSliderTrack.backgroundColor : '#CFE5F2',
       height: 2,
       width: 2,
       '&.MuiSlider-markActive': {
-        backgroundColor: '#CFE5F2',
-        opacity: 1,
+        backgroundColor: disabled ? MuiSliderTrack.backgroundColor : '#CFE5F2',
+        opacity: 0,
       },
+    },
+    '& .MuiSlider-mark:nth-of-type(20n)': {
+      opacity: 1,
+
+      '&.MuiSlider-markActive': {
+        opacity: 1,
+      }
     },
   });
 });
@@ -169,6 +201,20 @@ const headCells = [
     isHideInDetails: true,
   },
   {
+    id: 'tvl',
+    numeric: true,
+    disablePadding: false,
+    label: 'TVL',
+    isHideInDetails: true,
+  },
+  {
+    id: 'apr',
+    numeric: true,
+    disablePadding: false,
+    label: 'APR %',
+    isHideInDetails: true,
+  },
+  {
     id: 'balance',
     numeric: true,
     disablePadding: false,
@@ -207,6 +253,7 @@ const headCells = [
     width: 200,
     isHideInDetails: true,
   },
+  
 ];
 
 const StickyTableCell = styled(TableCell)(({theme, appTheme}) => ({
@@ -476,7 +523,7 @@ const useStyles = makeStyles((theme) => {
     doubleImages: {
       display: 'flex',
       position: 'relative',
-      width: '70px',
+      width: '80px',
       height: '35px',
     },
     img1Logo: {
@@ -489,7 +536,7 @@ const useStyles = makeStyles((theme) => {
     },
     img2Logo: {
       position: 'absolute',
-      left: '23px',
+      left: '28px',
       zIndex: '1',
       top: '0px',
       border: '2px solid #DBE6EC',
@@ -524,14 +571,14 @@ const useStyles = makeStyles((theme) => {
     },
     cellPaddings: {
       padding: '11px 20px',
-      ["@media (max-width:430px)"]: {
+      ["@media (max-width:530px)"]: {
         // eslint-disable-line no-useless-computed-key
         padding: 10,
       },
     },
     cellHeadPaddings: {
       padding: '5px 20px',
-      ["@media (max-width:430px)"]: {
+      ["@media (max-width:530px)"]: {
         // eslint-disable-line no-useless-computed-key
         padding: '5px 10px',
       },
@@ -539,7 +586,7 @@ const useStyles = makeStyles((theme) => {
   });
 });
 
-export default function EnhancedTable({gauges, setParentSliderValues, defaultVotes, veToken, token, showSearch}) {
+export default function EnhancedTable({gauges, setParentSliderValues, defaultVotes, veToken, token, showSearch, noTokenSelected}) {
   const classes = useStyles();
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('totalVotes');
@@ -624,7 +671,6 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
     );
   }
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, gauges.length - page * rowsPerPage);
   const marks = [
     {
       value: -100,
@@ -740,9 +786,11 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
           }}
           className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
           <TableContainer
+            className={'g-flex-column__item'}
             style={{
               overflow: 'auto',
               height: tableHeight,
+              background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
             }}>
             <Table
               stickyHeader
@@ -791,7 +839,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                 alt=""
                                 onError={(e) => {
                                   e.target.onerror = null;
-                                  e.target.src = '/tokens/unknown-logo.png';
+                                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                 }}
                               />
                               <img
@@ -802,7 +850,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                 alt=""
                                 onError={(e) => {
                                   e.target.onerror = null;
-                                  e.target.src = '/tokens/unknown-logo.png';
+                                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                 }}
                               />
                             </div>
@@ -816,7 +864,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                   color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                 }}
                                 noWrap>
-                                {row?.symbol}
+                                {formatSymbol(row?.symbol)}
                               </Typography>
                               <Typography
                                 className={classes.textSpaced}
@@ -832,7 +880,43 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                             </div>
                           </div>
                         </StickyTableCell>
-
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                            
+                          {
+                            tableCellContent(
+                              `${(numeral(BigNumber(row?.tvl).toLocaleString()).format('($ 0a)'))} `,
+                              null,
+                              null,
+                              null,
+                            )
+                          }
+                        </TableCell>
+                        <TableCell
+                          className={classes.cell}
+                          align="right"
+                          style={{
+                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                            border: '1px dashed #CFE5F2',
+                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            overflow: 'hidden',
+                          }}>
+                          {
+                            tableCellContent(
+                              `${formatCurrency(BigNumber(row?.gauge?.apr))} %`,
+                              null,
+                              null,
+                              null
+                            )
+                          }
+                        </TableCell>
                         <TableCell
                           className={classes.cell}
                           align="right"
@@ -883,7 +967,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           {
                             tableCellContent(
                               formatCurrency(row?.gauge?.weight),
-                              `${formatCurrency(row?.gauge?.weight)} %`,
+                              `${formatCurrency(row?.gauge?.weightPercent)} %`,
                               null,
                               null,
                             )
@@ -964,22 +1048,20 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               max={100}
                               marks
                               step={1}
+                              disabled={noTokenSelected}
                             />
                           </div>
                         </TableCell>
+                        
                       </TableRow>
                     );
                   })}
-                {emptyRows > 0 && (
-                  <TableRow style={{height: 61 * emptyRows}}>
-                    <TableCell colSpan={7}/>
-                  </TableRow>
-                )}
               </TableBody>
             </Table>
           </TableContainer>
 
           <TablePagination
+            className={'g-flex-column__item-fixed'}
             style={{
               width: '100%',
               marginTop: 20,
@@ -1034,6 +1116,11 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                   <Dialog
                     open={voteDialogOpen}
                     onClose={closeModal}
+                    onClick={(e) => {
+                      if (e.target.classList.contains('MuiDialog-container')) {
+                        closeModal()
+                      }
+                    }}
                     fullWidth={false}
                     maxWidth="false"
                     fullScreen={false}
@@ -1146,7 +1233,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               alt=""
                               onError={(e) => {
                                 e.target.onerror = null;
-                                e.target.src = '/tokens/unknown-logo.png';
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                               }}
                             />
                             <img
@@ -1157,7 +1244,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               alt=""
                               onError={(e) => {
                                 e.target.onerror = null;
-                                e.target.src = '/tokens/unknown-logo.png';
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                               }}
                             />
                           </div>
@@ -1434,21 +1521,21 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {headCell.id === 'balance' && row.token0.symbol}
-                                    {headCell.id === 'liquidity' && row.token0.symbol}
+                                    {headCell.id === 'balance' && formatSymbol(row.token0.symbol)}
+                                    {headCell.id === 'liquidity' && formatSymbol(row.token0.symbol)}
                                     {headCell.id === 'apy' && row?.gaugebribes.length ? (
                                         row?.gaugebribes.map((bribe, idx) => {
                                           return (
                                             <>
                                               {
-                                                bribe.symbol
+                                                formatSymbol(bribe.symbol)
                                               }
                                             </>
                                           );
                                         })
                                       )
                                       : null}
-                                    {headCell.id === 'myVotes' && row.token0.symbol}
+                                    {headCell.id === 'myVotes' && formatSymbol(row.token0.symbol)}
                                   </Typography>
 
                                   <Typography
@@ -1459,10 +1546,10 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {headCell.id === 'balance' && row.token1.symbol}
-                                    {headCell.id === 'liquidity' && row.token1.symbol}
+                                    {headCell.id === 'balance' && formatSymbol(row.token1.symbol)}
+                                    {headCell.id === 'liquidity' && formatSymbol(row.token1.symbol)}
                                     {headCell.id === 'apy' && ''}
-                                    {headCell.id === 'myVotes' && row.token1.symbol}
+                                    {headCell.id === 'myVotes' && formatSymbol(row.token1.symbol)}
                                   </Typography>
                                 </div>
                               </div>

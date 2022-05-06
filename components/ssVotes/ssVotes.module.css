@@ -73,6 +73,10 @@
   white-space: nowrap !important;
 }
 
+.infoSectionPercentDisabled {
+  color: #7C838A !important;
+}
+
 .buttonOverride {
   background: rgb(23, 52, 72) !important;
   color: rgb(6, 211, 215) !important;
@@ -97,6 +101,18 @@
 
 .buttonOverrideFixed--dark {
   background: #494B51 !important;
+  outline: 1px solid #7F828B !important;
+}
+
+.buttonOverrideFixedDisabled--light {
+  background: #D4D5DB!important;
+  color: #A3A9BA !important;
+  outline: 1px solid #A3A9BA !important;
+}
+
+.buttonOverrideFixedDisabled--dark {
+  background: #494B51 !important;
+  color: #7F828B !important;
   outline: 1px solid #7F828B !important;
 }
 
@@ -275,7 +291,7 @@
 @media (max-width: 935px) {
   .tokenSelect {
     position: absolute !important;
-    top: -30px;
+    top: -42px;
     left: 0;
     margin: 0;
   }
@@ -292,10 +308,11 @@
   }
 
   .controls > .tokenSelect {
-    position: absolute !important;
+    margin-bottom: 12px;
+    /* position: absolute !important;
     top: 0;
     left: auto;
-    right: 0;
+    right: 0; */
   }
 
   .addButton {
@@ -327,7 +344,7 @@
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 530px) {
   .container,
   .container3,
   .reAddPadding3 {
@@ -346,7 +363,7 @@
   .textField--withdraw-dark {
     width: 280px;
     height: 114px;
-    background-image: url("/images/ui/swap-coin-top-360--light.svg");
+    background-image: url("/images/ui/swap-coin-top-360--dark.svg");
   }
 
   .textField--amount0-light,
@@ -367,7 +384,7 @@
     margin-top: -30px;
     width: 280px;
     height: 114px;
-    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+    background-image: url("/images/ui/swap-coin-bottom-360--dark.svg");
   }
 
   .textField--To-light,
@@ -376,7 +393,7 @@
   }
 
   .swapIconContainer--dark {
-    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
+    background-image: url("/images/ui/swap-coin-btn-360--dark.svg");
   }
 
   .swapIconContainer--light {
@@ -414,7 +431,7 @@
   }
 
   .mediumInputContainer--dark {
-    background-image: url("/images/ui/liquidity-swap-token-360--light.svg");
+    background-image: url("/images/ui/liquidity-swap-token-360--dark.svg");
   }
 
   .mediumInputContainer--withdrawAmount0 {
@@ -539,15 +556,15 @@
   }
 
   .buttonOverride--dark {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .buttonOverride--dark:hover {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .buttonOverride--dark:active {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .dialogContainer {
@@ -667,7 +684,7 @@
     left: 50%;
     transform: translateX(-50%);
     margin-left: 0 !important;
-    background: transparent url("/images/ui/btn-simple-disabled.svg") !important;
+    background: transparent url("/images/ui/btn-simple-disabled--dark.svg") !important;
   }
 
   .searchInput {

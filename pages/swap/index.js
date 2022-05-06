@@ -48,13 +48,7 @@ function Swap({changeTheme}) {
         :
         <Paper className={classes.notConnectedContent}>
           <div className={classes.contentFloat}>
-            <Typography
-              style={{
-                fontFamily: 'PPNeueMachina UltraBold',
-                fontWeight: 700,
-                fontSize: 72,
-                color: '#ffffff',
-              }}>
+            <Typography className={classes.contentFloatText}>
               Swap
             </Typography>
 

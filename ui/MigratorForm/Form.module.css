@@ -1,0 +1,85 @@
+.form {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  margin-left: 1px;
+  background: var(--background-dark);
+  padding: 13px 30px;
+  /* border: 1px solid var(--border-dark); */
+  border: 1px solid var(--border-light);
+  border-top: none;
+  border-bottom: none;
+  z-index: 2;
+}
+
+.top,
+.top--dark,
+.top--light,
+.bottom,
+.bottom--dark,
+.bottom--light {
+  position: relative;
+}
+
+.top {
+  top: 1px;
+  width: 464px;
+  height: 18px;
+  background-image: url("/images/ui/swap-popup-top-slice.svg");
+  background-repeat: no-repeat;
+}
+
+.bottom {
+  width: 463px;
+  height: 93px;
+  margin-top: -1px;
+  margin-left: 1px;
+  background-image: url("/images/ui/swap-popup-bottom-slice.svg");
+}
+
+.top--dark {
+  background-image: url("/images/ui/swap-popup-top-slice--dark.svg");
+  background-repeat: no-repeat;
+}
+
+.bottom--dark {
+  background-image: url("/images/ui/swap-popup-bottom-slice--dark.svg");
+  background-repeat: no-repeat;
+}
+
+.form--dark {
+  background: var(--background-dark);
+  border-color: var(--border-dark);
+}
+
+.form--light {
+  background: var(--background-light);
+  border-color: var(--border-light);
+}
+
+@media (max-width: 470px) {
+  .form,
+  .top,
+  .bottom {
+    width: 100%;
+  }
+
+  .bottom {
+    height: 58px;
+    background: var(--background-light);
+    border: 1px solid var(--border-light);
+    border-top: none;
+  }
+
+  .bottom--dark {
+    height: 58px;
+    background: var(--background-dark);
+    border-color: var(--border-dark);
+    border-top: none;
+  }
+
+  .form {
+    padding: 13px 20px;
+  }
+}

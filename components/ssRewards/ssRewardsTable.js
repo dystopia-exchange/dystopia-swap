@@ -25,6 +25,7 @@ import { ACTIONS } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import { ArrowDropDown, ExpandLess, ExpandMore } from '@mui/icons-material';
 import TablePaginationActions from '../table-pagination/table-pagination';
+import { formatSymbol } from '../../utils';
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
@@ -407,7 +408,7 @@ const useStyles = makeStyles((theme) => {
     },
     img2Logo: {
       position: 'absolute',
-      left: '23px',
+      left: '28px',
       zIndex: '1',
       top: '0px',
       border: '2px solid #DBE6EC',
@@ -420,7 +421,7 @@ const useStyles = makeStyles((theme) => {
     doubleImages: {
       display: 'flex',
       position: 'relative',
-      width: '70px',
+      width: '80px',
       height: '35px',
     },
     searchContainer: {
@@ -505,14 +506,14 @@ const useStyles = makeStyles((theme) => {
     },
     cellPaddings: {
       padding: '11px 20px',
-      ["@media (max-width:430px)"]: {
+      ["@media (max-width:530px)"]: {
         // eslint-disable-line no-useless-computed-key
         padding: 10,
       },
     },
     cellHeadPaddings: {
       padding: '5px 20px',
-      ["@media (max-width:430px)"]: {
+      ["@media (max-width:530px)"]: {
         // eslint-disable-line no-useless-computed-key
         padding: '5px 10px',
       },
@@ -528,7 +529,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
   const [orderBy, setOrderBy] = React.useState('balance');
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
-  const [tableHeight, setTableHeight] = useState(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
+  const [tableHeight, setTableHeight] = useState(window.innerHeight - 50 - 64 - 74 - 60 - 54 - 20 - 30);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [expanded, setExpanded] = useState('');
 
@@ -574,8 +575,6 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
     }
   };
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rewards.length - page * rowsPerPage);
-
   function tableCellContent(data1, data2, symbol1, symbol2, imgSource1, imgSource2) {
     return (
       <div
@@ -596,19 +595,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
               display: 'flex',
               alignItems: 'center',
             }}>
-            {imgSource1 &&
-              <img
-                className={classes.imgLogo}
-                src={imgSource1}
-                width="24"
-                height="24"
-                alt=""
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = '/tokens/unknown-logo.png';
-                }}
-              />
-            }
+            
 
             <Typography
               className={classes.textSpaced}
@@ -643,19 +630,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
               alignItems: 'flex-end',
               paddingLeft: 10,
             }}>
-            {imgSource2 &&
-              <img
-                className={classes.imgLogo}
-                src={imgSource2}
-                width="24"
-                height="24"
-                alt=""
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = '/tokens/unknown-logo.png';
-                }}
-              />
-            }
+           
 
             <Typography
               className={`${classes.textSpaced} ${classes.symbol}`}
@@ -689,7 +664,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
   };
 
   window.addEventListener('resize', () => {
-    setTableHeight(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
+    setTableHeight(window.innerHeight - 50 - 64 - 74 - 60 - 54 - 20 - 30);
     setWindowWidth(window.innerWidth);
   });
 
@@ -698,9 +673,11 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
       {windowWidth > 660 &&
         <div className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
           <TableContainer
+            className={'g-flex-column__item-fixed'}
             style={{
               overflow: 'auto',
               height: tableHeight,
+              background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
             }}>
             <Table
               stickyHeader
@@ -747,7 +724,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                   alt=""
                                   onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = '/tokens/unknown-logo.png';
+                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                   }}
                                 />
                                 <img
@@ -758,7 +735,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                   alt=""
                                   onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = '/tokens/unknown-logo.png';
+                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                   }}
                                 />
                               </div>
@@ -773,7 +750,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                     color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   }}
                                   noWrap>
-                                  {row?.symbol}
+                                  {formatSymbol(row?.symbol)}
                                 </Typography>
                                 <Typography
                                   className={classes.textSpaced}
@@ -800,7 +777,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                   alt=""
                                   onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = '/tokens/unknown-logo.png';
+                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                   }}
                                 />
                               </div>
@@ -815,7 +792,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                     color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   }}
                                   noWrap>
-                                  {row?.lockToken?.symbol}
+                                  {formatSymbol(row?.lockToken?.symbol)}
                                 </Typography>
                                 <Typography
                                   className={classes.textSpaced}
@@ -896,7 +873,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                   null,
                                   bribe.token?.symbol,
                                   null,
-                                  (bribe && bribe.token && bribe.token.logoURI) ? bribe.token.logoURI : '/tokens/unknown-logo.png',
+                                  (bribe && bribe.token && bribe.token.logoURI) ? bribe.token.logoURI : `/tokens/unknown-logo--${appTheme}.svg`,
                                 )
                               );
                             })
@@ -908,8 +885,8 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                               formatCurrency(row.claimable1),
                               row.token0?.symbol,
                               row.token1?.symbol,
-                              (row.token0 && row.token0.logoURI) ? row.token0.logoURI : '/tokens/unknown-logo.png',
-                              (row.token1 && row.token1.logoURI) ? row.token1.logoURI : '/tokens/unknown-logo.png',
+                              (row.token0 && row.token0.logoURI) ? row.token0.logoURI : `/tokens/unknown-logo--${appTheme}.svg`,
+                              (row.token1 && row.token1.logoURI) ? row.token1.logoURI : `/tokens/unknown-logo--${appTheme}.svg`,
                             )
                           }
 
@@ -968,6 +945,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
           </TableContainer>
 
           <TablePagination
+            className={'g-flex-column__item-fixed'}
             style={{
               width: '100%',
               marginTop: 20,
@@ -1035,7 +1013,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                   alt=""
                                   onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = '/tokens/unknown-logo.png';
+                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                   }}
                                 />
                                 <img
@@ -1046,7 +1024,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                   alt=""
                                   onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = '/tokens/unknown-logo.png';
+                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                   }}
                                 />
                               </div>
@@ -1061,7 +1039,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                     color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   }}
                                   noWrap>
-                                  {row?.symbol}
+                                  {formatSymbol(row?.symbol)}
                                 </Typography>
                                 <Typography
                                   className={classes.textSpaced}
@@ -1088,7 +1066,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                   alt=""
                                   onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = '/tokens/unknown-logo.png';
+                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                   }}
                                 />
                               </div>
@@ -1103,7 +1081,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                     color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   }}
                                   noWrap>
-                                  {row?.lockToken?.symbol}
+                                  {formatSymbol(row?.lockToken?.symbol)}
                                 </Typography>
                                 <Typography
                                   className={classes.textSpaced}
@@ -1204,7 +1182,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                       null,
                                       bribe.token?.symbol,
                                       null,
-                                      (bribe && bribe.token && bribe.token.logoURI) ? bribe.token.logoURI : '/tokens/unknown-logo.png',
+                                      (bribe && bribe.token && bribe.token.logoURI) ? bribe.token.logoURI : `/tokens/unknown-logo--${appTheme}.svg`,
                                     )
                                   );
                                 })
@@ -1216,8 +1194,8 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                   formatCurrency(row.claimable1),
                                   row.token0?.symbol,
                                   row.token1?.symbol,
-                                  (row.token0 && row.token0.logoURI) ? row.token0.logoURI : '/tokens/unknown-logo.png',
-                                  (row.token1 && row.token1.logoURI) ? row.token1.logoURI : '/tokens/unknown-logo.png',
+                                  (row.token0 && row.token0.logoURI) ? row.token0.logoURI : `/tokens/unknown-logo--${appTheme}.svg`,
+                                  (row.token1 && row.token1.logoURI) ? row.token1.logoURI : `/tokens/unknown-logo--${appTheme}.svg`,
                                 )
                               }
 
@@ -1361,7 +1339,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {row.token0.symbol}
+                                    {formatSymbol(row.token0.symbol)}
                                   </Typography>
 
                                   <Typography
@@ -1372,7 +1350,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {row.token1.symbol}
+                                    {formatSymbol(row.token1.symbol)}
                                   </Typography>
                                 </div>
                               </div>

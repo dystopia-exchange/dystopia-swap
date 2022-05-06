@@ -42,6 +42,7 @@ import { formatCurrency } from '../../utils';
 import classes from './ssLiquidityPairs.module.css';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import TablePaginationActions from '../table-pagination/table-pagination';
+import { formatSymbol } from '../../utils';
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
@@ -437,23 +438,23 @@ const useStyles = makeStyles({
     position: 'absolute',
     left: '0px',
     top: '0px',
-    border: '1px solid #DBE6EC',
-    borderRadius: '30px',
+    outline: '1px solid #DBE6EC',
+    borderRadius: '100px',
     background: 'rgb(25, 33, 56)',
   },
   img2Logo: {
     position: 'absolute',
-    left: '23px',
+    left: '28px',
     zIndex: '1',
     top: '0px',
-    border: '1px solid #DBE6EC',
-    borderRadius: '30px',
+    outline: '1px solid #DBE6EC',
+    borderRadius: '100px',
     background: 'rgb(25, 33, 56)',
   },
   doubleImages: {
     display: 'flex',
     position: 'relative',
-    width: '70px',
+    width: '80px',
     height: '35px',
   },
   searchContainer: {
@@ -495,13 +496,13 @@ const useStyles = makeStyles({
       padding: '5px 0',
       paddingLeft: 20,
     },
-    ["@media (max-width:430px)"]: {
+    ["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       fontSize: '12px !important',
     },
   },
   myDepositsText: {
-    ["@media (max-width:430px)"]: {
+    ["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       display: 'flex',
       flexDirection: 'column',
@@ -694,7 +695,7 @@ const useStyles = makeStyles({
     background: '#D2D0F2',
     color: '#8F5AE8',
     transition: 'all ease 300ms',
-    ["@media (max-width:430px)"]: {
+    ["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       width: 100,
       fontSize: 14,
@@ -717,17 +718,21 @@ const useStyles = makeStyles({
   sortSelect: {
     position: 'absolute',
     top: 60,
+    ["@media (max-width:530px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      width: '60%',
+    },
   },
   cellPaddings: {
     padding: '11px 20px',
-    ["@media (max-width:430px)"]: {
+    ["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       padding: 10,
     },
   },
   cellHeadPaddings: {
     padding: '5px 20px',
-    ["@media (max-width:430px)"]: {
+    ["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       padding: '5px 10px',
     },
@@ -1153,7 +1158,6 @@ export default function EnhancedTable({pairs}) {
 
     return true;
   });
-  const emptyRows = 5 - Math.min(5, filteredPairs.length - page * 5);
 
   const {appTheme} = useAppThemeContext();
 
@@ -1165,6 +1169,11 @@ export default function EnhancedTable({pairs}) {
   const handleChangeAccordion = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
+
+  console.log(
+    '------',
+    stableSort(filteredPairs, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+  )
 
   return (
     <>
@@ -1186,9 +1195,11 @@ export default function EnhancedTable({pairs}) {
             }}
             className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
             <TableContainer
+              className={'g-flex-column__item'}
               style={{
                 overflow: 'auto',
                 height: tableHeight,
+                background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
               }}>
               <Table
                 stickyHeader
@@ -1232,7 +1243,7 @@ export default function EnhancedTable({pairs}) {
                                   alt=""
                                   onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = '/tokens/unknown-logo.png';
+                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                   }}
                                 />
                                 <img
@@ -1243,7 +1254,7 @@ export default function EnhancedTable({pairs}) {
                                   alt=""
                                   onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = '/tokens/unknown-logo.png';
+                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                   }}
                                 />
                               </div>
@@ -1257,7 +1268,7 @@ export default function EnhancedTable({pairs}) {
                                     color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   }}
                                   noWrap>
-                                  {row?.symbol}
+                                  {formatSymbol(row?.symbol)}
                                 </Typography>
                                 <Typography
                                   className={classes.textSpaced}
@@ -1353,7 +1364,7 @@ export default function EnhancedTable({pairs}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {row.token0.symbol}
+                                    {formatSymbol(row.token0.symbol)}
                                   </Typography>
 
                                   <Typography
@@ -1364,7 +1375,7 @@ export default function EnhancedTable({pairs}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {row.token1.symbol}
+                                    {formatSymbol(row.token1.symbol)}
                                   </Typography>
                                 </div>
                               }
@@ -1544,7 +1555,7 @@ export default function EnhancedTable({pairs}) {
                                         lineHeight: '120%',
                                         color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                       }}>
-                                      {row.token0.symbol}
+                                      {formatSymbol(row.token0.symbol)}
                                     </Typography>
 
                                     <Typography
@@ -1555,7 +1566,7 @@ export default function EnhancedTable({pairs}) {
                                         lineHeight: '120%',
                                         color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                       }}>
-                                      {row.token1.symbol}
+                                      {formatSymbol(row.token1.symbol)}
                                     </Typography>
                                   </div>
                                 </div>
@@ -1685,7 +1696,7 @@ export default function EnhancedTable({pairs}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {row.token0.symbol}
+                                    {formatSymbol(row.token0.symbol)}
                                   </Typography>
 
                                   <Typography
@@ -1696,7 +1707,7 @@ export default function EnhancedTable({pairs}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                    {row.token1.symbol}
+                                    {formatSymbol(row.token1.symbol)}
                                   </Typography>
                                 </div>
                               }
@@ -1800,7 +1811,7 @@ export default function EnhancedTable({pairs}) {
                                         lineHeight: '120%',
                                         color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                       }}>
-                                      {row.token0.symbol}
+                                      {formatSymbol(row.token0.symbol)}
                                     </Typography>
 
                                     <Typography
@@ -1811,7 +1822,7 @@ export default function EnhancedTable({pairs}) {
                                         lineHeight: '120%',
                                         color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                       }}>
-                                      {row.token1.symbol}
+                                      {formatSymbol(row.token1.symbol)}
                                     </Typography>
                                   </div>
                                 }
@@ -1889,16 +1900,12 @@ export default function EnhancedTable({pairs}) {
                         </TableRow>
                       );
                     })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{height: 61 * emptyRows}}>
-                      <TableCell colSpan={7}/>
-                    </TableRow>
-                  )}
                 </TableBody>
               </Table>
             </TableContainer>
 
             <TablePagination
+              className={'g-flex-column__item-fixed'}
               style={{
                 width: '100%',
                 marginTop: 20,
@@ -1940,6 +1947,7 @@ export default function EnhancedTable({pairs}) {
                     marginBottom: 20,
                     background: appTheme === 'dark' ? '#24292D' : '#DBE6EC',
                     border: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                    borderRadius: 0,
                   }}
                   disableGutters={true}
                   expanded={expanded === labelId}
@@ -1968,7 +1976,7 @@ export default function EnhancedTable({pairs}) {
                             alt=""
                             onError={(e) => {
                               e.target.onerror = null;
-                              e.target.src = '/tokens/unknown-logo.png';
+                              e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                             }}
                           />
                           <img
@@ -1979,7 +1987,7 @@ export default function EnhancedTable({pairs}) {
                             alt=""
                             onError={(e) => {
                               e.target.onerror = null;
-                              e.target.src = '/tokens/unknown-logo.png';
+                              e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                             }}
                           />
                         </div>
@@ -2133,7 +2141,7 @@ export default function EnhancedTable({pairs}) {
                                   lineHeight: '120%',
                                   color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                 }}>
-                                {row.token0.symbol}
+                                {formatSymbol(row.token0.symbol)}
                               </Typography>
 
                               <Typography
@@ -2144,7 +2152,7 @@ export default function EnhancedTable({pairs}) {
                                   lineHeight: '120%',
                                   color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                 }}>
-                                {row.token1.symbol}
+                                {formatSymbol(row.token1.symbol)}
                               </Typography>
                             </div>
                           </div>
@@ -2279,7 +2287,7 @@ export default function EnhancedTable({pairs}) {
                                     lineHeight: '120%',
                                     color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                   }}>
-                                  {row.token0.symbol}
+                                  {formatSymbol(row.token0.symbol)}
                                 </Typography>
 
                                 <Typography
@@ -2290,7 +2298,7 @@ export default function EnhancedTable({pairs}) {
                                     lineHeight: '120%',
                                     color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                   }}>
-                                  {row.token1.symbol}
+                                  {formatSymbol(row.token1.symbol)}
                                 </Typography>
                               </div>
                             </div>

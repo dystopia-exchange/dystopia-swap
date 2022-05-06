@@ -48,19 +48,13 @@ function Vote({ changeTheme }) {
         :
         <Paper className={classes.notConnectedContent}>
           <div className={classes.contentFloat}>
-            <Typography
-              style={{
-                fontFamily: 'PPNeueMachina UltraBold',
-                fontWeight: 700,
-                fontSize: 72,
-                color: '#ffffff',
-              }}>
+            <Typography className={classes.contentFloatText}>
               Vote
             </Typography>
 
             <div className={classes.mainDescBg}>
               <Typography className={classes.mainDescNC} variant="body2">
-                Use your veSolid to vote for your selected liquidity pair’s rewards distribution or create a bribe to encourage others to do the same.
+                Use your veDyst to vote for your selected liquidity pair’s rewards distribution or create a bribe to encourage others to do the same.
               </Typography>
             </div>
 

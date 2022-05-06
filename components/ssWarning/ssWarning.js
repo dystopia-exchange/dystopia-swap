@@ -2,9 +2,9 @@ import { Dialog, Typography, Button } from "@mui/material";
 import classes from "./ssWarning.module.css";
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
-export default function ffWarning({close}) {
+export default function ffWarning({close, title, subTitle, icon, description, btnLabel1, btnLabel2, action2}) {
   const navigateToMedium = () => {
-    window.open("https://andrecronje.medium.com/solidly-preparation-for-launch-8e653ce8a428", "_blank");
+    window.open("https://medium.com/@DystopiaSwap", "_blank");
   };
 
   const {appTheme} = useAppThemeContext();
@@ -14,6 +14,11 @@ export default function ffWarning({close}) {
       fullScreen
       open={true}
       onClose={close}
+      onClick={(e) => {
+        if (e.target.classList.contains('MuiDialog-container')) {
+          close()
+        }
+      }}
       className={classes.dialogWrapper}
       classes={{
         paper: appTheme === "dark" ? classes['paperBody--dark'] : classes['paperBody--light'],
@@ -75,34 +80,47 @@ export default function ffWarning({close}) {
               alignItems: 'center',
             }}>
             <img
-              src={appTheme === "dark" ? "/images/icon-warning--dark.svg" : "/images/icon-warning.svg"}
+              src={appTheme === "dark" ? `/images/${icon ? icon : 'icon-warning'}--dark.svg` : `/images/${icon ? icon : 'icon-warning'}.svg`}
               className={classes.warningIcon}/>
 
             <Typography className={[classes.title1, classes[`title1--${appTheme}`]].join(' ')}>
-              Dystopia Disclaimer:
+              {title ? title : 'Dystopia Disclaimer:'}
             </Typography>
           </div>
 
           <Typography className={[classes.title2, classes[`title2--${appTheme}`]].join(' ')}>
-            Acknowledgement of Terms &amp; Conditions of access
+            {subTitle ? subTitle : 'Acknowledgement of Terms &amp; Conditions of access'}
           </Typography>
 
           <Typography
             className={[classes.paragraph, classes[`paragraph--${appTheme}`]].join(' ')}
             align="center">
-            <span
-              className={classes.paragraph1}
-              style={{
-                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-              }}>
-              Use of the Dystopia.exchange website, services, dapp, or application is subject to the following Terms & Conditions and hereby confirm that by proceeding and interacting with the protocoL I am aware of these and accept them in full:
-            </span>
-            <br/><br/>
-            Dystopia.exchange is a smart contract protocol in alpha stage of launch, and even though multiple security audits have been completed on the smart contracts, I understand the risks associated with using the Dystopia protocol and associated functions.
-            <br/><br/>
-            Any interactions that I have with the associated Dystopia protocol apps, smart contracts or any related functions MAY place my funds at risk, and hereby release the Dystopia protocol and its contributors, team members, and service providers from any and all liability with my use of the above-mentioned functions.
-            <br/><br/>
-            I am lawfully permitted to access this site and use the dystopia.exchange application functions, and I am not in contravention of any laws governing my jurisdiction of residence or citizenship.
+            {description
+              ? description
+              : <>
+                <span
+                  className={classes.paragraph1}
+                  style={{
+                    color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                  }}>
+                  Use of the Dystopia.exchange website, services, dapp, or application is subject to the following Terms & Conditions and hereby confirm that by proceeding and interacting with the protocoL I am aware of these and accept them in full:
+                </span>
+                <br/><br/>
+                Dystopia.exchange is a smart contract protocol in alpha stage of launch, and even though multiple
+                security
+                audits have been completed on the smart contracts, I understand the risks associated with using the
+                Dystopia protocol and associated functions.
+                <br/><br/>
+                Any interactions that I have with the associated Dystopia protocol apps, smart contracts or any related
+                functions MAY place my funds at risk, and hereby release the Dystopia protocol and its contributors,
+                team
+                members, and service providers from any and all liability with my use of the above-mentioned functions.
+                <br/><br/>
+                I am lawfully permitted to access this site and use the dystopia.exchange application functions, and I
+                am
+                not in contravention of any laws governing my jurisdiction of residence or citizenship.
+              </>
+            }
           </Typography>
 
           <div className={classes.buttonsContainer}>
@@ -110,15 +128,16 @@ export default function ffWarning({close}) {
               className={[classes.primaryButton, classes[`primaryButton--${appTheme}`]].join(' ')}
               onClick={close}>
               <Typography className={classes.buttonTextPrimary}>
-                I understand the risks involved, proceed to the app
+                {btnLabel1 ? btnLabel1 : 'I understand the risks involved, proceed to the app'}
               </Typography>
             </div>
 
             <div
               className={[classes.secondaryButton, classes[`secondaryButton--${appTheme}`]].join(' ')}
-              onClick={navigateToMedium}>
-              <Typography className={[classes.buttonTextSecondary, classes[`buttonTextSecondary--${appTheme}`]].join(' ')}>
-                Read more about it on the Medium article
+              onClick={action2 ? action2 : navigateToMedium}>
+              <Typography
+                className={[classes.buttonTextSecondary, classes[`buttonTextSecondary--${appTheme}`]].join(' ')}>
+                {btnLabel2 ? btnLabel2 : 'Read more about it on the Medium article'}
               </Typography>
             </div>
           </div>

@@ -25,6 +25,7 @@ import {
   ETHERSCAN_URL,
 } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import { formatSymbol } from '../../utils';
 
 export default function SSLiquidityCreate() {
 
@@ -332,7 +333,7 @@ export default function SSLiquidityCreate() {
                 className: classes.largeInput
               }}
             />
-            <Typography color='textSecondary' className={ classes.smallerText }>{ assetValue?.symbol }</Typography>
+            <Typography color='textSecondary' className={ classes.smallerText }>{ formatSymbol(assetValue?.symbol) }</Typography>
           </div>
         </div>
       </div>
@@ -351,11 +352,12 @@ export default function SSLiquidityCreate() {
           className={['g-flex'].join(' ')}>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
             <Typography className={ classes.title } >{ BigNumber(amount1).gt(0) ? formatCurrency(BigNumber(amount0).div(amount1)) : '0.00' }</Typography>
-            <Typography className={ classes.text } >{ `${asset0?.symbol} per ${asset1?.symbol}` }</Typography>
+            <Typography className={ classes.text } >{ `${formatSymbol(asset0?.symbol)} per ${formatSymbol(asset1?.symbol)}` }</Typography>
           </div>
-          <div className={ classes.priceInfo }>
+
+          <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
             <Typography className={ classes.title } >{ BigNumber(amount0).gt(0) ? formatCurrency(BigNumber(amount1).div(amount0)) : '0.00' }</Typography>
-            <Typography className={ classes.text } >{ `${asset1?.symbol} per ${asset0?.symbol}` }</Typography>
+            <Typography className={ classes.text } >{ `${formatSymbol(asset1?.symbol)} per ${formatSymbol(asset0?.symbol)}` }</Typography>
           </div>
         </div>
       </div>
@@ -382,7 +384,7 @@ export default function SSLiquidityCreate() {
                       <Typography>Token #{option.id}</Typography>
                       <div>
                         <Typography align='right' className={ classes.smallerText }>{ formatCurrency(option.lockValue) }</Typography>
-                        <Typography color='textSecondary' className={ classes.smallerText }>{veToken?.symbol}</Typography>
+                        <Typography color='textSecondary' className={ classes.smallerText }>{formatSymbol(veToken?.symbol)}</Typography>
                       </div>
                     </div>
                   </MenuItem>
@@ -595,12 +597,12 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               alt=""
               src={ asset ? `${asset.logoURI}` : '' }
               height='60px'
-              onError={(e)=>{e.target.onerror = null; e.target.src="/tokens/unknown-logo.png"}}
+              onError={(e)=>{e.target.onerror = null; e.target.src=`/tokens/unknown-logo--${appTheme}.svg`}}
             />
           </div>
         </div>
         <div className={ classes.assetSelectIconName }>
-          <Typography variant='h5'>{ asset ? asset.symbol : '' }</Typography>
+          <Typography variant='h5'>{ asset ? formatSymbol(asset.symbol) : '' }</Typography>
           <Typography variant='subtitle1' color='textSecondary'>{ asset ? asset.name : '' }</Typography>
         </div>
         <div className={ classes.assetSelectActions}>
@@ -625,12 +627,12 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               alt=""
               src={ asset ? `${asset.logoURI}` : '' }
               height='60px'
-              onError={(e)=>{e.target.onerror = null; e.target.src="/tokens/unknown-logo.png"}}
+              onError={(e)=>{e.target.onerror = null; e.target.src=`/tokens/unknown-logo--${appTheme}.svg`}}
             />
           </div>
         </div>
         <div className={ classes.assetSelectIconName }>
-          <Typography variant='h5'>{ asset ? asset.symbol : '' }</Typography>
+          <Typography variant='h5'>{ asset ? formatSymbol(asset.symbol) : '' }</Typography>
           <Typography variant='subtitle1' color='textSecondary'>{ asset ? asset.name : '' }</Typography>
         </div>
         <div className={ classes.assetSelectBalance}>
@@ -729,7 +731,7 @@ function AssetSelect({ type, value, assetOptions, onSelect }) {
               alt=""
               src={ value ? `${value.logoURI}` : '' }
               height='100px'
-              onError={(e)=>{e.target.onerror = null; e.target.src="/tokens/unknown-logo.png"}}
+              onError={(e)=>{e.target.onerror = null; e.target.src=`/tokens/unknown-logo--${appTheme}.svg`}}
             />
           </div>
         </div>

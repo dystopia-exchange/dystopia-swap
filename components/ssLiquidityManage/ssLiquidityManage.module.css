@@ -239,6 +239,76 @@
   background: transparent url("/images/ui/liquidity-tab-left--active--dark.svg") !important;
 }
 
+.slippageIconContainer {
+  display: flex;
+  padding: 11px;
+  background: transparent;
+  border: 1px solid #86b9d6;
+  cursor: pointer;
+}
+
+.slippageIconContainer--active {
+  background: #0b5e8e;
+  border: 1px solid #0b5e8e;
+}
+
+.selectTokenIconContainer--active {
+  background: #0b5e8e;
+  border: 1px solid #0b5e8e;
+  transform: rotate(180deg);
+}
+
+.slippageIconContainer--dark {
+  background: transparent;
+  border: 1px solid #5F7285;
+}
+
+.slippageIconContainer--dark.slippageIconContainer--active {
+  background: #5F7285;
+  border: 1px solid #5F7285;
+}
+
+.slippageTextContainer {
+  padding: 11px 0 11px 20px;
+  border: 1px solid #86b9d6;
+  border-right: none;
+}
+
+.slippageTextContainer--dark {
+  border: 1px solid #5F7285;
+  border-right: none;
+}
+
+.slippageIcon {
+  width: 20px;
+  height: 20px;
+  fill: #0B5E8E;
+}
+
+.slippageIcon--active {
+  fill: #ffffff;
+}
+
+.slippageIcon--dark {
+  fill: #4CADE6;
+}
+
+.popoverPaper {
+  width: 337px !important;
+  height: 300px !important;
+  padding: 30px !important;
+  background: #DBE6EC !important;
+  border: 1px solid #0B5E8E !important;
+  box-shadow: 5px 5px 20px rgba(14, 44, 79, 0.25) !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+}
+
+.popoverPaper--dark {
+  background: #151718 !important;
+  border: 1px solid #5F7285 !important;
+}
+
 .textField {
   margin-top: 2px;
   margin-bottom: 2px;
@@ -619,10 +689,14 @@
   align-items: center;
 }
 
+.paperScrollPaper {
+  border-radius: 0 !important;
+}
+
 .depositInfoHeading {
   width: 100%;
   margin-top: 20px !important;
-  font-weight: 700 !important;
+  font-weight: 500 !important;
   color: #5688A5 !important;
   font-size: 14px !important;
 }
@@ -632,6 +706,7 @@
 }
 
 .priceInfos {
+  position: relative;
   display: flex;
   width: 100%;
   margin-top: 7px;
@@ -683,6 +758,48 @@
 
 .priceInfo--dark > .text {
   color: #5F7285 !important;
+}
+
+
+
+.priceInfo::before,
+.priceInfo::after {
+  margin-top: 3.5px;
+}
+
+.priceInfo::before,
+.priceInfo::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  z-index: 999;
+}
+
+.priceInfo::before,
+.priceInfo::after {
+  top: -4.5px;
+  border-top: 1px solid var(--main-secondary-dark);
+}
+
+.priceInfo::before {
+  left: -1px;
+  border-left: 1px solid var(--main-secondary-dark);
+}
+
+.priceInfo::after {
+  right: -1px;
+  border-right: 1px solid var(--main-secondary-dark);
+}
+
+.priceInfo--dark::before,
+.priceInfo--dark::after {
+  border-color: var(--main-secondary-dark);
+}
+
+.priceInfo--light::before,
+.priceInfo--light::after {
+  border-color: var(--main-secondary-light);
 }
 
 .titleSection {
@@ -741,8 +858,33 @@
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  width: calc(100% - 24px);
+  width: 100%;
   padding: 6px 12px;
+}
+
+.controls {
+  width: 100%;
+  display: flex;
+  margin-top: 20px;
+}
+
+.controlItem {
+  width: 50%;
+}
+
+.controlItem:first-child {
+  margin-right: 20px;
+}
+
+.controlPopover {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  color: #5688A5;
+}
+
+.controlPopover--dark {
+  color: #4CADE6;
 }
 
 .toggles {
@@ -775,7 +917,7 @@
 }
 
 .toggleOption.active {
-  border: 1px solid #06D3D7;
+  border: 1px solid #86B9D6;
   background: #86B9D6 !important;
   color: #FFFFFF !important;
 }
@@ -785,6 +927,7 @@
 }
 
 .toggleOption--dark.active {
+  border: 1px solid #5F7285;
   background: #5F7285 !important;
 }
 
@@ -813,7 +956,6 @@
 }
 
 .tokenSelect {
-  margin-top: 20px;
   border-radius: 0 !important;
 }
 
@@ -826,17 +968,63 @@
 }
 
 .tokenSelectInput {
-  padding: 3px !important;
+  padding: 4.5px !important;
   border: 1px solid #86B9D6 !important;
+  border-right: none !important;
   border-radius: 0 !important;
 }
 
 .tokenSelectInput--dark {
-  padding: 3px !important;
+  padding: 4.5px !important;
   border: 1px solid #5F7285 !important;
+  border-right: none !important;
   border-radius: 0 !important;
   color: #4CADE6 !important;
 }
+
+.tokenSelectInput > .menuOption > .menuOptionSec,
+.tokenSelectInput--dark > .menuOption > .menuOptionSec {
+  display: none !important;
+}
+
+.tokenSelectInput > .menuOption > .menuOptionLabel,
+.tokenSelectInput--dark > .menuOption > .menuOptionLabel {
+  font-weight: 400 !important;
+  font-size: 14px !important;
+}
+
+.list,
+.list--dark {
+  padding: 0 !important;
+  background: #DBE6EC !important;
+}
+
+.list--dark {
+  background: #151718 !important;
+}
+
+.list > li,
+.list--dark > li {
+  padding: 0 !important;
+}
+
+.list > li > .menuOption,
+.list--dark > li > .menuOption {
+  width: 100%;
+  padding: 10px !important;
+  border: 1px solid #0B5E8E !important;
+}
+
+.list > li:not(:last-of-type) > .menuOption,
+.list--dark > li:not(:last-of-type) > .menuOption {
+  border-bottom: none !important;
+}
+
+.list > li > .menuOption > .menuOptionSec,
+.list--dark > li > .menuOption > .menuOptionSec {
+  padding-right: 0 !important;
+}
+
 
 .assetSelectBalance {
   flex: 1;
@@ -862,6 +1050,37 @@
 
 .searchInput > fieldset {
   border: none;
+}
+
+.slippageRoot {
+  padding: 9px 12px !important;
+  border: 1px solid #86B9D6 !important;
+  margin-bottom: 20px !important;
+}
+
+.slippageRoot--dark {
+  border-color: #5F7285 !important;
+}
+
+.slippageDivider {
+  border-bottom: 1px solid #86B9D6;
+  margin-bottom: 20px;
+}
+
+.slippageDivider--dark {
+  border-color: #5F7285;
+}
+
+.inputBalanceSlippageText--light,
+.inputAdornment--light {
+  color: #325569 !important;
+  -webkit-text-fill-color: #325569 !important;
+}
+
+.inputBalanceSlippageText--dark,
+.inputAdornment--dark {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
 .manageLocalContainer {
@@ -954,8 +1173,8 @@
 }
 
 .disclaimer {
-  font-size: 13px !important;
-  font-weight: 200 !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
   border-radius: 0;
   background: #CFE5F2 !important;
   border: 2px solid #15B525 !important;
@@ -980,11 +1199,24 @@
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 530px) {
   .container,
   .container3,
   .reAddPadding3 {
+    width: 320px;
+  }
+
+  .controls {
+    flex-direction: column;
+  }
+
+  .controlItem {
     width: 100%;
+  }
+
+  .controlItem:first-child {
+    margin-right: 0;
+    margin-bottom: 20px;
   }
 
   .top {
@@ -999,7 +1231,7 @@
   .textField--withdraw-dark {
     width: 280px;
     height: 114px;
-    background-image: url("/images/ui/swap-coin-top-360--light.svg");
+    background-image: url("/images/ui/swap-coin-top-360--dark.svg");
   }
 
   .textField--amount0-light,
@@ -1020,7 +1252,7 @@
     margin-top: -30px;
     width: 280px;
     height: 114px;
-    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+    background-image: url("/images/ui/swap-coin-bottom-360--dark.svg");
   }
 
   .textField--To-light,
@@ -1029,7 +1261,7 @@
   }
 
   .swapIconContainer--dark {
-    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
+    background-image: url("/images/ui/swap-coin-btn-360--dark.svg");
   }
 
   .swapIconContainer--light {
@@ -1054,7 +1286,7 @@
   }
 
   .mediumInputContainer {
-    width: 135px;
+    width: 130px;
     height: 61px;
   }
 
@@ -1067,11 +1299,21 @@
   }
 
   .mediumInputContainer--dark {
-    background-image: url("/images/ui/liquidity-swap-token-360--light.svg");
+    background-image: url("/images/ui/liquidity-swap-token-360--dark.svg");
   }
 
   .mediumInputContainer--withdrawAmount0 {
-    margin-right: 10px;
+    margin-right: 20px;
+  }
+
+  .mediumInputContainer--withdrawAmount0,
+  .mediumInputContainer--withdrawAmount1 {
+    border-right: 1px solid #86B9D6;
+  }
+
+  .mediumInputContainer--dark.mediumInputContainer--withdrawAmount0,
+  .mediumInputContainer--dark.mediumInputContainer--withdrawAmount1 {
+    border-right: 1px solid #5F7285;
   }
 
   .swapInputs {
@@ -1192,15 +1434,15 @@
   }
 
   .buttonOverride--dark {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .buttonOverride--dark:hover {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .buttonOverride--dark:active {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .dialogContainer {
@@ -1284,6 +1526,15 @@
     margin-right: 10px;
   }
 
+  .tokenSelectInput {
+    padding: 4.5px 0 4.5px 5px !important;
+  }
+
+  .popoverPaper {
+    width: 300px !important;
+    padding: 20px !important;
+  }
+
   .inputsContainer {
     display: flex;
     flex-direction: column;
@@ -1324,6 +1575,6 @@
     left: 50%;
     transform: translateX(-50%);
     margin-left: 0 !important;
-    background: transparent url("/images/ui/btn-simple-disabled.svg") !important;
+    background: transparent url("/images/ui/btn-simple-disabled--dark.svg") !important;
   }
 }

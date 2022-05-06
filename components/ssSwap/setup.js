@@ -14,7 +14,7 @@ import {
   DialogContent,
 } from '@mui/material';
 import { Search, ArrowDownward, ArrowForwardIos, DeleteOutline, Close, ArrowBackIosNew } from '@mui/icons-material';
-import {useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { withTheme } from '@mui/styles';
 
 import { formatCurrency, formatAddress, formatCurrencyWithSymbol, formatCurrencySmall } from '../../utils';
@@ -28,6 +28,7 @@ import {
 } from '../../stores/constants';
 import BigNumber from 'bignumber.js';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import BtnSwap from '../../ui/BtnSwap';
 
 function Setup() {
   const [, updateState] = React.useState();
@@ -262,7 +263,6 @@ function Setup() {
   };
 
   const renderSwapInformation = () => {
-
     if (quoteError) {
       return (
         <div className={[classes.quoteLoader, classes.quoteLoaderError].join(" ")}>
@@ -280,111 +280,122 @@ function Setup() {
       );
     }
 
-    if (!quote) {
-      return;
-      <div className={[classes.quoteLoader, classes.quoteLoaderInfo].join(" ")}></div>;
-    }
-
     return (
       <div className={classes.depositInfoContainer}>
-        {
-          BigNumber(quote.priceImpact).gt(0.5) &&
-          <div
-            className={[classes.warningContainer, classes[`warningContainer--${appTheme}`], BigNumber(quote.priceImpact).gt(5) ? classes.warningContainerError : classes.warningContainerWarning].join(" ")}>
-            <div className={[
-              classes.warningDivider,
-              BigNumber(quote.priceImpact).gt(5) ? classes.warningDividerError : classes.warningDividerWarning].join(" ")
-            }>
-            </div>
+        {quote &&
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+          }}>
+            {BigNumber(quote.priceImpact).gt(0.5) &&
+              <div
+                className={[classes.warningContainer, classes[`warningContainer--${appTheme}`], BigNumber(quote.priceImpact).gt(5) ? classes.warningContainerError : classes.warningContainerWarning].join(" ")}>
+                <div className={[
+                  classes.warningDivider,
+                  BigNumber(quote.priceImpact).gt(5) ? classes.warningDividerError : classes.warningDividerWarning].join(" ")
+                }>
+                </div>
+
+                <Typography
+                  className={[BigNumber(quote.priceImpact).gt(5) ? classes.warningError : classes.warningWarning, classes[`warningText--${appTheme}`]].join(" ")}
+                  align="center">Price impact: {formatCurrency(quote.priceImpact)}%</Typography>
+              </div>
+            }
 
             <Typography
-              className={[BigNumber(quote.priceImpact).gt(5) ? classes.warningError : classes.warningWarning, classes[`warningText--${appTheme}`]].join(" ")}
-              align="center">Price impact: {formatCurrency(quote.priceImpact)}%</Typography>
-          </div>
-        }
-
-        <Typography className={[classes.depositInfoHeading, classes.depositInfoHeadingPrice].join(" ")}>Price
-          Info</Typography>
-
-        <div className={[classes.priceInfos, classes[`priceInfos--${appTheme}`]].join(' ')}>
-          <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
-            <Typography className={classes.text}>
-              {`${fromAssetValue?.symbol} per ${toAssetValue?.symbol}`}
+              className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`], classes.depositInfoHeadingPrice].join(" ")}>
+              Price Info
             </Typography>
 
-            <Typography className={classes.title}>
-              {formatCurrency(BigNumber(quote.inputs.fromAmount).div(quote.output.finalValue).toFixed(18))}
-            </Typography>
-          </div>
+            <div className={[classes.priceInfos, classes[`priceInfos--${appTheme}`]].join(' ')}>
+              <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+                <Typography className={classes.text}>
+                  {`${fromAssetValue?.symbol} per ${toAssetValue?.symbol}`}
+                </Typography>
 
-          <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
-            <Typography className={classes.text}>
-              {`${toAssetValue?.symbol} per ${fromAssetValue?.symbol}`}
-            </Typography>
+                <Typography className={classes.title}>
+                  {formatCurrency(BigNumber(quote.inputs.fromAmount).div(quote.output.finalValue).toFixed(18))}
+                </Typography>
+              </div>
 
-            <Typography className={classes.title}>
-              {formatCurrency(BigNumber(quote.output.finalValue).div(quote.inputs.fromAmount).toFixed(18))}
-            </Typography>
-          </div>
+              <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+                <Typography className={classes.text}>
+                  {`${toAssetValue?.symbol} per ${fromAssetValue?.symbol}`}
+                </Typography>
 
-          {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
-        </div>
-
-        <Typography className={classes.depositInfoHeading}>Route</Typography>
-
-        <div className={[classes.route, classes[`route--${appTheme}`]].join(' ')}>
-          <img
-            className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
-            alt=""
-            src={fromAssetValue ? `${fromAssetValue.logoURI}` : ''}
-            height="40px"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "/tokens/unknown-logo.png";
-            }}
-          />
-          <div className={classes.line}>
-            <div className={[classes.routeLinesLeft, classes[`routeLinesLeft--${appTheme}`]].join(' ')}>
+                <Typography className={classes.title}>
+                  {formatCurrency(BigNumber(quote.output.finalValue).div(quote.inputs.fromAmount).toFixed(18))}
+                </Typography>
+              </div>
             </div>
-            <div className={[classes.routeArrow, classes[`routeArrow--${appTheme}`]].join(' ')}>
-            </div>
-            <div className={[classes.routeLinesRight, classes[`routeLinesRight--${appTheme}`]].join(' ')}>
-            </div>
-          </div>
-          {quote && quote.output && quote.output.routeAsset &&
-            <>
+
+            <Typography className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`]].join(' ')}>
+              Route
+            </Typography>
+
+            <div className={[classes.route, classes[`route--${appTheme}`]].join(' ')}>
               <img
                 className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
                 alt=""
-                src={quote.output.routeAsset ? `${quote.output.routeAsset.logoURI}` : ''}
+                src={fromAssetValue ? `${fromAssetValue.logoURI}` : ''}
                 height="40px"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "/tokens/unknown-logo.png";
+                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                 }}
               />
               <div className={classes.line}>
-                <div className={classes.routeArrow}>
-                  <ArrowForwardIos className={classes.routeArrowIcon}/>
+                <div className={[classes.routeLinesLeft, classes[`routeLinesLeft--${appTheme}`]].join(' ')}>
                 </div>
-                <div className={classes.stabIndicatorContainer}>
-                  <Typography
-                    className={classes.stabIndicator}>{quote.output.routes[1].stable ? 'Stable' : 'Volatile'}</Typography>
+
+                {quote?.output?.routeAsset &&
+                  <>
+                    <div className={[classes.routeLinesLeftText, classes[`routeLinesLeftText--${appTheme}`]].join(' ')}>
+                    {quote.output.routes[0].stable ? 'Stable' : 'Volatile'}
+                    </div>
+
+                    <img
+                      className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
+                      alt=""
+                      src={quote.output.routeAsset ? `${quote.output.routeAsset.logoURI}` : ''}
+                      height="40px"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                      }}
+                    />
+
+                    <div
+                      className={[classes.routeLinesRightText, classes[`routeLinesRightText--${appTheme}`]].join(' ')}>
+                      {quote.output.routes[1].stable ? 'Stable' : 'Volatile'}
+                    </div>
+                  </>
+                }
+
+                {!quote?.output?.routeAsset &&
+                  <div className={[classes.routeArrow, classes[`routeArrow--${appTheme}`]].join(' ')}>
+                    {quote.output.routes[0].stable ? 'Stable' : 'Volatile'}
+                  </div>
+                }
+
+                <div className={[classes.routeLinesRight, classes[`routeLinesRight--${appTheme}`]].join(' ')}>
                 </div>
               </div>
-            </>
-          }
-          <img
-            className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
-            alt=""
-            src={toAssetValue ? `${toAssetValue.logoURI}` : ''}
-            height="40px"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "/tokens/unknown-logo.png";
-            }}
-          />
-        </div>
+
+              <img
+                className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(' ')}
+                alt=""
+                src={toAssetValue ? `${toAssetValue.logoURI}` : ''}
+                height="40px"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                }}
+              />
+            </div>
+          </div>
+        }
       </div>
     );
   };
@@ -392,11 +403,18 @@ function Setup() {
   const renderSmallInput = (type, amountValue, amountError, amountChanged) => {
     return (
       <div className={classes.slippage}>
-        <Typography
-          className={[classes.inputBalanceSlippage, classes[`inputBalanceSlippage--${appTheme}`]].join(" ")}
-          noWrap>
-          Slippage %
-        </Typography>
+        <div
+          className={['g-flex', 'g-flex--align-center', classes.slippageLabel].join(' ')}>
+          <Typography
+            className={[classes.inputBalanceSlippage, classes[`inputBalanceSlippage--${appTheme}`]].join(" ")}
+            noWrap>
+            Slippage
+          </Typography>
+
+          <img
+            src={'/images/ui/question-icon.svg'}
+            className={classes.questionIcon}/>
+        </div>
 
         <TextField
           placeholder="0.00"
@@ -406,15 +424,17 @@ function Setup() {
           onChange={amountChanged}
           disabled={loading}
           InputProps={{
-            style: {
-              border: 'none',
-              borderRadius: 0,
-            },
+            style: {},
             classes: {
-              root: classes.searchInput,
+              root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(" "),
             },
             endAdornment: <InputAdornment position="end">
-              %
+              <span
+                style={{
+                  color: appTheme === "dark" ? '#ffffff' : '#5688A5',
+                }}>
+                %
+              </span>
             </InputAdornment>,
           }}
           inputProps={{
@@ -464,15 +484,11 @@ function Setup() {
             className={classes.massiveInputAmount}
             placeholder="0.00"
             error={amountError}
-            helperText={amountError}
             value={amountValue}
             onChange={amountChanged}
             disabled={loading || type === 'To'}
             inputProps={{
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
-            }}
-            InputProps={{
-              disableUnderline: true,
             }}
           />
 
@@ -488,31 +504,30 @@ function Setup() {
   return (
     <div className={classes.swapInputs}>
       {renderMassiveInput('From', fromAmountValue, fromAmountError, fromAmountChanged, fromAssetValue, fromAssetError, fromAssetOptions, onAssetSelect)}
+
       <div
         className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}
         onClick={swapAssets}>
       </div>
+
       {renderMassiveInput('To', toAmountValue, toAmountError, toAmountChanged, toAssetValue, toAssetError, toAssetOptions, onAssetSelect)}
+
+      {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
+
       {renderSwapInformation()}
-      {/*<div className={classes.actionsContainer}>*/}
-      <Button
-        variant="contained"
-        size="large"
-        color="primary"
-        className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(' ')}
-        disabled={loading || quoteLoading}
+
+      <BtnSwap
         onClick={onSwap}
-      >
-        <Typography className={classes.actionButtonText}>{loading ? `Swapping` : `Swap`}</Typography>
-        {loading && <CircularProgress size={10} className={classes.loadingCircle}/>}
-      </Button>
-      {/*</div>*/}
+        className={classes.btnSwap}
+        labelClassName={!fromAmountValue ? classes['actionButtonText--disabled'] : classes.actionButtonText}
+        isDisabled={!fromAmountValue}
+        label={loading ? `Swapping` : (!fromAmountValue ? 'Enter Amount' : `Swap`)}>
+      </BtnSwap>
     </div>
   );
 }
 
 function AssetSelect({type, value, assetOptions, onSelect}) {
-
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [filteredAssetOptions, setFilteredAssetOptions] = useState([]);
@@ -525,7 +540,6 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
   };
 
   useEffect(async function () {
-
     let ao = assetOptions.filter((asset) => {
       if (search && search !== '') {
         return asset.address.toLowerCase().includes(search.toLowerCase()) ||
@@ -590,7 +604,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
               height="60px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
           </div>
@@ -650,7 +664,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
               height="50px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
           </div>
@@ -841,7 +855,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
               height="100px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
           </div>
@@ -850,7 +864,13 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
       <Dialog
         aria-labelledby="simple-dialog-title"
         open={open}
-        style={{borderRadius: 0}}>
+        style={{borderRadius: 0}}
+        onClick={(e) => {
+        if (e.target.classList.contains('MuiDialog-container')) {
+          onClose()
+        }
+      }}
+        >
         <div
           className={classes.dialogContainer}
           style={{

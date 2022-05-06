@@ -4,7 +4,7 @@ import { useAppThemeContext } from "../AppThemeProvider";
 
 const Logo = (props) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const {width = windowWidth <= 720 ? "24" : "156", height = windowWidth <= 720 ? "34" : "36"} = props;
+  const {width = windowWidth <= 770 ? "24" : "156", height = windowWidth <= 770 ? "34" : "36"} = props;
   const {appTheme} = useAppThemeContext();
   const mainFillColor = appTheme === "dark" ? "white" : "#0A2C40";
 
@@ -14,7 +14,7 @@ const Logo = (props) => {
 
   return (
     <>
-      {windowWidth > 720 &&
+      {windowWidth > 770 &&
         <svg
           width={width}
           height={height}
@@ -48,7 +48,7 @@ const Logo = (props) => {
         </svg>
       }
 
-      {windowWidth <= 720 &&
+      {windowWidth <= 770 &&
         <svg
           width={width}
           height={height}

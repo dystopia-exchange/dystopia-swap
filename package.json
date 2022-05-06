@@ -34,6 +34,7 @@
     "moment": "^2.29.1",
     "next": "^10.2.3",
     "node-fetch": "^2.6.2",
+    "numeral": "^2.0.6",
     "promise-async": "^0.2.0",
     "query-string": "^7.0.1",
     "react": "17.0.1",

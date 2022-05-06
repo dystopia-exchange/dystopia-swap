@@ -1,3 +1,77 @@
+.blurbg{
+  background: rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(10px) !important;
+}
+.dialogContent {
+  padding: 20px 30px 30px !important;
+}
+.nav-button-corner-top,
+.nav-button-corner-bottom {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-button-corner-top::before,
+.nav-button-corner-top::after {
+  margin-top: 3.5px;
+}
+
+.nav-button-corner-bottom::before,
+.nav-button-corner-bottom::after {
+  margin-bottom: 3.5px;
+}
+
+.nav-button-corner-top::before,
+.nav-button-corner-top::after,
+.nav-button-corner-bottom::before,
+.nav-button-corner-bottom::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  z-index: 999;
+}
+
+.nav-button-corner-top::before,
+.nav-button-corner-top::after {
+  top: -14.5px;
+  border-top: 1px solid var(--main-secondary-dark);
+}
+
+.nav-button-corner-top::before,
+.nav-button-corner-bottom::before {
+  left: -11px;
+  border-left: 1px solid var(--main-secondary-dark);
+}
+
+.nav-button-corner-top::after,
+.nav-button-corner-bottom::after {
+  right: -11px;
+  border-right: 1px solid var(--main-secondary-dark);
+}
+
+.nav-button-corner-bottom::before,
+.nav-button-corner-bottom::after {
+  bottom: -14.5px;
+  border-bottom: 1px solid var(--main-secondary-dark);
+}
+
+.nav-button-corner-top--dark::before,
+.nav-button-corner-top--dark::after,
+.nav-button-corner-bottom--dark::before,
+.nav-button-corner-bottom--dark::after {
+  border-color: var(--main-secondary-dark);
+}
+
+.nav-button-corner-top--light::before,
+.nav-button-corner-top--light::after,
+.nav-button-corner-bottom--light::before,
+.nav-button-corner-bottom--light::after {
+  border-color: var(--main-secondary-light);
+}
 .newSwapContainer {
   display: flex;
   justify-content: space-evenly;
@@ -145,25 +219,43 @@
 }
 
 .searchContainer {
-  padding: 24px;
-  height: 600px;
+  padding: 30px 30px 0;
+  max-height: 710px;
   overflow-y: scroll;
+  background: #DBE6EC;
+  border: 1px solid #86B9D6;
+  border-bottom: none;
 }
 
 .manageLocalContainer {
-  width: 100%;
+  position: absolute;
+  bottom: 30px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 6px;
+  justify-content: flex-start;
+  margin-top: 20px;
 }
-
+.searchInput > fieldset {
+  border: none;
+}
 .assetSearchResults {
   width: 100%;
+  max-height: 490px;
+  overflow: auto;
   display: flex;
   flex-direction: column;
-  margin-top: 12px;
+  margin-top: 30px;
   min-width: 390px;
+}
+
+.assetSearchResults--light {
+  background: #9BC9E4;
+  border: 1px solid #86B9D6;
+}
+
+.assetSearchResults--dark {
+  background: #2D3741;
+  border: 1px solid #5F7285;
 }
 
 .withBalanceToggle {
@@ -474,6 +566,17 @@
   background: #2D3741 !important;
   box-shadow: 0 1px 0 rgba(76, 173, 229, 0.5);
 }
+.assetSymbolName {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 120%;
+}
+
+.assetSymbolName2 {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+}
 
 .assetOptionIcon {
   width: 50px;
@@ -514,6 +617,9 @@
   flex-direction: column;
   align-items: flex-end;
 }
+.assetSelectBalance {
+  margin-left: 10px;
+}
 
 .assetSelectActions {
   flex: 1;
@@ -533,7 +639,35 @@
   z-index: 1;
   height: 0px;
 }
+.assetSelectBalanceText {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 120%;
+}
 
+.assetSelectBalanceText2 {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+}
+
+
+.searchInput {
+  border: none !important;
+  border-bottom: 1px solid #86B9D6 !important;
+  border-radius: 0 !important;
+}
+.searchInput:hover {
+  border-bottom: 1px solid #325569 !important;
+}
+
+.searchInput--dark {
+  border-bottom: 1px solid #5F7285 !important;
+}
+
+.searchInput--dark:hover {
+  border-bottom: 1px solid #C6CDD2 !important;
+}
 .swapIconSubContainer {
   background: #161B2C;
   border-radius: 9px;
@@ -702,7 +836,7 @@
 .depositInfoHeading {
   width: 100%;
   font-weight: 700 !important;
-  color: #06D3D7 !important;
+  color: #5688A5 !important;
   padding-bottom: 15px !important;
   border-bottom: 1px solid rgba(126, 153, 176, 0.2);
   font-size: 14px !important;
@@ -844,7 +978,15 @@
   .newSwapContainer {
     margin-top: -100px;
   }
+.assetSymbolName,
+.assetSelectBalanceText {
+  font-size: 14px !important;
+}
 
+.assetSymbolName2,
+.assetSelectBalanceText2 {
+  font-size: 12px !important;
+}
   .swapContainer {
     padding: 12px;
   }
@@ -922,7 +1064,13 @@
   width: 100%;
   margin-top: 20px;
 }
-
+.manageLocalBtn {
+  padding: 0 !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  color: #0B5E8E !important;
+}
 .buttonOverrideContainer--dark {
   background: #8F5AE8;
   position: relative;
@@ -1003,11 +1151,14 @@
   margin-top: 20px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .radioButton {
   font-size: 16px;
   font-weight: 800;
+  display: flex;
+    width: 100%;
   padding: 0px 15px;.newSwapContainer {
     display: flex;
     justify-content: space-evenly;
@@ -1017,6 +1168,7 @@
     min-height: calc(100vh - 423px);
     align-items: center;
   }
+}
   
   .infoContainer {
     display: flex;
@@ -1109,8 +1261,7 @@
   }
   
   .displaySelectContainer {
-    padding: 61px 20px 20px;
-    cursor: pointer;
+    padding: 43px 10px 10px;
   }
   
   .displayDualIconContainer {
@@ -1136,11 +1287,10 @@
     margin: 0 auto;
   }
   
-  .displayDualIconContainerSmall {
-    width: 50px;
-    height: 50px;
-    position: relative;
-    margin-right: 15px;
+  .displayDualIconContainerSmall,
+  .assetOptionIcon {
+    width: 40px;
+    height: 40px;
   }
   
   .displaySelect {
@@ -1158,22 +1308,6 @@
     padding: 24px;
     height: 600px;
     overflow-y: scroll;
-  }
-  
-  .manageLocalContainer {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px;
-  }
-  
-  .assetSearchResults {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    margin-top: 12px;
-    min-width: 390px;
   }
   
   .withBalanceToggle {
@@ -1457,80 +1591,13 @@
     flex-wrap: wrap;
   }
   
-  .assetSelectMenu {
-    padding: 10px !important;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1px !important;
-    transition: all ease 300ms;
-  }
+ 
+
   
-  .assetSelectMenu--light {
-    background: #B9DFF5 !important;
-    box-shadow: 0 1px 0 rgba(11, 94, 142, 0);
-  }
+ 
   
-  .assetSelectMenu--light:hover {
-    background: #CFE5F2 !important;
-    box-shadow: 0 1px 0 rgba(11, 94, 142, 0.5);
-  }
   
-  .assetSelectMenu--dark {
-    background: #24292D !important;
-    box-shadow: 0 1px 0 rgba(76, 173, 229, 0);
-  }
-  
-  .assetSelectMenu--dark:hover {
-    background: #2D3741 !important;
-    box-shadow: 0 1px 0 rgba(76, 173, 229, 0.5);
-  }
-  
-  .assetOptionIcon {
-    width: 50px;
-    height: 50px;
-    padding: 4px;
-    border-radius: 100px;
-    border: 1px solid #9BC9E4;
-    background: #CFE5F2;
-  }
-  
-  .assetOptionIcon--light {
-    background: #CFE5F2;
-    border: 1px solid #86B9D6;
-  }
-  
-  .assetOptionIcon--dark {
-    background: #304E61;
-    border: 1px solid #5F7285;
-  }
-  
-  .txContainer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex: 1;
-    width: 100%;
-  }
-  
-  .txInfoContainer {
-    margin-left: 12px;
-    flex: 1;
-  }
-  
-  .assetSelectBalance {
-    flex: 1;
-    margin-left: 48px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-  
-  .assetSelectActions {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-  }
+ 
   
   .confirmationsText {
     padding-bottom: 12px;
@@ -1713,7 +1780,7 @@
   .depositInfoHeading {
     width: 100%;
     font-weight: 700 !important;
-    color: #06D3D7 !important;
+    color: #5688A5 !important;
     padding-bottom: 15px !important;
     border-bottom: 1px solid rgba(126, 153, 176, 0.2);
     font-size: 14px !important;
@@ -2014,6 +2081,7 @@
     margin-top: 20px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
   }
   
   .radioButton {
@@ -2024,14 +2092,23 @@
     align-items: center;
     cursor: pointer;
   }
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 359px) {
     .buttonOverrideContainer--dark,
     .buttonOverrideContainer--light,
     .textField {
       max-width: 300px;
     }
   }
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
+  .dialogContainer {
+    width: 100% !important;
+  }
+
+  .dialogTitle {
+    padding: 20px 20px 0;
+  }
+  .dialogContent {
+    padding: 20px !important;
+  }
+  .assetSearchResults {
+    min-width: auto;
+  }

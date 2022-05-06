@@ -15,7 +15,7 @@ button {
   text-transform: none !important;
 }
 
-@media (max-width: 430px) {
+@media (max-width: 530px) {
   input[type="date"]::-webkit-calendar-picker-indicator {
     top: 12px;
     left: -71px;

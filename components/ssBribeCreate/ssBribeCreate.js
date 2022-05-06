@@ -17,7 +17,7 @@ import { Add, Search, ArrowBack, DeleteOutline, ArrowBackIosNew, Close } from '@
 import BigNumber from 'bignumber.js';
 import { formatCurrency } from '../../utils';
 import classes from './ssBribeCreate.module.css';
-
+import { formatSymbol } from '../../utils';
 
 import stores from '../../stores';
 import {
@@ -52,12 +52,11 @@ export default function ssBribeCreate() {
     }
 
     if (storePairs.length > 0 && gauge == null) {
-      for(var i=0;i<storePairs.length;i++)
-      if(storePairs[i].gauge != null)
-      {
-        setGauge(storePairs[i])
-        break;
-      }
+      for (var i = 0; i < storePairs.length; i++)
+        if (storePairs[i].gauge != null) {
+          setGauge(storePairs[i]);
+          break;
+        }
     }
   };
 
@@ -152,7 +151,7 @@ export default function ssBribeCreate() {
     setAsset(value);
   };
 
-  const onGagugeSelect = (event,asset) => {
+  const onGagugeSelect = (event, asset) => {
     setGauge(asset);
   };
 
@@ -160,7 +159,7 @@ export default function ssBribeCreate() {
     return (
       <div className={[classes.textFieldTop, classes[`textFieldTop--${appTheme}`]].join(' ')}>
         <Typography className={classes.inputTitleText} noWrap>
-          Bribe to
+          Bribe for
         </Typography>
 
         <div className={`${classes.massiveInputContainer} ${error && classes.error}`}>
@@ -168,33 +167,25 @@ export default function ssBribeCreate() {
             <AssetSelectPair type={type} value={value} assetOptions={options} onSelect={onChange} manageLocal={false}/>
           </div>
           <div className={classes.assetSelectIconName}>
-          <Typography
-            variant="h5"
-            style={{
+            <Typography
+              variant="h5"
+              className={classes.assetSymbolName}
+              style={{
+                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+              }}>
+              {formatSymbol(gauge?.symbol)}
+            </Typography>
 
-              fontWeight: 500,
-              fontSize: 25,
-              lineHeight: '120%',
-              marginLeft:"20px",
-              marginTop:"20px",
-              color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-            }}>
-            {gauge?.symbol}
-          </Typography>
+            <Typography
+              variant="subtitle1"
+              className={classes.assetSymbolName2}
+              style={{
+                color: appTheme === "dark" ? '#7C838A' : '#5688A5',
+              }}>
+              {gauge?.isStable ? "Stable Pool" : "Volatile Pool"}
+            </Typography>
+          </div>
 
-          <Typography
-            variant="subtitle1"
-            style={{
-              fontWeight: 400,
-              fontSize: 14,
-              marginLeft:"20px",
-              lineHeight: '120%',
-              color: appTheme === "dark" ? '#7C838A' : '#5688A5',
-            }}>
-            {gauge?.isStable  ? "Stable Pool" :  "Volatile Pool"}
-          </Typography>
-        </div>
-          
         </div>
       </div>
     );
@@ -219,7 +210,8 @@ export default function ssBribeCreate() {
 
         <div className={`${classes.massiveInputContainer} ${(amountError || assetError) && classes.error}`}>
           <div className={classes.massiveInputAssetSelect}>
-            <AssetSelectManage type={type} value={assetValue} assetOptions={assetOptions} onSelect={onAssetSelect} manageLocal={true}/>
+            <AssetSelectManage type={type} value={assetValue} assetOptions={assetOptions} onSelect={onAssetSelect}
+                               manageLocal={true}/>
           </div>
 
           <InputBase
@@ -240,7 +232,7 @@ export default function ssBribeCreate() {
 
           <Typography
             className={[classes.smallerText, classes[`smallerText--${appTheme}`]].join(" ")}>
-            {assetValue?.symbol}
+            {formatSymbol(assetValue?.symbol)}
           </Typography>
         </div>
       </div>
@@ -255,9 +247,9 @@ export default function ssBribeCreate() {
     return (
       <div className={classes.depositInfoContainer}>
         <Typography className={classes.depositInfoHeading}>You are creating a bribe of <span
-          className={classes.highlight}>{formatCurrency(amount)} {asset?.symbol}</span> to incentivize Vesters to vote
+          className={classes.highlight}>{formatCurrency(amount)} {formatSymbol(asset?.symbol)}</span> to incentivize Vesters to vote
           for the <span
-            className={classes.highlight}>{gauge?.token0?.symbol}/{gauge?.token1?.symbol} Pool</span></Typography>
+            className={classes.highlight}>{formatSymbol(gauge?.token0?.symbol)}/{formatSymbol(gauge?.token1?.symbol)} Pool</span></Typography>
       </div>
     );
   };
@@ -282,7 +274,9 @@ export default function ssBribeCreate() {
 
       <div className={[classes.reAddPadding, classes[`reAddPadding--${appTheme}`]].join(' ')}>
         {renderMassiveGaugeInput('gauge', gauge, null, gaugeOptions, onGagugeSelect)}
-        {renderMassiveInput('amount', amount, amountError, amountChanged, asset, null, assetOptions, onAssetSelect)}
+        <div style={{marginTop: 20}}>
+          {renderMassiveInput('amount', amount, amountError, amountChanged, asset, null, assetOptions, onAssetSelect)}
+        </div>
         {renderCreateInfo()}
       </div>
 
@@ -379,14 +373,14 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
               height="60px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
-            
+
           </div>
         </div>
         <div className={classes.assetSelectIconName}>
-          <Typography variant="h5">{asset ? asset.symbol : ''}</Typography>
+          <Typography variant="h5">{asset ? formatSymbol(asset.symbol) : ''}</Typography>
           <Typography variant="subtitle1" color="textSecondary">{asset ? asset.name : ''}</Typography>
         </div>
         <div className={classes.assetSelectActions}>
@@ -416,19 +410,16 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
         }}>
         <div className={classes.assetSelectMenuItem}>
           <div className={classes.displayDualIconContainerSmall}>
-          
-          <img
+            <img
               className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
               alt=""
               src={asset ? `${asset.logoURI}` : ''}
-              height="30px"
+              height="60px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
-           
-             
           </div>
         </div>
         <div className={classes.assetSelectIconName}>
@@ -440,7 +431,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
               lineHeight: '120%',
               color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
             }}>
-            {asset ? asset.symbol : ''}
+            {asset ? formatSymbol(asset.symbol) : ''}
           </Typography>
         </div>
 
@@ -606,7 +597,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
       }}>
         <div className={classes.assetSelectMenuItem}>
           <div
-            className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+            className={[classes.displayDualIconContainer, classes[`displayDualIconContainerSec--${appTheme}`]].join(' ')}>
             <img
               className={classes.displayAssetIcon}
               alt=""
@@ -614,7 +605,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
               height="100px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
           </div>
@@ -624,7 +615,13 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
       <Dialog
         aria-labelledby="simple-dialog-title"
         open={open}
-        style={{borderRadius: 0}}>
+        style={{borderRadius: 0}}
+        onClick={(e) => {
+          if (e.target.classList.contains('MuiDialog-container')) {
+            onClose()
+          }
+        }}
+        >
         <div style={{
           width: 460,
           height: 710,
@@ -753,10 +750,9 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
               height="60px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
-            
           </div>
         </div>
         <div className={classes.assetSelectIconName}>
@@ -790,29 +786,28 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
         }}>
         <div className={classes.assetSelectMenuItem}>
           <div className={classes.displayDualIconContainerSmall}>
-          
-          {asset?.token0?.logoURI && <img
+            <img
               className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
               alt=""
               src={asset ? `${asset?.token0?.logoURI}` : ''}
               height="30px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
-            />}
-            {asset?.token1?.logoURI && <img
+            />
+
+            <img
               className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
               alt=""
               src={asset ? `${asset?.token1?.logoURI}` : ''}
               height="30px"
-              style={{marginLeft:"-25px"}}
+              style={{marginLeft: "-15px"}}
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
-            />}
-             
+            />
           </div>
         </div>
         <div className={classes.assetSelectIconName}>
@@ -820,10 +815,6 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
             variant="h5"
             className={classes.assetSymbolName}
             style={{
-              fontWeight: 500,
-              fontSize: 18,
-              marginLeft:"25px",
-              lineHeight: '120%',
               color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
             }}>
             {asset ? asset.symbol : ''}
@@ -833,13 +824,9 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
             variant="subtitle1"
             className={classes.assetSymbolName2}
             style={{
-              fontWeight: 400,
-              fontSize: 14,
-              marginLeft:"25px",
-              lineHeight: '120%',
               color: appTheme === "dark" ? '#7C838A' : '#5688A5',
             }}>
-            {asset.isStable  ? "Stable Pool" :  "Volatile Pool"}
+            {asset.isStable ? "Stable Pool" : "Volatile Pool"}
           </Typography>
         </div>
 
@@ -979,8 +966,8 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
               if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
               return 0;
             }).map((asset, idx) => {
-               if(asset.gauge != null)
-              return renderAssetOption(type, asset, idx);
+              if (asset.gauge != null)
+                return renderAssetOption(type, asset, idx);
             }) : []
           }
         </div>
@@ -1013,17 +1000,17 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
               height="100px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
             <img
-              className={classes.displayAssetIcon}
+              className={[classes.displayAssetIcon, classes.displayAssetIconSec].join(' ')}
               alt=""
               src={value ? `${value?.token1?.logoURI}` : ''}
               height="100px"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "/tokens/unknown-logo.png";
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
               }}
             />
           </div>
@@ -1033,7 +1020,13 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
       <Dialog
         aria-labelledby="simple-dialog-title"
         open={open}
-        style={{borderRadius: 0}}>
+        style={{borderRadius: 0}}
+        onClick={(e) => {
+          if (e.target.classList.contains('MuiDialog-container')) {
+            onClose()
+          }
+        }}
+        >
         <div
           className={classes.dialogContainer}
           style={{
@@ -1062,6 +1055,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
                 display: 'flex',
                 alignItems: 'center',
                 color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                paddingBottom: 8,
               }}>
                 {manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
                   marginRight: 10,

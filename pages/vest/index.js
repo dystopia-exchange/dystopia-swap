@@ -53,19 +53,13 @@ function Vesting({ changeTheme }) {
         :
         <Paper className={classes.notConnectedContent}>
           <div className={classes.contentFloat}>
-            <Typography
-              style={{
-                fontFamily: 'PPNeueMachina UltraBold',
-                fontWeight: 700,
-                fontSize: 72,
-                color: '#ffffff',
-              }}>
+            <Typography className={classes.contentFloatText}>
               Vest
             </Typography>
 
             <div className={classes.mainDescBg}>
               <Typography className={classes.mainDescNC} variant="body2">
-                Lock your Solid to earn rewards and governance rights. Each locked position is created and represented as an NFT, meaning you can hold multiple locked positions.
+                Lock your DYST to earn rewards and governance rights. Each locked position is created and represented as an NFT, meaning you can hold multiple locked positions.
               </Typography>
             </div>
 

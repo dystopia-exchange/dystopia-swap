@@ -83,10 +83,12 @@
   margin-bottom: -1px;
   margin-left: -2px;
   background-image: url("/images/ui/swap-popup-top-slice.svg");
+  background-repeat: no-repeat;
 }
 
 .top--dark {
   background-image: url("/images/ui/swap-popup-top-slice--dark.svg");
+  background-repeat: no-repeat;
 }
 
 .contentBox {
@@ -387,21 +389,22 @@
   width: 100%;
 }
 
+.vestInfoBg--light {
+  background-image: url('../../public/images/block-border-transparent-bg-light-0.svg');
+}
+
+.vestInfoBg--dark {
+  background-image: url('../../public/images/block-border-transparent-bg-dark-0.svg');
+}
+
 .vestInfo {
   display: flex;
+  height: 86px;
 }
 
 .vestInfoText {
   width: 50%;
   padding: 20px 15px;
-}
-
-.vestInfoTextTop--light {
-  border-right: 1px solid #86B9D6;
-}
-
-.vestInfoTextTop--dark {
-  border-right: 1px solid #5F7285;
 }
 
 .error {
@@ -589,7 +592,7 @@
 }
 
 .backIcon {
-  color: #06D3D7 !important;
+  /* color: #06D3D7 !important; */
 }
 
 .titleText {
@@ -690,6 +693,8 @@
   background: #4CADE6;
 }
 
+
+
 @media (max-width:660px) {
   .container,
   .container3 {
@@ -703,11 +708,18 @@
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 530px) {
   .container,
   .container3,
   .reAddPadding3 {
     width: 100%;
+  }
+
+  .reAddPadding3 {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .top {
@@ -721,7 +733,7 @@
   .textField--dark {
     width: 280px;
     height: 114px;
-    background-image: url("/images/ui/swap-coin-top-360--light.svg");
+    background-image: url("/images/ui/swap-coin-top-360--dark.svg");
   }
 
   .textField--light {
@@ -732,14 +744,14 @@
 
   .textFieldDate--light {
     width: 280px;
-    height: 114px;
-    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+    height: 81px;
+    background-image: url("/images/ui/calendar-bg-360--light.svg");
   }
 
   .textFieldDate--dark {
     width: 280px;
-    height: 114px;
-    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+    height: 81px;
+    background-image: url("/images/ui/calendar-bg-360--dark.svg");
   }
 
   .textField--To-light,
@@ -748,7 +760,7 @@
   }
 
   .swapIconContainer--dark {
-    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
+    background-image: url("/images/ui/swap-coin-btn-360--dark.svg");
   }
 
   .swapIconContainer--light {
@@ -797,6 +809,10 @@
     padding: 43px 10px 10px;
   }
 
+  .displaySelectContainerDate {
+    padding: 10px 10px 10px;
+  }
+
   .largeInput {
     font-size: 18px !important;
   }
@@ -807,11 +823,19 @@
     left: 100px;
   }
 
+  .massiveInputAmountDate {
+    top: 18px;
+  }
+
   .smallerText,
   .smallerTextDate {
     font-size: 12px !important;
     top: 79px;
     left: 100px;
+  }
+
+  .smallerTextDate {
+    top: 46px;
   }
 
   .warningWarning,
@@ -884,15 +908,15 @@
   }
 
   .buttonOverride--dark {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .buttonOverride--dark:hover {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .buttonOverride--dark:active {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
+    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .dialogContainer {
@@ -964,3 +988,4 @@
     font-size: 14px !important;
   }
 }
+

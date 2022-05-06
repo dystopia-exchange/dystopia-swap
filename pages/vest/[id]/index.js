@@ -82,7 +82,7 @@ function Vest({ changeTheme }) {
             <BalanceIcon className={ classes.overviewIcon } />
             <Typography className={classes.mainHeadingNC} variant='h1'>Vest</Typography>
             <Typography className={classes.mainDescNC} variant='body2'>
-              Lock your Solid to earn rewards and governance rights. Each locked position is created and represented as an NFT, meaning you can hold multiple locked positions.
+              Lock your DYST to earn rewards and governance rights. Each locked position is created and represented as an NFT, meaning you can hold multiple locked positions.
             </Typography>
             <Button
               disableElevation

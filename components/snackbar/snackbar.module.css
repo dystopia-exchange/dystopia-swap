@@ -1,0 +1,286 @@
+.headingContainer {
+  padding: 24px;
+}
+
+.heading {
+  font-size: 24px !important;
+  width: 100%;
+  text-align: center;
+}
+
+.transactionsContainer {
+  margin-bottom: 12px;
+}
+
+.transaction {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 460px;
+  margin-bottom: 20px;
+  z-index: 9999;
+}
+
+.transactionTopBg {
+  width: 460px;
+  height: 16px;
+}
+
+.transactionTopBg--Success,
+.transactionTopBg--DONE {
+  background-image: url("/images/ui/notify-success-top-bg.svg");
+}
+
+.transactionTopBg--Warning,
+.transactionTopBg--WAITING {
+  background-image: url("/images/ui/notify-waiting-top-bg.svg");
+}
+
+.transactionTopBg--Info {
+  background-image: url("/images/ui/notify-submited-top-bg.svg");
+}
+
+.transactionTopBg--Error {
+  background-image: url("/images/ui/global-error-top-bg.svg");
+}
+
+.transactionInfo {
+  display: flex;
+  background: #DBE6EC;
+  border: 1px solid #DB3434;
+}
+
+.transactionInfo--dark {
+  background: #151718;
+  border: 1px solid #DB3434;
+}
+
+.transactionInfo--Success,
+.transactionInfo--DONE {
+  border: 1px solid #15B525;
+}
+
+.transactionInfo--Warning,
+.transactionInfo--WAITING {
+  border: 1px solid #86B9D6;
+}
+
+.transactionInfo--Info {
+  border: 1px solid #F9A01A;
+}
+
+.transactionInfo--Error {
+  border: 1px solid #DB3434;
+}
+
+.transactionStatusText {
+  padding: 5px 2px;
+  border-top: 1px solid #86B9D6;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 120%;
+  text-transform: lowercase;
+}
+
+.transactionStatusText--Success,
+.transactionStatusText--DONE {
+  color: #15B525;
+}
+
+.transactionStatusText--Warning,
+.transactionStatusText--WAITING {
+  color: #86B9D6;
+}
+
+.transactionStatusText--Info {
+  color: #F9A01A;
+}
+
+.transactionStatusText--Error {
+  color: #DB3434;
+}
+
+.transactionDescriptionTitle {
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  text-align: left;
+}
+
+.transactionDescriptionTitle--Success,
+.transactionDescriptionTitle--DONE {
+  color: #15B525;
+}
+
+.transactionDescriptionTitle--Warning,
+.transactionDescriptionTitle--WAITING {
+  color: #86B9D6;
+}
+
+.transactionDescriptionTitle--Info {
+  color: #F9A01A;
+}
+
+.transactionDescriptionTitle--Error {
+  color: #DB3434;
+}
+
+.transactionDescription {
+  margin-top: 10px !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  color: #5688A5 !important;
+  text-align: left;
+  white-space: pre-wrap !important;
+  word-break: break-all !important;
+}
+
+.transactionDescription--dark {
+  color: #7C838A !important;
+}
+
+.capitalise {
+  text-transform: capitalize !important;
+}
+
+.transactionExpanded {
+}
+
+.transaactionHash {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.orangeIcon {
+  color: #ffc512 !important;
+}
+
+.greenIcon {
+  color: #49a766 !important;
+}
+
+.redIcon {
+  color: #dc3545 !important;
+}
+
+.errorText {
+  color: #dc3545 !important;
+  padding-top: 12px !important;
+}
+
+.animClass {
+  width: 130px;
+  margin: auto;
+  padding: 30px 0 20px 0;
+}
+
+.dialogScale {
+  max-width: 640px;
+  margin: auto;
+  text-align: center;
+}
+
+.topScrollPaper {
+  align-items: flex-start !important;
+  justify-content: flex-end !important;
+}
+
+.rootPaper {
+  max-width: none !important;
+}
+
+.paperBody--dark,
+.paperBody--light {
+  top: 49px !important;
+  width: auto !important;
+  height: 100%;
+  max-height: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none;
+}
+
+.paperBody--light {
+  background: #DBE6EC;
+  border: 1px solid #86B9D6;
+}
+
+.paperBody--dark {
+  background: #151718;
+  border: 1px solid #5F7285;
+}
+
+.successDialog {
+  max-width: 400px;
+  margin: auto;
+  text-align: center;
+  padding-bottom: 20px !important;
+}
+
+.successTitle {
+  padding: 0 40px !important;
+  text-align: center !important;
+  margin: 20px 0 10px 0 !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+}
+
+.successText {
+  padding: 0 40px !important;
+  text-align: center !important;
+  line-height: 1.5rem !important;
+  margin-bottom: 40px !important;
+  color: rgba(126, 153, 176, 0.8) !important;
+}
+
+.viewDetailsText {
+  background: none;
+  margin: 10px auto 20px auto !important;
+  font-size: 14px !important;
+}
+
+.viewDetailsText a {
+  color: #06D3D7 !important;
+}
+
+.viewDetailsText a:hover {
+  color: #FFF !important;
+}
+
+.newWindowIcon {
+  font-size: 15px !important;
+  margin-bottom: -2px;
+  margin-left: 3px;
+}
+
+@media (max-width: 660px) {
+  .paperBody--dark,
+  .paperBody--light {
+    top: 0 !important;
+    width: 100% !important;
+  }
+
+  .transactionsContainer {
+    padding-top: 40px;
+  }
+}
+
+@media (max-width: 530px) {
+  .dialogTitle {
+    padding: 20px !important;
+    font-size: 18px !important;
+  }
+
+  .dialogContent {
+    padding: 0 20px 20px !important;
+  }
+
+  .transaction,
+  .transactionTopBg {
+    width: 100%;
+  }
+}

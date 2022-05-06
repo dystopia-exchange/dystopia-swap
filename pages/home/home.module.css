@@ -17,7 +17,7 @@
 .contentContainerFull {
   display: flex;
   justify-content: space-between;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   position: relative;
   padding: 30px;
@@ -49,7 +49,7 @@
 }
 
 .mainTitle {
-  font-family: 'PPNeueMachina UltraBold', serif !important;
+  font-family: 'PPNeueMachina', serif !important;
   font-weight: 800 !important;
   font-size: 72px !important;
   line-height: 100% !important;
@@ -197,7 +197,7 @@
   }
 
   .buttonEnter {
-    margin-top: 100px !important;
+    margin-top: 70px !important;
   }
 
   .buttonEnterSec {
@@ -282,7 +282,7 @@
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 530px) {
   .mainTitle {
     font-size: 32px !important;
   }

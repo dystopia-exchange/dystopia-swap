@@ -17,8 +17,8 @@ export default function VestingInfo({currentNFT, futureNFT, veToken, govToken, s
               marginTop: 20,
               border: appTheme === 'dark' ? '1px solid #5F7285' : '1px solid #86B9D6',
             }}
-            className={classes.vestInfo}>
-            <div className={[classes.vestInfoText, classes[`vestInfoTextTop--${appTheme}`], 'g-flex-column'].join(' ')}>
+            className={[classes.vestInfo, classes[`vestInfoBg--${appTheme}`]].join(' ')}>
+            <div className={[classes.vestInfoText, 'g-flex-column'].join(' ')}>
               <Typography className={[classes.amount, classes[`amount--${appTheme}`]].join(' ')}>>
                 {formatCurrency(currentNFT?.lockValue)} <span style={{fontSize: 14}}>{veToken?.symbol}</span>
               </Typography>
@@ -63,13 +63,10 @@ export default function VestingInfo({currentNFT, futureNFT, veToken, govToken, s
         futureNFT &&
         <>
           <div
-            style={{
-              marginTop: 20,
-              border: appTheme === 'dark' ? '1px solid #5F7285' : '1px solid #86B9D6',
-            }}
-            className={classes.vestInfo}>
+            style={{ marginTop: 20 }}
+            className={[classes.vestInfo, classes[`vestInfoBg--${appTheme}`]].join(' ')}>
             <div
-              className={[classes.vestInfoText, classes[`vestInfoTextTop--${appTheme}`], 'g-flex-column'].join(' ')}>
+              className={[classes.vestInfoText, 'g-flex-column'].join(' ')}>
               <Typography className={[classes.amount, classes[`amount--${appTheme}`]].join(' ')}>
                 {formatCurrency(futureNFT?.lockValue)} <span style={{fontSize: 14}}>{veToken?.symbol}</span>
               </Typography>
@@ -113,16 +110,15 @@ export default function VestingInfo({currentNFT, futureNFT, veToken, govToken, s
       {
         showVestingStructure &&
         <div className={classes.seccondSection}>
+          {/* 
           <Typography className={[classes.info, classes[`info--${appTheme}`]].join(' ')} color="textSecondary">
             1 {govToken?.symbol} locked for 4 years = 1.00 {veToken?.symbol}
           </Typography>
-
           <Typography className={[classes.info, classes[`info--${appTheme}`]].join(' ')} color="textSecondary">
             1 {govToken?.symbol} locked for 3 years = 0.75 {veToken?.symbol}</Typography>
-
           <Typography className={[classes.info, classes[`info--${appTheme}`]].join(' ')} color="textSecondary">
             1 {govToken?.symbol} locked for 2 years = 0.50 {veToken?.symbol}</Typography>
-
+          */}
           <Typography className={[classes.info, classes[`info--${appTheme}`]].join(' ')} color="textSecondary">
             1 {govToken?.symbol} locked for 1 years = 0.25 {veToken?.symbol}</Typography>
         </div>
