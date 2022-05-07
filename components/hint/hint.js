@@ -5,7 +5,7 @@ import classes from './hint.module.css';
 
 function Hint(props) {
   const {appTheme} = useAppThemeContext();
-  const {hintText, open, anchor, handleClick, handleClose} = props;
+  const {hintText, open, anchor, handleClick, handleClose, vertical = -90} = props;
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   window.addEventListener('resize', () => {
@@ -43,7 +43,7 @@ function Hint(props) {
         anchorEl={anchor}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: -90,
+          vertical,
           horizontal: windowWidth > 530 ? -200 : -257,
         }}>
         <div
@@ -54,7 +54,7 @@ function Hint(props) {
           <svg
             style={{
               position: 'absolute',
-              top: -20,
+              top: -22,
               left: -22,
             }}
             width="88"

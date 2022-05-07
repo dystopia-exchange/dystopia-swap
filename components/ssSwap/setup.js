@@ -16,11 +16,8 @@ import {
 import { Search, ArrowDownward, ArrowForwardIos, DeleteOutline, Close, ArrowBackIosNew } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import { withTheme } from '@mui/styles';
-
 import { formatCurrency, formatAddress, formatCurrencyWithSymbol, formatCurrencySmall } from '../../utils';
-
 import classes from './ssSwap.module.css';
-
 import stores from '../../stores';
 import {
   ACTIONS,
@@ -29,6 +26,7 @@ import {
 import BigNumber from 'bignumber.js';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import BtnSwap from '../../ui/BtnSwap';
+import Hint from '../hint/hint';
 
 function Setup() {
   const [, updateState] = React.useState();
@@ -55,8 +53,19 @@ function Setup() {
 
   const [quoteError, setQuoteError] = useState(null);
   const [quote, setQuote] = useState(null);
+  const [hintAnchor, setHintAnchor] = React.useState(null);
 
   const {appTheme} = useAppThemeContext();
+
+  const handleClickPopover = (event) => {
+    setHintAnchor(event.currentTarget);
+  };
+
+  const handleClosePopover = () => {
+    setHintAnchor(null);
+  };
+
+  const openHint = Boolean(hintAnchor);
 
   useEffect(function () {
     const errorReturned = () => {
@@ -167,7 +176,7 @@ function Setup() {
   const fromAmountChanged = (event) => {
     setFromAmountError(false);
     setFromAmountValue(event.target.value);
-    if (event.target.value == '') {
+    if (event.target.value == '' || Number(event.target.value) === 0) {
       setToAmountValue('');
       setQuote(null);
     } else {
@@ -288,7 +297,7 @@ function Setup() {
             flexDirection: 'column',
             width: '100%',
           }}>
-            {BigNumber(quote.priceImpact).gt(0.5) &&
+            {fromAmountValue <= Number(fromAssetValue.balance) && BigNumber(quote.priceImpact).gt(0.5) &&
               <div
                 className={[classes.warningContainer, classes[`warningContainer--${appTheme}`], BigNumber(quote.priceImpact).gt(5) ? classes.warningContainerError : classes.warningContainerWarning].join(" ")}>
                 <div className={[
@@ -300,6 +309,21 @@ function Setup() {
                 <Typography
                   className={[BigNumber(quote.priceImpact).gt(5) ? classes.warningError : classes.warningWarning, classes[`warningText--${appTheme}`]].join(" ")}
                   align="center">Price impact: {formatCurrency(quote.priceImpact)}%</Typography>
+              </div>
+            }
+
+            {fromAmountValue > Number(fromAssetValue.balance) &&
+              <div
+                className={[classes.warningContainer, classes[`warningContainer--${appTheme}`], BigNumber(quote.priceImpact).gt(5) ? classes.warningContainerError : classes.warningContainerWarning].join(" ")}>
+                <div className={[
+                  classes.warningDivider,
+                  BigNumber(quote.priceImpact).gt(5) ? classes.warningDividerError : classes.warningDividerWarning].join(" ")
+                }>
+                </div>
+
+                <Typography
+                  className={[BigNumber(quote.priceImpact).gt(5) ? classes.warningError : classes.warningWarning, classes[`warningText--${appTheme}`]].join(" ")}
+                  align="center">Balance is below the entered value</Typography>
               </div>
             }
 
@@ -352,7 +376,7 @@ function Setup() {
                 {quote?.output?.routeAsset &&
                   <>
                     <div className={[classes.routeLinesLeftText, classes[`routeLinesLeftText--${appTheme}`]].join(' ')}>
-                    {quote.output.routes[0].stable ? 'Stable' : 'Volatile'}
+                      {quote.output.routes[0].stable ? 'Stable' : 'Volatile'}
                     </div>
 
                     <img
@@ -411,9 +435,14 @@ function Setup() {
             Slippage
           </Typography>
 
-          <img
-            src={'/images/ui/question-icon.svg'}
-            className={classes.questionIcon}/>
+          <Hint
+            hintText={'Slippage is the difference between the price you expect to get on the crypto you have ordered and the price you actually get when the order executes.'}
+            open={openHint}
+            anchor={hintAnchor}
+            handleClick={handleClickPopover}
+            handleClose={handleClosePopover}
+            vertical={-110}>
+          </Hint>
         </div>
 
         <TextField
@@ -462,19 +491,37 @@ function Setup() {
           {type === 'From' ? 'From' : 'To'}
         </Typography>
 
-        <Typography className={classes.inputBalanceText} noWrap onClick={() => {
-          if (type === 'From') {
-            setBalance100();
+        <div className={[classes.inputBalanceTextContainer, 'g-flex', 'g-flex--align-center'].join(' ')}>
+          <img
+            src="/images/ui/icon-wallet.svg"
+            className={classes.walletIcon}/>
+
+          <Typography
+            className={[classes.inputBalanceText, 'g-flex__item'].join(' ')}
+            noWrap>
+            <span>
+              {(assetValue && assetValue.balance) ?
+                ' ' + formatCurrency(assetValue.balance) :
+                ''
+              }
+            </span>
+          </Typography>
+
+          {assetValue?.balance && Number(assetValue?.balance) > 0 && type === 'From' &&
+            <div
+              style={{
+                cursor: 'pointer',
+                fontWeight: 500,
+                fontSize: 14,
+                lineHeight: '120%',
+                color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+              }}
+              onClick={() => setBalance100()}>
+              MAX
+            </div>
           }
-        }}>
-          Balance:
-          <span>
-            {(assetValue && assetValue.balance) ?
-              ' ' + formatCurrency(assetValue.balance) :
-              ''
-            }
-          </span>
-        </Typography>
+        </div>
+
         <div className={`${classes.massiveInputContainer} ${(amountError || assetError) && classes.error}`}>
           <div className={classes.massiveInputAssetSelect}>
             <AssetSelect type={type} value={assetValue} assetOptions={assetOptions} onSelect={onAssetSelect}/>
@@ -487,6 +534,7 @@ function Setup() {
             value={amountValue}
             onChange={amountChanged}
             disabled={loading || type === 'To'}
+            inputmode={'decimal'}
             inputProps={{
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}
@@ -519,9 +567,9 @@ function Setup() {
       <BtnSwap
         onClick={onSwap}
         className={classes.btnSwap}
-        labelClassName={!fromAmountValue ? classes['actionButtonText--disabled'] : classes.actionButtonText}
-        isDisabled={!fromAmountValue}
-        label={loading ? `Swapping` : (!fromAmountValue ? 'Enter Amount' : `Swap`)}>
+        labelClassName={!fromAmountValue || fromAmountValue > Number(fromAssetValue.balance) || Number(fromAmountValue) <= 0 ? classes['actionButtonText--disabled'] : classes.actionButtonText}
+        isDisabled={!fromAmountValue || fromAmountValue > Number(fromAssetValue.balance) || Number(fromAmountValue) <= 0}
+        label={loading ? 'Swapping' : (!fromAmountValue || Number(fromAmountValue) <= 0 ? 'Enter Amount' : 'Swap')}>
       </BtnSwap>
     </div>
   );
@@ -866,11 +914,11 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
         open={open}
         style={{borderRadius: 0}}
         onClick={(e) => {
-        if (e.target.classList.contains('MuiDialog-container')) {
-          onClose()
-        }
-      }}
-        >
+          if (e.target.classList.contains('MuiDialog-container')) {
+            onClose();
+          }
+        }}
+      >
         <div
           className={classes.dialogContainer}
           style={{

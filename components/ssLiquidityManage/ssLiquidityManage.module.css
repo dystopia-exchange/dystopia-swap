@@ -339,10 +339,27 @@
   background-image: url("/images/ui/swap-coin-bottom--light.svg");
 }
 
-.inputBalanceText,
+.inputBalanceTextContainer {
+  position: absolute;
+  left: 151px;
+  top: 12px;
+  width: 225px;
+}
+
+.walletIcon {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+}
+
 .inputTitleText {
   position: absolute;
   top: 12px;
+  left: 20px;
+}
+
+.inputBalanceText,
+.inputTitleText {
   font-style: normal !important;
   font-weight: 500 !important;
   font-size: 14px !important;
@@ -352,10 +369,6 @@
 
 .inputBalanceText {
   left: 151px;
-}
-
-.inputTitleText {
-  left: 20px;
 }
 
 .massiveInputContainer {
@@ -387,7 +400,7 @@
 .smallerText {
   position: absolute !important;
   left: 151px;
-  top: 118px;
+  top: 108px;
   font-style: normal;
   font-weight: 500 !important;
   font-size: 18px !important;
@@ -464,6 +477,10 @@
 .assetSelectMenu--dark:hover {
   background: #2D3741 !important;
   box-shadow: 0 1px 0 rgba(76, 173, 229, 0.5);
+}
+
+.assetSelectIconName {
+  margin-left: 32px;
 }
 
 .assetOptionIcon {
@@ -577,7 +594,7 @@
 .massiveInputAmount {
   position: absolute !important;
   left: 151px;
-  top: 76px;
+  top: 66px;
   border: none !important;
   margin-right: 20px !important;
 }
@@ -596,6 +613,23 @@
   width: 60px;
   height: 60px;
   border-radius: 100px;
+}
+
+.displayAssetIconWithdraw {
+  width: 54px;
+  height: 54px;
+  border: 2px solid #9BC9E4;
+  padding: 4px;
+  background: #B9DFF5;
+}
+
+.displayAssetIconWithdraw--dark {
+  border: 2px solid #2D3741;
+  background: #24292D;
+}
+
+.displayAssetIconSec {
+  margin-left: -10px;
 }
 
 .mediumInputContainer {
@@ -1028,7 +1062,7 @@
 
 .assetSelectBalance {
   flex: 1;
-  margin-left: 48px;
+  margin-left: 16px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -1273,6 +1307,13 @@
     font-size: 12px !important;
   }
 
+  .inputBalanceTextContainer {
+    position: absolute;
+    left: 94px;
+    top: 10px;
+    width: 172px;
+  }
+
   .swapIconContainer,
   .swapIconContainerWithdraw {
     position: static;
@@ -1353,14 +1394,14 @@
 
   .massiveInputAmount,
   .massiveInputAmountDate {
-    top: 51px;
+    top: 49px;
     left: 100px;
   }
 
   .smallerText,
   .smallerTextDate {
     font-size: 12px !important;
-    top: 79px;
+    top: 74px;
     left: 100px;
   }
 
@@ -1419,6 +1460,11 @@
     margin-left: 0 !important;
     width: 320px !important;
     height: 50px;
+  }
+
+  .displayAssetIconWithdraw {
+    padding: 2px;
+    border-width: 1px;
   }
 
   .buttonOverride--light {

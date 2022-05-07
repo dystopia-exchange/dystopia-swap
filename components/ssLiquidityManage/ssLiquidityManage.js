@@ -863,37 +863,77 @@ export default function ssLiquidityManage() {
         <Typography className={classes.inputTitleText} noWrap>
           {
             type === 'amount0'
-              ? `1st ${windowWidth > 730 ? 'token' : ''}`
+              ? `1st ${windowWidth > 530 ? 'token' : ''}`
               : type !== 'withdraw' ? (`2nd ${windowWidth > 530 ? 'token' : ''}`) : 'Liq. Pair'
           }
         </Typography>
 
         {type !== 'withdraw' &&
-          <Typography className={classes.inputBalanceText} noWrap onClick={() => {
-            setAmountPercent(type, 100);
-          }}>
-            Balance:
-            {(assetValue && assetValue.balance) ?
-              ' ' + formatCurrency(assetValue.balance) :
-              ''
+          <div className={[classes.inputBalanceTextContainer, 'g-flex', 'g-flex--align-center'].join(' ')}>
+            <img
+              src="/images/ui/icon-wallet.svg"
+              className={classes.walletIcon}/>
+
+            <Typography
+              className={[classes.inputBalanceText, 'g-flex__item'].join(' ')}
+              noWrap>
+            <span>
+              {(assetValue && assetValue.balance) ?
+                ' ' + formatCurrency(assetValue.balance) :
+                ''
+              }
+            </span>
+            </Typography>
+
+            {assetValue?.balance && Number(assetValue?.balance) > 0 && type === 'amount0' &&
+              <div
+                style={{
+                  cursor: 'pointer',
+                  fontWeight: 500,
+                  fontSize: 14,
+                  lineHeight: '120%',
+                  color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                }}
+                onClick={() => setAmountPercent(type, 100)}>
+                MAX
+              </div>
             }
-          </Typography>
+          </div>
         }
 
         {type === 'withdraw' &&
-          <Typography className={classes.inputBalanceText} noWrap onClick={() => {
-            setAmountPercent(type, 100);
-          }}>
-            Balance:
-            {(assetValue && assetValue.gauge && assetValue.gauge.balance) ?
-              (' ' + formatCurrency(assetValue.gauge.balance)) :
-              (
-                (assetValue && assetValue.balance) ?
-                  (' ' + formatCurrency(assetValue.balance)) :
-                  '0.00'
-              )
+          <div className={[classes.inputBalanceTextContainer, 'g-flex', 'g-flex--align-center'].join(' ')}>
+            <img
+              src="/images/ui/icon-wallet.svg"
+              className={classes.walletIcon}/>
+
+            <Typography
+              className={[classes.inputBalanceText, 'g-flex__item'].join(' ')}
+              noWrap>
+              {(assetValue && assetValue.gauge && assetValue.gauge.balance) ?
+                (' ' + formatCurrency(assetValue.gauge.balance)) :
+                (
+                  (assetValue && assetValue.balance) ?
+                    (' ' + formatCurrency(assetValue.balance)) :
+                    '0.00'
+                )
+              }
+            </Typography>
+
+            {assetValue?.balance && Number(assetValue?.balance) > 0 &&
+              <div
+                style={{
+                  cursor: 'pointer',
+                  fontWeight: 500,
+                  fontSize: 14,
+                  lineHeight: '120%',
+                  color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                }}
+                onClick={() => setAmountPercent(type, 100)}>
+                MAX
+              </div>
             }
-          </Typography>
+          </div>
         }
 
         <div className={`${classes.massiveInputContainer} ${(amountError || assetError) && classes.error}`}>
@@ -1886,12 +1926,37 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
           onLocalSelect(type, asset);
         }}>
         <div className={classes.assetSelectMenuItem}>
-          <div className={classes.displayDualIconContainerSmall}>
+          {/*<div className={classes.displayDualIconContainerSmall}>
             <img
               className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
               alt=""
               src={asset ? `${asset.logoURI}` : ''}
               height="60px"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+              }}
+            />
+          </div>*/}
+
+          <div className={classes.displayDualIconContainerSmall}>
+            <img
+              className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
+              alt=""
+              src={asset ? `${asset?.token0?.logoURI}` : ''}
+              height="30px"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+              }}
+            />
+
+            <img
+              className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
+              alt=""
+              src={asset ? `${asset?.token1?.logoURI}` : ''}
+              height="30px"
+              style={{marginLeft: "-15px"}}
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -1904,7 +1969,7 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
             variant="h5"
             style={{
               fontWeight: 500,
-              fontSize: 18,
+              fontSize: 14,
               lineHeight: '120%',
               color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
             }}>
@@ -1915,7 +1980,7 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
             variant="subtitle1"
             style={{
               fontWeight: 400,
-              fontSize: 14,
+              fontSize: 12,
               lineHeight: '120%',
               color: appTheme === "dark" ? '#7C838A' : '#5688A5',
             }}>
@@ -2010,7 +2075,7 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
     );
   };
 
-  const renderOptions = () => {
+  const renderOptions = (type) => {
     return (
       <>
         <div className={classes.searchInline}>
@@ -2084,21 +2149,51 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
       <div className={classes.displaySelectContainer} onClick={() => {
         openSearch();
       }}>
-        <div className={classes.assetSelectMenuItem}>
-          <div
-            className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
-            <img
-              className={classes.displayAssetIcon}
-              alt=""
-              src={value ? `${value.logoURI}` : ''}
-              height="100px"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-              }}
-            />
+        {type !== 'withdraw' &&
+          <div className={classes.assetSelectMenuItem}>
+            <div
+              className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+              <img
+                className={classes.displayAssetIcon}
+                alt=""
+                src={value ? `${value.logoURI}` : ''}
+                height="100px"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                }}
+              />
+            </div>
           </div>
-        </div>
+        }
+
+        {type === 'withdraw' &&
+          <div className={classes.assetSelectMenuItem}>
+            <div
+              className={classes.displayDualIconContainer}>
+              <img
+                className={[classes.displayAssetIcon, classes.displayAssetIconWithdraw, classes[`displayAssetIconWithdraw--${appTheme}`]].join(' ')}
+                alt=""
+                src={value ? `${value?.token0?.logoURI}` : ''}
+                height="100px"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                }}
+              />
+              <img
+                className={[classes.displayAssetIcon, classes.displayAssetIconSec, classes.displayAssetIconWithdraw, classes[`displayAssetIconWithdraw--${appTheme}`]].join(' ')}
+                alt=""
+                src={value ? `${value?.token1?.logoURI}` : ''}
+                height="100px"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                }}
+              />
+            </div>
+          </div>
+        }
       </div>
 
       <Dialog
@@ -2150,7 +2245,7 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
                   height: 18,
                   cursor: 'pointer',
                 }}/>}
-                {manageLocal ? 'Manage local assets' : 'Select a liquidity pair'}
+                {manageLocal ? 'Manage local assets' : (type === 'withdraw' ? 'Select a liquidity pair' : 'Select a token')}
               </div>
 
               <Close
@@ -2163,7 +2258,7 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
           </DialogTitle>
 
           <DialogContent className={classes.dialogContent}>
-            {!manageLocal && renderOptions()}
+            {!manageLocal && renderOptions(type)}
             {manageLocal && renderManageLocal()}
           </DialogContent>
         </div>

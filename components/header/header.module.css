@@ -493,4 +493,29 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  .headSwitchBtnText {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .accountButtonContainer {
+    margin-left: 5px;
+  }
+
+  .headBtnTxt {
+    font-size: 10px !important;
+  }
+}
+
+@media (max-width: 345px) {
+  .logoContainer {
+    display: none;
+  }
+
+  .userBlock {
+    width: 100%;
+    justify-content: center;
+  }
 }

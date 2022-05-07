@@ -50,6 +50,12 @@
   padding: 20px 30px 30px !important;
 }
 
+.walletIcon {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+}
+
 .massiveInputContainer {
   display: flex;
   flex-wrap: wrap;
@@ -214,10 +220,20 @@
   background: rgb(33, 43, 72);
 }
 
-.inputBalanceText,
+.inputBalanceTextContainer {
+  position: absolute;
+  left: 151px;
+  top: 12px;
+  width: 225px;
+}
+
 .inputTitleText {
   position: absolute;
   top: 12px;
+}
+
+.inputBalanceText,
+.inputTitleText {
   font-style: normal !important;
   font-weight: 400 !important;
   font-size: 14px !important;
@@ -229,6 +245,7 @@
   font-weight: 500 !important;
   font-size: 14px !important;
   line-height: 120% !important;
+  margin-right: 10px !important;
 }
 
 .inputBalanceSlippage--light {
@@ -249,10 +266,6 @@
 
 .inputTitleText {
   left: 20px;
-}
-
-.inputBalanceText {
-  left: 151px;
 }
 
 .slippage {
@@ -708,7 +721,7 @@
 .btnSwap {
   position: absolute !important;
   bottom: -98px;
-  margin-left: 26px !important;
+  margin-left: 24px !important;
   left: 118px;
 }
 
@@ -1028,6 +1041,13 @@
 
   .inputBalanceText {
     left: 100px;
+  }
+
+  .inputBalanceTextContainer {
+    position: absolute;
+    left: 94px;
+    top: 10px;
+    width: 172px;
   }
 
   .displayDualIconContainer {
