@@ -16,6 +16,8 @@ import {
   Tooltip,
   Stack,
   Radio,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -25,10 +27,12 @@ import {
   ArrowForwardIos,
   DeleteOutline,
   Close,
-  ArrowBackIosNew
+  ArrowBackIosNew,
+  SettingsPhoneTwoTone,
 } from "@mui/icons-material";
 import migrate from "../../stores/configurations/migrators";
 import FactoryAbi from "../../stores/abis/FactoryAbi.json";
+import migratorAbi from "../../stores/abis/migrator.json";
 import pairContractAbi from "../../stores/abis/pairOldRouter.json";
 import Form from "../../ui/MigratorForm";
 import {
@@ -37,13 +41,12 @@ import {
   formatCurrencyWithSymbol,
   formatCurrencySmall,
 } from "../../utils";
-import migratorAbi from "../../stores/abis/migrator.json";
 import classes from "./ssSwap.module.css";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import stores from "../../stores";
 import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
 import BigNumber from "bignumber.js";
-import { formatSymbol } from '../../utils';
+import { formatSymbol } from "../../utils";
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -72,6 +75,7 @@ export default function Setup() {
   const [toAssetValue, setToAssetValue] = useState(null);
   const { appTheme } = useAppThemeContext();
   const [isStable, toggleStablePool] = useState(false);
+  const [toggleArrow, settoggleArrow] = useState(false);
   const [pairDetails, setPairDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("");
@@ -80,6 +84,9 @@ export default function Setup() {
   const [fromAssetOptions, setFromAssetOptions] = useState([]);
   const [toAssetOptions, setToAssetOptions] = useState([]);
   const [selectedValue, setSelectedValue] = React.useState("a");
+  const [checkpair, setcheckpair] = useState(false);
+  const [dystopiaPair, setdystopiaPair] = useState(null);
+
 
   const handleRadioChange = (event) => {
     setSelectedValue(event.target.value);
@@ -98,11 +105,11 @@ export default function Setup() {
   const getPairDetails = async (token0, token1) => {
     const multicall = await stores.accountStore.getMulticall();
 
-    if (token0 == 'MATIC') {
-      token0 = CONTRACTS.WFTM_ADDRESS
+    if (token0 == "MATIC") {
+      token0 = CONTRACTS.WFTM_ADDRESS;
     }
-    if (token1 == 'MATIC') {
-      token1 = CONTRACTS.WFTM_ADDRESS
+    if (token1 == "MATIC") {
+      token1 = CONTRACTS.WFTM_ADDRESS;
     }
 
     try {
@@ -130,35 +137,44 @@ export default function Setup() {
               (eachMigrate) => eachMigrate.value === platform
             );
 
-            let [getReserves, symbol, allowence, getTotalSupply, lpBalance, token0Add, token1Add] = await multicall.aggregate([
+            let [
+              getReserves,
+              symbol,
+              allowence,
+              getTotalSupply,
+              lpBalance,
+              token0Add,
+              token1Add,
+            ] = await multicall.aggregate([
               pairContract.methods.getReserves(),
               pairContract.methods.symbol(),
-              pairContract.methods
-                .allowance(
-                  account.address,
-                  migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
-                ),
+              pairContract.methods.allowance(
+                account.address,
+                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
+              ),
               pairContract.methods.totalSupply(),
-              pairContract.methods
-                .balanceOf(account.address),
+              pairContract.methods.balanceOf(account.address),
               pairContract.methods.token0(),
               pairContract.methods.token1(),
-
             ]);
 
-            const token0Contract = new web3.eth.Contract(pairContractAbi, token0Add);
-            const token1Contract = new web3.eth.Contract(pairContractAbi, token1Add);
+            const token0Contract = new web3.eth.Contract(
+              pairContractAbi,
+              token0Add
+            );
+            const token1Contract = new web3.eth.Contract(
+              pairContractAbi,
+              token1Add
+            );
             let [token0symbol, token1symbol] = await multicall.aggregate([
               token0Contract.methods.symbol(),
               token1Contract.methods.symbol(),
-              pairContract.methods
-                .allowance(
-                  account.address,
-                  migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
-                ),
+              pairContract.methods.allowance(
+                account.address,
+                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
+              ),
               pairContract.methods.totalSupply(),
-              pairContract.methods
-                .balanceOf(account.address)
+              pairContract.methods.balanceOf(account.address),
             ]);
 
             let totalSupply = web3.utils.fromWei(
@@ -167,10 +183,19 @@ export default function Setup() {
             );
             lpBalance = web3.utils.fromWei(lpBalance.toString(), "ether");
 
-            const weiReserve1 = getReserves[0] / (10 ** toAssetValue.decimals)
+            const weiReserve1 = getReserves[0] / 10 ** toAssetValue.decimals;
 
-            const weiReserve2 = getReserves[1] / (10 ** fromAssetValue.decimals)
-            console.log(getReserves, fromAssetValue, toAssetValue, weiReserve1, weiReserve2, lpBalance, totalSupply, "migrate info")
+            const weiReserve2 = getReserves[1] / 10 ** fromAssetValue.decimals;
+            console.log(
+              getReserves,
+              fromAssetValue,
+              toAssetValue,
+              weiReserve1,
+              weiReserve2,
+              lpBalance,
+              totalSupply,
+              "migrate info"
+            );
             const token0Bal =
               (parseFloat(lpBalance.toString()) /
                 parseFloat(totalSupply.toString())) *
@@ -198,6 +223,7 @@ export default function Setup() {
 
             setAmount(parseFloat(lpBalance).toFixed(4));
             setPairDetails(pairDetails);
+            return pairDetails
           } else {
             let pairDetails = {
               isValid: false,
@@ -205,6 +231,7 @@ export default function Setup() {
               allowence: 0,
             };
             setPairDetails(pairDetails);
+            return pairDetails
           }
         }
       }
@@ -214,6 +241,7 @@ export default function Setup() {
   };
 
   const onAssetSelect = async (type, value) => {
+
     if (type === "From") {
       if (value.address === toAssetValue.address) {
         setToAssetValue(fromAssetValue);
@@ -221,7 +249,6 @@ export default function Setup() {
       } else {
         setFromAssetValue(value);
       }
-      getPairDetails(value.address, toAssetValue.address);
     } else {
       if (value.address === fromAssetValue.address) {
         setFromAssetError(toAssetValue);
@@ -229,8 +256,9 @@ export default function Setup() {
       } else {
         setToAssetValue(value);
       }
-      getPairDetails(fromAssetValue.address, value.address);
     }
+    setPairDetails(null)
+    setcheckpair(false)
   };
 
   useEffect(
@@ -294,9 +322,7 @@ export default function Setup() {
     }
   };
   const handleMax = (lpBalance) => {
-    
-      setAmount(lpBalance);
-    
+    setAmount(lpBalance);
   };
 
   let buttonText = "Approve";
@@ -333,6 +359,40 @@ export default function Setup() {
       </div>
     );
   };
+  const checkPair = async (fromAssetValue, toAssetValue, isStable) => {
+    const web3 = await stores.accountStore.getWeb3Provider();
+
+    await getPairDetails(fromAssetValue, toAssetValue).then((a) => {
+      if (!a?.isValid)
+        setcheckpair(false)
+      else
+        setcheckpair(true)
+    })
+    const pair = await stores.stableSwapStore.getPair(fromAssetValue, toAssetValue, isStable)
+    console.log(pair, "dystopiapair")
+
+
+    pair.reserve0 =
+      (parseFloat(pair.balance.toString()) /
+        parseFloat(pair.totalSupply.toString())) *
+      parseFloat(pair.reserve0);
+    pair.reserve1 =
+      (parseFloat(pair.balance.toString()) /
+        parseFloat(pair.totalSupply.toString())) *
+      parseFloat(pair.reserve1.toString());
+
+      // const multicall = await stores.accountStore.getMulticall();  
+      // const migcontract = new web3.eth.Contract(
+      //   migratorAbi,
+      //   migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
+      // );
+      // let [getAmoutsOldToken] = await multicall.aggregate([
+      //   migcontract.methods.getAmountsFromLiquidityForOldPair(),
+      // ]);
+      // console.log(getAmoutsOldToken,"musicmg")
+    setdystopiaPair(pair)
+
+  };
   return (
     <div>
       <Form>
@@ -340,7 +400,7 @@ export default function Setup() {
           className={[classes[`form`], classes[`form--${appTheme}`]].join(" ")}
         >
           <div className={classes.infoContainer}>
-            <div style={{ marginBottom: "20px" }}>
+            <div style={{ marginBottom: "20px",width:"100%" }}>
               <p
                 className={classes.titleText}
                 style={{ color: appTheme === "light" ? "#0A2C40" : "white" }}
@@ -349,10 +409,62 @@ export default function Setup() {
               </p>
               <FormControl
                 variant="standard"
-                sx={{ minWidth: 120, width: "300px" }}
+                sx={{ minWidth: "300px", width: "100%" }}
               >
+                 <div style={{
+                  display: 'flex',
+                  flexDirectiion: 'row'
+                }}>
+                  <div
+                    className={[
+                      classes.pairDetails,
+                      classes[`pairDetails--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    <div
+                      className={[
+                        classes[`nav-button-corner-bottom`],
+                        classes[`nav-button-corner-bottom--${appTheme}`],
+                      ].join(" ")}
+                    >
+                      <div
+                        className={[
+                          classes[`nav-button-corner-top`],
+                          classes[`nav-button-corner-top--${appTheme}`],
+                        ].join(" ")}
+                      >
+                        <span style={{ color: "#304C5E", fontWeight: "800" }}>
+                          QuickSwap
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={{ width: "30%" }}
+                    className={[
+                      classes.pairDetails,
+                      classes[`pairDetails--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    <div
+                      className={[
+                        classes[`nav-button-corner-bottom`],
+                        classes[`nav-button-corner-bottom--${appTheme}`],
+                      ].join(" ")}
+                    >
+                      <div
+                        className={[
+                          classes[`nav-button-corner-top`],
+                          classes[`nav-button-corner-top--${appTheme}`],
+                        ].join(" ")}
+                      >
+                        <PlatformSelect />
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 {/* <InputLabel id="demo-simple-select-standard-label">Select Exchange Platform</InputLabel> */}
-                <Select
+                {/* <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
                   value={platform}
@@ -369,7 +481,8 @@ export default function Setup() {
                       {eachPlatform.label}
                     </MenuItem>
                   ))}
-                </Select>
+                </Select> */}
+                <div className={classes.line}></div>
               </FormControl>
             </div>
             <div className={classes.swapInputs}>
@@ -378,6 +491,7 @@ export default function Setup() {
                   classes.textField,
                   classes[`textField--From-${appTheme}`],
                 ].join(" ")}
+                style={{ overflow: "overlay" }}
               >
                 <Typography className={classes.inputTitleText} noWrap>
                   Token 0
@@ -415,7 +529,7 @@ export default function Setup() {
                   classes.textField,
                   classes[`textField--To-${appTheme}`],
                 ].join(" ")}
-                style={{ marginTop: "50px" }}
+                style={{ marginTop: "50px", overflow: "overlay" }}
               >
                 <Typography className={classes.inputTitleText} noWrap>
                   Token 1
@@ -474,9 +588,23 @@ export default function Setup() {
                         : "0"}
                     </span>
                   </Typography>
-                  <Button onClick={()=>handleMax(Number(pairDetails.lpBalance).toFixed(5))} style={{ position: 'absolute', marginLeft: "325px", top: '10px', padding: '0' }} variant="text" size="small" >
-                    MAX
-                  </Button>
+                  <div>
+                    <Button
+                      onClick={() =>
+                        handleMax(Number(pairDetails.lpBalance).toFixed(5))
+                      }
+                      style={{
+                        position: "absolute",
+                        marginLeft: "300px",
+                        top: "10px",
+                        padding: "0",
+                      }}
+                      variant="text"
+                      size="small"
+                    >
+                      MAX
+                    </Button>
+                  </div>
                   <div className={`${classes.massiveInputContainer}`}>
                     <div className={classes.massiveInputAssetSelect}>
                       <div
@@ -673,7 +801,7 @@ export default function Setup() {
                     classes[`pairDetails--${appTheme}`],
                   ].join(" ")}
                 >
-                 <div
+                  <div
                     className={[
                       classes[`nav-button-corner-bottom`],
                       classes[`nav-button-corner-bottom--${appTheme}`],
@@ -686,7 +814,13 @@ export default function Setup() {
                       ].join(" ")}
                     >
                       Your Pool Share:
-                      <span style={{ color: "#304C5E", fontWeight: "800" ,marginLeft:"175px"}}>
+                      <span
+                        style={{
+                          color: "#304C5E",
+                          fontWeight: "800",
+                          marginLeft: "175px",
+                        }}
+                      >
                         {pairDetails.poolTokenPercentage}%
                       </span>
                     </div>
@@ -699,7 +833,7 @@ export default function Setup() {
                       classes[`pairDetails--${appTheme}`],
                     ].join(" ")}
                   >
-                     <div
+                    <div
                       className={[
                         classes[`nav-button-corner-bottom`],
                         classes[`nav-button-corner-bottom--${appTheme}`],
@@ -712,7 +846,13 @@ export default function Setup() {
                         ].join(" ")}
                       >
                         {pairDetails?.token0symbol}:
-                        <span style={{ color: "#304C5E", fontWeight: "800",marginLeft:"50px" }}>
+                        <span
+                          style={{
+                            color: "#304C5E",
+                            fontWeight: "800",
+                            marginLeft: "50px",
+                          }}
+                        >
                           {Number(pairDetails.token0Bal).toFixed(2)}
                         </span>
                       </div>
@@ -724,7 +864,7 @@ export default function Setup() {
                       classes[`pairDetails--${appTheme}`],
                     ].join(" ")}
                   >
-                      <div
+                    <div
                       className={[
                         classes[`nav-button-corner-bottom`],
                         classes[`nav-button-corner-bottom--${appTheme}`],
@@ -737,79 +877,318 @@ export default function Setup() {
                         ].join(" ")}
                       >
                         {pairDetails?.token1symbol}
-                        <span style={{ color: "#304C5E", fontWeight: "800" ,marginLeft:"50px"}}>
+                        <span
+                          style={{
+                            color: "#304C5E",
+                            fontWeight: "800",
+                            marginLeft: "50px",
+                          }}
+                        >
                           {Number(pairDetails.token1Bal).toFixed(2)}
                         </span>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className={classes.radioContainer}>
-                  <div
-                    onClick={() => toggleStablePool(true)}
-                    className={classes.radioButton}
-                    style={{
-                      color: isStable ? "white" : "#0C5E8E",
-                      background: isStable
-                        ? appTheme === "light"
-                          ? "#86B9D6"
-                          : "#5F7285"
-                        : "transparent",
-                        border: "1px solid #0C5E8E",
-                        marginRight: '10px'
-                    }}
-                  >
-                    <Radio
-                      checked={isStable}
-                      onClick={() => toggleStablePool(true)}
-                      value="a"
-                      name="radio-buttons"
-                      inputProps={{ "aria-label": "A" }}
-                    />
-                    Stable
+                {dystopiaPair ?
+
+                  (<div>
+                    <div className={classes.arrowDownCircle} onClick={() => settoggleArrow(!toggleArrow)}>
+                      <span
+                        style={{
+                          height: "40px",
+                          width: "40px",
+                          backgroundColor: "transparent",
+                          borderRadius: "50%",
+                          display: "inline-block",
+                          border: "1px solid #86B9D6",
+                        }}
+                      >
+                        <svg
+                          style={{ marginTop: "10px" }}
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          class="bi bi-chevron-down"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                    {toggleArrow ?
+                      (<div>
+                        <div
+                          className={[
+                            classes.pairContainer,
+                            classes[`pairContainer--${appTheme}`],
+                          ].join(" ")}
+                          style={{ marginTop: "20px" }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center" }}>
+                            <div
+                              className={classes.assetSelectMenuItem}
+                              style={{ display: "flex" }}
+                            >
+                              <div
+                                className={[classes.displayDualIconContainer].join(" ")}
+                                style={{
+                                  width: "50px",
+                                  height: "50px",
+                                  borderRadius: "50%",
+                                  border:
+                                    appTheme === "light"
+                                      ? "1px solid rgb(50 73 87)"
+                                      : "1px solid rgb(50 73 87)",
+                                  background: "#B8DFF5",
+                                  padding: "10px",
+                                }}
+                              >
+                                <img
+                                  className={classes.displayAssetIcon}
+                                  alt=""
+                                  src={
+                                    fromAssetValue ? `${fromAssetValue.logoURI}` : ""
+                                  }
+                                  style={{ width: "30px", height: "30px" }}
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                                  }}
+                                />
+                              </div>
+                              <div
+                                className={[classes.displayDualIconContainer].join(" ")}
+                                style={{
+                                  width: "50px",
+                                  height: "50px",
+                                  borderRadius: "50%",
+                                  border:
+                                    appTheme === "light"
+                                      ? "1px solid rgb(50 73 87)"
+                                      : "1px solid rgb(50 73 87)",
+                                  position: "absolute",
+                                  left: "80px",
+                                  background: "#B8DFF5",
+                                  padding: "10px",
+                                }}
+                              >
+                                <img
+                                  className={classes.displayAssetIcon}
+                                  alt=""
+                                  src={toAssetValue ? `${toAssetValue.logoURI}` : ""}
+                                  style={{ width: "30px", height: "30px" }}
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            <div style={{ marginLeft: "50px" }}>
+                              <div>
+                                {fromAssetValue?.symbol}/{toAssetValue?.symbol}
+                              </div>
+                              <span
+                                style={{
+                                  color: appTheme === "light" ? "#86B9D6" : "#5F7285",
+                                  fontSize: "16px",
+                                }}
+                              >
+                                {migrator.label} Pool
+                              </span>
+                            </div>
+                          </div>
+                          <span style={{ color: "#304C5E", fontWeight: "800" }}>
+                            {Number(dystopiaPair.balance).toFixed(5)}
+                          </span>
+                        </div>
+                        <div style={{ display: "flex", width: "100%" }}>
+                          <div
+                            className={[
+                              classes.pairDetails,
+                              classes[`pairDetails--${appTheme}`],
+                            ].join(" ")}
+                          >
+                            <div
+                              className={[
+                                classes[`nav-button-corner-bottom`],
+                                classes[`nav-button-corner-bottom--${appTheme}`],
+                              ].join(" ")}
+                            >
+                              <div
+                                className={[
+                                  classes[`nav-button-corner-top`],
+                                  classes[`nav-button-corner-top--${appTheme}`],
+                                ].join(" ")}
+                              >
+                                {dystopiaPair?.token0?.symbol}:
+                                <span
+                                  style={{
+                                    color: "#304C5E",
+                                    fontWeight: "800",
+                                    marginLeft: "50px",
+                                  }}
+                                >
+                                  {Number(dystopiaPair.reserve0).toFixed(2)}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            className={[
+                              classes.pairDetails,
+                              classes[`pairDetails--${appTheme}`],
+                            ].join(" ")}
+                          >
+                            <div
+                              className={[
+                                classes[`nav-button-corner-bottom`],
+                                classes[`nav-button-corner-bottom--${appTheme}`],
+                              ].join(" ")}
+                            >
+                              <div
+                                className={[
+                                  classes[`nav-button-corner-top`],
+                                  classes[`nav-button-corner-top--${appTheme}`],
+                                ].join(" ")}
+                              >
+                                {dystopiaPair?.token1?.symbol}
+                                <span
+                                  style={{
+                                    color: "#304C5E",
+                                    fontWeight: "800",
+                                    marginLeft: "50px",
+                                  }}
+                                >
+                                  {Number(dystopiaPair.reserve1).toFixed(2)}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          className={[
+                            classes.quoteLoader,
+                            classes.quoteLoaderError,
+                          ].join(" ")}
+                        >
+                          <div
+                            className={[
+                              classes.quoteLoaderDivider,
+                              classes.quoteLoaderDividerError,
+                            ].join(" ")}
+                          ></div>
+                          <Typography>
+                            ~0USDC and ~2.1975DYST will be refunded to your wallet due
+                            to the price difference.
+                          </Typography>
+                        </div>
+                      </div>) : null}
                   </div>
-                  <div
-                    onClick={() => toggleStablePool(false)}
-                    className={classes.radioButton}
-                    style={{
-                      color: !isStable ? "white" : "#0C5E8E",
-                      background: !isStable
-                        ? appTheme === "light"
-                          ? "#86B9D6"
-                          : "#5F7285"
-                        : "transparent",
-                        border: "1px solid #0C5E8E",
-                        marginRight: '0px'
-                    }}
-                  >
-                    <Radio
-                      checked={!isStable}
-                      onClick={() => toggleStablePool(false)}
-                      value="b"
-                      name="radio-buttons"
-                      inputProps={{ "aria-label": "B" }}
-                    />
-                    Volatile
-                  </div>
-                </div>
+
+                  )
+                  : null}
+
               </div>
+
             )}
+            <div className={classes.radioContainer}>
+              <div
+                onClick={() => toggleStablePool(true)}
+                className={classes.radioButton}
+                style={{
+                  color: isStable ? "white" : "#0C5E8E",
+                  background: isStable
+                    ? appTheme === "light"
+                      ? "#86B9D6"
+                      : "#5F7285"
+                    : "transparent",
+                  border: "1px solid #0C5E8E",
+                  marginRight: "10px",
+                }}
+              >
+                <Radio
+                  checked={isStable}
+                  onClick={() => toggleStablePool(true)}
+                  value="a"
+                  name="radio-buttons"
+                  inputProps={{ "aria-label": "A" }}
+                />
+                Stable
+              </div>
+              <div
+                onClick={() => toggleStablePool(false)}
+                className={classes.radioButton}
+                style={{
+                  color: !isStable ? "white" : "#0C5E8E",
+                  background: !isStable
+                    ? appTheme === "light"
+                      ? "#86B9D6"
+                      : "#5F7285"
+                    : "transparent",
+                  border: "1px solid #0C5E8E",
+                  marginRight: "0px",
+                }}
+              >
+                <Radio
+                  checked={!isStable}
+                  onClick={() => toggleStablePool(false)}
+                  value="b"
+                  name="radio-buttons"
+                  inputProps={{ "aria-label": "B" }}
+                />
+                Volatile
+              </div>
+            </div>
           </div>
         </div>
       </Form>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <div className={[classes[`buttonOverrideContainer--${appTheme}`]].join(' ')}>
-          <Button
-            variant='contained'
-            size='large'
-            color='primary'
-            onClick={migrateLiquidity}
-            disabled={disableButton}
-            className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(' ')}
-          >
-            <span className={classes.actionButtonText}>{buttonText}</span>
-            {loading && <CircularProgress size={10} className={classes.loadingCircle} />}
-          </Button>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <div
+          className={[classes[`buttonOverrideContainer--${appTheme}`]].join(
+            " "
+          )}
+        >
+          {checkpair ? (
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={migrateLiquidity}
+              disabled={disableButton}
+              className={[
+                classes.buttonOverride,
+                classes[`buttonOverride--${appTheme}`],
+              ].join(" ")}
+            >
+              <span className={classes.actionButtonText}>{buttonText}</span>
+              {loading && (
+                <CircularProgress size={10} className={classes.loadingCircle} />
+              )}
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={() => checkPair(fromAssetValue.address, toAssetValue.address, isStable)}
+              disabled={disableButton}
+              className={[
+                classes.buttonOverride,
+                classes[`buttonOverride--${appTheme}`],
+              ].join(" ")}
+            >
+              <span className={classes.actionButtonText}>{`Check Pair`}</span>
+              {loading && (
+                <CircularProgress size={10} className={classes.loadingCircle} />
+              )}
+            </Button>
+          )}
         </div>
       </div>
     </div>
@@ -887,14 +1266,22 @@ export default function Setup() {
     const renderManageOption = (type, asset, idx) => {
       return (
         <MenuItem
-          val={asset.address} key={asset.address + '_' + idx}
-          className={[classes.assetSelectMenu, classes[`assetSelectMenu--${appTheme}`]].join(' ')}>
+          val={asset.address}
+          key={asset.address + "_" + idx}
+          className={[
+            classes.assetSelectMenu,
+            classes[`assetSelectMenu--${appTheme}`],
+          ].join(" ")}
+        >
           <div className={classes.assetSelectMenuItem}>
             <div className={classes.displayDualIconContainerSmall}>
               <img
-                className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
+                className={[
+                  classes.assetOptionIcon,
+                  classes[`assetOptionIcon--${appTheme}`],
+                ].join(" ")}
                 alt=""
-                src={asset ? `${asset.logoURI}` : ''}
+                src={asset ? `${asset.logoURI}` : ""}
                 height="60px"
                 onError={(e) => {
                   e.target.onerror = null;
@@ -909,30 +1296,36 @@ export default function Setup() {
               variant="h5"
               className={classes.assetSymbolName}
               style={{
-                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-              }}>
-              {asset ? formatSymbol(asset.symbol) : ''}
+                color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+              }}
+            >
+              {asset ? formatSymbol(asset.symbol) : ""}
             </Typography>
 
             <Typography
               variant="subtitle1"
               className={classes.assetSymbolName2}
               style={{
-                color: appTheme === "dark" ? '#7C838A' : '#5688A5',
-              }}>
-              {asset ? asset.name : ''}
+                color: appTheme === "dark" ? "#7C838A" : "#5688A5",
+              }}
+            >
+              {asset ? asset.name : ""}
             </Typography>
           </div>
 
           <div className={classes.assetSelectActions}>
-            <IconButton onClick={() => {
-              deleteOption(asset);
-            }}>
+            <IconButton
+              onClick={() => {
+                deleteOption(asset);
+              }}
+            >
               <DeleteOutline />
             </IconButton>
-            <IconButton onClick={() => {
-              viewOption(asset);
-            }}>
+            <IconButton
+              onClick={() => {
+                viewOption(asset);
+              }}
+            >
               ↗
             </IconButton>
           </div>
@@ -944,17 +1337,24 @@ export default function Setup() {
       return (
         <MenuItem
           val={asset.address}
-          key={asset.address + '_' + idx}
-          className={[classes.assetSelectMenu, classes[`assetSelectMenu--${appTheme}`]].join(' ')}
+          key={asset.address + "_" + idx}
+          className={[
+            classes.assetSelectMenu,
+            classes[`assetSelectMenu--${appTheme}`],
+          ].join(" ")}
           onClick={() => {
             onLocalSelect(type, asset);
-          }}>
+          }}
+        >
           <div className={classes.assetSelectMenuItem}>
             <div className={classes.displayDualIconContainerSmall}>
               <img
-                className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
+                className={[
+                  classes.assetOptionIcon,
+                  classes[`assetOptionIcon--${appTheme}`],
+                ].join(" ")}
                 alt=""
-                src={asset ? `${asset.logoURI}` : ''}
+                src={asset ? `${asset.logoURI}` : ""}
                 height="50px"
                 onError={(e) => {
                   e.target.onerror = null;
@@ -968,18 +1368,20 @@ export default function Setup() {
               variant="h5"
               className={classes.assetSymbolName}
               style={{
-                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-              }}>
-              {asset ? formatSymbol(asset.symbol) : ''}
+                color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+              }}
+            >
+              {asset ? formatSymbol(asset.symbol) : ""}
             </Typography>
 
             <Typography
               variant="subtitle1"
               className={classes.assetSymbolName2}
               style={{
-                color: appTheme === "dark" ? '#7C838A' : '#5688A5',
-              }}>
-              {asset ? asset.name : ''}
+                color: appTheme === "dark" ? "#7C838A" : "#5688A5",
+              }}
+            >
+              {asset ? asset.name : ""}
             </Typography>
           </div>
 
@@ -988,18 +1390,20 @@ export default function Setup() {
               variant="h5"
               className={classes.assetSelectBalanceText}
               style={{
-                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-              }}>
-              {(asset && asset.balance) ? formatCurrency(asset.balance) : '0.00'}
+                color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+              }}
+            >
+              {asset && asset.balance ? formatCurrency(asset.balance) : "0.00"}
             </Typography>
 
             <Typography
               variant="subtitle1"
               className={classes.assetSelectBalanceText2}
               style={{
-                color: appTheme === "dark" ? '#7C838A' : '#5688A5',
-              }}>
-              {'Balance'}
+                color: appTheme === "dark" ? "#7C838A" : "#5688A5",
+              }}
+            >
+              {"Balance"}
             </Typography>
           </div>
         </MenuItem>
@@ -1019,54 +1423,61 @@ export default function Setup() {
               onChange={onSearchChanged}
               InputProps={{
                 style: {
-                  background: 'transparent',
-                  border: '1px solid',
-                  borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
+                  background: "transparent",
+                  border: "1px solid",
+                  borderColor: appTheme === "dark" ? "#5F7285" : "#86B9D6",
                   borderRadius: 0,
                 },
                 classes: {
                   root: classes.searchInput,
                 },
-                startAdornment: <InputAdornment position="start">
-                  <Search style={{
-                    color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                  }}/>
-                </InputAdornment>,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search
+                      style={{
+                        color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
+                      }}
+                    />
+                  </InputAdornment>
+                ),
               }}
               inputProps={{
                 style: {
-                  padding: '10px',
+                  padding: "10px",
                   borderRadius: 0,
-                  border: 'none',
-                  fontSize: '14px',
-                  lineHeight: '120%',
-                  color: '#86B9D6',
+                  border: "none",
+                  fontSize: "14px",
+                  lineHeight: "120%",
+                  color: "#86B9D6",
                 },
               }}
             />
-          </div> 
-  
-          <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
-            {
-              filteredAssetOptions ? filteredAssetOptions.filter((option) => {
-                return option.local === true;
-              }).map((asset, idx) => {
-                return renderManageOption(type, asset, idx);
-              }) : []
-            }
           </div>
-  
+
+          <div
+            className={[
+              classes.assetSearchResults,
+              classes[`assetSearchResults--${appTheme}`],
+            ].join(" ")}
+          >
+            {filteredAssetOptions
+              ? filteredAssetOptions
+                .filter((option) => {
+                  return option.local === true;
+                })
+                .map((asset, idx) => {
+                  return renderManageOption(type, asset, idx);
+                })
+              : []}
+          </div>
+
           <div className={classes.manageLocalContainer}>
-            <Button
-              onClick={toggleLocal}
-            >
-              Back to Assets
-            </Button>
+            <Button onClick={toggleLocal}>Back to Assets</Button>
           </div>
         </>
       );
     };
-  
+
     const renderOptions = () => {
       return (
         <>
@@ -1080,51 +1491,62 @@ export default function Setup() {
               onChange={onSearchChanged}
               InputProps={{
                 style: {
-                  background: 'transparent',
-                  border: '1px solid',
-                  borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
+                  background: "transparent",
+                  border: "1px solid",
+                  borderColor: appTheme === "dark" ? "#5F7285" : "#86B9D6",
                   borderRadius: 0,
                 },
                 classes: {
                   root: classes.searchInput,
                 },
-                startAdornment: <InputAdornment position="start">
-                  <Search style={{
-                    color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                  }}/>
-                </InputAdornment>,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search
+                      style={{
+                        color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
+                      }}
+                    />
+                  </InputAdornment>
+                ),
               }}
               inputProps={{
                 style: {
-                  padding: '10px',
+                  padding: "10px",
                   borderRadius: 0,
-                  border: 'none',
-                  fontSize: '14px',
-                  lineHeight: '120%',
-                  color: '#86B9D6',
+                  border: "none",
+                  fontSize: "14px",
+                  lineHeight: "120%",
+                  color: "#86B9D6",
                 },
               }}
             />
           </div>
-  
-          <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
-            {
-              filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
-                if (BigNumber(a.balance).lt(b.balance)) return 1;
-                if (BigNumber(a.balance).gt(b.balance)) return -1;
-                if (a.symbol.toLowerCase() < b.symbol.toLowerCase()) return -1;
-                if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
-                return 0;
-              }).map((asset, idx) => {
-                return renderAssetOption(type, asset, idx);
-              }) : []
-            }
+
+          <div
+            className={[
+              classes.assetSearchResults,
+              classes[`assetSearchResults--${appTheme}`],
+            ].join(" ")}
+          >
+            {filteredAssetOptions
+              ? filteredAssetOptions
+                .sort((a, b) => {
+                  if (BigNumber(a.balance).lt(b.balance)) return 1;
+                  if (BigNumber(a.balance).gt(b.balance)) return -1;
+                  if (a.symbol.toLowerCase() < b.symbol.toLowerCase())
+                    return -1;
+                  if (a.symbol.toLowerCase() > b.symbol.toLowerCase())
+                    return 1;
+                  return 0;
+                })
+                .map((asset, idx) => {
+                  return renderAssetOption(type, asset, idx);
+                })
+              : []}
           </div>
-  
+
           <div className={classes.manageLocalContainer}>
-            <Button
-              className={classes.manageLocalBtn}
-              onClick={toggleLocal}>
+            <Button className={classes.manageLocalBtn} onClick={toggleLocal}>
               Manage Local Assets
             </Button>
           </div>
@@ -1161,26 +1583,119 @@ export default function Setup() {
           </div>
         </div>
         <Dialog
-        className={classes.blurbg}
-        aria-labelledby="simple-dialog-title"
-        open={open}
-        onClick={(e) => {
-          if (e.target.classList.contains('MuiDialog-container')) {
-            onClose()
-          }
-        }}
-        style={{borderRadius: 0}}>
-        <div
-          className={classes.dialogContainer}
-          style={{
-            width: 460,
-            height: 710,
-            background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-            border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
-            borderRadius: 0,
-          }}>
+          className={classes.blurbg}
+          aria-labelledby="simple-dialog-title"
+          open={open}
+          onClick={(e) => {
+            if (e.target.classList.contains("MuiDialog-container")) {
+              onClose();
+            }
+          }}
+          style={{ borderRadius: 0 }}
+        >
+          <div
+            className={classes.dialogContainer}
+            style={{
+              width: 460,
+              height: 710,
+              background: appTheme === "dark" ? "#151718" : "#DBE6EC",
+              border:
+                appTheme === "dark" ? "1px solid #5F7285" : "1px solid #86B9D6",
+              borderRadius: 0,
+            }}
+          >
             <DialogTitle
               className={classes.dialogTitle}
+              style={{
+                padding: 30,
+                paddingBottom: 0,
+                fontWeight: 500,
+                fontSize: 18,
+                lineHeight: "140%",
+                color: "#0A2C40",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+                  }}
+                >
+                  {manageLocal && (
+                    <ArrowBackIosNew
+                      onClick={toggleLocal}
+                      style={{
+                        marginRight: 10,
+                        width: 18,
+                        height: 18,
+                        cursor: "pointer",
+                      }}
+                    />
+                  )}
+                  {manageLocal ? "Manage local assets" : "Select a token"}
+                </div>
+
+                <Close
+                  style={{
+                    cursor: "pointer",
+                    color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+                  }}
+                  onClick={onClose}
+                />
+              </div>
+            </DialogTitle>
+
+            <DialogContent className={classes.dialogContent}>
+              {!manageLocal && renderOptions()}
+              {manageLocal && renderManageLocal()}
+            </DialogContent>
+          </div>
+        </Dialog>
+      </React.Fragment>
+    );
+  }
+  function PlatformSelect({ platformOptions, onSelect }) {
+    const [open, setOpen] = useState(false);
+    const [search, setSearch] = useState("");
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    }
+    const handleClose = () => {
+      setOpen(false);
+    }
+
+    const onClose = () => {
+      setSearch("");
+      setOpen(false);
+    };
+
+    return (
+      <div>
+        <Button style={{ padding: "0" }} onClick={handleClickOpen}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+          </svg>
+        </Button>
+        <Dialog className={classes.blurbg} open={open} onClose={handleClose}>
+          <div
+            // className={classes.dialogContainer}
+            style={{
+              width: 380,
+              height: 710,
+              background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+              border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
+              borderRadius: 0,
+            }}>
+            <DialogTitle TitleclassName={classes.dialogTitle}
               style={{
                 padding: 30,
                 paddingBottom: 0,
@@ -1199,15 +1714,8 @@ export default function Setup() {
                   alignItems: 'center',
                   color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
                 }}>
-                  {manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
-                    marginRight: 10,
-                    width: 18,
-                    height: 18,
-                    cursor: 'pointer',
-                  }} />}
-                  {manageLocal ? 'Manage local assets' : 'Select a token'}
+                  Select a Platform
                 </div>
-
                 <Close
                   style={{
                     cursor: 'pointer',
@@ -1215,16 +1723,79 @@ export default function Setup() {
                   }}
                   onClick={onClose} />
               </div>
-              
             </DialogTitle>
-
-            <DialogContent className={classes.dialogContent}>
-              {!manageLocal && renderOptions()}
-              {manageLocal && renderManageLocal()}
+            <div className={classes.searchInline}>
+              <TextField
+                autoFocus
+                variant="outlined"
+                fullWidth
+                placeholder="Search platfrom"
+                // value={search}
+                // onChange={onSearchChanged}
+                InputProps={{
+                  style: {
+                    background: 'transparent',
+                    border: '1px solid',
+                    borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
+                    borderRadius: 0,
+                  },
+                  classes: {
+                    root: classes.searchInput,
+                  },
+                  startAdornment: <InputAdornment position="start">
+                    <Search style={{
+                      color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                    }} />
+                  </InputAdornment>,
+                }}
+                inputProps={{
+                  style: {
+                    padding: '10px',
+                    borderRadius: 0,
+                    border: 'none',
+                    fontSize: '14px',
+                    lineHeight: '120%',
+                    color: '#86B9D6',
+                  },
+                }}
+              />
+            </div>
+            <DialogContent>
+              {migrate.map((eachPlatform) => (
+                <div
+                  className={[
+                    classes.pairDetails,
+                    classes[`pairDetails--${appTheme}`],
+                  ].join(" ")}
+                  style={{
+                    marginTop: "0",
+                    background: "#b9dff5",
+                    color: "#0A2C40"
+                  }}
+                >
+                  <div
+                    className={[
+                      classes[`nav-button-corner-bottom`],
+                      classes[`nav-button-corner-bottom--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    <div
+                      className={[
+                        classes[`nav-button-corner-top`],
+                        classes[`nav-button-corner-top--${appTheme}`],
+                      ].join(" ")}
+                    >
+                      <MenuItem value={eachPlatform.value}>
+                        {eachPlatform.label}
+                      </MenuItem>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </DialogContent>
           </div>
-        </Dialog>
-      </React.Fragment>
-    );
+        </Dialog >
+      </div >
+    )
   }
-} 
+}

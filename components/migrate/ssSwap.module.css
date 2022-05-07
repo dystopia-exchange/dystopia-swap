@@ -1151,6 +1151,7 @@
   margin-top: 20px;
   display: flex;
   align-items: center;
+  width:100%;
   justify-content: space-between;
 }
 
@@ -1997,7 +1998,7 @@
   .buttonOverrideContainer--light {
     background: #8F5AE8;
     position: relative;
-    width: 400px;
+    /* width: 400px; */
     margin-top: 20px;
   }
   
@@ -2096,7 +2097,8 @@
     .buttonOverrideContainer--dark,
     .buttonOverrideContainer--light,
     .textField {
-      max-width: 300px;
+      /* max-width: 300px; */
+      max-width: 100%;
     }
   }
   .dialogContainer {
@@ -2111,4 +2113,55 @@
   }
   .assetSearchResults {
     min-width: auto;
+  }
+
+  .arrowDownCircle{
+    text-align: center;
+    margin-top: 20px;
+    background: url("/images/decorative_fence.png") repeat-x center center;
+  }
+
+  .quoteLoaderDivider {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: 100%;
+    height: 8px;
+  }
+  
+  .quoteLoaderDividerError {
+    background-image: url("/images/ui/Divider.png");
+  }
+  
+  .quoteLoader {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 14px 18px !important;
+    border: 2px solid #15B525;
+    font-size: 14px !important;
+    line-height: 120% !important;
+    color: #1B4F20 !important;
+    font-weight: 400 !important;
+    margin-top: 20px;
+  }
+  
+  .quoteError {
+    /* color: #631515 !important; */
+    color: #000 !important;
+  }
+  
+  
+  .quoteLoaderError {
+    min-width: 100%;
+    /* border: 2px solid #DB3434; */
+    border: 2px solid #FFA500;
+  }
+  
+  .line{
+    margin-top: 20px;
+    margin-bottom: 5px;
+    background: url("/images/vertical_border.png");
   }
