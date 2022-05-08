@@ -86,7 +86,9 @@ export default function Setup() {
   const [selectedValue, setSelectedValue] = React.useState("a");
   const [checkpair, setcheckpair] = useState(false);
   const [dystopiaPair, setdystopiaPair] = useState(null);
-
+  const [quote, setQuote] = useState(null);
+  const [amount0, setAmount0] = useState('');
+  const [amount1, setAmount1] = useState('');
 
   const handleRadioChange = (event) => {
     setSelectedValue(event.target.value);
@@ -125,8 +127,6 @@ export default function Setup() {
           const pairAddress = await factoryContract.methods
             .getPair(token0, token1)
             .call();
-          console.log("ftech noww", pairAddress);
-
           if (pairAddress !== "0x0000000000000000000000000000000000000000") {
             const pairContract = new web3.eth.Contract(
               pairContractAbi,
@@ -166,15 +166,11 @@ export default function Setup() {
               pairContractAbi,
               token1Add
             );
-            let [token0symbol, token1symbol] = await multicall.aggregate([
+            let [token0symbol, token1symbol, decimal0, decimal1] = await multicall.aggregate([
               token0Contract.methods.symbol(),
               token1Contract.methods.symbol(),
-              pairContract.methods.allowance(
-                account.address,
-                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
-              ),
-              pairContract.methods.totalSupply(),
-              pairContract.methods.balanceOf(account.address),
+              token0Contract.methods.decimals(),
+              token1Contract.methods.decimals(),
             ]);
 
             let totalSupply = web3.utils.fromWei(
@@ -183,19 +179,10 @@ export default function Setup() {
             );
             lpBalance = web3.utils.fromWei(lpBalance.toString(), "ether");
 
-            const weiReserve1 = getReserves[0] / 10 ** toAssetValue.decimals;
+            const weiReserve1 = getReserves[0] / 10 ** decimal0;
 
-            const weiReserve2 = getReserves[1] / 10 ** fromAssetValue.decimals;
-            console.log(
-              getReserves,
-              fromAssetValue,
-              toAssetValue,
-              weiReserve1,
-              weiReserve2,
-              lpBalance,
-              totalSupply,
-              "migrate info"
-            );
+            const weiReserve2 = getReserves[1] / 10 ** decimal1;
+
             const token0Bal =
               (parseFloat(lpBalance.toString()) /
                 parseFloat(totalSupply.toString())) *
@@ -207,6 +194,19 @@ export default function Setup() {
             const poolTokenPercentage =
               (parseFloat(lpBalance) * 100) / parseFloat(totalSupply);
 
+            let token0 = {
+              symbol: token0symbol,
+              decimals: decimal0,
+              balanceOf: token0Bal,
+              address: token0Add
+            }
+            let token1 = {
+              symbol: token1symbol,
+              decimals: decimal1,
+              balanceOf: token1Bal,
+              address: token1Add
+            }
+
             let pairDetails = {
               isValid: true,
               symbol: symbol,
@@ -214,9 +214,13 @@ export default function Setup() {
               token1symbol: token1symbol,
               lpBalance: parseFloat(lpBalance).toFixed(4),
               totalSupply,
+              token0,
+              token1,
               token0Bal: parseFloat(token0Bal).toFixed(18),
               token1Bal: parseFloat(token1Bal).toFixed(18),
               allowence,
+              weiReserve1,
+              weiReserve2,
               pairAddress,
               poolTokenPercentage: Math.floor(poolTokenPercentage),
             };
@@ -359,48 +363,89 @@ export default function Setup() {
       </div>
     );
   };
+  const callQuoteAddLiquidity = async(amount0,amount1,isStable,token0,token1) => {
+    const web3 = await stores.accountStore.getWeb3Provider();
+    const routerContract = new web3.eth.Contract(
+      CONTRACTS.ROUTER_ABI,
+      CONTRACTS.ROUTER_ADDRESS
+    );
+
+    const sendAmount0 = BigNumber(amount0)
+      .times(10 ** parseInt(token0.decimals))
+      .toFixed(0);
+    const sendAmount1 = BigNumber(amount1)
+      .times(10 ** parseInt(token1.decimals))
+      .toFixed(0);
+
+    let addy0 = token0.address;
+    let addy1 = token1.address;
+
+    if (token0.address === "MATIC") {
+      addy0 = CONTRACTS.WFTM_ADDRESS;
+    }
+    if (token1.address === "MATIC") {
+      addy1 = CONTRACTS.WFTM_ADDRESS;
+    }
+
+    let res = await routerContract.methods
+      .quoteAddLiquidity(
+        addy0,
+        addy1,
+        isStable,
+        sendAmount0,
+        sendAmount1
+      )
+      .call();
+      console.log(res,"quotee")
+      res = {res,token0:token0,token1:token1}
+      console.log(res,"respooo")
+      setQuote(res);
+  };
   const checkPair = async (fromAssetValue, toAssetValue, isStable) => {
     const web3 = await stores.accountStore.getWeb3Provider();
 
-    await getPairDetails(fromAssetValue, toAssetValue).then((a) => {
+    await getPairDetails(fromAssetValue, toAssetValue).then(async (a) => {
       if (!a?.isValid)
         setcheckpair(false)
       else
         setcheckpair(true)
+
+      const multicall = await stores.accountStore.getMulticall();
+
+      let removedToken0 = a?.lpBalance * a?.weiReserve1 / a?.totalSupply
+      let removedToken1 = a?.lpBalance * a?.weiReserve2 / a?.totalSupply
+
+      console.log(removedToken0,removedToken1,"brokya kar rhe ho")
+      await callQuoteAddLiquidity(removedToken0, removedToken1,isStable, a.token0, a.token1)
+
     })
     const pair = await stores.stableSwapStore.getPair(fromAssetValue, toAssetValue, isStable)
-    console.log(pair, "dystopiapair")
 
-
+    if(pair!= null){
     pair.reserve0 =
-      (parseFloat(pair.balance.toString()) /
-        parseFloat(pair.totalSupply.toString())) *
-      parseFloat(pair.reserve0);
+      (parseFloat(pair?.balance.toString()) /
+        parseFloat(pair?.totalSupply.toString())) *
+      parseFloat(pair?.reserve0);
     pair.reserve1 =
-      (parseFloat(pair.balance.toString()) /
-        parseFloat(pair.totalSupply.toString())) *
-      parseFloat(pair.reserve1.toString());
+      (parseFloat(pair?.balance.toString()) /
+        parseFloat(pair?.totalSupply.toString())) *
+      parseFloat(pair?.reserve1.toString());
 
-      // const multicall = await stores.accountStore.getMulticall();  
-      // const migcontract = new web3.eth.Contract(
-      //   migratorAbi,
-      //   migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
-      // );
-      // let [getAmoutsOldToken] = await multicall.aggregate([
-      //   migcontract.methods.getAmountsFromLiquidityForOldPair(),
-      // ]);
-      // console.log(getAmoutsOldToken,"musicmg")
-    setdystopiaPair(pair)
 
+    setdystopiaPair(pair)}
+    else
+    {setdystopiaPair(null)}
+
+ 
   };
   return (
-    <div>
-      <Form>
+    <div >
+      <Form style={{ width: '100%' }}>
         <div
           className={[classes[`form`], classes[`form--${appTheme}`]].join(" ")}
         >
           <div className={classes.infoContainer}>
-            <div style={{ marginBottom: "20px",width:"100%" }}>
+            <div style={{ marginBottom: "20px", width: "100%" }}>
               <p
                 className={classes.titleText}
                 style={{ color: appTheme === "light" ? "#0A2C40" : "white" }}
@@ -409,9 +454,9 @@ export default function Setup() {
               </p>
               <FormControl
                 variant="standard"
-                sx={{ minWidth: "300px", width: "100%" }}
+                sx={{ width: "100%" }}
               >
-                 <div style={{
+                <div style={{
                   display: 'flex',
                   flexDirectiion: 'row'
                 }}>
@@ -434,7 +479,7 @@ export default function Setup() {
                         ].join(" ")}
                       >
                         <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                          QuickSwap
+                          {migrator.label}
                         </span>
                       </div>
                     </div>
@@ -569,7 +614,7 @@ export default function Setup() {
               </span>
             )}
             {pairDetails && pairDetails.isValid && (
-              <div>
+              <div style={{ width: "100%" }}>
                 <div
                   className={[
                     classes.textField,
@@ -813,20 +858,22 @@ export default function Setup() {
                         classes[`nav-button-corner-top--${appTheme}`],
                       ].join(" ")}
                     >
-                      Your Pool Share:
-                      <span
-                        style={{
-                          color: "#304C5E",
-                          fontWeight: "800",
-                          marginLeft: "175px",
-                        }}
-                      >
-                        {pairDetails.poolTokenPercentage}%
-                      </span>
+                      <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                        Your Pool Share:
+                        <span
+                          style={{
+                            color: "#304C5E",
+                            fontWeight: "800",
+                            // marginLeft: "175px",
+                          }}
+                        >
+                          {pairDetails.poolTokenPercentage}%
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div style={{ display: "flex", width: "100%" }}>
+                <div className={classes.boxStyle}>
                   <div
                     className={[
                       classes.pairDetails,
@@ -845,16 +892,18 @@ export default function Setup() {
                           classes[`nav-button-corner-top--${appTheme}`],
                         ].join(" ")}
                       >
-                        {pairDetails?.token0symbol}:
-                        <span
-                          style={{
-                            color: "#304C5E",
-                            fontWeight: "800",
-                            marginLeft: "50px",
-                          }}
-                        >
-                          {Number(pairDetails.token0Bal).toFixed(2)}
-                        </span>
+                        <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                          {pairDetails?.token0symbol}:
+                          <span
+                            style={{
+                              color: "#304C5E",
+                              fontWeight: "800",
+                              // marginLeft: "10px",
+                            }}
+                          >
+                            {Number(pairDetails.token0Bal).toFixed(2)}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -876,16 +925,18 @@ export default function Setup() {
                           classes[`nav-button-corner-top--${appTheme}`],
                         ].join(" ")}
                       >
-                        {pairDetails?.token1symbol}
-                        <span
-                          style={{
-                            color: "#304C5E",
-                            fontWeight: "800",
-                            marginLeft: "50px",
-                          }}
-                        >
-                          {Number(pairDetails.token1Bal).toFixed(2)}
-                        </span>
+                        <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                          {pairDetails?.token1symbol}:
+                          <span
+                            style={{
+                              color: "#304C5E",
+                              fontWeight: "800",
+                              // marginLeft: "10px",
+                            }}
+                          >
+                            {Number(pairDetails.token1Bal).toFixed(2)}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1004,10 +1055,10 @@ export default function Setup() {
                             </div>
                           </div>
                           <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                            {Number(dystopiaPair.balance).toFixed(5)}
+                            {Number(quote?.res?.liquidity/10**18).toFixed(5)}
                           </span>
                         </div>
-                        <div style={{ display: "flex", width: "100%" }}>
+                        <div className={classes.boxStyle}>
                           <div
                             className={[
                               classes.pairDetails,
@@ -1026,7 +1077,7 @@ export default function Setup() {
                                   classes[`nav-button-corner-top--${appTheme}`],
                                 ].join(" ")}
                               >
-                                {dystopiaPair?.token0?.symbol}:
+                                {quote?.token0?.symbol}:
                                 <span
                                   style={{
                                     color: "#304C5E",
@@ -1034,7 +1085,7 @@ export default function Setup() {
                                     marginLeft: "50px",
                                   }}
                                 >
-                                  {Number(dystopiaPair.reserve0).toFixed(2)}
+                                  {Number(quote?.res?.amountA/10**quote?.token0?.decimals).toFixed(2)}
                                 </span>
                               </div>
                             </div>
@@ -1057,16 +1108,18 @@ export default function Setup() {
                                   classes[`nav-button-corner-top--${appTheme}`],
                                 ].join(" ")}
                               >
-                                {dystopiaPair?.token1?.symbol}
-                                <span
-                                  style={{
-                                    color: "#304C5E",
-                                    fontWeight: "800",
-                                    marginLeft: "50px",
-                                  }}
-                                >
-                                  {Number(dystopiaPair.reserve1).toFixed(2)}
-                                </span>
+                                <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                                  {quote?.token1?.symbol}:
+                                  <span
+                                    style={{
+                                      color: "#304C5E",
+                                      fontWeight: "800",
+                                      // marginLeft: "10px",
+                                    }}
+                                  >
+                                    {Number(quote?.res?.amountB/10**quote?.token1?.decimals).toFixed(2)}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -1084,7 +1137,7 @@ export default function Setup() {
                             ].join(" ")}
                           ></div>
                           <Typography>
-                            ~0USDC and ~2.1975DYST will be refunded to your wallet due
+                            ~{(Number(pairDetails.token0Bal)-Number(quote?.res?.amountA/10**quote?.token0?.decimals)).toFixed(2)}{quote?.token0?.symbol} and ~{(Number(pairDetails.token1Bal)-Number(quote?.res?.amountB/10**quote?.token1?.decimals)).toFixed(2)}{quote?.token1?.symbol} will be refunded to your wallet due
                             to the price difference.
                           </Typography>
                         </div>
@@ -1662,9 +1715,10 @@ export default function Setup() {
       </React.Fragment>
     );
   }
-  function PlatformSelect({ platformOptions, onSelect }) {
+  function PlatformSelect({ onSelect }) {
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
+    const [filteredPlatform, setFilteredPlatform] = useState([]);
 
     const handleClickOpen = () => {
       setOpen(true);
@@ -1676,6 +1730,42 @@ export default function Setup() {
     const onClose = () => {
       setSearch("");
       setOpen(false);
+    };
+
+    const openSearch = () => {
+      setSearch("");
+      setOpen(true);
+    };
+
+    useEffect(
+      async function () {
+        let ao = migrate.filter((eachPlatform) => {
+          if (search && search !== "") {
+            return (
+              eachPlatform.label.toLowerCase().includes(search.toLowerCase())
+            );
+          } else {
+            return true;
+          }
+        });
+        setFilteredPlatform(ao);
+
+        //no options in our default list and its an address we search for the address
+        if (ao.length === 0 && search && search.length === 42) {
+          const baseAsset = await stores.stableSwapStore.getBaseAsset(
+            event.target.value,
+            true,
+            true
+          );
+        }
+
+        return () => { };
+      },
+      [search]
+    );
+
+    const onSearchChanged = async (event) => {
+      setSearch(event.target.value);
     };
 
     return (
@@ -1724,14 +1814,18 @@ export default function Setup() {
                   onClick={onClose} />
               </div>
             </DialogTitle>
-            <div className={classes.searchInline}>
+            <div className={classes.searchInline}
+              onClick={() => {
+                openSearch();
+              }}
+            >
               <TextField
                 autoFocus
                 variant="outlined"
                 fullWidth
                 placeholder="Search platfrom"
-                // value={search}
-                // onChange={onSearchChanged}
+                value={search}
+                onChange={onSearchChanged}
                 InputProps={{
                   style: {
                     background: 'transparent',
@@ -1761,41 +1855,76 @@ export default function Setup() {
               />
             </div>
             <DialogContent>
-              {migrate.map((eachPlatform) => (
-                <div
-                  className={[
-                    classes.pairDetails,
-                    classes[`pairDetails--${appTheme}`],
-                  ].join(" ")}
-                  style={{
-                    marginTop: "0",
-                    background: "#b9dff5",
-                    color: "#0A2C40"
-                  }}
-                >
+              {filteredPlatform.length === 0 ? (
+                migrate.map((eachPlatform) => (
                   <div
                     className={[
-                      classes[`nav-button-corner-bottom`],
-                      classes[`nav-button-corner-bottom--${appTheme}`],
+                      classes.pairDetails,
+                      classes[`pairDetails--${appTheme}`],
                     ].join(" ")}
+                    style={{
+                      marginTop: "0",
+                      background: "#b9dff5",
+                      color: "#0A2C40"
+                    }}
                   >
                     <div
                       className={[
-                        classes[`nav-button-corner-top`],
-                        classes[`nav-button-corner-top--${appTheme}`],
+                        classes[`nav-button-corner-bottom`],
+                        classes[`nav-button-corner-bottom--${appTheme}`],
                       ].join(" ")}
                     >
-                      <MenuItem value={eachPlatform.value}>
-                        {eachPlatform.label}
-                      </MenuItem>
+                      <div
+                        className={[
+                          classes[`nav-button-corner-top`],
+                          classes[`nav-button-corner-top--${appTheme}`],
+                        ].join(" ")}
+                      >
+                        <MenuItem value={eachPlatform.value}>
+                          {eachPlatform.label}
+                        </MenuItem>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                filteredPlatform.map((eachPlatform) => (
+                  <div
+                    className={[
+                      classes.pairDetails,
+                      classes[`pairDetails--${appTheme}`],
+                    ].join(" ")}
+                    style={{
+                      marginTop: "0",
+                      background: "#b9dff5",
+                      color: "#0A2C40"
+                    }}
+                  >
+                    <div
+                      className={[
+                        classes[`nav-button-corner-bottom`],
+                        classes[`nav-button-corner-bottom--${appTheme}`],
+                      ].join(" ")}
+                    >
+                      <div
+                        className={[
+                          classes[`nav-button-corner-top`],
+                          classes[`nav-button-corner-top--${appTheme}`],
+                        ].join(" ")}
+                      >
+                        <MenuItem value={eachPlatform.value}>
+                          {eachPlatform.label}
+                        </MenuItem>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
             </DialogContent>
           </div>
-        </Dialog >
-      </div >
+        </Dialog>
+      </div>
     )
   }
 }
+
