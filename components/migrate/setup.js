@@ -144,7 +144,7 @@ export default function Setup() {
         if (!account) {
           console.warn("account not found");
         } else {
-          const factoryContract = new web3.eth.Contract(FactoryAbi, platform);
+          const factoryContract = new web3.eth.Contract(FactoryAbi, platform.value);
           const pairAddress = await factoryContract.methods
             .getPair(token0, token1)
             .call();
@@ -153,10 +153,11 @@ export default function Setup() {
               pairContractAbi,
               pairAddress
             );
-
+            
             const migrator = migrate.find(
               (eachMigrate) => eachMigrate.value === platform
             );
+            
 
             let [
               getReserves,
@@ -310,9 +311,9 @@ export default function Setup() {
   );
 
   const handleChange = (event) => {
-    console.log(event, "inmotu");
+
     setPlatform(event);
-    setcheckpair(false);
+    setcheckpair(false)
   };
 
   const migrateLiquidity = async () => {
@@ -467,10 +468,8 @@ export default function Setup() {
     let res = await routerContract.methods
       .quoteAddLiquidity(addy0, addy1, isStable, sendAmount0, sendAmount1)
       .call();
-    console.log(res, "quotee");
-    res = { res, token0: token0, token1: token1 };
-    console.log(res, "respooo");
-    setQuote(res);
+      res = {res,token0:token0,token1:token1}
+      setQuote(res);
   };
   const checkPair = async (fromAssetValue, toAssetValue, isStable) => {
     const web3 = await stores.accountStore.getWeb3Provider();
@@ -479,25 +478,29 @@ export default function Setup() {
       if (!a?.isValid) setcheckpair(false);
       else setcheckpair(true);
 
-      const multicall = await stores.accountStore.getMulticall();
+      let removedToken0 = a?.lpBalance * a?.weiReserve1 / a?.totalSupply
+      let removedToken1 = a?.lpBalance * a?.weiReserve2 / a?.totalSupply
 
-      let removedToken0 = (a?.lpBalance * a?.weiReserve1) / a?.totalSupply;
-      let removedToken1 = (a?.lpBalance * a?.weiReserve2) / a?.totalSupply;
+      if(a?.isValid && removedToken0 > 0 && removedToken1 >0)
+      await callQuoteAddLiquidity(removedToken0, removedToken1,isStable, a.token0, a.token1)
 
-      if (a?.isValid && removedToken0 > 0 && removedToken1 > 0)
-        await callQuoteAddLiquidity(
-          removedToken0,
-          removedToken1,
-          isStable,
-          a.token0,
-          a.token1
-        );
-    });
-    const pair = await stores.stableSwapStore.getPair(
-      fromAssetValue,
-      toAssetValue,
-      isStable
-    );
+    })
+    const pair = await stores.stableSwapStore.getPair(fromAssetValue, toAssetValue, isStable)
+
+    if(pair!= null){
+    pair.reserve0 =
+      (parseFloat(pair?.balance.toString()) /
+        parseFloat(pair?.totalSupply.toString())) *
+      parseFloat(pair?.reserve0);
+    pair.reserve1 =
+      (parseFloat(pair?.balance.toString()) /
+        parseFloat(pair?.totalSupply.toString())) *
+      parseFloat(pair?.reserve1.toString());
+
+
+    setdystopiaPair(pair)}
+    else
+    {setdystopiaPair(null)}
 
     if (pair != null) {
       pair.reserve0 =
