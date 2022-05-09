@@ -516,7 +516,7 @@ export default function Setup() {
   };
   return (
     <div>
-      <Form style={{ width: "100%" }}>
+      <Form >
         <div
           className={[classes[`form`], classes[`form--${appTheme}`]].join(" ")}
         >
