@@ -309,7 +309,7 @@ export default function Setup() {
   const handleChange = (event) => {
     console.log(event,"inmotu")
     setPlatform(event);
-  //  setcheckpair(false)
+    setcheckpair(false)
   };
 
   const migrateLiquidity = async () => {
