@@ -259,7 +259,7 @@ function MyComponent(props) {
         } else if (name === "Frame") {
           return "";
         }
-
+ 
         return (
           <div
             key={name}
