@@ -257,7 +257,7 @@ function MyComponent(props) {
           url = "/connectors/walletConnectIcon.svg";
           
         } else if (name === "Frame") {
-          return "";
+          return ""; 
         }
  
         return (
