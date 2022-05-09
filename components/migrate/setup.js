@@ -80,7 +80,7 @@ export default function Setup() {
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("");
   const [fromAssetError, setFromAssetError] = useState(false);
-  const [platform, setPlatform] = React.useState(migrate[1].value);
+  const [platform, setPlatform] = React.useState(null);
   const [fromAssetOptions, setFromAssetOptions] = useState([]);
   const [toAssetOptions, setToAssetOptions] = useState([]);
   const [selectedValue, setSelectedValue] = React.useState("a");
@@ -90,8 +90,26 @@ export default function Setup() {
   const [amount0, setAmount0] = useState('');
   const [amount1, setAmount1] = useState('');
 
-  const handleRadioChange = (event) => {
-    setSelectedValue(event.target.value);
+  const handleRadioChange = async(bool) => {
+    toggleStablePool(bool);
+    console.log(fromAssetValue, toAssetValue, bool,"support")
+    const pair = await stores.stableSwapStore.getPair(fromAssetValue.address, toAssetValue.address, bool)
+
+    if(pair!= null){
+    pair.reserve0 =
+      (parseFloat(pair?.balance.toString()) /
+        parseFloat(pair?.totalSupply.toString())) *
+      parseFloat(pair?.reserve0);
+    pair.reserve1 =
+      (parseFloat(pair?.balance.toString()) /
+        parseFloat(pair?.totalSupply.toString())) *
+      parseFloat(pair?.reserve1.toString());
+
+
+    setdystopiaPair(pair)}
+    else
+    {setdystopiaPair(null)}
+
   };
 
   function ValueLabelComponent(props) {
@@ -289,8 +307,9 @@ export default function Setup() {
   );
 
   const handleChange = (event) => {
-    setPlatform(event.target.value);
-    getPairDetails(fromAssetValue.address, toAssetValue.address);
+    console.log(event,"inmotu")
+    setPlatform(event);
+  //  setcheckpair(false)
   };
 
   const migrateLiquidity = async () => {
@@ -318,15 +337,51 @@ export default function Setup() {
     }
   };
 
-  const handleAmountChange = (event) => {
+  const handleAmountChange = async(event) => {
     if (parseFloat(event.target.value) >= parseFloat(pairDetails.lpBalance)) {
       setAmount(pairDetails.lpBalance);
     } else {
       setAmount(event.target.value);
     }
+   
+   
+
+    pairDetails.token0Bal = 
+    (parseFloat(event.target.value.toString()) /
+      parseFloat(pairDetails.totalSupply.toString())) *
+    parseFloat(pairDetails.weiReserve1);
+
+    pairDetails.token1Bal =
+    (parseFloat(event.target.value.toString()) /
+      parseFloat(pairDetails.totalSupply.toString())) *
+    parseFloat(pairDetails.weiReserve2.toString());
+
+    let removedToken0 = event.target.value * pairDetails?.weiReserve1 / pairDetails?.totalSupply
+    let removedToken1 = event.target.value * pairDetails?.weiReserve2 / pairDetails?.totalSupply
+
+    if(pairDetails?.isValid && removedToken0 > 0 && removedToken1 >0)
+      await callQuoteAddLiquidity(removedToken0, removedToken1,pairDetails.isStable, pairDetails.token0, pairDetails.token1)
+
+
   };
-  const handleMax = (lpBalance) => {
+  const handleMax = async(lpBalance) => {
     setAmount(lpBalance);
+    pairDetails.token0Bal = 
+    (parseFloat(lpBalance.toString()) /
+      parseFloat(pairDetails.totalSupply.toString())) *
+    parseFloat(pairDetails.weiReserve1);
+
+    pairDetails.token1Bal =
+    (parseFloat(lpBalance.toString()) /
+      parseFloat(pairDetails.totalSupply.toString())) *
+    parseFloat(pairDetails.weiReserve2.toString());
+
+    let removedToken0 =lpBalance * pairDetails?.weiReserve1 / pairDetails?.totalSupply
+    let removedToken1 = lpBalance * pairDetails?.weiReserve2 / pairDetails?.totalSupply
+
+    if(pairDetails?.isValid && removedToken0 > 0 && removedToken1 >0)
+      await callQuoteAddLiquidity(removedToken0, removedToken1,pairDetails.isStable, pairDetails.token0, pairDetails.token1)
+
   };
 
   let buttonText = "Approve";
@@ -415,7 +470,7 @@ export default function Setup() {
       let removedToken0 = a?.lpBalance * a?.weiReserve1 / a?.totalSupply
       let removedToken1 = a?.lpBalance * a?.weiReserve2 / a?.totalSupply
 
-      console.log(removedToken0,removedToken1,"brokya kar rhe ho")
+      if(a?.isValid && removedToken0 > 0 && removedToken1 >0)
       await callQuoteAddLiquidity(removedToken0, removedToken1,isStable, a.token0, a.token1)
 
     })
@@ -479,7 +534,7 @@ export default function Setup() {
                         ].join(" ")}
                       >
                         <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                          {migrator.label}
+                          {platform?platform.label:"Select a Platform"}
                         </span>
                       </div>
                     </div>
@@ -503,7 +558,7 @@ export default function Setup() {
                           classes[`nav-button-corner-top--${appTheme}`],
                         ].join(" ")}
                       >
-                        <PlatformSelect />
+                        <PlatformSelect onSelect={handleChange}/>
                       </div>
                     </div>
                   </div>
@@ -832,12 +887,12 @@ export default function Setup() {
                           fontSize: "16px",
                         }}
                       >
-                        {migrator.label} Pool
+                        {platform?platform.label:"Select a Platform"} Pool
                       </span>
                     </div>
                   </div>
                   <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                    {Number(pairDetails.lpBalance).toFixed(5)}
+                    {Number(amount).toFixed(5)}
                   </span>
                 </div>
                 <div
@@ -1050,7 +1105,7 @@ export default function Setup() {
                                   fontSize: "16px",
                                 }}
                               >
-                                {migrator.label} Pool
+                                Dystopia Pool
                               </span>
                             </div>
                           </div>
@@ -1150,9 +1205,10 @@ export default function Setup() {
               </div>
 
             )}
-            <div className={classes.radioContainer}>
+            {pairDetails && pairDetails.isValid?
+            (<div className={classes.radioContainer}>
               <div
-                onClick={() => toggleStablePool(true)}
+                onClick={() => handleRadioChange(true)}
                 className={classes.radioButton}
                 style={{
                   color: isStable ? "white" : "#0C5E8E",
@@ -1167,7 +1223,7 @@ export default function Setup() {
               >
                 <Radio
                   checked={isStable}
-                  onClick={() => toggleStablePool(true)}
+                  onClick={() => handleRadioChange(true)}
                   value="a"
                   name="radio-buttons"
                   inputProps={{ "aria-label": "A" }}
@@ -1175,7 +1231,7 @@ export default function Setup() {
                 Stable
               </div>
               <div
-                onClick={() => toggleStablePool(false)}
+                onClick={() => handleRadioChange(false)}
                 className={classes.radioButton}
                 style={{
                   color: !isStable ? "white" : "#0C5E8E",
@@ -1190,14 +1246,14 @@ export default function Setup() {
               >
                 <Radio
                   checked={!isStable}
-                  onClick={() => toggleStablePool(false)}
+                  onClick={() => handleRadioChange(false)}
                   value="b"
                   name="radio-buttons"
                   inputProps={{ "aria-label": "B" }}
                 />
                 Volatile
               </div>
-            </div>
+            </div>):null}
           </div>
         </div>
       </Form>
@@ -1724,9 +1780,14 @@ export default function Setup() {
       setOpen(true);
     }
     const handleClose = () => {
+      onSelect(type, asset);
       setOpen(false);
     }
-
+    const handleCloseSelect = (platform) => {
+      onSelect(platform);
+      setOpen(false);
+    }
+    
     const onClose = () => {
       setSearch("");
       setOpen(false);
@@ -1894,6 +1955,7 @@ export default function Setup() {
                       classes.pairDetails,
                       classes[`pairDetails--${appTheme}`],
                     ].join(" ")}
+                    onClick={()=>handleCloseSelect(eachPlatform)}
                     style={{
                       marginTop: "0",
                       background: "#b9dff5",
