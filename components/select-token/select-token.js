@@ -33,6 +33,8 @@ function TokenSelect(props) {
     );
   };
 
+  console.log('noValue', noValue)
+
   return (
     <Select
       className={[classes.tokenSelect, classes[`tokenSelect--${appTheme}`]].join(' ')}

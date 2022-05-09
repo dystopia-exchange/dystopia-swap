@@ -592,7 +592,13 @@
 }
 
 .backIcon {
-  /* color: #06D3D7 !important; */
+  width: 19px !important;
+  height: 19px !important;
+  color: #5688A5 !important;
+}
+
+.backIcon--dark {
+  color: #C6CDD2 !important;
 }
 
 .titleText {

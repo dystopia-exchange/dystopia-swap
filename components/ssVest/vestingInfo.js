@@ -15,7 +15,7 @@ export default function VestingInfo({currentNFT, futureNFT, veToken, govToken, s
           <div
             style={{
               marginTop: 20,
-              border: appTheme === 'dark' ? '1px solid #5F7285' : '1px solid #86B9D6',
+              // border: appTheme === 'dark' ? '1px solid #5F7285' : '1px solid #86B9D6',
             }}
             className={[classes.vestInfo, classes[`vestInfoBg--${appTheme}`]].join(' ')}>
             <div className={[classes.vestInfoText, 'g-flex-column'].join(' ')}>
