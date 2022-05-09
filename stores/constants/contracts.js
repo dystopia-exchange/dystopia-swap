@@ -1,13 +1,13 @@
 import abis from "../abis";
 
-export const GOV_TOKEN_ADDRESS = '0x6E511b6fAce2c5094163A1F420135a4D70a5ecd7'
+export const GOV_TOKEN_ADDRESS = '0x5093868fBc3f96FF07A840D3b03Aa807dA05e2EF'
 export const GOV_TOKEN_NAME = 'DYSTOPIA'
 export const GOV_TOKEN_SYMBOL = 'DYST'
 export const GOV_TOKEN_DECIMALS = 18
 export const GOV_TOKEN_LOGO = 'https://dystopia-swap-seven.vercel.app/logo.svg'
 export const GOV_TOKEN_ABI = abis.tokenABI
 
-export const VE_TOKEN_ADDRESS = '0x043074eaAf5DCca960601b7B464FCd2bEC34df1D'
+export const VE_TOKEN_ADDRESS = '0x0841097f62a82c2Fef8aA943a2f80b59773E5e02'
 export const VE_TOKEN_NAME = 'veNFT'
 export const VE_TOKEN_SYMBOL = 'veNFT'
 export const VE_TOKEN_DECIMALS = 18
@@ -33,13 +33,13 @@ export const FACTORY_ABI = abis.factoryABI
 export const ROUTER_ADDRESS = '0xbE75Dd16D029c6B32B7aD57A0FD9C1c20Dd2862e'
 export const ROUTER_ABI = abis.routerABI
 
-export const VE_DIST_ADDRESS = '0x67fef6a7908Faf1d89B659b9bbE76D82837Ee6E2'
+export const VE_DIST_ADDRESS = '0xBB5b65FE42B1965eD412fDe45B9b336a2cFba43b'
 export const VE_DIST_ABI = abis.veDistABI
 
-export const VOTER_ADDRESS = '0xECACDAcf3b6c23E180f70cF28b6811652e6808e7'
+export const VOTER_ADDRESS = '0xeFD3f2598bAAf11118f5f44A73130274F22B2848'
 export const VOTER_ABI = abis.voterABI
 
-export const REWARD_ADDRESS = '0x332C7aC34580dfEF553B7726549cEc7015C4B39b'
+export const REWARD_ADDRESS = '0x5093868fBc3f96FF07A840D3b03Aa807dA05e2EF'
 
 export const ERC20_ABI = abis.erc20ABI
 export const PAIR_ABI = abis.pairABI

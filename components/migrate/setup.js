@@ -155,10 +155,9 @@ export default function Setup() {
             );
             
             const migrator = migrate.find(
-              (eachMigrate) => eachMigrate.value === platform
+              (eachMigrate) => eachMigrate == platform
             );
-            
-
+   console.log(migrator,"hello")
             let [
               getReserves,
               symbol,
@@ -320,7 +319,7 @@ export default function Setup() {
     try {
       setLoading(true);
       const migrator = migrate.find(
-        (eachMigrate) => eachMigrate.value === platform
+        (eachMigrate) => eachMigrate == platform
       );
       stores.dispatcher.dispatch({
         type: ACTIONS.MIGRATE,
@@ -420,7 +419,7 @@ export default function Setup() {
     disableButton = true;
   }
   const migrator = migrate.find(
-    (eachMigrate) => eachMigrate.value === platform
+    (eachMigrate) => eachMigrate == platform
   );
   const OpenDown = (props) => {
     return (
