@@ -87,29 +87,32 @@ export default function Setup() {
   const [checkpair, setcheckpair] = useState(false);
   const [dystopiaPair, setdystopiaPair] = useState(null);
   const [quote, setQuote] = useState(null);
-  const [amount0, setAmount0] = useState('');
-  const [amount1, setAmount1] = useState('');
+  const [amount0, setAmount0] = useState("");
+  const [amount1, setAmount1] = useState("");
 
-  const handleRadioChange = async(bool) => {
+  const handleRadioChange = async (bool) => {
     toggleStablePool(bool);
-    console.log(fromAssetValue, toAssetValue, bool,"support")
-    const pair = await stores.stableSwapStore.getPair(fromAssetValue.address, toAssetValue.address, bool)
+    console.log(fromAssetValue, toAssetValue, bool, "support");
+    const pair = await stores.stableSwapStore.getPair(
+      fromAssetValue.address,
+      toAssetValue.address,
+      bool
+    );
 
-    if(pair!= null){
-    pair.reserve0 =
-      (parseFloat(pair?.balance.toString()) /
-        parseFloat(pair?.totalSupply.toString())) *
-      parseFloat(pair?.reserve0);
-    pair.reserve1 =
-      (parseFloat(pair?.balance.toString()) /
-        parseFloat(pair?.totalSupply.toString())) *
-      parseFloat(pair?.reserve1.toString());
+    if (pair != null) {
+      pair.reserve0 =
+        (parseFloat(pair?.balance.toString()) /
+          parseFloat(pair?.totalSupply.toString())) *
+        parseFloat(pair?.reserve0);
+      pair.reserve1 =
+        (parseFloat(pair?.balance.toString()) /
+          parseFloat(pair?.totalSupply.toString())) *
+        parseFloat(pair?.reserve1.toString());
 
-
-    setdystopiaPair(pair)}
-    else
-    {setdystopiaPair(null)}
-
+      setdystopiaPair(pair);
+    } else {
+      setdystopiaPair(null);
+    }
   };
 
   function ValueLabelComponent(props) {
@@ -184,12 +187,13 @@ export default function Setup() {
               pairContractAbi,
               token1Add
             );
-            let [token0symbol, token1symbol, decimal0, decimal1] = await multicall.aggregate([
-              token0Contract.methods.symbol(),
-              token1Contract.methods.symbol(),
-              token0Contract.methods.decimals(),
-              token1Contract.methods.decimals(),
-            ]);
+            let [token0symbol, token1symbol, decimal0, decimal1] =
+              await multicall.aggregate([
+                token0Contract.methods.symbol(),
+                token1Contract.methods.symbol(),
+                token0Contract.methods.decimals(),
+                token1Contract.methods.decimals(),
+              ]);
 
             let totalSupply = web3.utils.fromWei(
               getTotalSupply.toString(),
@@ -216,14 +220,14 @@ export default function Setup() {
               symbol: token0symbol,
               decimals: decimal0,
               balanceOf: token0Bal,
-              address: token0Add
-            }
+              address: token0Add,
+            };
             let token1 = {
               symbol: token1symbol,
               decimals: decimal1,
               balanceOf: token1Bal,
-              address: token1Add
-            }
+              address: token1Add,
+            };
 
             let pairDetails = {
               isValid: true,
@@ -245,7 +249,7 @@ export default function Setup() {
 
             setAmount(parseFloat(lpBalance).toFixed(4));
             setPairDetails(pairDetails);
-            return pairDetails
+            return pairDetails;
           } else {
             let pairDetails = {
               isValid: false,
@@ -253,7 +257,7 @@ export default function Setup() {
               allowence: 0,
             };
             setPairDetails(pairDetails);
-            return pairDetails
+            return pairDetails;
           }
         }
       }
@@ -263,7 +267,6 @@ export default function Setup() {
   };
 
   const onAssetSelect = async (type, value) => {
-
     if (type === "From") {
       if (value.address === toAssetValue.address) {
         setToAssetValue(fromAssetValue);
@@ -279,8 +282,8 @@ export default function Setup() {
         setToAssetValue(value);
       }
     }
-    setPairDetails(null)
-    setcheckpair(false)
+    setPairDetails(null);
+    setcheckpair(false);
   };
 
   useEffect(
@@ -307,9 +310,9 @@ export default function Setup() {
   );
 
   const handleChange = (event) => {
-    console.log(event,"inmotu")
+    console.log(event, "inmotu");
     setPlatform(event);
-    setcheckpair(false)
+    setcheckpair(false);
   };
 
   const migrateLiquidity = async () => {
@@ -337,51 +340,64 @@ export default function Setup() {
     }
   };
 
-  const handleAmountChange = async(event) => {
+  const handleAmountChange = async (event) => {
     if (parseFloat(event.target.value) >= parseFloat(pairDetails.lpBalance)) {
       setAmount(pairDetails.lpBalance);
     } else {
       setAmount(event.target.value);
     }
-   
-   
 
-    pairDetails.token0Bal = 
-    (parseFloat(event.target.value.toString()) /
-      parseFloat(pairDetails.totalSupply.toString())) *
-    parseFloat(pairDetails.weiReserve1);
+    pairDetails.token0Bal =
+      (parseFloat(event.target.value.toString()) /
+        parseFloat(pairDetails.totalSupply.toString())) *
+      parseFloat(pairDetails.weiReserve1);
 
     pairDetails.token1Bal =
-    (parseFloat(event.target.value.toString()) /
-      parseFloat(pairDetails.totalSupply.toString())) *
-    parseFloat(pairDetails.weiReserve2.toString());
+      (parseFloat(event.target.value.toString()) /
+        parseFloat(pairDetails.totalSupply.toString())) *
+      parseFloat(pairDetails.weiReserve2.toString());
 
-    let removedToken0 = event.target.value * pairDetails?.weiReserve1 / pairDetails?.totalSupply
-    let removedToken1 = event.target.value * pairDetails?.weiReserve2 / pairDetails?.totalSupply
+    let removedToken0 =
+      (event.target.value * pairDetails?.weiReserve1) /
+      pairDetails?.totalSupply;
+    let removedToken1 =
+      (event.target.value * pairDetails?.weiReserve2) /
+      pairDetails?.totalSupply;
 
-    if(pairDetails?.isValid && removedToken0 > 0 && removedToken1 >0)
-      await callQuoteAddLiquidity(removedToken0, removedToken1,pairDetails.isStable, pairDetails.token0, pairDetails.token1)
-
-
+    if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0)
+      await callQuoteAddLiquidity(
+        removedToken0,
+        removedToken1,
+        pairDetails.isStable,
+        pairDetails.token0,
+        pairDetails.token1
+      );
   };
-  const handleMax = async(lpBalance) => {
+  const handleMax = async (lpBalance) => {
     setAmount(lpBalance);
-    pairDetails.token0Bal = 
-    (parseFloat(lpBalance.toString()) /
-      parseFloat(pairDetails.totalSupply.toString())) *
-    parseFloat(pairDetails.weiReserve1);
+    pairDetails.token0Bal =
+      (parseFloat(lpBalance.toString()) /
+        parseFloat(pairDetails.totalSupply.toString())) *
+      parseFloat(pairDetails.weiReserve1);
 
     pairDetails.token1Bal =
-    (parseFloat(lpBalance.toString()) /
-      parseFloat(pairDetails.totalSupply.toString())) *
-    parseFloat(pairDetails.weiReserve2.toString());
+      (parseFloat(lpBalance.toString()) /
+        parseFloat(pairDetails.totalSupply.toString())) *
+      parseFloat(pairDetails.weiReserve2.toString());
 
-    let removedToken0 =lpBalance * pairDetails?.weiReserve1 / pairDetails?.totalSupply
-    let removedToken1 = lpBalance * pairDetails?.weiReserve2 / pairDetails?.totalSupply
+    let removedToken0 =
+      (lpBalance * pairDetails?.weiReserve1) / pairDetails?.totalSupply;
+    let removedToken1 =
+      (lpBalance * pairDetails?.weiReserve2) / pairDetails?.totalSupply;
 
-    if(pairDetails?.isValid && removedToken0 > 0 && removedToken1 >0)
-      await callQuoteAddLiquidity(removedToken0, removedToken1,pairDetails.isStable, pairDetails.token0, pairDetails.token1)
-
+    if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0)
+      await callQuoteAddLiquidity(
+        removedToken0,
+        removedToken1,
+        pairDetails.isStable,
+        pairDetails.token0,
+        pairDetails.token1
+      );
   };
 
   let buttonText = "Approve";
@@ -418,7 +434,13 @@ export default function Setup() {
       </div>
     );
   };
-  const callQuoteAddLiquidity = async(amount0,amount1,isStable,token0,token1) => {
+  const callQuoteAddLiquidity = async (
+    amount0,
+    amount1,
+    isStable,
+    token0,
+    token1
+  ) => {
     const web3 = await stores.accountStore.getWeb3Provider();
     const routerContract = new web3.eth.Contract(
       CONTRACTS.ROUTER_ABI,
@@ -443,59 +465,58 @@ export default function Setup() {
     }
 
     let res = await routerContract.methods
-      .quoteAddLiquidity(
-        addy0,
-        addy1,
-        isStable,
-        sendAmount0,
-        sendAmount1
-      )
+      .quoteAddLiquidity(addy0, addy1, isStable, sendAmount0, sendAmount1)
       .call();
-      console.log(res,"quotee")
-      res = {res,token0:token0,token1:token1}
-      console.log(res,"respooo")
-      setQuote(res);
+    console.log(res, "quotee");
+    res = { res, token0: token0, token1: token1 };
+    console.log(res, "respooo");
+    setQuote(res);
   };
   const checkPair = async (fromAssetValue, toAssetValue, isStable) => {
     const web3 = await stores.accountStore.getWeb3Provider();
 
     await getPairDetails(fromAssetValue, toAssetValue).then(async (a) => {
-      if (!a?.isValid)
-        setcheckpair(false)
-      else
-        setcheckpair(true)
+      if (!a?.isValid) setcheckpair(false);
+      else setcheckpair(true);
 
       const multicall = await stores.accountStore.getMulticall();
 
-      let removedToken0 = a?.lpBalance * a?.weiReserve1 / a?.totalSupply
-      let removedToken1 = a?.lpBalance * a?.weiReserve2 / a?.totalSupply
+      let removedToken0 = (a?.lpBalance * a?.weiReserve1) / a?.totalSupply;
+      let removedToken1 = (a?.lpBalance * a?.weiReserve2) / a?.totalSupply;
 
-      if(a?.isValid && removedToken0 > 0 && removedToken1 >0)
-      await callQuoteAddLiquidity(removedToken0, removedToken1,isStable, a.token0, a.token1)
+      if (a?.isValid && removedToken0 > 0 && removedToken1 > 0)
+        await callQuoteAddLiquidity(
+          removedToken0,
+          removedToken1,
+          isStable,
+          a.token0,
+          a.token1
+        );
+    });
+    const pair = await stores.stableSwapStore.getPair(
+      fromAssetValue,
+      toAssetValue,
+      isStable
+    );
 
-    })
-    const pair = await stores.stableSwapStore.getPair(fromAssetValue, toAssetValue, isStable)
+    if (pair != null) {
+      pair.reserve0 =
+        (parseFloat(pair?.balance.toString()) /
+          parseFloat(pair?.totalSupply.toString())) *
+        parseFloat(pair?.reserve0);
+      pair.reserve1 =
+        (parseFloat(pair?.balance.toString()) /
+          parseFloat(pair?.totalSupply.toString())) *
+        parseFloat(pair?.reserve1.toString());
 
-    if(pair!= null){
-    pair.reserve0 =
-      (parseFloat(pair?.balance.toString()) /
-        parseFloat(pair?.totalSupply.toString())) *
-      parseFloat(pair?.reserve0);
-    pair.reserve1 =
-      (parseFloat(pair?.balance.toString()) /
-        parseFloat(pair?.totalSupply.toString())) *
-      parseFloat(pair?.reserve1.toString());
-
-
-    setdystopiaPair(pair)}
-    else
-    {setdystopiaPair(null)}
-
- 
+      setdystopiaPair(pair);
+    } else {
+      setdystopiaPair(null);
+    }
   };
   return (
-    <div >
-      <Form style={{ width: '100%' }}>
+    <div>
+      <Form style={{ width: "100%" }}>
         <div
           className={[classes[`form`], classes[`form--${appTheme}`]].join(" ")}
         >
@@ -507,14 +528,13 @@ export default function Setup() {
               >
                 Source of Migration:
               </p>
-              <FormControl
-                variant="standard"
-                sx={{ width: "100%" }}
-              >
-                <div style={{
-                  display: 'flex',
-                  flexDirectiion: 'row'
-                }}>
+              <FormControl variant="standard" sx={{ width: "100%" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirectiion: "row",
+                  }}
+                >
                   <div
                     className={[
                       classes.pairDetails,
@@ -534,7 +554,7 @@ export default function Setup() {
                         ].join(" ")}
                       >
                         <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                          {platform?platform.label:"Select a Platform"}
+                          {platform ? platform.label : "Select a Platform"}
                         </span>
                       </div>
                     </div>
@@ -558,7 +578,7 @@ export default function Setup() {
                           classes[`nav-button-corner-top--${appTheme}`],
                         ].join(" ")}
                       >
-                        <PlatformSelect onSelect={handleChange}/>
+                        <PlatformSelect onSelect={handleChange} />
                       </div>
                     </div>
                   </div>
@@ -887,7 +907,7 @@ export default function Setup() {
                           fontSize: "16px",
                         }}
                       >
-                        {platform?platform.label:"Select a Platform"} Pool
+                        {platform ? platform.label : "Select a Platform"} Pool
                       </span>
                     </div>
                   </div>
@@ -913,7 +933,12 @@ export default function Setup() {
                         classes[`nav-button-corner-top--${appTheme}`],
                       ].join(" ")}
                     >
-                      <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
                         Your Pool Share:
                         <span
                           style={{
@@ -947,7 +972,12 @@ export default function Setup() {
                           classes[`nav-button-corner-top--${appTheme}`],
                         ].join(" ")}
                       >
-                        <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
                           {pairDetails?.token0symbol}:
                           <span
                             style={{
@@ -980,7 +1010,12 @@ export default function Setup() {
                           classes[`nav-button-corner-top--${appTheme}`],
                         ].join(" ")}
                       >
-                        <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
                           {pairDetails?.token1symbol}:
                           <span
                             style={{
@@ -996,10 +1031,12 @@ export default function Setup() {
                     </div>
                   </div>
                 </div>
-                {dystopiaPair ?
-
-                  (<div>
-                    <div className={classes.arrowDownCircle} onClick={() => settoggleArrow(!toggleArrow)}>
+                {dystopiaPair ? (
+                  <div>
+                    <div
+                      className={classes.arrowDownCircle}
+                      onClick={() => settoggleArrow(!toggleArrow)}
+                    >
                       <span
                         style={{
                           height: "40px",
@@ -1026,8 +1063,8 @@ export default function Setup() {
                         </svg>
                       </span>
                     </div>
-                    {toggleArrow ?
-                      (<div>
+                    {toggleArrow ? (
+                      <div>
                         <div
                           className={[
                             classes.pairContainer,
@@ -1035,13 +1072,17 @@ export default function Setup() {
                           ].join(" ")}
                           style={{ marginTop: "20px" }}
                         >
-                          <div style={{ display: "flex", alignItems: "center" }}>
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
                             <div
                               className={classes.assetSelectMenuItem}
                               style={{ display: "flex" }}
                             >
                               <div
-                                className={[classes.displayDualIconContainer].join(" ")}
+                                className={[
+                                  classes.displayDualIconContainer,
+                                ].join(" ")}
                                 style={{
                                   width: "50px",
                                   height: "50px",
@@ -1058,7 +1099,9 @@ export default function Setup() {
                                   className={classes.displayAssetIcon}
                                   alt=""
                                   src={
-                                    fromAssetValue ? `${fromAssetValue.logoURI}` : ""
+                                    fromAssetValue
+                                      ? `${fromAssetValue.logoURI}`
+                                      : ""
                                   }
                                   style={{ width: "30px", height: "30px" }}
                                   onError={(e) => {
@@ -1068,7 +1111,9 @@ export default function Setup() {
                                 />
                               </div>
                               <div
-                                className={[classes.displayDualIconContainer].join(" ")}
+                                className={[
+                                  classes.displayDualIconContainer,
+                                ].join(" ")}
                                 style={{
                                   width: "50px",
                                   height: "50px",
@@ -1086,7 +1131,11 @@ export default function Setup() {
                                 <img
                                   className={classes.displayAssetIcon}
                                   alt=""
-                                  src={toAssetValue ? `${toAssetValue.logoURI}` : ""}
+                                  src={
+                                    toAssetValue
+                                      ? `${toAssetValue.logoURI}`
+                                      : ""
+                                  }
                                   style={{ width: "30px", height: "30px" }}
                                   onError={(e) => {
                                     e.target.onerror = null;
@@ -1101,7 +1150,10 @@ export default function Setup() {
                               </div>
                               <span
                                 style={{
-                                  color: appTheme === "light" ? "#86B9D6" : "#5F7285",
+                                  color:
+                                    appTheme === "light"
+                                      ? "#86B9D6"
+                                      : "#5F7285",
                                   fontSize: "16px",
                                 }}
                               >
@@ -1110,7 +1162,9 @@ export default function Setup() {
                             </div>
                           </div>
                           <span style={{ color: "#304C5E", fontWeight: "800" }}>
-                            {Number(quote?.res?.liquidity/10**18).toFixed(5)}
+                            {Number(quote?.res?.liquidity / 10 ** 18).toFixed(
+                              5
+                            )}
                           </span>
                         </div>
                         <div className={classes.boxStyle}>
@@ -1123,7 +1177,9 @@ export default function Setup() {
                             <div
                               className={[
                                 classes[`nav-button-corner-bottom`],
-                                classes[`nav-button-corner-bottom--${appTheme}`],
+                                classes[
+                                  `nav-button-corner-bottom--${appTheme}`
+                                ],
                               ].join(" ")}
                             >
                               <div
@@ -1140,7 +1196,10 @@ export default function Setup() {
                                     marginLeft: "50px",
                                   }}
                                 >
-                                  {Number(quote?.res?.amountA/10**quote?.token0?.decimals).toFixed(2)}
+                                  {Number(
+                                    quote?.res?.amountA /
+                                      10 ** quote?.token0?.decimals
+                                  ).toFixed(2)}
                                 </span>
                               </div>
                             </div>
@@ -1154,7 +1213,9 @@ export default function Setup() {
                             <div
                               className={[
                                 classes[`nav-button-corner-bottom`],
-                                classes[`nav-button-corner-bottom--${appTheme}`],
+                                classes[
+                                  `nav-button-corner-bottom--${appTheme}`
+                                ],
                               ].join(" ")}
                             >
                               <div
@@ -1163,7 +1224,12 @@ export default function Setup() {
                                   classes[`nav-button-corner-top--${appTheme}`],
                                 ].join(" ")}
                               >
-                                <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                  }}
+                                >
                                   {quote?.token1?.symbol}:
                                   <span
                                     style={{
@@ -1172,7 +1238,10 @@ export default function Setup() {
                                       // marginLeft: "10px",
                                     }}
                                   >
-                                    {Number(quote?.res?.amountB/10**quote?.token1?.decimals).toFixed(2)}
+                                    {Number(
+                                      quote?.res?.amountB /
+                                        10 ** quote?.token1?.decimals
+                                    ).toFixed(2)}
                                   </span>
                                 </div>
                               </div>
@@ -1192,68 +1261,82 @@ export default function Setup() {
                             ].join(" ")}
                           ></div>
                           <Typography>
-                            ~{(Number(pairDetails.token0Bal)-Number(quote?.res?.amountA/10**quote?.token0?.decimals)).toFixed(2)}{quote?.token0?.symbol} and ~{(Number(pairDetails.token1Bal)-Number(quote?.res?.amountB/10**quote?.token1?.decimals)).toFixed(2)}{quote?.token1?.symbol} will be refunded to your wallet due
-                            to the price difference.
+                            ~
+                            {(
+                              Number(pairDetails.token0Bal) -
+                              Number(
+                                quote?.res?.amountA /
+                                  10 ** quote?.token0?.decimals
+                              )
+                            ).toFixed(2)}
+                            {quote?.token0?.symbol} and ~
+                            {(
+                              Number(pairDetails.token1Bal) -
+                              Number(
+                                quote?.res?.amountB /
+                                  10 ** quote?.token1?.decimals
+                              )
+                            ).toFixed(2)}
+                            {quote?.token1?.symbol} will be refunded to your
+                            wallet due to the price difference.
                           </Typography>
                         </div>
-                      </div>) : null}
+                      </div>
+                    ) : null}
                   </div>
-
-                  )
-                  : null}
-
+                ) : null}
               </div>
-
             )}
-            {pairDetails && pairDetails.isValid?
-            (<div className={classes.radioContainer}>
-              <div
-                onClick={() => handleRadioChange(true)}
-                className={classes.radioButton}
-                style={{
-                  color: isStable ? "white" : "#0C5E8E",
-                  background: isStable
-                    ? appTheme === "light"
-                      ? "#86B9D6"
-                      : "#5F7285"
-                    : "transparent",
-                  border: "1px solid #0C5E8E",
-                  marginRight: "10px",
-                }}
-              >
-                <Radio
-                  checked={isStable}
+            {pairDetails && pairDetails.isValid ? (
+              <div className={classes.radioContainer}>
+                <div
                   onClick={() => handleRadioChange(true)}
-                  value="a"
-                  name="radio-buttons"
-                  inputProps={{ "aria-label": "A" }}
-                />
-                Stable
-              </div>
-              <div
-                onClick={() => handleRadioChange(false)}
-                className={classes.radioButton}
-                style={{
-                  color: !isStable ? "white" : "#0C5E8E",
-                  background: !isStable
-                    ? appTheme === "light"
-                      ? "#86B9D6"
-                      : "#5F7285"
-                    : "transparent",
-                  border: "1px solid #0C5E8E",
-                  marginRight: "0px",
-                }}
-              >
-                <Radio
-                  checked={!isStable}
+                  className={classes.radioButton}
+                  style={{
+                    color: isStable ? "white" : "#0C5E8E",
+                    background: isStable
+                      ? appTheme === "light"
+                        ? "#86B9D6"
+                        : "#5F7285"
+                      : "transparent",
+                    border: "1px solid #0C5E8E",
+                    marginRight: "10px",
+                  }}
+                >
+                  <Radio
+                    checked={isStable}
+                    onClick={() => handleRadioChange(true)}
+                    value="a"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "A" }}
+                  />
+                  Stable
+                </div>
+                <div
                   onClick={() => handleRadioChange(false)}
-                  value="b"
-                  name="radio-buttons"
-                  inputProps={{ "aria-label": "B" }}
-                />
-                Volatile
+                  className={classes.radioButton}
+                  style={{
+                    color: !isStable ? "white" : "#0C5E8E",
+                    background: !isStable
+                      ? appTheme === "light"
+                        ? "#86B9D6"
+                        : "#5F7285"
+                      : "transparent",
+                    border: "1px solid #0C5E8E",
+                    marginRight: "0px",
+                  }}
+                >
+                  <Radio
+                    checked={!isStable}
+                    onClick={() => handleRadioChange(false)}
+                    value="b"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "B" }}
+                  />
+                  Volatile
+                </div>
               </div>
-            </div>):null}
+            ) : null}
           </div>
         </div>
       </Form>
@@ -1285,7 +1368,13 @@ export default function Setup() {
               variant="contained"
               size="large"
               color="primary"
-              onClick={() => checkPair(fromAssetValue.address, toAssetValue.address, isStable)}
+              onClick={() =>
+                checkPair(
+                  fromAssetValue.address,
+                  toAssetValue.address,
+                  isStable
+                )
+              }
               disabled={disableButton}
               className={[
                 classes.buttonOverride,
@@ -1338,7 +1427,7 @@ export default function Setup() {
           );
         }
 
-        return () => { };
+        return () => {};
       },
       [assetOptions, search]
     );
@@ -1571,12 +1660,12 @@ export default function Setup() {
           >
             {filteredAssetOptions
               ? filteredAssetOptions
-                .filter((option) => {
-                  return option.local === true;
-                })
-                .map((asset, idx) => {
-                  return renderManageOption(type, asset, idx);
-                })
+                  .filter((option) => {
+                    return option.local === true;
+                  })
+                  .map((asset, idx) => {
+                    return renderManageOption(type, asset, idx);
+                  })
               : []}
           </div>
 
@@ -1639,18 +1728,18 @@ export default function Setup() {
           >
             {filteredAssetOptions
               ? filteredAssetOptions
-                .sort((a, b) => {
-                  if (BigNumber(a.balance).lt(b.balance)) return 1;
-                  if (BigNumber(a.balance).gt(b.balance)) return -1;
-                  if (a.symbol.toLowerCase() < b.symbol.toLowerCase())
-                    return -1;
-                  if (a.symbol.toLowerCase() > b.symbol.toLowerCase())
-                    return 1;
-                  return 0;
-                })
-                .map((asset, idx) => {
-                  return renderAssetOption(type, asset, idx);
-                })
+                  .sort((a, b) => {
+                    if (BigNumber(a.balance).lt(b.balance)) return 1;
+                    if (BigNumber(a.balance).gt(b.balance)) return -1;
+                    if (a.symbol.toLowerCase() < b.symbol.toLowerCase())
+                      return -1;
+                    if (a.symbol.toLowerCase() > b.symbol.toLowerCase())
+                      return 1;
+                    return 0;
+                  })
+                  .map((asset, idx) => {
+                    return renderAssetOption(type, asset, idx);
+                  })
               : []}
           </div>
 
@@ -1778,16 +1867,16 @@ export default function Setup() {
 
     const handleClickOpen = () => {
       setOpen(true);
-    }
+    };
     const handleClose = () => {
       onSelect(type, asset);
       setOpen(false);
-    }
+    };
     const handleCloseSelect = (platform) => {
       onSelect(platform);
       setOpen(false);
-    }
-    
+    };
+
     const onClose = () => {
       setSearch("");
       setOpen(false);
@@ -1802,9 +1891,9 @@ export default function Setup() {
       async function () {
         let ao = migrate.filter((eachPlatform) => {
           if (search && search !== "") {
-            return (
-              eachPlatform.label.toLowerCase().includes(search.toLowerCase())
-            );
+            return eachPlatform.label
+              .toLowerCase()
+              .includes(search.toLowerCase());
           } else {
             return true;
           }
@@ -1820,7 +1909,7 @@ export default function Setup() {
           );
         }
 
-        return () => { };
+        return () => {};
       },
       [search]
     );
@@ -1832,8 +1921,18 @@ export default function Setup() {
     return (
       <div>
         <Button style={{ padding: "0" }} onClick={handleClickOpen}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-chevron-down"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+            />
           </svg>
         </Button>
         <Dialog className={classes.blurbg} open={open} onClose={handleClose}>
@@ -1842,40 +1941,50 @@ export default function Setup() {
             style={{
               width: 380,
               height: 710,
-              background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-              border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
+              background: appTheme === "dark" ? "#151718" : "#DBE6EC",
+              border:
+                appTheme === "dark" ? "1px solid #5F7285" : "1px solid #86B9D6",
               borderRadius: 0,
-            }}>
-            <DialogTitle TitleclassName={classes.dialogTitle}
+            }}
+          >
+            <DialogTitle
+              TitleclassName={classes.dialogTitle}
               style={{
                 padding: 30,
                 paddingBottom: 0,
                 fontWeight: 500,
                 fontSize: 18,
-                lineHeight: '140%',
-                color: '#0A2C40',
-              }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-                }}>
+                lineHeight: "140%",
+                color: "#0A2C40",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+                  }}
+                >
                   Select a Platform
                 </div>
                 <Close
                   style={{
-                    cursor: 'pointer',
-                    color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                    cursor: "pointer",
+                    color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
                   }}
-                  onClick={onClose} />
+                  onClick={onClose}
+                />
               </div>
             </DialogTitle>
-            <div className={classes.searchInline}
+            <div
+              className={classes.searchInline}
               onClick={() => {
                 openSearch();
               }}
@@ -1889,104 +1998,105 @@ export default function Setup() {
                 onChange={onSearchChanged}
                 InputProps={{
                   style: {
-                    background: 'transparent',
-                    border: '1px solid',
-                    borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
+                    background: "transparent",
+                    border: "1px solid",
+                    borderColor: appTheme === "dark" ? "#5F7285" : "#86B9D6",
                     borderRadius: 0,
                   },
                   classes: {
                     root: classes.searchInput,
                   },
-                  startAdornment: <InputAdornment position="start">
-                    <Search style={{
-                      color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                    }} />
-                  </InputAdornment>,
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Search
+                        style={{
+                          color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
+                        }}
+                      />
+                    </InputAdornment>
+                  ),
                 }}
                 inputProps={{
                   style: {
-                    padding: '10px',
+                    padding: "10px",
                     borderRadius: 0,
-                    border: 'none',
-                    fontSize: '14px',
-                    lineHeight: '120%',
-                    color: '#86B9D6',
+                    border: "none",
+                    fontSize: "14px",
+                    lineHeight: "120%",
+                    color: "#86B9D6",
                   },
                 }}
               />
             </div>
             <DialogContent>
-              {filteredPlatform.length === 0 ? (
-                migrate.map((eachPlatform) => (
-                  <div
-                    className={[
-                      classes.pairDetails,
-                      classes[`pairDetails--${appTheme}`],
-                    ].join(" ")}
-                    style={{
-                      marginTop: "0",
-                      background: "#b9dff5",
-                      color: "#0A2C40"
-                    }}
-                  >
+              {filteredPlatform.length === 0
+                ? migrate.map((eachPlatform) => (
                     <div
                       className={[
-                        classes[`nav-button-corner-bottom`],
-                        classes[`nav-button-corner-bottom--${appTheme}`],
+                        classes.pairDetails,
+                        classes[`pairDetails--${appTheme}`],
                       ].join(" ")}
+                      style={{
+                        marginTop: "0",
+                        background: "#b9dff5",
+                        color: "#0A2C40",
+                      }}
                     >
                       <div
                         className={[
-                          classes[`nav-button-corner-top`],
-                          classes[`nav-button-corner-top--${appTheme}`],
+                          classes[`nav-button-corner-bottom`],
+                          classes[`nav-button-corner-bottom--${appTheme}`],
                         ].join(" ")}
                       >
-                        <MenuItem value={eachPlatform.value}>
-                          {eachPlatform.label}
-                        </MenuItem>
+                        <div
+                          className={[
+                            classes[`nav-button-corner-top`],
+                            classes[`nav-button-corner-top--${appTheme}`],
+                          ].join(" ")}
+                        >
+                          <MenuItem value={eachPlatform.value}>
+                            {eachPlatform.label}
+                          </MenuItem>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))
-              ) : (
-                filteredPlatform.map((eachPlatform) => (
-                  <div
-                    className={[
-                      classes.pairDetails,
-                      classes[`pairDetails--${appTheme}`],
-                    ].join(" ")}
-                    onClick={()=>handleCloseSelect(eachPlatform)}
-                    style={{
-                      marginTop: "0",
-                      background: "#b9dff5",
-                      color: "#0A2C40"
-                    }}
-                  >
+                  ))
+                : filteredPlatform.map((eachPlatform) => (
                     <div
                       className={[
-                        classes[`nav-button-corner-bottom`],
-                        classes[`nav-button-corner-bottom--${appTheme}`],
+                        classes.pairDetails,
+                        classes[`pairDetails--${appTheme}`],
                       ].join(" ")}
+                      onClick={() => handleCloseSelect(eachPlatform)}
+                      style={{
+                        marginTop: "0",
+                        background: "#b9dff5",
+                        color: "#0A2C40",
+                      }}
                     >
                       <div
                         className={[
-                          classes[`nav-button-corner-top`],
-                          classes[`nav-button-corner-top--${appTheme}`],
+                          classes[`nav-button-corner-bottom`],
+                          classes[`nav-button-corner-bottom--${appTheme}`],
                         ].join(" ")}
                       >
-                        <MenuItem value={eachPlatform.value}>
-                          {eachPlatform.label}
-                        </MenuItem>
+                        <div
+                          className={[
+                            classes[`nav-button-corner-top`],
+                            classes[`nav-button-corner-top--${appTheme}`],
+                          ].join(" ")}
+                        >
+                          <MenuItem value={eachPlatform.value}>
+                            {eachPlatform.label}
+                          </MenuItem>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))
-              )}
+                  ))}
             </DialogContent>
           </div>
         </Dialog>
       </div>
-    )
+    );
   }
 }
-
