@@ -604,12 +604,25 @@
   padding-bottom: 12px !important;
   font-size: 15px !important;
   line-height: 23px !important;
-  text-align: center;
-  color: #7E99B0 !important;
+  font-weight: 500;
 }
 
-.highlight {
-  color: #FFF !important;
+.depositInfoHeading--light {
+  color: #5688A5 !important;
+}
+
+.depositInfoHeading--dark {
+  color: #7C838A !important;
+}
+
+.depositInfoHeading--light .highlight {
+  color: #325569 !important;
+  font-weight: 600;
+}
+
+.depositInfoHeading--dark .highlight {
+  color: #C6CDD2 !important;
+  font-weight: 600;
 }
 
 .priceInfos {
@@ -705,7 +718,13 @@
 }
 
 .backIcon {
-  color: #06D3D7 !important;
+  width: 19px !important;
+  height: 19px !important;
+  color: #5688A5 !important;
+}
+
+.backIcon--dark {
+  color: #C6CDD2 !important;
 }
 
 .titleText {
