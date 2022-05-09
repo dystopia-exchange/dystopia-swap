@@ -255,7 +255,7 @@ function MyComponent(props) {
           url = "/connectors/coinbaseWalletIcon.svg";
         } else if (name === "WalletConnect") {
           url = "/connectors/walletConnectIcon.svg";
-          descriptor = "Scan with WalletConnect to connect";
+          
         } else if (name === "Frame") {
           return "";
         }
