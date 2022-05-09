@@ -246,7 +246,7 @@ export default function ssBribeCreate() {
   const renderCreateInfo = () => {
     return (
       <div className={classes.depositInfoContainer}>
-        <Typography className={classes.depositInfoHeading}>You are creating a bribe of <span
+        <Typography className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`]].join(' ')}>You are creating a bribe of <span
           className={classes.highlight}>{formatCurrency(amount)} {formatSymbol(asset?.symbol)}</span> to incentivize Vesters to vote
           for the <span
             className={classes.highlight}>{formatSymbol(gauge?.token0?.symbol)}/{formatSymbol(gauge?.token1?.symbol)} Pool</span></Typography>
@@ -262,11 +262,11 @@ export default function ssBribeCreate() {
       className={[classes.container, classes[`container--${appTheme}`, 'g-flex-column']].join(' ')}>
       <div
         className={[classes.titleSection, classes[`titleSection--${appTheme}`]].join(' ')}>
-        <Tooltip title="Back to Vote" placement="top">
+         <Tooltip title="Back to Vote" placement="top">
           <IconButton onClick={onBack}>
             <ArrowBackIosNew className={[classes.backIcon, classes[`backIcon--${appTheme}`]].join(' ')}/>
           </IconButton>
-        </Tooltip>
+        </Tooltip> 
       </div>
 
       <div className={[classes[`top`], classes[`top--${appTheme}`]].join(' ')}>
@@ -381,7 +381,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
         </div>
         <div className={classes.assetSelectIconName}>
           <Typography variant="h5">{asset ? formatSymbol(asset.symbol) : ''}</Typography>
-          <Typography variant="subtitle1" color="textSecondary">{asset ? asset.name : ''}</Typography>
+          <Typography variant="subtitle1" color="textSecondary">{asset ? formatSymbol(asset.name) : ''}</Typography>
         </div>
         <div className={classes.assetSelectActions}>
           <IconButton onClick={() => {
@@ -502,7 +502,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
           />
         </div>
 
-        <div className={classes.assetSearchResults}>
+        <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
           {
             filteredAssetOptions ? filteredAssetOptions.filter((option) => {
               return option.local === true;
@@ -514,7 +514,8 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
 
         <div className={classes.manageLocalContainer}>
           <Button
-            onClick={toggleLocal}>
+            onClick={toggleLocal}
+          >
             Back to Assets
           </Button>
         </div>
@@ -522,7 +523,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
     );
   };
 
-  const renderOptions = (manageLocalAssets) => {
+  const renderOptions = () => {
     return (
       <>
         <div className={classes.searchInline}>
@@ -571,21 +572,18 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
               if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
               return 0;
             }).map((asset, idx) => {
-              // if(asset.gauge != null)
               return renderAssetOption(type, asset, idx);
             }) : []
           }
         </div>
 
-        {manageLocalAssets &&
-          <div className={classes.manageLocalContainer}>
-            <Button
-              onClick={toggleLocal}
-            >
-              Manage Local Assets
-            </Button>
-          </div>
-        }
+        <div className={classes.manageLocalContainer}>
+          <Button
+            className={classes.manageLocalBtn}
+            onClick={toggleLocal}>
+            Manage Local Assets
+          </Button>
+        </div>
       </>
     );
   };
@@ -817,7 +815,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
             style={{
               color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
             }}>
-            {asset ? asset.symbol : ''}
+            {asset ? formatSymbol(asset.symbol) : ''}
           </Typography>
 
           <Typography
@@ -994,7 +992,11 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
           <div
             className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
             <img
-              className={classes.displayAssetIcon}
+              className={[
+                  classes.displayAssetIcon,
+                  classes.assetOptionIcon,
+                  classes[`assetOptionIcon--${appTheme}`],
+                ].join(" ")}
               alt=""
               src={value ? `${value?.token0?.logoURI}` : ''}
               height="100px"
@@ -1004,7 +1006,11 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
               }}
             />
             <img
-              className={[classes.displayAssetIcon, classes.displayAssetIconSec].join(' ')}
+            className={[
+              classes.displayAssetIcon,
+              classes.displayAssetIconSec,
+              classes.assetOptionIcon,
+              classes[`assetOptionIcon--${appTheme}`]].join(" ")}
               alt=""
               src={value ? `${value?.token1?.logoURI}` : ''}
               height="100px"
