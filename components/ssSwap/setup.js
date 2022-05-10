@@ -28,6 +28,8 @@ import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import BtnSwap from '../../ui/BtnSwap';
 import Hint from '../hint/hint';
 import SwapIconBg from '../../ui/SwapIconBg';
+import Loader from '../../ui/Loader';
+import Borders from '../../ui/Borders';
 
 function Setup() {
   const [, updateState] = React.useState();
@@ -216,7 +218,7 @@ function Setup() {
 
   const onSwap = () => {
     if (!fromAmountValue || fromAmountValue > Number(fromAssetValue.balance) || Number(fromAmountValue) <= 0) {
-      return
+      return;
     }
 
     setFromAmountError(false);
@@ -462,7 +464,6 @@ function Setup() {
           onChange={amountChanged}
           disabled={loading}
           InputProps={{
-            style: {},
             classes: {
               root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(" "),
             },
@@ -658,6 +659,12 @@ function Setup() {
       {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
 
       {renderSwapInformation()}
+
+      {loading &&
+        <div className={classes.loader}>
+          <Loader/>
+        </div>
+      }
 
       <BtnSwap
         onClick={onSwap}
@@ -867,14 +874,9 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
             value={search}
             onChange={onSearchChanged}
             InputProps={{
-              style: {
-                background: 'transparent',
-                border: '1px solid',
-                borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-                borderRadius: 0,
-              },
               classes: {
-                root: classes.searchInput,
+                root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
+                inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
               },
               startAdornment: <InputAdornment position="start">
                 <Search style={{
@@ -882,20 +884,11 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
                 }}/>
               </InputAdornment>,
             }}
-            inputProps={{
-              style: {
-                padding: '10px',
-                borderRadius: 0,
-                border: 'none',
-                fontSize: '14px',
-                lineHeight: '120%',
-                color: '#86B9D6',
-              },
-            }}
           />
         </div>
 
         <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
+          <Borders/>
           {
             filteredAssetOptions ? filteredAssetOptions.filter((option) => {
               return option.local === true;
@@ -920,6 +913,19 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
     return (
       <>
         <div className={classes.searchInline}>
+          {/*<div className={[classes.networkButtonCornerLT, classes[`networkButtonCornerLT--${appTheme}`]].join(' ')}>
+          </div>
+
+          <div className={[classes.networkButtonCornerLB, classes[`networkButtonCornerLB--${appTheme}`]].join(' ')}>
+          </div>
+
+          <div className={[classes.networkButtonCornerRT, classes[`networkButtonCornerRT--${appTheme}`]].join(' ')}>
+          </div>
+
+          <div className={[classes.networkButtonCornerRB, classes[`networkButtonCornerRB--${appTheme}`]].join(' ')}>
+          </div>*/}
+          <Borders/>
+
           <TextField
             autoFocus
             variant="outlined"
@@ -928,14 +934,9 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
             value={search}
             onChange={onSearchChanged}
             InputProps={{
-              style: {
-                background: 'transparent',
-                border: '1px solid',
-                borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-                borderRadius: 0,
-              },
               classes: {
-                root: classes.searchInput,
+                root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
+                inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
               },
               startAdornment: <InputAdornment position="start">
                 <Search style={{
@@ -943,31 +944,24 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
                 }}/>
               </InputAdornment>,
             }}
-            inputProps={{
-              style: {
-                padding: '10px',
-                borderRadius: 0,
-                border: 'none',
-                fontSize: '14px',
-                lineHeight: '120%',
-                color: '#86B9D6',
-              },
-            }}
           />
         </div>
 
-        <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
-          {
-            filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
-              if (BigNumber(a.balance).lt(b.balance)) return 1;
-              if (BigNumber(a.balance).gt(b.balance)) return -1;
-              if (a.symbol.toLowerCase() < b.symbol.toLowerCase()) return -1;
-              if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
-              return 0;
-            }).map((asset, idx) => {
-              return renderAssetOption(type, asset, idx);
-            }) : []
-          }
+        <div style={{position: 'relative'}}>
+          <Borders/>
+          <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
+            {
+              filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
+                if (BigNumber(a.balance).lt(b.balance)) return 1;
+                if (BigNumber(a.balance).gt(b.balance)) return -1;
+                if (a.symbol.toLowerCase() < b.symbol.toLowerCase()) return -1;
+                if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
+                return 0;
+              }).map((asset, idx) => {
+                return renderAssetOption(type, asset, idx);
+              }) : []
+            }
+          </div>
         </div>
 
         <div className={classes.manageLocalContainer}>

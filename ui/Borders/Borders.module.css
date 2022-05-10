@@ -1,0 +1,45 @@
+.networkButtonCornerLT,
+.networkButtonCornerLB,
+.networkButtonCornerRT,
+.networkButtonCornerRB {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border: 1px solid #0B5E8E;
+  z-index: 9;
+}
+
+.networkButtonCornerLT--dark,
+.networkButtonCornerLB--dark,
+.networkButtonCornerRT--dark,
+.networkButtonCornerRB--dark {
+  border: 1px solid #4CADE6;
+}
+
+.networkButtonCornerLT {
+  left: 0;
+  top: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.networkButtonCornerLB {
+  left: 0;
+  bottom: 0;
+  border-right: none;
+  border-top: none;
+}
+
+.networkButtonCornerRT {
+  right: 0;
+  top: 0;
+  border-left: none;
+  border-bottom: none;
+}
+
+.networkButtonCornerRB {
+  right: 0;
+  bottom: 0;
+  border-left: none;
+  border-top: none;
+}
