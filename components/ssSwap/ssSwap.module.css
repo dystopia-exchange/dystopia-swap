@@ -494,14 +494,6 @@
   -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
 }
 
-/*.swapIconContainer--dark {
-  background-image: url("/images/ui/swap-coin-btn--dark.svg");
-}
-
-.swapIconContainer--light {
-  background-image: url("/images/ui/swap-coin-btn--light.svg");
-}*/
-
 .swapInfoContainer {
   width: 485px;
 }

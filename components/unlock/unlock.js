@@ -1,12 +1,12 @@
 import React, { Component, useState } from "react";
 import { withStyles } from "@mui/styles";
 import { Typography, Button, CircularProgress } from "@mui/material";
-import { Close } from "@mui/icons-material";
-
 import { Web3ReactProvider, useWeb3React } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
-
 import { ACTIONS } from '../../stores/constants';
+import classes from './unlockModal.module.css';
+import stores from "../../stores";
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 const {
   ERROR,
@@ -14,9 +14,6 @@ const {
   CONNECTION_CONNECTED,
   CONFIGURE_SS,
 } = ACTIONS;
-
-import stores from "../../stores";
-import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 const styles = theme => ({
   root: {
@@ -269,15 +266,12 @@ function MyComponent(props) {
             }}
           >
             <Button
+              TouchRippleProps={{ classes: classes.rippleClasses }}
               style={{
                 width: windowWidth > 530 ? "400px" : "calc(100vw - 100px)",
-                padding: '10px 20px',
-                backgroundColor: appTheme === "dark" ? '#24292D' : '#CFE5F2',
-                border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
                 borderRadius: 0,
-                color: "rgba(108,108,123,1)",
               }}
-              variant="contained"
+              className={[classes.networkButton, classes[`networkButton--${appTheme}`]].join(' ')}
               onClick={() => {
                 onConnectionClicked(
                   currentConnector,
@@ -287,9 +281,19 @@ function MyComponent(props) {
                 );
               }}
               disableElevation
-              color="secondary"
-              disabled={disabled}
-            >
+              disabled={disabled}>
+              <div className={[classes.networkButtonCornerLT, classes[`networkButtonCornerLT--${appTheme}`]].join(' ')}>
+              </div>
+
+              <div className={[classes.networkButtonCornerLB, classes[`networkButtonCornerLB--${appTheme}`]].join(' ')}>
+              </div>
+
+              <div className={[classes.networkButtonCornerRT, classes[`networkButtonCornerRT--${appTheme}`]].join(' ')}>
+              </div>
+
+              <div className={[classes.networkButtonCornerRB, classes[`networkButtonCornerRB--${appTheme}`]].join(' ')}>
+              </div>
+
               <div
                 style={{
                   width: "100%",

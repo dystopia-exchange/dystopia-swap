@@ -1,0 +1,74 @@
+.networkButton {
+  position: relative;
+  padding: 10px 20px !important;
+  background-color: #CFE5F2 !important;
+  border: 1px solid #86B9D6 !important;
+}
+
+.networkButton--dark {
+  background-color: #24292D !important;
+  border: 1px solid #5F7285 !important;
+}
+
+.networkButton:hover,
+.networkButton--dark:hover {
+  border: 1px solid #ffffff !important;
+}
+
+.networkButton:active {
+  border: 1px solid #0B5E8E !important;
+}
+
+.networkButton--dark:active {
+  border: 1px solid #4CADE6 !important;
+}
+
+.networkButtonCornerLT,
+.networkButtonCornerLB,
+.networkButtonCornerRT,
+.networkButtonCornerRB {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border: 1px solid #0B5E8E;
+}
+
+.networkButtonCornerLT--dark,
+.networkButtonCornerLB--dark,
+.networkButtonCornerRT--dark,
+.networkButtonCornerRB--dark {
+  border: 1px solid #4CADE6;
+}
+
+.networkButtonCornerLT {
+  left: -1px;
+  top: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.networkButtonCornerLB {
+  left: -1px;
+  bottom: -1px;
+  border-right: none;
+  border-top: none;
+}
+
+.networkButtonCornerRT {
+  right: -1px;
+  top: -1px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.networkButtonCornerRB {
+  right: -1px;
+  bottom: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+.rippleClasses {
+  display: none !important;
+}
+
