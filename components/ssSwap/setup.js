@@ -109,7 +109,6 @@ function Setup() {
       if (baseAsset.length > 0 && fromAssetValue == null) {
         setFromAssetValue(baseAsset[1]);
       }
-
       forceUpdate();
     };
 
