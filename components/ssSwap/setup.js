@@ -27,6 +27,7 @@ import BigNumber from 'bignumber.js';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import BtnSwap from '../../ui/BtnSwap';
 import Hint from '../hint/hint';
+import SwapIconBg from '../../ui/SwapIconBg';
 
 function Setup() {
   const [, updateState] = React.useState();
@@ -978,6 +979,12 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
 
   const {appTheme} = useAppThemeContext();
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
+
   return (
     <React.Fragment>
       <div className={classes.displaySelectContainer} onClick={() => {
@@ -986,6 +993,8 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
         <div className={classes.assetSelectMenuItem}>
           <div
             className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+            <SwapIconBg/>
+
             <img
               className={classes.displayAssetIcon}
               alt=""

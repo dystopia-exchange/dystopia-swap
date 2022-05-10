@@ -48,6 +48,7 @@ import stores from "../../stores";
 import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
 import BigNumber from "bignumber.js";
 import { formatSymbol } from "../../utils";
+import SwapIconBg from '../../ui/SwapIconBg';
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -762,6 +763,7 @@ export default function Setup() {
                               padding: "10px",
                             }}
                           >
+                            <SwapIconBg/>
                             <img
                               className={classes.displayAssetIcon}
                               alt=""
@@ -796,6 +798,7 @@ export default function Setup() {
                               padding: "10px",
                             }}
                           >
+                            <SwapIconBg/>
                             <img
                               className={classes.displayAssetIcon}
                               alt=""
@@ -1106,6 +1109,7 @@ export default function Setup() {
                                   padding: "10px",
                                 }}
                               >
+                                <SwapIconBg/>
                                 <img
                                   className={classes.displayAssetIcon}
                                   alt=""
@@ -1139,6 +1143,7 @@ export default function Setup() {
                                   padding: "10px",
                                 }}
                               >
+                                <SwapIconBg/>
                                 <img
                                   className={classes.displayAssetIcon}
                                   alt=""
@@ -1778,6 +1783,7 @@ export default function Setup() {
                 classes[`displayDualIconContainer--${appTheme}`],
               ].join(" ")}
             >
+              <SwapIconBg/>
               <img
                 className={classes.displayAssetIcon}
                 alt=""
