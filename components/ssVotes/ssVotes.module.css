@@ -97,6 +97,16 @@
   outline: 1px solid #8F5AE8 !important;
   border-radius: 0 !important;
   border: none !important;
+  color: #8F5AE8 !important;
+  box-shadow: none !important;
+}
+
+.buttonOverrideFixed:hover {
+  background: #C6BAF0 !important;
+  box-shadow: none !important;
+}
+
+.buttonOverrideFixed--light {
 }
 
 .buttonOverrideFixed--dark {
