@@ -8,6 +8,7 @@ import stores from '../../stores';
 import { useRouter } from 'next/router';
 import { ACTIONS } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import BtnEnterApp from '../../ui/BtnEnterApp';
 
 export default function Migrate() {
   const accountStore = stores.accountStore.getStore('account');
@@ -43,6 +44,34 @@ export default function Migrate() {
 
   const {appTheme} = useAppThemeContext();
 
+  const [isHoverState, setIsHoverState] = useState(false);
+  const [isClickState, setIsClickState] = useState(false);
+  const [btnColor, setBtnColor] = useState(appTheme === 'dark' ? '#33284C' : '#D2D0F2');
+
+  const btnDefaultColor = () => {
+    setIsHoverState(false);
+    setIsClickState(false);
+  };
+
+  const btnHoverColor = () => {
+    setIsHoverState(true);
+  };
+
+  const btnClickColor = () => {
+    setIsClickState(true);
+  };
+
+  const getBtnColor = () => {
+    switch (appTheme) {
+      case 'dark':
+        return isClickState ? '#523880' : (isHoverState ? '#402E61' : '#33284C');
+
+      case 'light':
+      default:
+        return isClickState ? '#B9A4EE' : (isHoverState ? '#C6BAF0' : '#D2D0F2');
+    }
+  };
+
   return (
     <>
       {account && account.address ?
@@ -64,13 +93,18 @@ export default function Migrate() {
               </Typography>
             </div>
 
-            <Button
-              disableElevation
+            <div
               className={[classes.buttonConnect, classes[`buttonConnect--${appTheme}`]].join(' ')}
-              variant="contained"
+              onMouseOver={btnHoverColor}
+              onMouseOut={btnDefaultColor}
+              onMouseDown={btnClickColor}
               onClick={onAddressClicked}>
-              {account && account.address && <div className={`${classes.accountIcon} ${classes.metamask}`}></div>}
-            </Button>
+              <BtnEnterApp
+                labelClassName={classes.buttonEnterLabel}
+                label={`Connect wallet\nto continue`}
+                btnColor={getBtnColor}
+              />
+            </div>
           </div>
         </Paper>
       }

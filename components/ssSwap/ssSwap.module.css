@@ -271,7 +271,7 @@
 .slippage {
   position: absolute;
   left: 30px;
-  bottom: -75px;
+  bottom: -68px;
   width: min-content;
 }
 
@@ -720,7 +720,7 @@
 
 .btnSwap {
   position: absolute !important;
-  bottom: -98px;
+  bottom: -92px;
   margin-left: 24px !important;
   left: 118px;
 }

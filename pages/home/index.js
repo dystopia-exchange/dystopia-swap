@@ -5,6 +5,7 @@ import classes from './home.module.css';
 import React, { useState } from 'react';
 import { useRouter } from "next/router";
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import BtnEnterApp from '../../ui/BtnEnterApp';
 
 function Home({changeTheme}) {
   const [showLearnMore, setShowLearnMore] = useState(false);
@@ -15,6 +16,34 @@ function Home({changeTheme}) {
   }
 
   const router = useRouter();
+
+  const [isHoverState, setIsHoverState] = useState(false);
+  const [isClickState, setIsClickState] = useState(false);
+  const [btnColor, setBtnColor] = useState(appTheme === 'dark' ? '#33284C' : '#D2D0F2');
+
+  const btnDefaultColor = () => {
+    setIsHoverState(false);
+    setIsClickState(false);
+  };
+
+  const btnHoverColor = () => {
+    setIsHoverState(true);
+  };
+
+  const btnClickColor = () => {
+    setIsClickState(true);
+  };
+
+  const getBtnColor = () => {
+    switch (appTheme) {
+      case 'dark':
+        return isClickState ? '#523880' : (isHoverState ? '#402E61' : '#33284C');
+
+      case 'light':
+      default:
+        return isClickState ? '#B9A4EE' : (isHoverState ? '#C6BAF0' : '#D2D0F2');
+    }
+  };
 
   const {appTheme} = useAppThemeContext();
 
@@ -66,8 +95,15 @@ function Home({changeTheme}) {
 
             <div
               className={[classes.buttonEnter, classes[`buttonEnter--${appTheme}`]].join(' ')}
+              onMouseOver={btnHoverColor}
+              onMouseOut={btnDefaultColor}
+              onMouseDown={btnClickColor}
               onClick={() => router.push('/swap')}>
-              Enter App
+              <BtnEnterApp
+                labelClassName={classes.buttonEnterLabel}
+                label={'Enter App'}
+                btnColor={getBtnColor}
+              />
             </div>
 
             <div
@@ -100,15 +136,18 @@ function Home({changeTheme}) {
               utilizing strategies to maximize their yield.
             </Typography>
 
-            <Button
-              disableElevation
+            <div
               className={[classes.buttonEnterSec, classes[`buttonEnterSec--${appTheme}`]].join(' ')}
-              variant="contained"
+              onMouseOver={btnHoverColor}
+              onMouseOut={btnDefaultColor}
+              onMouseDown={btnClickColor}
               onClick={() => router.push('/swap')}>
-              <Typography className={classes.buttonEnterTitle}>
-                Enter App
-              </Typography>
-            </Button>
+              <BtnEnterApp
+                labelClassName={classes.buttonEnterLabel}
+                label={'Enter App'}
+                btnColor={getBtnColor}
+              />
+            </div>
           </div>}
 
         <img

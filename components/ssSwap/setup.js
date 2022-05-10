@@ -878,7 +878,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
           <Button
             className={classes.manageLocalBtn}
             onClick={toggleLocal}>
-            Manage Local Assets
+            Manage local assets
           </Button>
         </div>
       </>

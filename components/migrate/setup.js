@@ -1756,7 +1756,7 @@ export default function Setup() {
 
           <div className={classes.manageLocalContainer}>
             <Button className={classes.manageLocalBtn} onClick={toggleLocal}>
-              Manage Local Assets
+              Manage local assets
             </Button>
           </div>
         </>
