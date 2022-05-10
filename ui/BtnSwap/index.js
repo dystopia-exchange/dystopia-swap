@@ -88,7 +88,9 @@ const BtnSwap = (props) => {
       onMouseUp={mouseOut}>
       <>
         {updateState()}
-        <div variant="text" onClick={onClick}>
+        <div
+          className={['g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}
+          onClick={onClick}>
           {windowWidth > 470 && (
             <svg
               width="292"
@@ -167,21 +169,17 @@ const BtnSwap = (props) => {
           )}
 
 
-          <Typography
+          <div
             className={labelClassName}
             style={{
               position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
               userSelect: "none",
               pointerEvents: "none",
+              lineHeight: '120%',
             }}
           >
             {`${label}`}
-
-          </Typography>
-
+          </div>
         </div>
       </>
     </div>

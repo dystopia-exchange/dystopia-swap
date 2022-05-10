@@ -548,13 +548,70 @@ function Setup() {
     );
   };
 
+  const [swapIconBgColor, setSwapIconBgColor] = useState(appTheme === 'dark' ? '#24292D' : '#B9DFF5');
+  const [swapIconBorderColor, setSwapIconBorderColor] = useState(appTheme === 'dark' ? '#5F7285' : '#86B9D6');
+  const [swapIconArrowColor, setSwapIconArrowColor] = useState(appTheme === 'dark' ? '#ffffff' : '#ffffff');
+
+  const swapIconHover = () => {
+    setSwapIconBgColor(appTheme === 'dark' ? '#2D3741' : '#9BC9E4');
+    setSwapIconBorderColor(appTheme === 'dark' ? '#4CADE6' : '#0B5E8E');
+    setSwapIconArrowColor(appTheme === 'dark' ? '#ffffff' : '#ffffff');
+  };
+
+  const swapIconClick = () => {
+    setSwapIconBgColor(appTheme === 'dark' ? '#5F7285' : '#86B9D6');
+    setSwapIconBorderColor(appTheme === 'dark' ? '#4CADE6' : '#0B5E8E');
+    setSwapIconArrowColor(appTheme === 'dark' ? '#4CADE6' : '#0B5E8E');
+  };
+
+  const swapIconDefault = () => {
+    setSwapIconBgColor(null);
+    setSwapIconBorderColor(null);
+    setSwapIconArrowColor(null);
+  };
+
   return (
     <div className={classes.swapInputs}>
       {renderMassiveInput('From', fromAmountValue, fromAmountError, fromAmountChanged, fromAssetValue, fromAssetError, fromAssetOptions, onAssetSelect)}
 
       <div
         className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}
+        onMouseOver={swapIconHover}
+        onMouseOut={swapIconDefault}
+        onMouseDown={swapIconClick}
         onClick={swapAssets}>
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle
+            cx="40"
+            cy="40"
+            r="39.5"
+            fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
+            stroke={appTheme === 'dark' ? '#5F7285' : '#86B9D6'}/>
+
+          <rect
+            y="30"
+            width="4"
+            height="20"
+            fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}/>
+
+          <rect
+            x="76"
+            y="30"
+            width="4"
+            height="20"
+            fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}/>
+
+          <circle
+            cx="40"
+            cy="40"
+            r="29.5"
+            fill={swapIconBgColor || (appTheme === 'dark' ? '#24292D' : '#B9DFF5')}
+            stroke={swapIconBorderColor || (appTheme === 'dark' ? '#5F7285' : '#86B9D6')}/>
+
+          <path
+            d="M41.0002 44.172L46.3642 38.808L47.7782 40.222L40.0002 48L32.2222 40.222L33.6362 38.808L39.0002 44.172V32H41.0002V44.172Z"
+            fill={swapIconArrowColor || (appTheme === 'dark' ? '#ffffff' : '#ffffff')}/>
+        </svg>
       </div>
 
       {renderMassiveInput('To', toAmountValue, toAmountError, toAmountChanged, toAssetValue, toAssetError, toAssetOptions, onAssetSelect)}
@@ -878,7 +935,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
           <Button
             className={classes.manageLocalBtn}
             onClick={toggleLocal}>
-            Manage Local Assets
+            Manage local assets
           </Button>
         </div>
       </>

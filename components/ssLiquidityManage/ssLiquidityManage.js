@@ -2137,7 +2137,7 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
               color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
             }}
             onClick={toggleLocal}>
-            Manage Local Assets
+            Manage local assets
           </Button>
         </div>
       </>

@@ -581,7 +581,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
           <Button
             className={classes.manageLocalBtn}
             onClick={toggleLocal}>
-            Manage Local Assets
+            Manage local assets
           </Button>
         </div>
       </>
@@ -975,7 +975,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
             <Button
               onClick={toggleLocal}
             >
-              Manage Local Assets
+              Manage local assets
             </Button>
           </div>
         }

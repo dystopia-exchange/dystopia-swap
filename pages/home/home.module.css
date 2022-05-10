@@ -131,6 +131,7 @@
 
 .buttonEnter,
 .buttonEnterSec {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -148,37 +149,12 @@
   cursor: pointer;
 }
 
-.buttonEnter--light,
-.buttonEnterSec--light {
-  background-image: url("/images/ui/btn-enter--light.svg");
-}
-
-.buttonEnter--light:hover,
-.buttonEnterSec--light:hover {
-  background-image: url("/images/ui/btn-enter-hover--light.svg");
-}
-
-.buttonEnter--light:active,
-.buttonEnterSec--light:active {
-  background-image: url("/images/ui/btn-enter-click--light.svg");
-}
-
-.buttonEnter--dark,
-.buttonEnterSec--dark {
-  margin-top: 60px !important;
-  background-image: url("/images/ui/btn-enter--dark.svg");
-}
-
-.buttonEnter--dark:hover,
-.buttonEnterSec--dark:hover {
-  margin-top: 60px !important;
-  background-image: url("/images/ui/btn-enter-hover--dark.svg");
-}
-
-.buttonEnter--dark:active,
-.buttonEnterSec--dark:active {
-  margin-top: 60px !important;
-  background-image: url("/images/ui/btn-enter-click--dark.svg");
+.buttonEnterLabel {
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  line-height: 120% !important;
+  color: #8F5AE8 !important;
+  text-transform: uppercase;
 }
 
 .buttonEnterTitle {
