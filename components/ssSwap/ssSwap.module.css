@@ -487,7 +487,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 320px;
+  margin-left: 310px;
   margin-top: -32px;
   z-index: 1;
   cursor: pointer;
@@ -1004,14 +1004,6 @@
     background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
   }
 
-  .swapIconContainer--dark {
-    background-image: url("/images/ui/swap-coin-btn-360--dark.svg");
-  }
-
-  .swapIconContainer--light {
-    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
-  }
-
   .inputBalanceText,
   .inputTitleText {
     font-size: 12px !important;
@@ -1019,8 +1011,9 @@
 
   .swapIconContainer {
     background-repeat: no-repeat;
-    margin-left: 220px;
-    margin-top: -22px;
+    margin-left: 210px;
+    margin-top: -37px;
+    margin-bottom: 15px;
   }
 
   .textField--To-light,

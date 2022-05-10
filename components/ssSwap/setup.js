@@ -54,6 +54,7 @@ function Setup() {
   const [quoteError, setQuoteError] = useState(null);
   const [quote, setQuote] = useState(null);
   const [hintAnchor, setHintAnchor] = React.useState(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const {appTheme} = useAppThemeContext();
 
@@ -66,6 +67,10 @@ function Setup() {
   };
 
   const openHint = Boolean(hintAnchor);
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
 
   useEffect(function () {
     const errorReturned = () => {
@@ -579,39 +584,68 @@ function Setup() {
         onMouseOver={swapIconHover}
         onMouseOut={swapIconDefault}
         onMouseDown={swapIconClick}
+        onMouseUp={swapIconDefault}
         onClick={swapAssets}>
-        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle
-            cx="40"
-            cy="40"
-            r="39.5"
-            fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
-            stroke={appTheme === 'dark' ? '#5F7285' : '#86B9D6'}/>
+        {windowWidth > 470 &&
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle
+              cx="40"
+              cy="40"
+              r="39.5"
+              fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
+              stroke={appTheme === 'dark' ? '#5F7285' : '#86B9D6'}/>
 
-          <rect
-            y="30"
-            width="4"
-            height="20"
-            fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}/>
+            <rect
+              y="30"
+              width="4"
+              height="20"
+              fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}/>
 
-          <rect
-            x="76"
-            y="30"
-            width="4"
-            height="20"
-            fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}/>
+            <rect
+              x="76"
+              y="30"
+              width="4"
+              height="20"
+              fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}/>
 
-          <circle
-            cx="40"
-            cy="40"
-            r="29.5"
-            fill={swapIconBgColor || (appTheme === 'dark' ? '#24292D' : '#B9DFF5')}
-            stroke={swapIconBorderColor || (appTheme === 'dark' ? '#5F7285' : '#86B9D6')}/>
+            <circle
+              cx="40"
+              cy="40"
+              r="29.5"
+              fill={swapIconBgColor || (appTheme === 'dark' ? '#24292D' : '#B9DFF5')}
+              stroke={swapIconBorderColor || (appTheme === 'dark' ? '#5F7285' : '#86B9D6')}/>
 
-          <path
-            d="M41.0002 44.172L46.3642 38.808L47.7782 40.222L40.0002 48L32.2222 40.222L33.6362 38.808L39.0002 44.172V32H41.0002V44.172Z"
-            fill={swapIconArrowColor || (appTheme === 'dark' ? '#ffffff' : '#ffffff')}/>
-        </svg>
+            <path
+              d="M41.0002 44.172L46.3642 38.808L47.7782 40.222L40.0002 48L32.2222 40.222L33.6362 38.808L39.0002 44.172V32H41.0002V44.172Z"
+              fill={swapIconArrowColor || (appTheme === 'dark' ? '#ffffff' : '#ffffff')}/>
+          </svg>
+        }
+
+        {windowWidth <= 470 &&
+          <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle
+              cx="25"
+              cy="25"
+              r="24.5"
+              fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
+              stroke={appTheme === 'dark' ? '#5F7285' : '#86B9D6'}/>
+
+            <rect y="20" width="3" height="10" fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}/>
+
+            <rect x="48" y="20" width="2" height="10" fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}/>
+
+            <circle
+              cx="25"
+              cy="25"
+              r="18.5"
+              fill={swapIconBgColor || (appTheme === 'dark' ? '#24292D' : '#B9DFF5')}
+              stroke={swapIconBorderColor || (appTheme === 'dark' ? '#5F7285' : '#86B9D6')}/>
+
+            <path
+              d="M25.8336 28.4773L30.3036 24.0073L31.4819 25.1857L25.0002 31.6673L18.5186 25.1857L19.6969 24.0073L24.1669 28.4773V18.334H25.8336V28.4773Z"
+              fill={swapIconArrowColor || (appTheme === 'dark' ? '#ffffff' : '#ffffff')}/>
+          </svg>
+        }
       </div>
 
       {renderMassiveInput('To', toAmountValue, toAmountError, toAmountChanged, toAssetValue, toAssetError, toAssetOptions, onAssetSelect)}
