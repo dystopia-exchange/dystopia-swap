@@ -12,6 +12,7 @@ import stores from '../../stores';
 import {
   ACTIONS,
 } from '../../stores/constants';
+import SwapIconBg from '../../ui/SwapIconBg';
 
 export default function existingLock({nft, govToken, veToken}) {
   const [futureNFT, setFutureNFT] = useState(null);
@@ -167,6 +168,7 @@ export default function existingLock({nft, govToken, veToken}) {
             <div className={classes.displaySelectContainer}>
               <div
                 className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+                <SwapIconBg/>
                 {
                   govToken?.logoURI &&
                   <img
@@ -231,6 +233,7 @@ export default function existingLock({nft, govToken, veToken}) {
               <div className={classes.displaySelectContainerDate}>
                 <div
                   className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+                  <SwapIconBg/>
                   <div className={[classes.displayAssetIcon, classes[`displayAssetIcon--${appTheme}`]].join(' ')}/>
                 </div>
               </div>

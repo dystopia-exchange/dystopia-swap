@@ -25,6 +25,7 @@ import {
   ETHERSCAN_URL,
 } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import SwapIconBg from '../../ui/SwapIconBg';
 
 export default function ssBribeCreate() {
 
@@ -599,7 +600,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
           <Button
             className={classes.manageLocalBtn}
             onClick={toggleLocal}>
-            Manage Local Assets
+            Manage local assets
           </Button>
         </div>
       </>
@@ -614,6 +615,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
         <div className={classes.assetSelectMenuItem}>
           <div
             className={[classes.displayDualIconContainer, classes[`displayDualIconContainerSec--${appTheme}`]].join(' ')}>
+            <SwapIconBg/>
             <img
               className={classes.displayAssetIcon}
               alt=""
@@ -993,7 +995,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
             <Button
               onClick={toggleLocal}
             >
-              Manage Local Assets
+              Manage local assets
             </Button>
           </div>
         }

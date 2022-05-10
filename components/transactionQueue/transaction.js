@@ -166,6 +166,7 @@ export default function Transaction({transaction}) {
                 fontSize: 12,
                 lineHeight: '120%',
                 color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                cursor: 'pointer',
               }}
               onClick={onViewTX}>
               View in Explorer

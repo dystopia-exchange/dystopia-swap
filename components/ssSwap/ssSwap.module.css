@@ -105,14 +105,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: fill 0.16s ease;
+  fill: #9BC9E4;
 }
 
-.displayDualIconContainer--light {
-  background-image: url("/images/ui/swap-currency-circle--light.svg");
+.displayDualIconContainer:hover {
+  fill: #0B5E8E;
+}
+
+.displayDualIconContainer:active {
+  fill: #86B9D6;
 }
 
 .displayDualIconContainer--dark {
-  background-image: url("/images/ui/swap-currency-circle--dark.svg");
+  fill: #2D3741;
+}
+
+.displayDualIconContainer--dark:hover {
+  fill: #4CADE6;
+}
+
+.displayDualIconContainer--dark:active {
+  fill: #5F7285;
 }
 
 .displayDualIconContainerConfirm {
@@ -173,6 +187,7 @@
   flex-direction: column;
   margin-top: 30px;
   min-width: 390px;
+  position: relative;
 }
 
 .assetSearchResults--light {
@@ -271,7 +286,7 @@
 .slippage {
   position: absolute;
   left: 30px;
-  bottom: -75px;
+  bottom: -68px;
   width: min-content;
 }
 
@@ -465,6 +480,7 @@
 
 .assetSelectBalance {
   flex: 1;
+  margin-top: 4px;
   margin-left: 48px;
   display: flex;
   flex-direction: column;
@@ -487,19 +503,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 320px;
+  margin-left: 310px;
   margin-top: -32px;
   z-index: 1;
   cursor: pointer;
   -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
-}
-
-.swapIconContainer--dark {
-  background-image: url("/images/ui/swap-coin-btn--dark.svg");
-}
-
-.swapIconContainer--light {
-  background-image: url("/images/ui/swap-coin-btn--light.svg");
 }
 
 .swapInfoContainer {
@@ -621,6 +629,53 @@
 .searchInline {
   display: flex;
   align-items: center;
+  position: relative;
+}
+
+.networkButtonCornerLT,
+.networkButtonCornerLB,
+.networkButtonCornerRT,
+.networkButtonCornerRB {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border: 1px solid #0B5E8E;
+  z-index: 9;
+}
+
+.networkButtonCornerLT--dark,
+.networkButtonCornerLB--dark,
+.networkButtonCornerRT--dark,
+.networkButtonCornerRB--dark {
+  border: 1px solid #4CADE6;
+}
+
+.networkButtonCornerLT {
+  left: 0;
+  top: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.networkButtonCornerLB {
+  left: 0;
+  bottom: 0;
+  border-right: none;
+  border-top: none;
+}
+
+.networkButtonCornerRT {
+  right: 0;
+  top: 0;
+  border-left: none;
+  border-bottom: none;
+}
+
+.networkButtonCornerRB {
+  right: 0;
+  bottom: 0;
+  border-left: none;
+  border-top: none;
 }
 
 .actionsContainer {
@@ -720,9 +775,16 @@
 
 .btnSwap {
   position: absolute !important;
-  bottom: -98px;
+  bottom: -92px;
   margin-left: 24px !important;
   left: 118px;
+}
+
+.loader {
+  position: absolute !important;
+  bottom: -78px;
+  left: 215px;
+  z-index: 99;
 }
 
 .actionButtonText {
@@ -738,27 +800,27 @@
 }
 
 .assetSymbolName {
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 120%;
+  font-weight: 500 !important;
+  font-size: 24px !important;
+  line-height: 120% !important;
 }
 
 .assetSymbolName2 {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 120%;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
 }
 
 .assetSelectBalanceText {
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 120%;
+  font-weight: 500 !important;
+  font-size: 18px !important;
+  line-height: 120% !important;
 }
 
 .assetSelectBalanceText2 {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 120%;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
 }
 
 .route {
@@ -813,8 +875,8 @@
 .routeLinesLeftText,
 .routeLinesRightText {
   position: absolute;
-  left: calc(25% - 15px);
-  padding: 2px 10px;
+  left: calc(25% + 2px);
+  padding: 2px 3px;
   background: var(--background-light);
   font-weight: 500;
   font-size: 12px;
@@ -823,7 +885,8 @@
 
 .routeLinesRightText {
   left: auto;
-  right: calc(25% - 15px);
+  right: calc(25% - 7px);
+  padding: 2px 6px;
 }
 
 .routeLinesLeftText--dark,
@@ -835,8 +898,8 @@
 .routeLinesLeft,
 .routeLinesRight {
   width: 50%;
-  height: 5px;
-  margin: 0 5px;
+  height: 12px;
+  margin: 0 7px;
 }
 
 .routeLinesLeft--light,
@@ -961,28 +1024,70 @@
 }
 
 .searchInput {
-  border: none !important;
-  border-bottom: 1px solid #86B9D6 !important;
+  height: 40px;
+  background: #DBE6EC !important;
+  border: 1px solid #86B9D6 !important;
   border-radius: 0 !important;
 }
 
 .searchInput:hover {
-  border-bottom: 1px solid #325569 !important;
+  background: #B9DFF5 !important;
+  border: 1px solid #86B9D6 !important;
+}
+
+.searchInput:active {
+  background: #B9DFF5 !important;
+  border: 1px solid #0B5E8E !important;
+}
+
+.searchInput:focus {
+  background: #B9DFF5 !important;
+  border: 1px solid #FFFFFF !important;
 }
 
 .searchInput--dark {
-  border-bottom: 1px solid #5F7285 !important;
+  background: #151718 !important;
+  border: 1px solid #5F7285 !important;
 }
 
 .searchInput--dark:hover {
-  border-bottom: 1px solid #C6CDD2 !important;
+  background: #24292D !important;
+  border: 1px solid #5F7285 !important;
+}
+
+.searchInput:active {
+  background: #24292D !important;
+  border: 1px solid #4CADE6 !important;
+}
+
+.searchInput:focus {
+  background: #24292D !important;
+  border: 1px solid #FFFFFF !important;
 }
 
 .searchInput > fieldset {
   border: none;
 }
 
+.searchInputText {
+  padding: 10px !important;
+  border-radius: 0 !important;
+  border: none !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  color: #325569 !important;
+}
+
+.searchInputText--dark {
+  color: #C6CDD2 !important;
+}
+
 @media (max-width: 470px) {
+  .loader {
+    bottom: -70px;
+    left: 105px;
+  }
+
   .textField {
     width: 100%;
   }
@@ -1011,14 +1116,6 @@
     background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
   }
 
-  .swapIconContainer--dark {
-    background-image: url("/images/ui/swap-coin-btn-360--dark.svg");
-  }
-
-  .swapIconContainer--light {
-    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
-  }
-
   .inputBalanceText,
   .inputTitleText {
     font-size: 12px !important;
@@ -1026,8 +1123,9 @@
 
   .swapIconContainer {
     background-repeat: no-repeat;
-    margin-left: 220px;
-    margin-top: -22px;
+    margin-left: 210px;
+    margin-top: -37px;
+    margin-bottom: 15px;
   }
 
   .textField--To-light,
@@ -1053,14 +1151,6 @@
   .displayDualIconContainer {
     width: 60px;
     height: 60px;
-  }
-
-  .displayDualIconContainer--light {
-    background-image: url("/images/ui/swap-currency-circle-360--light.svg");
-  }
-
-  .displayDualIconContainer--dark {
-    background-image: url("/images/ui/swap-currency-circle-360--light.svg");
   }
 
   .displayAssetIcon {

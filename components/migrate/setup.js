@@ -29,6 +29,7 @@ import {
   Close,
   ArrowBackIosNew,
   SettingsPhoneTwoTone,
+  ContentPasteSearchOutlined,
 } from "@mui/icons-material";
 import migrate from "../../stores/configurations/migrators";
 import FactoryAbi from "../../stores/abis/FactoryAbi.json";
@@ -47,6 +48,7 @@ import stores from "../../stores";
 import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
 import BigNumber from "bignumber.js";
 import { formatSymbol } from "../../utils";
+import SwapIconBg from '../../ui/SwapIconBg';
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -73,6 +75,8 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 export default function Setup() {
   const [fromAssetValue, setFromAssetValue] = useState(null);
   const [toAssetValue, setToAssetValue] = useState(null);
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
   const { appTheme } = useAppThemeContext();
   const [isStable, toggleStablePool] = useState(false);
   const [toggleArrow, settoggleArrow] = useState(false);
@@ -92,7 +96,6 @@ export default function Setup() {
 
   const handleRadioChange = async (bool) => {
     toggleStablePool(bool);
-    console.log(fromAssetValue, toAssetValue, bool, "support");
     const pair = await stores.stableSwapStore.getPair(
       fromAssetValue.address,
       toAssetValue.address,
@@ -144,7 +147,10 @@ export default function Setup() {
         if (!account) {
           console.warn("account not found");
         } else {
-          const factoryContract = new web3.eth.Contract(FactoryAbi, platform.value);
+          const factoryContract = new web3.eth.Contract(
+            FactoryAbi,
+            platform.value
+          );
           const pairAddress = await factoryContract.methods
             .getPair(token0, token1)
             .call();
@@ -153,11 +159,10 @@ export default function Setup() {
               pairContractAbi,
               pairAddress
             );
-            
+
             const migrator = migrate.find(
               (eachMigrate) => eachMigrate == platform
             );
-   console.log(migrator,"hello")
             let [
               getReserves,
               symbol,
@@ -284,43 +289,41 @@ export default function Setup() {
     }
     setPairDetails(null);
     setcheckpair(false);
+    forceUpdate();
+  };
+  const ssUpdated = async () => {
+    const baseAsset = await stores.stableSwapStore.getStore("baseAssets");
+
+    setToAssetOptions(baseAsset);
+    setFromAssetOptions(baseAsset);
+
+    if (baseAsset.length > 0 && toAssetValue == null) {
+      setToAssetValue(baseAsset[0]);
+    }
+
+    if (baseAsset.length > 0 && fromAssetValue == null) {
+      setFromAssetValue(baseAsset[1]);
+    }
+    forceUpdate();
   };
 
-  useEffect(
-    function () {
-      const ssUpdated = async () => {
-        const baseAsset = await stores.stableSwapStore.getStore("baseAssets");
-
-        setToAssetOptions(baseAsset);
-        setFromAssetOptions(baseAsset);
-
-        if (baseAsset.length > 0 && toAssetValue == null) {
-          setToAssetValue(baseAsset[0]);
-        }
-
-        if (baseAsset.length > 0 && fromAssetValue == null) {
-          setFromAssetValue(baseAsset[1]);
-        }
-      };
-
-      stores.emitter.on(ACTIONS.UPDATED, ssUpdated);
-      ssUpdated();
-    },
-    [fromAssetValue, toAssetValue, pairDetails]
-  );
+  useEffect(() => {
+    stores.emitter.on(ACTIONS.UPDATED, ssUpdated);
+    ssUpdated();
+    return () => {
+      stores.emitter.removeListener(ACTIONS.UPDATED, ssUpdated);
+    };
+  }, []);
 
   const handleChange = (event) => {
-
     setPlatform(event);
-    setcheckpair(false)
+    setcheckpair(false);
   };
 
   const migrateLiquidity = async () => {
     try {
       setLoading(true);
-      const migrator = migrate.find(
-        (eachMigrate) => eachMigrate == platform
-      );
+      const migrator = migrate.find((eachMigrate) => eachMigrate == platform);
       stores.dispatcher.dispatch({
         type: ACTIONS.MIGRATE,
         content: {
@@ -418,9 +421,7 @@ export default function Setup() {
   ) {
     disableButton = true;
   }
-  const migrator = migrate.find(
-    (eachMigrate) => eachMigrate == platform
-  );
+  const migrator = migrate.find((eachMigrate) => eachMigrate == platform);
   const OpenDown = (props) => {
     return (
       <div
@@ -467,8 +468,8 @@ export default function Setup() {
     let res = await routerContract.methods
       .quoteAddLiquidity(addy0, addy1, isStable, sendAmount0, sendAmount1)
       .call();
-      res = {res,token0:token0,token1:token1}
-      setQuote(res);
+    res = { res, token0: token0, token1: token1 };
+    setQuote(res);
   };
   const checkPair = async (fromAssetValue, toAssetValue, isStable) => {
     const web3 = await stores.accountStore.getWeb3Provider();
@@ -477,29 +478,38 @@ export default function Setup() {
       if (!a?.isValid) setcheckpair(false);
       else setcheckpair(true);
 
-      let removedToken0 = a?.lpBalance * a?.weiReserve1 / a?.totalSupply
-      let removedToken1 = a?.lpBalance * a?.weiReserve2 / a?.totalSupply
+      let removedToken0 = (a?.lpBalance * a?.weiReserve1) / a?.totalSupply;
+      let removedToken1 = (a?.lpBalance * a?.weiReserve2) / a?.totalSupply;
 
-      if(a?.isValid && removedToken0 > 0 && removedToken1 >0)
-      await callQuoteAddLiquidity(removedToken0, removedToken1,isStable, a.token0, a.token1)
+      if (a?.isValid && removedToken0 > 0 && removedToken1 > 0)
+        await callQuoteAddLiquidity(
+          removedToken0,
+          removedToken1,
+          isStable,
+          a.token0,
+          a.token1
+        );
+    });
+    const pair = await stores.stableSwapStore.getPair(
+      fromAssetValue,
+      toAssetValue,
+      isStable
+    );
 
-    })
-    const pair = await stores.stableSwapStore.getPair(fromAssetValue, toAssetValue, isStable)
+    if (pair != null) {
+      pair.reserve0 =
+        (parseFloat(pair?.balance.toString()) /
+          parseFloat(pair?.totalSupply.toString())) *
+        parseFloat(pair?.reserve0);
+      pair.reserve1 =
+        (parseFloat(pair?.balance.toString()) /
+          parseFloat(pair?.totalSupply.toString())) *
+        parseFloat(pair?.reserve1.toString());
 
-    if(pair!= null){
-    pair.reserve0 =
-      (parseFloat(pair?.balance.toString()) /
-        parseFloat(pair?.totalSupply.toString())) *
-      parseFloat(pair?.reserve0);
-    pair.reserve1 =
-      (parseFloat(pair?.balance.toString()) /
-        parseFloat(pair?.totalSupply.toString())) *
-      parseFloat(pair?.reserve1.toString());
-
-
-    setdystopiaPair(pair)}
-    else
-    {setdystopiaPair(null)}
+      setdystopiaPair(pair);
+    } else {
+      setdystopiaPair(null);
+    }
 
     if (pair != null) {
       pair.reserve0 =
@@ -518,7 +528,7 @@ export default function Setup() {
   };
   return (
     <div>
-      <Form >
+      <Form>
         <div
           className={[classes[`form`], classes[`form--${appTheme}`]].join(" ")}
         >
@@ -753,6 +763,7 @@ export default function Setup() {
                               padding: "10px",
                             }}
                           >
+                            <SwapIconBg/>
                             <img
                               className={classes.displayAssetIcon}
                               alt=""
@@ -787,6 +798,7 @@ export default function Setup() {
                               padding: "10px",
                             }}
                           >
+                            <SwapIconBg/>
                             <img
                               className={classes.displayAssetIcon}
                               alt=""
@@ -1097,6 +1109,7 @@ export default function Setup() {
                                   padding: "10px",
                                 }}
                               >
+                                <SwapIconBg/>
                                 <img
                                   className={classes.displayAssetIcon}
                                   alt=""
@@ -1130,6 +1143,7 @@ export default function Setup() {
                                   padding: "10px",
                                 }}
                               >
+                                <SwapIconBg/>
                                 <img
                                   className={classes.displayAssetIcon}
                                   alt=""
@@ -1431,7 +1445,7 @@ export default function Setup() {
 
         return () => {};
       },
-      [assetOptions, search]
+      [assetOptions]
     );
 
     const onSearchChanged = async (event) => {
@@ -1455,8 +1469,8 @@ export default function Setup() {
       setManageLocal(!manageLocal);
     };
 
-    const deleteOption = (token) => {
-      stores.stableSwapStore.removeBaseAsset(token);
+    const deleteOption = async (token) => {
+      await stores.stableSwapStore.removeBaseAsset(token);
     };
 
     const viewOption = (token) => {
@@ -1747,7 +1761,7 @@ export default function Setup() {
 
           <div className={classes.manageLocalContainer}>
             <Button className={classes.manageLocalBtn} onClick={toggleLocal}>
-              Manage Local Assets
+              Manage local assets
             </Button>
           </div>
         </>
@@ -1769,6 +1783,7 @@ export default function Setup() {
                 classes[`displayDualIconContainer--${appTheme}`],
               ].join(" ")}
             >
+              <SwapIconBg/>
               <img
                 className={classes.displayAssetIcon}
                 alt=""

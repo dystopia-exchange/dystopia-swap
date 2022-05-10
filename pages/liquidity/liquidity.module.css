@@ -30,10 +30,35 @@
   justify-content: center;
   max-width: 460px;
   width: 100%;
-  height: 110px;
+  min-height: 120px;
   margin-top: 20px;
   padding: 30px;
-  background-image: url("/images/ui/swap-bg.svg");
+  background: rgba(227, 238, 244, 0.8);
+  border: 1px solid #CFE5F2;
+  backdrop-filter: blur(5px);
+}
+
+.mainDescBg::after,
+.mainDescBg::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.mainDescBg::before {
+  top: 0;
+  left: 0;
+  border-width: 16px 16px 0 0;
+  border-color: #ffffff transparent transparent transparent;
+}
+
+.mainDescBg::after {
+  bottom: 0;
+  right: 0;
+  border-width: 0 0 16px 16px;
+  border-color: transparent transparent #ffffff transparent;
 }
 
 .mainDescNC {
@@ -45,36 +70,20 @@
 }
 
 .buttonConnect {
-  width: 292px;
-  height: 65px;
+  position: relative;
   margin-top: 40px !important;
   padding: 0 !important;
   border: none !important;
   background-color: transparent !important;
+  cursor: pointer;
 }
 
-.buttonConnect--light {
-  background-image: url("/images/ui/btn-connect-wallet--light.svg");
-}
-
-.buttonConnect--light:hover {
-  background-image: url("/images/ui/btn-connect-wallet-hover--light.svg");
-}
-
-.buttonConnect--light:active {
-  background-image: url("/images/ui/btn-connect-wallet-click--light.svg");
-}
-
-.buttonConnect--dark {
-  background-image: url("/images/ui/btn-connect-wallet--dark.svg");
-}
-
-.buttonConnect--dark:hover {
-  background-image: url("/images/ui/btn-connect-wallet-hover--dark.svg");
-}
-
-.buttonConnect--dark:active {
-  background-image: url("/images/ui/btn-connect-wallet-click--dark.svg");
+.buttonEnterLabel {
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  line-height: 120% !important;
+  color: #8F5AE8 !important;
+  white-space: pre-line;
 }
 
 @media (max-width: 530px) {

@@ -27,6 +27,9 @@ import BigNumber from 'bignumber.js';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import BtnSwap from '../../ui/BtnSwap';
 import Hint from '../hint/hint';
+import SwapIconBg from '../../ui/SwapIconBg';
+import Loader from '../../ui/Loader';
+import Borders from '../../ui/Borders';
 
 function Setup() {
   const [, updateState] = React.useState();
@@ -54,6 +57,7 @@ function Setup() {
   const [quoteError, setQuoteError] = useState(null);
   const [quote, setQuote] = useState(null);
   const [hintAnchor, setHintAnchor] = React.useState(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const {appTheme} = useAppThemeContext();
 
@@ -66,6 +70,10 @@ function Setup() {
   };
 
   const openHint = Boolean(hintAnchor);
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
 
   useEffect(function () {
     const errorReturned = () => {
@@ -109,7 +117,6 @@ function Setup() {
       if (baseAsset.length > 0 && fromAssetValue == null) {
         setFromAssetValue(baseAsset[1]);
       }
-
       forceUpdate();
     };
 
@@ -210,6 +217,10 @@ function Setup() {
   };
 
   const onSwap = () => {
+    if (!fromAmountValue || fromAmountValue > Number(fromAssetValue.balance) || Number(fromAmountValue) <= 0) {
+      return;
+    }
+
     setFromAmountError(false);
     setFromAssetError(false);
     setToAssetError(false);
@@ -453,7 +464,6 @@ function Setup() {
           onChange={amountChanged}
           disabled={loading}
           InputProps={{
-            style: {},
             classes: {
               root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(" "),
             },
@@ -549,6 +559,28 @@ function Setup() {
     );
   };
 
+  const [swapIconBgColor, setSwapIconBgColor] = useState(appTheme === 'dark' ? '#24292D' : '#B9DFF5');
+  const [swapIconBorderColor, setSwapIconBorderColor] = useState(appTheme === 'dark' ? '#5F7285' : '#86B9D6');
+  const [swapIconArrowColor, setSwapIconArrowColor] = useState(appTheme === 'dark' ? '#ffffff' : '#ffffff');
+
+  const swapIconHover = () => {
+    setSwapIconBgColor(appTheme === 'dark' ? '#2D3741' : '#9BC9E4');
+    setSwapIconBorderColor(appTheme === 'dark' ? '#4CADE6' : '#0B5E8E');
+    setSwapIconArrowColor(appTheme === 'dark' ? '#ffffff' : '#ffffff');
+  };
+
+  const swapIconClick = () => {
+    setSwapIconBgColor(appTheme === 'dark' ? '#5F7285' : '#86B9D6');
+    setSwapIconBorderColor(appTheme === 'dark' ? '#4CADE6' : '#0B5E8E');
+    setSwapIconArrowColor(appTheme === 'dark' ? '#4CADE6' : '#0B5E8E');
+  };
+
+  const swapIconDefault = () => {
+    setSwapIconBgColor(null);
+    setSwapIconBorderColor(null);
+    setSwapIconArrowColor(null);
+  };
+
   return (
     <div className={classes.swapInputs}>
       {renderMassiveInput('From', fromAmountValue, fromAmountError, fromAmountChanged, fromAssetValue, fromAssetError, fromAssetOptions, onAssetSelect)}
@@ -571,7 +603,71 @@ function Setup() {
 
       <div
         className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}
+        onMouseOver={swapIconHover}
+        onMouseOut={swapIconDefault}
+        onMouseDown={swapIconClick}
+        onMouseUp={swapIconDefault}
         onClick={swapAssets}>
+        {windowWidth > 470 &&
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle
+              cx="40"
+              cy="40"
+              r="39.5"
+              fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
+              stroke={appTheme === 'dark' ? '#5F7285' : '#86B9D6'}/>
+
+            <rect
+              y="30"
+              width="4"
+              height="20"
+              fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}/>
+
+            <rect
+              x="76"
+              y="30"
+              width="4"
+              height="20"
+              fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}/>
+
+            <circle
+              cx="40"
+              cy="40"
+              r="29.5"
+              fill={swapIconBgColor || (appTheme === 'dark' ? '#24292D' : '#B9DFF5')}
+              stroke={swapIconBorderColor || (appTheme === 'dark' ? '#5F7285' : '#86B9D6')}/>
+
+            <path
+              d="M41.0002 44.172L46.3642 38.808L47.7782 40.222L40.0002 48L32.2222 40.222L33.6362 38.808L39.0002 44.172V32H41.0002V44.172Z"
+              fill={swapIconArrowColor || (appTheme === 'dark' ? '#ffffff' : '#ffffff')}/>
+          </svg>
+        }
+
+        {windowWidth <= 470 &&
+          <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle
+              cx="25"
+              cy="25"
+              r="24.5"
+              fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
+              stroke={appTheme === 'dark' ? '#5F7285' : '#86B9D6'}/>
+
+            <rect y="20" width="3" height="10" fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}/>
+
+            <rect x="48" y="20" width="2" height="10" fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}/>
+
+            <circle
+              cx="25"
+              cy="25"
+              r="18.5"
+              fill={swapIconBgColor || (appTheme === 'dark' ? '#24292D' : '#B9DFF5')}
+              stroke={swapIconBorderColor || (appTheme === 'dark' ? '#5F7285' : '#86B9D6')}/>
+
+            <path
+              d="M25.8336 28.4773L30.3036 24.0073L31.4819 25.1857L25.0002 31.6673L18.5186 25.1857L19.6969 24.0073L24.1669 28.4773V18.334H25.8336V28.4773Z"
+              fill={swapIconArrowColor || (appTheme === 'dark' ? '#ffffff' : '#ffffff')}/>
+          </svg>
+        }
       </div>
 
       {renderMassiveInput('To', toAmountValue, toAmountError, toAmountChanged, toAssetValue, toAssetError, toAssetOptions, onAssetSelect)}
@@ -611,6 +707,12 @@ function Setup() {
               </div>}
 
       {renderSwapInformation()}
+
+      {loading &&
+        <div className={classes.loader}>
+          <Loader/>
+        </div>
+      }
 
       <BtnSwap
         onClick={onSwap}
@@ -820,14 +922,9 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
             value={search}
             onChange={onSearchChanged}
             InputProps={{
-              style: {
-                background: 'transparent',
-                border: '1px solid',
-                borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-                borderRadius: 0,
-              },
               classes: {
-                root: classes.searchInput,
+                root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
+                inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
               },
               startAdornment: <InputAdornment position="start">
                 <Search style={{
@@ -835,20 +932,11 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
                 }}/>
               </InputAdornment>,
             }}
-            inputProps={{
-              style: {
-                padding: '10px',
-                borderRadius: 0,
-                border: 'none',
-                fontSize: '14px',
-                lineHeight: '120%',
-                color: '#86B9D6',
-              },
-            }}
           />
         </div>
 
         <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
+          <Borders/>
           {
             filteredAssetOptions ? filteredAssetOptions.filter((option) => {
               return option.local === true;
@@ -873,6 +961,19 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
     return (
       <>
         <div className={classes.searchInline}>
+          {/*<div className={[classes.networkButtonCornerLT, classes[`networkButtonCornerLT--${appTheme}`]].join(' ')}>
+          </div>
+
+          <div className={[classes.networkButtonCornerLB, classes[`networkButtonCornerLB--${appTheme}`]].join(' ')}>
+          </div>
+
+          <div className={[classes.networkButtonCornerRT, classes[`networkButtonCornerRT--${appTheme}`]].join(' ')}>
+          </div>
+
+          <div className={[classes.networkButtonCornerRB, classes[`networkButtonCornerRB--${appTheme}`]].join(' ')}>
+          </div>*/}
+          <Borders/>
+
           <TextField
             autoFocus
             variant="outlined"
@@ -881,14 +982,9 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
             value={search}
             onChange={onSearchChanged}
             InputProps={{
-              style: {
-                background: 'transparent',
-                border: '1px solid',
-                borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-                borderRadius: 0,
-              },
               classes: {
-                root: classes.searchInput,
+                root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
+                inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
               },
               startAdornment: <InputAdornment position="start">
                 <Search style={{
@@ -896,38 +992,31 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
                 }}/>
               </InputAdornment>,
             }}
-            inputProps={{
-              style: {
-                padding: '10px',
-                borderRadius: 0,
-                border: 'none',
-                fontSize: '14px',
-                lineHeight: '120%',
-                color: '#86B9D6',
-              },
-            }}
           />
         </div>
 
-        <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
-          {
-            filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
-              if (BigNumber(a.balance).lt(b.balance)) return 1;
-              if (BigNumber(a.balance).gt(b.balance)) return -1;
-              if (a.symbol.toLowerCase() < b.symbol.toLowerCase()) return -1;
-              if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
-              return 0;
-            }).map((asset, idx) => {
-              return renderAssetOption(type, asset, idx);
-            }) : []
-          }
+        <div style={{position: 'relative'}}>
+          <Borders/>
+          <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
+            {
+              filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
+                if (BigNumber(a.balance).lt(b.balance)) return 1;
+                if (BigNumber(a.balance).gt(b.balance)) return -1;
+                if (a.symbol.toLowerCase() < b.symbol.toLowerCase()) return -1;
+                if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
+                return 0;
+              }).map((asset, idx) => {
+                return renderAssetOption(type, asset, idx);
+              }) : []
+            }
+          </div>
         </div>
 
         <div className={classes.manageLocalContainer}>
           <Button
             className={classes.manageLocalBtn}
             onClick={toggleLocal}>
-            Manage Local Assets
+            Manage local assets
           </Button>
         </div>
       </>
@@ -935,6 +1024,12 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
   };
 
   const {appTheme} = useAppThemeContext();
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
 
   return (
     <React.Fragment>
@@ -944,6 +1039,8 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
         <div className={classes.assetSelectMenuItem}>
           <div
             className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+            <SwapIconBg/>
+
             <img
               className={classes.displayAssetIcon}
               alt=""
