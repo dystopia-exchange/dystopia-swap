@@ -215,6 +215,10 @@ function Setup() {
   };
 
   const onSwap = () => {
+    if (!fromAmountValue || fromAmountValue > Number(fromAssetValue.balance) || Number(fromAmountValue) <= 0) {
+      return
+    }
+
     setFromAmountError(false);
     setFromAssetError(false);
     setToAssetError(false);
