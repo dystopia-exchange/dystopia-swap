@@ -494,13 +494,13 @@
   -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
 }
 
-.swapIconContainer--dark {
+/*.swapIconContainer--dark {
   background-image: url("/images/ui/swap-coin-btn--dark.svg");
 }
 
 .swapIconContainer--light {
   background-image: url("/images/ui/swap-coin-btn--light.svg");
-}
+}*/
 
 .swapInfoContainer {
   width: 485px;
@@ -813,8 +813,8 @@
 .routeLinesLeftText,
 .routeLinesRightText {
   position: absolute;
-  left: calc(25% - 15px);
-  padding: 2px 10px;
+  left: calc(25% + 2px);
+  padding: 2px 3px;
   background: var(--background-light);
   font-weight: 500;
   font-size: 12px;
@@ -823,7 +823,8 @@
 
 .routeLinesRightText {
   left: auto;
-  right: calc(25% - 15px);
+  right: calc(25% - 7px);
+  padding: 2px 6px;
 }
 
 .routeLinesLeftText--dark,
@@ -835,8 +836,8 @@
 .routeLinesLeft,
 .routeLinesRight {
   width: 50%;
-  height: 5px;
-  margin: 0 5px;
+  height: 12px;
+  margin: 0 7px;
 }
 
 .routeLinesLeft--light,
