@@ -192,6 +192,9 @@ export default function ssBribeCreate() {
   };
 
   const renderMassiveInput = (type, amountValue, amountError, amountChanged, assetValue, assetError, assetOptions, onAssetSelect) => {
+
+  console.log('amountError assetError', amountError, assetError)
+
     return (
       <div className={[classes.textField, classes[`textField--${appTheme}`]].join(' ')}>
         <Typography className={classes.inputTitleText} noWrap>
@@ -277,6 +280,21 @@ export default function ssBribeCreate() {
         <div style={{marginTop: 20}}>
           {renderMassiveInput('amount', amount, amountError, amountChanged, asset, null, assetOptions, onAssetSelect)}
         </div>
+        {amountError && <div
+                style={{ marginTop: 20 }}
+                className={[
+                  classes.warningContainer,
+                  classes[`warningContainer--${appTheme}`],
+                  classes.warningContainerError].join(" ")}>
+                <div className={[
+                  classes.warningDivider,
+                  classes.warningDividerError
+                ].join(" ")}>
+                </div>
+                <Typography
+                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+                  align="center">{amountError}</Typography>
+              </div>}
         {renderCreateInfo()}
       </div>
 

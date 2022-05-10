@@ -553,6 +553,22 @@ function Setup() {
     <div className={classes.swapInputs}>
       {renderMassiveInput('From', fromAmountValue, fromAmountError, fromAmountChanged, fromAssetValue, fromAssetError, fromAssetOptions, onAssetSelect)}
 
+      {fromAssetError && <div
+                style={{ marginTop: 20 }}
+                className={[
+                  classes.warningContainer,
+                  classes[`warningContainer--${appTheme}`],
+                  classes.warningContainerError].join(" ")}>
+                <div className={[
+                  classes.warningDivider,
+                  classes.warningDividerError
+                ].join(" ")}>
+                </div>
+                <Typography
+                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+                  align="center">{fromAssetError}</Typography>
+              </div>}
+
       <div
         className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}
         onClick={swapAssets}>
@@ -560,7 +576,39 @@ function Setup() {
 
       {renderMassiveInput('To', toAmountValue, toAmountError, toAmountChanged, toAssetValue, toAssetError, toAssetOptions, onAssetSelect)}
 
+      {toAssetError && <div
+                style={{ marginTop: 20 }}
+                className={[
+                  classes.warningContainer,
+                  classes[`warningContainer--${appTheme}`],
+                  classes.warningContainerError].join(" ")}>
+                <div className={[
+                  classes.warningDivider,
+                  classes.warningDividerError
+                ].join(" ")}>
+                </div>
+                <Typography
+                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+                  align="center">{toAssetError}</Typography>
+              </div>}
+
       {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
+
+      {slippageError && <div
+                style={{ marginTop: 20 }}
+                className={[
+                  classes.warningContainer,
+                  classes[`warningContainer--${appTheme}`],
+                  classes.warningContainerError].join(" ")}>
+                <div className={[
+                  classes.warningDivider,
+                  classes.warningDividerError
+                ].join(" ")}>
+                </div>
+                <Typography
+                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+                  align="center">{slippageError}</Typography>
+              </div>}
 
       {renderSwapInformation()}
 

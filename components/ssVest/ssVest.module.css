@@ -1,3 +1,105 @@
+.quoteLoaderDivider,
+.warningDivider {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 100%;
+  height: 8px;
+}
+
+.quoteLoaderDividerError,
+.warningDividerError {
+  background-image: url("/images/ui/quote-loader-error--light.svg");
+}
+
+.quoteLoaderDividerInfo,
+.warningDividerWarning {
+  background-image: url("/images/ui/quote-loader-info--light.svg");
+}
+
+.quoteLoader,
+.warningContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 14px 18px !important;
+  border: 2px solid #15B525;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  color: #1B4F20 !important;
+  font-weight: 400 !important;
+}
+
+.warningContainer {
+  margin-bottom: 20px;
+}
+
+.warningContainer--light {
+  background: #CFE5F2;
+}
+
+.warningContainer--dark {
+  background: #24292D;
+}
+
+.warningContainerError {
+  border: 2px solid #DB3434;
+}
+
+.warningContainerWarning {
+  border: 2px solid #15B525;
+}
+
+.warningError.warningText--light {
+  color: #631515 !important;
+}
+
+.warningError.warningText--dark {
+  color: #EC9999 !important;
+}
+
+.warningWarning.warningText--light {
+  color: #1B4F20 !important;
+}
+
+.warningWarning.warningText--dark {
+  color: #A2E3A9 !important;
+}
+
+
+.quoteLoaderError {
+  min-width: 100%;
+  border: 2px solid #DB3434;
+}
+
+.notConnectedContent {
+  width: calc(100%) !important;
+  background: transparent !important;
+  text-align: center;
+  height: calc(100vh);
+  box-shadow: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  flex-direction: column;
+  border-radius: 0 !important;
+}
+
+.contentFloat {
+  position: relative;
+  z-index: 9;
+}
+
+.contentFloatText {
+  font-family: 'PPNeueMachina', serif !important;
+  font-weight: 700 !important;
+  font-size: 72px !important;
+  color: #ffffff !important;
+}
+
 .backButton {
   top: 24px;
   left: 0px;
@@ -408,7 +510,49 @@
 }
 
 .error {
-  border: 1px solid #dc3545;
+  /* border: 1px solid #dc3545; */
+}
+
+.quoteLoaderDivider,
+.warningDivider {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 100%;
+  height: 8px;
+}
+
+.quoteLoaderDividerError,
+.warningDividerError {
+  background-image: url("/images/ui/quote-loader-error--light.svg");
+}
+
+.quoteLoaderDividerInfo,
+.warningDividerWarning {
+  background-image: url("/images/ui/quote-loader-info--light.svg");
+}
+
+.quoteLoader,
+.warningContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 14px 18px !important;
+  border: 2px solid #15B525;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  color: #1B4F20 !important;
+  font-weight: 400 !important;
+}
+
+.warningContainer {
+  margin-bottom: 20px;
+}
+
+.warningContainer--light {
+  background: #CFE5F2;
 }
 
 .massiveInputContainer {

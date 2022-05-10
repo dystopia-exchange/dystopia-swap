@@ -71,9 +71,7 @@ export default function BribeCard({ pair, bribe }) {
     }
   }
 
-  const onVote = () => {
-
-  }
+  const onVote = () => {}
 
   useEffect(function () {
     const errorReturned = () => {
