@@ -33,6 +33,7 @@ import {
 } from '@mui/icons-material';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import { formatSymbol } from '../../utils';
+import SwapIconBg from '../../ui/SwapIconBg';
 
 export default function ssLiquidityManage() {
 
@@ -2153,6 +2154,8 @@ function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
           <div className={classes.assetSelectMenuItem}>
             <div
               className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+              <SwapIconBg/>
+
               <img
                 className={classes.displayAssetIcon}
                 alt=""

@@ -25,6 +25,7 @@ import {
 import { ArrowBack, ArrowBackIosNew } from '@mui/icons-material';
 import VestingInfo from "./vestingInfo";
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import SwapIconBg from '../../ui/SwapIconBg';
 
 export default function ssLock({govToken, veToken}) {
 
@@ -144,6 +145,7 @@ export default function ssLock({govToken, veToken}) {
             <div className={classes.displaySelectContainerDate}>
               <div
                 className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+                <SwapIconBg/>
                 <div className={[classes.displayAssetIcon, classes[`displayAssetIcon--${appTheme}`]].join(' ')}/>
               </div>
             </div>
@@ -197,6 +199,7 @@ export default function ssLock({govToken, veToken}) {
             <div className={classes.displaySelectContainer}>
               <div
                 className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+                <SwapIconBg/>
                 {
                   token && token.logoURI &&
                   <img

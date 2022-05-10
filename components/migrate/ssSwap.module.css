@@ -184,14 +184,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: fill 0.16s ease;
+  fill: #9BC9E4;
 }
 
-.displayDualIconContainer--light {
-  background-image: url("/images/ui/swap-currency-circle--light.svg");
+.displayDualIconContainer:hover {
+  fill: #0B5E8E;
+}
+
+.displayDualIconContainer:active {
+  fill: #86B9D6;
 }
 
 .displayDualIconContainer--dark {
-  background-image: url("/images/ui/swap-currency-circle--dark.svg");
+  fill: #2D3741;
+}
+
+.displayDualIconContainer--dark:hover {
+  fill: #4CADE6;
+}
+
+.displayDualIconContainer--dark:active {
+  fill: #5F7285;
 }
 
 .displayDualIconContainerConfirm {
@@ -1275,14 +1289,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.displayDualIconContainer--light {
-  background-image: url("/images/ui/swap-currency-circle--light.svg");
-}
-
-.displayDualIconContainer--dark {
-  background-image: url("/images/ui/swap-currency-circle--dark.svg");
 }
 
 .displayDualIconContainerConfirm {
