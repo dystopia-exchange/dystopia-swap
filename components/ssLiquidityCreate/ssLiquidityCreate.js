@@ -419,12 +419,46 @@ export default function SSLiquidityCreate() {
         <div className={ classes.reAddPadding }>
           <div className={ classes.inputsContainer }>
             { renderMassiveInput('amount0', amount0, amount0Error, amount0Changed, asset0, null, assetOptions, onAssetSelect) }
+
+            {amount0Error && <div
+                style={{ marginTop: 20 }}
+                className={[
+                  classes.warningContainer,
+                  classes[`warningContainer--${appTheme}`],
+                  classes.warningContainerError].join(" ")}>
+                <div className={[
+                  classes.warningDivider,
+                  classes.warningDividerError
+                ].join(" ")}>
+                </div>
+                <Typography
+                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+                  align="center">{amount0Error}</Typography>
+              </div>}
+
             <div className={ classes.swapIconContainer }>
               <div className={ classes.swapIconSubContainer }>
                 <Add className={ classes.swapIcon } />
               </div>
             </div>
             { renderMassiveInput('amount1', amount1, amount1Error, amount1Changed, asset1, null, assetOptions, onAssetSelect) }
+
+            {amount1Error && <div
+                style={{ marginTop: 20 }}
+                className={[
+                  classes.warningContainer,
+                  classes[`warningContainer--${appTheme}`],
+                  classes.warningContainerError].join(" ")}>
+                <div className={[
+                  classes.warningDivider,
+                  classes.warningDividerError
+                ].join(" ")}>
+                </div>
+                <Typography
+                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+                  align="center">{amount1Error}</Typography>
+              </div>}
+
             { renderMediumInputToggle('stable', stable) }
             { renderTokenSelect() }
             { renderCreateInformation() }

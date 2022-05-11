@@ -26,6 +26,7 @@ import {
 } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import SwapIconBg from '../../ui/SwapIconBg';
+import Borders from '../../ui/Borders';
 
 export default function ssBribeCreate() {
 
@@ -193,6 +194,9 @@ export default function ssBribeCreate() {
   };
 
   const renderMassiveInput = (type, amountValue, amountError, amountChanged, assetValue, assetError, assetOptions, onAssetSelect) => {
+
+    console.log('amountError assetError', amountError, assetError);
+
     return (
       <div className={[classes.textField, classes[`textField--${appTheme}`]].join(' ')}>
         <Typography className={classes.inputTitleText} noWrap>
@@ -248,8 +252,10 @@ export default function ssBribeCreate() {
   const renderCreateInfo = () => {
     return (
       <div className={classes.depositInfoContainer}>
-        <Typography className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`]].join(' ')}>You are creating a bribe of <span
-          className={classes.highlight}>{formatCurrency(amount)} {formatSymbol(asset?.symbol)}</span> to incentivize Vesters to vote
+        <Typography className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`]].join(' ')}>You
+          are creating a bribe of <span
+            className={classes.highlight}>{formatCurrency(amount)} {formatSymbol(asset?.symbol)}</span> to incentivize
+          Vesters to vote
           for the <span
             className={classes.highlight}>{formatSymbol(gauge?.token0?.symbol)}/{formatSymbol(gauge?.token1?.symbol)} Pool</span></Typography>
       </div>
@@ -264,11 +270,11 @@ export default function ssBribeCreate() {
       className={[classes.container, classes[`container--${appTheme}`, 'g-flex-column']].join(' ')}>
       <div
         className={[classes.titleSection, classes[`titleSection--${appTheme}`]].join(' ')}>
-         <Tooltip title="Back to Vote" placement="top">
+        <Tooltip title="Back to Vote" placement="top">
           <IconButton onClick={onBack}>
             <ArrowBackIosNew className={[classes.backIcon, classes[`backIcon--${appTheme}`]].join(' ')}/>
           </IconButton>
-        </Tooltip> 
+        </Tooltip>
       </div>
 
       <div className={[classes[`top`], classes[`top--${appTheme}`]].join(' ')}>
@@ -279,6 +285,21 @@ export default function ssBribeCreate() {
         <div style={{marginTop: 20}}>
           {renderMassiveInput('amount', amount, amountError, amountChanged, asset, null, assetOptions, onAssetSelect)}
         </div>
+        {amountError && <div
+          style={{marginTop: 20}}
+          className={[
+            classes.warningContainer,
+            classes[`warningContainer--${appTheme}`],
+            classes.warningContainerError].join(" ")}>
+          <div className={[
+            classes.warningDivider,
+            classes.warningDividerError,
+          ].join(" ")}>
+          </div>
+          <Typography
+            className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+            align="center">{amountError}</Typography>
+        </div>}
         {renderCreateInfo()}
       </div>
 
@@ -529,6 +550,8 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
     return (
       <>
         <div className={classes.searchInline}>
+          <Borders/>
+
           <TextField
             autoFocus
             variant="outlined"
@@ -537,14 +560,9 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
             value={search}
             onChange={onSearchChanged}
             InputProps={{
-              style: {
-                background: 'transparent',
-                border: '1px solid',
-                borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-                borderRadius: 0,
-              },
               classes: {
-                root: classes.searchInput,
+                root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
+                inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
               },
               startAdornment: <InputAdornment position="start">
                 <Search style={{
@@ -552,36 +570,29 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
                 }}/>
               </InputAdornment>,
             }}
-            inputProps={{
-              style: {
-                padding: '10px',
-                borderRadius: 0,
-                border: 'none',
-                fontSize: '14px',
-                lineHeight: '120%',
-                color: '#86B9D6',
-              },
-            }}
           />
         </div>
 
-        <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
-          {
-            filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
-              if (BigNumber(a.balance).lt(b.balance)) return 1;
-              if (BigNumber(a.balance).gt(b.balance)) return -1;
-              if (a.symbol.toLowerCase() < b.symbol.toLowerCase()) return -1;
-              if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
-              return 0;
-            }).map((asset, idx) => {
-              return renderAssetOption(type, asset, idx);
-            }) : []
-          }
+        <div style={{position: 'relative'}}>
+          <Borders/>
+          <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
+            {
+              filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
+                if (BigNumber(a.balance).lt(b.balance)) return 1;
+                if (BigNumber(a.balance).gt(b.balance)) return -1;
+                if (a.symbol.toLowerCase() < b.symbol.toLowerCase()) return -1;
+                if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
+                return 0;
+              }).map((asset, idx) => {
+                return renderAssetOption(type, asset, idx);
+              }) : []
+            }
+          </div>
         </div>
 
         <div className={classes.manageLocalContainer}>
           <Button
-            className={classes.manageLocalBtn}
+            className={[classes.manageLocalBtn, classes[`manageLocalBtn--${appTheme}`]].join(' ')}
             onClick={toggleLocal}>
             Manage local assets
           </Button>
@@ -619,10 +630,10 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
         style={{borderRadius: 0}}
         onClick={(e) => {
           if (e.target.classList.contains('MuiDialog-container')) {
-            onClose()
+            onClose();
           }
         }}
-        >
+      >
         <div style={{
           width: 460,
           height: 710,
@@ -862,6 +873,8 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
     return (
       <>
         <div className={classes.searchInline}>
+          <Borders/>
+
           <TextField
             autoFocus
             variant="outlined"
@@ -922,6 +935,8 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
     return (
       <>
         <div className={classes.searchInline}>
+          <Borders/>
+
           <TextField
             autoFocus
             variant="outlined"
@@ -930,14 +945,9 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
             value={search}
             onChange={onSearchChanged}
             InputProps={{
-              style: {
-                background: 'transparent',
-                border: '1px solid',
-                borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-                borderRadius: 0,
-              },
               classes: {
-                root: classes.searchInput,
+                root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
+                inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
               },
               startAdornment: <InputAdornment position="start">
                 <Search style={{
@@ -945,32 +955,26 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
                 }}/>
               </InputAdornment>,
             }}
-            inputProps={{
-              style: {
-                padding: '10px',
-                borderRadius: 0,
-                border: 'none',
-                fontSize: '14px',
-                lineHeight: '120%',
-                color: '#86B9D6',
-              },
-            }}
           />
         </div>
 
-        <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
-          {
-            filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
-              if (BigNumber(a.balance).lt(b.balance)) return 1;
-              if (BigNumber(a.balance).gt(b.balance)) return -1;
-              if (a.symbol.toLowerCase() < b.symbol.toLowerCase()) return -1;
-              if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
-              return 0;
-            }).map((asset, idx) => {
-              if (asset.gauge != null)
-                return renderAssetOption(type, asset, idx);
-            }) : []
-          }
+        <div style={{position: 'relative'}}>
+          <Borders/>
+
+          <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
+            {
+              filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
+                if (BigNumber(a.balance).lt(b.balance)) return 1;
+                if (BigNumber(a.balance).gt(b.balance)) return -1;
+                if (a.symbol.toLowerCase() < b.symbol.toLowerCase()) return -1;
+                if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
+                return 0;
+              }).map((asset, idx) => {
+                if (asset.gauge != null)
+                  return renderAssetOption(type, asset, idx);
+              }) : []
+            }
+          </div>
         </div>
 
         {manageLocalAssets &&
@@ -996,10 +1000,10 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
             className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
             <img
               className={[
-                  classes.displayAssetIcon,
-                  classes.assetOptionIcon,
-                  classes[`assetOptionIcon--${appTheme}`],
-                ].join(" ")}
+                classes.displayAssetIcon,
+                classes.assetOptionIcon,
+                classes[`assetOptionIcon--${appTheme}`],
+              ].join(" ")}
               alt=""
               src={value ? `${value?.token0?.logoURI}` : ''}
               height="100px"
@@ -1009,11 +1013,11 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
               }}
             />
             <img
-            className={[
-              classes.displayAssetIcon,
-              classes.displayAssetIconSec,
-              classes.assetOptionIcon,
-              classes[`assetOptionIcon--${appTheme}`]].join(" ")}
+              className={[
+                classes.displayAssetIcon,
+                classes.displayAssetIconSec,
+                classes.assetOptionIcon,
+                classes[`assetOptionIcon--${appTheme}`]].join(" ")}
               alt=""
               src={value ? `${value?.token1?.logoURI}` : ''}
               height="100px"
@@ -1032,10 +1036,10 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
         style={{borderRadius: 0}}
         onClick={(e) => {
           if (e.target.classList.contains('MuiDialog-container')) {
-            onClose()
+            onClose();
           }
         }}
-        >
+      >
         <div
           className={classes.dialogContainer}
           style={{

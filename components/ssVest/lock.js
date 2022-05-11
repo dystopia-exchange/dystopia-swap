@@ -295,9 +295,41 @@ export default function ssLock({govToken, veToken}) {
 
         <div className={[classes.reAddPadding3, classes[`reAddPadding3--${appTheme}`]].join(' ')}>
           {renderMassiveInput('amount', amount, amountError, onAmountChanged, govToken)}
+          
+          {amountError && <div
+                style={{ marginTop: 20 }}
+                className={[
+                  classes.warningContainer,
+                  classes[`warningContainer--${appTheme}`],
+                  classes.warningContainerError].join(" ")}>
+                <div className={[
+                  classes.warningDivider,
+                  classes.warningDividerError
+                ].join(" ")}>
+                </div>
+                <Typography
+                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+                  align="center">{amountError}</Typography>
+              </div>}
 
           <div>
             {renderMassiveDateInput('date', selectedDate, selectedDateError, handleDateChange, govToken?.balance, govToken?.logoURI)}
+
+            {selectedDateError && <div
+                style={{ marginTop: 20 }}
+                className={[
+                  classes.warningContainer,
+                  classes[`warningContainer--${appTheme}`],
+                  classes.warningContainerError].join(" ")}>
+                <div className={[
+                  classes.warningDivider,
+                  classes.warningDividerError
+                ].join(" ")}>
+                </div>
+                <Typography
+                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+                  align="center">{selectedDateError}</Typography>
+              </div>}
 
             <div
               className={[classes.vestPeriodToggle, classes[`vestPeriodToggle--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>

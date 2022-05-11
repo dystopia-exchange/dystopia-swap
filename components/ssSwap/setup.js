@@ -308,7 +308,7 @@ function Setup() {
             flexDirection: 'column',
             width: '100%',
           }}>
-            {fromAmountValue <= Number(fromAssetValue.balance)  &&
+            {fromAmountValue <= Number(fromAssetValue.balance) &&
               <div
                 className={[classes.warningContainer, classes[`warningContainer--${appTheme}`], BigNumber(quote.priceImpact).gt(5) ? classes.warningContainerError : classes.warningContainerWarning].join(" ")}>
                 <div className={[
@@ -464,7 +464,8 @@ function Setup() {
           disabled={loading}
           InputProps={{
             classes: {
-              root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(" "),
+              root: [classes.inputBalanceSlippageText, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
+              inputAdornedStart: [classes.inputBalanceSlippageText, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
             },
             endAdornment: <InputAdornment position="end">
               <span
@@ -476,15 +477,11 @@ function Setup() {
             </InputAdornment>,
           }}
           inputProps={{
-            className: [classes.smallInput, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
             style: {
               padding: 0,
               borderRadius: 0,
               border: 'none',
-              fontSize: 18,
-              fontWeight: 400,
-              lineHeight: '120%',
-              color: appTheme === "dark" ? '#C6CDD2' : '#325569',
+              color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
             },
           }}
         />
@@ -585,6 +582,22 @@ function Setup() {
     <div className={classes.swapInputs}>
       {renderMassiveInput('From', fromAmountValue, fromAmountError, fromAmountChanged, fromAssetValue, fromAssetError, fromAssetOptions, onAssetSelect)}
 
+      {fromAssetError && <div
+        style={{marginTop: 20}}
+        className={[
+          classes.warningContainer,
+          classes[`warningContainer--${appTheme}`],
+          classes.warningContainerError].join(" ")}>
+        <div className={[
+          classes.warningDivider,
+          classes.warningDividerError,
+        ].join(" ")}>
+        </div>
+        <Typography
+          className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+          align="center">{fromAssetError}</Typography>
+      </div>}
+
       <div
         className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}
         onMouseOver={swapIconHover}
@@ -656,7 +669,39 @@ function Setup() {
 
       {renderMassiveInput('To', toAmountValue, toAmountError, toAmountChanged, toAssetValue, toAssetError, toAssetOptions, onAssetSelect)}
 
+      {toAssetError && <div
+        style={{marginTop: 20}}
+        className={[
+          classes.warningContainer,
+          classes[`warningContainer--${appTheme}`],
+          classes.warningContainerError].join(" ")}>
+        <div className={[
+          classes.warningDivider,
+          classes.warningDividerError,
+        ].join(" ")}>
+        </div>
+        <Typography
+          className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+          align="center">{toAssetError}</Typography>
+      </div>}
+
       {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
+
+      {slippageError && <div
+        style={{marginTop: 20}}
+        className={[
+          classes.warningContainer,
+          classes[`warningContainer--${appTheme}`],
+          classes.warningContainerError].join(" ")}>
+        <div className={[
+          classes.warningDivider,
+          classes.warningDividerError,
+        ].join(" ")}>
+        </div>
+        <Typography
+          className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+          align="center">{slippageError}</Typography>
+      </div>}
 
       {renderSwapInformation()}
 
@@ -913,21 +958,9 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
     return (
       <>
         <div className={classes.searchInline}>
-          {/*<div className={[classes.networkButtonCornerLT, classes[`networkButtonCornerLT--${appTheme}`]].join(' ')}>
-          </div>
-
-          <div className={[classes.networkButtonCornerLB, classes[`networkButtonCornerLB--${appTheme}`]].join(' ')}>
-          </div>
-
-          <div className={[classes.networkButtonCornerRT, classes[`networkButtonCornerRT--${appTheme}`]].join(' ')}>
-          </div>
-
-          <div className={[classes.networkButtonCornerRB, classes[`networkButtonCornerRB--${appTheme}`]].join(' ')}>
-          </div>*/}
           <Borders/>
 
           <TextField
-            autoFocus
             variant="outlined"
             fullWidth
             placeholder="Search by name or paste address"
@@ -949,6 +982,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
 
         <div style={{position: 'relative'}}>
           <Borders/>
+
           <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
             {
               filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
@@ -966,7 +1000,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
 
         <div className={classes.manageLocalContainer}>
           <Button
-            className={classes.manageLocalBtn}
+            className={[classes.manageLocalBtn, classes[`manageLocalBtn--${appTheme}`]].join(' ')}
             onClick={toggleLocal}>
             Manage local assets
           </Button>
