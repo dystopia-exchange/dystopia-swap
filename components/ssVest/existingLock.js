@@ -108,8 +108,9 @@ export default function existingLock({nft, govToken, veToken}) {
   };
 
   const amountChanged = (event) => {
-    setAmount(event.target.value);
-    updateLockAmount(event.target.value);
+    const value = event.target.value.replace(',', '.')
+    setAmount(value)
+    updateLockAmount(value)
   };
 
   const handleDateChange = (event) => {
@@ -208,7 +209,6 @@ export default function existingLock({nft, govToken, veToken}) {
             onChange={amountChanged}
             disabled={lockLoading}
             inputProps={{
-              type: 'number',
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}
             InputProps={{

@@ -181,13 +181,15 @@ function Setup() {
   };
 
   const fromAmountChanged = (event) => {
+    const value = event.target.value.replace(',', '.')
+
     setFromAmountError(false);
-    setFromAmountValue(event.target.value);
-    if (event.target.value == '' || Number(event.target.value) === 0) {
+    setFromAmountValue(value);
+    if (value == '' || Number(value) === 0) {
       setToAmountValue('');
       setQuote(null);
     } else {
-      calculateReceiveAmount(event.target.value, fromAssetValue, toAssetValue);
+      calculateReceiveAmount(value, fromAssetValue, toAssetValue);
     }
   };
 
@@ -542,7 +544,6 @@ function Setup() {
             disabled={loading || type === 'To'}
             inputmode={'decimal'}
             inputProps={{
-              type: 'number',
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}
           />

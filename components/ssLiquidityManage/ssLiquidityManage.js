@@ -738,15 +738,17 @@ export default function ssLiquidityManage() {
   };
 
   const amount0Changed = (event) => {
+    const value = event.target.value.replace(',', '.')
     setAmount0Error(false);
-    setAmount0(event.target.value);
-    callQuoteAddLiquidity(event.target.value, amount1, priorityAsset, stable, pair, asset0, asset1);
+    setAmount0(value);
+    callQuoteAddLiquidity(value, amount1, priorityAsset, stable, pair, asset0, asset1);
   };
 
   const amount1Changed = (event) => {
+    const value = event.target.value.replace(',', '.')
     setAmount1Error(false);
-    setAmount1(event.target.value);
-    callQuoteAddLiquidity(amount0, event.target.value, priorityAsset, stable, pair, asset0, asset1);
+    setAmount1(value);
+    callQuoteAddLiquidity(amount0, value, priorityAsset, stable, pair, asset0, asset1);
   };
 
   const amount0Focused = (event) => {
@@ -786,13 +788,14 @@ export default function ssLiquidityManage() {
   };
 
   const withdrawAmountChanged = (event) => {
+    const value = event.target.value.replace(',', '.')
     setWithdrawAmountError(false);
-    setWithdrawAmount(event.target.value);
-    if (event.target.value === '') {
+    setWithdrawAmount(value);
+    if (value === '') {
       setWithdrawAmount0('');
       setWithdrawAmount1('');
-    } else if (event.target.value !== '' && !isNaN(event.target.value)) {
-      calcRemove(pair, event.target.value);
+    } else if (value !== '' && !isNaN(value)) {
+      calcRemove(pair, value);
     }
   };
 
@@ -848,7 +851,6 @@ export default function ssLiquidityManage() {
                 className: [classes.mediumInput, classes[`mediumInput--${appTheme}`]].join(" "),
               }}
               InputProps={{
-                type: 'number',
                 disableUnderline: true,
               }}
             />
@@ -952,8 +954,7 @@ export default function ssLiquidityManage() {
             onChange={amountChanged}
             disabled={createLoading}
             onFocus={onFocus ? onFocus : null}
-            inputProps={{
-              type: 'number',
+            inputProps={{ 
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}
             InputProps={{

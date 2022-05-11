@@ -133,8 +133,9 @@ export default function ssLock({govToken, veToken}) {
   };
 
   const onAmountChanged = (event) => {
+    const value = event.target.value.replace(',', '.')
     setAmountError(false);
-    setAmount(event.target.value);
+    setAmount(value);
   };
 
   const renderMassiveDateInput = (type, amountValue, amountError, amountChanged, balance, logo) => {
@@ -239,7 +240,6 @@ export default function ssLock({govToken, veToken}) {
             onChange={amountChanged}
             disabled={lockLoading}
             inputProps={{
-              type: 'number',
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}
             InputProps={{
