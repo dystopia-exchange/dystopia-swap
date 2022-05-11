@@ -308,7 +308,7 @@ function Setup() {
             flexDirection: 'column',
             width: '100%',
           }}>
-            {fromAmountValue <= Number(fromAssetValue.balance) && BigNumber(quote.priceImpact).gt(0.5) &&
+            {fromAmountValue <= Number(fromAssetValue.balance)  &&
               <div
                 className={[classes.warningContainer, classes[`warningContainer--${appTheme}`], BigNumber(quote.priceImpact).gt(5) ? classes.warningContainerError : classes.warningContainerWarning].join(" ")}>
                 <div className={[
@@ -316,7 +316,6 @@ function Setup() {
                   BigNumber(quote.priceImpact).gt(5) ? classes.warningDividerError : classes.warningDividerWarning].join(" ")
                 }>
                 </div>
-
                 <Typography
                   className={[BigNumber(quote.priceImpact).gt(5) ? classes.warningError : classes.warningWarning, classes[`warningText--${appTheme}`]].join(" ")}
                   align="center">Price impact: {formatCurrency(quote.priceImpact)}%</Typography>

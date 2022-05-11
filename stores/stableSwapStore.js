@@ -4279,7 +4279,6 @@ class Store {
           const amIn = BigNumber(amountIn).div(reserves.reserveA);
           const amOut = BigNumber(amountOut).div(reserves.reserveB);
           const ratio = BigNumber(amOut).div(amIn);
-          console.log(ratio, "helloooo");
           totalRatio = BigNumber(totalRatio).times(ratio).toFixed(18);
         }
       }
