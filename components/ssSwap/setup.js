@@ -308,7 +308,7 @@ function Setup() {
             flexDirection: 'column',
             width: '100%',
           }}>
-            {fromAmountValue <= Number(fromAssetValue.balance)  &&
+            {fromAmountValue <= Number(fromAssetValue.balance) &&
               <div
                 className={[classes.warningContainer, classes[`warningContainer--${appTheme}`], BigNumber(quote.priceImpact).gt(5) ? classes.warningContainerError : classes.warningContainerWarning].join(" ")}>
                 <div className={[
@@ -464,7 +464,8 @@ function Setup() {
           disabled={loading}
           InputProps={{
             classes: {
-              root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(" "),
+              root: [classes.inputBalanceSlippageText, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
+              inputAdornedStart: [classes.inputBalanceSlippageText, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
             },
             endAdornment: <InputAdornment position="end">
               <span
@@ -476,15 +477,14 @@ function Setup() {
             </InputAdornment>,
           }}
           inputProps={{
-            className: [classes.smallInput, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
             style: {
               padding: 0,
               borderRadius: 0,
               border: 'none',
-              fontSize: 18,
-              fontWeight: 400,
-              lineHeight: '120%',
-              color: appTheme === "dark" ? '#C6CDD2' : '#325569',
+              // fontSize: 18,
+              // fontWeight: 400,
+              // lineHeight: '120%',
+              color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
             },
           }}
         />
@@ -586,20 +586,20 @@ function Setup() {
       {renderMassiveInput('From', fromAmountValue, fromAmountError, fromAmountChanged, fromAssetValue, fromAssetError, fromAssetOptions, onAssetSelect)}
 
       {fromAssetError && <div
-                style={{ marginTop: 20 }}
-                className={[
-                  classes.warningContainer,
-                  classes[`warningContainer--${appTheme}`],
-                  classes.warningContainerError].join(" ")}>
-                <div className={[
-                  classes.warningDivider,
-                  classes.warningDividerError
-                ].join(" ")}>
-                </div>
-                <Typography
-                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
-                  align="center">{fromAssetError}</Typography>
-              </div>}
+        style={{marginTop: 20}}
+        className={[
+          classes.warningContainer,
+          classes[`warningContainer--${appTheme}`],
+          classes.warningContainerError].join(" ")}>
+        <div className={[
+          classes.warningDivider,
+          classes.warningDividerError,
+        ].join(" ")}>
+        </div>
+        <Typography
+          className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+          align="center">{fromAssetError}</Typography>
+      </div>}
 
       <div
         className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}
@@ -673,38 +673,38 @@ function Setup() {
       {renderMassiveInput('To', toAmountValue, toAmountError, toAmountChanged, toAssetValue, toAssetError, toAssetOptions, onAssetSelect)}
 
       {toAssetError && <div
-                style={{ marginTop: 20 }}
-                className={[
-                  classes.warningContainer,
-                  classes[`warningContainer--${appTheme}`],
-                  classes.warningContainerError].join(" ")}>
-                <div className={[
-                  classes.warningDivider,
-                  classes.warningDividerError
-                ].join(" ")}>
-                </div>
-                <Typography
-                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
-                  align="center">{toAssetError}</Typography>
-              </div>}
+        style={{marginTop: 20}}
+        className={[
+          classes.warningContainer,
+          classes[`warningContainer--${appTheme}`],
+          classes.warningContainerError].join(" ")}>
+        <div className={[
+          classes.warningDivider,
+          classes.warningDividerError,
+        ].join(" ")}>
+        </div>
+        <Typography
+          className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+          align="center">{toAssetError}</Typography>
+      </div>}
 
       {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
 
       {slippageError && <div
-                style={{ marginTop: 20 }}
-                className={[
-                  classes.warningContainer,
-                  classes[`warningContainer--${appTheme}`],
-                  classes.warningContainerError].join(" ")}>
-                <div className={[
-                  classes.warningDivider,
-                  classes.warningDividerError
-                ].join(" ")}>
-                </div>
-                <Typography
-                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
-                  align="center">{slippageError}</Typography>
-              </div>}
+        style={{marginTop: 20}}
+        className={[
+          classes.warningContainer,
+          classes[`warningContainer--${appTheme}`],
+          classes.warningContainerError].join(" ")}>
+        <div className={[
+          classes.warningDivider,
+          classes.warningDividerError,
+        ].join(" ")}>
+        </div>
+        <Typography
+          className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+          align="center">{slippageError}</Typography>
+      </div>}
 
       {renderSwapInformation()}
 
