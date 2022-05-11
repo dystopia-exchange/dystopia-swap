@@ -7,7 +7,14 @@
   -webkit-box-shadow: 0 13px 30px 0 rgba(7, 9, 18, 0.1) !important;
   box-shadow: 0 13px 30px 0 rgba(7, 9, 18, 0.1) !important;
 }
+input[type=number].massiveInputAmount::-webkit-inner-spin-button, 
+input[type=number].massiveInputAmount::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+}
 
+input[type=number].massiveInputAmount {
+  -moz-appearance: textfield;
+}
 .smallerText {
   position: absolute !important;
   left: 151px;

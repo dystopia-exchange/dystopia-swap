@@ -228,10 +228,11 @@ export default function ssBribeCreate() {
             onChange={amountChanged}
             disabled={createLoading}
             inputProps={{
+              type:"number",
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}
+            
             InputProps={{
-              type: 'number',
               disableUnderline: true,
             }}
           />

@@ -542,7 +542,7 @@ function Setup() {
             disabled={loading || type === 'To'}
             inputmode={'decimal'}
             inputProps={{
-              type: 'number',
+              type:"number",
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}
           />

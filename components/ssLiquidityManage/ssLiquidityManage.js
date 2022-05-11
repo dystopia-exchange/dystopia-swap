@@ -845,10 +845,10 @@ export default function ssLiquidityManage() {
               value={value}
               disabled={true}
               inputProps={{
+                type:"number",
                 className: [classes.mediumInput, classes[`mediumInput--${appTheme}`]].join(" "),
               }}
               InputProps={{
-                type: 'number',
                 disableUnderline: true,
               }}
             />
@@ -942,8 +942,24 @@ export default function ssLiquidityManage() {
           <div className={classes.massiveInputAssetSelect}>
             <AssetSelect type={type} value={assetValue} assetOptions={assetOptions} onSelect={onAssetSelect}/>
           </div>
-
           <InputBase
+                    placeholder={"0.00"}
+                    fullWidth
+                    error={amountError}
+                    helperText={amountError}
+                    value={amountValue}
+                    onChange={amountChanged}
+                    disabled={depositLoading || stakeLoading || depositStakeLoading || createLoading}
+                    className={classes.massiveInputAmount}
+                    InputProps={{
+                      disableUnderline: true,
+                    }}
+                    inputProps={{
+                      type:"number",
+                      className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
+                    }}
+                  />
+          {/* <InputBase
             className={classes.massiveInputAmount}
             placeholder="0.00"
             error={amountError}
@@ -953,13 +969,12 @@ export default function ssLiquidityManage() {
             disabled={createLoading}
             onFocus={onFocus ? onFocus : null}
             inputProps={{
-              type: 'number',
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}
             InputProps={{
               disableUnderline: true,
             }}
-          />
+          /> */}
 
           <Typography
             className={[classes.smallerText, classes[`smallerText--${appTheme}`]].join(" ")}>
@@ -1390,41 +1405,8 @@ export default function ssLiquidityManage() {
             <>
               <div className={classes.amountsContainer}>
                 {renderMassiveInput('amount0', amount0, amount0Error, amount0Changed, asset0, null, assetOptions, onAssetSelect, amount0Focused, amount0Ref)}
-
-{amount0Error && <div
-                style={{ marginTop: 20 }}
-                className={[
-                  classes.warningContainer,
-                  classes[`warningContainer--${appTheme}`],
-                  classes.warningContainerError].join(" ")}>
-                <div className={[
-                  classes.warningDivider,
-                  classes.warningDividerError
-                ].join(" ")}>
-                </div>
-                <Typography
-                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
-                  align="center">{amount0Error}</Typography>
-              </div>}
-
                 <div className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}></div>
                 {renderMassiveInput('amount1', amount1, amount1Error, amount1Changed, asset1, null, assetOptions, onAssetSelect, amount1Focused, amount1Ref)}
-
-                {amount1Error && <div
-                style={{ marginTop: 20 }}
-                className={[
-                  classes.warningContainer,
-                  classes[`warningContainer--${appTheme}`],
-                  classes.warningContainerError].join(" ")}>
-                <div className={[
-                  classes.warningDivider,
-                  classes.warningDividerError
-                ].join(" ")}>
-                </div>
-                <Typography
-                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
-                  align="center">{amount1Error}</Typography>
-              </div>}
               </div>
               {renderMediumInputToggle('stable', stable)}
 
@@ -1436,21 +1418,6 @@ export default function ssLiquidityManage() {
                 <div
                   className={[classes.controlItem, classes.controlPopover, classes[`controlPopover--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
                   {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
-                  {slippageError && <div
-                style={{ marginTop: 20 }}
-                className={[
-                  classes.warningContainer,
-                  classes[`warningContainer--${appTheme}`],
-                  classes.warningContainerError].join(" ")}>
-                <div className={[
-                  classes.warningDivider,
-                  classes.warningDividerError
-                ].join(" ")}>
-                </div>
-                <Typography
-                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
-                  align="center">{slippageError}</Typography>
-              </div>}
                 </div>
 
                 <Popover

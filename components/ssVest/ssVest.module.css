@@ -573,6 +573,14 @@
   border: none !important;
   margin-right: 20px !important;
 }
+input[type=number].massiveInputAmount::-webkit-inner-spin-button, 
+input[type=number].massiveInputAmount::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+}
+
+input[type=number].massiveInputAmount {
+  -moz-appearance: textfield;
+}
 
 .massiveInputAmountDate {
   position: absolute !important;

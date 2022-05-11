@@ -113,9 +113,9 @@ export default function ffLockAmount({nft, govToken, updateLockAmount}) {
             helperText={amountError}
             value={amountValue}
             onChange={amountChanged}
-            disabled={lockLoading}
+            disabled={lockLoading} 
             inputProps={{
-              type: 'number',
+              type:"number",
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}
             InputProps={{
