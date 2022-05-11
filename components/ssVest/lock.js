@@ -239,6 +239,7 @@ export default function ssLock({govToken, veToken}) {
             onChange={amountChanged}
             disabled={lockLoading}
             inputProps={{
+              type: 'number',
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}
             InputProps={{
