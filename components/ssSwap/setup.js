@@ -481,9 +481,6 @@ function Setup() {
               padding: 0,
               borderRadius: 0,
               border: 'none',
-              // fontSize: 18,
-              // fontWeight: 400,
-              // lineHeight: '120%',
               color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
             },
           }}
@@ -961,21 +958,9 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
     return (
       <>
         <div className={classes.searchInline}>
-          {/*<div className={[classes.networkButtonCornerLT, classes[`networkButtonCornerLT--${appTheme}`]].join(' ')}>
-          </div>
-
-          <div className={[classes.networkButtonCornerLB, classes[`networkButtonCornerLB--${appTheme}`]].join(' ')}>
-          </div>
-
-          <div className={[classes.networkButtonCornerRT, classes[`networkButtonCornerRT--${appTheme}`]].join(' ')}>
-          </div>
-
-          <div className={[classes.networkButtonCornerRB, classes[`networkButtonCornerRB--${appTheme}`]].join(' ')}>
-          </div>*/}
           <Borders/>
 
           <TextField
-            autoFocus
             variant="outlined"
             fullWidth
             placeholder="Search by name or paste address"
@@ -997,6 +982,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
 
         <div style={{position: 'relative'}}>
           <Borders/>
+
           <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
             {
               filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
@@ -1014,7 +1000,7 @@ function AssetSelect({type, value, assetOptions, onSelect}) {
 
         <div className={classes.manageLocalContainer}>
           <Button
-            className={classes.manageLocalBtn}
+            className={[classes.manageLocalBtn, classes[`manageLocalBtn--${appTheme}`]].join(' ')}
             onClick={toggleLocal}>
             Manage local assets
           </Button>

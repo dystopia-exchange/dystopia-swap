@@ -49,8 +49,9 @@ import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
 import BigNumber from "bignumber.js";
 import { formatSymbol } from "../../utils";
 import SwapIconBg from '../../ui/SwapIconBg';
+import Borders from '../../ui/Borders';
 
-const BootstrapInput = styled(InputBase)(({ theme }) => ({
+const BootstrapInput = styled(InputBase)(({theme}) => ({
   "& .MuiInputBase-input": {
     borderRadius: 0,
     position: "relative",
@@ -77,7 +78,7 @@ export default function Setup() {
   const [toAssetValue, setToAssetValue] = useState(null);
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
-  const { appTheme } = useAppThemeContext();
+  const {appTheme} = useAppThemeContext();
   const [isStable, toggleStablePool] = useState(false);
   const [toggleArrow, settoggleArrow] = useState(false);
   const [pairDetails, setPairDetails] = useState(null);
@@ -99,7 +100,7 @@ export default function Setup() {
     const pair = await stores.stableSwapStore.getPair(
       fromAssetValue.address,
       toAssetValue.address,
-      bool
+      bool,
     );
 
     if (pair != null) {
@@ -119,7 +120,7 @@ export default function Setup() {
   };
 
   function ValueLabelComponent(props) {
-    const { children, value } = props;
+    const {children, value} = props;
 
     return (
       <Tooltip enterTouchDelay={0} placement="top" title={value}>
@@ -149,7 +150,7 @@ export default function Setup() {
         } else {
           const factoryContract = new web3.eth.Contract(
             FactoryAbi,
-            platform.value
+            platform.value,
           );
           const pairAddress = await factoryContract.methods
             .getPair(token0, token1)
@@ -157,11 +158,11 @@ export default function Setup() {
           if (pairAddress !== "0x0000000000000000000000000000000000000000") {
             const pairContract = new web3.eth.Contract(
               pairContractAbi,
-              pairAddress
+              pairAddress,
             );
 
             const migrator = migrate.find(
-              (eachMigrate) => eachMigrate == platform
+              (eachMigrate) => eachMigrate == platform,
             );
             let [
               getReserves,
@@ -176,7 +177,7 @@ export default function Setup() {
               pairContract.methods.symbol(),
               pairContract.methods.allowance(
                 account.address,
-                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
+                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID],
               ),
               pairContract.methods.totalSupply(),
               pairContract.methods.balanceOf(account.address),
@@ -186,11 +187,11 @@ export default function Setup() {
 
             const token0Contract = new web3.eth.Contract(
               pairContractAbi,
-              token0Add
+              token0Add,
             );
             const token1Contract = new web3.eth.Contract(
               pairContractAbi,
-              token1Add
+              token1Add,
             );
             let [token0symbol, token1symbol, decimal0, decimal1] =
               await multicall.aggregate([
@@ -202,7 +203,7 @@ export default function Setup() {
 
             let totalSupply = web3.utils.fromWei(
               getTotalSupply.toString(),
-              "ether"
+              "ether",
             );
             lpBalance = web3.utils.fromWei(lpBalance.toString(), "ether");
 
@@ -373,7 +374,7 @@ export default function Setup() {
         removedToken1,
         pairDetails.isStable,
         pairDetails.token0,
-        pairDetails.token1
+        pairDetails.token1,
       );
   };
   const handleMax = async (lpBalance) => {
@@ -399,7 +400,7 @@ export default function Setup() {
         removedToken1,
         pairDetails.isStable,
         pairDetails.token0,
-        pairDetails.token1
+        pairDetails.token1,
       );
   };
 
@@ -431,7 +432,7 @@ export default function Setup() {
           classes[`selecticonIcon--${appTheme}`],
         ].join(" ")}`}
       >
-        <KeyboardArrowDown />
+        <KeyboardArrowDown/>
       </div>
     );
   };
@@ -440,12 +441,12 @@ export default function Setup() {
     amount1,
     isStable,
     token0,
-    token1
+    token1,
   ) => {
     const web3 = await stores.accountStore.getWeb3Provider();
     const routerContract = new web3.eth.Contract(
       CONTRACTS.ROUTER_ABI,
-      CONTRACTS.ROUTER_ADDRESS
+      CONTRACTS.ROUTER_ADDRESS,
     );
 
     const sendAmount0 = BigNumber(amount0)
@@ -468,7 +469,7 @@ export default function Setup() {
     let res = await routerContract.methods
       .quoteAddLiquidity(addy0, addy1, isStable, sendAmount0, sendAmount1)
       .call();
-    res = { res, token0: token0, token1: token1 };
+    res = {res, token0: token0, token1: token1};
     setQuote(res);
   };
   const checkPair = async (fromAssetValue, toAssetValue, isStable) => {
@@ -487,13 +488,13 @@ export default function Setup() {
           removedToken1,
           isStable,
           a.token0,
-          a.token1
+          a.token1,
         );
     });
     const pair = await stores.stableSwapStore.getPair(
       fromAssetValue,
       toAssetValue,
-      isStable
+      isStable,
     );
 
     if (pair != null) {
@@ -533,14 +534,14 @@ export default function Setup() {
           className={[classes[`form`], classes[`form--${appTheme}`]].join(" ")}
         >
           <div className={classes.infoContainer}>
-            <div style={{ marginBottom: "20px", width: "100%" }}>
+            <div style={{marginBottom: "20px", width: "100%"}}>
               <p
                 className={classes.titleText}
-                style={{ color: appTheme === "light" ? "#0A2C40" : "white" }}
+                style={{color: appTheme === "light" ? "#0A2C40" : "white"}}
               >
                 Source of Migration:
               </p>
-              <FormControl variant="standard" sx={{ width: "100%" }}>
+              <FormControl variant="standard" sx={{width: "100%"}}>
                 <div
                   style={{
                     display: "flex",
@@ -565,14 +566,14 @@ export default function Setup() {
                           classes[`nav-button-corner-top--${appTheme}`],
                         ].join(" ")}
                       >
-                        <span style={{ color: "#304C5E", fontWeight: "800" }}>
+                        <span style={{color: "#304C5E", fontWeight: "800"}}>
                           {platform ? platform.label : "Select a Platform"}
                         </span>
                       </div>
                     </div>
                   </div>
                   <div
-                    style={{ width: "30%" }}
+                    style={{width: "30%"}}
                     className={[
                       classes.pairDetails,
                       classes[`pairDetails--${appTheme}`],
@@ -590,7 +591,7 @@ export default function Setup() {
                           classes[`nav-button-corner-top--${appTheme}`],
                         ].join(" ")}
                       >
-                        <PlatformSelect onSelect={handleChange} />
+                        <PlatformSelect onSelect={handleChange}/>
                       </div>
                     </div>
                   </div>
@@ -623,7 +624,7 @@ export default function Setup() {
                   classes.textField,
                   classes[`textField--From-${appTheme}`],
                 ].join(" ")}
-                style={{ overflow: "overlay" }}
+                style={{overflow: "overlay"}}
               >
                 <Typography className={classes.inputTitleText} noWrap>
                   Token 0
@@ -661,7 +662,7 @@ export default function Setup() {
                   classes.textField,
                   classes[`textField--To-${appTheme}`],
                 ].join(" ")}
-                style={{ marginTop: "50px", overflow: "overlay" }}
+                style={{marginTop: "50px", overflow: "overlay"}}
               >
                 <Typography className={classes.inputTitleText} noWrap>
                   Token 1
@@ -701,13 +702,13 @@ export default function Setup() {
               </span>
             )}
             {pairDetails && pairDetails.isValid && (
-              <div style={{ width: "100%" }}>
+              <div style={{width: "100%"}}>
                 <div
                   className={[
                     classes.textField,
                     classes[`textField--To-${appTheme}`],
                   ].join(" ")}
-                  style={{ marginTop: "50px" }}
+                  style={{marginTop: "50px"}}
                 >
                   <Typography className={classes.inputTitleText} noWrap>
                     Liq. Pair
@@ -741,15 +742,15 @@ export default function Setup() {
                     <div className={classes.massiveInputAssetSelect}>
                       <div
                         className={classes.displaySelectContainer}
-                        style={{ padding: "61px 0px 19px" }}
+                        style={{padding: "61px 0px 19px"}}
                       >
                         <div
                           className={classes.assetSelectMenuItem}
-                          style={{ display: "flex" }}
+                          style={{display: "flex"}}
                         >
                           <div
                             className={[classes.displayDualIconContainer].join(
-                              " "
+                              " ",
                             )}
                             style={{
                               width: "60px",
@@ -773,7 +774,7 @@ export default function Setup() {
                                   : ""
                               }
                               height="40px"
-                              style={{ width: "40px", height: "40px" }}
+                              style={{width: "40px", height: "40px"}}
                               onError={(e) => {
                                 e.target.onerror = null;
                                 e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -782,7 +783,7 @@ export default function Setup() {
                           </div>
                           <div
                             className={[classes.displayDualIconContainer].join(
-                              " "
+                              " ",
                             )}
                             style={{
                               width: "60px",
@@ -806,7 +807,7 @@ export default function Setup() {
                                 toAssetValue ? `${toAssetValue.logoURI}` : ""
                               }
                               height="40px"
-                              style={{ width: "40px", height: "40px" }}
+                              style={{width: "40px", height: "40px"}}
                               onError={(e) => {
                                 e.target.onerror = null;
                                 e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -838,7 +839,7 @@ export default function Setup() {
                         classes.smallerText,
                         classes[`smallerText--${appTheme}`],
                       ].join(" ")}
-                      style={{ top: "118px", left: "151px" }}
+                      style={{top: "118px", left: "151px"}}
                     >
                       {fromAssetValue?.symbol}/{toAssetValue?.symbol}
                     </Typography>
@@ -849,12 +850,12 @@ export default function Setup() {
                     classes.pairContainer,
                     classes[`pairContainer--${appTheme}`],
                   ].join(" ")}
-                  style={{ marginTop: "20px" }}
+                  style={{marginTop: "20px"}}
                 >
-                  <div style={{ display: "flex", alignItems: "center" }}>
+                  <div style={{display: "flex", alignItems: "center"}}>
                     <div
                       className={classes.assetSelectMenuItem}
-                      style={{ display: "flex" }}
+                      style={{display: "flex"}}
                     >
                       <div
                         className={[classes.displayDualIconContainer].join(" ")}
@@ -876,7 +877,7 @@ export default function Setup() {
                           src={
                             fromAssetValue ? `${fromAssetValue.logoURI}` : ""
                           }
-                          style={{ width: "30px", height: "30px" }}
+                          style={{width: "30px", height: "30px"}}
                           onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -903,7 +904,7 @@ export default function Setup() {
                           className={classes.displayAssetIcon}
                           alt=""
                           src={toAssetValue ? `${toAssetValue.logoURI}` : ""}
-                          style={{ width: "30px", height: "30px" }}
+                          style={{width: "30px", height: "30px"}}
                           onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -911,7 +912,7 @@ export default function Setup() {
                         />
                       </div>
                     </div>
-                    <div style={{ marginLeft: "50px" }}>
+                    <div style={{marginLeft: "50px"}}>
                       <div>
                         {fromAssetValue?.symbol}/{toAssetValue?.symbol}
                       </div>
@@ -925,7 +926,7 @@ export default function Setup() {
                       </span>
                     </div>
                   </div>
-                  <span style={{ color: "#304C5E", fontWeight: "800" }}>
+                  <span style={{color: "#304C5E", fontWeight: "800"}}>
                     {Number(amount).toFixed(5)}
                   </span>
                 </div>
@@ -1062,7 +1063,7 @@ export default function Setup() {
                         }}
                       >
                         <svg
-                          style={{ marginTop: "10px" }}
+                          style={{marginTop: "10px"}}
                           xmlns="http://www.w3.org/2000/svg"
                           width="16"
                           height="16"
@@ -1084,14 +1085,14 @@ export default function Setup() {
                             classes.pairContainer,
                             classes[`pairContainer--${appTheme}`],
                           ].join(" ")}
-                          style={{ marginTop: "20px" }}
+                          style={{marginTop: "20px"}}
                         >
                           <div
-                            style={{ display: "flex", alignItems: "center" }}
+                            style={{display: "flex", alignItems: "center"}}
                           >
                             <div
                               className={classes.assetSelectMenuItem}
-                              style={{ display: "flex" }}
+                              style={{display: "flex"}}
                             >
                               <div
                                 className={[
@@ -1118,7 +1119,7 @@ export default function Setup() {
                                       ? `${fromAssetValue.logoURI}`
                                       : ""
                                   }
-                                  style={{ width: "30px", height: "30px" }}
+                                  style={{width: "30px", height: "30px"}}
                                   onError={(e) => {
                                     e.target.onerror = null;
                                     e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -1152,7 +1153,7 @@ export default function Setup() {
                                       ? `${toAssetValue.logoURI}`
                                       : ""
                                   }
-                                  style={{ width: "30px", height: "30px" }}
+                                  style={{width: "30px", height: "30px"}}
                                   onError={(e) => {
                                     e.target.onerror = null;
                                     e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -1160,7 +1161,7 @@ export default function Setup() {
                                 />
                               </div>
                             </div>
-                            <div style={{ marginLeft: "50px" }}>
+                            <div style={{marginLeft: "50px"}}>
                               <div>
                                 {fromAssetValue?.symbol}/{toAssetValue?.symbol}
                               </div>
@@ -1177,9 +1178,9 @@ export default function Setup() {
                               </span>
                             </div>
                           </div>
-                          <span style={{ color: "#304C5E", fontWeight: "800" }}>
+                          <span style={{color: "#304C5E", fontWeight: "800"}}>
                             {Number(quote?.res?.liquidity / 10 ** 18).toFixed(
-                              5
+                              5,
                             )}
                           </span>
                         </div>
@@ -1195,7 +1196,7 @@ export default function Setup() {
                                 classes[`nav-button-corner-bottom`],
                                 classes[
                                   `nav-button-corner-bottom--${appTheme}`
-                                ],
+                                  ],
                               ].join(" ")}
                             >
                               <div
@@ -1214,7 +1215,7 @@ export default function Setup() {
                                 >
                                   {Number(
                                     quote?.res?.amountA /
-                                      10 ** quote?.token0?.decimals
+                                    10 ** quote?.token0?.decimals,
                                   ).toFixed(2)}
                                 </span>
                               </div>
@@ -1231,7 +1232,7 @@ export default function Setup() {
                                 classes[`nav-button-corner-bottom`],
                                 classes[
                                   `nav-button-corner-bottom--${appTheme}`
-                                ],
+                                  ],
                               ].join(" ")}
                             >
                               <div
@@ -1256,7 +1257,7 @@ export default function Setup() {
                                   >
                                     {Number(
                                       quote?.res?.amountB /
-                                        10 ** quote?.token1?.decimals
+                                      10 ** quote?.token1?.decimals,
                                     ).toFixed(2)}
                                   </span>
                                 </div>
@@ -1282,7 +1283,7 @@ export default function Setup() {
                               Number(pairDetails.token0Bal) -
                               Number(
                                 quote?.res?.amountA /
-                                  10 ** quote?.token0?.decimals
+                                10 ** quote?.token0?.decimals,
                               )
                             ).toFixed(2)}
                             {quote?.token0?.symbol} and ~
@@ -1290,7 +1291,7 @@ export default function Setup() {
                               Number(pairDetails.token1Bal) -
                               Number(
                                 quote?.res?.amountB /
-                                  10 ** quote?.token1?.decimals
+                                10 ** quote?.token1?.decimals,
                               )
                             ).toFixed(2)}
                             {quote?.token1?.symbol} will be refunded to your
@@ -1324,7 +1325,7 @@ export default function Setup() {
                     onClick={() => handleRadioChange(true)}
                     value="a"
                     name="radio-buttons"
-                    inputProps={{ "aria-label": "A" }}
+                    inputProps={{"aria-label": "A"}}
                   />
                   Stable
                 </div>
@@ -1347,7 +1348,7 @@ export default function Setup() {
                     onClick={() => handleRadioChange(false)}
                     value="b"
                     name="radio-buttons"
-                    inputProps={{ "aria-label": "B" }}
+                    inputProps={{"aria-label": "B"}}
                   />
                   Volatile
                 </div>
@@ -1356,10 +1357,10 @@ export default function Setup() {
           </div>
         </div>
       </Form>
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div style={{display: "flex", justifyContent: "center"}}>
         <div
           className={[classes[`buttonOverrideContainer--${appTheme}`]].join(
-            " "
+            " ",
           )}
         >
           {checkpair ? (
@@ -1376,7 +1377,7 @@ export default function Setup() {
             >
               <span className={classes.actionButtonText}>{buttonText}</span>
               {loading && (
-                <CircularProgress size={10} className={classes.loadingCircle} />
+                <CircularProgress size={10} className={classes.loadingCircle}/>
               )}
             </Button>
           ) : (
@@ -1388,7 +1389,7 @@ export default function Setup() {
                 checkPair(
                   fromAssetValue.address,
                   toAssetValue.address,
-                  isStable
+                  isStable,
                 )
               }
               disabled={disableButton}
@@ -1399,7 +1400,7 @@ export default function Setup() {
             >
               <span className={classes.actionButtonText}>{`Check Pair`}</span>
               {loading && (
-                <CircularProgress size={10} className={classes.loadingCircle} />
+                <CircularProgress size={10} className={classes.loadingCircle}/>
               )}
             </Button>
           )}
@@ -1407,7 +1408,8 @@ export default function Setup() {
       </div>
     </div>
   );
-  function AssetSelect({ type, value, assetOptions, onSelect }) {
+
+  function AssetSelect({type, value, assetOptions, onSelect}) {
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [filteredAssetOptions, setFilteredAssetOptions] = useState([]);
@@ -1439,13 +1441,14 @@ export default function Setup() {
           const baseAsset = await stores.stableSwapStore.getBaseAsset(
             event.target.value,
             true,
-            true
+            true,
           );
         }
 
-        return () => {};
+        return () => {
+        };
       },
-      [assetOptions]
+      [assetOptions],
     );
 
     const onSearchChanged = async (event) => {
@@ -1533,7 +1536,7 @@ export default function Setup() {
                 deleteOption(asset);
               }}
             >
-              <DeleteOutline />
+              <DeleteOutline/>
             </IconButton>
             <IconButton
               onClick={() => {
@@ -1676,12 +1679,12 @@ export default function Setup() {
           >
             {filteredAssetOptions
               ? filteredAssetOptions
-                  .filter((option) => {
-                    return option.local === true;
-                  })
-                  .map((asset, idx) => {
-                    return renderManageOption(type, asset, idx);
-                  })
+                .filter((option) => {
+                  return option.local === true;
+                })
+                .map((asset, idx) => {
+                  return renderManageOption(type, asset, idx);
+                })
               : []}
           </div>
 
@@ -1696,6 +1699,8 @@ export default function Setup() {
       return (
         <>
           <div className={classes.searchInline}>
+            <Borders/>
+
             <TextField
               autoFocus
               variant="outlined"
@@ -1704,46 +1709,25 @@ export default function Setup() {
               value={search}
               onChange={onSearchChanged}
               InputProps={{
-                style: {
-                  background: "transparent",
-                  border: "1px solid",
-                  borderColor: appTheme === "dark" ? "#5F7285" : "#86B9D6",
-                  borderRadius: 0,
-                },
                 classes: {
-                  root: classes.searchInput,
+                  root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
+                  inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
                 },
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Search
-                      style={{
-                        color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
-                      }}
-                    />
-                  </InputAdornment>
-                ),
-              }}
-              inputProps={{
-                style: {
-                  padding: "10px",
-                  borderRadius: 0,
-                  border: "none",
-                  fontSize: "14px",
-                  lineHeight: "120%",
-                  color: "#86B9D6",
-                },
+                startAdornment: <InputAdornment position="start">
+                  <Search style={{
+                    color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  }}/>
+                </InputAdornment>,
               }}
             />
           </div>
 
-          <div
-            className={[
-              classes.assetSearchResults,
-              classes[`assetSearchResults--${appTheme}`],
-            ].join(" ")}
-          >
-            {filteredAssetOptions
-              ? filteredAssetOptions
+          <div style={{position: 'relative'}}>
+            <Borders/>
+
+            <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(" ")}>
+              {filteredAssetOptions
+                ? filteredAssetOptions
                   .sort((a, b) => {
                     if (BigNumber(a.balance).lt(b.balance)) return 1;
                     if (BigNumber(a.balance).gt(b.balance)) return -1;
@@ -1756,11 +1740,14 @@ export default function Setup() {
                   .map((asset, idx) => {
                     return renderAssetOption(type, asset, idx);
                   })
-              : []}
+                : []}
+            </div>
           </div>
 
           <div className={classes.manageLocalContainer}>
-            <Button className={classes.manageLocalBtn} onClick={toggleLocal}>
+            <Button
+              className={[classes.manageLocalBtn, classes[`manageLocalBtn--${appTheme}`]].join(' ')}
+              onClick={toggleLocal}>
               Manage local assets
             </Button>
           </div>
@@ -1806,7 +1793,7 @@ export default function Setup() {
               onClose();
             }
           }}
-          style={{ borderRadius: 0 }}
+          style={{borderRadius: 0}}
         >
           <div
             className={classes.dialogContainer}
@@ -1877,7 +1864,8 @@ export default function Setup() {
       </React.Fragment>
     );
   }
-  function PlatformSelect({ onSelect }) {
+
+  function PlatformSelect({onSelect}) {
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [filteredPlatform, setFilteredPlatform] = useState([]);
@@ -1922,13 +1910,14 @@ export default function Setup() {
           const baseAsset = await stores.stableSwapStore.getBaseAsset(
             event.target.value,
             true,
-            true
+            true,
           );
         }
 
-        return () => {};
+        return () => {
+        };
       },
-      [search]
+      [search],
     );
 
     const onSearchChanged = async (event) => {
@@ -1937,7 +1926,7 @@ export default function Setup() {
 
     return (
       <div>
-        <Button style={{ padding: "0" }} onClick={handleClickOpen}>
+        <Button style={{padding: "0"}} onClick={handleClickOpen}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -2048,68 +2037,68 @@ export default function Setup() {
             <DialogContent>
               {filteredPlatform.length === 0
                 ? migrate.map((eachPlatform) => (
+                  <div
+                    className={[
+                      classes.pairDetails,
+                      classes[`pairDetails--${appTheme}`],
+                    ].join(" ")}
+                    style={{
+                      marginTop: "0",
+                      background: "#b9dff5",
+                      color: "#0A2C40",
+                    }}
+                  >
                     <div
                       className={[
-                        classes.pairDetails,
-                        classes[`pairDetails--${appTheme}`],
+                        classes[`nav-button-corner-bottom`],
+                        classes[`nav-button-corner-bottom--${appTheme}`],
                       ].join(" ")}
-                      style={{
-                        marginTop: "0",
-                        background: "#b9dff5",
-                        color: "#0A2C40",
-                      }}
                     >
                       <div
                         className={[
-                          classes[`nav-button-corner-bottom`],
-                          classes[`nav-button-corner-bottom--${appTheme}`],
+                          classes[`nav-button-corner-top`],
+                          classes[`nav-button-corner-top--${appTheme}`],
                         ].join(" ")}
                       >
-                        <div
-                          className={[
-                            classes[`nav-button-corner-top`],
-                            classes[`nav-button-corner-top--${appTheme}`],
-                          ].join(" ")}
-                        >
-                          <MenuItem value={eachPlatform.value}>
-                            {eachPlatform.label}
-                          </MenuItem>
-                        </div>
+                        <MenuItem value={eachPlatform.value}>
+                          {eachPlatform.label}
+                        </MenuItem>
                       </div>
                     </div>
-                  ))
+                  </div>
+                ))
                 : filteredPlatform.map((eachPlatform) => (
+                  <div
+                    className={[
+                      classes.pairDetails,
+                      classes[`pairDetails--${appTheme}`],
+                    ].join(" ")}
+                    onClick={() => handleCloseSelect(eachPlatform)}
+                    style={{
+                      marginTop: "0",
+                      background: "#b9dff5",
+                      color: "#0A2C40",
+                    }}
+                  >
                     <div
                       className={[
-                        classes.pairDetails,
-                        classes[`pairDetails--${appTheme}`],
+                        classes[`nav-button-corner-bottom`],
+                        classes[`nav-button-corner-bottom--${appTheme}`],
                       ].join(" ")}
-                      onClick={() => handleCloseSelect(eachPlatform)}
-                      style={{
-                        marginTop: "0",
-                        background: "#b9dff5",
-                        color: "#0A2C40",
-                      }}
                     >
                       <div
                         className={[
-                          classes[`nav-button-corner-bottom`],
-                          classes[`nav-button-corner-bottom--${appTheme}`],
+                          classes[`nav-button-corner-top`],
+                          classes[`nav-button-corner-top--${appTheme}`],
                         ].join(" ")}
                       >
-                        <div
-                          className={[
-                            classes[`nav-button-corner-top`],
-                            classes[`nav-button-corner-top--${appTheme}`],
-                          ].join(" ")}
-                        >
-                          <MenuItem value={eachPlatform.value}>
-                            {eachPlatform.label}
-                          </MenuItem>
-                        </div>
+                        <MenuItem value={eachPlatform.value}>
+                          {eachPlatform.label}
+                        </MenuItem>
                       </div>
                     </div>
-                  ))}
+                  </div>
+                ))}
             </DialogContent>
           </div>
         </Dialog>
