@@ -848,6 +848,7 @@ export default function ssLiquidityManage() {
                 className: [classes.mediumInput, classes[`mediumInput--${appTheme}`]].join(" "),
               }}
               InputProps={{
+                type: 'number',
                 disableUnderline: true,
               }}
             />
@@ -952,6 +953,7 @@ export default function ssLiquidityManage() {
             disabled={createLoading}
             onFocus={onFocus ? onFocus : null}
             inputProps={{
+              type: 'number',
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}
             InputProps={{

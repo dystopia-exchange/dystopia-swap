@@ -230,6 +230,7 @@ export default function ssBribeCreate() {
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}
             InputProps={{
+              type: 'number',
               disableUnderline: true,
             }}
           />

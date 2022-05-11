@@ -208,6 +208,7 @@ export default function existingLock({nft, govToken, veToken}) {
             onChange={amountChanged}
             disabled={lockLoading}
             inputProps={{
+              type: 'number',
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}
             InputProps={{
