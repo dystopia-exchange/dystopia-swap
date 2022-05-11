@@ -154,8 +154,10 @@ function Setup() {
   }, [fromAmountValue, fromAssetValue, toAssetValue]);
 
   const onAssetSelect = (type, value) => {
+    console.log(value.address,fromAssetValue.address,toAssetValue.address,"please work")
     if (type === 'From') {
-
+    
+      
       if (value.address === toAssetValue.address) {
         setToAssetValue(fromAssetValue);
         setFromAssetValue(toAssetValue);
@@ -168,7 +170,7 @@ function Setup() {
 
     } else {
       if (value.address === fromAssetValue.address) {
-        setFromAssetError(toAssetValue);
+        setFromAssetValue(toAssetValue);
         setToAssetValue(fromAssetValue);
         calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
       } else {
