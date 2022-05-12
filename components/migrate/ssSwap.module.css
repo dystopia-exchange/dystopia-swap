@@ -1,10 +1,12 @@
-.blurbg{
+.blurbg {
   background: rgba(0, 0, 0, 0.1) !important;
   backdrop-filter: blur(10px) !important;
 }
+
 .dialogContent {
   padding: 20px 30px 30px !important;
 }
+
 .nav-button-corner-top,
 .nav-button-corner-bottom {
   position: relative;
@@ -72,6 +74,7 @@
 .nav-button-corner-bottom--light::after {
   border-color: var(--main-secondary-light);
 }
+
 .newSwapContainer {
   display: flex;
   justify-content: space-evenly;
@@ -749,7 +752,8 @@
   justify-content: center;
 }
 
-.textFlex {}
+.textFlex {
+}
 
 .flexy2 {
   display: flex;
@@ -790,6 +794,7 @@
   background: #2D3741 !important;
   box-shadow: 0 1px 0 rgba(76, 173, 229, 0.5);
 }
+
 .assetSymbolName {
   font-weight: 500;
   font-size: 24px;
@@ -841,6 +846,7 @@
   flex-direction: column;
   align-items: flex-end;
 }
+
 .assetSelectBalance {
   margin-left: 10px;
 }
@@ -863,6 +869,7 @@
   z-index: 1;
   height: 0px;
 }
+
 .assetSelectBalanceText {
   font-weight: 500;
   font-size: 18px;
@@ -1065,13 +1072,13 @@
   padding: 12px 0px;
 }
 
-.priceInfo>.title {
+.priceInfo > .title {
   font-weight: bold !important;
   font-size: 14px !important;
   padding: 6px 0px;
 }
 
-.priceInfo>.text {
+.priceInfo > .text {
   font-size: 13px !important;
   color: #7e99b0;
 }
@@ -1186,15 +1193,17 @@
   .newSwapContainer {
     margin-top: -100px;
   }
-.assetSymbolName,
-.assetSelectBalanceText {
-  font-size: 14px !important;
-}
 
-.assetSymbolName2,
-.assetSelectBalanceText2 {
-  font-size: 12px !important;
-}
+  .assetSymbolName,
+  .assetSelectBalanceText {
+    font-size: 14px !important;
+  }
+
+  .assetSymbolName2,
+  .assetSelectBalanceText2 {
+    font-size: 12px !important;
+  }
+
   .swapContainer {
     padding: 12px;
   }
@@ -1246,14 +1255,14 @@
   animation: none !important;
   transition: none !important;
   clip-path: polygon(0 20px,
-      20px 0,
-      100% 0,
-      100% 0%,
-      100% 70%,
-      95% 100%,
-      0% 100%,
-      0% 100%,
-      0% 10%);
+  20px 0,
+  100% 0,
+  100% 0%,
+  100% 70%,
+  95% 100%,
+  0% 100%,
+  0% 100%,
+  0% 10%);
 }
 
 .buttonOverride--light {
@@ -1373,7 +1382,7 @@
   font-size: 16px;
   font-weight: 800;
   display: flex;
-    width: 100%;
+  width: 100%;
   padding: 0px 15px;
 }
 
@@ -1387,7 +1396,7 @@
   align-items: center;
 } */
 
-  
+
 .infoContainer {
   display: flex;
   flex-direction: column;
@@ -1428,7 +1437,7 @@
   flex-direction: column;
   width: 100%;
 }
-  
+
 .smallInputContainer {
   display: flex;
   flex-wrap: wrap;
@@ -1788,7 +1797,8 @@
   justify-content: center;
 }
 
-.textFlex {}
+.textFlex {
+}
 
 .flexy2 {
   display: flex;
@@ -1800,13 +1810,6 @@
   justify-content: flex-start;
   flex-wrap: wrap;
 }
-
-
-
-
-
-
-
 
 
 .confirmationsText {
@@ -2006,13 +2009,13 @@
   padding: 12px 0px;
 }
 
-.priceInfo>.title {
+.priceInfo > .title {
   font-weight: bold !important;
   font-size: 14px !important;
   padding: 6px 0px;
 }
 
-.priceInfo>.text {
+.priceInfo > .text {
   font-size: 13px !important;
   color: #7e99b0;
 }
@@ -2179,14 +2182,14 @@
   animation: none !important;
   transition: none !important;
   clip-path: polygon(0 20px,
-      20px 0,
-      100% 0,
-      100% 0%,
-      100% 70%,
-      95% 100%,
-      0% 100%,
-      0% 100%,
-      0% 10%);
+  20px 0,
+  100% 0,
+  100% 0%,
+  100% 70%,
+  95% 100%,
+  0% 100%,
+  0% 100%,
+  0% 10%);
 }
 
 .buttonOverride--light {
@@ -2298,6 +2301,7 @@
   align-items: center;
   cursor: pointer;
 }
+
 @media screen and (max-width: 359px) {
   .buttonOverrideContainer--dark,
   .buttonOverrideContainer--light,
@@ -2306,6 +2310,7 @@
     max-width: 100%;
   }
 }
+
 .dialogContainer {
   width: 100% !important;
 }
@@ -2313,14 +2318,16 @@
 .dialogTitle {
   padding: 20px 20px 0;
 }
+
 .dialogContent {
   padding: 20px !important;
 }
+
 .assetSearchResults {
   min-width: auto;
 }
 
-.arrowDownCircle{
+.arrowDownCircle {
   text-align: center;
   margin-top: 20px;
   background: url("/images/decorative_fence.png") repeat-x center center;
@@ -2365,7 +2372,7 @@
   border: 2px solid #FFA500;
 }
 
-.line{
+.line {
   margin-top: 20px;
   margin-bottom: 5px;
   background: url("/images/vertical_border.png");
@@ -2376,24 +2383,24 @@
   width: 100%;
 }
 
-@media screen and (max-width: 390px){
-  .pairContainer{
+@media screen and (max-width: 390px) {
+  .pairContainer {
     flex-direction: column;
   }
 }
 
-@media screen and (max-width: 380px){
-  .boxStyle{
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  }
-  
-  .radioContainer{
+@media screen and (max-width: 380px) {
+  .boxStyle {
+    display: flex;
+    width: 100%;
     flex-direction: column;
   }
 
-  .radioButton{
+  .radioContainer {
+    flex-direction: column;
+  }
+
+  .radioButton {
     margin-top: 10px;
     margin-right: 0 !important;
   }
