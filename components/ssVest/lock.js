@@ -368,7 +368,7 @@ export default function ssLock({govToken, veToken}) {
           variant="contained"
           size="large"
           color="primary"
-          disabled={lockLoading}
+          disabled={lockLoading || amount === '' || Number(amount) === 0}
           onClick={onLock}>
           <Typography className={classes.actionButtonText}>
             {lockLoading ? `Locking` : `Lock Tokens & Get veNFT`}

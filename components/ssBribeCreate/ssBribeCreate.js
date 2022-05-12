@@ -196,8 +196,6 @@ export default function ssBribeCreate() {
 
   const renderMassiveInput = (type, amountValue, amountError, amountChanged, assetValue, assetError, assetOptions, onAssetSelect) => {
 
-    console.log('amountError assetError', amountError, assetError);
-
     return (
       <div className={[classes.textField, classes[`textField--${appTheme}`]].join(' ')}>
         <Typography className={classes.inputTitleText} noWrap>
@@ -309,7 +307,7 @@ export default function ssBribeCreate() {
         variant="contained"
         size="large"
         color="primary"
-        disabled={createLoading}
+        disabled={createLoading || amount === '' || parseFloat(amount) === 0}
         onClick={onCreate}>
         <Typography className={classes.actionButtonText}>
           {createLoading ? `Creating` : `Create Bribe`}
