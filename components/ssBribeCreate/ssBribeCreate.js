@@ -144,8 +144,9 @@ export default function ssBribeCreate() {
   };
 
   const amountChanged = (event) => {
+    const value = event.target.value.replace(',', '.')
     setAmountError(false);
-    setAmount(event.target.value);
+    setAmount(value);
   };
 
   const onAssetSelect = (type, value) => {

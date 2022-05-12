@@ -52,8 +52,9 @@ export default function ffLockAmount({nft, govToken, updateLockAmount}) {
   };
 
   const amountChanged = (event) => {
-    setAmount(event.target.value);
-    updateLockAmount(event.target.value);
+    const value = event.target.value.replace(',', '.')
+    setAmount(value);
+    updateLockAmount(value);
   };
 
   const {appTheme} = useAppThemeContext();
@@ -113,9 +114,8 @@ export default function ffLockAmount({nft, govToken, updateLockAmount}) {
             helperText={amountError}
             value={amountValue}
             onChange={amountChanged}
-            disabled={lockLoading} 
+            disabled={lockLoading}
             inputProps={{
-              type:"number",
               className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
             }}
             InputProps={{
