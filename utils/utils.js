@@ -106,6 +106,10 @@ export const formatSymbol = (symbol) => {
 }
 
 export const validateInput = (value) => {
+   if (Number.isNaN(parseFloat(value))) {
+    return ''
+  }
+
   const numbers = '0123456789'
   let hasDot = false
   const val = Array.from(value)
@@ -144,6 +148,6 @@ export const formatToString = (value) => {
 }
 
 export const formatInputAmount = (value) => {
-  const formated = formatToString(validateInput(value)) === 'NaN' ? value : formatToString(validateInput(value))
+  const formated = formatToString(validateInput(value)) === 'NaN' ? '' : formatToString(validateInput(value))
   return formated
 }
