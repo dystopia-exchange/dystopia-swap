@@ -86,8 +86,8 @@ function Liquidity({ changeTheme }) {
               Liquidity
             </Typography>
 
-            <div className={classes.mainDescBg}>
-              <Typography className={classes.mainDescNC} variant="body2">
+            <div className={[classes.mainDescBg, classes[`mainDescBg--${appTheme}`]].join(' ')}>
+              <Typography className={[classes.mainDescNC, classes[`mainDescNC--${appTheme}`]].join(' ')} variant="body2">
                 Create a pair or add liquidity to existing stable or volatile Liquidity Pairs.
               </Typography>
             </div>

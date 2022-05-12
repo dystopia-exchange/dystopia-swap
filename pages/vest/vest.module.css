@@ -130,6 +130,23 @@
   color: #0A2C40 !important;
 }
 
+.mainDescBg--dark {
+  background: rgba(21, 23, 24, 0.8);
+  border-color: #304E61;
+}
+
+.mainDescBg--dark::before {
+  border-color: #304E61 transparent transparent transparent;
+}
+
+.mainDescBg--dark::after {
+  border-color: transparent transparent #304E61 transparent;
+}
+
+.mainDescNC--dark {
+  color: #ffffff !important;
+}
+
 .buttonConnect {
   position: relative;
   margin-top: 40px !important;
