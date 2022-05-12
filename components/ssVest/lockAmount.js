@@ -3,7 +3,7 @@ import { Grid, Typography, Button, TextField, InputAdornment, CircularProgress, 
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import moment from 'moment';
-import { formatCurrency } from '../../utils';
+import { formatCurrency, formatInputAmount } from '../../utils';
 import classes from "./ssVest.module.css";
 import stores from '../../stores';
 import {
@@ -52,7 +52,7 @@ export default function ffLockAmount({nft, govToken, updateLockAmount}) {
   };
 
   const amountChanged = (event) => {
-    const value = event.target.value.replace(',', '.')
+    const value = formatInputAmount(event.target.value.replace(',', '.'));
     setAmount(value);
     updateLockAmount(value);
   };

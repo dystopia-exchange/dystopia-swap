@@ -252,15 +252,15 @@ export default function SSLiquidityCreate() {
   }
 
   const amount0Changed = (event) => {
-    const value = event.target.value.replace(',', '.')
-    setAmount0Error(false)
-    setAmount0(value)
+    const value = formatInputAmount(event.target.value.replace(',', '.'));
+    setAmount0Error(false);
+    setAmount0(value);
   }
 
   const amount1Changed = (event) => {
-    const value = event.target.value.replace(',', '.')
-    setAmount1Error(false)
-    setAmount1(value)
+    const value = formatInputAmount(event.target.value.replace(',', '.'));
+    setAmount1Error(false);
+    setAmount1(value);
   }
 
   const handleChange = (event) => {

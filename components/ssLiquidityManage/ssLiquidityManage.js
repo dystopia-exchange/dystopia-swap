@@ -32,7 +32,7 @@ import {
   Close, Settings, ArrowDropDownCircleOutlined,
 } from '@mui/icons-material';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
-import { formatSymbol } from '../../utils';
+import { formatSymbol, formatInputAmount } from '../../utils';
 import SwapIconBg from '../../ui/SwapIconBg';
 
 export default function ssLiquidityManage() {
@@ -738,14 +738,14 @@ export default function ssLiquidityManage() {
   };
 
   const amount0Changed = (event) => {
-    const value = event.target.value.replace(',', '.')
+    const value = formatInputAmount(event.target.value.replace(',', '.'))
     setAmount0Error(false);
     setAmount0(value);
     callQuoteAddLiquidity(value, amount1, priorityAsset, stable, pair, asset0, asset1);
   };
 
   const amount1Changed = (event) => {
-    const value = event.target.value.replace(',', '.')
+    const value = formatInputAmount(event.target.value.replace(',', '.'))
     setAmount1Error(false);
     setAmount1(value);
     callQuoteAddLiquidity(amount0, value, priorityAsset, stable, pair, asset0, asset1);
@@ -788,7 +788,7 @@ export default function ssLiquidityManage() {
   };
 
   const withdrawAmountChanged = (event) => {
-    const value = event.target.value.replace(',', '.')
+    const value = formatInputAmount(event.target.value.replace(',', '.'))
     setWithdrawAmountError(false);
     setWithdrawAmount(value);
     if (value === '') {

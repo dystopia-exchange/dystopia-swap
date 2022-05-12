@@ -104,3 +104,46 @@ export const formatSymbol = (symbol) => {
   if (symbol.includes('vAMM')) return symbol.replace('vAMM-', '')
   return symbol
 }
+
+export const validateInput = (value) => {
+  const numbers = '0123456789'
+  let hasDot = false
+  const val = Array.from(value)
+    .filter((el) => {
+      if (el === '.' && !hasDot) {
+        hasDot = true
+        return true
+      }
+      return numbers.includes(el)
+    })
+    .join('')
+
+  return val
+}
+
+export const formatToString = (value) => {
+  if (value[value.length - 1] === '.') {
+    return value
+  }
+
+  if (value.includes('.')) {
+    const [whole, fractional] = value.split('.')
+    if (fractional.length >= 18) {
+      const formated = new BigNumber(value ?? 0).toFixed(18)
+      return formated
+    }
+  }
+
+  const formated = new BigNumber(value ?? 0).toFixed()
+
+  if ((value.length > 2 && formated === '0') || formated.length < value.length) {
+    return value
+  }
+
+  return formated
+}
+
+export const formatInputAmount = (value) => {
+  const formated = formatToString(validateInput(value)) === 'NaN' ? value : formatToString(validateInput(value))
+  return formated
+}

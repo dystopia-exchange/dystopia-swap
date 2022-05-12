@@ -16,7 +16,7 @@ import {
 import { Search, ArrowDownward, ArrowForwardIos, DeleteOutline, Close, ArrowBackIosNew } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import { withTheme } from '@mui/styles';
-import { formatCurrency, formatAddress, formatCurrencyWithSymbol, formatCurrencySmall } from '../../utils';
+import { formatCurrency, formatInputAmount, formatAddress, formatCurrencyWithSymbol, formatCurrencySmall } from '../../utils';
 import classes from './ssSwap.module.css';
 import stores from '../../stores';
 import {
@@ -181,7 +181,7 @@ function Setup() {
   };
 
   const fromAmountChanged = (event) => {
-    const value = event.target.value.replace(',', '.')
+    const value = formatInputAmount(event.target.value.replace(',', '.'))
 
     setFromAmountError(false);
     setFromAmountValue(value);

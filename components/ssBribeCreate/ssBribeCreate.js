@@ -17,7 +17,7 @@ import { Add, Search, ArrowBack, DeleteOutline, ArrowBackIosNew, Close } from '@
 import BigNumber from 'bignumber.js';
 import { formatCurrency } from '../../utils';
 import classes from './ssBribeCreate.module.css';
-import { formatSymbol } from '../../utils';
+import { formatSymbol, formatInputAmount } from '../../utils';
 
 import stores from '../../stores';
 import {
@@ -144,7 +144,7 @@ export default function ssBribeCreate() {
   };
 
   const amountChanged = (event) => {
-    const value = event.target.value.replace(',', '.')
+    const value = formatInputAmount(event.target.value.replace(',', '.'))
     setAmountError(false);
     setAmount(value);
   };
