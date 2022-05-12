@@ -319,7 +319,7 @@ function MyComponent(props) {
                       alignItems: "center",
                     }}>
                     {activatingNetwork === name && (
-                      <Loader/>
+                      <Loader color={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'} />
                     )}
 
                     <Typography

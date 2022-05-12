@@ -32,8 +32,9 @@ import {
   Close, Settings, ArrowDropDownCircleOutlined,
 } from '@mui/icons-material';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
-import { formatSymbol } from '../../utils';
+import { formatSymbol, formatInputAmount } from '../../utils';
 import SwapIconBg from '../../ui/SwapIconBg';
+import AssetSelect from '../../ui/AssetSelect';
 
 export default function ssLiquidityManage() {
 
@@ -738,14 +739,14 @@ export default function ssLiquidityManage() {
   };
 
   const amount0Changed = (event) => {
-    const value = event.target.value.replace(',', '.')
+    const value = formatInputAmount(event.target.value.replace(',', '.'));
     setAmount0Error(false);
     setAmount0(value);
     callQuoteAddLiquidity(value, amount1, priorityAsset, stable, pair, asset0, asset1);
   };
 
   const amount1Changed = (event) => {
-    const value = event.target.value.replace(',', '.')
+    const value = formatInputAmount(event.target.value.replace(',', '.'));
     setAmount1Error(false);
     setAmount1(value);
     callQuoteAddLiquidity(amount0, value, priorityAsset, stable, pair, asset0, asset1);
@@ -788,7 +789,7 @@ export default function ssLiquidityManage() {
   };
 
   const withdrawAmountChanged = (event) => {
-    const value = event.target.value.replace(',', '.')
+    const value = formatInputAmount(event.target.value.replace(',', '.'));
     setWithdrawAmountError(false);
     setWithdrawAmount(value);
     if (value === '') {
@@ -942,7 +943,13 @@ export default function ssLiquidityManage() {
 
         <div className={`${classes.massiveInputContainer} ${(amountError || assetError) && classes.error}`}>
           <div className={classes.massiveInputAssetSelect}>
-            <AssetSelect type={type} value={assetValue} assetOptions={assetOptions} onSelect={onAssetSelect}/>
+            <AssetSelect
+              type={type}
+              value={assetValue}
+              assetOptions={assetOptions}
+              onSelect={onAssetSelect}
+              typeIcon={type === 'withdraw' ? 'double' : 'single'}
+            />
           </div>
 
           <InputBase
@@ -1391,8 +1398,41 @@ export default function ssLiquidityManage() {
             <>
               <div className={classes.amountsContainer}>
                 {renderMassiveInput('amount0', amount0, amount0Error, amount0Changed, asset0, null, assetOptions, onAssetSelect, amount0Focused, amount0Ref)}
+
+                {amount0Error && <div
+                  style={{marginTop: 20}}
+                  className={[
+                    classes.warningContainer,
+                    classes[`warningContainer--${appTheme}`],
+                    classes.warningContainerError].join(" ")}>
+                  <div className={[
+                    classes.warningDivider,
+                    classes.warningDividerError,
+                  ].join(" ")}>
+                  </div>
+                  <Typography
+                    className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+                    align="center">{amount0Error}</Typography>
+                </div>}
+
                 <div className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}></div>
                 {renderMassiveInput('amount1', amount1, amount1Error, amount1Changed, asset1, null, assetOptions, onAssetSelect, amount1Focused, amount1Ref)}
+
+                {amount1Error && <div
+                  style={{marginTop: 20}}
+                  className={[
+                    classes.warningContainer,
+                    classes[`warningContainer--${appTheme}`],
+                    classes.warningContainerError].join(" ")}>
+                  <div className={[
+                    classes.warningDivider,
+                    classes.warningDividerError,
+                  ].join(" ")}>
+                  </div>
+                  <Typography
+                    className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+                    align="center">{amount1Error}</Typography>
+                </div>}
               </div>
               {renderMediumInputToggle('stable', stable)}
 
@@ -1404,6 +1444,21 @@ export default function ssLiquidityManage() {
                 <div
                   className={[classes.controlItem, classes.controlPopover, classes[`controlPopover--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
                   {renderSmallInput('slippage', slippage, slippageError, onSlippageChanged)}
+                  {slippageError && <div
+                    style={{marginTop: 20}}
+                    className={[
+                      classes.warningContainer,
+                      classes[`warningContainer--${appTheme}`],
+                      classes.warningContainerError].join(" ")}>
+                    <div className={[
+                      classes.warningDivider,
+                      classes.warningDividerError,
+                    ].join(" ")}>
+                    </div>
+                    <Typography
+                      className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+                      align="center">{slippageError}</Typography>
+                  </div>}
                 </div>
 
                 <Popover
@@ -1414,7 +1469,7 @@ export default function ssLiquidityManage() {
                   anchorEl={anchorEl}
                   onClose={handleClosePopover}
                   anchorOrigin={{
-                    vertical: -300,
+                    vertical: -190,
                     horizontal: windowWidth > 530 ? -295 : -257,
                   }}>
                   <div
@@ -1491,6 +1546,8 @@ export default function ssLiquidityManage() {
                     }}
                   />
 
+                  {/*TODO: uncomment deadline then logic will be ready*/}
+                  {/*
                   <div className={[classes.slippageDivider, classes[`slippageDivider--${appTheme}`]].join(" ")}>
                   </div>
 
@@ -1544,7 +1601,7 @@ export default function ssLiquidityManage() {
                         color: appTheme === "dark" ? '#C6CDD2' : '#325569',
                       },
                     }}
-                  />
+                  />*/}
                 </Popover>
               </div>
 
@@ -1668,7 +1725,6 @@ export default function ssLiquidityManage() {
             pair && (pair && pair.gauge && pair.gauge.address) &&
             <>
               <Button
-                className={classes.buttonDeposit}
                 variant="contained"
                 size="large"
                 className={[
@@ -1686,7 +1742,6 @@ export default function ssLiquidityManage() {
               {advanced &&
                 <>
                   <Button
-                    className={classes.buttonDeposit}
                     variant="contained"
                     size="large"
                     className={[
@@ -1701,15 +1756,16 @@ export default function ssLiquidityManage() {
                       className={classes.actionButtonText}>{depositLoading ? `Depositing` : `Deposit LP`}</Typography>
                     {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
                   </Button>
+
                   <Button
                     variant="contained"
                     size="large"
                     className={[
-                      (BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
-                      (BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+                      ((amount0 === '' && amount1 === '') || BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
+                      ((amount0 === '' && amount1 === '') || BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
                     ].join(' ')}
                     color="primary"
-                    disabled={BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading}
+                    disabled={(amount0 === '' && amount1 === '') || BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading}
                     onClick={onStake}
                   >
                     <Typography
@@ -1800,475 +1856,5 @@ export default function ssLiquidityManage() {
         </div>
       }
     </Paper>
-  );
-}
-
-
-function AssetSelect({type, value, assetOptions, onSelect, disabled}) {
-
-  const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState('');
-  const [filteredAssetOptions, setFilteredAssetOptions] = useState([]);
-
-  const [manageLocal, setManageLocal] = useState(false);
-
-  const {appTheme} = useAppThemeContext();
-
-  const openSearch = () => {
-    if (disabled) {
-      return false;
-    }
-    setSearch('');
-    setOpen(true);
-  };
-
-  useEffect(async function () {
-
-    let ao = assetOptions.filter((asset) => {
-      if (search && search !== '') {
-        return asset.address.toLowerCase().includes(search.toLowerCase()) ||
-          asset.symbol.toLowerCase().includes(search.toLowerCase()) ||
-          asset.name.toLowerCase().includes(search.toLowerCase());
-      } else {
-        return true;
-      }
-    }).sort((a, b) => {
-      if (BigNumber(a.balance).lt(b.balance)) return 1;
-      if (BigNumber(a.balance).gt(b.balance)) return -1;
-      if (a.symbol < b.symbol) return -1;
-      if (a.symbol > b.symbol) return 1;
-      return 0;
-    });
-
-    setFilteredAssetOptions(ao);
-
-    //no options in our default list and its an address we search for the address
-    if (ao.length === 0 && search && search.length === 42) {
-      const baseAsset = await stores.stableSwapStore.getBaseAsset(event.target.value, true, true);
-    }
-
-    return () => {
-    };
-  }, [assetOptions, search]);
-
-
-  const onSearchChanged = async (event) => {
-    setSearch(event.target.value);
-  };
-
-  const onLocalSelect = (type, asset) => {
-    setSearch('');
-    setManageLocal(false);
-    setOpen(false);
-    onSelect(type, asset);
-  };
-
-  const onClose = () => {
-    setManageLocal(false);
-    setSearch('');
-    setOpen(false);
-  };
-
-  const toggleLocal = () => {
-    setManageLocal(!manageLocal);
-  };
-
-  const deleteOption = (token) => {
-    stores.stableSwapStore.removeBaseAsset(token);
-  };
-
-  const viewOption = (token) => {
-    window.open(`${ETHERSCAN_URL}token/${token.address}`, '_blank');
-  };
-
-  const renderManageOption = (type, asset, idx) => {
-    return (
-      <MenuItem
-        val={asset.address} key={asset.address + '_' + idx}
-        className={[classes.assetSelectMenu, classes[`assetSelectMenu--${appTheme}`]].join(' ')}>
-        <div className={classes.assetSelectMenuItem}>
-          <div className={classes.displayDualIconContainerSmall}>
-            <img
-              className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
-              alt=""
-              src={asset ? `${asset.logoURI}` : ''}
-              height="60px"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-              }}
-            />
-          </div>
-        </div>
-        <div className={classes.assetSelectIconName}>
-          <Typography variant="h5">{asset ? asset.symbol : ''}</Typography>
-          <Typography variant="subtitle1" color="textSecondary">{asset ? asset.name : ''}</Typography>
-        </div>
-        <div className={classes.assetSelectActions}>
-          <IconButton onClick={() => {
-            deleteOption(asset);
-          }}>
-            <DeleteOutline/>
-          </IconButton>
-          <IconButton onClick={() => {
-            viewOption(asset);
-          }}>
-            ↗
-          </IconButton>
-        </div>
-      </MenuItem>
-    );
-  };
-
-  const renderAssetOption = (type, asset, idx) => {
-    return (
-      <MenuItem
-        val={asset.address}
-        key={asset.address + '_' + idx}
-        className={[classes.assetSelectMenu, classes[`assetSelectMenu--${appTheme}`]].join(' ')}
-        onClick={() => {
-          onLocalSelect(type, asset);
-        }}>
-        <div className={classes.assetSelectMenuItem}>
-          {/*<div className={classes.displayDualIconContainerSmall}>
-            <img
-              className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
-              alt=""
-              src={asset ? `${asset.logoURI}` : ''}
-              height="60px"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-              }}
-            />
-          </div>*/}
-
-          <div className={classes.displayDualIconContainerSmall}>
-            <img
-              className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
-              alt=""
-              src={asset ? `${asset?.token0?.logoURI}` : ''}
-              height="30px"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-              }}
-            />
-
-            <img
-              className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
-              alt=""
-              src={asset ? `${asset?.token1?.logoURI}` : ''}
-              height="30px"
-              style={{marginLeft: "-15px"}}
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-              }}
-            />
-          </div>
-        </div>
-        <div className={classes.assetSelectIconName}>
-          <Typography
-            variant="h5"
-            style={{
-              fontWeight: 500,
-              fontSize: 14,
-              lineHeight: '120%',
-              color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-            }}>
-            {asset ? asset.symbol : ''}
-          </Typography>
-
-          <Typography
-            variant="subtitle1"
-            style={{
-              fontWeight: 400,
-              fontSize: 12,
-              lineHeight: '120%',
-              color: appTheme === "dark" ? '#7C838A' : '#5688A5',
-            }}>
-            {asset ? asset.name : ''}
-          </Typography>
-        </div>
-
-        <div className={classes.assetSelectBalance}>
-          <Typography
-            variant="h5"
-            style={{
-              fontWeight: 500,
-              fontSize: 14,
-              lineHeight: '120%',
-              color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-            }}>
-            {(asset && asset.balance) ? formatCurrency(asset.balance) : '0.00'}
-          </Typography>
-
-          <Typography
-            variant="subtitle1"
-            style={{
-              fontWeight: 400,
-              fontSize: 14,
-              lineHeight: '120%',
-              color: appTheme === "dark" ? '#7C838A' : '#5688A5',
-            }}>
-            {'Balance'}
-          </Typography>
-        </div>
-      </MenuItem>
-    );
-  };
-
-  const renderManageLocal = () => {
-    return (
-      <>
-        <div className={classes.searchInline}>
-          <TextField
-            autoFocus
-            variant="outlined"
-            fullWidth
-            placeholder="Search by name or paste address"
-            value={search}
-            onChange={onSearchChanged}
-            InputProps={{
-              style: {
-                background: 'transparent',
-                border: '1px solid',
-                borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-                borderRadius: 0,
-              },
-              classes: {
-                root: classes.searchInput,
-              },
-              startAdornment: <InputAdornment position="start">
-                <Search style={{
-                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                }}/>
-              </InputAdornment>,
-            }}
-            inputProps={{
-              style: {
-                padding: '10px',
-                borderRadius: 0,
-                border: 'none',
-                fontSize: '14px',
-                lineHeight: '120%',
-                color: '#86B9D6',
-              },
-            }}
-          />
-        </div>
-
-        <div className={classes.assetSearchResults}>
-          {
-            filteredAssetOptions ? filteredAssetOptions.filter((option) => {
-              return option.local === true;
-            }).map((asset, idx) => {
-              return renderManageOption(type, asset, idx);
-            }) : []
-          }
-        </div>
-
-        <div className={classes.manageLocalContainer}>
-          <Button
-            onClick={toggleLocal}>
-            Back to Assets
-          </Button>
-        </div>
-      </>
-    );
-  };
-
-  const renderOptions = (type) => {
-    return (
-      <>
-        <div className={classes.searchInline}>
-          <TextField
-            autoFocus
-            variant="outlined"
-            fullWidth
-            placeholder="Search by name or paste address"
-            value={search}
-            onChange={onSearchChanged}
-            InputProps={{
-              style: {
-                background: 'transparent',
-                border: '1px solid',
-                borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-                borderRadius: 0,
-              },
-              classes: {
-                root: classes.searchInput,
-              },
-              startAdornment: <InputAdornment position="start">
-                <Search style={{
-                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                }}/>
-              </InputAdornment>,
-            }}
-            inputProps={{
-              style: {
-                padding: '10px',
-                borderRadius: 0,
-                border: 'none',
-                fontSize: '14px',
-                lineHeight: '120%',
-                color: '#86B9D6',
-              },
-            }}
-          />
-        </div>
-        <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
-          {
-            filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
-              if (BigNumber(a.balance).lt(b.balance)) return 1;
-              if (BigNumber(a.balance).gt(b.balance)) return -1;
-              if (a.symbol.toLowerCase() < b.symbol.toLowerCase()) return -1;
-              if (a.symbol.toLowerCase() > b.symbol.toLowerCase()) return 1;
-              return 0;
-            }).map((asset, idx) => {
-              return renderAssetOption(type, asset, idx);
-            }) : []
-          }
-        </div>
-
-        <div className={classes.manageLocalContainer}>
-          <Button
-            style={{
-              padding: 0,
-              fontWeight: 500,
-              fontSize: 14,
-              color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
-            }}
-            onClick={toggleLocal}>
-            Manage local assets
-          </Button>
-        </div>
-      </>
-    );
-  };
-
-  return (
-    <React.Fragment>
-      <div className={classes.displaySelectContainer} onClick={() => {
-        openSearch();
-      }}>
-        {type !== 'withdraw' &&
-          <div className={classes.assetSelectMenuItem}>
-            <div
-              className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
-              <SwapIconBg/>
-
-              <img
-                className={classes.displayAssetIcon}
-                alt=""
-                src={value ? `${value.logoURI}` : ''}
-                height="100px"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                }}
-              />
-            </div>
-          </div>
-        }
-
-        {type === 'withdraw' &&
-          <div className={classes.assetSelectMenuItem}>
-            <div
-              className={classes.displayDualIconContainer}>
-              <img
-                className={[classes.displayAssetIcon, classes.displayAssetIconWithdraw, classes[`displayAssetIconWithdraw--${appTheme}`]].join(' ')}
-                alt=""
-                src={value ? `${value?.token0?.logoURI}` : ''}
-                height="100px"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                }}
-              />
-              <img
-                className={[classes.displayAssetIcon, classes.displayAssetIconSec, classes.displayAssetIconWithdraw, classes[`displayAssetIconWithdraw--${appTheme}`]].join(' ')}
-                alt=""
-                src={value ? `${value?.token1?.logoURI}` : ''}
-                height="100px"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                }}
-              />
-            </div>
-          </div>
-        }
-      </div>
-
-      <Dialog
-        aria-labelledby="simple-dialog-title"
-        open={open}
-        classes={{
-          paperScrollPaper: classes.paperScrollPaper,
-        }}
-        style={{borderRadius: 0}}
-        onClick={(e) => {
-          if (e.target.classList.contains('MuiDialog-container')) {
-            onClose();
-          }
-        }}
-      >
-        <div
-          className={classes.dialogContainer}
-          style={{
-            width: 460,
-            height: 710,
-            background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-            border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
-            borderRadius: 0,
-          }}>
-          <DialogTitle
-            className={classes.dialogTitle}
-            style={{
-              padding: 30,
-              paddingBottom: 0,
-              fontWeight: 500,
-              fontSize: 18,
-              lineHeight: '140%',
-              color: '#0A2C40',
-            }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: 20,
-            }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-              }}>
-                {manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
-                  marginRight: 10,
-                  width: 18,
-                  height: 18,
-                  cursor: 'pointer',
-                }}/>}
-                {manageLocal ? 'Manage local assets' : (type === 'withdraw' ? 'Select a liquidity pair' : 'Select a token')}
-              </div>
-
-              <Close
-                style={{
-                  cursor: 'pointer',
-                  color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-                }}
-                onClick={onClose}/>
-            </div>
-          </DialogTitle>
-
-          <DialogContent className={classes.dialogContent}>
-            {!manageLocal && renderOptions(type)}
-            {manageLocal && renderManageLocal()}
-          </DialogContent>
-        </div>
-      </Dialog>
-    </React.Fragment>
   );
 }

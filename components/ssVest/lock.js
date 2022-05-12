@@ -15,7 +15,7 @@ import {
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import moment from 'moment';
-import { formatCurrency } from '../../utils';
+import { formatCurrency, formatInputAmount } from '../../utils';
 import classes from "./ssVest.module.css";
 import stores from '../../stores';
 import {
@@ -133,7 +133,7 @@ export default function ssLock({govToken, veToken}) {
   };
 
   const onAmountChanged = (event) => {
-    const value = event.target.value.replace(',', '.')
+    const value = formatInputAmount(event.target.value.replace(',', '.'))
     setAmountError(false);
     setAmount(value);
   };

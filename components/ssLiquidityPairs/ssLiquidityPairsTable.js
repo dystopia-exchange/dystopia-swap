@@ -246,8 +246,7 @@ function EnhancedTableHead(props) {
                     sortDirection={orderBy === headCell.id ? order : false}
                     style={{
                       background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
-                      borderBottom: '1px solid #9BC9E4',
-                      borderColor: appTheme === 'dark' ? '#5F7285' : '#9BC9E4',
+                      borderBottom: `1px solid ${appTheme === 'dark' ? '#5F7285' : '#9BC9E4'}`,
                       zIndex: 10,
                     }}>
                     <TableSortLabel
@@ -274,8 +273,7 @@ function EnhancedTableHead(props) {
                   : <StyledTableCell
                     style={{
                       background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
-                      borderBottom: '1px solid #9BC9E4',
-                      borderColor: appTheme === 'dark' ? '#5F7285' : '#9BC9E4',
+                      borderBottom: `1px solid ${appTheme === 'dark' ? '#5F7285' : '#9BC9E4'}`,
                       color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
                     }}
                     key={headCell.id}
@@ -434,22 +432,28 @@ const useStyles = makeStyles({
   statusSafe: {
     color: 'green',
   },
-  img1Logo: {
-    position: 'absolute',
-    left: '0px',
-    top: '0px',
-    outline: '1px solid #DBE6EC',
+  imgLogoContainer: {
+    padding: 1,
+    width: 39,
+    height: 39,
     borderRadius: '100px',
     background: 'rgb(25, 33, 56)',
+    border: '2px solid #DBE6EC',
   },
-  img2Logo: {
-    position: 'absolute',
-    left: '28px',
-    zIndex: '1',
-    top: '0px',
-    outline: '1px solid #DBE6EC',
+  'imgLogoContainer--dark': {
+    border: '2px solid #151718',
+    ["@media (max-width:660px)"]: {
+      border: '2px solid #24292d',
+    },
+  },
+  imgLogoContainer2: {
+    marginLeft: -10,
+  },
+  imgLogo: {
+    width: 37,
+    height: 37,
+    margin: -2,
     borderRadius: '100px',
-    background: 'rgb(25, 33, 56)',
   },
   doubleImages: {
     display: 'flex',
@@ -737,7 +741,7 @@ const useStyles = makeStyles({
       padding: '5px 10px',
     },
   },
-})
+});
 
 const getLocalToggles = () => {
   let localToggles = {
@@ -1170,11 +1174,6 @@ export default function EnhancedTable({pairs}) {
     setExpanded(newExpanded ? panel : false);
   };
 
-  console.log(
-    '------',
-    stableSort(filteredPairs, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-  )
-
   return (
     <>
       <EnhancedTableToolbar
@@ -1229,34 +1228,40 @@ export default function EnhancedTable({pairs}) {
                           <StickyTableCell
                             style={{
                               background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                              border: '1px dashed #CFE5F2',
-                              borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             }}
                             className={classes.cell}>
                             <div className={classes.inline}>
                               <div className={classes.doubleImages}>
-                                <img
-                                  className={classes.img1Logo}
-                                  src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
-                                  width="37"
-                                  height="37"
-                                  alt=""
-                                  onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                                  }}
-                                />
-                                <img
-                                  className={classes.img2Logo}
-                                  src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
-                                  width="37"
-                                  height="37"
-                                  alt=""
-                                  onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                                  }}
-                                />
+                                <div
+                                  className={[classes.imgLogoContainer, classes[`imgLogoContainer--${appTheme}`]].join(' ')}>
+                                  <img
+                                    className={classes.imgLogo}
+                                    src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
+                                    width="37"
+                                    height="37"
+                                    alt=""
+                                    onError={(e) => {
+                                      e.target.onerror = null;
+                                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                                    }}
+                                  />
+                                </div>
+
+                                <div
+                                  className={[classes.imgLogoContainer, classes.imgLogoContainer2, classes[`imgLogoContainer--${appTheme}`]].join(' ')}>
+                                  <img
+                                    className={classes.imgLogo}
+                                    src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
+                                    width="37"
+                                    height="37"
+                                    alt=""
+                                    onError={(e) => {
+                                      e.target.onerror = null;
+                                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                                    }}
+                                  />
+                                </div>
                               </div>
                               <div>
                                 <Typography
@@ -1289,8 +1294,7 @@ export default function EnhancedTable({pairs}) {
                             className={[classes.cell, classes.hiddenMobile].join(' ')}
                             style={{
                               background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                              border: '1px dashed #CFE5F2',
-                              borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                               overflow: 'hidden',
                             }}
                             align="right">
@@ -1402,8 +1406,7 @@ export default function EnhancedTable({pairs}) {
                             className={[classes.cell, classes.hiddenMobile].join(' ')}
                             style={{
                               background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                              border: '1px dashed #CFE5F2',
-                              borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             }}
                             align="right">
                             {(row && row.balance && row.totalSupply) &&
@@ -1499,8 +1502,7 @@ export default function EnhancedTable({pairs}) {
                               className={[classes.cell, classes.hiddenMobile].join(' ')}
                               style={{
                                 background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                                border: '1px dashed #CFE5F2',
-                                borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                                borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                               }}
                               align="right">
                               {(row && row.gauge && row.gauge.balance && row.gauge.totalSupply) &&
@@ -1599,8 +1601,7 @@ export default function EnhancedTable({pairs}) {
                               className={[classes.cell, classes.hiddenMobile].join(' ')}
                               style={{
                                 background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                                border: '1px dashed #CFE5F2',
-                                borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                                borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                               }}
                               align="right">
                               <Typography
@@ -1621,8 +1622,7 @@ export default function EnhancedTable({pairs}) {
                             className={[classes.cell, classes.hiddenSmallMobile].join(' ')}
                             style={{
                               background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                              border: '1px dashed #CFE5F2',
-                              borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             }}
                             align="right">
                             <div
@@ -1736,8 +1736,7 @@ export default function EnhancedTable({pairs}) {
                               className={[classes.cell, classes.hiddenMobile].join(' ')}
                               style={{
                                 background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                                border: '1px dashed #CFE5F2',
-                                borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                                borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                               }}
                               align="right">
                               <div
@@ -1852,8 +1851,7 @@ export default function EnhancedTable({pairs}) {
                               className={[classes.cell, classes.hiddenMobile].join(' ')}
                               style={{
                                 background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                                border: '1px dashed #CFE5F2',
-                                borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                                borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                               }}
                               align="right">
                               <Typography
@@ -1874,8 +1872,7 @@ export default function EnhancedTable({pairs}) {
                             className={classes.cell}
                             style={{
                               background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                              border: '1px dashed #CFE5F2',
-                              borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             }}
                             align="right">
                             <Button
@@ -1968,28 +1965,35 @@ export default function EnhancedTable({pairs}) {
                         }}
                         className={['g-flex', 'g-flex--align-center'].join(' ')}>
                         <div className={classes.doubleImages}>
-                          <img
-                            className={classes.img1Logo}
-                            src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
-                            width="37"
-                            height="37"
-                            alt=""
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                            }}
-                          />
-                          <img
-                            className={classes.img2Logo}
-                            src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
-                            width="37"
-                            height="37"
-                            alt=""
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                            }}
-                          />
+                          <div
+                            className={[classes.imgLogoContainer, classes[`imgLogoContainer--${appTheme}`]].join(' ')}>
+                            <img
+                              className={classes.imgLogo}
+                              src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
+                              width="37"
+                              height="37"
+                              alt=""
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                              }}
+                            />
+                          </div>
+
+                          <div
+                            className={[classes.imgLogoContainer, classes.imgLogoContainer2, classes[`imgLogoContainer--${appTheme}`]].join(' ')}>
+                            <img
+                              className={classes.imgLogo}
+                              src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
+                              width="37"
+                              height="37"
+                              alt=""
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                              }}
+                            />
+                          </div>
                         </div>
 
                         <div>

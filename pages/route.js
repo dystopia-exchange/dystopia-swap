@@ -2,7 +2,7 @@ import Swap from "./swap";
 import Liquidity from "./liquidity";
 import LiquidityAddress from "./liquidity/[address]";
 import Vest from "./vest";
-import Migrate from './migrate'
+// import Migrate from './migrate'
 import Vote from "./vote";
 import Rewards from "./rewards";
 import Whitelist from "./whitelist";

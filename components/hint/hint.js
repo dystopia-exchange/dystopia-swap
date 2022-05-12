@@ -16,7 +16,7 @@ function Hint(props) {
     <div
       style={{
         cursor: 'pointer',
-        '-webkit-tap-highlight-color': 'rgba(255, 255, 255, 0)',
+        WebkitTapHighlightColor: 'rgba(255, 255, 255, 0)',
       }}
       className={['g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}
       onMouseOut={handleClose}

@@ -5,7 +5,7 @@ import classes from "./ssVest.module.css";
 import moment from 'moment';
 import BigNumber from 'bignumber.js';
 import { ArrowBack, ArrowBackIosNew } from '@mui/icons-material';
-import { formatCurrency } from '../../utils';
+import { formatCurrency, formatInputAmount } from '../../utils';
 import VestingInfo from "./vestingInfo";
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import stores from '../../stores';
@@ -108,9 +108,9 @@ export default function existingLock({nft, govToken, veToken}) {
   };
 
   const amountChanged = (event) => {
-    const value = event.target.value.replace(',', '.')
-    setAmount(value)
-    updateLockAmount(value)
+    const value = formatInputAmount(event.target.value.replace(',', '.'));
+    setAmount(value);
+    updateLockAmount(value);
   };
 
   const handleDateChange = (event) => {
