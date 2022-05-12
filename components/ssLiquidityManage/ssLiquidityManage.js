@@ -283,9 +283,9 @@ export default function ssLiquidityManage() {
         setAmount1('');
       } else {
         if (invert) {
-          amountB = BigNumber(amountA).times(parseInt(pp.reserve0)).div(parseInt(pp.reserve1)).toFixed(parseInt(pp.token0.decimals) > 6 ? 6 : parseInt(pp.token0.decimals));
+          amountB = BigNumber(amountA).times(parseFloat(pp.reserve0)).div(parseFloat(pp.reserve1)).toFixed(parseFloat(pp.token0.decimals) > 6 ? 6 : parseFloat(pp.token0.decimals));
         } else {
-          amountB = BigNumber(amountA).times(parseInt(pp.reserve1)).div(parseInt(pp.reserve0)).toFixed(parseInt(pp.token1.decimals) > 6 ? 6 : parseInt(pp.token1.decimals));
+          amountB = BigNumber(amountA).times(parseFloat(pp.reserve1)).div(parseFloat(pp.reserve0)).toFixed(parseFloat(pp.token1.decimals) > 6 ? 6 : parseFloat(pp.token1.decimals));
         }
         setAmount1(amountB);
       }
@@ -295,9 +295,9 @@ export default function ssLiquidityManage() {
         setAmount0('');
       } else {
         if (invert) {
-          amountA = BigNumber(amountB).times(parseInt(pp.reserve1)).div(parseInt(pp.reserve0)).toFixed(parseInt(pp.token1.decimals) > 6 ? 6 : parseInt(pp.token1.decimals));
+          amountA = BigNumber(amountB).times(parseFloat(pp.reserve1)).div(parseFloat(pp.reserve0)).toFixed(parseFloat(pp.token1.decimals) > 6 ? 6 : parseFloat(pp.token1.decimals));
         } else {
-          amountA = BigNumber(amountB).times(parseInt(pp.reserve0)).div(parseInt(pp.reserve1)).toFixed(parseInt(pp.token0.decimals) > 6 ? 6 : parseInt(pp.token0.decimals));
+          amountA = BigNumber(amountB).times(parseFloat(pp.reserve0)).div(parseFloat(pp.reserve1)).toFixed(parseFloat(pp.token0.decimals) > 6 ? 6 : parseFloat(pp.token0.decimals));
         }
         setAmount0(amountA);
       }
