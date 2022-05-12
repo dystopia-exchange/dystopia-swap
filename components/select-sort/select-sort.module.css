@@ -1,6 +1,6 @@
 .sortSelect {
   min-width: 215px !important;
-  padding: 9.5px 35px 9.5px 60px;
+  padding: 0 20px 0 60px;
   background: #B9DFF5 !important;
   border: 1px solid #0B5E8E !important;
   border-radius: 100px !important;
@@ -8,7 +8,7 @@
 
 .sortSelect--dark {
   background: #151718 !important;
-  border: 1px solid #5F7285 !important;
+  border: 1px solid #4CADE6 !important;
 }
 
 .sortSelect > svg,
@@ -22,15 +22,17 @@
 }
 
 .sortSelectInput {
-  padding: 3px !important;
+  padding: 15px 3px 15.5px 3px !important;
   border: none !important;
   border-radius: 0 !important;
+  min-height: auto !important;
 }
 
 .sortSelectInput--dark {
-  padding: 3px !important;
+  padding: 15px 3px 15.5px 3px !important;
   border: none !important;
   border-radius: 0 !important;
+  min-height: auto !important;
 }
 
 .list,

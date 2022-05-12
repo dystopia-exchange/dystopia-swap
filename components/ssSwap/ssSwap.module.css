@@ -1,11 +1,6 @@
-.swapContainer {
-  max-width: 485px;
-  width: 100%;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  -webkit-box-shadow: 0 13px 30px 0 rgba(7, 9, 18, 0.1) !important;
-  box-shadow: 0 13px 30px 0 rgba(7, 9, 18, 0.1) !important;
+input[type=number].massiveInputAmount::-webkit-inner-spin-button,
+input[type=number].massiveInputAmount::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
 }
 
 .smallerText {
@@ -34,22 +29,6 @@
   width: 100%;
 }
 
-.smallInputContainer {
-  display: flex;
-  flex-wrap: wrap;
-  border-radius: 10px;
-  width: 100%;
-  align-items: center;
-  background: rgb(33, 43, 72);
-  max-width: 80px;
-  min-height: 50px;
-  padding: 20px 12px 4px 12px;
-}
-
-.dialogContent {
-  padding: 20px 30px 30px !important;
-}
-
 .walletIcon {
   width: 18px;
   height: 18px;
@@ -63,10 +42,6 @@
   align-items: center;
 }
 
-.whiteBackground {
-  background: #fff;
-}
-
 .massiveInputAssetSelect {
   height: 100%;
 }
@@ -77,166 +52,6 @@
   top: 76px;
   border: none !important;
   margin-right: 20px !important;
-}
-
-.massiveInputAmountField {
-  font-style: normal !important;
-  font-weight: 500 !important;
-  font-size: 30px !important;
-  line-height: 100% !important;
-  color: var(--input-font-color-light);
-  padding: 8px !important;
-}
-
-.massiveInputAddress {
-  min-width: 100%;
-  border-top: 1px solid rgba(128, 128, 128, 0.5);
-}
-
-.displaySelectContainer {
-  padding: 61px 20px 20px;
-  cursor: pointer;
-}
-
-.displayDualIconContainer {
-  position: relative;
-  width: 90px;
-  height: 90px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: fill 0.16s ease;
-  fill: #9BC9E4;
-}
-
-.displayDualIconContainer:hover {
-  fill: #0B5E8E;
-}
-
-.displayDualIconContainer:active {
-  fill: #86B9D6;
-}
-
-.displayDualIconContainer--dark {
-  fill: #2D3741;
-}
-
-.displayDualIconContainer--dark:hover {
-  fill: #4CADE6;
-}
-
-.displayDualIconContainer--dark:active {
-  fill: #5F7285;
-}
-
-.displayDualIconContainerConfirm {
-  width: 100px;
-  position: relative;
-  margin: 0 auto;
-}
-
-.displayDualIconContainerSmall {
-  width: 50px;
-  height: 50px;
-  position: relative;
-  margin-right: 15px;
-}
-
-.displaySelect {
-  display: flex;
-  align-items: center;
-}
-
-.displaySelectContent {
-  flex: 1;
-  display: flex;
-  align-items: center;
-}
-
-.searchContainer {
-  padding: 30px 30px 0;
-  max-height: 710px;
-  overflow-y: scroll;
-  background: #DBE6EC;
-  border: 1px solid #86B9D6;
-  border-bottom: none;
-}
-
-.manageLocalContainer {
-  position: absolute;
-  bottom: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 20px;
-}
-
-.manageLocalBtn {
-  padding: 0 !important;
-  font-weight: 500 !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
-  color: #0B5E8E !important;
-}
-
-.manageLocalBtn--dark {
-  color: #4CADE6 !important;
-}
-
-.assetSearchResults {
-  width: 100%;
-  max-height: 490px;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  margin-top: 30px;
-  min-width: 390px;
-  position: relative;
-}
-
-.assetSearchResults--light {
-  background: #9BC9E4;
-  border: 1px solid #86B9D6;
-}
-
-.assetSearchResults--dark {
-  background: #2D3741;
-  border: 1px solid #5F7285;
-}
-
-.withBalanceToggle {
-  margin-left: 12px !important;
-}
-
-.displayAssetIcon {
-  width: 60px;
-  height: 60px;
-  border-radius: 100px;
-}
-
-.displayAssetIconSmall {
-  border: 1px solid rgba(126, 153, 176, 0.2);
-  border-radius: 30px;
-  background: rgb(33, 43, 72);
-  padding: 6px;
-}
-
-.displayChainIcon {
-  border: 1px solid rgba(126, 153, 176, 0.2);
-  border-radius: 20px;
-  position: absolute;
-  top: 60px;
-  right: 0px;
-  background: rgb(33, 43, 72);
-}
-
-.displayChainIconSmall {
-  border: 1px solid rgba(126, 153, 176, 0.2);
-  border-radius: 20px;
-  position: absolute;
-  top: 30px;
-  right: -5px;
-  background: rgb(33, 43, 72);
 }
 
 .inputBalanceTextContainer {
@@ -388,157 +203,6 @@
   -webkit-text-fill-color: #C6CDD2 !important;
 }
 
-.addressInput {
-  font-size: 16px !important;
-  padding: 12px;
-}
-
-.backButton {
-  min-width: 100px;
-}
-
-.header {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.confirmSwap {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.swapConfirmContainer {
-  margin-top: 12px;
-}
-
-.arrowIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-}
-
-.chainDescrPadding {
-  padding-top: 12px;
-  padding-bottom: 24px;
-}
-
-.swapConfirmSide {
-  border: 1px solid rgba(128, 128, 128, 0.5);
-  border-radius: 10px;
-  padding: 24px 6px;
-}
-
-.addressField {
-  border-radius: 10px;
-  border: 1px solid rgba(128, 128, 128, 0.5);
-  padding: 6px 12px;
-  width: 100%;
-  margin: 12px 0px !important;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 44px;
-  cursor: pointer;
-}
-
-.swapDepositInfo {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.qrPreview {
-  padding: 24px;
-  height: 148px;
-  box-sizing: content-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.textFlex {
-
-}
-
-.flexy2 {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.flexy {
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-}
-
-.assetSelectMenu {
-  padding: 10px !important;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1px !important;
-  transition: all ease 300ms;
-}
-
-.assetSelectMenu--light {
-  background: #B9DFF5 !important;
-  box-shadow: 0 1px 0 rgba(11, 94, 142, 0);
-}
-
-.assetSelectMenu--light:hover {
-  background: #CFE5F2 !important;
-  box-shadow: 0 1px 0 rgba(11, 94, 142, 0.5);
-}
-
-.assetSelectMenu--dark {
-  background: #24292D !important;
-  box-shadow: 0 1px 0 rgba(76, 173, 229, 0);
-}
-
-.assetSelectMenu--dark:hover {
-  background: #2D3741 !important;
-  box-shadow: 0 1px 0 rgba(76, 173, 229, 0.5);
-}
-
-.txContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex: 1;
-  width: 100%;
-}
-
-.txInfoContainer {
-  margin-left: 12px;
-  flex: 1;
-}
-
-.assetSelectBalance {
-  flex: 1;
-  margin-top: 4px;
-  margin-left: 48px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.assetSelectActions {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.confirmationsText {
-  padding-bottom: 12px;
-}
-
 .swapIconContainer {
   width: 80px;
   height: 80px;
@@ -550,89 +214,6 @@
   z-index: 1;
   cursor: pointer;
   -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
-}
-
-.swapInfoContainer {
-  width: 485px;
-}
-
-.swapInfo {
-  display: flex;
-  flex-direction: column;
-  border-radius: 10px;
-  padding: 12px;
-  width: 100%;
-}
-
-.swapInfoRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 12px;
-  padding-top: 12px;
-  border-bottom: 1px solid rgba(128, 128, 128, 0.5);
-}
-
-.inlineText {
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-.swapDirection {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 12px 0px;
-}
-
-.swapDirectionHead {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.rightArrow {
-  margin-right: 18px;
-  margin-left: 18px;
-}
-
-.marginRightNone {
-  margin-right: 0;
-}
-
-.skelly {
-  margin-bottom: 12px;
-  margin-top: 12px;
-}
-
-.skelly1 {
-  margin-bottom: 6px;
-  margin-top: 6px;
-}
-
-.skelly2 {
-  margin-left: 24px;
-}
-
-.inline {
-  margin-top: 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.swapStatusContainer {
-  padding: 24px 24px 12px 24px;
-  width: 500px;
-  border-radius: 10px;
-}
-
-.info {
-  border-left: 5px solid #2F80ED;
-}
-
-.success {
-  border-left: 5px solid #4caf50;
 }
 
 .headerContainer {
@@ -841,30 +422,6 @@
   color: #A3A9BA !important;
 }
 
-.assetSymbolName {
-  font-weight: 500 !important;
-  font-size: 24px !important;
-  line-height: 120% !important;
-}
-
-.assetSymbolName2 {
-  font-weight: 400 !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
-}
-
-.assetSelectBalanceText {
-  font-weight: 500 !important;
-  font-size: 18px !important;
-  line-height: 120% !important;
-}
-
-.assetSelectBalanceText2 {
-  font-weight: 400 !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
-}
-
 .route {
   display: flex;
   align-items: center;
@@ -969,25 +526,6 @@
   border: 1px solid #5F7285;
 }
 
-.assetOptionIcon {
-  width: 50px;
-  height: 50px;
-  padding: 4px;
-  border-radius: 100px;
-  border: 1px solid #9BC9E4;
-  background: #CFE5F2;
-}
-
-.assetOptionIcon--light {
-  background: #CFE5F2;
-  border: 1px solid #86B9D6;
-}
-
-.assetOptionIcon--dark {
-  background: #304E61;
-  border: 1px solid #5F7285;
-}
-
 .quoteLoaderDivider,
 .warningDivider {
   position: absolute;
@@ -1059,69 +597,9 @@
   color: #A2E3A9 !important;
 }
 
-
 .quoteLoaderError {
   min-width: 100%;
   border: 2px solid #DB3434;
-}
-
-.searchInput {
-  height: 40px;
-  background: #DBE6EC !important;
-  border: 1px solid #86B9D6 !important;
-  border-radius: 0 !important;
-}
-
-.searchInput:hover {
-  background: #B9DFF5 !important;
-  border: 1px solid #86B9D6 !important;
-}
-
-.searchInput:active {
-  background: #B9DFF5 !important;
-  border: 1px solid #0B5E8E !important;
-}
-
-.searchInput:focus {
-  background: #B9DFF5 !important;
-  border: 1px solid #FFFFFF !important;
-}
-
-.searchInput--dark {
-  background: #151718 !important;
-  border: 1px solid #5F7285 !important;
-}
-
-.searchInput--dark:hover {
-  background: #24292D !important;
-  border: 1px solid #5F7285 !important;
-}
-
-.searchInput--dark:active {
-  background: #24292D !important;
-  border: 1px solid #4CADE6 !important;
-}
-
-.searchInput:focus {
-  background: #24292D !important;
-  border: 1px solid #FFFFFF !important;
-}
-
-.searchInput > fieldset {
-  border: none;
-}
-
-.searchInputText {
-  padding: 10px !important;
-  border-radius: 0 !important;
-  border: none !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
-  color: #325569 !important;
-}
-
-.searchInputText--dark {
-  color: #C6CDD2 !important;
 }
 
 @media (max-width: 470px) {
@@ -1188,20 +666,6 @@
     left: 94px;
     top: 10px;
     width: 172px;
-  }
-
-  .displayDualIconContainer {
-    width: 60px;
-    height: 60px;
-  }
-
-  .displayAssetIcon {
-    width: 40px;
-    height: 40px;
-  }
-
-  .displaySelectContainer {
-    padding: 43px 10px 10px;
   }
 
   .largeInput {
@@ -1274,41 +738,5 @@
     bottom: -76px;
     transform: translateX(-50%);
     margin-left: 0 !important;
-  }
-
-  .dialogContainer {
-    width: 100% !important;
-  }
-
-  .dialogTitle {
-    padding: 20px 20px 0;
-  }
-
-  .displayDualIconContainerSmall,
-  .assetOptionIcon {
-    width: 40px;
-    height: 40px;
-  }
-
-  .dialogContent {
-    padding: 20px !important;
-  }
-
-  .assetSelectBalance {
-    margin-left: 10px;
-  }
-
-  .assetSymbolName,
-  .assetSelectBalanceText {
-    font-size: 14px !important;
-  }
-
-  .assetSymbolName2,
-  .assetSelectBalanceText2 {
-    font-size: 12px !important;
-  }
-
-  .assetSearchResults {
-    min-width: auto;
   }
 }

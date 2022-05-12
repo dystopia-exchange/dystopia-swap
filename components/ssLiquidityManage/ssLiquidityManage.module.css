@@ -337,7 +337,7 @@
 
 .popoverPaper {
   width: 337px !important;
-  height: 300px !important;
+  height: 190px !important;
   padding: 30px !important;
   background: #DBE6EC !important;
   border: 1px solid #0B5E8E !important;
@@ -1284,7 +1284,7 @@
   }
 }
 
-@media (max-width: 530px) {
+@media (max-width: 470px) {
   .container,
   .container3,
   .reAddPadding3 {

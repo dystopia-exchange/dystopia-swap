@@ -101,13 +101,13 @@ const BtnSwap = (props) => {
             >
               <mask id="path-1-inside-1_471_7693" fill="white">
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   clip-rule="evenodd"
                   d="M227 65L292 7.37235e-06L227 0H65L0 65L227 65Z"
                 />
               </mask>
               <path
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 clip-rule="evenodd"
                 d="M227 65L292 7.37235e-06L227 0H65L0 65L227 65Z"
                 fill={appTheme === "dark" ? borderColorDark : borderColorLight}
@@ -131,14 +131,14 @@ const BtnSwap = (props) => {
               <g
                 id="Page-1"
                 stroke="none"
-                stroke-width="1"
+                strokeWidth="1"
                 fill="none"
-                fill-rule="evenodd"
+                fillRule="evenodd"
               >
                 <rect
                   id="Rectangle"
                   fill={appTheme === "dark" ? borderColorDark : borderColorLight}
-                  fill-rule="nonzero"
+                  fillRule="nonzero"
                   x="0.5"
                   y="0.500001399"
                   width="319"
@@ -155,13 +155,13 @@ const BtnSwap = (props) => {
                 <polygon
                   id="Path"
                   fill={appTheme === "dark" ? bgColorDark : bgColorLight}
-                  fill-rule="nonzero"
+                  fillRule="nonzero"
                   points="0 16.0000014 16 1.39876e-06 1.39876e-06 1.77635684e-15"
                 ></polygon>
                 <polygon
                   id="Path"
                   fill={appTheme === "dark" ? bgColorDark : bgColorLight}
-                  fill-rule="nonzero"
+                  fillRule="nonzero"
                   points="320 34.0000014 304 50.0000014 320 50.0000014"
                 ></polygon>
               </g>

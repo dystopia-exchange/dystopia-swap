@@ -531,7 +531,7 @@ const useStyles = makeStyles((theme) => {
       left: '0px',
       top: '0px',
       borderRadius: '30px',
-      border: '2px solid #DBE6EC',
+      outline: '2px solid #DBE6EC',
       background: '#13B5EC',
     },
     img2Logo: {
@@ -539,9 +539,21 @@ const useStyles = makeStyles((theme) => {
       left: '28px',
       zIndex: '1',
       top: '0px',
-      border: '2px solid #DBE6EC',
+      outline: '2px solid #DBE6EC',
       background: '#13B5EC',
       borderRadius: '30px',
+    },
+    'img1Logo--dark': {
+      outline: '2px solid #151718',
+      ["@media (max-width:660px)"]: {
+        outline: '2px solid #24292d',
+      }
+    },
+    'img2Logo--dark': {
+      outline: '2px solid #151718',
+      ["@media (max-width:660px)"]: {
+        outline: '2px solid #24292d',
+      }
     },
     inlineEnd: {
       display: 'flex',
@@ -832,7 +844,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           <div className={classes.inline}>
                             <div className={classes.doubleImages}>
                               <img
-                                className={classes.img1Logo}
+                                className={[classes.img1Logo, classes[`img1Logo--${appTheme}`]].join(' ')}
                                 src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
                                 width="37"
                                 height="37"
@@ -843,7 +855,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                 }}
                               />
                               <img
-                                className={classes.img2Logo}
+                                className={[classes.img2Logo, classes[`img2Logo--${appTheme}`]].join(' ')}
                                 src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
                                 width="37"
                                 height="37"
@@ -1226,7 +1238,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                         <div className={[classes.cellHeadPaddings, 'g-flex', 'g-flex--align-center'].join(' ')}>
                           <div className={classes.doubleImages}>
                             <img
-                              className={classes.img1Logo}
+                              className={[classes.img1Logo, classes[`img1Logo--${appTheme}`]].join(' ')}
                               src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
                               width="37"
                               height="37"
@@ -1237,7 +1249,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               }}
                             />
                             <img
-                              className={classes.img2Logo}
+                              className={[classes.img2Logo, classes[`img2Logo--${appTheme}`]].join(' ')}
                               src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
                               width="37"
                               height="37"

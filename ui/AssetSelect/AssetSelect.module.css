@@ -1,0 +1,348 @@
+.paperScrollPaper {
+  margin: 0 !important;
+}
+
+.displaySelectContainer {
+  padding: 61px 20px 20px;
+  cursor: pointer;
+}
+
+.displayDualIconContainer {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: fill 0.16s ease;
+  fill: #9BC9E4;
+}
+
+.displayDualIconContainer:hover {
+  fill: #0B5E8E;
+}
+
+.displayDualIconContainer:active {
+  fill: #86B9D6;
+}
+
+.displayDualIconContainer--dark {
+  fill: #2D3741;
+}
+
+.displayDualIconContainer--dark:hover {
+  fill: #4CADE6;
+}
+
+.displayDualIconContainer--dark:active {
+  fill: #5F7285;
+}
+
+.displayDualIconContainerConfirm {
+  width: 100px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.displayDualIconContainerSmall {
+  width: 50px;
+  height: 50px;
+  position: relative;
+  margin-right: 15px;
+}
+
+.displayDualIconContainerDouble {
+  width: 85px;
+  height: 50px;
+  position: relative;
+  margin-right: 15px;
+}
+
+.displayAssetIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 100px;
+}
+
+.assetSelectMenu {
+  min-height: 70px !important;
+  padding: 10px !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1px !important;
+  transition: all ease 300ms;
+}
+
+.assetSelectMenu--light {
+  background: #B9DFF5 !important;
+  box-shadow: 0 1px 0 rgba(11, 94, 142, 0);
+}
+
+.assetSelectMenu--light:hover {
+  background: #CFE5F2 !important;
+  box-shadow: 0 1px 0 rgba(11, 94, 142, 0.5);
+}
+
+.assetSelectMenu--dark {
+  background: #24292D !important;
+  box-shadow: 0 1px 0 rgba(76, 173, 229, 0);
+}
+
+.assetSelectMenu--dark:hover {
+  background: #2D3741 !important;
+  box-shadow: 0 1px 0 rgba(76, 173, 229, 0.5);
+}
+
+.assetOptionIcon {
+  width: 50px;
+  height: 50px;
+  padding: 4px;
+  border-radius: 100px;
+  border: 1px solid #9BC9E4;
+  background: #CFE5F2;
+}
+
+.assetOptionIcon--light {
+  background: #CFE5F2;
+  border: 1px solid #86B9D6;
+}
+
+.assetOptionIcon--dark {
+  background: #304E61;
+  border: 1px solid #5F7285;
+}
+
+.assetSymbolName {
+  font-weight: 500 !important;
+  font-size: 24px !important;
+  line-height: 120% !important;
+}
+
+.assetSymbolNameDouble {
+  font-size: 18px !important;
+}
+
+.assetSymbolName2 {
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+}
+
+.assetSelectActions {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.assetSelectBalanceText {
+  font-weight: 500 !important;
+  font-size: 18px !important;
+  line-height: 120% !important;
+}
+
+.assetSelectBalanceText2 {
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+}
+
+.assetSelectBalance {
+  margin-top: 4px;
+}
+
+.searchInline {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.searchInput {
+  height: 40px;
+  background: #DBE6EC !important;
+  border: 1px solid #86B9D6 !important;
+  border-radius: 0 !important;
+}
+
+.searchInput:hover {
+  background: #B9DFF5 !important;
+  border: 1px solid #86B9D6 !important;
+}
+
+.searchInput:active {
+  background: #B9DFF5 !important;
+  border: 1px solid #0B5E8E !important;
+}
+
+.searchInput:focus {
+  background: #B9DFF5 !important;
+  border: 1px solid #FFFFFF !important;
+}
+
+.searchInput--dark {
+  background: #151718 !important;
+  border: 1px solid #5F7285 !important;
+}
+
+.searchInput--dark:hover {
+  background: #24292D !important;
+  border: 1px solid #5F7285 !important;
+}
+
+.searchInput--dark:active {
+  background: #24292D !important;
+  border: 1px solid #4CADE6 !important;
+}
+
+.searchInput:focus {
+  background: #24292D !important;
+  border: 1px solid #FFFFFF !important;
+}
+
+.searchInput > fieldset {
+  border: none;
+}
+
+.searchInputText {
+  padding: 10px !important;
+  border-radius: 0 !important;
+  border: none !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  color: #325569 !important;
+}
+
+.searchInputText--dark {
+  color: #C6CDD2 !important;
+}
+
+.assetSearchResults {
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 390px;
+  position: relative;
+}
+
+.assetSearchResults--light {
+  background: #9BC9E4;
+  border: 1px solid #86B9D6;
+}
+
+.assetSearchResults--dark {
+  background: #2D3741;
+  border: 1px solid #5F7285;
+}
+
+.manageLocalContainer {
+  position: absolute;
+  bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 20px;
+}
+
+.manageLocalBtn {
+  padding: 0 !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 120% !important;
+  color: #0B5E8E !important;
+}
+
+.manageLocalBtn--dark {
+  color: #4CADE6 !important;
+}
+
+.dialogContent {
+  padding: 20px 30px 30px !important;
+}
+
+.displayAssetIconSecond {
+  width: 54px;
+  height: 54px;
+  border: 2px solid #9BC9E4;
+  padding: 4px;
+  background: #B9DFF5;
+}
+
+.displayAssetIconSecond--dark {
+  border: 2px solid #2D3741;
+  background: #24292D;
+}
+
+.displayAssetIconSec {
+  margin-left: -10px;
+}
+
+@media (max-width: 470px) {
+  .displaySelectContainer {
+    padding: 43px 10px 10px;
+  }
+
+  .displayDualIconContainerSmall,
+  .assetOptionIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .displayDualIconContainerDouble {
+    width: 65px;
+    height: 40px;
+    position: relative;
+    margin-right: 10px;
+  }
+
+  .displayDualIconContainer {
+    width: 60px;
+    height: 60px;
+  }
+
+  .displayAssetIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .dialogContainer {
+    width: 100% !important;
+  }
+
+  .dialogTitle {
+    padding: 20px 20px 0;
+  }
+
+  .dialogContent {
+    padding: 20px !important;
+  }
+
+  .assetSymbolName,
+  .assetSelectBalanceText {
+    font-size: 14px !important;
+  }
+
+  .assetSymbolName2,
+  .assetSelectBalanceText2 {
+    font-size: 12px !important;
+  }
+
+  .assetSymbolName,
+  .assetSymbolName2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .assetSearchResults {
+    min-width: auto;
+  }
+
+  .assetSelectMenu {
+    min-height: 50px !important;
+  }
+
+  .displayAssetIconSecond {
+    padding: 2px;
+    border-width: 1px;
+  }
+}
