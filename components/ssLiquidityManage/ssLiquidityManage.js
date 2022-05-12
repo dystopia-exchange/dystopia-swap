@@ -1838,11 +1838,11 @@ export default function ssLiquidityManage() {
                     variant="contained"
                     size="large"
                     className={[
-                      (BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
-                      (BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+                      (withdrawAmount === '' || BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
+                      (withdrawAmount === '' || BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
                     ].join(' ')}
                     color="primary"
-                    disabled={BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading}
+                    disabled={withdrawAmount === '' || BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading}
                     onClick={onWithdraw}
                   >
                     <Typography
