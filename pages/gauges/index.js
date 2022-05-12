@@ -62,7 +62,7 @@ function Liquidity({ changeTheme }) {
          <Paper className={classes.notConnectedContent}>
           <BalanceIcon className={ classes.overviewIcon } />
            <Typography className={classes.mainHeadingNC} variant='h1'>Liquidity Pools</Typography>
-           <Typography className={classes.mainDescNC} variant='body2'>
+           <Typography className={[classes.mainDescNC, classes[`mainDescNC--${appTheme}`]].join(' ')} variant='body2'>
              Earn Rewards. Providing liquidity to these LP’s allows you to hedge against USD risk, or simply have exposure in your own preferred currency, while earning LP incentives.
            </Typography>
            <Button
