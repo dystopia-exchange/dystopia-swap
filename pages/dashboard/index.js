@@ -94,7 +94,7 @@ function Dashboard({ changeTheme }) {
          <div className={classes.sphere}></div>
           <div className={classes.contentFloat}>
            <Typography className={classes.mainHeadingNC} variant='h1'>Dashboard</Typography>
-           <Typography className={classes.mainDescNC} variant='body2'>An overview Assets.</Typography>
+           <Typography className={[classes.mainDescNC, classes[`mainDescNC--${appTheme}`]].join(' ')} variant='body2'>An overview Assets.</Typography>
            <Button
              disableElevation
              className={classes.buttonConnect}

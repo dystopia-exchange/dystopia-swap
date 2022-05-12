@@ -86,8 +86,8 @@ function Rewards({ changeTheme }) {
               Rewards
             </Typography>
 
-            <div className={classes.mainDescBg}>
-              <Typography className={classes.mainDescNC} variant="body2">
+            <div className={[classes.mainDescBg, classes[`mainDescBg--${appTheme}`]].join(' ')}>
+              <Typography className={[classes.mainDescNC, classes[`mainDescNC--${appTheme}`]].join(' ')} variant="body2">
                 Claim your share of rewards!
               </Typography>
             </div>

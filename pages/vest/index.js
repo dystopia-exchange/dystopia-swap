@@ -86,8 +86,8 @@ function Vesting({ changeTheme }) {
               Vest
             </Typography>
 
-            <div className={classes.mainDescBg}>
-              <Typography className={classes.mainDescNC} variant="body2">
+            <div className={[classes.mainDescBg, classes[`mainDescBg--${appTheme}`]].join(' ')}>
+              <Typography className={[classes.mainDescNC, classes[`mainDescNC--${appTheme}`]].join(' ')} variant="body2">
                 Lock your DYST to earn rewards and governance rights. Each locked position is created and represented as an NFT, meaning you can hold multiple locked positions.
               </Typography>
             </div>
