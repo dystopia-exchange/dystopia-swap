@@ -23,8 +23,9 @@ function Route({ changeTheme, ...props }) {
     }
   } else if (activePath.includes("/vest")) {
     return <Vest props={props} changeTheme={changeTheme} />;
-  } else if (activePath.includes("/migrate")) {
-    return <Migrate props={props} changeTheme={changeTheme} />;
+  // } 
+  // else if (activePath.includes("/migrate")) {
+  //   return <Migrate props={props} changeTheme={changeTheme} />;
   } else if (activePath.includes("/vote")) {
     return <Vote props={props} changeTheme={changeTheme} />;
   } else if (activePath.includes("/rewards")) {
