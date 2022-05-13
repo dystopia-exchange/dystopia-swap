@@ -142,6 +142,10 @@ export default function ssVotes() {
 
   const noTokenSelected = token === null
 
+  console.log('formatCurrency(totalVotes)', formatCurrency(totalVotes), totalVotes);
+
+  const disableCastVotes = totalVotes >= 100;
+
   return (
     <>
       <div className={[classes.topBarContainer, 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
@@ -175,12 +179,12 @@ export default function ssVotes() {
               className={[
                 classes.buttonOverrideFixed,
                 classes[`buttonOverrideFixed--${appTheme}`],
-                noTokenSelected ? classes[`buttonOverrideFixedDisabled--${appTheme}`] : null,
+                noTokenSelected || disableCastVotes ? classes[`buttonOverrideFixedDisabled--${appTheme}`] : null,
               ].join(' ')}
               variant="contained"
               size="large"
               color="primary"
-              disabled={voteLoading || BigNumber(totalVotes).eq(0) || BigNumber(totalVotes).gt(100)}
+              disabled={disableCastVotes || voteLoading || BigNumber(totalVotes).eq(0) || BigNumber(totalVotes).gt(100)}
               onClick={onVote}>
               <Typography
                 style={{
