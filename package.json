@@ -39,6 +39,7 @@
     "query-string": "^7.0.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-onclickout": "^2.0.8",
     "react-router-dom": "^6.3.0",
     "react-use-window-scroll": "^1.0.13",
     "smooth-scroll": "^16.1.3",
