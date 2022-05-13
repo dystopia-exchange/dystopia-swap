@@ -1062,7 +1062,7 @@ class Store {
       };
 
       baseAssets.unshift(nativeFTM);
-
+     
       for (let i = 0; i < response2.data.length; i++) {
         for (let j = 0; j < baseAssets.length; j++) {
           if (
@@ -1070,6 +1070,13 @@ class Store {
             baseAssets[j].address.toLowerCase()
           ) {
             baseAssets[j].logoURI = response2.data[i].logoURI;
+          }
+         
+          if (
+            baseAssets[j].name == "miMATIC"
+          ) {
+            baseAssets[j].symbol = "MAI";
+            baseAssets[j].name = "MAI";
           }
         }
       }
