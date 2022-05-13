@@ -4258,6 +4258,28 @@ class Store {
 
       for (let i = 0; i < bestAmountOut.routes.length; i++) {
         if (bestAmountOut.routes[i].stable == true) {
+          const reserves = await routerContract.methods
+            .getReserves(
+              bestAmountOut.routes[i].from,
+              bestAmountOut.routes[i].to,
+              bestAmountOut.routes[i].stable
+            )
+            .call();
+          let amountIn = 0;
+          let amountOut = 0;
+          if (i == 0) {
+            amountIn = sendFromAmount;
+            amountOut = bestAmountOut.receiveAmounts[i + 1];
+          } else {
+            amountIn = bestAmountOut.receiveAmounts[i];
+            amountOut = bestAmountOut.receiveAmounts[i + 1];
+          }
+
+          const amIn = BigNumber(amountIn).div(reserves.reserveA);
+          const amOut = BigNumber(amountOut).div(reserves.reserveB);
+          const ratio = BigNumber(amOut).div(amIn);
+          totalRatio = BigNumber(totalRatio).times(ratio).toFixed(18);
+
         } else {
           const reserves = await routerContract.methods
             .getReserves(
