@@ -387,6 +387,7 @@ a.linkz {
   border-bottom: 1px solid transparent !important;
   border-left: 1px solid transparent !important;
   text-transform: capitalize !important;
+  transition: all 0.16s ease;
 }
 
 .nav-button:hover {

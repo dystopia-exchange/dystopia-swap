@@ -426,7 +426,7 @@ function Header(props) {
               )}
 
               <div className={classes.walletPointContainer}>
-                <div className={classes.walletPoint}>
+                <div className={[classes.walletPoint, classes[`walletPoint--${appTheme}`]].join(' ')}>
                 </div>
               </div>
 
