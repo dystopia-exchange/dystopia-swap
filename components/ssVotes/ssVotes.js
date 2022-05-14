@@ -144,7 +144,7 @@ export default function ssVotes() {
 
   console.log('formatCurrency(totalVotes)', formatCurrency(totalVotes), totalVotes);
 
-  const disableCastVotes = totalVotes >= 100;
+  const disableCastVotes = totalVotes > 100;
 
   return (
     <>
