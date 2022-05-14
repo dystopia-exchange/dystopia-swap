@@ -17,9 +17,10 @@
 .contentContainerFull {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   height: 100%;
   min-width: 100%;
+  width: 100%;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -240,6 +241,12 @@
   }
 }
 
+@media (max-height: 770px) {
+  .contentContainerFull {
+    overflow-y: auto;
+  }
+}
+
 @media (max-width: 720px) {
   .contentContainerFull {
     justify-content: center;
@@ -277,7 +284,7 @@
 
   .homeContentMain,
   .homeContentMainSec {
-    padding: 10px 0 80px;
+    padding: 10px 20px 80px;
   }
 
   .homeContentMainSec {

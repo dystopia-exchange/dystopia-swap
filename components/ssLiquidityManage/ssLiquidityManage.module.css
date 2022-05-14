@@ -621,6 +621,10 @@ input[type=number].mediumInputAmount {
   background: transparent url("/images/ui/liquidity-add-button-deposit--dark.svg") !important;
 }
 
+.buttonOverride[disabled] {
+  filter: grayscale(1);
+}
+
 .multiApprovalButton {
   background: transparent url("/images/ui/liquidity-add-button-unstacked--light.svg") !important;
   min-width: auto;
