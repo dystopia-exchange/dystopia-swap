@@ -381,6 +381,10 @@
   border-radius: 0 !important;
 }
 
+.buttonOverride[disabled] {
+  filter: grayscale(1);
+}
+
 .buttonOverride:hover {
   background: transparent url("/images/ui/liquidity-add-button-deposit--light.svg") !important;
 }
