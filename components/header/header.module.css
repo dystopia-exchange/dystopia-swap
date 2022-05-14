@@ -459,6 +459,10 @@
   .headerContainer {
     outline: 1px solid #86B9D6;
   }
+
+  .headerContainer--dark {
+    outline: 1px solid #5F7285;
+  }
 }
 
 @media (max-width: 630px) {

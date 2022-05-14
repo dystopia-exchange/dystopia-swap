@@ -316,7 +316,7 @@ function Header(props) {
 
   return (
     <TopHeader>
-      <div className={classes.headerContainer}>
+      <div className={[classes.headerContainer, classes[`headerContainer--${appTheme}`]].join(' ')}>
         <div className={classes.logoContainer}>
           <a className={classes.logoLink} onClick={() => router.push("/home")}>
             <Logo/>

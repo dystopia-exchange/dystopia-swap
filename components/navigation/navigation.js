@@ -134,7 +134,7 @@ function Navigation(props) {
   const renderNavs = () => {
     return (
       <ToggleButtonGroup
-        value={active}
+        value={router.asPath.includes("home") ? null : active}
         exclusive
         onChange={onActiveClick}
         className={classes.navToggles}

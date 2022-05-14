@@ -389,6 +389,20 @@ a.linkz {
   text-transform: capitalize !important;
 }
 
+.nav-button:hover {
+  background: #B9DFF5 !important;
+  color: #0B5E8E !important;
+  border: 1px solid var(--main-secondary-light) !important;
+  z-index: 9;
+}
+
+.nav-button:active {
+  background: #9BC9E4 !important;
+  color: #0B5E8E !important;
+  border: 1px solid var(--main-secondary-light) !important;
+  z-index: 9;
+}
+
 .nav-button--dark {
   border-top: 1px solid var(--border-dark) !important;
   border-right: none;
@@ -399,6 +413,20 @@ a.linkz {
 
 .nav-button--dark:last-child {
   border-right: 1px solid var(--border-dark);
+}
+
+.nav-button--dark:hover {
+  background: #24292D !important;
+  color: #ffffff !important;
+  border: 1px solid #4CADE6 !important;
+  z-index: 9;
+}
+
+.nav-button--dark:active {
+  background: #2D3741 !important;
+  color: #ffffff !important;
+  border: 1px solid #4CADE6 !important;
+  z-index: 9;
 }
 
 .nav-button--light {
