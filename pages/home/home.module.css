@@ -19,7 +19,7 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  min-width: 100%;
+  width: 100%;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -277,7 +277,7 @@
 
   .homeContentMain,
   .homeContentMainSec {
-    padding: 10px 0 80px;
+    padding: 10px 20px 80px;
   }
 
   .homeContentMainSec {
