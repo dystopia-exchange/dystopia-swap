@@ -24,7 +24,7 @@ import {
   Skeleton,
   Accordion,
   AccordionSummary,
-  AccordionDetails,
+  AccordionDetails, Popover,
 } from '@mui/material';
 import { useRouter } from "next/router";
 import BigNumber from 'bignumber.js';
@@ -607,10 +607,38 @@ const useStyles = makeStyles({
     alignItems: 'center',
   },
   filterItem: {
+    position: 'relative',
     padding: '10px 0',
     borderBottom: '1px solid #86B9D6',
     '&:last-child': {
       borderBottom: 'none',
+    },
+    '&:not(:last-child)::before': {
+      content: `''`,
+      position: 'absolute',
+      width: 5,
+      height: 1,
+      bottom: -1,
+      left: 0,
+      background: '#0B5E8E',
+    },
+    '&:not(:last-child)::after': {
+      content: `''`,
+      position: 'absolute',
+      width: 5,
+      height: 1,
+      bottom: -1,
+      right: 0,
+      background: '#0B5E8E',
+    },
+  },
+  'filterItem--dark': {
+    borderColor: '#5F7285',
+    '&:not(:last-child)::before': {
+      backgroundColor: '#4CADE6',
+    },
+    '&:not(:last-child)::after': {
+      backgroundColor: '#4CADE6',
     },
   },
   filterLabel: {
@@ -742,6 +770,16 @@ const useStyles = makeStyles({
       padding: '5px 10px',
     },
   },
+  popoverPaper: {
+    width: 340,
+    height: 256,
+    padding: 0,
+    background: 'none',
+    border: 'none !important',
+    boxShadow: '5px 5px 20px rgba(14, 44, 79, 0.25)',
+    borderRadius: 0,
+    overflow: 'hidden',
+  },
 });
 
 const getLocalToggles = () => {
@@ -853,6 +891,10 @@ const EnhancedTableToolbar = (props) => {
 
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const handleClosePopover = () => {
+    setAnchorEl(null);
   };
 
   const handleSearch = () => {
@@ -968,11 +1010,11 @@ const EnhancedTableToolbar = (props) => {
               marginLeft: 10,
               marginRight: 10,
             }}>
-              <SwitchCustom
-                checked={toggleActive}
-                onChange={onToggle}
-                name={'toggleActive'}
-              />
+            <SwitchCustom
+              checked={toggleActive}
+              onChange={onToggle}
+              name={'toggleActive'}
+            />
           </div>
         </div>
 
@@ -997,75 +1039,76 @@ const EnhancedTableToolbar = (props) => {
         </div>
       </div>
 
-      <Popper id={id} open={open} anchorEl={anchorEl} transition placement="bottom-end" style={{zIndex: 100}}>
-        {({TransitionProps}) => (
-          <Fade {...TransitionProps} timeout={350}>
-            <div className={[classes.filterContainer, classes[`filterContainer--${appTheme}`]].join(' ')}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom: 10,
-              }}>
-                <Typography className={[classes.filterListTitle, classes[`filterListTitle--${appTheme}`]].join(' ')}>
-                  List Filters
-                </Typography>
+      <Popover
+        classes={{
+          paper: [classes.popoverPaper, classes[`popoverPaper--${appTheme}`]].join(' '),
+        }}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClosePopover}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}>
+        <div className={[classes.filterContainer, classes[`filterContainer--${appTheme}`]].join(' ')}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: 10,
+          }}>
+            <Typography className={[classes.filterListTitle, classes[`filterListTitle--${appTheme}`]].join(' ')}>
+              List Filters
+            </Typography>
 
-                <Close
-                  style={{
-                    cursor: 'pointer',
-                    color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-                  }}
-                  onClick={handleClick}/>
-              </div>
+            <Close
+              style={{
+                cursor: 'pointer',
+                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+              }}
+              onClick={handleClick}/>
+          </div>
 
-              <Grid className={classes.filterItem} container spacing={0}>
-                <Grid item lg={9} className={classes.labelColumn}>
-                  <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>Show
-                    Active Gauges</Typography>
-                </Grid>
-                <Grid item lg={3} className={classes.alignContentRight}>
-                  <SwitchCustom
-                    checked={toggleActiveGauge}
-                    name={'toggleActiveGauge'}
-                    onChange={onToggle}
-                  />
-                </Grid>
-              </Grid>
+          <div
+            className={[classes.filterItem, classes[`filterItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+            <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>
+              Show Active Gauges
+            </Typography>
 
-              <Grid className={classes.filterItem} container spacing={0}>
-                <Grid item lg={9} className={classes.labelColumn}>
-                  <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>Show
-                    Stable Pools</Typography>
-                </Grid>
-                <Grid item lg={3} className={classes.alignContentRight}>
-                  <SwitchCustom
-                    checked={toggleStable}
-                    name={'toggleStable'}
-                    onChange={onToggle}
-                  />
-                </Grid>
-              </Grid>
+            <SwitchCustom
+              checked={toggleActiveGauge}
+              name={'toggleActiveGauge'}
+              onChange={onToggle}
+            />
+          </div>
 
-              <Grid className={classes.filterItem} container spacing={0}>
-                <Grid item lg={9} className={classes.labelColumn}>
-                  <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>Show
-                    Volatile Pools</Typography>
-                </Grid>
-                <Grid item lg={3} className={classes.alignContentRight}>
-                  <SwitchCustom
-                    checked={toggleVariable}
-                    name={'toggleVariable'}
-                    onChange={onToggle}
-                  />
-                </Grid>
-              </Grid>
+          <div
+            className={[classes.filterItem, classes[`filterItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+            <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>
+              Show Stable Pools
+            </Typography>
 
+            <SwitchCustom
+              checked={toggleStable}
+              name={'toggleStable'}
+              onChange={onToggle}
+            />
+          </div>
 
-            </div>
-          </Fade>
-        )}
-      </Popper>
+          <div
+            className={[classes.filterItem, classes[`filterItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+            <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>
+              Show Volatile Pools
+            </Typography>
+
+            <SwitchCustom
+              checked={toggleVariable}
+              name={'toggleVariable'}
+              onChange={onToggle}
+            />
+          </div>
+        </div>
+      </Popover>
     </Toolbar>
   );
 };
