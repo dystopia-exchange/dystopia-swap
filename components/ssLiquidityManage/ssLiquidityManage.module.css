@@ -1609,6 +1609,7 @@
 
   .disclaimerDivider {
     width: 100%;
+    top: 0;
   }
 
   .multiApprovalButton {
