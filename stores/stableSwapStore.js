@@ -258,7 +258,6 @@ class Store {
 
   setStore = (obj) => {
     this.store = { ...this.store, ...obj };
-    console.log(this.store);
     return this.emitter.emit(ACTIONS.STORE_UPDATED);
   };
 
@@ -1109,7 +1108,6 @@ class Store {
     try {
       const response = await client.query(queryone).toPromise();
       const pairsCall = response;
-      console.log(pairsCall, "response");
       return pairsCall.data.pairs;
     } catch (ex) {
       console.log(ex);
@@ -1358,10 +1356,7 @@ class Store {
                 CONTRACTS.GAUGE_ABI,
                 pair.gauge.address
               );
-              console.log(
-                pair.gauge.address,
-                "rewardRate2"
-              );
+             
               const [totalSupply, gaugeBalance, gaugeWeight, rewardRate] =
                 await multicall.aggregate([
                   gaugeContract.methods.totalSupply(),
@@ -1369,13 +1364,7 @@ class Store {
                   gaugesContract.methods.weights(pair.address),
                   gaugeContract.methods.rewardRate(CONTRACTS.REWARD_ADDRESS),
                 ]);
-              console.log(
-                gaugeWeight,
-                rewardRate,
-                pair.tvl,
-                rewardRate / (pair.tvl * 10 ** 18),
-                "rewardRate"
-              );
+              
               const bribeContract = new web3.eth.Contract(
                 CONTRACTS.BRIBE_ABI,
                 pair.gauge.bribeAddress
@@ -1534,14 +1523,12 @@ class Store {
               CONTRACTS.ERC20_ABI,
               asset.address
             );
-            console.log(asset.address,assetContract,"balanceof")
             let bal = await web3.eth.getBalance(account.address);
             //rechange isWhitelisted!!
             const [ balanceOf] = await Promise.all([
             //  voterContract.methods.isWhitelisted(asset.address).call(),
               assetContract.methods.balanceOf(account.address).call(),
             ]);
-            console.log(asset.address,balanceOf,"balanceof")
             return {
               balanceOf,
               bal,
@@ -2092,8 +2079,6 @@ class Store {
         pairDetails,
       } = payload.content;
 
-      console.log(BigNumber(allowance).gt(amount),"supp")
-
       const migratorContract = new web3.eth.Contract(
         migratorAbi,
         migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
@@ -2148,7 +2133,6 @@ class Store {
           },
         ],
       });
-      console.log(BigNumber(allowance).gt(amount),"hi1")
       // CHECK ALLOWANCES AND SET TX DISPLAY
 
         if (!BigNumber(allowance).gt(amount)) {
@@ -2163,7 +2147,6 @@ class Store {
             description: `Allowance on ${pairDetails.symbol} sufficient`,
             status: "DONE",
           });
-          console.log(BigNumber(allowance).gt(amount),"hi3")
         }
       
 
@@ -4127,7 +4110,6 @@ class Store {
         );
       });
 
-      console.log(includesRouteAddress, routeAssets, "routeAssets");
       let amountOuts = [];
 
       if (includesRouteAddress.length === 0) {
@@ -5508,7 +5490,6 @@ class Store {
               });
             }
 
-            console.log(bribeTokens, "yeahhhhhh");
             bribeTokens.shift();
 
             const bribesEarned = await Promise.all(
@@ -6379,7 +6360,7 @@ class Store {
         if (ex.message) {
           this.emitter.emit(ACTIONS.TX_REJECTED, { uuid, error: ex.message });
           return callback(ex.message);
-        }
+        } 
         this.emitter.emit(ACTIONS.TX_REJECTED, {
           uuid,
           error: "Error estimating gas",
