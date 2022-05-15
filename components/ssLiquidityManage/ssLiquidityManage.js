@@ -1523,47 +1523,55 @@ export default function ssLiquidityManage() {
                     Slippage Tolerance
                   </div>
 
-                  <TextField
-                    placeholder="0.00"
-                    fullWidth
-                    error={slippageError}
-                    helperText={slippageError}
-                    value={slippage}
-                    onChange={onSlippageChanged}
-                    disabled={depositLoading || stakeLoading || depositStakeLoading || createLoading}
-                    classes={{
-                      root: [classes.slippageRoot, appTheme === "dark" ? classes['slippageRoot--dark'] : classes['slippageRoot--light']].join(' '),
-                    }}
-                    InputProps={{
-                      style: {
-                        border: 'none',
-                        borderRadius: 0,
-                      },
-                      classes: {
-                        root: classes.searchInput,
-                      },
-                      endAdornment: <InputAdornment position="end">
+                  <div
+                    style={{
+                      position: 'relative',
+                      marginBottom: 20,
+                    }}>
+                    <Borders/>
+
+                    <TextField
+                      placeholder="0.00"
+                      fullWidth
+                      error={slippageError}
+                      helperText={slippageError}
+                      value={slippage}
+                      onChange={onSlippageChanged}
+                      disabled={depositLoading || stakeLoading || depositStakeLoading || createLoading}
+                      classes={{
+                        root: [classes.slippageRoot, appTheme === "dark" ? classes['slippageRoot--dark'] : classes['slippageRoot--light']].join(' '),
+                      }}
+                      InputProps={{
+                        style: {
+                          border: 'none',
+                          borderRadius: 0,
+                        },
+                        classes: {
+                          root: classes.searchInput,
+                        },
+                        endAdornment: <InputAdornment position="end">
                         <span
                           style={{
                             color: appTheme === "dark" ? '#ffffff' : '#325569',
                           }}>
                           %
                         </span>
-                      </InputAdornment>,
-                    }}
-                    inputProps={{
-                      className: [classes.smallInput, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
-                      style: {
-                        padding: 0,
-                        borderRadius: 0,
-                        border: 'none',
-                        fontSize: 14,
-                        fontWeight: 400,
-                        lineHeight: '120%',
-                        color: appTheme === "dark" ? '#C6CDD2' : '#325569',
-                      },
-                    }}
-                  />
+                        </InputAdornment>,
+                      }}
+                      inputProps={{
+                        className: [classes.smallInput, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
+                        style: {
+                          padding: 0,
+                          borderRadius: 0,
+                          border: 'none',
+                          fontSize: 14,
+                          fontWeight: 400,
+                          lineHeight: '120%',
+                          color: appTheme === "dark" ? '#C6CDD2' : '#325569',
+                        },
+                      }}
+                    />
+                  </div>
 
                   {/*TODO: uncomment deadline then logic will be ready*/}
                   {/*
