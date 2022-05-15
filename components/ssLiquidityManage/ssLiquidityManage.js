@@ -35,6 +35,7 @@ import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import { formatSymbol, formatInputAmount } from '../../utils';
 import SwapIconBg from '../../ui/SwapIconBg';
 import AssetSelect from '../../ui/AssetSelect';
+import Borders from '../../ui/Borders';
 
 export default function ssLiquidityManage() {
 
@@ -990,6 +991,8 @@ export default function ssLiquidityManage() {
             }}
             className={['g-flex'].join(' ')}>
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.title}>
                 {BigNumber(amount1).gt(0) ? formatCurrency(BigNumber(amount0).div(amount1)) : '0.00'}
               </Typography>
@@ -998,9 +1001,13 @@ export default function ssLiquidityManage() {
                 {`${formatSymbol(asset0?.symbol)} per ${formatSymbol(asset1?.symbol)}`}
               </Typography>
             </div>
+
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography
                 className={classes.title}>{BigNumber(amount0).gt(0) ? formatCurrency(BigNumber(amount1).div(amount0)) : '0.00'}</Typography>
+
               <Typography
                 className={classes.text}>{`${formatSymbol(asset1?.symbol)} per ${formatSymbol(asset0?.symbol)}`}</Typography>
             </div>
@@ -1016,6 +1023,8 @@ export default function ssLiquidityManage() {
 
           <div className={[classes.priceInfos, classes[`priceInfos--${appTheme}`]].join(' ')}>
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.text}>
                 {`${formatSymbol(pair?.token0?.symbol)}`}
               </Typography>
@@ -1026,6 +1035,8 @@ export default function ssLiquidityManage() {
             </div>
 
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.text}>
                 {`${formatSymbol(pair?.token1?.symbol)}`}
               </Typography>
@@ -1042,6 +1053,8 @@ export default function ssLiquidityManage() {
 
           <div className={[classes.priceInfos, classes[`priceInfos--${appTheme}`]].join(' ')}>
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.text}>
                 Pooled
               </Typography>
@@ -1052,6 +1065,8 @@ export default function ssLiquidityManage() {
             </div>
 
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.text}>
                 Staked
               </Typography>
@@ -1072,10 +1087,12 @@ export default function ssLiquidityManage() {
         <Typography className={classes.depositInfoHeading}>Reserve Info</Typography>
         <div className={classes.priceInfos}>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
             <Typography className={classes.text}>{`${formatSymbol(pair?.token0?.symbol)}`}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.reserve0)}</Typography>
           </div>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
             <Typography className={classes.text}>{`${formatSymbol(pair?.token1?.symbol)}`}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.reserve1)}</Typography>
           </div>
@@ -1083,10 +1100,12 @@ export default function ssLiquidityManage() {
         <Typography className={classes.depositInfoHeading}>Your Balances</Typography>
         <div className={classes.priceInfos}>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
             <Typography className={classes.text}>{`Pooled ${formatSymbol(pair?.symbol)}`}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.balance)}</Typography>
           </div>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
             <Typography className={classes.text}>{`Staked ${formatSymbol(pair?.symbol)} `}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.gauge?.balance)}</Typography>
           </div>

@@ -26,6 +26,7 @@ import {
 } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import { formatSymbol } from '../../utils';
+import Borders from '../../ui/Borders';
 
 export default function SSLiquidityCreate() {
 
@@ -353,6 +354,7 @@ export default function SSLiquidityCreate() {
           }}
           className={['g-flex'].join(' ')}>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Borders/>
             <Typography className={ classes.title } >{ BigNumber(amount1).gt(0) ? formatCurrency(BigNumber(amount0).div(amount1)) : '0.00' }</Typography>
             <Typography className={ classes.text } >{ `${formatSymbol(asset0?.symbol)} per ${formatSymbol(asset1?.symbol)}` }</Typography>
           </div>

@@ -19,7 +19,15 @@ import Borders from '../Borders';
 import BigNumber from 'bignumber.js';
 import SwapIconBg from '../SwapIconBg';
 
-const AssetSelect = ({type, value, assetOptions, onSelect, typeIcon = 'single'}) => {
+const AssetSelect = ({
+                       type,
+                       value,
+                       assetOptions,
+                       onSelect,
+                       typeIcon = 'single',
+                       isManageLocal = true,
+                       title = 'Select a token',
+                     }) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [filteredAssetOptions, setFilteredAssetOptions] = useState([]);
@@ -312,7 +320,7 @@ const AssetSelect = ({type, value, assetOptions, onSelect, typeIcon = 'single'})
           className={['g-flex-column__item', 'g-flex-column'].join(' ')}
           style={{
             position: 'relative',
-            marginBottom: 53,
+            marginBottom: !isManageLocal ? 34 : 53,
             marginTop: 30,
           }}>
           <Borders/>
@@ -334,13 +342,15 @@ const AssetSelect = ({type, value, assetOptions, onSelect, typeIcon = 'single'})
           }
         </div>
 
-        <div className={classes.manageLocalContainer}>
-          <Button
-            className={[classes.manageLocalBtn, classes[`manageLocalBtn--${appTheme}`]].join(' ')}
-            onClick={toggleLocal}>
-            Manage local assets
-          </Button>
-        </div>
+        {isManageLocal &&
+          <div className={classes.manageLocalContainer}>
+            <Button
+              className={[classes.manageLocalBtn, classes[`manageLocalBtn--${appTheme}`]].join(' ')}
+              onClick={toggleLocal}>
+              Manage local assets
+            </Button>
+          </div>
+        }
       </>
     );
   };
@@ -452,13 +462,13 @@ const AssetSelect = ({type, value, assetOptions, onSelect, typeIcon = 'single'})
                 alignItems: 'center',
                 color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
               }}>
-                {manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
+                {isManageLocal && manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
                   marginRight: 10,
                   width: 18,
                   height: 18,
                   cursor: 'pointer',
                 }}/>}
-                {manageLocal ? 'Manage local assets' : 'Select a token'}
+                {isManageLocal && manageLocal ? 'Manage local assets' : title}
               </div>
 
               <Close
@@ -474,7 +484,7 @@ const AssetSelect = ({type, value, assetOptions, onSelect, typeIcon = 'single'})
             style={{overflow: 'hidden'}}
             className={[classes.dialogContent, 'g-flex-column__item', 'g-flex-column'].join(' ')}>
             {!manageLocal && renderOptions()}
-            {manageLocal && renderManageLocal()}
+            {isManageLocal && manageLocal && renderManageLocal()}
           </DialogContent>
         </div>
       </Dialog>
