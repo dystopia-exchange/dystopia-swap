@@ -1,0 +1,72 @@
+.switch {
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  background: #86B9D6;
+  border-radius: 100px;
+  transition: all 0.16s ease;
+}
+
+.toggle--dark {
+  background: #7C838A;
+  border-radius: 100px;
+}
+
+.track {
+  width: 54px;
+  height: 30px;
+  background: #DBE6EC;
+  border: 1px solid #86B9D6;
+  border-radius: 100px;
+  transition: all 0.16s ease;
+}
+
+.track--dark {
+  background: #151718;
+  border: 1px solid #7C838A;
+}
+
+.switch:hover .track {
+  background: #B9DFF5;
+  border: 1px solid #86B9D6;
+}
+
+.switch:hover .toggle--dark {
+  background: #5F7285;
+}
+
+.switch:hover .track--dark {
+  background: #24292D;
+  border: 1px solid #5F7285;
+}
+
+.switch--active .toggle,
+.switch--active:hover .toggle {
+  transform: translateX(24px);
+  background: #0B5E8E;
+}
+
+.switch--active .track,
+.switch--active:hover .track {
+  background: #B9DFF5;
+  border: 1px solid #0B5E8E;
+}
+
+.switch--active .toggle--dark,
+.switch--active:hover .toggle--dark {
+  transform: translateX(24px);
+  background: #4CADE6;
+}
+
+.switch--active .track--dark,
+.switch--active:hover .track--dark {
+  background: #24292D;
+  border: 1px solid #4CADE6;
+}

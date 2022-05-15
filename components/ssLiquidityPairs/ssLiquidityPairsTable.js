@@ -43,6 +43,7 @@ import classes from './ssLiquidityPairs.module.css';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import TablePaginationActions from '../table-pagination/table-pagination';
 import { formatSymbol } from '../../utils';
+import SwitchCustom from '../../ui/Switch';
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
@@ -802,30 +803,30 @@ const EnhancedTableToolbar = (props) => {
     props.setSearch(event.target.value);
   };
 
-  const onToggle = (event) => {
-
+  const onToggle = (event, name = null, checked = false) => {
     const localToggles = getLocalToggles();
+    const isChecked = event?.target?.checked || checked;
 
-    switch (event.target.name) {
+    switch (event?.target?.name || name) {
       case 'toggleActive':
-        setToggleActive(event.target.checked);
-        props.setToggleActive(event.target.checked);
-        localToggles.toggleActive = event.target.checked;
+        setToggleActive(isChecked);
+        props.setToggleActive(isChecked);
+        localToggles.toggleActive = isChecked;
         break;
       case 'toggleActiveGauge':
-        setToggleActiveGauge(event.target.checked);
-        props.setToggleActiveGauge(event.target.checked);
-        localToggles.toggleActiveGauge = event.target.checked;
+        setToggleActiveGauge(isChecked);
+        props.setToggleActiveGauge(isChecked);
+        localToggles.toggleActiveGauge = isChecked;
         break;
       case 'toggleStable':
-        setToggleStable(event.target.checked);
-        props.setToggleStable(event.target.checked);
-        localToggles.toggleStable = event.target.checked;
+        setToggleStable(isChecked);
+        props.setToggleStable(isChecked);
+        localToggles.toggleStable = isChecked;
         break;
       case 'toggleVariable':
-        setToggleVariable(event.target.checked);
-        props.setToggleVariable(event.target.checked);
-        localToggles.toggleVariable = event.target.checked;
+        setToggleVariable(isChecked);
+        props.setToggleVariable(isChecked);
+        localToggles.toggleVariable = isChecked;
         break;
       case 'showSearch':
         setShowSearch(event.showSearch);
@@ -944,7 +945,7 @@ const EnhancedTableToolbar = (props) => {
             <span
               style={{
                 fontSize: 'inherit',
-                fontWeight: 600,
+                fontWeight: 500,
                 color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
                 paddingRight: 4,
               }}>
@@ -954,7 +955,7 @@ const EnhancedTableToolbar = (props) => {
             <span
               style={{
                 fontSize: 'inherit',
-                fontWeight: 600,
+                fontWeight: 500,
                 color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
                 whiteSpace: 'nowrap',
               }}>
@@ -962,11 +963,17 @@ const EnhancedTableToolbar = (props) => {
             </span>
           </Typography>
 
-          <Switch
-            color="primary"
-            checked={toggleActive}
-            name={'toggleActive'}
-            onChange={onToggle}/>
+          <div
+            style={{
+              marginLeft: 10,
+              marginRight: 10,
+            }}>
+              <SwitchCustom
+                checked={toggleActive}
+                onChange={onToggle}
+                name={'toggleActive'}
+              />
+          </div>
         </div>
 
         <div className={[classes.actionsButtons, 'g-flex', 'g-flex--align-center'].join(' ')}>
@@ -1018,8 +1025,7 @@ const EnhancedTableToolbar = (props) => {
                     Active Gauges</Typography>
                 </Grid>
                 <Grid item lg={3} className={classes.alignContentRight}>
-                  <Switch
-                    color="primary"
+                  <SwitchCustom
                     checked={toggleActiveGauge}
                     name={'toggleActiveGauge'}
                     onChange={onToggle}
@@ -1033,8 +1039,7 @@ const EnhancedTableToolbar = (props) => {
                     Stable Pools</Typography>
                 </Grid>
                 <Grid item lg={3} className={classes.alignContentRight}>
-                  <Switch
-                    color="primary"
+                  <SwitchCustom
                     checked={toggleStable}
                     name={'toggleStable'}
                     onChange={onToggle}
@@ -1048,8 +1053,7 @@ const EnhancedTableToolbar = (props) => {
                     Volatile Pools</Typography>
                 </Grid>
                 <Grid item lg={3} className={classes.alignContentRight}>
-                  <Switch
-                    color="primary"
+                  <SwitchCustom
                     checked={toggleVariable}
                     name={'toggleVariable'}
                     onChange={onToggle}

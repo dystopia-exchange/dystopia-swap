@@ -123,60 +123,6 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-const StyledSwitch = withStyles((theme) => ({
-  root: {
-    width: 45,
-    height: 26,
-    padding: 0,
-    margin: theme.spacing(1),
-  },
-  switchBase: {
-    paddingTop: 1.5,
-    width: "70%",
-    margin: "auto",
-    borderRadius: "20px",
-    "&$checked": {
-      paddingTop: "6px",
-      transform: "translateX(18px)",
-      color: "rgba(128,128,128, 1)",
-      width: "25px",
-      height: "25px",
-      "& + $track": {
-        backgroundColor: "rgba(0,0,0, 0.3)",
-        opacity: 1,
-      },
-    },
-    "&$focusVisible $thumb": {
-      color: "#ffffff",
-      border: "6px solid #fff",
-    },
-  },
-  track: {
-    borderRadius: 32 / 2,
-    border: "1px solid rgba(104,108,122, 0.25)",
-    backgroundColor: "rgba(0,0,0, 0)",
-    opacity: 1,
-    transition: theme.transitions.create(["background-color", "border"]),
-  },
-  checked: {},
-  focusVisible: {},
-}))(({classes, ...props}) => {
-  return (
-    <Switch
-      focusVisibleClassName={classes.focusVisible}
-      disableRipple
-      classes={{
-        root: classes.root,
-        switchBase: classes.switchBase,
-        thumb: classes.thumb,
-        track: classes.track,
-        checked: classes.checked,
-      }}
-      {...props}
-    />
-  );
-});
-
 const StyledBadge = withStyles((theme) => ({
   badge: {
     background: "#15B525",
