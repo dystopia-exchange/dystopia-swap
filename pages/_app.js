@@ -51,7 +51,7 @@ export default function MyApp({ Component, pageProps }) {
     const localStorageDarkMode = window.localStorage.getItem(
       "dystopia.finance-dark-mode"
     );
-    changeTheme(localStorageDarkMode ? localStorageDarkMode === "light" : true);
+    changeTheme(localStorageDarkMode ? localStorageDarkMode === "dark" : true);
   }, []);
 
   useEffect(function () {
