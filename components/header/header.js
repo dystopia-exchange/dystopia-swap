@@ -275,7 +275,7 @@ function Header(props) {
     const localStorageDarkMode = window.localStorage.getItem(
       "dystopia.finance-dark-mode",
     );
-    setDarkMode(localStorageDarkMode ? localStorageDarkMode === "light" : true);
+    setDarkMode(localStorageDarkMode ? true : true);
   }, []);
 
   const navigate = (url) => {
