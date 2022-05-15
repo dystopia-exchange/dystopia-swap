@@ -100,8 +100,6 @@ export default function Transaction({transaction}) {
     window.open(`${ETHERSCAN_URL}tx/${transaction.txHash}`, '_blank');
   };
 
-  console.log(transaction);
-
   return (
     <div className={classes.transaction} key={transaction.uuid}>
       <div className={[classes.transactionTopBg, classes[`transactionTopBg--${transaction.status}`]].join(' ')}>
