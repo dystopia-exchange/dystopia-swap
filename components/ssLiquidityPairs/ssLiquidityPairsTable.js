@@ -498,7 +498,7 @@ const useStyles = makeStyles({
     fontSize: '18px !important',
     ["@media (max-width:660px)"]: {
       // eslint-disable-line no-useless-computed-key
-      padding: '5px 0',
+      padding: '9px 0',
       paddingLeft: 20,
     },
     ["@media (max-width:530px)"]: {
@@ -1222,7 +1222,12 @@ export default function EnhancedTable({pairs}) {
   };
 
   return (
-    <>
+    <div
+      className={['g-flex-column__item', 'g-flex-column'].join(' ')}
+      style={{
+        overflowY: windowWidth <= 400 ? 'auto' : 'hidden',
+      }}
+    >
       <EnhancedTableToolbar
         setSearch={setSearch}
         setToggleActive={setToggleActive}
@@ -1974,7 +1979,11 @@ export default function EnhancedTable({pairs}) {
       }
 
       {windowWidth <= 660 &&
-        <div style={{overflow: 'auto'}}>
+        <div
+          style={{
+            overflowY: windowWidth > 400 ? 'auto' : 'visible',
+            marginTop: 20,
+          }}>
           {stableSort(filteredPairs, getComparator(order, orderBy))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
@@ -2364,6 +2373,6 @@ export default function EnhancedTable({pairs}) {
           }
         </div>
       }
-    </>
+    </div>
   );
 }
