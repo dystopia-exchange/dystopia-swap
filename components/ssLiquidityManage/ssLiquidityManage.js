@@ -352,13 +352,11 @@ export default function ssLiquidityManage() {
     if (input === 'amount0') {
       let am = BigNumber(asset0.balance).times(percent).div(100).toFixed(parseInt(asset0.decimals));
       setAmount0(am);
-      amount0Ref.current.focus();
       callQuoteAddLiquidity(am, amount1, 0, stable, pair, asset0, asset1);
 
     } else if (input === 'amount1') {
       let am = BigNumber(asset1.balance).times(percent).div(100).toFixed(parseInt(asset1.decimals));
       setAmount1(am);
-      amount1Ref.current.focus();
       callQuoteAddLiquidity(amount0, am, 1, stable, pair, asset0, asset1);
 
     } else if (input === 'withdraw') {
@@ -917,15 +915,11 @@ export default function ssLiquidityManage() {
               noWrap>
               {(assetValue && assetValue.gauge && assetValue.gauge.balance) ?
                 (' ' + formatCurrency(assetValue.gauge.balance)) :
-                (
-                  (assetValue && assetValue.balance) ?
-                    (' ' + formatCurrency(assetValue.balance)) :
-                    '0.00'
-                )
+                '0.00'
               }
             </Typography>
 
-            {assetValue?.balance && Number(assetValue?.balance) > 0 &&
+            {assetValue?.gauge?.balance && Number(assetValue?.gauge?.balance) > 0 && type === 'withdraw' &&
               <div
                 style={{
                   cursor: 'pointer',
