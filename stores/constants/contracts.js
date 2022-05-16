@@ -41,6 +41,9 @@ export const VOTER_ABI = abis.voterABI
 
 export const REWARD_ADDRESS = '0x39aB6574c289c3Ae4d88500eEc792AB5B947A5Eb'
 
+export const LIBRARY_ADDRESS = '0xAC587e0535a278379eB898e3FdbeFd4d713EacB7'
+export const LIBRARY_ABI = abis.dystopiaLibraryABI
+
 export const ERC20_ABI = abis.erc20ABI
 export const PAIR_ABI = abis.pairABI
 export const GAUGE_ABI = abis.gaugeABI
