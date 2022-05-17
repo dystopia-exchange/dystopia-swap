@@ -6,7 +6,7 @@ import stores from '../../stores';
 import { ACTIONS } from '../../stores/constants';
 
 export default function ssLiquidityPairs() {
-
+  const [isLoading, setIsLoading] = useState(true);
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
 
@@ -17,6 +17,7 @@ export default function ssLiquidityPairs() {
     const stableSwapUpdated = () => {
       setPairs(stores.stableSwapStore.getStore('pairs'));
       forceUpdate();
+      setIsLoading(false)
     };
 
     setPairs(stores.stableSwapStore.getStore('pairs'));
@@ -28,6 +29,6 @@ export default function ssLiquidityPairs() {
   }, []);
 
   return (
-    <PairsTable pairs={pairs}/>
+    <PairsTable pairs={pairs} isLoading={isLoading} />
   );
 }
