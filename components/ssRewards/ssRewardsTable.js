@@ -671,12 +671,15 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
   return (
     <>
       {windowWidth > 660 &&
-        <div className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
+        <div
+          // className={['g-flex-column__item', 'g-flex-column'].join(' ')}
+        >
           <TableContainer
             className={'g-flex-column__item-fixed'}
             style={{
               overflow: 'auto',
-              height: tableHeight,
+              maxHeight: tableHeight,
+              height: 'auto',
               background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
             }}>
             <Table

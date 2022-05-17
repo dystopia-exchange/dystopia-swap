@@ -796,12 +796,14 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
           style={{
             marginTop: ((windowWidth <= 1360 && showSearch) || windowWidth <= 1210) ? 45 : 0,
           }}
-          className={['g-flex-column__item', 'g-flex-column'].join(' ')}>
+          // className={['g-flex-column__item', 'g-flex-column'].join(' ')}
+        >
           <TableContainer
             className={'g-flex-column__item'}
             style={{
               overflow: 'auto',
-              height: tableHeight,
+              maxHeight: tableHeight,
+              height: 'auto',
               background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
             }}>
             <Table
