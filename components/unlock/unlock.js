@@ -152,6 +152,7 @@ function onConnectionClicked(
 ) {
   const connectorsByName = stores.accountStore.getStore("connectorsByName");
   setActivatingConnector(currentConnector);
+
   activate(connectorsByName[name]);
 }
 
