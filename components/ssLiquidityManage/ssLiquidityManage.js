@@ -1736,7 +1736,7 @@ export default function ssLiquidityManage() {
                   className={classes.actionButtonText}>{depositLoading ? `Depositing` : `Deposit`}</Typography>
                 {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
               </Button>
-              {/* {pair.token0.isWhitelisted && pair.token1.isWhitelisted && */}
+              {!pair.gauge &&
                 <Button
                   variant="contained"
                   size="large"
@@ -1752,7 +1752,7 @@ export default function ssLiquidityManage() {
                     className={classes.actionButtonText}>{createLoading ? `Creating` : `Create Gauge`}</Typography>
                   {createLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
                 </Button>
-              {/* } */}
+              } 
             </>
           }
           { // There is a Gauge on the pair. Can deposit and stake
