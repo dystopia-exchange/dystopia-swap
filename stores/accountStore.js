@@ -14,6 +14,8 @@ import {
 
 import Web3 from 'web3'; 
 
+import detectProvider from '@metamask/detect-provider'
+
 class Store {
   constructor(dispatcher, emitter) {
     this.dispatcher = dispatcher;
@@ -63,11 +65,15 @@ class Store {
   }
 
   configure = async () => {
+    const provider = await detectProvider();
     // this.getGasPrices();
-    injected.isAuthorized().then((isAuthorized) => {
+    injected.isAuthorized().then(async (isAuthorized) => {
+
       const { supportedChainIds } = injected;
       // fall back to ethereum mainnet if chainId undefined
-      const { chainId = process.env.NEXT_PUBLIC_CHAINID } = window.ethereum || {};
+      let providerChain = await provider.request({ method: 'eth_chainId' });
+      // const { chainId = process.env.NEXT_PUBLIC_CHAINID } = window.ethereum || {};
+      const { chainId = process.env.NEXT_PUBLIC_CHAINID } = { chainId: providerChain } || {};
       const parsedChainId = parseInt(chainId, 16);
       const isChainSupported = supportedChainIds.includes(parsedChainId);
       if (!isChainSupported) {
@@ -107,7 +113,7 @@ class Store {
       }
     });
 
-    if (window.ethereum) {
+    if (window.ethereum || provider) {
       this.updateAccount();
     } else {
       window.removeEventListener('ethereum#initialized', this.updateAccount);
@@ -119,10 +125,10 @@ class Store {
 
   updateAccount = () => {
     const that = this;
-    const res = window.ethereum.on('accountsChanged', function (accounts) {
+    const res = window.ethereum.on('accountsChanged', async function (accounts) {
       that.setStore({
         account: { address: accounts[0] },
-        web3context: { library: { provider: window.ethereum } }
+        web3context: { library: { provider: window.ethereum || await detectProvider() } }
       });
       that.emitter.emit(ACTIONS.ACCOUNT_CHANGED);
       that.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
