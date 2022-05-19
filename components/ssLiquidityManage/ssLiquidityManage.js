@@ -255,13 +255,12 @@ export default function ssLiquidityManage() {
   };
 
   const callQuoteAddLiquidity = (amountA, amountB, pa, sta, pp, assetA, assetB) => {
+    if(Number(parseInt(pp.reserve0)) != Number(0) && Number(parseInt(pp.reserve1)) != Number(0)){
     if (!pp) {
       return null;
     }
 
     let invert = false;
-
-    //TODO: Add check that asset0.address === pp.token0, otherwise we need to invert the calcs
 
     let addy0 = assetA.address;
     let addy1 = assetB.address;
@@ -317,6 +316,7 @@ export default function ssLiquidityManage() {
         stable: sta,
       },
     });
+  }
   };
 
   const callQuoteRemoveLiquidity = (p, amount) => {
@@ -350,12 +350,12 @@ export default function ssLiquidityManage() {
     setAmount1Error(false);
 
     if (input === 'amount0') {
-      let am = BigNumber(asset0.balance).times(percent).div(100).toFixed(parseInt(asset0.decimals));
+      let am = BigNumber(asset0.balance).times(percent).div(100).toFixed(parseFloat(asset0.decimals));
       setAmount0(am);
       callQuoteAddLiquidity(am, amount1, 0, stable, pair, asset0, asset1);
 
     } else if (input === 'amount1') {
-      let am = BigNumber(asset1.balance).times(percent).div(100).toFixed(parseInt(asset1.decimals));
+      let am = BigNumber(asset1.balance).times(percent).div(100).toFixed(parseFloat(asset1.decimals));
       setAmount1(am);
       callQuoteAddLiquidity(amount0, am, 1, stable, pair, asset0, asset1);
 
