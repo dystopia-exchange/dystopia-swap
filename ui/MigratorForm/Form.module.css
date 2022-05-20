@@ -1,13 +1,11 @@
 .form {
   position: relative;
-  width: 100%;
-  max-width: 460px;
+  width: 463px;
   height: auto;
   margin-left: 1px;
   background: var(--background-dark);
   padding: 13px 30px;
-  /* border: 1px solid var(--border-dark); */
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border-dark);
   border-top: none;
   border-bottom: none;
   z-index: 2;
@@ -23,29 +21,55 @@
 }
 
 .top {
-  top: 1px;
-  width: 464px;
-  height: 18px;
-  background-image: url("/images/ui/swap-popup-top-slice.svg");
-  background-repeat: no-repeat;
+  top: 0;
+  left: 0.5px;
+  width: 463px;
+  height: 17px;
+  background: var(--border-light);
+  clip-path: polygon(4% 0, 100% 0%, 100% 100%, 0 100%);
 }
 
-.bottom {
-  width: 463px;
-  height: 93px;
-  margin-top: -1px;
-  margin-left: 1px;
-  background-image: url("/images/ui/swap-popup-bottom-slice.svg");
+.top--inside {
+  margin-top: 1px;
+  margin-left: 0;
+  width: 462px;
+  height: 17px;
+  background: var(--background-light);
+  clip-path: polygon(4% 0, 100% 0%, 100% 100%, 0 100%);
 }
 
 .top--dark {
-  background-image: url("/images/ui/swap-popup-top-slice--dark.svg");
-  background-repeat: no-repeat;
+  background: var(--border-dark);
+}
+
+.top--inside--dark {
+  background: var(--background-dark);
+}
+
+.bottom {
+  top: 0;
+  left: 0.5px;
+  width: 463px;
+  height: 17px;
+  background: var(--border-light);
+  clip-path: polygon(0% 0, 100% 0%, 95% 100%, 0 100%);
+}
+
+.bottom--inside {
+  margin-top: 0;
+  margin-left: 1px;
+  width: 462px;
+  height: 16px;
+  background: var(--background-light);
+  clip-path: polygon(0% 0, 99.7% 0%, 94.9% 100%, 0 100%);
 }
 
 .bottom--dark {
-  background-image: url("/images/ui/swap-popup-bottom-slice--dark.svg");
-  background-repeat: no-repeat;
+  background: var(--border-dark);
+}
+
+.bottom--inside--dark {
+  background: var(--background-dark);
 }
 
 .form--dark {
@@ -62,7 +86,16 @@
   .form,
   .top,
   .bottom {
-    width: 100%;
+    width: 320px;
+  }
+
+  .top {
+    clip-path: polygon(5% 0, 100% 0%, 100% 100%, 0 100%);
+  }
+
+  .top--inside {
+    width: 318.5px;
+    clip-path: polygon(5% 0, 100% 0%, 100% 100%, 0 100%);
   }
 
   .bottom {
@@ -70,6 +103,7 @@
     background: var(--background-light);
     border: 1px solid var(--border-light);
     border-top: none;
+    display: none;
   }
 
   .bottom--dark {
@@ -80,6 +114,14 @@
   }
 
   .form {
-    padding: 13px 20px;
+    padding: 2px 20px 20px;
+  }
+
+  .form--dark {
+    border-bottom: 1px solid var(--border-dark);
+  }
+
+  .form--light {
+    border-bottom: 1px solid var(--border-light);
   }
 }

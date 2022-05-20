@@ -9,14 +9,18 @@ const Form = (props) => {
   return (
     <div className={['g-flex-column', 'g-flex--align-center'].join(' ')}>
       <div className={[classes[`top`], classes[`top--${appTheme}`]].join(' ')}>
+        <div className={[classes[`top--inside`], classes[`top--inside--${appTheme}`]].join(' ')}>
+        </div>
       </div>
 
       <form className={[classes[`form`], classes[`form--${appTheme}`]].join(' ')} {...props}>
         {props.children}
       </form>
 
-      {/* <div className={[classes[`bottom`], classes[`bottom--${appTheme}`]].join(' ')}>
-      </div> */}
+      <div className={[classes[`bottom`], classes[`bottom--${appTheme}`]].join(' ')}>
+        <div className={[classes[`bottom--inside`], classes[`bottom--inside--${appTheme}`]].join(' ')}>
+        </div>
+      </div>
     </div>
   );
 };

@@ -503,9 +503,11 @@ const useStyles = makeStyles({
       padding: '9px 0',
       paddingLeft: 20,
     },
-    ["@media (max-width:530px)"]: {
+    ["@media (max-width:540px)"]: {
       // eslint-disable-line no-useless-computed-key
       fontSize: '12px !important',
+      paddingLeft: 10,
+      marginLeft: 10,
     },
   },
   myDepositsText: {
@@ -1009,7 +1011,7 @@ const EnhancedTableToolbar = (props) => {
 
           <div
             style={{
-              marginLeft: 10,
+              marginLeft: windowWidth > 540 ? 10 : 0,
               marginRight: 10,
             }}>
             <SwitchCustom

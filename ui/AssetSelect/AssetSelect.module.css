@@ -7,6 +7,11 @@
   cursor: pointer;
 }
 
+.displaySelectContainerSmall {
+  padding: 0;
+  margin-left: 10px;
+}
+
 .displayDualIconContainer {
   position: relative;
   width: 90px;
@@ -16,6 +21,20 @@
   justify-content: center;
   transition: fill 0.16s ease;
   fill: #9BC9E4;
+}
+
+.displayDualIconContainerSmallest {
+  width: 50px;
+  height: 50px;
+  background: #CFE5F2;
+  border: 1px solid #9BC9E4;
+  border-radius: 100px;
+  margin-right: 10px;
+}
+
+.displayDualIconContainer--dark.displayDualIconContainerSmallest {
+  background: #24292D;
+  border: 1px solid #304E61;
 }
 
 .displayDualIconContainer:hover {
@@ -62,6 +81,11 @@
   width: 60px;
   height: 60px;
   border-radius: 100px;
+}
+
+.displayAssetIconSmall {
+  width: 40px;
+  height: 40px;
 }
 
 .assetSelectMenu {
@@ -282,6 +306,11 @@
     padding: 43px 10px 10px;
   }
 
+  .displaySelectContainerSmall {
+    padding: 0;
+    margin-left: 10px;
+  }
+
   .displayDualIconContainerSmall,
   .assetOptionIcon {
     width: 40px;
@@ -300,9 +329,19 @@
     height: 60px;
   }
 
+  .displayDualIconContainerSmallest {
+    width: 38px;
+    height: 38px;
+  }
+
   .displayAssetIcon {
     width: 40px;
     height: 40px;
+  }
+
+  .displayAssetIconSmall {
+    width: 30px;
+    height: 30px;
   }
 
   .dialogContainer {
