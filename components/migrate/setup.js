@@ -56,9 +56,8 @@ export default function Setup() {
     const pair = await stores.stableSwapStore.getPair(
       fromAssetValue.address,
       toAssetValue.address,
-      bool,
+      bool
     );
-
     if (pair != null) {
       pair.reserve0 =
         (parseFloat(pair?.balance.toString()) /
@@ -70,8 +69,18 @@ export default function Setup() {
         parseFloat(pair?.reserve1.toString());
 
       setdystopiaPair(pair);
+      let removedToken0 =(amount * pairDetails?.weiReserve1) /pairDetails?.totalSupply;
+    let removedToken1 =(amount * pairDetails?.weiReserve2) /pairDetails?.totalSupply;
+      if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0){
+      await callQuoteAddLiquidity(
+        removedToken0,
+        removedToken1,
+        bool,
+        pairDetails.token0,
+        pairDetails.token1,
+      );}
     } else {
-      // setdystopiaPair(null);
+      setdystopiaPair(null);
     }
   };
 
@@ -374,8 +383,7 @@ export default function Setup() {
     (loading &&
       pairDetails &&
       !pairDetails.isValid &&
-      parseFloat(pairDetails.lpBalance) <= 0);
-
+      Number(parseInt(pairDetails?.lpBalance)) == Number(0));
   const migrator = migrate.find((eachMigrate) => eachMigrate == platform);
   const OpenDown = (props) => {
     return (
@@ -958,8 +966,8 @@ export default function Setup() {
                 </div>
               </div>
 
-
-              {dystopiaPair ? (
+              {Number(parseFloat(pairDetails?.lpBalance)) !== Number(0)?
+              dystopiaPair ? (
                 <div>
                   <div
                     className={[classes.toggleArrow, 'g-flex', 'g-flex--align-center'].join(' ')}
@@ -1169,7 +1177,7 @@ export default function Setup() {
                     </div>
                   ) : null}
                 </div>
-              ) : null}
+              ) : null:null}
             </>
           )}
 
@@ -1183,7 +1191,7 @@ export default function Setup() {
           size="large"
           color="primary"
           onClick={migrateLiquidity}
-          disabled={disableButton}
+          disabled={(parseFloat(pairDetails.lpBalance) <= 0)}
           className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(" ")}>
             <span className={classes.actionButtonText}>
               {buttonText}
