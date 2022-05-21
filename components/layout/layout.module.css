@@ -39,6 +39,12 @@
   padding: 60px 90px 30px;
 }
 
+.containerInner {
+  max-width: 1375px;
+  width: 100%;
+  margin: 0 auto;
+}
+
 @media screen and (max-width: 1024px) {
   .main {
     padding: 60px 47px;

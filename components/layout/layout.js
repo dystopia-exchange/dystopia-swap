@@ -49,7 +49,9 @@ export default function Layout({
         )}
         <SnackbarController />
         <main className={[classes.main, 'g-flex-column__item', 'g-flex-column', 'g-scroll-y'].join(' ')}>
-          {children}
+          <div className={classes.containerInner}>
+            {children}
+          </div>
         </main>
       </div>
     </>
