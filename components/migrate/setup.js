@@ -311,30 +311,36 @@ export default function Setup() {
   };
 
   const handleAmountChange = async (event) => {
-    if (parseFloat(event.target.value) >= parseFloat(pairDetails.lpBalance)) {
-      setAmount(pairDetails.lpBalance);
-    } else {
-      setAmount(event.target.value);
-    }
-
-    pairDetails.token0Bal =
+     if (parseFloat(event.target.value) >= parseFloat(pairDetails.lpBalance)) {
+       setAmount(pairDetails.lpBalance);
+     } else {
+       setAmount(event.target.value);
+     }
+     if(parseFloat(event.target.value) <=0 || event.target.value == null || event.target.value == '' || isNaN(event.target.value)){
+       setdystopiaPair(null)
+     }
+     else{
+       setdystopiaPair(true)
+     }
+     
+     pairDetails.token0Bal =
       (parseFloat(event.target.value.toString()) /
         parseFloat(pairDetails.totalSupply.toString())) *
       parseFloat(pairDetails.weiReserve1);
 
-    pairDetails.token1Bal =
+     pairDetails.token1Bal =
       (parseFloat(event.target.value.toString()) /
         parseFloat(pairDetails.totalSupply.toString())) *
       parseFloat(pairDetails.weiReserve2.toString());
 
-    let removedToken0 =
+     let removedToken0 =
       (event.target.value * pairDetails?.weiReserve1) /
       pairDetails?.totalSupply;
-    let removedToken1 =
+     let removedToken1 =
       (event.target.value * pairDetails?.weiReserve2) /
       pairDetails?.totalSupply;
 
-    if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0)
+     if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0)
       await callQuoteAddLiquidity(
         removedToken0,
         removedToken1,
@@ -342,6 +348,7 @@ export default function Setup() {
         pairDetails.token0,
         pairDetails.token1,
       );
+    
   };
   const handleMax = async (lpBalance) => {
     setAmount(lpBalance);
@@ -368,6 +375,8 @@ export default function Setup() {
         pairDetails.token0,
         pairDetails.token1,
       );
+    
+      setdystopiaPair(true)  
   };
 
   let buttonText = "Approve";
@@ -948,7 +957,7 @@ export default function Setup() {
 
                   <div
                     className={[classes.poolShareCoinBalance, classes[`poolShareCoinBalance--${appTheme}`]].join(' ')}>
-                    {Number(pairDetails.token0Bal).toFixed(2)}
+                    {isNaN(Number(pairDetails.token0Bal).toFixed(2))?0:Number(pairDetails.token0Bal).toFixed(2)}
                   </div>
                 </div>
 
@@ -962,12 +971,12 @@ export default function Setup() {
 
                   <div
                     className={[classes.poolShareCoinBalance, classes[`poolShareCoinBalance--${appTheme}`]].join(' ')}>
-                    {Number(pairDetails.token1Bal).toFixed(2)}
+                    {isNaN(Number(pairDetails.token1Bal).toFixed(2))?0:Number(pairDetails.token1Bal).toFixed(2)}
                   </div>
                 </div>
               </div>
 
-              {Number(parseFloat(pairDetails?.lpBalance)) !== Number(0)?
+              {Number(parseFloat(pairDetails?.lpBalance)) !== Number(0) || Number(parseFloat(amount)) !== Number(0) || Number(parseFloat(amount)) == null?
               dystopiaPair ? (
                 <div>
                   <div
@@ -1192,7 +1201,7 @@ export default function Setup() {
           size="large"
           color="primary"
           onClick={migrateLiquidity}
-          disabled={(parseFloat(pairDetails.lpBalance) <= 0)}
+          disabled={(parseFloat(pairDetails.lpBalance) <= 0) || parseFloat(amount)<=0 || amount == null || amount == '' || isNaN(amount)}
           className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(" ")}>
             <span className={classes.actionButtonText}>
               {buttonText}
