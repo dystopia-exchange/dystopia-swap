@@ -14,7 +14,7 @@ export default function Layout({
 }) {
   const { appTheme } = useAppThemeContext();
 
-  
+  const isHomePage = window.location.pathname === '/home'
 
   return (
     <>
@@ -36,7 +36,14 @@ export default function Layout({
         <meta name="og:title" content="Dystopia" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <div className={[classes.content, classes[`content--${appTheme}`], 'g-flex-column'].join(' ')}>
+      <div
+        className={[
+          classes.content,
+          classes[`content--${appTheme}`],
+          classes[`homePage--${appTheme}`],
+          'g-flex-column'
+        ].join(' ')}
+      >
         {!configure && (
           <Header backClicked={backClicked} changeTheme={changeTheme} title={ title } />
         )}

@@ -7,12 +7,14 @@ import Vote from "./vote";
 import Rewards from "./rewards";
 import Whitelist from "./whitelist";
 import Bribe from "./bribe/create";
+import { HomePage2 } from './home2'
 
 import { useRouter } from "next/router";
 
 function Route({ changeTheme, ...props }) {
   const router = useRouter();
   const activePath = router.asPath;
+
   if (activePath.includes("/swap")) {
     return <Swap props={props} changeTheme={changeTheme} />;
   } else if (activePath.includes("/liquidity")) {

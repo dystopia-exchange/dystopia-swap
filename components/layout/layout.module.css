@@ -26,6 +26,14 @@
   background-size: cover;
 }
 
+.homePage--light {
+  background: #DBE6EC;
+}
+
+.homePage--dark {
+  background: #151718;
+}
+
 .main {
   position: relative;
   padding: 60px 90px 30px;
