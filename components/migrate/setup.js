@@ -283,6 +283,7 @@ export default function Setup() {
 
   const handleChange = (event) => {
     setPlatform(event);
+    setPairDetails(null);
     setcheckpair(false);
   };
 
