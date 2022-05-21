@@ -40,7 +40,7 @@ export default function Layout({
         className={[
           classes.content,
           classes[`content--${appTheme}`],
-          classes[`homePage--${appTheme}`],
+          isHomePage ? classes[`homePage--${appTheme}`] : '',
           'g-flex-column'
         ].join(' ')}
       >
