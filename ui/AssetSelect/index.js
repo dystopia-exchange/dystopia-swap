@@ -19,15 +19,19 @@ import Borders from '../Borders';
 import BigNumber from 'bignumber.js';
 import SwapIconBg from '../SwapIconBg';
 
-const AssetSelect = ({
-                       type,
-                       value,
-                       assetOptions,
-                       onSelect,
-                       typeIcon = 'single',
-                       isManageLocal = true,
-                       title = 'Select a token',
-                     }) => {
+const AssetSelect = (
+  {
+    type,
+    value,
+    assetOptions,
+    onSelect,
+    typeIcon = 'single',
+    isManageLocal = true,
+    title = 'Select a token',
+    showBalance = true,
+    interactiveBorder = true,
+    size = 'default',
+  }) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [filteredAssetOptions, setFilteredAssetOptions] = useState([]);
@@ -211,13 +215,15 @@ const AssetSelect = ({
               {asset ? asset.symbol : ''}
             </div>
 
-            <div
-              className={classes.assetSelectBalanceText}
-              style={{
-                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-              }}>
-              {(asset && asset.balance) ? formatCurrency(asset.balance) : '0.00'}
-            </div>
+            {showBalance &&
+              <div
+                className={classes.assetSelectBalanceText}
+                style={{
+                  color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                }}>
+                {(asset && asset.balance) ? formatCurrency(asset.balance) : '0.00'}
+              </div>
+            }
           </div>
 
           <div
@@ -230,13 +236,15 @@ const AssetSelect = ({
               {asset ? asset.name : ''}
             </div>
 
-            <div
-              className={classes.assetSelectBalanceText2}
-              style={{
-                color: appTheme === "dark" ? '#7C838A' : '#5688A5',
-              }}>
-              {typeIcon === 'single' ? 'Balance' : ''}
-            </div>
+            {showBalance &&
+              <div
+                className={classes.assetSelectBalanceText2}
+                style={{
+                  color: appTheme === "dark" ? '#7C838A' : '#5688A5',
+                }}>
+                {typeIcon === 'single' ? 'Balance' : ''}
+              </div>
+            }
           </div>
         </div>
       </MenuItem>
@@ -365,22 +373,23 @@ const AssetSelect = ({
 
   return (
     <React.Fragment>
-      <div className={classes.displaySelectContainer} onClick={() => {
+      <div className={[classes.displaySelectContainer, size === 'small' ? classes.displaySelectContainerSmall : ''].join(' ')} onClick={() => {
         openSearch();
       }}>
         <div className={classes.assetSelectMenuItem}>
           <div
-            className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+            className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`], size === 'small' ? classes.displayDualIconContainerSmallest : ''].join(' ')}>
 
             {typeIcon === 'single' &&
               <>
-                <SwapIconBg/>
+                {interactiveBorder &&
+                  <SwapIconBg/>
+                }
 
                 <img
-                  className={classes.displayAssetIcon}
+                  className={[classes.displayAssetIcon, size === 'small' ? classes.displayAssetIconSmall : ''].join(' ')}
                   alt=""
                   src={value ? `${value.logoURI}` : ''}
-                  height="100px"
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
