@@ -7,7 +7,6 @@ import Vote from "./vote";
 import Rewards from "./rewards";
 import Whitelist from "./whitelist";
 import Bribe from "./bribe/create";
-import { HomePage2 } from './home2'
 
 import { useRouter } from "next/router";
 
