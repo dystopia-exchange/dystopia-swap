@@ -211,7 +211,7 @@ export default function TransactionQueue({setQueueLength}) {
           justifyContent: 'space-between',
         }}>
           <div style={{
-            color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+            color: appTheme === "dark" ? '#7C838A' : '#0A2C40',
           }}>
             Notification History
           </div>
@@ -219,7 +219,7 @@ export default function TransactionQueue({setQueueLength}) {
           <Close
             style={{
               cursor: 'pointer',
-              color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+              color: appTheme === "dark" ? '#7C838A' : '#0A2C40',
             }}
             onClick={handleClose}/>
         </div>

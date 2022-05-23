@@ -8,58 +8,6 @@ import SSWarning from "../ssWarning";
 import classes from "./navigation.module.css";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 
-const StyledSwitch = withStyles((theme) => ({
-  root: {
-    width: 58,
-    height: 32,
-    padding: 0,
-    margin: theme.spacing(1),
-  },
-  switchBase: {
-    padding: 1,
-    "&$checked": {
-      transform: "translateX(28px)",
-      color: "#212529",
-      "& + $track": {
-        backgroundColor: "#ffffff",
-        opacity: 1,
-      },
-    },
-    "&$focusVisible $thumb": {
-      color: "#ffffff",
-      border: "6px solid #fff",
-    },
-  },
-  thumb: {
-    width: 24,
-    height: 24,
-  },
-  track: {
-    borderRadius: 32 / 2,
-    border: `1px solid #212529`,
-    backgroundColor: "#212529",
-    opacity: 1,
-    transition: theme.transitions.create(["background-color", "border"]),
-  },
-  checked: {},
-  focusVisible: {},
-}))(({ classes, ...props }) => {
-  return (
-    <Switch
-      focusVisibleClassName={classes.focusVisible}
-      disableRipple
-      classes={{
-        root: classes.root,
-        switchBase: classes.switchBase,
-        thumb: classes.thumb,
-        track: classes.track,
-        checked: classes.checked,
-      }}
-      {...props}
-    />
-  );
-});
-
 function Navigation(props) {
   const router = useRouter();
   const { appTheme } = useAppThemeContext();
@@ -126,15 +74,15 @@ function Navigation(props) {
     if (activePath.includes("whitelist")) {
       setActive("whitelist");
     }
-    // if (activePath.includes("migrate")) {
-    //   setActive("migrate");
-    // }
+    if (activePath.includes("migrate")) {
+      setActive("migrate");
+    }
   }, []);
 
   const renderNavs = () => {
     return (
       <ToggleButtonGroup
-        value={active}
+        value={router.asPath.includes("home") ? null : active}
         exclusive
         onChange={onActiveClick}
         className={classes.navToggles}
@@ -145,7 +93,7 @@ function Navigation(props) {
         {renderSubNav("Vote", "vote")}
         {renderSubNav("Rewards", "rewards")}
         {renderSubNav("Whitelist", "whitelist")}
-        {/* {renderSubNav("Migrate", "migrate")} */}
+        {renderSubNav("Migrate", "migrate")}
       </ToggleButtonGroup>
     );
   };

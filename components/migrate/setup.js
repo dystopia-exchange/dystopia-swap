@@ -4,74 +4,30 @@ import {
   Typography,
   InputAdornment,
   Button,
-  MenuItem,
-  IconButton,
   Dialog,
-  InputLabel,
   InputBase,
-  FormControl,
   DialogTitle,
-  CircularProgress,
   DialogContent,
   Tooltip,
-  Stack,
-  Radio,
-  DialogContentText,
-  DialogActions,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import {
   Search,
   KeyboardArrowDown,
-  ArrowForwardIos,
-  DeleteOutline,
   Close,
-  ArrowBackIosNew,
-  SettingsPhoneTwoTone,
-  ContentPasteSearchOutlined,
 } from "@mui/icons-material";
 import migrate from "../../stores/configurations/migrators";
 import FactoryAbi from "../../stores/abis/FactoryAbi.json";
-import migratorAbi from "../../stores/abis/migrator.json";
 import pairContractAbi from "../../stores/abis/pairOldRouter.json";
 import Form from "../../ui/MigratorForm";
-import {
-  formatCurrency,
-  formatAddress,
-  formatCurrencyWithSymbol,
-  formatCurrencySmall,
-} from "../../utils";
-import classes from "./ssSwap.module.css";
+import classes from "./ssMigrate.module.css";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import stores from "../../stores";
 import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
 import BigNumber from "bignumber.js";
-import { formatSymbol } from "../../utils";
-import SwapIconBg from '../../ui/SwapIconBg';
 import Borders from '../../ui/Borders';
-
-const BootstrapInput = styled(InputBase)(({theme}) => ({
-  "& .MuiInputBase-input": {
-    borderRadius: 0,
-    position: "relative",
-    color: "#5688A5",
-    backgroundColor: "transparent",
-    border: "1px solid #86B9D6",
-    fontSize: 16,
-    padding: "10px 26px 10px 12px",
-    fontFamily: "Roboto Mono",
-    fontStyle: "normal",
-    fontWeight: "500",
-    fontSize: "18px",
-    transition: theme.transitions.create(["border-color", "box-shadow"]),
-    "&:focus": {
-      borderRadius: 0,
-      borderColor: "#80bdff",
-      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
-    },
-  },
-}));
+import AssetSelect from '../../ui/AssetSelect';
+import Loader from '../../ui/Loader';
 
 export default function Setup() {
   const [fromAssetValue, setFromAssetValue] = useState(null);
@@ -80,7 +36,7 @@ export default function Setup() {
   const forceUpdate = React.useCallback(() => updateState({}), []);
   const {appTheme} = useAppThemeContext();
   const [isStable, toggleStablePool] = useState(false);
-  const [toggleArrow, settoggleArrow] = useState(false);
+  const [toggleArrow, setToggleArrow] = useState(false);
   const [pairDetails, setPairDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("");
@@ -100,9 +56,8 @@ export default function Setup() {
     const pair = await stores.stableSwapStore.getPair(
       fromAssetValue.address,
       toAssetValue.address,
-      bool,
+      bool
     );
-
     if (pair != null) {
       pair.reserve0 =
         (parseFloat(pair?.balance.toString()) /
@@ -114,6 +69,16 @@ export default function Setup() {
         parseFloat(pair?.reserve1.toString());
 
       setdystopiaPair(pair);
+      let removedToken0 =(amount * pairDetails?.weiReserve1) /pairDetails?.totalSupply;
+    let removedToken1 =(amount * pairDetails?.weiReserve2) /pairDetails?.totalSupply;
+      if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0){
+      await callQuoteAddLiquidity(
+        removedToken0,
+        removedToken1,
+        bool,
+        pairDetails.token0,
+        pairDetails.token1,
+      );}
     } else {
       setdystopiaPair(null);
     }
@@ -318,6 +283,7 @@ export default function Setup() {
 
   const handleChange = (event) => {
     setPlatform(event);
+    setPairDetails(null);
     setcheckpair(false);
   };
 
@@ -345,30 +311,36 @@ export default function Setup() {
   };
 
   const handleAmountChange = async (event) => {
-    if (parseFloat(event.target.value) >= parseFloat(pairDetails.lpBalance)) {
-      setAmount(pairDetails.lpBalance);
-    } else {
-      setAmount(event.target.value);
-    }
-
-    pairDetails.token0Bal =
+     if (parseFloat(event.target.value) >= parseFloat(pairDetails.lpBalance)) {
+       setAmount(pairDetails.lpBalance);
+     } else {
+       setAmount(event.target.value);
+     }
+     if(parseFloat(event.target.value) <=0 || event.target.value == null || event.target.value == '' || isNaN(event.target.value)){
+       setdystopiaPair(null)
+     }
+     else{
+       setdystopiaPair(true)
+     }
+     
+     pairDetails.token0Bal =
       (parseFloat(event.target.value.toString()) /
         parseFloat(pairDetails.totalSupply.toString())) *
       parseFloat(pairDetails.weiReserve1);
 
-    pairDetails.token1Bal =
+     pairDetails.token1Bal =
       (parseFloat(event.target.value.toString()) /
         parseFloat(pairDetails.totalSupply.toString())) *
       parseFloat(pairDetails.weiReserve2.toString());
 
-    let removedToken0 =
+     let removedToken0 =
       (event.target.value * pairDetails?.weiReserve1) /
       pairDetails?.totalSupply;
-    let removedToken1 =
+     let removedToken1 =
       (event.target.value * pairDetails?.weiReserve2) /
       pairDetails?.totalSupply;
 
-    if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0)
+     if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0)
       await callQuoteAddLiquidity(
         removedToken0,
         removedToken1,
@@ -376,6 +348,7 @@ export default function Setup() {
         pairDetails.token0,
         pairDetails.token1,
       );
+    
   };
   const handleMax = async (lpBalance) => {
     setAmount(lpBalance);
@@ -402,6 +375,8 @@ export default function Setup() {
         pairDetails.token0,
         pairDetails.token1,
       );
+    
+      setdystopiaPair(true)  
   };
 
   let buttonText = "Approve";
@@ -413,15 +388,12 @@ export default function Setup() {
   } else if (pairDetails && parseFloat(pairDetails.allowence) > 0) {
     buttonText = "Migrate Liquidity";
   }
-  let disableButton = false;
-  if (
-    loading &&
-    pairDetails &&
-    !pairDetails.isValid &&
-    parseFloat(pairDetails.lpBalance) <= 0
-  ) {
-    disableButton = true;
-  }
+
+  const disableButton = !platform ||
+    (loading &&
+      pairDetails &&
+      !pairDetails.isValid &&
+      Number(parseInt(pairDetails?.lpBalance)) == Number(0));
   const migrator = migrate.find((eachMigrate) => eachMigrate == platform);
   const OpenDown = (props) => {
     return (
@@ -511,1361 +483,20 @@ export default function Setup() {
     } else {
       setdystopiaPair(null);
     }
-
-    if (pair != null) {
-      pair.reserve0 =
-        (parseFloat(pair?.balance.toString()) /
-          parseFloat(pair?.totalSupply.toString())) *
-        parseFloat(pair?.reserve0);
-      pair.reserve1 =
-        (parseFloat(pair?.balance.toString()) /
-          parseFloat(pair?.totalSupply.toString())) *
-        parseFloat(pair?.reserve1.toString());
-
-      setdystopiaPair(pair);
-    } else {
-      setdystopiaPair(null);
-    }
   };
-  return (
-    <div>
-      <Form>
-        <div
-          className={[classes[`form`], classes[`form--${appTheme}`]].join(" ")}
-        >
-          <div className={classes.infoContainer}>
-            <div style={{marginBottom: "20px", width: "100%"}}>
-              <p
-                className={classes.titleText}
-                style={{color: appTheme === "light" ? "#0A2C40" : "white"}}
-              >
-                Source of Migration:
-              </p>
-              <FormControl variant="standard" sx={{width: "100%"}}>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirectiion: "row",
-                  }}
-                >
-                  <div
-                    className={[
-                      classes.pairDetails,
-                      classes[`pairDetails--${appTheme}`],
-                    ].join(" ")}
-                  >
-                    <div
-                      className={[
-                        classes[`nav-button-corner-bottom`],
-                        classes[`nav-button-corner-bottom--${appTheme}`],
-                      ].join(" ")}
-                    >
-                      <div
-                        className={[
-                          classes[`nav-button-corner-top`],
-                          classes[`nav-button-corner-top--${appTheme}`],
-                        ].join(" ")}
-                      >
-                        <span style={{color: "#304C5E", fontWeight: "800"}}>
-                          {platform ? platform.label : "Select a Platform"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    style={{width: "30%"}}
-                    className={[
-                      classes.pairDetails,
-                      classes[`pairDetails--${appTheme}`],
-                    ].join(" ")}
-                  >
-                    <div
-                      className={[
-                        classes[`nav-button-corner-bottom`],
-                        classes[`nav-button-corner-bottom--${appTheme}`],
-                      ].join(" ")}
-                    >
-                      <div
-                        className={[
-                          classes[`nav-button-corner-top`],
-                          classes[`nav-button-corner-top--${appTheme}`],
-                        ].join(" ")}
-                      >
-                        <PlatformSelect onSelect={handleChange}/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {/* <InputLabel id="demo-simple-select-standard-label">Select Exchange Platform</InputLabel> */}
-                {/* <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  value={platform}
-                  onChange={handleChange}
-                  label="Exchange Platform"
-                  // IconComponent={(_props) => (
-                  //   <div className={[classes[`selecticonIcon`], classes[`selecticonIcon--${appTheme}`]].join(' ')}><KeyboardArrowDown /></div>
-                  // )}
-                  IconComponent={OpenDown}
-                  input={<BootstrapInput />}
-                >
-                  {migrate.map((eachPlatform) => (
-                    <MenuItem value={eachPlatform.value}>
-                      {eachPlatform.label}
-                    </MenuItem>
-                  ))}
-                </Select> */}
-                <div className={classes.line}></div>
-              </FormControl>
-            </div>
-            <div className={classes.swapInputs}>
-              <div
-                className={[
-                  classes.textField,
-                  classes[`textField--From-${appTheme}`],
-                ].join(" ")}
-                style={{overflow: "overlay"}}
-              >
-                <Typography className={classes.inputTitleText} noWrap>
-                  Token 0
-                </Typography>
 
-                <Typography className={classes.inputBalanceText} noWrap>
-                  Balance:
-                  <span>
-                    {fromAssetValue && fromAssetValue.balance
-                      ? " " + formatCurrency(fromAssetValue.balance)
-                      : ""}
-                  </span>
-                </Typography>
-                <div className={`${classes.massiveInputContainer}`}>
-                  <div className={classes.massiveInputAssetSelect}>
-                    <AssetSelect
-                      type="From"
-                      value={fromAssetValue}
-                      assetOptions={fromAssetOptions}
-                      onSelect={onAssetSelect}
-                    />
-                  </div>
-                  <Typography
-                    className={[
-                      classes.smallerText,
-                      classes[`smallerText--${appTheme}`],
-                    ].join(" ")}
-                  >
-                    {fromAssetValue?.symbol}
-                  </Typography>
-                </div>
-              </div>
-              <div
-                className={[
-                  classes.textField,
-                  classes[`textField--To-${appTheme}`],
-                ].join(" ")}
-                style={{marginTop: "50px", overflow: "overlay"}}
-              >
-                <Typography className={classes.inputTitleText} noWrap>
-                  Token 1
-                </Typography>
-
-                <Typography className={classes.inputBalanceText} noWrap>
-                  Balance:
-                  <span>
-                    {toAssetValue && toAssetValue.balance
-                      ? " " + formatCurrency(toAssetValue.balance)
-                      : ""}
-                  </span>
-                </Typography>
-                <div className={`${classes.massiveInputContainer}`}>
-                  <div className={classes.massiveInputAssetSelect}>
-                    <AssetSelect
-                      type="To"
-                      value={toAssetValue}
-                      assetOptions={toAssetOptions}
-                      onSelect={onAssetSelect}
-                    />
-                  </div>
-                  <Typography
-                    className={[
-                      classes.smallerText,
-                      classes[`smallerText--${appTheme}`],
-                    ].join(" ")}
-                  >
-                    {toAssetValue?.symbol}
-                  </Typography>
-                </div>
-              </div>
-            </div>
-            {pairDetails && !pairDetails.isValid && (
-              <span className={classes.inputBalanceErrorText}>
-                Pair is Invaild
-              </span>
-            )}
-            {pairDetails && pairDetails.isValid && (
-              <div style={{width: "100%"}}>
-                <div
-                  className={[
-                    classes.textField,
-                    classes[`textField--To-${appTheme}`],
-                  ].join(" ")}
-                  style={{marginTop: "50px"}}
-                >
-                  <Typography className={classes.inputTitleText} noWrap>
-                    Liq. Pair
-                  </Typography>
-                  <Typography className={classes.inputBalanceText} noWrap>
-                    Balance:
-                    <span>
-                      {pairDetails && pairDetails.lpBalance
-                        ? Number(pairDetails.lpBalance).toFixed(5)
-                        : "0"}
-                    </span>
-                  </Typography>
-                  <div>
-                    <Button
-                      onClick={() =>
-                        handleMax(Number(pairDetails.lpBalance).toFixed(5))
-                      }
-                      style={{
-                        position: "absolute",
-                        marginLeft: "300px",
-                        top: "10px",
-                        padding: "0",
-                      }}
-                      variant="text"
-                      size="small"
-                    >
-                      MAX
-                    </Button>
-                  </div>
-                  <div className={`${classes.massiveInputContainer}`}>
-                    <div className={classes.massiveInputAssetSelect}>
-                      <div
-                        className={classes.displaySelectContainer}
-                        style={{padding: "61px 0px 19px"}}
-                      >
-                        <div
-                          className={classes.assetSelectMenuItem}
-                          style={{display: "flex"}}
-                        >
-                          <div
-                            className={[classes.displayDualIconContainer].join(
-                              " ",
-                            )}
-                            style={{
-                              width: "60px",
-                              height: "60px",
-                              borderRadius: "50%",
-                              border:
-                                appTheme === "light"
-                                  ? "1px solid rgb(50 73 87)"
-                                  : "1px solid rgb(50 73 87)",
-                              background: "#B8DFF5",
-                              padding: "10px",
-                            }}
-                          >
-                            <SwapIconBg/>
-                            <img
-                              className={classes.displayAssetIcon}
-                              alt=""
-                              src={
-                                fromAssetValue
-                                  ? `${fromAssetValue.logoURI}`
-                                  : ""
-                              }
-                              height="40px"
-                              style={{width: "40px", height: "40px"}}
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                              }}
-                            />
-                          </div>
-                          <div
-                            className={[classes.displayDualIconContainer].join(
-                              " ",
-                            )}
-                            style={{
-                              width: "60px",
-                              height: "60px",
-                              borderRadius: "50%",
-                              border:
-                                appTheme === "light"
-                                  ? "1px solid rgb(50 73 87)"
-                                  : "1px solid rgb(50 73 87)",
-                              position: "absolute",
-                              left: "50px",
-                              background: "#B8DFF5",
-                              padding: "10px",
-                            }}
-                          >
-                            <SwapIconBg/>
-                            <img
-                              className={classes.displayAssetIcon}
-                              alt=""
-                              src={
-                                toAssetValue ? `${toAssetValue.logoURI}` : ""
-                              }
-                              height="40px"
-                              style={{width: "40px", height: "40px"}}
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <InputBase
-                      className={classes.massiveInputAmount}
-                      placeholder="0.00"
-                      inputProps={{
-                        className: [
-                          classes.largeInput,
-                          classes[`largeInput--${appTheme}`],
-                        ].join(" "),
-                      }}
-                      InputProps={{
-                        disableUnderline: true,
-                      }}
-                      max
-                      fullWidth
-                      value={amount}
-                      onChange={(event) => handleAmountChange(event)}
-                    />
-                    <Typography
-                      className={[
-                        classes.smallerText,
-                        classes[`smallerText--${appTheme}`],
-                      ].join(" ")}
-                      style={{top: "118px", left: "151px"}}
-                    >
-                      {fromAssetValue?.symbol}/{toAssetValue?.symbol}
-                    </Typography>
-                  </div>
-                </div>
-                <div
-                  className={[
-                    classes.pairContainer,
-                    classes[`pairContainer--${appTheme}`],
-                  ].join(" ")}
-                  style={{marginTop: "20px"}}
-                >
-                  <div style={{display: "flex", alignItems: "center"}}>
-                    <div
-                      className={classes.assetSelectMenuItem}
-                      style={{display: "flex"}}
-                    >
-                      <div
-                        className={[classes.displayDualIconContainer].join(" ")}
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          borderRadius: "50%",
-                          border:
-                            appTheme === "light"
-                              ? "1px solid rgb(50 73 87)"
-                              : "1px solid rgb(50 73 87)",
-                          background: "#B8DFF5",
-                          padding: "10px",
-                        }}
-                      >
-                        <img
-                          className={classes.displayAssetIcon}
-                          alt=""
-                          src={
-                            fromAssetValue ? `${fromAssetValue.logoURI}` : ""
-                          }
-                          style={{width: "30px", height: "30px"}}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                          }}
-                        />
-                      </div>
-                      <div
-                        className={[classes.displayDualIconContainer].join(" ")}
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          borderRadius: "50%",
-                          border:
-                            appTheme === "light"
-                              ? "1px solid rgb(50 73 87)"
-                              : "1px solid rgb(50 73 87)",
-                          position: "absolute",
-                          left: "80px",
-                          background: "#B8DFF5",
-                          padding: "10px",
-                        }}
-                      >
-                        <img
-                          className={classes.displayAssetIcon}
-                          alt=""
-                          src={toAssetValue ? `${toAssetValue.logoURI}` : ""}
-                          style={{width: "30px", height: "30px"}}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div style={{marginLeft: "50px"}}>
-                      <div>
-                        {fromAssetValue?.symbol}/{toAssetValue?.symbol}
-                      </div>
-                      <span
-                        style={{
-                          color: appTheme === "light" ? "#86B9D6" : "#5F7285",
-                          fontSize: "16px",
-                        }}
-                      >
-                        {platform ? platform.label : "Select a Platform"} Pool
-                      </span>
-                    </div>
-                  </div>
-                  <span style={{color: "#304C5E", fontWeight: "800"}}>
-                    {Number(amount).toFixed(5)}
-                  </span>
-                </div>
-                <div
-                  className={[
-                    classes.pairDetails,
-                    classes[`pairDetails--${appTheme}`],
-                  ].join(" ")}
-                >
-                  <div
-                    className={[
-                      classes[`nav-button-corner-bottom`],
-                      classes[`nav-button-corner-bottom--${appTheme}`],
-                    ].join(" ")}
-                  >
-                    <div
-                      className={[
-                        classes[`nav-button-corner-top`],
-                        classes[`nav-button-corner-top--${appTheme}`],
-                      ].join(" ")}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        Your Pool Share:
-                        <span
-                          style={{
-                            color: "#304C5E",
-                            fontWeight: "800",
-                            // marginLeft: "175px",
-                          }}
-                        >
-                          {pairDetails.poolTokenPercentage}%
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className={classes.boxStyle}>
-                  <div
-                    className={[
-                      classes.pairDetails,
-                      classes[`pairDetails--${appTheme}`],
-                    ].join(" ")}
-                  >
-                    <div
-                      className={[
-                        classes[`nav-button-corner-bottom`],
-                        classes[`nav-button-corner-bottom--${appTheme}`],
-                      ].join(" ")}
-                    >
-                      <div
-                        className={[
-                          classes[`nav-button-corner-top`],
-                          classes[`nav-button-corner-top--${appTheme}`],
-                        ].join(" ")}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          {pairDetails?.token0symbol}:
-                          <span
-                            style={{
-                              color: "#304C5E",
-                              fontWeight: "800",
-                              // marginLeft: "10px",
-                            }}
-                          >
-                            {Number(pairDetails.token0Bal).toFixed(2)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className={[
-                      classes.pairDetails,
-                      classes[`pairDetails--${appTheme}`],
-                    ].join(" ")}
-                  >
-                    <div
-                      className={[
-                        classes[`nav-button-corner-bottom`],
-                        classes[`nav-button-corner-bottom--${appTheme}`],
-                      ].join(" ")}
-                    >
-                      <div
-                        className={[
-                          classes[`nav-button-corner-top`],
-                          classes[`nav-button-corner-top--${appTheme}`],
-                        ].join(" ")}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          {pairDetails?.token1symbol}:
-                          <span
-                            style={{
-                              color: "#304C5E",
-                              fontWeight: "800",
-                              // marginLeft: "10px",
-                            }}
-                          >
-                            {Number(pairDetails.token1Bal).toFixed(2)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {dystopiaPair ? (
-                  <div>
-                    <div
-                      className={classes.arrowDownCircle}
-                      onClick={() => settoggleArrow(!toggleArrow)}
-                    >
-                      <span
-                        style={{
-                          height: "40px",
-                          width: "40px",
-                          backgroundColor: "transparent",
-                          borderRadius: "50%",
-                          display: "inline-block",
-                          border: "1px solid #86B9D6",
-                        }}
-                      >
-                        <svg
-                          style={{marginTop: "10px"}}
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          class="bi bi-chevron-down"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-                          />
-                        </svg>
-                      </span>
-                    </div>
-                    {toggleArrow ? (
-                      <div>
-                        <div
-                          className={[
-                            classes.pairContainer,
-                            classes[`pairContainer--${appTheme}`],
-                          ].join(" ")}
-                          style={{marginTop: "20px"}}
-                        >
-                          <div
-                            style={{display: "flex", alignItems: "center"}}
-                          >
-                            <div
-                              className={classes.assetSelectMenuItem}
-                              style={{display: "flex"}}
-                            >
-                              <div
-                                className={[
-                                  classes.displayDualIconContainer,
-                                ].join(" ")}
-                                style={{
-                                  width: "50px",
-                                  height: "50px",
-                                  borderRadius: "50%",
-                                  border:
-                                    appTheme === "light"
-                                      ? "1px solid rgb(50 73 87)"
-                                      : "1px solid rgb(50 73 87)",
-                                  background: "#B8DFF5",
-                                  padding: "10px",
-                                }}
-                              >
-                                <SwapIconBg/>
-                                <img
-                                  className={classes.displayAssetIcon}
-                                  alt=""
-                                  src={
-                                    fromAssetValue
-                                      ? `${fromAssetValue.logoURI}`
-                                      : ""
-                                  }
-                                  style={{width: "30px", height: "30px"}}
-                                  onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                                  }}
-                                />
-                              </div>
-                              <div
-                                className={[
-                                  classes.displayDualIconContainer,
-                                ].join(" ")}
-                                style={{
-                                  width: "50px",
-                                  height: "50px",
-                                  borderRadius: "50%",
-                                  border:
-                                    appTheme === "light"
-                                      ? "1px solid rgb(50 73 87)"
-                                      : "1px solid rgb(50 73 87)",
-                                  position: "absolute",
-                                  left: "80px",
-                                  background: "#B8DFF5",
-                                  padding: "10px",
-                                }}
-                              >
-                                <SwapIconBg/>
-                                <img
-                                  className={classes.displayAssetIcon}
-                                  alt=""
-                                  src={
-                                    toAssetValue
-                                      ? `${toAssetValue.logoURI}`
-                                      : ""
-                                  }
-                                  style={{width: "30px", height: "30px"}}
-                                  onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                                  }}
-                                />
-                              </div>
-                            </div>
-                            <div style={{marginLeft: "50px"}}>
-                              <div>
-                                {fromAssetValue?.symbol}/{toAssetValue?.symbol}
-                              </div>
-                              <span
-                                style={{
-                                  color:
-                                    appTheme === "light"
-                                      ? "#86B9D6"
-                                      : "#5F7285",
-                                  fontSize: "16px",
-                                }}
-                              >
-                                Dystopia Pool
-                              </span>
-                            </div>
-                          </div>
-                          <span style={{color: "#304C5E", fontWeight: "800"}}>
-                            {Number(quote?.res?.liquidity / 10 ** 18).toFixed(
-                              5,
-                            )}
-                          </span>
-                        </div>
-                        <div className={classes.boxStyle}>
-                          <div
-                            className={[
-                              classes.pairDetails,
-                              classes[`pairDetails--${appTheme}`],
-                            ].join(" ")}
-                          >
-                            <div
-                              className={[
-                                classes[`nav-button-corner-bottom`],
-                                classes[
-                                  `nav-button-corner-bottom--${appTheme}`
-                                  ],
-                              ].join(" ")}
-                            >
-                              <div
-                                className={[
-                                  classes[`nav-button-corner-top`],
-                                  classes[`nav-button-corner-top--${appTheme}`],
-                                ].join(" ")}
-                              >
-                                {quote?.token0?.symbol}:
-                                <span
-                                  style={{
-                                    color: "#304C5E",
-                                    fontWeight: "800",
-                                    marginLeft: "50px",
-                                  }}
-                                >
-                                  {Number(
-                                    quote?.res?.amountA /
-                                    10 ** quote?.token0?.decimals,
-                                  ).toFixed(2)}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          <div
-                            className={[
-                              classes.pairDetails,
-                              classes[`pairDetails--${appTheme}`],
-                            ].join(" ")}
-                          >
-                            <div
-                              className={[
-                                classes[`nav-button-corner-bottom`],
-                                classes[
-                                  `nav-button-corner-bottom--${appTheme}`
-                                  ],
-                              ].join(" ")}
-                            >
-                              <div
-                                className={[
-                                  classes[`nav-button-corner-top`],
-                                  classes[`nav-button-corner-top--${appTheme}`],
-                                ].join(" ")}
-                              >
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                  }}
-                                >
-                                  {quote?.token1?.symbol}:
-                                  <span
-                                    style={{
-                                      color: "#304C5E",
-                                      fontWeight: "800",
-                                      // marginLeft: "10px",
-                                    }}
-                                  >
-                                    {Number(
-                                      quote?.res?.amountB /
-                                      10 ** quote?.token1?.decimals,
-                                    ).toFixed(2)}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className={[
-                            classes.quoteLoader,
-                            classes.quoteLoaderError,
-                          ].join(" ")}
-                        >
-                          <div
-                            className={[
-                              classes.quoteLoaderDivider,
-                              classes.quoteLoaderDividerError,
-                            ].join(" ")}
-                          ></div>
-                          <Typography>
-                            ~
-                            {(
-                              Number(pairDetails.token0Bal) -
-                              Number(
-                                quote?.res?.amountA /
-                                10 ** quote?.token0?.decimals,
-                              )
-                            ).toFixed(2)}
-                            {quote?.token0?.symbol} and ~
-                            {(
-                              Number(pairDetails.token1Bal) -
-                              Number(
-                                quote?.res?.amountB /
-                                10 ** quote?.token1?.decimals,
-                              )
-                            ).toFixed(2)}
-                            {quote?.token1?.symbol} will be refunded to your
-                            wallet due to the price difference.
-                          </Typography>
-                        </div>
-                      </div>
-                    ) : null}
-                  </div>
-                ) : null}
-              </div>
-            )}
-            {pairDetails && pairDetails.isValid ? (
-              <div className={classes.radioContainer}>
-                <div
-                  onClick={() => handleRadioChange(true)}
-                  className={classes.radioButton}
-                  style={{
-                    color: isStable ? "white" : "#0C5E8E",
-                    background: isStable
-                      ? appTheme === "light"
-                        ? "#86B9D6"
-                        : "#5F7285"
-                      : "transparent",
-                    border: "1px solid #0C5E8E",
-                    marginRight: "10px",
-                  }}
-                >
-                  <Radio
-                    checked={isStable}
-                    onClick={() => handleRadioChange(true)}
-                    value="a"
-                    name="radio-buttons"
-                    inputProps={{"aria-label": "A"}}
-                  />
-                  Stable
-                </div>
-                <div
-                  onClick={() => handleRadioChange(false)}
-                  className={classes.radioButton}
-                  style={{
-                    color: !isStable ? "white" : "#0C5E8E",
-                    background: !isStable
-                      ? appTheme === "light"
-                        ? "#86B9D6"
-                        : "#5F7285"
-                      : "transparent",
-                    border: "1px solid #0C5E8E",
-                    marginRight: "0px",
-                  }}
-                >
-                  <Radio
-                    checked={!isStable}
-                    onClick={() => handleRadioChange(false)}
-                    value="b"
-                    name="radio-buttons"
-                    inputProps={{"aria-label": "B"}}
-                  />
-                  Volatile
-                </div>
-              </div>
-            ) : null}
-          </div>
-        </div>
-      </Form>
-      <div style={{display: "flex", justifyContent: "center"}}>
-        <div
-          className={[classes[`buttonOverrideContainer--${appTheme}`]].join(
-            " ",
-          )}
-        >
-          {checkpair ? (
-            <Button
-              variant="contained"
-              size="large"
-              color="primary"
-              onClick={migrateLiquidity}
-              disabled={disableButton}
-              className={[
-                classes.buttonOverride,
-                classes[`buttonOverride--${appTheme}`],
-              ].join(" ")}
-            >
-              <span className={classes.actionButtonText}>{buttonText}</span>
-              {loading && (
-                <CircularProgress size={10} className={classes.loadingCircle}/>
-              )}
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              size="large"
-              color="primary"
-              onClick={() =>
-                checkPair(
-                  fromAssetValue.address,
-                  toAssetValue.address,
-                  isStable,
-                )
-              }
-              disabled={disableButton}
-              className={[
-                classes.buttonOverride,
-                classes[`buttonOverride--${appTheme}`],
-              ].join(" ")}
-            >
-              <span className={classes.actionButtonText}>{`Check Pair`}</span>
-              {loading && (
-                <CircularProgress size={10} className={classes.loadingCircle}/>
-              )}
-            </Button>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-
-  function AssetSelect({type, value, assetOptions, onSelect}) {
-    const [open, setOpen] = useState(false);
-    const [search, setSearch] = useState("");
-    const [filteredAssetOptions, setFilteredAssetOptions] = useState([]);
-
-    const [manageLocal, setManageLocal] = useState(false);
-
-    const openSearch = () => {
-      setSearch("");
-      setOpen(true);
-    };
-
-    useEffect(
-      async function () {
-        let ao = assetOptions.filter((asset) => {
-          if (search && search !== "") {
-            return (
-              asset.address.toLowerCase().includes(search.toLowerCase()) ||
-              asset.symbol.toLowerCase().includes(search.toLowerCase()) ||
-              asset.name.toLowerCase().includes(search.toLowerCase())
-            );
-          } else {
-            return true;
-          }
-        });
-        setFilteredAssetOptions(ao);
-
-        //no options in our default list and its an address we search for the address
-        if (ao.length === 0 && search && search.length === 42) {
-          const baseAsset = await stores.stableSwapStore.getBaseAsset(
-            event.target.value,
-            true,
-            true,
-          );
-        }
-
-        return () => {
-        };
-      },
-      [assetOptions],
-    );
-
-    const onSearchChanged = async (event) => {
-      setSearch(event.target.value);
-    };
-
-    const onLocalSelect = (type, asset) => {
-      setSearch("");
-      setManageLocal(false);
-      setOpen(false);
-      onSelect(type, asset);
-    };
-
-    const onClose = () => {
-      setManageLocal(false);
-      setSearch("");
-      setOpen(false);
-    };
-
-    const toggleLocal = () => {
-      setManageLocal(!manageLocal);
-    };
-
-    const deleteOption = async (token) => {
-      await stores.stableSwapStore.removeBaseAsset(token);
-    };
-
-    const viewOption = (token) => {
-      window.open(`${ETHERSCAN_URL}token/${token.address}`, "_blank");
-    };
-
-    const renderManageOption = (type, asset, idx) => {
-      return (
-        <MenuItem
-          val={asset.address}
-          key={asset.address + "_" + idx}
-          className={[
-            classes.assetSelectMenu,
-            classes[`assetSelectMenu--${appTheme}`],
-          ].join(" ")}
-        >
-          <div className={classes.assetSelectMenuItem}>
-            <div className={classes.displayDualIconContainerSmall}>
-              <img
-                className={[
-                  classes.assetOptionIcon,
-                  classes[`assetOptionIcon--${appTheme}`],
-                ].join(" ")}
-                alt=""
-                src={asset ? `${asset.logoURI}` : ""}
-                height="60px"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                }}
-              />
-            </div>
-          </div>
-
-          <div>
-            <Typography
-              variant="h5"
-              className={classes.assetSymbolName}
-              style={{
-                color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
-              }}
-            >
-              {asset ? formatSymbol(asset.symbol) : ""}
-            </Typography>
-
-            <Typography
-              variant="subtitle1"
-              className={classes.assetSymbolName2}
-              style={{
-                color: appTheme === "dark" ? "#7C838A" : "#5688A5",
-              }}
-            >
-              {asset ? asset.name : ""}
-            </Typography>
-          </div>
-
-          <div className={classes.assetSelectActions}>
-            <IconButton
-              onClick={() => {
-                deleteOption(asset);
-              }}
-            >
-              <DeleteOutline/>
-            </IconButton>
-            <IconButton
-              onClick={() => {
-                viewOption(asset);
-              }}
-            >
-              ↗
-            </IconButton>
-          </div>
-        </MenuItem>
-      );
-    };
-
-    const renderAssetOption = (type, asset, idx) => {
-      return (
-        <MenuItem
-          val={asset.address}
-          key={asset.address + "_" + idx}
-          className={[
-            classes.assetSelectMenu,
-            classes[`assetSelectMenu--${appTheme}`],
-          ].join(" ")}
-          onClick={() => {
-            onLocalSelect(type, asset);
-          }}
-        >
-          <div className={classes.assetSelectMenuItem}>
-            <div className={classes.displayDualIconContainerSmall}>
-              <img
-                className={[
-                  classes.assetOptionIcon,
-                  classes[`assetOptionIcon--${appTheme}`],
-                ].join(" ")}
-                alt=""
-                src={asset ? `${asset.logoURI}` : ""}
-                height="50px"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                }}
-              />
-            </div>
-          </div>
-          <div className={classes.assetSelectIconName}>
-            <Typography
-              variant="h5"
-              className={classes.assetSymbolName}
-              style={{
-                color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
-              }}
-            >
-              {asset ? formatSymbol(asset.symbol) : ""}
-            </Typography>
-
-            <Typography
-              variant="subtitle1"
-              className={classes.assetSymbolName2}
-              style={{
-                color: appTheme === "dark" ? "#7C838A" : "#5688A5",
-              }}
-            >
-              {asset ? asset.name : ""}
-            </Typography>
-          </div>
-
-          <div className={classes.assetSelectBalance}>
-            <Typography
-              variant="h5"
-              className={classes.assetSelectBalanceText}
-              style={{
-                color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
-              }}
-            >
-              {asset && asset.balance ? formatCurrency(asset.balance) : "0.00"}
-            </Typography>
-
-            <Typography
-              variant="subtitle1"
-              className={classes.assetSelectBalanceText2}
-              style={{
-                color: appTheme === "dark" ? "#7C838A" : "#5688A5",
-              }}
-            >
-              {"Balance"}
-            </Typography>
-          </div>
-        </MenuItem>
-      );
-    };
-
-    const renderManageLocal = () => {
-      return (
-        <>
-          <div className={classes.searchInline}>
-            <TextField
-              autoFocus
-              variant="outlined"
-              fullWidth
-              placeholder="Search by name or paste address"
-              value={search}
-              onChange={onSearchChanged}
-              InputProps={{
-                style: {
-                  background: "transparent",
-                  border: "1px solid",
-                  borderColor: appTheme === "dark" ? "#5F7285" : "#86B9D6",
-                  borderRadius: 0,
-                },
-                classes: {
-                  root: classes.searchInput,
-                },
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Search
-                      style={{
-                        color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
-                      }}
-                    />
-                  </InputAdornment>
-                ),
-              }}
-              inputProps={{
-                style: {
-                  padding: "10px",
-                  borderRadius: 0,
-                  border: "none",
-                  fontSize: "14px",
-                  lineHeight: "120%",
-                  color: "#86B9D6",
-                },
-              }}
-            />
-          </div>
-
-          <div
-            className={[
-              classes.assetSearchResults,
-              classes[`assetSearchResults--${appTheme}`],
-            ].join(" ")}
-          >
-            {filteredAssetOptions
-              ? filteredAssetOptions
-                .filter((option) => {
-                  return option.local === true;
-                })
-                .map((asset, idx) => {
-                  return renderManageOption(type, asset, idx);
-                })
-              : []}
-          </div>
-
-          <div className={classes.manageLocalContainer}>
-            <Button onClick={toggleLocal}>Back to Assets</Button>
-          </div>
-        </>
-      );
-    };
-
-    const renderOptions = () => {
-      return (
-        <>
-          <div className={classes.searchInline}>
-            <Borders/>
-
-            <TextField
-              autoFocus
-              variant="outlined"
-              fullWidth
-              placeholder="Search by name or paste address"
-              value={search}
-              onChange={onSearchChanged}
-              InputProps={{
-                classes: {
-                  root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
-                  inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
-                },
-                startAdornment: <InputAdornment position="start">
-                  <Search style={{
-                    color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                  }}/>
-                </InputAdornment>,
-              }}
-            />
-          </div>
-
-          <div style={{position: 'relative'}}>
-            <Borders/>
-
-            <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(" ")}>
-              {filteredAssetOptions
-                ? filteredAssetOptions
-                  .sort((a, b) => {
-                    if (BigNumber(a.balance).lt(b.balance)) return 1;
-                    if (BigNumber(a.balance).gt(b.balance)) return -1;
-                    if (a.symbol.toLowerCase() < b.symbol.toLowerCase())
-                      return -1;
-                    if (a.symbol.toLowerCase() > b.symbol.toLowerCase())
-                      return 1;
-                    return 0;
-                  })
-                  .map((asset, idx) => {
-                    return renderAssetOption(type, asset, idx);
-                  })
-                : []}
-            </div>
-          </div>
-
-          <div className={classes.manageLocalContainer}>
-            <Button
-              className={[classes.manageLocalBtn, classes[`manageLocalBtn--${appTheme}`]].join(' ')}
-              onClick={toggleLocal}>
-              Manage local assets
-            </Button>
-          </div>
-        </>
-      );
-    };
-
+  const arrowIcon = () => {
     return (
-      <React.Fragment>
-        <div
-          className={classes.displaySelectContainer}
-          onClick={() => {
-            openSearch();
-          }}
-        >
-          <div className={classes.assetSelectMenuItem}>
-            <div
-              className={[
-                classes.displayDualIconContainer,
-                classes[`displayDualIconContainer--${appTheme}`],
-              ].join(" ")}
-            >
-              <SwapIconBg/>
-              <img
-                className={classes.displayAssetIcon}
-                alt=""
-                src={value ? `${value.logoURI}` : ""}
-                height="100px"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                }}
-              />
-            </div>
-          </div>
-        </div>
-        <Dialog
-          className={classes.blurbg}
-          aria-labelledby="simple-dialog-title"
-          open={open}
-          onClick={(e) => {
-            if (e.target.classList.contains("MuiDialog-container")) {
-              onClose();
-            }
-          }}
-          style={{borderRadius: 0}}
-        >
-          <div
-            className={classes.dialogContainer}
-            style={{
-              width: 460,
-              height: 710,
-              background: appTheme === "dark" ? "#151718" : "#DBE6EC",
-              border:
-                appTheme === "dark" ? "1px solid #5F7285" : "1px solid #86B9D6",
-              borderRadius: 0,
-            }}
-          >
-            <DialogTitle
-              className={classes.dialogTitle}
-              style={{
-                padding: 30,
-                paddingBottom: 0,
-                fontWeight: 500,
-                fontSize: 18,
-                lineHeight: "140%",
-                color: "#0A2C40",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
-                  }}
-                >
-                  {manageLocal && (
-                    <ArrowBackIosNew
-                      onClick={toggleLocal}
-                      style={{
-                        marginRight: 10,
-                        width: 18,
-                        height: 18,
-                        cursor: "pointer",
-                      }}
-                    />
-                  )}
-                  {manageLocal ? "Manage local assets" : "Select a token"}
-                </div>
-
-                <Close
-                  style={{
-                    cursor: "pointer",
-                    color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
-                  }}
-                  onClick={onClose}
-                />
-              </div>
-            </DialogTitle>
-
-            <DialogContent className={classes.dialogContent}>
-              {!manageLocal && renderOptions()}
-              {manageLocal && renderManageLocal()}
-            </DialogContent>
-          </div>
-        </Dialog>
-      </React.Fragment>
+      <svg
+        width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M9.99962 10.9773L14.1246 6.85232L15.303 8.03065L9.99962 13.334L4.69629 8.03065L5.87462 6.85232L9.99962 10.9773Z"
+          fill={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+      </svg>
     );
-  }
+  };
 
-  function PlatformSelect({onSelect}) {
+  const PlatformSelect = ({onSelect}) => {
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [filteredPlatform, setFilteredPlatform] = useState([]);
@@ -1925,184 +556,683 @@ export default function Setup() {
     };
 
     return (
-      <div>
-        <Button style={{padding: "0"}} onClick={handleClickOpen}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-chevron-down"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-            />
-          </svg>
-        </Button>
-        <Dialog className={classes.blurbg} open={open} onClose={handleClose}>
+      <>
+        <div
+          className={[classes.select, classes[`select--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}
+          onClick={handleClickOpen}>
           <div
-            // className={classes.dialogContainer}
             style={{
-              width: 380,
-              height: 710,
-              background: appTheme === "dark" ? "#151718" : "#DBE6EC",
-              border:
-                appTheme === "dark" ? "1px solid #5F7285" : "1px solid #86B9D6",
-              borderRadius: 0,
+              position: 'relative',
+              height: '100%',
             }}
-          >
+            className={['g-flex__item', 'g-flex', 'g-flex--align-center'].join(' ')}>
+            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+            <div className={classes.selectLabel}>
+              {platform ? platform.label : "Select a platform"}
+            </div>
+          </div>
+
+          <div
+            className={[classes.selectArrow, 'g-flex__item-fixed', 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}>
+            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+            {arrowIcon()}
+          </div>
+        </div>
+
+        <Dialog
+          classes={{
+            paperScrollPaper: classes.paperScrollPaper,
+          }}
+          aria-labelledby="simple-dialog-title"
+          open={open}
+          style={{borderRadius: 0}}
+          onClick={(e) => {
+            if (e.target.classList.contains('MuiDialog-container')) {
+              onClose();
+            }
+          }}>
+          <div
+            className={[classes.dialogContainer, 'g-flex-column'].join(' ')}
+            style={{
+              width: 460,
+              height: 710,
+              background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+              border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
+              borderRadius: 0,
+              overflow: 'hidden',
+            }}>
             <DialogTitle
-              TitleclassName={classes.dialogTitle}
+              className={[classes.dialogTitle, 'g-flex-column__item-fixed'].join(' ')}
               style={{
                 padding: 30,
                 paddingBottom: 0,
                 fontWeight: 500,
                 fontSize: 18,
-                lineHeight: "140%",
-                color: "#0A2C40",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
-                  }}
-                >
-                  Select a Platform
+                lineHeight: '140%',
+                color: '#0A2C40',
+              }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                }}>
+                  Select a platform
                 </div>
+
                 <Close
                   style={{
-                    cursor: "pointer",
-                    color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+                    cursor: 'pointer',
+                    color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
                   }}
-                  onClick={onClose}
-                />
+                  onClick={onClose}/>
               </div>
             </DialogTitle>
-            <div
-              className={classes.searchInline}
-              onClick={() => {
-                openSearch();
-              }}
-            >
+
+            <div className={classes.searchInline}>
+              <Borders/>
+
               <TextField
-                autoFocus
                 variant="outlined"
                 fullWidth
-                placeholder="Search platfrom"
+                placeholder="Search by name"
                 value={search}
                 onChange={onSearchChanged}
                 InputProps={{
-                  style: {
-                    background: "transparent",
-                    border: "1px solid",
-                    borderColor: appTheme === "dark" ? "#5F7285" : "#86B9D6",
-                    borderRadius: 0,
-                  },
                   classes: {
-                    root: classes.searchInput,
+                    root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
+                    inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
                   },
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Search
-                        style={{
-                          color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
-                        }}
-                      />
-                    </InputAdornment>
-                  ),
-                }}
-                inputProps={{
-                  style: {
-                    padding: "10px",
-                    borderRadius: 0,
-                    border: "none",
-                    fontSize: "14px",
-                    lineHeight: "120%",
-                    color: "#86B9D6",
-                  },
+                  startAdornment: <InputAdornment position="start">
+                    <Search style={{
+                      color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                    }}/>
+                  </InputAdornment>,
                 }}
               />
             </div>
-            <DialogContent>
+
+            <DialogContent
+              className={[classes.dialogContent, 'g-flex-column__item', 'g-flex-column'].join(' ')}>
               {filteredPlatform.length === 0
-                ? migrate.map((eachPlatform) => (
+                ? migrate.map((eachPlatform, index) => (
                   <div
-                    className={[
-                      classes.pairDetails,
-                      classes[`pairDetails--${appTheme}`],
-                    ].join(" ")}
-                    style={{
-                      marginTop: "0",
-                      background: "#b9dff5",
-                      color: "#0A2C40",
-                    }}
-                  >
-                    <div
-                      className={[
-                        classes[`nav-button-corner-bottom`],
-                        classes[`nav-button-corner-bottom--${appTheme}`],
-                      ].join(" ")}
-                    >
-                      <div
-                        className={[
-                          classes[`nav-button-corner-top`],
-                          classes[`nav-button-corner-top--${appTheme}`],
-                        ].join(" ")}
-                      >
-                        <MenuItem value={eachPlatform.value}>
-                          {eachPlatform.label}
-                        </MenuItem>
-                      </div>
-                    </div>
+                    key={index}
+                    className={[classes.pairDetails, classes[`pairDetails--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(" ")}>
+                    <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+                    {eachPlatform.label}
                   </div>
                 ))
-                : filteredPlatform.map((eachPlatform) => (
+                : filteredPlatform.map((eachPlatform, index) => (
                   <div
-                    className={[
-                      classes.pairDetails,
-                      classes[`pairDetails--${appTheme}`],
-                    ].join(" ")}
-                    onClick={() => handleCloseSelect(eachPlatform)}
-                    style={{
-                      marginTop: "0",
-                      background: "#b9dff5",
-                      color: "#0A2C40",
-                    }}
-                  >
-                    <div
-                      className={[
-                        classes[`nav-button-corner-bottom`],
-                        classes[`nav-button-corner-bottom--${appTheme}`],
-                      ].join(" ")}
-                    >
-                      <div
-                        className={[
-                          classes[`nav-button-corner-top`],
-                          classes[`nav-button-corner-top--${appTheme}`],
-                        ].join(" ")}
-                      >
-                        <MenuItem value={eachPlatform.value}>
-                          {eachPlatform.label}
-                        </MenuItem>
-                      </div>
-                    </div>
+                    key={index}
+                    className={[classes.pairDetails, classes[`pairDetails--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(" ")}
+                    onClick={() => handleCloseSelect(eachPlatform)}>
+                    <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+                    {eachPlatform.label}
                   </div>
                 ))}
             </DialogContent>
           </div>
         </Dialog>
-      </div>
+      </>
     );
-  }
+  };
+
+  return (
+    <div className={['g-flex-column', 'g-flex--align-center'].join(' ')}>
+      <Form>
+        <div className={[classes[`form`], classes[`form--${appTheme}`]].join(" ")}>
+          <div className={[classes.titleText, classes[`titleText--${appTheme}`]].join(" ")}>
+            Source of Migration:
+          </div>
+
+          <PlatformSelect onSelect={handleChange}/>
+
+          <div className={[classes.dividerLine, classes[`dividerLine--${appTheme}`]].join(" ")}>
+          </div>
+
+          <div className={[classes.pairsContainer, 'g-flex'].join(' ')}>
+            <div className={[classes.pair, classes[`pair--${appTheme}`], 'g-flex-column'].join(' ')}>
+              <div
+                className={[classes.pairTitle, classes[`pairTitle--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
+                <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                Token 1
+              </div>
+
+              <div
+                className={[classes.pairContent, classes[`pairContent--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
+                <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+                <AssetSelect
+                  type={"From"}
+                  value={fromAssetValue}
+                  assetOptions={fromAssetOptions}
+                  onSelect={onAssetSelect}
+                  showBalance={false}
+                  size={'small'}
+                  interactiveBorder={false}
+                />
+
+                <div>
+                  {fromAssetValue?.symbol}
+                </div>
+              </div>
+            </div>
+
+            <div className={[classes.pair, classes[`pair--${appTheme}`], 'g-flex-column'].join(' ')}>
+              <div
+                className={[classes.pairTitle, classes[`pairTitle--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
+                <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                Token 2
+              </div>
+
+              <div
+                className={[classes.pairContent, classes[`pairContent--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
+                <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+                <AssetSelect
+                  type={"To"}
+                  value={toAssetValue}
+                  assetOptions={toAssetOptions}
+                  onSelect={onAssetSelect}
+                  showBalance={false}
+                  size={'small'}
+                  interactiveBorder={false}
+                />
+
+                <div>
+                  {toAssetValue?.symbol}
+                </div>
+              </div>
+            </div>
+
+            <div className={[classes.pairsCircle, classes[`pairsCircle--${appTheme}`]].join(' ')}>
+              <div
+                className={[classes.pairsCircleInside, classes[`pairsCircleInside--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M6.75844 9.11694L7.93761 7.93777C8.47929 7.39604 9.12238 6.9663 9.83015 6.67311C10.5379 6.37992 11.2965 6.22902 12.0626 6.22902C12.8287 6.22902 13.5873 6.37992 14.2951 6.67311C15.0028 6.9663 15.6459 7.39604 16.1876 7.93777L16.4818 8.23277C17.5758 9.32679 18.1904 10.8106 18.1904 12.3578C18.1904 13.9049 17.5758 15.3888 16.4818 16.4828C15.3878 17.5768 13.904 18.1914 12.3568 18.1914C10.8096 18.1914 9.3258 17.5768 8.23178 16.4828L9.41094 15.3036C9.79724 15.6933 10.2567 16.0029 10.7629 16.2145C11.2692 16.4261 11.8123 16.5357 12.361 16.5369C12.9097 16.5381 13.4532 16.4309 13.9604 16.2215C14.4676 16.0121 14.9284 15.7045 15.3164 15.3165C15.7044 14.9285 16.0119 14.4677 16.2213 13.9606C16.4308 13.4534 16.538 12.9098 16.5368 12.3611C16.5356 11.8124 16.426 11.2694 16.2143 10.7631C16.0027 10.2569 15.6931 9.7974 15.3034 9.41111L15.0084 9.11611C14.2271 8.33498 13.1675 7.89616 12.0626 7.89616C10.9578 7.89616 9.89814 8.33498 9.11678 9.11611L7.93761 10.2953L6.75928 9.11611L6.75844 9.11694ZM11.7676 3.51861L10.5893 4.69694C10.203 4.30725 9.74352 3.99769 9.23727 3.78605C8.73102 3.5744 8.18796 3.46483 7.63925 3.46363C7.09054 3.46243 6.547 3.56962 6.03983 3.77905C5.53265 3.98847 5.07184 4.29601 4.68385 4.68401C4.29585 5.07201 3.98831 5.53282 3.77888 6.03999C3.56946 6.54716 3.46227 7.0907 3.46347 7.63941C3.46467 8.18812 3.57424 8.73119 3.78589 9.23744C3.99753 9.74369 4.30709 10.2031 4.69678 10.5894L4.99178 10.8844C5.77314 11.6656 6.83276 12.1044 7.93761 12.1044C9.04246 12.1044 10.1021 11.6656 10.8834 10.8844L12.0626 9.70527L13.2409 10.8844L12.0626 12.0628C11.5209 12.6045 10.8778 13.0342 10.1701 13.3274C9.4623 13.6206 8.70371 13.7715 7.93761 13.7715C7.17152 13.7715 6.41293 13.6206 5.70515 13.3274C4.99738 13.0342 4.35429 12.6045 3.81261 12.0628L3.51845 11.7678C2.42443 10.6738 1.80981 9.18995 1.80981 7.64277C1.80981 6.0956 2.42443 4.61179 3.51844 3.51778C4.61246 2.42376 6.09627 1.80914 7.64344 1.80914C9.19062 1.80914 10.6744 2.42376 11.7684 3.51778L11.7676 3.51861Z"
+                    fill={appTheme === 'dark' ? '#7C838A' : '#5688A5'}/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          {pairDetails && !pairDetails.isValid && (
+            <div
+              className={[classes.inputBalanceErrorText, classes[`inputBalanceErrorText--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
+              The chosen Liquidity Pair does not exist
+            </div>
+          )}
+
+          {pairDetails && pairDetails.isValid && (
+            <>
+              <div
+                className={['g-flex'].join(" ")}
+                style={{
+                  width: '100%',
+                  marginTop: 20,
+                }}>
+                <div className={['g-flex-column', 'g-flex__item-fixed'].join(' ')}>
+                  <div
+                    className={[classes.liqHeader, classes[`liqHeader--${appTheme}`], classes.liqHeaderLabel, 'g-flex', 'g-flex--align-center'].join(' ')}>
+                    <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+                    <div>
+                      Liq. Pair
+                    </div>
+                  </div>
+
+                  <div
+                    className={[classes.liqBody, classes[`liqBody--${appTheme}`], classes.liqBodyLabel, 'g-flex', 'g-flex--align-center'].join(" ")}>
+                    <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+                    <div
+                      className={[classes.liqBodyIconContainer, classes[`liqBodyIconContainer--${appTheme}`]].join(' ')}>
+                      <img
+                        className={classes.liqBodyIcon}
+                        alt=""
+                        src={
+                          fromAssetValue
+                            ? `${fromAssetValue.logoURI}`
+                            : ""
+                        }
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                        }}
+                      />
+                    </div>
+
+                    <div
+                      className={[classes.liqBodyIconContainer, classes[`liqBodyIconContainer--${appTheme}`]].join(' ')}>
+                      <img
+                        className={classes.liqBodyIcon}
+                        alt=""
+                        src={
+                          toAssetValue ? `${toAssetValue.logoURI}` : ""
+                        }
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className={['g-flex-column', 'g-flex__item'].join(' ')}>
+                  <div
+                    className={[classes.liqHeader, classes[`liqHeader--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                    <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+                    <div className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                      <img
+                        src="/images/ui/icon-wallet.svg"
+                        className={classes.walletIcon}/>
+
+                      <div>
+                        {pairDetails && pairDetails.lpBalance
+                          ? Number(pairDetails.lpBalance).toFixed(5)
+                          : "0"}
+                      </div>
+                    </div>
+
+                    <div
+                      className={[classes.balanceMax, classes[`balanceMax--${appTheme}`]].join(' ')}
+                      onClick={() =>
+                        handleMax(Number(pairDetails.lpBalance).toFixed(5))
+                      }>
+                      MAX
+                    </div>
+                  </div>
+
+                  <div
+                    className={[classes.liqBody, classes[`liqBody--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(" ")}>
+                    <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+                    <div>
+                      <InputBase
+                        className={classes.massiveInputAmount}
+                        placeholder="0.00"
+                        inputProps={{
+                          className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
+                        }}
+                        fullWidth
+                        value={amount}
+                        onChange={(event) => handleAmountChange(event)}/>
+
+                      <Typography
+                        className={[classes.smallerText, classes[`smallerText--${appTheme}`]].join(" ")}>
+                        {fromAssetValue?.symbol}/{toAssetValue?.symbol}
+                      </Typography>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className={[classes.pairContainer, classes[`pairContainer--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(" ")}>
+                <div
+                  className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                  <div
+                    className={[classes.pairIconContainer, classes[`pairIconContainer--${appTheme}`]].join(' ')}>
+                    <img
+                      className={classes.pairIcon}
+                      alt=""
+                      src={
+                        fromAssetValue
+                          ? `${fromAssetValue.logoURI}`
+                          : ""
+                      }
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                      }}
+                    />
+                  </div>
+
+                  <div
+                    className={[classes.pairIconContainer, classes[`pairIconContainer--${appTheme}`]].join(' ')}>
+                    <img
+                      className={classes.pairIcon}
+                      alt=""
+                      src={
+                        toAssetValue ? `${toAssetValue.logoURI}` : ""
+                      }
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                      }}
+                    />
+                  </div>
+
+                  <div style={{marginLeft: 10}}>
+                    <div className={[classes.pairSymbolLabel, classes[`pairSymbolLabel--${appTheme}`]].join(' ')}>
+                      {fromAssetValue?.symbol}/{toAssetValue?.symbol}
+                    </div>
+
+                    <div className={[classes.pairPoolLabel, classes[`pairPoolLabel--${appTheme}`]].join(' ')}>
+                      {platform.label} Pool
+                    </div>
+                  </div>
+                </div>
+
+                <div className={[classes.pairBalance, classes[`pairBalance--${appTheme}`]].join(' ')}>
+                  {Number(amount).toFixed(5)}
+                </div>
+              </div>
+
+              <div
+                className={[classes.poolShare, classes[`poolShare--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+                <div>
+                  Your Pool Share:
+                </div>
+
+                <div className={[classes.poolShareBalance, classes[`poolShareBalance--${appTheme}`]].join(' ')}>
+                  {pairDetails.poolTokenPercentage}%
+                </div>
+              </div>
+
+              <div
+                className={[classes.poolShareCoins, classes[`poolShareCoins--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
+                <div
+                  className={[classes.poolShareCoin, classes[`poolShareCoin--${appTheme}`], 'g-flex__item', 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                  <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+                  <div>
+                    {pairDetails?.token0symbol}
+                  </div>
+
+                  <div
+                    className={[classes.poolShareCoinBalance, classes[`poolShareCoinBalance--${appTheme}`]].join(' ')}>
+                    {isNaN(Number(pairDetails.token0Bal).toFixed(2))?0:Number(pairDetails.token0Bal).toFixed(2)}
+                  </div>
+                </div>
+
+                <div
+                  className={[classes.poolShareCoin, classes[`poolShareCoin--${appTheme}`], 'g-flex__item', 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                  <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+                  <div>
+                    {pairDetails?.token0symbol}
+                  </div>
+
+                  <div
+                    className={[classes.poolShareCoinBalance, classes[`poolShareCoinBalance--${appTheme}`]].join(' ')}>
+                    {isNaN(Number(pairDetails.token1Bal).toFixed(2))?0:Number(pairDetails.token1Bal).toFixed(2)}
+                  </div>
+                </div>
+              </div>
+
+              {Number(parseFloat(pairDetails?.lpBalance)) !== Number(0) || Number(parseFloat(amount)) !== Number(0) || Number(parseFloat(amount)) == null?
+              dystopiaPair ? (
+                <div>
+                  <div
+                    className={[classes.toggleArrow, 'g-flex', 'g-flex--align-center'].join(' ')}
+                    onClick={() => setToggleArrow(!toggleArrow)}>
+                    <div className={[classes.toggleArrowBg, classes[`toggleArrowBg--${appTheme}`]].join(' ')}>
+                    </div>
+
+                    <svg
+                      className={[classes.toggleArrowBtn, classes[`toggleArrowBtn--${appTheme}`], toggleArrow ? classes.toggleArrowBtnOpen : ''].join(' ')}
+                      width="39"
+                      height="39" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="0.5" y="0.5" width="33" height="33" rx="16.5"
+                            fill={appTheme === 'dark' ? '#151718' : '#dbe6ec'}
+                            stroke={appTheme === 'dark' ? '#5F7285' : '#86B9D6'}/>
+                      <path
+                        d="M16.9998 18.1717L21.9498 13.2217L23.3638 14.6357L16.9998 20.9997L10.6358 14.6357L12.0498 13.2217L16.9998 18.1717Z"
+                        fill={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+                    </svg>
+                  </div>
+
+                  {toggleArrow ? (
+                    <div>
+                      <div
+                        className={[classes.pairContainer, classes[`pairContainer--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(" ")}>
+                        <div
+                          className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                          <div
+                            className={[classes.pairIconContainer, classes[`pairIconContainer--${appTheme}`]].join(' ')}>
+                            <img
+                              className={classes.pairIcon}
+                              alt=""
+                              src={
+                                fromAssetValue
+                                  ? `${fromAssetValue.logoURI}`
+                                  : ""
+                              }
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                              }}
+                            />
+                          </div>
+
+                          <div
+                            className={[classes.pairIconContainer, classes[`pairIconContainer--${appTheme}`]].join(' ')}>
+                            <img
+                              className={classes.pairIcon}
+                              alt=""
+                              src={
+                                toAssetValue ? `${toAssetValue.logoURI}` : ""
+                              }
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                              }}
+                            />
+                          </div>
+
+                          <div style={{marginLeft: 10}}>
+                            <div
+                              className={[classes.pairSymbolLabel, classes[`pairSymbolLabel--${appTheme}`]].join(' ')}>
+                              {fromAssetValue?.symbol}/{toAssetValue?.symbol}
+                            </div>
+
+                            <div className={[classes.pairPoolLabel, classes[`pairPoolLabel--${appTheme}`]].join(' ')}>
+                              Dystopia Pool
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className={[classes.pairBalance, classes[`pairBalance--${appTheme}`]].join(' ')}>
+                          {Number(quote?.res?.liquidity / 10 ** 18).toFixed(
+                            5,
+                          )}
+                        </div>
+                      </div>
+
+                      <div
+                        className={[classes.poolShareCoins, classes[`poolShareCoins--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
+                        <div
+                          className={[classes.poolShareCoin, classes[`poolShareCoin--${appTheme}`], 'g-flex__item', 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                          <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+                          <div>
+                            {quote?.token0?.symbol}
+                          </div>
+
+                          <div
+                            className={[classes.poolShareCoinBalance, classes[`poolShareCoinBalance--${appTheme}`]].join(' ')}>
+                            ~{Number(
+                            quote?.res?.amountA /
+                            10 ** quote?.token0?.decimals,
+                          ).toFixed(2)}
+                          </div>
+                        </div>
+
+                        <div
+                          className={[classes.poolShareCoin, classes[`poolShareCoin--${appTheme}`], 'g-flex__item', 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                          <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
+                          <div>
+                            {quote?.token1?.symbol}
+                          </div>
+
+                          <div
+                            className={[classes.poolShareCoinBalance, classes[`poolShareCoinBalance--${appTheme}`]].join(' ')}>
+                            ~{Number(
+                            quote?.res?.amountB /
+                            10 ** quote?.token1?.decimals,
+                          ).toFixed(2)}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className={classes.toggles}>
+                        <div
+                          className={[classes.toggleOption, classes[`toggleOption--${appTheme}`], `${isStable && classes.active}`].join(' ')}
+                          onClick={() => {
+                            handleRadioChange(true);
+                          }}>
+
+                          {!isStable &&
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
+                                fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
+                                stroke={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+                            </svg>
+                          }
+
+                          {isStable &&
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
+                                fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
+                                stroke={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+                              <path
+                                d="M5 10C5 7.23858 7.23858 5 10 5C12.7614 5 15 7.23858 15 10C15 12.7614 12.7614 15 10 15C7.23858 15 5 12.7614 5 10Z"
+                                fill={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+                            </svg>
+                          }
+
+                          <Typography
+                            className={[classes.toggleOptionText, classes[`toggleOptionText--${appTheme}`]].join(' ')}>
+                            Stable
+                          </Typography>
+                        </div>
+
+                        <div
+                          className={[classes.toggleOption, classes[`toggleOption--${appTheme}`], `${!isStable && classes.active}`].join(' ')}
+                          onClick={() => {
+                            handleRadioChange(false);
+                          }}>
+
+                          {isStable &&
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
+                                fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
+                                stroke={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+                            </svg>
+                          }
+
+                          {!isStable &&
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
+                                fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
+                                stroke={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+                              <path
+                                d="M5 10C5 7.23858 7.23858 5 10 5C12.7614 5 15 7.23858 15 10C15 12.7614 12.7614 15 10 15C7.23858 15 5 12.7614 5 10Z"
+                                fill={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+                            </svg>
+                          }
+
+                          <Typography
+                            className={[classes.toggleOptionText, classes[`toggleOptionText--${appTheme}`]].join(' ')}>
+                            Volatile
+                          </Typography>
+                        </div>
+                      </div>
+
+
+                      <div className={[classes.quoteLoader, classes[`quoteLoader--${appTheme}`]].join(' ')}>
+                        ~
+                        {(
+                          Number(pairDetails.token0Bal) -
+                          Number(
+                            quote?.res?.amountA /
+                            10 ** quote?.token0?.decimals,
+                          )
+                        ).toFixed(2)}
+                        {quote?.token0?.symbol} and ~
+                        {(
+                          Number(pairDetails.token1Bal) -
+                          Number(
+                            quote?.res?.amountB /
+                            10 ** quote?.token1?.decimals,
+                          )
+                        ).toFixed(2)}
+                        {quote?.token1?.symbol} will be refunded to your wallet due to the price difference.
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null:null}
+            </>
+          )}
+
+
+        </div>
+      </Form>
+
+      {checkpair ? (
+        <Button
+          variant="contained"
+          size="large"
+          color="primary"
+          onClick={migrateLiquidity}
+          disabled={(parseFloat(pairDetails.lpBalance) <= 0) || parseFloat(amount)<=0 || amount == null || amount == '' || isNaN(amount)}
+          className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(" ")}>
+            <span className={classes.actionButtonText}>
+              {buttonText}
+            </span>
+          {loading &&
+            <Loader color={appTheme === 'dark' ? '#8F5AE8' : '#8F5AE8'}/>
+          }
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          size="large"
+          color="primary"
+          onClick={() =>
+            checkPair(
+              fromAssetValue.address,
+              toAssetValue.address,
+              isStable,
+            )
+          }
+          disabled={disableButton}
+          className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(" ")}>
+            <span className={classes.actionButtonText}>
+              {platform ? 'Check Pair' : 'Choose Source of Migration'}
+            </span>
+
+          {loading &&
+            <Loader color={appTheme === 'dark' ? '#8F5AE8' : '#8F5AE8'}/>
+          }
+        </Button>
+      )}
+    </div>
+  );
 }

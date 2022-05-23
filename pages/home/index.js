@@ -1,165 +1,232 @@
-import { Typography, Button, Paper, SvgIcon, Grid, Avatar } from "@mui/material";
+import React, { useState, useRef, useEffect } from 'react'
+import { useTheme, withTheme } from '@mui/styles';
+import { useAppThemeContext } from '../../ui/AppThemeProvider'
+import BtnEnterApp from '../../ui/BtnEnterApp'
 
-import classes from './home.module.css';
+// import leftImageLight from '../../images/main-page/left-illustration-light.png'
+// import rightImageLight from '../../images/main-page/right-illustration-light.png'
+// import leftImageDark from '../../images/main-page/left-illustration-dark.png'
+// import rightImageDark from '../../images/main-page/right-illustration-dark.png'
 
-import React, { useState } from 'react';
-import { useRouter } from "next/router";
-import { useAppThemeContext } from '../../ui/AppThemeProvider';
-import BtnEnterApp from '../../ui/BtnEnterApp';
+import classes from './home.module.css'
 
-function Home({changeTheme}) {
-  const [showLearnMore, setShowLearnMore] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  function handleNavigate(route) {
-    router.push(route);
-  }
-
-  const router = useRouter();
-
-  const [isHoverState, setIsHoverState] = useState(false);
-  const [isClickState, setIsClickState] = useState(false);
-  const [btnColor, setBtnColor] = useState(appTheme === 'dark' ? '#33284C' : '#D2D0F2');
-
-  const btnDefaultColor = () => {
-    setIsHoverState(false);
-    setIsClickState(false);
-  };
-
-  const btnHoverColor = () => {
-    setIsHoverState(true);
-  };
-
-  const btnClickColor = () => {
-    setIsClickState(true);
-  };
-
-  const getBtnColor = () => {
-    switch (appTheme) {
-      case 'dark':
-        return isClickState ? '#523880' : (isHoverState ? '#402E61' : '#33284C');
-
-      case 'light':
-      default:
-        return isClickState ? '#B9A4EE' : (isHoverState ? '#C6BAF0' : '#D2D0F2');
-    }
-  };
-
-  const {appTheme} = useAppThemeContext();
-
-  window.addEventListener('resize', () => {
-    setWindowWidth(window.innerWidth);
-  });
-
-  return (
-    <div
-      className={[classes.ffContainer, classes[`ffContainer--${appTheme}`]].join(' ')}>
-      <div
-        className={classes.contentContainerFull}
-        style={{
-          padding: windowWidth <= 1360 ? (showLearnMore || windowWidth <= 1280 ? '30px 0px' : '30px 140px') : '30px',
-        }}>
-        <img
-          src={
-            appTheme === "dark"
-              ? `/images/ui/enter-bg-left${windowWidth <= 1360 ? '-1360' : ''}--dark.png`
-              : `/images/ui/enter-bg-left${windowWidth <= 1360 ? '-1360' : ''}--light.png`
-          }
-          className={classes.bgLeft}/>
-
-        {!showLearnMore &&
-          <div className={[classes.homeContentMain, classes[`homeContentMain--${appTheme}`]].join(' ')}>
-            <Typography className={[classes.mainTitle, classes[`mainTitle--${appTheme}`]].join(' ')}>
-              Enter the era of crypto
-            </Typography>
-
-            <img
-              src={appTheme === "dark" ? "/images/big-logo--dark.svg" : "/images/big-logo.svg"}
-              className={classes.bigLogo}/>
-
-            {windowWidth > 530 &&
-              <Typography className={classes.feeTitle}>
-                0.05% FEE • TOKENIZED LOCKS AS NFT’s • POLYGON (MATIC)
-              </Typography>
-            }
-
-            {windowWidth <= 530 &&
-              <Typography className={classes.feeTitle}>
-                <div>0.05% FEE</div>
-                <div>•</div>
-                <div>TOKENIZED LOCKS AS NFT’s</div>
-                <div>•</div>
-                <div>POLYGON (MATIC)</div>
-              </Typography>
-            }
-
-            <div
-              className={[classes.buttonEnter, classes[`buttonEnter--${appTheme}`]].join(' ')}
-              onMouseOver={btnHoverColor}
-              onMouseOut={btnDefaultColor}
-              onMouseDown={btnClickColor}
-              onClick={() => router.push('/swap')}>
-              <BtnEnterApp
-                labelClassName={classes.buttonEnterLabel}
-                label={'Enter App'}
-                btnColor={getBtnColor}
-              />
-            </div>
-
-            <div
-              className={[classes.buttonInfo, classes[`buttonInfo--${appTheme}`]].join(' ')}
-              onClick={() => setShowLearnMore(true)}>
-              Learn More
-            </div>
-          </div>}
-
-        {showLearnMore &&
-          <div className={[classes.homeContentMainSec, classes[`homeContentMainSec--${appTheme}`]].join(' ')}>
-            <img
-              src={appTheme === "dark" ? "/images/big-logo--dark.svg" : "/images/big-logo.svg"}
-              className={classes.bigLogoSec}/>
-
-            <Typography className={[classes.mainDescription, classes[`mainDescription--${appTheme}`]].join(' ')}>
-              Dystopia officially launched in May 2022 with a collective goal
-              of <span style={{fontWeight: 700}}>fair and balanced access to DeFi.</span>
-              <br/>
-              <br/>
-              Dystopia is a decentralized exchange that has launched on the Polygon network with low fees, near 0
-              slippage
-              on correlated assets and a strong focus on secondary markets for tokenized locks as NFT’s (veToken =
-              lpNFTs).
-            </Typography>
-
-            <Typography className={[classes.secDescription, classes[`secDescription--${appTheme}`]].join(' ')}>
-              One segment of the cryptocurrency landscape that has shown incredible potential is the swapping of
-              stablecoins and volatile assets. Dystopia Swap offers users quick, seamless and cheap transactions while
-              utilizing strategies to maximize their yield.
-            </Typography>
-
-            <div
-              className={[classes.buttonEnterSec, classes[`buttonEnterSec--${appTheme}`]].join(' ')}
-              onMouseOver={btnHoverColor}
-              onMouseOut={btnDefaultColor}
-              onMouseDown={btnClickColor}
-              onClick={() => router.push('/swap')}>
-              <BtnEnterApp
-                labelClassName={classes.buttonEnterLabel}
-                label={'Enter App'}
-                btnColor={getBtnColor}
-              />
-            </div>
-          </div>}
-
-        <img
-          src={
-            appTheme === "dark"
-              ? `/images/ui/enter-bg-right${windowWidth <= 1360 ? '-1360' : ''}--dark.png`
-              : `/images/ui/enter-bg-right${windowWidth <= 1360 ? '-1360' : ''}--light.png`
-          }
-          className={classes.bgLeft}/>
-      </div>
-    </div>
-  );
+const socialLinks = {
+    twitter: 'https://twitter.com/dystopiaswap',
+    discord: 'https://t.co/dFsniy2Ktq',
+    telegram: 'https://t.co/gkg3Ba1nmm',
+    gitbook: 'https://dystopia-1.gitbook.io/dystopia-1/',
+    medium: 'https://medium.com/@DystopiaSwap',
 }
 
-export default Home;
+const HomePage = () => {
+    const {appTheme} = useAppThemeContext();
+    
+    const [isHoverState, setIsHoverState] = useState(false);
+    const [isClickState, setIsClickState] = useState(false);
+    const [btnColor, setBtnColor] = useState(appTheme === 'dark' ? '#33284C' : '#D2D0F2');
+    const layoutRef = useRef(null)
+    const pageRef = useRef(null)
+
+    const btnDefaultColor = () => {
+        setIsHoverState(false);
+        setIsClickState(false);
+    };
+
+    const btnHoverColor = () => {
+        setIsHoverState(true);
+    };
+
+    const btnClickColor = () => {
+        setIsClickState(true);
+    };
+
+    const getBtnColor = () => {
+        switch (appTheme) {
+            case 'dark':
+                return isClickState ? '#523880' : (isHoverState ? '#402E61' : '#33284C');
+            case 'light':
+            default:
+                return isClickState ? '#B9A4EE' : (isHoverState ? '#C6BAF0' : '#D2D0F2');
+        }
+    };
+
+    const handleScroll = () => {
+        layoutRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+
+    useEffect(() => {
+      // 
+    }, [])
+
+    console.log('')
+
+    return (
+        <div
+            className={[classes.homePage, classes[`homePage--${appTheme}`]].join(' ')}
+            ref={pageRef}
+            onScroll={() => {
+              console.log('--', pageRef.current.scrollTop)
+            }}
+        >
+            <div className={classes.container}>
+                <div className={[classes.homePageLeftImage, classes[`homePageLeftImage--${appTheme}`]].join(' ')}></div>
+                <div className={[classes.homePageRightImage, classes[`homePageRightImage--${appTheme}`]].join(' ')}></div>
+
+                <div className={classes.layoutPromo}>
+                    <div className={classes.layoutPromoTitle}>
+                        Enter the era of crypto
+                    </div>
+                    <div className={classes.layoutPromoSubTitle}>
+                        DYSTOPIA
+                    </div>
+                    <div className={classes.layoutPromoDescription}>
+                        <div className={classes.layoutPromoDescriptionItem}>
+                            0.001% FEE
+                        </div>
+                        <div className={classes.layoutPromoDescriptionItem}>
+                            TOKENIZED LOCKS AS NFT’s
+                        </div>
+                        <div className={classes.layoutPromoDescriptionItem}>
+                            POLYGON (MATIC)
+                        </div>
+                    </div>
+                    <div className={classes.layoutPromoButton}>
+                        <div
+                            className={[classes.buttonEnter, classes[`buttonEnter--${appTheme}`]].join(' ')}
+                            onMouseOver={btnHoverColor}
+                            onMouseOut={btnDefaultColor}
+                            onMouseDown={btnClickColor}
+                            onClick={() => router.push('/swap')}>
+                            <BtnEnterApp
+                                labelClassName={classes.buttonEnterLabel}
+                                label={'Enter App'}
+                                btnColor={getBtnColor}
+                            />
+                        </div>
+                    </div>
+                    <div className={classes.layoutPromoSocials}>
+                        <div className={classes.layoutPromoSocialsLink}>
+                            <a href={socialLinks.discord} target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M16.868 4.32154C15.6048 3.74195 14.2503 3.31493 12.834 3.07036C12.8082 3.06564 12.7825 3.07744 12.7692 3.10103C12.595 3.41087 12.402 3.81508 12.2669 4.13279C10.7436 3.90474 9.22812 3.90474 7.73607 4.13279C7.60091 3.80802 7.40094 3.41087 7.22595 3.10103C7.21266 3.07822 7.1869 3.06643 7.16111 3.07036C5.74562 3.31415 4.39107 3.74117 3.12712 4.32154C3.11618 4.32626 3.1068 4.33413 3.10058 4.34435C0.531279 8.18283 -0.172559 11.927 0.17272 15.6247C0.174283 15.6428 0.184438 15.6601 0.198499 15.6711C1.89365 16.9159 3.53569 17.6717 5.14724 18.1726C5.17303 18.1805 5.20036 18.1711 5.21677 18.1498C5.59799 17.6292 5.9378 17.0803 6.22916 16.5031C6.24636 16.4693 6.22994 16.4292 6.1948 16.4158C5.65579 16.2113 5.14255 15.962 4.64885 15.6789C4.6098 15.6561 4.60667 15.6003 4.6426 15.5735C4.74649 15.4957 4.85041 15.4147 4.94961 15.3329C4.96756 15.318 4.99257 15.3148 5.01368 15.3242C8.2571 16.8051 11.7685 16.8051 14.9736 15.3242C14.9947 15.314 15.0198 15.3172 15.0385 15.3321C15.1377 15.4139 15.2416 15.4957 15.3463 15.5735C15.3822 15.6003 15.3799 15.6561 15.3408 15.6789C14.8471 15.9675 14.3339 16.2113 13.7941 16.415C13.7589 16.4284 13.7433 16.4693 13.7605 16.5031C14.0581 17.0795 14.3979 17.6284 14.7721 18.149C14.7877 18.1711 14.8158 18.1805 14.8416 18.1726C16.461 17.6717 18.103 16.9159 19.7982 15.6711C19.813 15.6601 19.8224 15.6435 19.824 15.6255C20.2372 11.3505 19.1318 7.63707 16.8938 4.34513C16.8883 4.33413 16.8789 4.32626 16.868 4.32154ZM6.71352 13.3731C5.73702 13.3731 4.93242 12.4767 4.93242 11.3757C4.93242 10.2747 5.72142 9.37819 6.71352 9.37819C7.7134 9.37819 8.51022 10.2826 8.49458 11.3757C8.49458 12.4767 7.70558 13.3731 6.71352 13.3731ZM13.2988 13.3731C12.3223 13.3731 11.5177 12.4767 11.5177 11.3757C11.5177 10.2747 12.3067 9.37819 13.2988 9.37819C14.2987 9.37819 15.0955 10.2826 15.0799 11.3757C15.0799 12.4767 14.2987 13.3731 13.2988 13.3731Z" fill="white"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <div className={classes.layoutPromoSocialsSeparator}>
+                            <svg width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M3 2.49983V0.5H2L2 2.49983H0V3.49983H2L2 5.5H3V3.49983H5V2.49983H3Z" fill="#5688A5"/>
+                            </svg>
+                        </div>
+                        <div className={classes.layoutPromoSocialsLink}>
+                            <a href={socialLinks.gitbook} target="_blank">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10.8021 17.7698C10.8944 17.77 10.9858 17.7883 11.0711 17.8237C11.1563 17.8592 11.2337 17.9111 11.2989 17.9764C11.3641 18.0418 11.4158 18.1194 11.451 18.2047C11.4862 18.2901 11.5042 18.3815 11.5041 18.4738C11.504 18.5661 11.4857 18.6575 11.4502 18.7428C11.4148 18.828 11.3629 18.9054 11.2975 18.9706C11.2321 19.0358 11.1545 19.0875 11.0692 19.1227C10.9839 19.1579 10.8924 19.176 10.8001 19.1758C10.6137 19.1756 10.435 19.1012 10.3033 18.9692C10.1717 18.8372 10.0978 18.6583 10.0981 18.4718C10.0984 18.2854 10.1727 18.1067 10.3047 17.975C10.4367 17.8434 10.6157 17.7696 10.8021 17.7698ZM21.8261 13.4228C21.7338 13.4228 21.6424 13.4045 21.5571 13.3691C21.4718 13.3337 21.3944 13.2819 21.3292 13.2166C21.2639 13.1512 21.2122 13.0737 21.1769 12.9884C21.1417 12.9031 21.1235 12.8116 21.1236 12.7193C21.1237 12.627 21.1419 12.5356 21.1773 12.4503C21.2127 12.3651 21.2645 12.2876 21.3299 12.2224C21.3952 12.1571 21.4727 12.1054 21.558 12.0701C21.6434 12.0349 21.7348 12.0168 21.8271 12.0168C22.0135 12.017 22.1923 12.0911 22.3241 12.2231C22.4558 12.355 22.5297 12.5339 22.5296 12.7203C22.5295 12.9068 22.4553 13.0855 22.3233 13.2173C22.1914 13.349 22.0126 13.423 21.8261 13.4228V13.4228ZM21.8261 10.5468C21.2497 10.5473 20.697 10.7766 20.2894 11.1842C19.8818 11.5917 19.6526 12.1444 19.6521 12.7208C19.6521 12.9538 19.6911 13.1858 19.7671 13.4118L12.5861 17.2348C12.387 16.9457 12.1206 16.7093 11.8098 16.5461C11.499 16.3829 11.1532 16.2977 10.8021 16.2978C9.9731 16.2978 9.2181 16.7728 8.8521 17.5138L2.4011 14.1118C1.7191 13.7538 1.2091 12.6318 1.2631 11.6098C1.2911 11.0768 1.4751 10.6628 1.7561 10.5028C1.9341 10.4028 2.1481 10.4108 2.3761 10.5298L2.4181 10.5528C4.1281 11.4528 9.7221 14.3998 9.9581 14.5088C10.3211 14.6778 10.5231 14.7458 11.1431 14.4518L22.7071 8.43782C22.8771 8.37382 23.0751 8.21082 23.0751 7.96382C23.0751 7.62182 22.7211 7.48682 22.7201 7.48682C22.0621 7.17182 21.0511 6.69882 20.0651 6.23682C17.9571 5.24982 15.5681 4.13182 14.5191 3.58182C13.6131 3.10782 12.8841 3.50782 12.7541 3.58782L12.5021 3.71282C7.7801 6.04782 1.4601 9.17782 1.1001 9.39682C0.457104 9.78882 0.0581037 10.5698 0.00610369 11.5388C-0.0738963 13.0758 0.709104 14.6788 1.8301 15.2658L8.6521 18.7838C8.72725 19.3006 8.98582 19.7731 9.38057 20.115C9.77532 20.4568 10.2799 20.6453 10.8021 20.6458C11.3724 20.6449 11.9196 20.4201 12.326 20.0199C12.7323 19.6197 12.9654 19.0761 12.9751 18.5058L20.4891 14.4328C20.8691 14.7308 21.3421 14.8938 21.8261 14.8938C22.4025 14.8933 22.9552 14.6641 23.3628 14.2565C23.7704 13.8489 23.9996 13.2962 24.0001 12.7198C23.9996 12.1434 23.7704 11.5907 23.3628 11.1832C22.9552 10.7756 22.4025 10.5463 21.8261 10.5458" fill="white"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <div className={classes.layoutPromoSocialsSeparator}>
+                            <svg width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M3 2.49983V0.5H2L2 2.49983H0V3.49983H2L2 5.5H3V3.49983H5V2.49983H3Z" fill="#5688A5"/>
+                            </svg>
+                        </div>
+                        <div className={classes.layoutPromoSocialsLink}>
+                            <a href={socialLinks.telegram} target="_blank">
+                                <svg style={{ marginLeft: -2 }} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M1.6975 9.41086C6.8654 7.15929 10.3115 5.67491 12.0357 4.95774C16.9588 2.91006 17.9818 2.55435 18.6486 2.54261C18.7952 2.54002 19.1231 2.57637 19.3355 2.74871C19.5148 2.89423 19.5642 3.09082 19.5878 3.22879C19.6114 3.36676 19.6408 3.68107 19.6174 3.92666C19.3507 6.72978 18.1963 13.5322 17.609 16.6718C17.3605 18.0002 16.8712 18.4456 16.3975 18.4892C15.368 18.584 14.5863 17.8089 13.5892 17.1553C12.029 16.1325 11.1475 15.4959 9.63306 14.4978C7.88281 13.3444 9.01742 12.7105 10.0149 11.6745C10.2759 11.4034 14.8118 7.2777 14.8996 6.90343C14.9105 6.85662 14.9207 6.68215 14.8171 6.59001C14.7134 6.49788 14.5604 6.52939 14.45 6.55445C14.2936 6.58996 11.801 8.23742 6.97251 11.4968C6.26502 11.9826 5.6242 12.2193 5.05004 12.2069C4.41708 12.1933 3.19952 11.849 2.29439 11.5548C1.1842 11.1939 0.301855 11.0031 0.378687 10.3903C0.418707 10.071 0.85831 9.74457 1.6975 9.41086Z" fill="white"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <div className={classes.layoutPromoSocialsSeparator}>
+                            <svg width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M3 2.49983V0.5H2L2 2.49983H0V3.49983H2L2 5.5H3V3.49983H5V2.49983H3Z" fill="#5688A5"/>
+                            </svg>
+                        </div>
+                        <div className={classes.layoutPromoSocialsLink}>
+                            <a href={socialLinks.medium} target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M11.2812 10.1897C11.2812 13.332 8.75578 15.8793 5.6407 15.8793C2.52561 15.8793 0 13.3314 0 10.1897C0 7.04806 2.52542 4.5 5.6407 4.5C8.75598 4.5 11.2812 7.04749 11.2812 10.1897Z" fill="white"/>
+                                    <path d="M17.4688 10.19C17.4688 13.1477 16.2061 15.5464 14.6485 15.5464C13.0908 15.5464 11.8281 13.1477 11.8281 10.19C11.8281 7.23219 13.0906 4.8335 14.6483 4.8335C16.2059 4.8335 17.4686 7.23142 17.4686 10.19" fill="white"/>
+                                    <path d="M19.9998 10.1897C19.9998 12.8391 19.5557 14.9882 19.0078 14.9882C18.4599 14.9882 18.0161 12.8397 18.0161 10.1897C18.0161 7.53965 18.4601 5.39111 19.0078 5.39111C19.5555 5.39111 19.9998 7.53946 19.9998 10.1897Z" fill="white"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <div className={classes.layoutPromoSocialsSeparator}>
+                            <svg width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M3 2.49983V0.5H2L2 2.49983H0V3.49983H2L2 5.5H3V3.49983H5V2.49983H3Z" fill="#5688A5"/>
+                            </svg>
+                        </div>
+                        <div className={classes.layoutPromoSocialsLink}>
+                            <a href={socialLinks.twitter} target="_blank">
+                                <svg style={{ marginRight: -1, marginBottom: -1 }} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M17.5475 5.98396C17.5552 6.15996 17.5552 6.32796 17.5552 6.50396C17.563 11.84 13.6426 18 6.47319 18C4.35865 18 2.2827 17.368 0.5 16.184C0.808692 16.224 1.11738 16.24 1.42608 16.24C3.1779 16.24 4.88343 15.632 6.26483 14.504C4.59789 14.472 3.1316 13.344 2.62226 11.696C3.20877 11.816 3.81072 11.792 4.3818 11.624C2.56824 11.256 1.26401 9.59997 1.2563 7.67197C1.2563 7.65597 1.2563 7.63997 1.2563 7.62397C1.79651 7.93597 2.40617 8.11197 3.02356 8.12797C1.31803 6.94396 0.78554 4.58396 1.81966 2.73595C3.80301 5.26396 6.72015 6.79196 9.85337 6.95996C9.53696 5.55996 9.96913 4.08796 10.9801 3.09595C12.5467 1.56795 15.0162 1.64795 16.498 3.27195C17.37 3.09595 18.2112 2.75995 18.9752 2.28795C18.682 3.22395 18.0723 4.01596 17.262 4.51996C18.0337 4.42396 18.79 4.20796 19.5 3.88795C18.9752 4.70396 18.3115 5.40796 17.5475 5.98396Z" fill="white"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div className={classes.layoutPromoMoreWrapper}>
+                        <div className={classes.layoutPromoMore} onClick={handleScroll}>
+                            <i>Learn more</i>
+                            <span>
+                                <svg width="31" height="30" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15.4999 16.465L21.6874 10.2775L23.4549 12.045L15.4999 20L7.54492 12.045L9.31242 10.2775L15.4999 16.465Z" fill="#86B9D6"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div className={classes.layoutDescription} ref={layoutRef}>
+                    <div className={classes.layoutDescriptionLogo}>
+                        {appTheme === 'light' ? (
+                            <svg width="442" height="60" viewBox="0 0 442 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M138.047 20.4503C137.196 18.0734 135.859 15.9144 134.118 14.1212C132.404 12.4827 130.381 11.2169 128.18 10.4011C125.945 9.508 123.607 8.88916 121.227 8.56567C118.725 8.26328 116.208 8.12264 113.685 8.1367H97.0986V51.8636H113.664C116.188 51.8777 118.704 51.73 121.207 51.4276C123.593 51.1041 125.924 50.4783 128.159 49.5641C130.36 48.7272 132.376 47.4544 134.097 45.8158C135.839 44.0226 137.176 41.8637 138.026 39.4868C140.097 33.3335 140.097 26.6528 138.026 20.4995L138.047 20.4503ZM131.361 37.6513C131.252 37.9467 131.142 38.2209 131.025 38.4811C130.415 39.7821 129.565 40.9495 128.516 41.9129C127.275 43.1436 125.766 44.0718 124.121 44.6133C122.516 45.2111 120.85 45.6049 119.157 45.7877C117.641 45.9354 115.817 46.0127 113.671 46.0057H104.072V13.6571H113.671C115.831 13.6571 117.669 13.7344 119.157 13.8751C120.85 14.0649 122.516 14.4658 124.121 15.0565C125.76 15.598 127.261 16.5052 128.516 17.7217C129.538 18.7414 130.36 19.944 130.943 21.2801C131.087 21.6036 131.231 21.9411 131.361 22.3138C132.897 27.2998 132.897 32.6514 131.361 37.6373" fill="#0A2C40"/>
+                                <path d="M163.79 28.8575V32.76H161.817V28.8575L148.175 8.13574H140.59L159.268 35.9875V51.8646H166.02V35.9875L185.094 8.13574H177.509L163.79 28.8575Z" fill="#0A2C40"/>
+                                <path d="M234.654 13.2742H252.416V51.8646H258.171V13.2742H276.123V8.13574H234.654V13.2742Z" fill="#0A2C40"/>
+                                <path d="M320.161 14.2918C315.809 10.1878 309.909 8.13574 302.456 8.13574C295.002 8.13574 289.082 10.1878 284.681 14.2918C280.322 18.3959 278.146 23.6217 278.146 29.9762C278.146 36.3307 280.322 41.5702 284.681 45.7085C289.033 49.8125 294.96 51.8646 302.456 51.8646C309.951 51.8646 315.857 49.8125 320.161 45.7085C324.52 41.6044 326.696 36.358 326.696 29.9762C326.696 23.5944 324.52 18.3617 320.161 14.2918ZM315.263 42.2268C312.334 45.2844 308.065 46.8166 302.456 46.8097H301.979C296.605 46.7208 292.474 45.2091 289.614 42.2405C286.754 39.2719 285.186 35.0994 285.186 29.9899C285.186 24.8803 286.664 20.8652 289.614 17.8077C292.563 14.7501 296.605 13.3274 301.979 13.2385H302.456C308.072 13.2385 312.341 14.7706 315.263 17.8282C318.185 20.8857 319.65 24.9487 319.656 30.0104C319.656 35.12 318.192 39.2035 315.263 42.261" fill="#0A2C40"/>
+                                <path d="M368.64 15.4529C367.634 13.5191 366.044 11.9439 364.096 10.9594C361.964 9.86949 359.671 9.1241 357.3 8.75843C354.317 8.30838 351.299 8.10446 348.282 8.13962H333.776V51.8646H340.107V37.1607H348.31C351.328 37.1958 354.345 36.9919 357.328 36.5418C359.692 36.1762 361.992 35.4308 364.124 34.3408C366.072 33.3563 367.662 31.7812 368.668 29.8474C370.694 25.2625 370.694 20.0378 368.668 15.4529H368.64ZM362.02 27.5198C361.338 28.7856 360.248 29.7771 358.918 30.3326C357.49 30.9584 355.985 31.3874 354.444 31.6054C352.481 31.8515 350.512 31.964 348.535 31.9429H340.107V13.3433H348.549C350.526 13.3222 352.495 13.4347 354.458 13.6879C355.999 13.9059 357.504 14.3348 358.932 14.9607C360.262 15.5162 361.352 16.5077 362.034 17.7734C363.364 20.8816 363.364 24.4046 362.034 27.5128" fill="#0A2C40"/>
+                                <path d="M425.967 8.13574H411.479L395.474 51.8646H402.495L408.48 35.3617H429.021L435.006 51.8646H442L425.967 8.13574ZM410.326 30.1584L417.752 9.81627H419.694L427.12 30.1584H410.326Z" fill="#0A2C40"/>
+                                <path d="M387.382 8.13574H381.313V51.8646H387.382V8.13574Z" fill="#0A2C40"/>
+                                <path d="M213.609 27.4183H204.096V27.3698C198.619 27.3698 194.162 24.2161 194.162 20.3415C194.162 16.467 198.619 13.3203 204.096 13.3203V13.2717H227.735V8.13574H204.116C195.283 8.13574 188.128 13.5975 188.128 20.3415C188.128 27.0856 195.29 32.5543 204.116 32.5543H213.629V32.6305C219.106 32.6305 223.563 35.7773 223.563 39.6518C223.563 43.5264 219.106 46.68 213.629 46.68V46.7286H189.772V51.8646H213.609C222.442 51.8646 229.597 46.3959 229.597 39.6518C229.597 32.9078 222.442 27.4391 213.609 27.4391" fill="#0A2C40"/>
+                                <path d="M36.908 0H0L19.6067 23.5696C20.7849 24.994 22.5318 25.8138 24.3701 25.8138H32.2006L17.6009 8.25961H36.5221C48.146 8.25961 57.962 17.4056 58.3987 29.1238C58.6679 36.1691 55.5245 42.9018 49.969 47.1802L40.9604 36.3484C39.7822 34.924 38.0354 34.1042 36.1971 34.1042H28.3666L42.3721 50.9974C40.5897 51.4688 38.7514 51.7096 36.908 51.7096H9.79576C7.95746 51.7096 6.21566 52.5295 5.03245 53.9488L0 60H36.4611C52.7975 60 66.4222 46.8933 66.6304 30.415C66.8386 13.8395 53.6913 0.230572 37.2584 0.0204953C37.1416 0.0204953 37.0248 0.0204953 36.908 0.0153715" fill="#0B5E8E"/>
+                            </svg>
+                        ) : (
+                            <svg width="442" height="60" viewBox="0 0 442 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M138.047 20.4503C137.196 18.0734 135.859 15.9144 134.118 14.1212C132.404 12.4827 130.381 11.2169 128.18 10.4011C125.945 9.508 123.607 8.88916 121.227 8.56567C118.725 8.26328 116.208 8.12264 113.685 8.1367H97.0986V51.8636H113.664C116.188 51.8777 118.704 51.73 121.207 51.4276C123.593 51.1041 125.924 50.4783 128.159 49.5641C130.36 48.7272 132.376 47.4544 134.097 45.8158C135.839 44.0226 137.176 41.8637 138.026 39.4868C140.097 33.3335 140.097 26.6528 138.026 20.4995L138.047 20.4503ZM131.361 37.6513C131.252 37.9467 131.142 38.2209 131.025 38.4811C130.415 39.7821 129.565 40.9495 128.516 41.9129C127.275 43.1436 125.766 44.0718 124.121 44.6133C122.516 45.2111 120.85 45.6049 119.157 45.7877C117.641 45.9354 115.817 46.0127 113.671 46.0057H104.072V13.6571H113.671C115.831 13.6571 117.669 13.7344 119.157 13.8751C120.85 14.0649 122.516 14.4658 124.121 15.0565C125.76 15.598 127.261 16.5052 128.516 17.7217C129.538 18.7414 130.36 19.944 130.943 21.2801C131.087 21.6036 131.231 21.9411 131.361 22.3138C132.897 27.2998 132.897 32.6514 131.361 37.6373" fill="white"/>
+                                <path d="M163.79 28.8575V32.76H161.817V28.8575L148.175 8.13574H140.59L159.268 35.9875V51.8646H166.02V35.9875L185.094 8.13574H177.509L163.79 28.8575Z" fill="white"/>
+                                <path d="M234.654 13.2742H252.416V51.8646H258.171V13.2742H276.123V8.13574H234.654V13.2742Z" fill="white"/>
+                                <path d="M320.161 14.2918C315.809 10.1878 309.909 8.13574 302.456 8.13574C295.002 8.13574 289.082 10.1878 284.681 14.2918C280.322 18.3959 278.146 23.6217 278.146 29.9762C278.146 36.3307 280.322 41.5702 284.681 45.7085C289.033 49.8125 294.96 51.8646 302.456 51.8646C309.951 51.8646 315.857 49.8125 320.161 45.7085C324.52 41.6044 326.696 36.358 326.696 29.9762C326.696 23.5944 324.52 18.3617 320.161 14.2918ZM315.263 42.2268C312.334 45.2844 308.065 46.8166 302.456 46.8097H301.979C296.605 46.7208 292.474 45.2091 289.614 42.2405C286.754 39.2719 285.186 35.0994 285.186 29.9899C285.186 24.8803 286.664 20.8652 289.614 17.8077C292.563 14.7501 296.605 13.3274 301.979 13.2385H302.456C308.072 13.2385 312.341 14.7706 315.263 17.8282C318.185 20.8857 319.65 24.9487 319.656 30.0104C319.656 35.12 318.192 39.2035 315.263 42.261" fill="white"/>
+                                <path d="M368.64 15.4529C367.634 13.5191 366.044 11.9439 364.096 10.9594C361.964 9.86949 359.671 9.1241 357.3 8.75843C354.317 8.30838 351.299 8.10446 348.282 8.13962H333.776V51.8646H340.107V37.1607H348.31C351.328 37.1958 354.345 36.9919 357.328 36.5418C359.692 36.1762 361.992 35.4308 364.124 34.3408C366.072 33.3563 367.662 31.7812 368.668 29.8474C370.694 25.2625 370.694 20.0378 368.668 15.4529H368.64ZM362.02 27.5198C361.338 28.7856 360.248 29.7771 358.918 30.3326C357.49 30.9584 355.985 31.3874 354.444 31.6054C352.481 31.8515 350.512 31.964 348.535 31.9429H340.107V13.3433H348.549C350.526 13.3222 352.495 13.4347 354.458 13.6879C355.999 13.9059 357.504 14.3348 358.932 14.9607C360.262 15.5162 361.352 16.5077 362.034 17.7734C363.364 20.8816 363.364 24.4046 362.034 27.5128" fill="white"/>
+                                <path d="M425.967 8.13574H411.479L395.474 51.8646H402.495L408.48 35.3617H429.021L435.006 51.8646H442L425.967 8.13574ZM410.326 30.1584L417.752 9.81627H419.694L427.12 30.1584H410.326Z" fill="white"/>
+                                <path d="M387.382 8.13574H381.313V51.8646H387.382V8.13574Z" fill="white"/>
+                                <path d="M213.609 27.4183H204.096V27.3698C198.619 27.3698 194.162 24.2161 194.162 20.3415C194.162 16.467 198.619 13.3203 204.096 13.3203V13.2717H227.735V8.13574H204.116C195.283 8.13574 188.128 13.5975 188.128 20.3415C188.128 27.0856 195.29 32.5543 204.116 32.5543H213.629V32.6305C219.106 32.6305 223.563 35.7773 223.563 39.6518C223.563 43.5264 219.106 46.68 213.629 46.68V46.7286H189.772V51.8646H213.609C222.442 51.8646 229.597 46.3959 229.597 39.6518C229.597 32.9078 222.442 27.4391 213.609 27.4391" fill="white"/>
+                                <path d="M36.908 0H0L19.6067 23.5696C20.7849 24.994 22.5318 25.8138 24.3701 25.8138H32.2006L17.6009 8.25961H36.5221C48.146 8.25961 57.962 17.4056 58.3987 29.1238C58.6679 36.1691 55.5245 42.9018 49.969 47.1802L40.9604 36.3484C39.7822 34.924 38.0354 34.1042 36.1971 34.1042H28.3666L42.3721 50.9974C40.5897 51.4688 38.7514 51.7096 36.908 51.7096H9.79576C7.95746 51.7096 6.21566 52.5295 5.03245 53.9488L0 60H36.4611C52.7975 60 66.4222 46.8933 66.6304 30.415C66.8386 13.8395 53.6913 0.230572 37.2584 0.0204953C37.1416 0.0204953 37.0248 0.0204953 36.908 0.0153715" fill="#4CADE6"/>
+                            </svg>
+                        )}
+                    </div>
+                    <div className={classes.layoutDescriptionText}>
+                        <p>Dystopia officially launched in April 2022 with a collective goal of <b>fair and balanced access to DeFi</b>.</p>
+                        <p>Dystopia is a decentralized exchange that has launched on the Polygon network with low fees, near 0 slippage on correlated assets and a strong focus on secondary markets for tokenized locks as NFT’s (veToken = lpNFTs).</p>
+                    </div>
+                    <div className={classes.layoutDescriptionSmallText}>
+                        <p>One segment of the cryptocurrency landscape that has shown incredible potential is the swapping of stablecoins and volatile assets. Dystopia Swap offers users quick, seamless and cheap transactions while utilizing strategies to maximize their yield.</p>
+                    </div>
+                    <div className={classes.layoutDescriptionButton}>
+                        <div
+                            className={[classes.buttonEnter, classes[`buttonEnter--${appTheme}`]].join(' ')}
+                            onMouseOver={btnHoverColor}
+                            onMouseOut={btnDefaultColor}
+                            onMouseDown={btnClickColor}
+                            onClick={() => router.push('/swap')}>
+                            <BtnEnterApp
+                                labelClassName={classes.buttonEnterLabel}
+                                label={'Enter App'}
+                                btnColor={getBtnColor}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default HomePage

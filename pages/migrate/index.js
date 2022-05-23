@@ -74,8 +74,12 @@ export default function Migrate() {
 
   return (
     <>
-      {account && account.address
-        ? <Setup/>
+      {account && account.address ?
+      <div className={classes.ffContainer}>
+      <div className={classes.newSwapContainer}>
+        <Setup/>
+        </div>
+        </div>
         :
         <Paper className={classes.notConnectedContent}>
           <div className={classes.contentFloat}>
@@ -84,8 +88,7 @@ export default function Migrate() {
             </Typography>
 
             <div className={[classes.mainDescBg, classes[`mainDescBg--${appTheme}`]].join(' ')}>
-              <Typography className={[classes.mainDescNC, classes[`mainDescNC--${appTheme}`]].join(' ')}
-                          variant="body2">
+              <Typography className={[classes.mainDescNC, classes[`mainDescNC--${appTheme}`]].join(' ')} variant="body2">
                 Migrate your LP tokens.
               </Typography>
             </div>
@@ -105,7 +108,7 @@ export default function Migrate() {
           </div>
         </Paper>
       }
-      {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock}/>}
+      {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
     </>
   );
 }

@@ -544,9 +544,9 @@ function Setup() {
     );
   };
 
-  const [swapIconBgColor, setSwapIconBgColor] = useState(appTheme === 'dark' ? '#24292D' : '#B9DFF5');
-  const [swapIconBorderColor, setSwapIconBorderColor] = useState(appTheme === 'dark' ? '#5F7285' : '#86B9D6');
-  const [swapIconArrowColor, setSwapIconArrowColor] = useState(appTheme === 'dark' ? '#ffffff' : '#ffffff');
+  const [swapIconBgColor, setSwapIconBgColor] = useState(null);
+  const [swapIconBorderColor, setSwapIconBorderColor] = useState(null);
+  const [swapIconArrowColor, setSwapIconArrowColor] = useState(null);
 
   const swapIconHover = () => {
     setSwapIconBgColor(appTheme === 'dark' ? '#2D3741' : '#9BC9E4');
@@ -592,6 +592,8 @@ function Setup() {
         onMouseOut={swapIconDefault}
         onMouseDown={swapIconClick}
         onMouseUp={swapIconDefault}
+        onTouchStart={swapIconClick}
+        onTouchEnd={swapIconDefault}
         onClick={swapAssets}>
         {windowWidth > 470 &&
           <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">

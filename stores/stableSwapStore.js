@@ -16,8 +16,7 @@ import FactoryAbi from "./abis/FactoryAbi.json";
 import { ConstructionOutlined } from "@mui/icons-material";
 
 const queryone = `
-query {
-  
+  query {
     pairs(first:1000) {
      address
      decimals
@@ -75,17 +74,14 @@ query {
         rewardRate
         rewardAmount
     }
-    } 
-  
+  } 
 }`;
 
 const querytwo = `
-query {
-  
-   
+  query {
     tokens{
-     address
-     balance
+      address
+      balance
       chainId
       symbol
       name
@@ -93,11 +89,8 @@ query {
       isWhitelisted
       logoURI
     }
-    
-  
-    
-  
-}`;
+  }
+`;
 
 const client = createClient({ url: process.env.NEXT_PUBLIC_API });
 

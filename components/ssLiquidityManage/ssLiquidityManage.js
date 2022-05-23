@@ -35,6 +35,7 @@ import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import { formatSymbol, formatInputAmount } from '../../utils';
 import SwapIconBg from '../../ui/SwapIconBg';
 import AssetSelect from '../../ui/AssetSelect';
+import Borders from '../../ui/Borders';
 
 export default function ssLiquidityManage() {
 
@@ -1024,6 +1025,8 @@ export default function ssLiquidityManage() {
             }}
             className={['g-flex'].join(' ')}>
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.title}>
                 {BigNumber(amount1).gt(0) ? formatCurrency(BigNumber(amount0).div(amount1)) : '0.00'}
               </Typography>
@@ -1032,9 +1035,13 @@ export default function ssLiquidityManage() {
                 {`${formatSymbol(asset0?.symbol)} per ${formatSymbol(asset1?.symbol)}`}
               </Typography>
             </div>
+
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography
                 className={classes.title}>{BigNumber(amount0).gt(0) ? formatCurrency(BigNumber(amount1).div(amount0)) : '0.00'}</Typography>
+
               <Typography
                 className={classes.text}>{`${formatSymbol(asset1?.symbol)} per ${formatSymbol(asset0?.symbol)}`}</Typography>
             </div>
@@ -1050,6 +1057,8 @@ export default function ssLiquidityManage() {
 
           <div className={[classes.priceInfos, classes[`priceInfos--${appTheme}`]].join(' ')}>
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.text}>
                 {`${formatSymbol(pair?.token0?.symbol)}`}
               </Typography>
@@ -1060,6 +1069,8 @@ export default function ssLiquidityManage() {
             </div>
 
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.text}>
                 {`${formatSymbol(pair?.token1?.symbol)}`}
               </Typography>
@@ -1076,6 +1087,8 @@ export default function ssLiquidityManage() {
 
           <div className={[classes.priceInfos, classes[`priceInfos--${appTheme}`]].join(' ')}>
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.text}>
                 Pooled
               </Typography>
@@ -1086,6 +1099,8 @@ export default function ssLiquidityManage() {
             </div>
 
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.text}>
                 Staked
               </Typography>
@@ -1106,10 +1121,12 @@ export default function ssLiquidityManage() {
         <Typography className={classes.depositInfoHeading}>Reserve Info</Typography>
         <div className={classes.priceInfos}>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
             <Typography className={classes.text}>{`${formatSymbol(pair?.token0?.symbol)}`}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.reserve0)}</Typography>
           </div>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
             <Typography className={classes.text}>{`${formatSymbol(pair?.token1?.symbol)}`}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.reserve1)}</Typography>
           </div>
@@ -1117,10 +1134,12 @@ export default function ssLiquidityManage() {
         <Typography className={classes.depositInfoHeading}>Your Balances</Typography>
         <div className={classes.priceInfos}>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
             <Typography className={classes.text}>{`Pooled ${formatSymbol(pair?.symbol)}`}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.balance)}</Typography>
           </div>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
             <Typography className={classes.text}>{`Staked ${formatSymbol(pair?.symbol)} `}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.gauge?.balance)}</Typography>
           </div>
@@ -1538,47 +1557,55 @@ export default function ssLiquidityManage() {
                     Slippage Tolerance
                   </div>
 
-                  <TextField
-                    placeholder="0.00"
-                    fullWidth
-                    error={slippageError}
-                    helperText={slippageError}
-                    value={slippage}
-                    onChange={onSlippageChanged}
-                    disabled={depositLoading || stakeLoading || depositStakeLoading || createLoading}
-                    classes={{
-                      root: [classes.slippageRoot, appTheme === "dark" ? classes['slippageRoot--dark'] : classes['slippageRoot--light']].join(' '),
-                    }}
-                    InputProps={{
-                      style: {
-                        border: 'none',
-                        borderRadius: 0,
-                      },
-                      classes: {
-                        root: classes.searchInput,
-                      },
-                      endAdornment: <InputAdornment position="end">
+                  <div
+                    style={{
+                      position: 'relative',
+                      marginBottom: 20,
+                    }}>
+                    <Borders/>
+
+                    <TextField
+                      placeholder="0.00"
+                      fullWidth
+                      error={slippageError}
+                      helperText={slippageError}
+                      value={slippage}
+                      onChange={onSlippageChanged}
+                      disabled={depositLoading || stakeLoading || depositStakeLoading || createLoading}
+                      classes={{
+                        root: [classes.slippageRoot, appTheme === "dark" ? classes['slippageRoot--dark'] : classes['slippageRoot--light']].join(' '),
+                      }}
+                      InputProps={{
+                        style: {
+                          border: 'none',
+                          borderRadius: 0,
+                        },
+                        classes: {
+                          root: classes.searchInput,
+                        },
+                        endAdornment: <InputAdornment position="end">
                         <span
                           style={{
                             color: appTheme === "dark" ? '#ffffff' : '#325569',
                           }}>
                           %
                         </span>
-                      </InputAdornment>,
-                    }}
-                    inputProps={{
-                      className: [classes.smallInput, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
-                      style: {
-                        padding: 0,
-                        borderRadius: 0,
-                        border: 'none',
-                        fontSize: 14,
-                        fontWeight: 400,
-                        lineHeight: '120%',
-                        color: appTheme === "dark" ? '#C6CDD2' : '#325569',
-                      },
-                    }}
-                  />
+                        </InputAdornment>,
+                      }}
+                      inputProps={{
+                        className: [classes.smallInput, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
+                        style: {
+                          padding: 0,
+                          borderRadius: 0,
+                          border: 'none',
+                          fontSize: 14,
+                          fontWeight: 400,
+                          lineHeight: '120%',
+                          color: appTheme === "dark" ? '#C6CDD2' : '#325569',
+                        },
+                      }}
+                    />
+                  </div>
 
                   {/*TODO: uncomment deadline then logic will be ready*/}
                   {/*
