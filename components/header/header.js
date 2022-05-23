@@ -330,7 +330,7 @@ function Header(props) {
               </Button>
 
               {anchorEl &&
-                <ClickAwayListener onClickAway={handleClickAway}>
+                
                   <div
                     className={[classes.headSwitchBtn, classes[`headSwitchBtn--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}
                     onClick={onAddressClicked}>
@@ -348,7 +348,7 @@ function Header(props) {
                       Switch Wallet Provider
                     </div>
                   </div>
-                </ClickAwayListener>
+                
               }
             </div>
           ) : (

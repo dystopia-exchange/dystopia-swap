@@ -200,20 +200,20 @@ const headCells = [
     isSticky: true,
     isHideInDetails: true,
   },
-  {
-    id: 'tvl',
-    numeric: true,
-    disablePadding: false,
-    label: 'TVL',
-    isHideInDetails: true,
-  },
-  {
-    id: 'apr',
-    numeric: true,
-    disablePadding: false,
-    label: 'APR %',
-    isHideInDetails: true,
-  },
+  // {
+  //   id: 'tvl',
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: 'TVL',
+  //   isHideInDetails: true,
+  // },
+  // {
+  //   id: 'apr',
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: 'APR %',
+  //   isHideInDetails: true,
+  // },
   {
     id: 'balance',
     numeric: true,
@@ -894,7 +894,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                             </div>
                           </div>
                         </StickyTableCell>
-                        <TableCell
+                        {/* <TableCell
                           className={classes.cell}
                           align="right"
                           style={{
@@ -930,7 +930,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               null
                             )
                           }
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell
                           className={classes.cell}
                           align="right"

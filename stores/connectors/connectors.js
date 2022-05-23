@@ -27,6 +27,7 @@ export const walletconnect = new WalletConnectConnector({
     137: RPC_URLS[137],
     80001: RPC_URLS[80001]
   },
+  infuraId:"9b5ceebd213642f0a30711054e4a208d",
   chainId: parseInt(process.env.NEXT_PUBLIC_CHAINID),
   bridge: "https://bridge.walletconnect.org",
   qrcode: true,

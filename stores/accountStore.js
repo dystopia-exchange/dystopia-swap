@@ -4,7 +4,7 @@ import {
   CONTRACTS
 } from './constants';
 import Multicall from '@dopex-io/web3-multicall';
-
+import detectProvider from '@metamask/detect-provider'
 import {
   injected,
   walletconnect,
@@ -13,8 +13,6 @@ import {
 } from './connectors';
 
 import Web3 from 'web3'; 
-
-import detectProvider from '@metamask/detect-provider'
 
 class Store {
   constructor(dispatcher, emitter) {
@@ -68,12 +66,10 @@ class Store {
     const provider = await detectProvider();
     // this.getGasPrices();
     injected.isAuthorized().then(async (isAuthorized) => {
-
       const { supportedChainIds } = injected;
-      // fall back to ethereum mainnet if chainId undefined
       let providerChain = await provider.request({ method: 'eth_chainId' });
-      // const { chainId = process.env.NEXT_PUBLIC_CHAINID } = window.ethereum || {};
       const { chainId = process.env.NEXT_PUBLIC_CHAINID } = { chainId: providerChain } || {};
+      // fall back to ethereum mainnet if chainId undefined
       const parsedChainId = parseInt(chainId, 16);
       const isChainSupported = supportedChainIds.includes(parsedChainId);
       if (!isChainSupported) {

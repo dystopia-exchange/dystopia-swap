@@ -11,7 +11,22 @@
 .warningDividerError {
   background-image: url("/images/ui/quote-loader-error--light.svg");
 }
+input[type=number].massiveInputAmount::-webkit-inner-spin-button, 
+input[type=number].massiveInputAmount::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+}
 
+input[type=number].massiveInputAmount {
+  -moz-appearance: textfield;
+}
+input[type=number].mediumInputAmount::-webkit-inner-spin-button, 
+input[type=number].mediumInputAmount::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+}
+
+input[type=number].mediumInputAmount {
+  -moz-appearance: textfield;
+}
 .quoteLoaderDividerInfo,
 .warningDividerWarning {
   background-image: url("/images/ui/quote-loader-info--light.svg");

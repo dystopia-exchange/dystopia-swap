@@ -1500,6 +1500,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                       flexDirection: 'column',
                                       alignItems: 'flex-end',
                                     }}>
+                                      
                                     <Typography
                                       className={classes.textSpaced}
                                       style={{
