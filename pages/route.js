@@ -2,7 +2,7 @@ import Swap from "./swap";
 import Liquidity from "./liquidity";
 import LiquidityAddress from "./liquidity/[address]";
 import Vest from "./vest";
-// import Migrate from './migrate'
+import Migrate from './migrate'
 import Vote from "./vote";
 import Rewards from "./rewards";
 import Whitelist from "./whitelist";
@@ -24,7 +24,7 @@ function Route({ changeTheme, ...props }) {
     }
   } else if (activePath.includes("/vest")) {
     return <Vest props={props} changeTheme={changeTheme} />;
-  // } 
+  // }
   // else if (activePath.includes("/migrate")) {
   //   return <Migrate props={props} changeTheme={changeTheme} />;
   } else if (activePath.includes("/vote")) {

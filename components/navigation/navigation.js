@@ -74,9 +74,9 @@ function Navigation(props) {
     if (activePath.includes("whitelist")) {
       setActive("whitelist");
     }
-    // if (activePath.includes("migrate")) {
-    //   setActive("migrate");
-    // }
+    if (activePath.includes("migrate")) {
+      setActive("migrate");
+    }
   }, []);
 
   const renderNavs = () => {
@@ -93,7 +93,7 @@ function Navigation(props) {
         {renderSubNav("Vote", "vote")}
         {renderSubNav("Rewards", "rewards")}
         {renderSubNav("Whitelist", "whitelist")}
-        {/* {renderSubNav("Migrate", "migrate")} */}
+        {renderSubNav("Migrate", "migrate")}
       </ToggleButtonGroup>
     );
   };
