@@ -205,7 +205,7 @@ export default function Setup() {
               symbol: symbol,
               token0symbol: token0symbol,
               token1symbol: token1symbol,
-              lpBalance: parseFloat(lpBalance).toFixed(8),
+              lpBalance: parseFloat(lpBalance).toFixed(14),
               totalSupply,
               token0,
               token1,
@@ -850,7 +850,7 @@ export default function Setup() {
                     <div
                       className={[classes.balanceMax, classes[`balanceMax--${appTheme}`]].join(' ')}
                       onClick={() =>
-                        handleMax(Number(pairDetails.lpBalance).toFixed(10))
+                        handleMax(Number(pairDetails.lpBalance).toFixed(18))
                       }>
                       MAX
                     </div>
@@ -976,7 +976,7 @@ export default function Setup() {
                 </div>
               </div>
 
-              {Number(parseFloat(pairDetails?.lpBalance)) !== Number(0) || Number(parseFloat(amount)) !== Number(0) || Number(parseFloat(amount)) == null?
+              {(parseFloat(pairDetails.lpBalance) <= 0) || parseFloat(amount)<=0 || amount == null || amount == '' || isNaN(amount)?
               dystopiaPair ? (
                 <div>
                   <div
