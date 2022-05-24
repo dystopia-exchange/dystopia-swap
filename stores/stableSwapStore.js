@@ -2071,8 +2071,6 @@ class Store {
         migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
       );
      
-      const balanceInWei = (web3.utils.toWei(amount));
-      let am = web3.utils.toBN(balanceInWei)
       const now = new Date();
       const utcMilllisecondsSinceEpoch = now.getTime();
       const utcSecondsSinceEpoch = Math.round(
@@ -2084,9 +2082,9 @@ class Store {
         token0.address,
         token1.address,
         isStable,
-        am,
-        1,
-        1,
+        amount,
+        0,
+        0,
         utcSecondsSinceEpoch,
       ];
       let sendValue = null;
