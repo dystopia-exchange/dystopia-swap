@@ -205,7 +205,7 @@ export default function Setup() {
               symbol: symbol,
               token0symbol: token0symbol,
               token1symbol: token1symbol,
-              lpBalance: parseFloat(lpBalance).toFixed(4),
+              lpBalance: parseFloat(lpBalance).toFixed(8),
               totalSupply,
               token0,
               token1,
