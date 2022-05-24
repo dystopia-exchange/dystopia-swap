@@ -850,7 +850,7 @@ export default function Setup() {
                     <div
                       className={[classes.balanceMax, classes[`balanceMax--${appTheme}`]].join(' ')}
                       onClick={() =>
-                        handleMax(Number(pairDetails.lpBalance).toFixed(5))
+                        handleMax(Number(pairDetails.lpBalance).toFixed(10))
                       }>
                       MAX
                     </div>
@@ -966,7 +966,7 @@ export default function Setup() {
                   <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
 
                   <div>
-                    {pairDetails?.token0symbol}
+                    {pairDetails?.token1symbol}
                   </div>
 
                   <div
