@@ -199,6 +199,26 @@ class Store {
     }
   };
 
+  connectWalletConnect = async () => {
+    try {
+      const that = this;
+      const provider = that.getStore('connectorsByName')['WalletConnect'];
+      // const provider = connectorsByName[name];
+      await provider.enable();
+      const web3 = new Web3(provider);
+  
+      that.setStore({
+        account: { address: provider.accounts[0] },
+        web3context: { library: { provider: web3 }},
+      });
+      return true;
+
+    } catch(e) {
+      console.log(e);
+      return false;
+    }
+  }
+
   getWeb3Provider = async () => {
     let web3context = this.getStore('web3context');
     let provider = null;
