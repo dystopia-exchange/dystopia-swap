@@ -290,13 +290,15 @@ export default function Setup() {
     try {
       setLoading(true);
       const migrator = migrate.find((eachMigrate) => eachMigrate == platform);
+      let am = amount
+
       stores.dispatcher.dispatch({
         type: ACTIONS.MIGRATE,
         content: {
           migrator: migrator,
           token0: fromAssetValue,
           token1: toAssetValue,
-          amount: amount,
+          amount: am,
           isStable: isStable,
           allowance: pairDetails.allowence,
           pairDetails: pairDetails,

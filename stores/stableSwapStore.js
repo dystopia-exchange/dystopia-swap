@@ -1355,14 +1355,6 @@ class Store {
                   gaugesContract.methods.weights(pair.address),
                   gaugeContract.methods.rewardRate(CONTRACTS.REWARD_ADDRESS),
                 ]);
-              console.log(
-                pair.symbol,
-                totalSupply,
-                gaugeBalance,
-                gaugeWeight,
-                rewardRate,
-                "heyya"
-              );
               const bribeContract = new web3.eth.Contract(
                 CONTRACTS.BRIBE_ABI,
                 pair.gauge.bribeAddress
@@ -2078,7 +2070,9 @@ class Store {
         migratorAbi,
         migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
       );
-      const balanceInWei = web3.utils.toWei(amount);
+     
+      const balanceInWei = (web3.utils.toWei(amount));
+      let am = web3.utils.toBN(balanceInWei)
       const now = new Date();
       const utcMilllisecondsSinceEpoch = now.getTime();
       const utcSecondsSinceEpoch = Math.round(
@@ -2090,7 +2084,7 @@ class Store {
         token0.address,
         token1.address,
         isStable,
-        balanceInWei,
+        am,
         1,
         1,
         utcSecondsSinceEpoch,
