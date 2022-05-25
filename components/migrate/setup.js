@@ -11,11 +11,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import {
-  Search,
-  KeyboardArrowDown,
-  Close,
-} from "@mui/icons-material";
+import { Search, KeyboardArrowDown, Close } from "@mui/icons-material";
 import migrate from "../../stores/configurations/migrators";
 import FactoryAbi from "../../stores/abis/FactoryAbi.json";
 import pairContractAbi from "../../stores/abis/pairOldRouter.json";
@@ -25,16 +21,16 @@ import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import stores from "../../stores";
 import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
 import BigNumber from "bignumber.js";
-import Borders from '../../ui/Borders';
-import AssetSelect from '../../ui/AssetSelect';
-import Loader from '../../ui/Loader';
+import Borders from "../../ui/Borders";
+import AssetSelect from "../../ui/AssetSelect";
+import Loader from "../../ui/Loader";
 
 export default function Setup() {
   const [fromAssetValue, setFromAssetValue] = useState(null);
   const [toAssetValue, setToAssetValue] = useState(null);
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
-  const {appTheme} = useAppThemeContext();
+  const { appTheme } = useAppThemeContext();
   const [isStable, toggleStablePool] = useState(false);
   const [toggleArrow, setToggleArrow] = useState(false);
   const [pairDetails, setPairDetails] = useState(null);
@@ -69,23 +65,24 @@ export default function Setup() {
         parseFloat(pair?.reserve1.toString());
 
       setdystopiaPair(pair);
-      let removedToken0 =(amount * pairDetails?.weiReserve1) /pairDetails?.totalSupply;
-    let removedToken1 =(amount * pairDetails?.weiReserve2) /pairDetails?.totalSupply;
-      if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0){
-      await callQuoteAddLiquidity(
-        removedToken0,
-        removedToken1,
-        bool,
-        pairDetails.token0,
-        pairDetails.token1,
-      );}
-    } else {
-      setdystopiaPair(null);
-    }
+      let removedToken0 =
+        (amount * pairDetails?.weiReserve1) / pairDetails?.totalSupply;
+      let removedToken1 =
+        (amount * pairDetails?.weiReserve2) / pairDetails?.totalSupply;
+      if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0) {
+        await callQuoteAddLiquidity(
+          removedToken0,
+          removedToken1,
+          bool,
+          pairDetails.token0,
+          pairDetails.token1
+        );
+      }
+    } 
   };
 
   function ValueLabelComponent(props) {
-    const {children, value} = props;
+    const { children, value } = props;
 
     return (
       <Tooltip enterTouchDelay={0} placement="top" title={value}>
@@ -115,7 +112,7 @@ export default function Setup() {
         } else {
           const factoryContract = new web3.eth.Contract(
             FactoryAbi,
-            platform.value,
+            platform.value
           );
           const pairAddress = await factoryContract.methods
             .getPair(token0, token1)
@@ -123,11 +120,11 @@ export default function Setup() {
           if (pairAddress !== "0x0000000000000000000000000000000000000000") {
             const pairContract = new web3.eth.Contract(
               pairContractAbi,
-              pairAddress,
+              pairAddress
             );
 
             const migrator = migrate.find(
-              (eachMigrate) => eachMigrate == platform,
+              (eachMigrate) => eachMigrate == platform
             );
             let [
               getReserves,
@@ -142,7 +139,7 @@ export default function Setup() {
               pairContract.methods.symbol(),
               pairContract.methods.allowance(
                 account.address,
-                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID],
+                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
               ),
               pairContract.methods.totalSupply(),
               pairContract.methods.balanceOf(account.address),
@@ -152,11 +149,11 @@ export default function Setup() {
 
             const token0Contract = new web3.eth.Contract(
               pairContractAbi,
-              token0Add,
+              token0Add
             );
             const token1Contract = new web3.eth.Contract(
               pairContractAbi,
-              token1Add,
+              token1Add
             );
             let [token0symbol, token1symbol, decimal0, decimal1] =
               await multicall.aggregate([
@@ -168,7 +165,7 @@ export default function Setup() {
 
             let totalSupply = web3.utils.fromWei(
               getTotalSupply.toString(),
-              "ether",
+              "ether"
             );
             lpBalance = web3.utils.fromWei(lpBalance.toString(), "ether");
 
@@ -205,7 +202,7 @@ export default function Setup() {
               symbol: symbol,
               token0symbol: token0symbol,
               token1symbol: token1symbol,
-              lpBalance: parseFloat(lpBalance).toFixed(4),
+              lpBalance: parseFloat(lpBalance).toFixed(14),
               totalSupply,
               token0,
               token1,
@@ -218,7 +215,7 @@ export default function Setup() {
               poolTokenPercentage: Math.floor(poolTokenPercentage),
             };
 
-            setAmount(parseFloat(lpBalance).toFixed(4));
+            setAmount(parseFloat(lpBalance).toFixed(14));
             setPairDetails(pairDetails);
             return pairDetails;
           } else {
@@ -255,6 +252,8 @@ export default function Setup() {
     }
     setPairDetails(null);
     setcheckpair(false);
+    setdystopiaPair(false);
+    setQuote(null);
     forceUpdate();
   };
   const ssUpdated = async () => {
@@ -291,13 +290,16 @@ export default function Setup() {
     try {
       setLoading(true);
       const migrator = migrate.find((eachMigrate) => eachMigrate == platform);
+      let am = (new BigNumber(amount).times(10**18))
+      console.log(typeof am,typeof amount)
+
       stores.dispatcher.dispatch({
         type: ACTIONS.MIGRATE,
         content: {
           migrator: migrator,
           token0: fromAssetValue,
           token1: toAssetValue,
-          amount: amount,
+          amount: am,
           isStable: isStable,
           allowance: pairDetails.allowence,
           pairDetails: pairDetails,
@@ -311,44 +313,51 @@ export default function Setup() {
   };
 
   const handleAmountChange = async (event) => {
-     if (parseFloat(event.target.value) >= parseFloat(pairDetails.lpBalance)) {
-       setAmount(pairDetails.lpBalance);
-     } else {
-       setAmount(event.target.value);
-     }
-     if(parseFloat(event.target.value) <=0 || event.target.value == null || event.target.value == '' || isNaN(event.target.value)){
-       setdystopiaPair(null)
-     }
-     else{
-       setdystopiaPair(true)
-     }
-     
-     pairDetails.token0Bal =
-      (parseFloat(event.target.value.toString()) /
+let am
+    if (parseFloat(event.target.value) >= parseFloat(pairDetails.lpBalance)) {
+      setAmount(pairDetails.lpBalance);
+am = pairDetails.lpBalance
+    } else {
+      setAmount(event.target.value);
+      am = event.target.value
+    }
+
+    if (
+      parseFloat(am) <= 0 ||
+      am == null ||
+      am == "" ||
+      isNaN(am)
+    ) {
+      setdystopiaPair(false);
+    } else {
+      setdystopiaPair(true);
+    }
+
+    pairDetails.token0Bal =
+      (parseFloat(am.toString()) /
         parseFloat(pairDetails.totalSupply.toString())) *
       parseFloat(pairDetails.weiReserve1);
 
-     pairDetails.token1Bal =
-      (parseFloat(event.target.value.toString()) /
+    pairDetails.token1Bal =
+      (parseFloat(am.toString()) /
         parseFloat(pairDetails.totalSupply.toString())) *
       parseFloat(pairDetails.weiReserve2.toString());
 
-     let removedToken0 =
-      (event.target.value * pairDetails?.weiReserve1) /
+    let removedToken0 =
+      (am * pairDetails?.weiReserve1) /
       pairDetails?.totalSupply;
-     let removedToken1 =
-      (event.target.value * pairDetails?.weiReserve2) /
+    let removedToken1 =
+      (am * pairDetails?.weiReserve2) /
       pairDetails?.totalSupply;
 
-     if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0)
+    if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0)
       await callQuoteAddLiquidity(
         removedToken0,
         removedToken1,
         pairDetails.isStable,
         pairDetails.token0,
-        pairDetails.token1,
+        pairDetails.token1
       );
-    
   };
   const handleMax = async (lpBalance) => {
     setAmount(lpBalance);
@@ -367,16 +376,15 @@ export default function Setup() {
     let removedToken1 =
       (lpBalance * pairDetails?.weiReserve2) / pairDetails?.totalSupply;
 
-    if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0)
+    if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0){
       await callQuoteAddLiquidity(
         removedToken0,
         removedToken1,
         pairDetails.isStable,
         pairDetails.token0,
-        pairDetails.token1,
+        pairDetails.token1
       );
-    
-      setdystopiaPair(true)  
+      setdystopiaPair(true) }
   };
 
   let buttonText = "Approve";
@@ -389,7 +397,8 @@ export default function Setup() {
     buttonText = "Migrate Liquidity";
   }
 
-  const disableButton = !platform ||
+  const disableButton =
+    !platform ||
     (loading &&
       pairDetails &&
       !pairDetails.isValid &&
@@ -404,7 +413,7 @@ export default function Setup() {
           classes[`selecticonIcon--${appTheme}`],
         ].join(" ")}`}
       >
-        <KeyboardArrowDown/>
+        <KeyboardArrowDown />
       </div>
     );
   };
@@ -413,12 +422,12 @@ export default function Setup() {
     amount1,
     isStable,
     token0,
-    token1,
+    token1
   ) => {
     const web3 = await stores.accountStore.getWeb3Provider();
     const routerContract = new web3.eth.Contract(
       CONTRACTS.ROUTER_ABI,
-      CONTRACTS.ROUTER_ADDRESS,
+      CONTRACTS.ROUTER_ADDRESS
     );
 
     const sendAmount0 = BigNumber(amount0)
@@ -441,8 +450,9 @@ export default function Setup() {
     let res = await routerContract.methods
       .quoteAddLiquidity(addy0, addy1, isStable, sendAmount0, sendAmount1)
       .call();
-    res = {res, token0: token0, token1: token1};
+    res = { res, token0: token0, token1: token1 };
     setQuote(res);
+    
   };
   const checkPair = async (fromAssetValue, toAssetValue, isStable) => {
     const web3 = await stores.accountStore.getWeb3Provider();
@@ -460,13 +470,13 @@ export default function Setup() {
           removedToken1,
           isStable,
           a.token0,
-          a.token1,
+          a.token1
         );
     });
     const pair = await stores.stableSwapStore.getPair(
       fromAssetValue,
       toAssetValue,
-      isStable,
+      isStable
     );
 
     if (pair != null) {
@@ -481,22 +491,28 @@ export default function Setup() {
 
       setdystopiaPair(pair);
     } else {
-      setdystopiaPair(null);
+      setdystopiaPair(false);
     }
   };
 
   const arrowIcon = () => {
     return (
       <svg
-        width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <path
           d="M9.99962 10.9773L14.1246 6.85232L15.303 8.03065L9.99962 13.334L4.69629 8.03065L5.87462 6.85232L9.99962 10.9773Z"
-          fill={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+          fill={appTheme === "dark" ? "#4CADE6" : "#0B5E8E"}
+        />
       </svg>
     );
   };
 
-  const PlatformSelect = ({onSelect}) => {
+  const PlatformSelect = ({ onSelect }) => {
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [filteredPlatform, setFilteredPlatform] = useState([]);
@@ -541,14 +557,13 @@ export default function Setup() {
           const baseAsset = await stores.stableSwapStore.getBaseAsset(
             event.target.value,
             true,
-            true,
+            true
           );
         }
 
-        return () => {
-        };
+        return () => { };
       },
-      [search],
+      [search]
     );
 
     const onSearchChanged = async (event) => {
@@ -558,15 +573,29 @@ export default function Setup() {
     return (
       <>
         <div
-          className={[classes.select, classes[`select--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}
-          onClick={handleClickOpen}>
+          className={[
+            classes.select,
+            classes[`select--${appTheme}`],
+            "g-flex",
+            "g-flex--align-center",
+          ].join(" ")}
+          onClick={handleClickOpen}
+        >
           <div
             style={{
-              position: 'relative',
-              height: '100%',
+              position: "relative",
+              height: "100%",
             }}
-            className={['g-flex__item', 'g-flex', 'g-flex--align-center'].join(' ')}>
-            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+            className={["g-flex__item", "g-flex", "g-flex--align-center"].join(
+              " "
+            )}
+          >
+            <Borders
+              offsetLeft={-1}
+              offsetRight={-1}
+              offsetTop={-1}
+              offsetBottom={-1}
+            />
 
             <div className={classes.selectLabel}>
               {platform ? platform.label : "Select a platform"}
@@ -574,8 +603,20 @@ export default function Setup() {
           </div>
 
           <div
-            className={[classes.selectArrow, 'g-flex__item-fixed', 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}>
-            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+            className={[
+              classes.selectArrow,
+              "g-flex__item-fixed",
+              "g-flex",
+              "g-flex--align-center",
+              "g-flex--justify-center",
+            ].join(" ")}
+          >
+            <Borders
+              offsetLeft={-1}
+              offsetRight={-1}
+              offsetTop={-1}
+              offsetBottom={-1}
+            />
 
             {arrowIcon()}
           </div>
@@ -587,56 +628,68 @@ export default function Setup() {
           }}
           aria-labelledby="simple-dialog-title"
           open={open}
-          style={{borderRadius: 0}}
+          style={{ borderRadius: 0 }}
           onClick={(e) => {
-            if (e.target.classList.contains('MuiDialog-container')) {
+            if (e.target.classList.contains("MuiDialog-container")) {
               onClose();
             }
-          }}>
+          }}
+        >
           <div
-            className={[classes.dialogContainer, 'g-flex-column'].join(' ')}
+            className={[classes.dialogContainer, "g-flex-column"].join(" ")}
             style={{
               width: 460,
               height: 710,
-              background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-              border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
+              background: appTheme === "dark" ? "#151718" : "#DBE6EC",
+              border:
+                appTheme === "dark" ? "1px solid #5F7285" : "1px solid #86B9D6",
               borderRadius: 0,
-              overflow: 'hidden',
-            }}>
+              overflow: "hidden",
+            }}
+          >
             <DialogTitle
-              className={[classes.dialogTitle, 'g-flex-column__item-fixed'].join(' ')}
+              className={[
+                classes.dialogTitle,
+                "g-flex-column__item-fixed",
+              ].join(" ")}
               style={{
                 padding: 30,
                 paddingBottom: 0,
                 fontWeight: 500,
                 fontSize: 18,
-                lineHeight: '140%',
-                color: '#0A2C40',
-              }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-                }}>
+                lineHeight: "140%",
+                color: "#0A2C40",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+                  }}
+                >
                   Select a platform
                 </div>
 
                 <Close
                   style={{
-                    cursor: 'pointer',
-                    color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                    cursor: "pointer",
+                    color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
                   }}
-                  onClick={onClose}/>
+                  onClick={onClose}
+                />
               </div>
             </DialogTitle>
 
             <div className={classes.searchInline}>
-              <Borders/>
+              <Borders />
 
               <TextField
                 variant="outlined"
@@ -646,26 +699,52 @@ export default function Setup() {
                 onChange={onSearchChanged}
                 InputProps={{
                   classes: {
-                    root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
-                    inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
+                    root: [
+                      classes.searchInput,
+                      classes[`searchInput--${appTheme}`],
+                    ].join(" "),
+                    inputAdornedStart: [
+                      classes.searchInputText,
+                      classes[`searchInputText--${appTheme}`],
+                    ].join(" "),
                   },
-                  startAdornment: <InputAdornment position="start">
-                    <Search style={{
-                      color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                    }}/>
-                  </InputAdornment>,
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Search
+                        style={{
+                          color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
+                        }}
+                      />
+                    </InputAdornment>
+                  ),
                 }}
               />
             </div>
 
             <DialogContent
-              className={[classes.dialogContent, 'g-flex-column__item', 'g-flex-column'].join(' ')}>
+              className={[
+                classes.dialogContent,
+                "g-flex-column__item",
+                "g-flex-column",
+              ].join(" ")}
+            >
               {filteredPlatform.length === 0
                 ? migrate.map((eachPlatform, index) => (
                   <div
                     key={index}
-                    className={[classes.pairDetails, classes[`pairDetails--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(" ")}>
-                    <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                    className={[
+                      classes.pairDetails,
+                      classes[`pairDetails--${appTheme}`],
+                      "g-flex",
+                      "g-flex--align-center",
+                    ].join(" ")}
+                  >
+                    <Borders
+                      offsetLeft={-1}
+                      offsetRight={-1}
+                      offsetTop={-1}
+                      offsetBottom={-1}
+                    />
 
                     {eachPlatform.label}
                   </div>
@@ -673,9 +752,20 @@ export default function Setup() {
                 : filteredPlatform.map((eachPlatform, index) => (
                   <div
                     key={index}
-                    className={[classes.pairDetails, classes[`pairDetails--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(" ")}
-                    onClick={() => handleCloseSelect(eachPlatform)}>
-                    <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                    className={[
+                      classes.pairDetails,
+                      classes[`pairDetails--${appTheme}`],
+                      "g-flex",
+                      "g-flex--align-center",
+                    ].join(" ")}
+                    onClick={() => handleCloseSelect(eachPlatform)}
+                  >
+                    <Borders
+                      offsetLeft={-1}
+                      offsetRight={-1}
+                      offsetTop={-1}
+                      offsetBottom={-1}
+                    />
 
                     {eachPlatform.label}
                   </div>
@@ -688,29 +778,68 @@ export default function Setup() {
   };
 
   return (
-    <div className={['g-flex-column', 'g-flex--align-center'].join(' ')}>
+    <div className={["g-flex-column", "g-flex--align-center"].join(" ")}>
       <Form>
-        <div className={[classes[`form`], classes[`form--${appTheme}`]].join(" ")}>
-          <div className={[classes.titleText, classes[`titleText--${appTheme}`]].join(" ")}>
+        <div
+          className={[classes[`form`], classes[`form--${appTheme}`]].join(" ")}
+        >
+          <div
+            className={[
+              classes.titleText,
+              classes[`titleText--${appTheme}`],
+            ].join(" ")}
+          >
             Source of Migration:
           </div>
 
-          <PlatformSelect onSelect={handleChange}/>
+          <PlatformSelect onSelect={handleChange} />
 
-          <div className={[classes.dividerLine, classes[`dividerLine--${appTheme}`]].join(" ")}>
-          </div>
+          <div
+            className={[
+              classes.dividerLine,
+              classes[`dividerLine--${appTheme}`],
+            ].join(" ")}
+          ></div>
 
-          <div className={[classes.pairsContainer, 'g-flex'].join(' ')}>
-            <div className={[classes.pair, classes[`pair--${appTheme}`], 'g-flex-column'].join(' ')}>
+          <div className={[classes.pairsContainer, "g-flex"].join(" ")}>
+            <div
+              className={[
+                classes.pair,
+                classes[`pair--${appTheme}`],
+                "g-flex-column",
+              ].join(" ")}
+            >
               <div
-                className={[classes.pairTitle, classes[`pairTitle--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
-                <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                className={[
+                  classes.pairTitle,
+                  classes[`pairTitle--${appTheme}`],
+                  "g-flex",
+                  "g-flex--align-center",
+                ].join(" ")}
+              >
+                <Borders
+                  offsetLeft={-1}
+                  offsetRight={-1}
+                  offsetTop={-1}
+                  offsetBottom={-1}
+                />
                 Token 1
               </div>
 
               <div
-                className={[classes.pairContent, classes[`pairContent--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
-                <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                className={[
+                  classes.pairContent,
+                  classes[`pairContent--${appTheme}`],
+                  "g-flex",
+                  "g-flex--align-center",
+                ].join(" ")}
+              >
+                <Borders
+                  offsetLeft={-1}
+                  offsetRight={-1}
+                  offsetTop={-1}
+                  offsetBottom={-1}
+                />
 
                 <AssetSelect
                   type={"From"}
@@ -718,26 +847,52 @@ export default function Setup() {
                   assetOptions={fromAssetOptions}
                   onSelect={onAssetSelect}
                   showBalance={false}
-                  size={'small'}
+                  size={"small"}
                   interactiveBorder={false}
                 />
 
-                <div>
-                  {fromAssetValue?.symbol}
-                </div>
+                <div>{fromAssetValue?.symbol}</div>
               </div>
             </div>
 
-            <div className={[classes.pair, classes[`pair--${appTheme}`], 'g-flex-column'].join(' ')}>
+            <div
+              className={[
+                classes.pair,
+                classes[`pair--${appTheme}`],
+                "g-flex-column",
+              ].join(" ")}
+            >
               <div
-                className={[classes.pairTitle, classes[`pairTitle--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
-                <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                className={[
+                  classes.pairTitle,
+                  classes[`pairTitle--${appTheme}`],
+                  "g-flex",
+                  "g-flex--align-center",
+                ].join(" ")}
+              >
+                <Borders
+                  offsetLeft={-1}
+                  offsetRight={-1}
+                  offsetTop={-1}
+                  offsetBottom={-1}
+                />
                 Token 2
               </div>
 
               <div
-                className={[classes.pairContent, classes[`pairContent--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
-                <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                className={[
+                  classes.pairContent,
+                  classes[`pairContent--${appTheme}`],
+                  "g-flex",
+                  "g-flex--align-center",
+                ].join(" ")}
+              >
+                <Borders
+                  offsetLeft={-1}
+                  offsetRight={-1}
+                  offsetTop={-1}
+                  offsetBottom={-1}
+                />
 
                 <AssetSelect
                   type={"To"}
@@ -745,23 +900,40 @@ export default function Setup() {
                   assetOptions={toAssetOptions}
                   onSelect={onAssetSelect}
                   showBalance={false}
-                  size={'small'}
+                  size={"small"}
                   interactiveBorder={false}
                 />
 
-                <div>
-                  {toAssetValue?.symbol}
-                </div>
+                <div>{toAssetValue?.symbol}</div>
               </div>
             </div>
 
-            <div className={[classes.pairsCircle, classes[`pairsCircle--${appTheme}`]].join(' ')}>
+            <div
+              className={[
+                classes.pairsCircle,
+                classes[`pairsCircle--${appTheme}`],
+              ].join(" ")}
+            >
               <div
-                className={[classes.pairsCircleInside, classes[`pairsCircleInside--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                className={[
+                  classes.pairsCircleInside,
+                  classes[`pairsCircleInside--${appTheme}`],
+                  "g-flex",
+                  "g-flex--align-center",
+                  "g-flex--justify-center",
+                ].join(" ")}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
                   <path
                     d="M6.75844 9.11694L7.93761 7.93777C8.47929 7.39604 9.12238 6.9663 9.83015 6.67311C10.5379 6.37992 11.2965 6.22902 12.0626 6.22902C12.8287 6.22902 13.5873 6.37992 14.2951 6.67311C15.0028 6.9663 15.6459 7.39604 16.1876 7.93777L16.4818 8.23277C17.5758 9.32679 18.1904 10.8106 18.1904 12.3578C18.1904 13.9049 17.5758 15.3888 16.4818 16.4828C15.3878 17.5768 13.904 18.1914 12.3568 18.1914C10.8096 18.1914 9.3258 17.5768 8.23178 16.4828L9.41094 15.3036C9.79724 15.6933 10.2567 16.0029 10.7629 16.2145C11.2692 16.4261 11.8123 16.5357 12.361 16.5369C12.9097 16.5381 13.4532 16.4309 13.9604 16.2215C14.4676 16.0121 14.9284 15.7045 15.3164 15.3165C15.7044 14.9285 16.0119 14.4677 16.2213 13.9606C16.4308 13.4534 16.538 12.9098 16.5368 12.3611C16.5356 11.8124 16.426 11.2694 16.2143 10.7631C16.0027 10.2569 15.6931 9.7974 15.3034 9.41111L15.0084 9.11611C14.2271 8.33498 13.1675 7.89616 12.0626 7.89616C10.9578 7.89616 9.89814 8.33498 9.11678 9.11611L7.93761 10.2953L6.75928 9.11611L6.75844 9.11694ZM11.7676 3.51861L10.5893 4.69694C10.203 4.30725 9.74352 3.99769 9.23727 3.78605C8.73102 3.5744 8.18796 3.46483 7.63925 3.46363C7.09054 3.46243 6.547 3.56962 6.03983 3.77905C5.53265 3.98847 5.07184 4.29601 4.68385 4.68401C4.29585 5.07201 3.98831 5.53282 3.77888 6.03999C3.56946 6.54716 3.46227 7.0907 3.46347 7.63941C3.46467 8.18812 3.57424 8.73119 3.78589 9.23744C3.99753 9.74369 4.30709 10.2031 4.69678 10.5894L4.99178 10.8844C5.77314 11.6656 6.83276 12.1044 7.93761 12.1044C9.04246 12.1044 10.1021 11.6656 10.8834 10.8844L12.0626 9.70527L13.2409 10.8844L12.0626 12.0628C11.5209 12.6045 10.8778 13.0342 10.1701 13.3274C9.4623 13.6206 8.70371 13.7715 7.93761 13.7715C7.17152 13.7715 6.41293 13.6206 5.70515 13.3274C4.99738 13.0342 4.35429 12.6045 3.81261 12.0628L3.51845 11.7678C2.42443 10.6738 1.80981 9.18995 1.80981 7.64277C1.80981 6.0956 2.42443 4.61179 3.51844 3.51778C4.61246 2.42376 6.09627 1.80914 7.64344 1.80914C9.19062 1.80914 10.6744 2.42376 11.7684 3.51778L11.7676 3.51861Z"
-                    fill={appTheme === 'dark' ? '#7C838A' : '#5688A5'}/>
+                    fill={appTheme === "dark" ? "#7C838A" : "#5688A5"}
+                  />
                 </svg>
               </div>
             </div>
@@ -769,7 +941,13 @@ export default function Setup() {
 
           {pairDetails && !pairDetails.isValid && (
             <div
-              className={[classes.inputBalanceErrorText, classes[`inputBalanceErrorText--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
+              className={[
+                classes.inputBalanceErrorText,
+                classes[`inputBalanceErrorText--${appTheme}`],
+                "g-flex",
+                "g-flex--align-center",
+              ].join(" ")}
+            >
               The chosen Liquidity Pair does not exist
             </div>
           )}
@@ -777,35 +955,60 @@ export default function Setup() {
           {pairDetails && pairDetails.isValid && (
             <>
               <div
-                className={['g-flex'].join(" ")}
+                className={["g-flex"].join(" ")}
                 style={{
-                  width: '100%',
+                  width: "100%",
                   marginTop: 20,
-                }}>
-                <div className={['g-flex-column', 'g-flex__item-fixed'].join(' ')}>
+                }}
+              >
+                <div
+                  className={["g-flex-column", "g-flex__item-fixed"].join(" ")}
+                >
                   <div
-                    className={[classes.liqHeader, classes[`liqHeader--${appTheme}`], classes.liqHeaderLabel, 'g-flex', 'g-flex--align-center'].join(' ')}>
-                    <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                    className={[
+                      classes.liqHeader,
+                      classes[`liqHeader--${appTheme}`],
+                      classes.liqHeaderLabel,
+                      "g-flex",
+                      "g-flex--align-center",
+                    ].join(" ")}
+                  >
+                    <Borders
+                      offsetLeft={-1}
+                      offsetRight={-1}
+                      offsetTop={-1}
+                      offsetBottom={-1}
+                    />
 
-                    <div>
-                      Liq. Pair
-                    </div>
+                    <div>Liq. Pair</div>
                   </div>
 
                   <div
-                    className={[classes.liqBody, classes[`liqBody--${appTheme}`], classes.liqBodyLabel, 'g-flex', 'g-flex--align-center'].join(" ")}>
-                    <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                    className={[
+                      classes.liqBody,
+                      classes[`liqBody--${appTheme}`],
+                      classes.liqBodyLabel,
+                      "g-flex",
+                      "g-flex--align-center",
+                    ].join(" ")}
+                  >
+                    <Borders
+                      offsetLeft={-1}
+                      offsetRight={-1}
+                      offsetTop={-1}
+                      offsetBottom={-1}
+                    />
 
                     <div
-                      className={[classes.liqBodyIconContainer, classes[`liqBodyIconContainer--${appTheme}`]].join(' ')}>
+                      className={[
+                        classes.liqBodyIconContainer,
+                        classes[`liqBodyIconContainer--${appTheme}`],
+                      ].join(" ")}
+                    >
                       <img
                         className={classes.liqBodyIcon}
                         alt=""
-                        src={
-                          fromAssetValue
-                            ? `${fromAssetValue.logoURI}`
-                            : ""
-                        }
+                        src={fromAssetValue ? `${fromAssetValue.logoURI}` : ""}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -814,13 +1017,15 @@ export default function Setup() {
                     </div>
 
                     <div
-                      className={[classes.liqBodyIconContainer, classes[`liqBodyIconContainer--${appTheme}`]].join(' ')}>
+                      className={[
+                        classes.liqBodyIconContainer,
+                        classes[`liqBodyIconContainer--${appTheme}`],
+                      ].join(" ")}
+                    >
                       <img
                         className={classes.liqBodyIcon}
                         alt=""
-                        src={
-                          toAssetValue ? `${toAssetValue.logoURI}` : ""
-                        }
+                        src={toAssetValue ? `${toAssetValue.logoURI}` : ""}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -830,15 +1035,30 @@ export default function Setup() {
                   </div>
                 </div>
 
-                <div className={['g-flex-column', 'g-flex__item'].join(' ')}>
+                <div className={["g-flex-column", "g-flex__item"].join(" ")}>
                   <div
-                    className={[classes.liqHeader, classes[`liqHeader--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
-                    <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                    className={[
+                      classes.liqHeader,
+                      classes[`liqHeader--${appTheme}`],
+                      "g-flex",
+                      "g-flex--align-center",
+                      "g-flex--space-between",
+                    ].join(" ")}
+                  >
+                    <Borders
+                      offsetLeft={-1}
+                      offsetRight={-1}
+                      offsetTop={-1}
+                      offsetBottom={-1}
+                    />
 
-                    <div className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                    <div
+                      className={["g-flex", "g-flex--align-center"].join(" ")}
+                    >
                       <img
                         src="/images/ui/icon-wallet.svg"
-                        className={classes.walletIcon}/>
+                        className={classes.walletIcon}
+                      />
 
                       <div>
                         {pairDetails && pairDetails.lpBalance
@@ -848,31 +1068,54 @@ export default function Setup() {
                     </div>
 
                     <div
-                      className={[classes.balanceMax, classes[`balanceMax--${appTheme}`]].join(' ')}
+                      className={[
+                        classes.balanceMax,
+                        classes[`balanceMax--${appTheme}`],
+                      ].join(" ")}
                       onClick={() =>
-                        handleMax(Number(pairDetails.lpBalance).toFixed(5))
-                      }>
+                        handleMax(Number(pairDetails.lpBalance).toFixed(18))
+                      }
+                    >
                       MAX
                     </div>
                   </div>
 
                   <div
-                    className={[classes.liqBody, classes[`liqBody--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(" ")}>
-                    <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                    className={[
+                      classes.liqBody,
+                      classes[`liqBody--${appTheme}`],
+                      "g-flex",
+                      "g-flex--align-center",
+                    ].join(" ")}
+                  >
+                    <Borders
+                      offsetLeft={-1}
+                      offsetRight={-1}
+                      offsetTop={-1}
+                      offsetBottom={-1}
+                    />
 
                     <div>
                       <InputBase
                         className={classes.massiveInputAmount}
                         placeholder="0.00"
                         inputProps={{
-                          className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
+                          className: [
+                            classes.largeInput,
+                            classes[`largeInput--${appTheme}`],
+                          ].join(" "),
                         }}
                         fullWidth
                         value={amount}
-                        onChange={(event) => handleAmountChange(event)}/>
+                        onChange={(event) => handleAmountChange(event)}
+                      />
 
                       <Typography
-                        className={[classes.smallerText, classes[`smallerText--${appTheme}`]].join(" ")}>
+                        className={[
+                          classes.smallerText,
+                          classes[`smallerText--${appTheme}`],
+                        ].join(" ")}
+                      >
                         {fromAssetValue?.symbol}/{toAssetValue?.symbol}
                       </Typography>
                     </div>
@@ -881,19 +1124,25 @@ export default function Setup() {
               </div>
 
               <div
-                className={[classes.pairContainer, classes[`pairContainer--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(" ")}>
-                <div
-                  className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                className={[
+                  classes.pairContainer,
+                  classes[`pairContainer--${appTheme}`],
+                  "g-flex",
+                  "g-flex--align-center",
+                  "g-flex--space-between",
+                ].join(" ")}
+              >
+                <div className={["g-flex", "g-flex--align-center"].join(" ")}>
                   <div
-                    className={[classes.pairIconContainer, classes[`pairIconContainer--${appTheme}`]].join(' ')}>
+                    className={[
+                      classes.pairIconContainer,
+                      classes[`pairIconContainer--${appTheme}`],
+                    ].join(" ")}
+                  >
                     <img
                       className={classes.pairIcon}
                       alt=""
-                      src={
-                        fromAssetValue
-                          ? `${fromAssetValue.logoURI}`
-                          : ""
-                      }
+                      src={fromAssetValue ? `${fromAssetValue.logoURI}` : ""}
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -902,13 +1151,15 @@ export default function Setup() {
                   </div>
 
                   <div
-                    className={[classes.pairIconContainer, classes[`pairIconContainer--${appTheme}`]].join(' ')}>
+                    className={[
+                      classes.pairIconContainer,
+                      classes[`pairIconContainer--${appTheme}`],
+                    ].join(" ")}
+                  >
                     <img
                       className={classes.pairIcon}
                       alt=""
-                      src={
-                        toAssetValue ? `${toAssetValue.logoURI}` : ""
-                      }
+                      src={toAssetValue ? `${toAssetValue.logoURI}` : ""}
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -916,282 +1167,517 @@ export default function Setup() {
                     />
                   </div>
 
-                  <div style={{marginLeft: 10}}>
-                    <div className={[classes.pairSymbolLabel, classes[`pairSymbolLabel--${appTheme}`]].join(' ')}>
+                  <div style={{ marginLeft: 10 }}>
+                    <div
+                      className={[
+                        classes.pairSymbolLabel,
+                        classes[`pairSymbolLabel--${appTheme}`],
+                      ].join(" ")}
+                    >
                       {fromAssetValue?.symbol}/{toAssetValue?.symbol}
                     </div>
 
-                    <div className={[classes.pairPoolLabel, classes[`pairPoolLabel--${appTheme}`]].join(' ')}>
+                    <div
+                      className={[
+                        classes.pairPoolLabel,
+                        classes[`pairPoolLabel--${appTheme}`],
+                      ].join(" ")}
+                    >
                       {platform.label} Pool
                     </div>
                   </div>
                 </div>
 
-                <div className={[classes.pairBalance, classes[`pairBalance--${appTheme}`]].join(' ')}>
+                <div
+                  className={[
+                    classes.pairBalance,
+                    classes[`pairBalance--${appTheme}`],
+                  ].join(" ")}
+                >
                   {Number(amount).toFixed(5)}
                 </div>
               </div>
 
               <div
-                className={[classes.poolShare, classes[`poolShare--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
-                <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                className={[
+                  classes.poolShare,
+                  classes[`poolShare--${appTheme}`],
+                  "g-flex",
+                  "g-flex--align-center",
+                  "g-flex--space-between",
+                ].join(" ")}
+              >
+                <Borders
+                  offsetLeft={-1}
+                  offsetRight={-1}
+                  offsetTop={-1}
+                  offsetBottom={-1}
+                />
 
-                <div>
-                  Your Pool Share:
-                </div>
+                <div>Your Pool Share:</div>
 
-                <div className={[classes.poolShareBalance, classes[`poolShareBalance--${appTheme}`]].join(' ')}>
+                <div
+                  className={[
+                    classes.poolShareBalance,
+                    classes[`poolShareBalance--${appTheme}`],
+                  ].join(" ")}
+                >
                   {pairDetails.poolTokenPercentage}%
                 </div>
               </div>
 
               <div
-                className={[classes.poolShareCoins, classes[`poolShareCoins--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
+                className={[
+                  classes.poolShareCoins,
+                  classes[`poolShareCoins--${appTheme}`],
+                  "g-flex",
+                  "g-flex--align-center",
+                ].join(" ")}
+              >
                 <div
-                  className={[classes.poolShareCoin, classes[`poolShareCoin--${appTheme}`], 'g-flex__item', 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
-                  <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                  className={[
+                    classes.poolShareCoin,
+                    classes[`poolShareCoin--${appTheme}`],
+                    "g-flex__item",
+                    "g-flex",
+                    "g-flex--align-center",
+                    "g-flex--space-between",
+                  ].join(" ")}
+                >
+                  <Borders
+                    offsetLeft={-1}
+                    offsetRight={-1}
+                    offsetTop={-1}
+                    offsetBottom={-1}
+                  />
 
-                  <div>
-                    {pairDetails?.token0symbol}
-                  </div>
+                  <div>{pairDetails?.token0symbol}</div>
 
                   <div
-                    className={[classes.poolShareCoinBalance, classes[`poolShareCoinBalance--${appTheme}`]].join(' ')}>
-                    {isNaN(Number(pairDetails.token0Bal).toFixed(2))?0:Number(pairDetails.token0Bal).toFixed(2)}
+                    className={[
+                      classes.poolShareCoinBalance,
+                      classes[`poolShareCoinBalance--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    {isNaN(Number(pairDetails.token0Bal).toFixed(2))
+                      ? 0
+                      : Number(pairDetails.token0Bal).toFixed(2)}
                   </div>
                 </div>
 
                 <div
-                  className={[classes.poolShareCoin, classes[`poolShareCoin--${appTheme}`], 'g-flex__item', 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
-                  <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                  className={[
+                    classes.poolShareCoin,
+                    classes[`poolShareCoin--${appTheme}`],
+                    "g-flex__item",
+                    "g-flex",
+                    "g-flex--align-center",
+                    "g-flex--space-between",
+                  ].join(" ")}
+                >
+                  <Borders
+                    offsetLeft={-1}
+                    offsetRight={-1}
+                    offsetTop={-1}
+                    offsetBottom={-1}
+                  />
 
-                  <div>
-                    {pairDetails?.token0symbol}
-                  </div>
+                  <div>{pairDetails?.token1symbol}</div>
 
                   <div
-                    className={[classes.poolShareCoinBalance, classes[`poolShareCoinBalance--${appTheme}`]].join(' ')}>
-                    {isNaN(Number(pairDetails.token1Bal).toFixed(2))?0:Number(pairDetails.token1Bal).toFixed(2)}
+                    className={[
+                      classes.poolShareCoinBalance,
+                      classes[`poolShareCoinBalance--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    {isNaN(Number(pairDetails.token1Bal).toFixed(2))
+                      ? 0
+                      : Number(pairDetails.token1Bal).toFixed(2)}
                   </div>
                 </div>
               </div>
 
-              {Number(parseFloat(pairDetails?.lpBalance)) !== Number(0) || Number(parseFloat(amount)) !== Number(0) || Number(parseFloat(amount)) == null?
-              dystopiaPair ? (
-                <div>
-                  <div
-                    className={[classes.toggleArrow, 'g-flex', 'g-flex--align-center'].join(' ')}
-                    onClick={() => setToggleArrow(!toggleArrow)}>
-                    <div className={[classes.toggleArrowBg, classes[`toggleArrowBg--${appTheme}`]].join(' ')}>
+              {!(parseFloat(pairDetails.lpBalance) <= 0 ||
+                parseFloat(amount) <= 0 ||
+                amount == null ||
+                amount == "" ||
+                isNaN(amount)) 
+                ? (
+                dystopiaPair ? (
+                  <div>
+                    <div
+                      className={[
+                        classes.toggleArrow,
+                        "g-flex",
+                        "g-flex--align-center",
+                      ].join(" ")}
+                      onClick={() => setToggleArrow(!toggleArrow)}
+                    >
+                      <div
+                        className={[
+                          classes.toggleArrowBg,
+                          classes[`toggleArrowBg--${appTheme}`],
+                        ].join(" ")}
+                      ></div>
+
+                      <svg
+                        className={[
+                          classes.toggleArrowBtn,
+                          classes[`toggleArrowBtn--${appTheme}`],
+                          toggleArrow ? classes.toggleArrowBtnOpen : "",
+                        ].join(" ")}
+                        width="39"
+                        height="39"
+                        viewBox="0 0 34 34"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.5"
+                          y="0.5"
+                          width="33"
+                          height="33"
+                          rx="16.5"
+                          fill={appTheme === "dark" ? "#151718" : "#dbe6ec"}
+                          stroke={appTheme === "dark" ? "#5F7285" : "#86B9D6"}
+                        />
+                        <path
+                          d="M16.9998 18.1717L21.9498 13.2217L23.3638 14.6357L16.9998 20.9997L10.6358 14.6357L12.0498 13.2217L16.9998 18.1717Z"
+                          fill={appTheme === "dark" ? "#4CADE6" : "#0B5E8E"}
+                        />
+                      </svg>
                     </div>
 
-                    <svg
-                      className={[classes.toggleArrowBtn, classes[`toggleArrowBtn--${appTheme}`], toggleArrow ? classes.toggleArrowBtnOpen : ''].join(' ')}
-                      width="39"
-                      height="39" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect x="0.5" y="0.5" width="33" height="33" rx="16.5"
-                            fill={appTheme === 'dark' ? '#151718' : '#dbe6ec'}
-                            stroke={appTheme === 'dark' ? '#5F7285' : '#86B9D6'}/>
-                      <path
-                        d="M16.9998 18.1717L21.9498 13.2217L23.3638 14.6357L16.9998 20.9997L10.6358 14.6357L12.0498 13.2217L16.9998 18.1717Z"
-                        fill={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
-                    </svg>
-                  </div>
-
-                  {toggleArrow ? (
-                    <div>
-                      <div
-                        className={[classes.pairContainer, classes[`pairContainer--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(" ")}>
+                    {toggleArrow ? (
+                      <div>
                         <div
-                          className={['g-flex', 'g-flex--align-center'].join(' ')}>
+                          className={[
+                            classes.pairContainer,
+                            classes[`pairContainer--${appTheme}`],
+                            "g-flex",
+                            "g-flex--align-center",
+                            "g-flex--space-between",
+                          ].join(" ")}
+                        >
                           <div
-                            className={[classes.pairIconContainer, classes[`pairIconContainer--${appTheme}`]].join(' ')}>
-                            <img
-                              className={classes.pairIcon}
-                              alt=""
-                              src={
-                                fromAssetValue
-                                  ? `${fromAssetValue.logoURI}`
-                                  : ""
-                              }
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                              }}
-                            />
-                          </div>
-
-                          <div
-                            className={[classes.pairIconContainer, classes[`pairIconContainer--${appTheme}`]].join(' ')}>
-                            <img
-                              className={classes.pairIcon}
-                              alt=""
-                              src={
-                                toAssetValue ? `${toAssetValue.logoURI}` : ""
-                              }
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                              }}
-                            />
-                          </div>
-
-                          <div style={{marginLeft: 10}}>
+                            className={["g-flex", "g-flex--align-center"].join(
+                              " "
+                            )}
+                          >
                             <div
-                              className={[classes.pairSymbolLabel, classes[`pairSymbolLabel--${appTheme}`]].join(' ')}>
-                              {fromAssetValue?.symbol}/{toAssetValue?.symbol}
+                              className={[
+                                classes.pairIconContainer,
+                                classes[`pairIconContainer--${appTheme}`],
+                              ].join(" ")}
+                            >
+                              <img
+                                className={classes.pairIcon}
+                                alt=""
+                                src={
+                                  fromAssetValue
+                                    ? `${fromAssetValue.logoURI}`
+                                    : ""
+                                }
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                                }}
+                              />
                             </div>
 
-                            <div className={[classes.pairPoolLabel, classes[`pairPoolLabel--${appTheme}`]].join(' ')}>
-                              Dystopia Pool
+                            <div
+                              className={[
+                                classes.pairIconContainer,
+                                classes[`pairIconContainer--${appTheme}`],
+                              ].join(" ")}
+                            >
+                              <img
+                                className={classes.pairIcon}
+                                alt=""
+                                src={
+                                  toAssetValue ? `${toAssetValue.logoURI}` : ""
+                                }
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                                }}
+                              />
                             </div>
-                          </div>
-                        </div>
 
-                        <div className={[classes.pairBalance, classes[`pairBalance--${appTheme}`]].join(' ')}>
-                          {Number(quote?.res?.liquidity / 10 ** 18).toFixed(
-                            5,
-                          )}
-                        </div>
-                      </div>
+                            <div style={{ marginLeft: 10 }}>
+                              <div
+                                className={[
+                                  classes.pairSymbolLabel,
+                                  classes[`pairSymbolLabel--${appTheme}`],
+                                ].join(" ")}
+                              >
+                                {fromAssetValue?.symbol}/{toAssetValue?.symbol}
+                              </div>
 
-                      <div
-                        className={[classes.poolShareCoins, classes[`poolShareCoins--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
-                        <div
-                          className={[classes.poolShareCoin, classes[`poolShareCoin--${appTheme}`], 'g-flex__item', 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
-                          <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
-
-                          <div>
-                            {quote?.token0?.symbol}
+                              <div
+                                className={[
+                                  classes.pairPoolLabel,
+                                  classes[`pairPoolLabel--${appTheme}`],
+                                ].join(" ")}
+                              >
+                                Dystopia Pool
+                              </div>
+                            </div>
                           </div>
 
                           <div
-                            className={[classes.poolShareCoinBalance, classes[`poolShareCoinBalance--${appTheme}`]].join(' ')}>
-                            ~{Number(
-                            quote?.res?.amountA /
-                            10 ** quote?.token0?.decimals,
-                          ).toFixed(2)}
+                            className={[
+                              classes.pairBalance,
+                              classes[`pairBalance--${appTheme}`],
+                            ].join(" ")}
+                          >
+                            {Number(quote?.res?.liquidity / 10 ** 18).toFixed(
+                              5
+                            )}
                           </div>
                         </div>
 
                         <div
-                          className={[classes.poolShareCoin, classes[`poolShareCoin--${appTheme}`], 'g-flex__item', 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
-                          <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+                          className={[
+                            classes.poolShareCoins,
+                            classes[`poolShareCoins--${appTheme}`],
+                            "g-flex",
+                            "g-flex--align-center",
+                          ].join(" ")}
+                        >
+                          <div
+                            className={[
+                              classes.poolShareCoin,
+                              classes[`poolShareCoin--${appTheme}`],
+                              "g-flex__item",
+                              "g-flex",
+                              "g-flex--align-center",
+                              "g-flex--space-between",
+                            ].join(" ")}
+                          >
+                            <Borders
+                              offsetLeft={-1}
+                              offsetRight={-1}
+                              offsetTop={-1}
+                              offsetBottom={-1}
+                            />
 
-                          <div>
-                            {quote?.token1?.symbol}
+                            <div>{quote?.token0?.symbol}</div>
+
+                            <div
+                              className={[
+                                classes.poolShareCoinBalance,
+                                classes[`poolShareCoinBalance--${appTheme}`],
+                              ].join(" ")}
+                            >
+                              ~
+                              {Number(
+                                quote?.res?.amountA /
+                                10 ** quote?.token0?.decimals
+                              ).toFixed(2)}
+                            </div>
                           </div>
 
                           <div
-                            className={[classes.poolShareCoinBalance, classes[`poolShareCoinBalance--${appTheme}`]].join(' ')}>
-                            ~{Number(
-                            quote?.res?.amountB /
-                            10 ** quote?.token1?.decimals,
-                          ).toFixed(2)}
+                            className={[
+                              classes.poolShareCoin,
+                              classes[`poolShareCoin--${appTheme}`],
+                              "g-flex__item",
+                              "g-flex",
+                              "g-flex--align-center",
+                              "g-flex--space-between",
+                            ].join(" ")}
+                          >
+                            <Borders
+                              offsetLeft={-1}
+                              offsetRight={-1}
+                              offsetTop={-1}
+                              offsetBottom={-1}
+                            />
+
+                            <div>{quote?.token1?.symbol}</div>
+
+                            <div
+                              className={[
+                                classes.poolShareCoinBalance,
+                                classes[`poolShareCoinBalance--${appTheme}`],
+                              ].join(" ")}
+                            >
+                              ~
+                              {Number(
+                                quote?.res?.amountB /
+                                10 ** quote?.token1?.decimals
+                              ).toFixed(2)}
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div className={classes.toggles}>
-                        <div
-                          className={[classes.toggleOption, classes[`toggleOption--${appTheme}`], `${isStable && classes.active}`].join(' ')}
-                          onClick={() => {
-                            handleRadioChange(true);
-                          }}>
+                        <div className={classes.toggles}>
+                          <div
+                            className={[
+                              classes.toggleOption,
+                              classes[`toggleOption--${appTheme}`],
+                              `${isStable && classes.active}`,
+                            ].join(" ")}
+                            onClick={() => {
+                              handleRadioChange(true);
+                            }}
+                          >
+                            {!isStable && (
+                              <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
+                                  fill={
+                                    appTheme === "dark" ? "#151718" : "#DBE6EC"
+                                  }
+                                  stroke={
+                                    appTheme === "dark" ? "#4CADE6" : "#0B5E8E"
+                                  }
+                                />
+                              </svg>
+                            )}
 
-                          {!isStable &&
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                              <path
-                                d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
-                                fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
-                                stroke={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
-                            </svg>
-                          }
+                            {isStable && (
+                              <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
+                                  fill={
+                                    appTheme === "dark" ? "#151718" : "#DBE6EC"
+                                  }
+                                  stroke={
+                                    appTheme === "dark" ? "#4CADE6" : "#0B5E8E"
+                                  }
+                                />
+                                <path
+                                  d="M5 10C5 7.23858 7.23858 5 10 5C12.7614 5 15 7.23858 15 10C15 12.7614 12.7614 15 10 15C7.23858 15 5 12.7614 5 10Z"
+                                  fill={
+                                    appTheme === "dark" ? "#4CADE6" : "#0B5E8E"
+                                  }
+                                />
+                              </svg>
+                            )}
 
-                          {isStable &&
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                              <path
-                                d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
-                                fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
-                                stroke={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
-                              <path
-                                d="M5 10C5 7.23858 7.23858 5 10 5C12.7614 5 15 7.23858 15 10C15 12.7614 12.7614 15 10 15C7.23858 15 5 12.7614 5 10Z"
-                                fill={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
-                            </svg>
-                          }
+                            <Typography
+                              className={[
+                                classes.toggleOptionText,
+                                classes[`toggleOptionText--${appTheme}`],
+                              ].join(" ")}
+                            >
+                              Stable
+                            </Typography>
+                          </div>
 
-                          <Typography
-                            className={[classes.toggleOptionText, classes[`toggleOptionText--${appTheme}`]].join(' ')}>
-                            Stable
-                          </Typography>
+                          <div
+                            className={[
+                              classes.toggleOption,
+                              classes[`toggleOption--${appTheme}`],
+                              `${!isStable && classes.active}`,
+                            ].join(" ")}
+                            onClick={() => {
+                              handleRadioChange(false);
+                            }}
+                          >
+                            {isStable && (
+                              <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
+                                  fill={
+                                    appTheme === "dark" ? "#151718" : "#DBE6EC"
+                                  }
+                                  stroke={
+                                    appTheme === "dark" ? "#4CADE6" : "#0B5E8E"
+                                  }
+                                />
+                              </svg>
+                            )}
+
+                            {!isStable && (
+                              <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
+                                  fill={
+                                    appTheme === "dark" ? "#151718" : "#DBE6EC"
+                                  }
+                                  stroke={
+                                    appTheme === "dark" ? "#4CADE6" : "#0B5E8E"
+                                  }
+                                />
+                                <path
+                                  d="M5 10C5 7.23858 7.23858 5 10 5C12.7614 5 15 7.23858 15 10C15 12.7614 12.7614 15 10 15C7.23858 15 5 12.7614 5 10Z"
+                                  fill={
+                                    appTheme === "dark" ? "#4CADE6" : "#0B5E8E"
+                                  }
+                                />
+                              </svg>
+                            )}
+
+                            <Typography
+                              className={[
+                                classes.toggleOptionText,
+                                classes[`toggleOptionText--${appTheme}`],
+                              ].join(" ")}
+                            >
+                              Volatile
+                            </Typography>
+                          </div>
                         </div>
 
                         <div
-                          className={[classes.toggleOption, classes[`toggleOption--${appTheme}`], `${!isStable && classes.active}`].join(' ')}
-                          onClick={() => {
-                            handleRadioChange(false);
-                          }}>
-
-                          {isStable &&
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                              <path
-                                d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
-                                fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
-                                stroke={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
-                            </svg>
-                          }
-
-                          {!isStable &&
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                              <path
-                                d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
-                                fill={appTheme === 'dark' ? '#151718' : '#DBE6EC'}
-                                stroke={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
-                              <path
-                                d="M5 10C5 7.23858 7.23858 5 10 5C12.7614 5 15 7.23858 15 10C15 12.7614 12.7614 15 10 15C7.23858 15 5 12.7614 5 10Z"
-                                fill={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
-                            </svg>
-                          }
-
-                          <Typography
-                            className={[classes.toggleOptionText, classes[`toggleOptionText--${appTheme}`]].join(' ')}>
-                            Volatile
-                          </Typography>
+                          className={[
+                            classes.quoteLoader,
+                            classes[`quoteLoader--${appTheme}`],
+                          ].join(" ")}
+                        >
+                          ~
+                          {(
+                            Number(pairDetails.token0Bal) -
+                            Number(
+                              quote?.res?.amountA /
+                              10 ** quote?.token0?.decimals
+                            )
+                          ).toFixed(2)}
+                          {quote?.token0?.symbol} and ~
+                          {(
+                            Number(pairDetails.token1Bal) -
+                            Number(
+                              quote?.res?.amountB /
+                              10 ** quote?.token1?.decimals
+                            )
+                          ).toFixed(2)}
+                          {quote?.token1?.symbol} will be refunded to your
+                          wallet due to the price difference.
                         </div>
                       </div>
-
-
-                      <div className={[classes.quoteLoader, classes[`quoteLoader--${appTheme}`]].join(' ')}>
-                        ~
-                        {(
-                          Number(pairDetails.token0Bal) -
-                          Number(
-                            quote?.res?.amountA /
-                            10 ** quote?.token0?.decimals,
-                          )
-                        ).toFixed(2)}
-                        {quote?.token0?.symbol} and ~
-                        {(
-                          Number(pairDetails.token1Bal) -
-                          Number(
-                            quote?.res?.amountB /
-                            10 ** quote?.token1?.decimals,
-                          )
-                        ).toFixed(2)}
-                        {quote?.token1?.symbol} will be refunded to your wallet due to the price difference.
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
-              ) : null:null}
+                    ) : null}
+                  </div>
+                ) : null
+              ) : null}
             </>
           )}
-
-
         </div>
       </Form>
 
@@ -1201,14 +1687,22 @@ export default function Setup() {
           size="large"
           color="primary"
           onClick={migrateLiquidity}
-          disabled={(parseFloat(pairDetails.lpBalance) <= 0) || parseFloat(amount)<=0 || amount == null || amount == '' || isNaN(amount)}
-          className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(" ")}>
-            <span className={classes.actionButtonText}>
-              {buttonText}
-            </span>
-          {loading &&
-            <Loader color={appTheme === 'dark' ? '#8F5AE8' : '#8F5AE8'}/>
+          disabled={
+            parseFloat(pairDetails.lpBalance) <= 0 ||
+            parseFloat(amount) <= 0 ||
+            amount == null ||
+            amount == "" ||
+            isNaN(amount)
           }
+          className={[
+            classes.buttonOverride,
+            classes[`buttonOverride--${appTheme}`],
+          ].join(" ")}
+        >
+          <span className={classes.actionButtonText}>{buttonText}</span>
+          {loading && (
+            <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
+          )}
         </Button>
       ) : (
         <Button
@@ -1216,21 +1710,21 @@ export default function Setup() {
           size="large"
           color="primary"
           onClick={() =>
-            checkPair(
-              fromAssetValue.address,
-              toAssetValue.address,
-              isStable,
-            )
+            checkPair(fromAssetValue.address, toAssetValue.address, isStable)
           }
           disabled={disableButton}
-          className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(" ")}>
-            <span className={classes.actionButtonText}>
-              {platform ? 'Check Pair' : 'Choose Source of Migration'}
-            </span>
+          className={[
+            classes.buttonOverride,
+            classes[`buttonOverride--${appTheme}`],
+          ].join(" ")}
+        >
+          <span className={classes.actionButtonText}>
+            {platform ? "Check Pair" : "Choose Source of Migration"}
+          </span>
 
-          {loading &&
-            <Loader color={appTheme === 'dark' ? '#8F5AE8' : '#8F5AE8'}/>
-          }
+          {loading && (
+            <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
+          )}
         </Button>
       )}
     </div>
