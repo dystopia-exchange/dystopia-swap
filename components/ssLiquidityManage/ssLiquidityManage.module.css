@@ -534,6 +534,10 @@ input[type=number].mediumInputAmount {
   z-index: 11;
 }
 
+.swapIconContainer {
+  margin-top: -22px;
+}
+
 .swapIconContainerWithdraw {
   margin-left: 170px;
 }
@@ -997,7 +1001,7 @@ input[type=number].mediumInputAmount {
 
 .toggles {
   width: 100%;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .toggleOption {
@@ -1303,10 +1307,42 @@ input[type=number].mediumInputAmount {
   border-color: #15B525 transparent transparent transparent;
 }
 
+.disclaimerContainerError {
+  border: 2px solid #DB3434;
+  color: #631515;
+}
 
-.disclaimer--dark {
-  background: #24292D !important;
-  color: #A2E3A9 !important;
+.disclaimerContainerError::before {
+  background: #DB3434;
+}
+
+.disclaimerContainerError::after {
+  border-color: #DB3434 transparent transparent transparent;
+}
+
+.disclaimerContainerError--dark {
+  background: #24292D;
+  border: 2px solid #DB3434;
+  color: #EC9999;
+}
+
+.disclaimerContainerWarning {
+  border: 2px solid #F9A01A;
+  color: #3A3020;
+}
+
+.disclaimerContainerWarning::before {
+  background: #F9A01A;
+}
+
+.disclaimerContainerWarning::after {
+  border-color: #F9A01A transparent transparent transparent;
+}
+
+.disclaimerContainerWarning--dark {
+  background: #24292D;
+  border: 2px solid #F9A01A;
+  color: #EACFA7;
 }
 
 .buttonOverride {
@@ -1508,6 +1544,66 @@ input[type=number].mediumInputAmount {
   width: 44px;
   height: 44px;
   border-radius: 100px;
+}
+
+.depositHeader {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 120%;
+  color: #325569;
+}
+
+.depositHeader--dark {
+  color: #C6CDD2;
+}
+
+.depositSwitcherLabel {
+  margin-right: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 120%;
+  color: #5688A5;
+}
+
+.depositSwitcherLabel--dark {
+  color: #7C838A;
+}
+
+.dividerLine {
+  position: relative;
+  width: 100%;
+  height: 1px;
+  margin-top: 20px;
+  background: #86B9D6;
+}
+
+.dividerLine::before {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background: #0B5E8E;
+}
+
+.dividerLine::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 1px;
+  bottom: 0;
+  right: 0;
+  background: #0B5E8E;
+}
+
+.dividerLine--dark {
+  background: #5F7285;
+}
+
+.dividerLine--dark::before,
+.dividerLine--dark::after {
+  background: #4CADE6;
 }
 
 @media (max-width:660px) {
@@ -1930,6 +2026,14 @@ input[type=number].mediumInputAmount {
   .tokenTextSecond {
     left: 10px;
     top: 38px;
+    font-size: 12px;
+  }
+
+  .depositHeader {
+    font-size: 14px;
+  }
+
+  .depositSwitcherLabel {
     font-size: 12px;
   }
 }

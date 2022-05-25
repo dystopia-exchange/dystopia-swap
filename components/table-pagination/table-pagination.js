@@ -6,13 +6,18 @@ import {
   KeyboardDoubleArrowLeft,
   KeyboardDoubleArrowRight,
 } from '@mui/icons-material';
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 function TablePaginationActions(props) {
   const theme = useTheme();
   const {count, page, rowsPerPage, onPageChange} = props;
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const {appTheme} = useAppThemeContext();
+
+  window.addEventListener('resize', () => {
+    setWindowWidth(window.innerWidth);
+  });
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -37,13 +42,15 @@ function TablePaginationActions(props) {
         disabled={page === 0}
         aria-label="first page"
         style={{
-          width: 30,
-          height: 30,
+          width: windowWidth > 660 ? 30 : 25,
+          height: windowWidth > 660 ? 30 : 25,
           border: '1px solid #86B9D6',
           borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
           color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
         }}>
-        {theme.direction === 'rtl' ? <KeyboardDoubleArrowRight/> : <KeyboardDoubleArrowLeft/>}
+        {theme.direction === 'rtl'
+          ? <KeyboardDoubleArrowRight style={{transform: windowWidth > 660 ? 'none' : 'scale(0.7)'}}/>
+          : <KeyboardDoubleArrowLeft style={{transform: windowWidth > 660 ? 'none' : 'scale(0.7)'}}/>}
       </IconButton>
 
       <IconButton
@@ -51,14 +58,16 @@ function TablePaginationActions(props) {
         disabled={page === 0}
         aria-label="previous page"
         style={{
-          width: 30,
-          height: 30,
+          width: windowWidth > 660 ? 30 : 25,
+          height: windowWidth > 660 ? 30 : 25,
           marginLeft: 10,
           border: '1px solid #86B9D6',
           borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
           color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
         }}>
-        {theme.direction === 'rtl' ? <KeyboardArrowRight/> : <KeyboardArrowLeft/>}
+        {theme.direction === 'rtl'
+          ? <KeyboardArrowRight style={{transform: windowWidth > 660 ? 'none' : 'scale(0.7)'}}/>
+          : <KeyboardArrowLeft style={{transform: windowWidth > 660 ? 'none' : 'scale(0.7)'}}/>}
       </IconButton>
 
       <IconButton
@@ -66,14 +75,16 @@ function TablePaginationActions(props) {
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="next page"
         style={{
-          width: 30,
-          height: 30,
+          width: windowWidth > 660 ? 30 : 25,
+          height: windowWidth > 660 ? 30 : 25,
           marginLeft: 10,
           border: '1px solid #86B9D6',
           borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
           color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
         }}>
-        {theme.direction === 'rtl' ? <KeyboardArrowLeft/> : <KeyboardArrowRight/>}
+        {theme.direction === 'rtl'
+          ? <KeyboardArrowLeft style={{transform: windowWidth > 660 ? 'none' : 'scale(0.7)'}}/>
+          : <KeyboardArrowRight style={{transform: windowWidth > 660 ? 'none' : 'scale(0.7)'}}/>}
       </IconButton>
 
       <IconButton
@@ -81,14 +92,16 @@ function TablePaginationActions(props) {
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="last page"
         style={{
-          width: 30,
-          height: 30,
+          width: windowWidth > 660 ? 30 : 25,
+          height: windowWidth > 660 ? 30 : 25,
           marginLeft: 10,
           border: '1px solid #86B9D6',
           borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
           color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
         }}>
-        {theme.direction === 'rtl' ? <KeyboardDoubleArrowLeft/> : <KeyboardDoubleArrowRight/>}
+        {theme.direction === 'rtl'
+          ? <KeyboardDoubleArrowLeft style={{transform: windowWidth > 660 ? 'none' : 'scale(0.7)'}}/>
+          : <KeyboardDoubleArrowRight style={{transform: windowWidth > 660 ? 'none' : 'scale(0.7)'}}/>}
       </IconButton>
     </Box>
   );
