@@ -430,7 +430,7 @@ export default function ssWhitelist() {
             options: nfts,
             symbol: veToken?.symbol,
             handleChange,
-            placeholder: 'Click to select veDyst',
+            placeholder: 'Click to select veDYST',
           })}
         </div>
       </div>
