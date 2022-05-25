@@ -967,6 +967,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
             rowsPerPage={rowsPerPage}
             page={page}
             labelRowsPerPage={window.innerWidth < 550 ? null : 'Rows per page:'}
+            rowsPerPageOptions={window.innerWidth < 435 ? [] : [5, 10, 25]}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
@@ -1389,6 +1390,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
             rowsPerPage={rowsPerPage}
             page={page}
             labelRowsPerPage={window.innerWidth < 550 ? null : 'Rows per page:'}
+            rowsPerPageOptions={window.innerWidth < 435 ? [] : [5, 10, 25]}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />

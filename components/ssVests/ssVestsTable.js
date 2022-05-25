@@ -861,6 +861,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
             rowsPerPage={rowsPerPage}
             page={page}
             labelRowsPerPage={window.innerWidth < 550 ? null : 'Rows per page:'}
+            rowsPerPageOptions={window.innerWidth < 435 ? [] : [5, 10, 25]}
             ActionsComponent={TablePaginationActions}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
@@ -1162,12 +1163,12 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
               borderRadius: 100,
               color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
             }}
-            rowsPerPageOptions={[5, 10, 25]}
             component="div"
             count={vestNFTs.length}
             rowsPerPage={rowsPerPage}
             page={page}
             labelRowsPerPage={window.innerWidth < 550 ? null : 'Rows per page:'}
+            rowsPerPageOptions={window.innerWidth < 435 ? [] : [5, 10, 25]}
             ActionsComponent={TablePaginationActions}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
