@@ -141,6 +141,7 @@
 .topBarContainer {
   position: relative;
   padding: 24px 0px;
+  padding-top: 0px;
   width: 100%;
 }
 
@@ -302,8 +303,12 @@
   .tokenSelect {
     position: absolute !important;
     top: -42px;
-    left: 0;
+    left: -20px;
     margin: 0;
+  }
+  
+  .topBarContainer {
+    padding-top: 15px;
   }
 }
 
@@ -313,6 +318,14 @@
 }
 
 @media (max-width: 660px) {
+  .topBarContainer {
+    height: 96px;
+  }
+
+  .sortSelect, .makeStyles-sortSelect-89 {
+    top: 145px;
+  }
+
   .infoSection {
     display: none;
   }
@@ -350,7 +363,7 @@
 
   .searchButton {
     position: absolute;
-    top: 60px;
+    top: 80px;
   }
 }
 

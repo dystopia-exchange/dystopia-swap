@@ -1099,13 +1099,11 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
       }
 
 
-      {windowWidth <= 660 &&
+      {windowWidth <= 660 && (
+        <>
         <div className={classes.sortSelect}>
           {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
         </div>
-      }
-
-      {windowWidth <= 660 &&
         <div style={{
           overflow: 'auto',
           marginTop: 100,
@@ -1578,7 +1576,28 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
             })
           }
         </div>
-      }
+        <TablePagination
+            className={'g-flex-column__item-fixed'}
+            style={{
+              width: '100%',
+              padding: '0 30px',
+              background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
+              border: '1px solid #86B9D6',
+              borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
+              borderRadius: 100,
+              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+            }}
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={gauges.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            ActionsComponent={TablePaginationActions}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </>
+      )}
     </>
   );
 }

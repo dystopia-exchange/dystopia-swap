@@ -971,7 +971,8 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
         </div>
       }
 
-      {windowWidth <= 660 &&
+      {windowWidth <= 660 && (
+        <>
         <div style={{overflow: 'auto'}}>
           {Array.isArray(rewards) > 0
             ? stableSort(rewards, getComparator(order, orderBy))
@@ -1368,7 +1369,28 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
             : null
           }
         </div>
-      }
+        <TablePagination
+            className={'g-flex-column__item-fixed'}
+            style={{
+              width: '100%',
+              padding: '0 30px',
+              background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
+              border: '1px solid #86B9D6',
+              borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
+              borderRadius: 100,
+              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+            }}
+            ActionsComponent={TablePaginationActions}
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rewards.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </>
+      )}
     </>
   );
 }

@@ -142,8 +142,6 @@ export default function ssVotes() {
 
   const noTokenSelected = token === null
 
-  console.log('formatCurrency(totalVotes)', formatCurrency(totalVotes), totalVotes);
-
   const disableCastVotes = totalVotes > 100;
 
   return (
