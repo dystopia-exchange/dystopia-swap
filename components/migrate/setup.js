@@ -36,7 +36,7 @@ export default function Setup() {
   const forceUpdate = React.useCallback(() => updateState({}), []);
   const {appTheme} = useAppThemeContext();
   const [isStable, toggleStablePool] = useState(false);
-  const [toggleArrow, setToggleArrow] = useState(false);
+  const [toggleArrow, setToggleArrow] = useState(true);
   const [pairDetails, setPairDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("");
@@ -776,12 +776,7 @@ export default function Setup() {
 
           {pairDetails && pairDetails.isValid && (
             <>
-              <div
-                className={['g-flex'].join(" ")}
-                style={{
-                  width: '100%',
-                  marginTop: 20,
-                }}>
+              <div className={['g-flex'].join(" ")} style={{width: '100%', marginTop: 20}}>
                 <div className={['g-flex-column', 'g-flex__item-fixed'].join(' ')}>
                   <div
                     className={[classes.liqHeader, classes[`liqHeader--${appTheme}`], classes.liqHeaderLabel, 'g-flex', 'g-flex--align-center'].join(' ')}>
@@ -980,13 +975,12 @@ export default function Setup() {
               dystopiaPair ? (
                 <div>
                   <div
-                    className={[classes.toggleArrow, 'g-flex', 'g-flex--align-center'].join(' ')}
-                    onClick={() => setToggleArrow(!toggleArrow)}>
+                    className={[classes.toggleArrow, 'g-flex', 'g-flex--align-center'].join(' ')}>
                     <div className={[classes.toggleArrowBg, classes[`toggleArrowBg--${appTheme}`]].join(' ')}>
                     </div>
 
                     <svg
-                      className={[classes.toggleArrowBtn, classes[`toggleArrowBtn--${appTheme}`], toggleArrow ? classes.toggleArrowBtnOpen : ''].join(' ')}
+                      className={[classes.toggleArrowBtn, classes[`toggleArrowBtn--${appTheme}`]].join(' ')}
                       width="39"
                       height="39" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <rect x="0.5" y="0.5" width="33" height="33" rx="16.5"

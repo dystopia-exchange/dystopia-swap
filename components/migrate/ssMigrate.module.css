@@ -675,6 +675,7 @@
 .liqBodyIcon {
   width: 44px;
   height: 44px;
+  border-radius: 100px;
 }
 
 .massiveInputAmount {
@@ -685,7 +686,7 @@
 .largeInput {
   padding: 0 !important;
   font-weight: 400 !important;
-  font-size: 30px !important;
+  font-size: 24px !important;
   line-height: 100% !important;
   border: none !important;
   outline: none !important;
@@ -757,6 +758,7 @@
 .pairIcon {
   width: 30px;
   height: 30px;
+  border-radius: 100px;
 }
 
 .pairSymbolLabel {
@@ -856,7 +858,6 @@
   transform: translateX(-50%);
   padding: 0 5px;
   background: #dbe6ec;
-  cursor: pointer;
 }
 
 .toggleArrowBtn--dark {

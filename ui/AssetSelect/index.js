@@ -373,9 +373,15 @@ const AssetSelect = (
 
   return (
     <React.Fragment>
-      <div className={[classes.displaySelectContainer, size === 'small' ? classes.displaySelectContainerSmall : ''].join(' ')} onClick={() => {
-        openSearch();
-      }}>
+      <div
+        className={[
+          classes.displaySelectContainer,
+          size === 'small' ? classes.displaySelectContainerSmall : '',
+          size === 'medium' ? classes.displaySelectContainerMedium : '',
+        ].join(' ')}
+        onClick={() => {
+          openSearch();
+        }}>
         <div className={classes.assetSelectMenuItem}>
           <div
             className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`], size === 'small' ? classes.displayDualIconContainerSmallest : ''].join(' ')}>

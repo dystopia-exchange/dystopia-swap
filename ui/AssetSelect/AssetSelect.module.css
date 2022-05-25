@@ -7,6 +7,11 @@
   cursor: pointer;
 }
 
+.displaySelectContainerMedium {
+  padding: 44px 20px 20px;
+  cursor: pointer;
+}
+
 .displaySelectContainerSmall {
   padding: 0;
   margin-left: 10px;
