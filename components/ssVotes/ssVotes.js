@@ -261,7 +261,7 @@ export default function ssVotes() {
               options: vestNFTs,
               symbol: veToken?.symbol,
               handleChange,
-              placeholder: 'Click to select veNFT'
+              placeholder: 'Click to select veDyst'
             })}
           </div>
 
