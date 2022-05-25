@@ -440,6 +440,7 @@ const useStyles = makeStyles((theme) => {
     toolbar: {
       margin: '24px 0px',
       padding: '0px',
+      minHeight: 'auto',
     },
     tableContainer: {
       border: '1px solid rgba(126,153,176,0.2)',
@@ -965,6 +966,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
             count={rewards.length}
             rowsPerPage={rowsPerPage}
             page={page}
+            labelRowsPerPage={window.innerWidth < 550 ? null : 'Rows per page:'}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
@@ -1386,6 +1388,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
             count={rewards.length}
             rowsPerPage={rowsPerPage}
             page={page}
+            labelRowsPerPage={window.innerWidth < 550 ? null : 'Rows per page:'}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />

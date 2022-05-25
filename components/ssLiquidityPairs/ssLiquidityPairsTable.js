@@ -528,6 +528,7 @@ const useStyles = makeStyles({
   toolbar: {
     marginBottom: 30,
     padding: 0,
+    minHeight: 'auto',
     ["@media (max-width:660px)"]: {
       paddingBottom: 40,
     },
@@ -1997,6 +1998,7 @@ export default function EnhancedTable({pairs, isLoading}) {
               count={filteredPairs.length}
               rowsPerPage={rowsPerPage}
               page={page}
+              labelRowsPerPage={window.innerWidth < 550 ? null : 'Rows per page:'}
               ActionsComponent={TablePaginationActions}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
@@ -2415,6 +2417,7 @@ export default function EnhancedTable({pairs, isLoading}) {
               count={filteredPairs.length}
               rowsPerPage={rowsPerPage}
               page={page}
+              labelRowsPerPage={window.innerWidth < 550 ? null : 'Rows per page:'}
               ActionsComponent={TablePaginationActions}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}

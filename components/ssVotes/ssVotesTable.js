@@ -793,6 +793,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
     setWindowWidth(window.innerWidth);
   });
 
+  console.log('window.innerWidth',window.innerWidth)
+
   return (
     <>
       {windowWidth > 660 &&
@@ -1090,6 +1092,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
               borderRadius: 100,
               color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
             }}
+            labelRowsPerPage={window.innerWidth < 550 ? '' : 'Rows per page:'}
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
             count={gauges.length}
@@ -1596,6 +1599,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
             count={gauges.length}
             rowsPerPage={rowsPerPage}
             page={page}
+            labelRowsPerPage={window.innerWidth < 550 ? null : 'Rows per page:'}
             ActionsComponent={TablePaginationActions}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}

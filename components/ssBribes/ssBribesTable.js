@@ -277,7 +277,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toolbar: {
-    paddingTop: '24px'
+    paddingTop: '24px',
+    minHeight: 'auto',
   }
 }));
 
