@@ -1593,6 +1593,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
               borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
               borderRadius: 100,
               color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+              marginBottom: 40,
             }}
             component="div"
             count={gauges.length}

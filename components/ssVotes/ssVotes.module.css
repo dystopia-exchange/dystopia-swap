@@ -279,7 +279,7 @@
 @media (max-width: 1360px) {
   .searchInput {
     position: absolute !important;
-    top: 42px;
+    top: 30px;
     right: 0;
   }
 }
@@ -296,6 +296,7 @@
 @media (max-width: 935px) {
   .searchInput {
     width: 300px !important;
+    top: 36px;
   }
 }
 
@@ -327,7 +328,11 @@
   }
 
   .infoSection {
-    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    bottom: 0;
+    width: 100%;
   }
 
   .controls > .tokenSelect {
@@ -339,7 +344,7 @@
   }
 
   .addButton {
-    top: 0;
+    top: 5px;
     z-index: 11;
   }
 
@@ -354,7 +359,7 @@
 
   .searchInput {
     position: absolute !important;
-    top: 29px;
+    top: 39px;
     left: 0;
     right: auto;
     z-index: 9;
