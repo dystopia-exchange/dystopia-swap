@@ -1099,13 +1099,34 @@ class Store {
     try {
       const response = await client.query(queryone).toPromise();
       const pairsCall = response;
-      return pairsCall.data.pairs;
+      const find = "miMATIC";
+      const regex = new RegExp(find, "g");
+      const regex1 = new RegExp("miMATIC", "g");
+      let pairsCall2;
+      try {
+        pairsCall2 = pairsCall.data.pairs.map((object) => {
+          const obj = object;
+          obj.name = obj?.name.replace(regex1, "MAI");
+          obj.symbol = obj?.symbol.replace(regex1, "MAI");
+          obj.token0.name = obj?.token0?.name?.replace(regex, "MAI");
+          obj.token0.symbol = obj?.token0?.symbol?.replace(regex, "MAI");
+          obj.token1.name = obj?.token1?.name?.replace(regex, "MAI");
+          obj.token1.symbol = obj?.token1?.symbol?.replace(regex, "MAI");
+          obj.token0.name = obj?.token0?.name?.replace(regex1, "MAI");
+          obj.token0.symbol = obj?.token0?.symbol?.replace(regex1, "MAI");
+          obj.token1.name = obj?.token1?.name?.replace(regex1, "MAI");
+          obj.token1.symbol = obj?.token1?.symbol?.replace(regex1, "MAI");
+          return obj;
+        });
+      } catch (e) {
+        console.log(e, "res");
+      }
+      return pairsCall2;
     } catch (ex) {
       console.log(ex);
       return [];
     }
   };
-
   _getGovTokenBase = () => {
     return {
       address: CONTRACTS.GOV_TOKEN_ADDRESS,
@@ -1355,6 +1376,7 @@ class Store {
                   gaugesContract.methods.weights(pair.address),
                   gaugeContract.methods.rewardRate(CONTRACTS.REWARD_ADDRESS),
                 ]);
+            
               const bribeContract = new web3.eth.Contract(
                 CONTRACTS.BRIBE_ABI,
                 pair.gauge.bribeAddress
@@ -1437,20 +1459,22 @@ class Store {
                 .div(10 ** 18)
                 .toFixed(18);
               pair.gauge.reserve0 =
-              parseFloat(pair.totalSupply) > 0
-                  ? parseFloat(BigNumber(parseFloat(pair.reserve0))
-                      .times(parseFloat(pair.gauge.totalSupply))
-                      .div(parseFloat(pair.totalSupply)))
-                      .toFixed(parseInt(pair.token0.decimals))
+                parseFloat(pair.totalSupply) > 0
+                  ? parseFloat(
+                      BigNumber(parseFloat(pair.reserve0))
+                        .times(parseFloat(pair.gauge.totalSupply))
+                        .div(parseFloat(pair.totalSupply))
+                    ).toFixed(parseInt(pair.token0.decimals))
                   : "0";
               pair.gauge.reserve1 =
-              parseFloat(pair.totalSupply) > 0
-                  ? parseFloat(BigNumber(parseFloat(pair.reserve1))
-                  .times(parseFloat(pair.gauge.totalSupply))
-                  .div(parseFloat(pair.totalSupply)))
-                  .toFixed(parseInt(pair.token1.decimals))
+                parseFloat(pair.totalSupply) > 0
+                  ? parseFloat(
+                      BigNumber(parseFloat(pair.reserve1))
+                        .times(parseFloat(pair.gauge.totalSupply))
+                        .div(parseFloat(pair.totalSupply))
+                    ).toFixed(parseInt(pair.token1.decimals))
                   : "0";
-                 
+
               pair.gauge.weight =
                 parseInt(gaugeWeight) != 0
                   ? BigNumber(parseInt(gaugeWeight))

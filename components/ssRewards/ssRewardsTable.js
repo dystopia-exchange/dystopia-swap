@@ -897,7 +897,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                             tableCellContent(
                               formatCurrency(row.gauge.rewardsEarned),
                               null,
-                              'SOLID',
+                              'DYST',
                               null,
                             )
                           }
@@ -1206,7 +1206,7 @@ export default function EnhancedTable({rewards, vestNFTs, tokenID}) {
                                 tableCellContent(
                                   formatCurrency(row.gauge.rewardsEarned),
                                   null,
-                                  'SOLID',
+                                  'DYST',
                                   null,
                                 )
                               }
