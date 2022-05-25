@@ -569,6 +569,10 @@ const useStyles = makeStyles((theme) => {
     sortSelect: {
       position: 'absolute',
       top: 125,
+      ["@media (max-width:660px)"]: {
+        // eslint-disable-line no-useless-computed-key
+        top: 145,
+      },
     },
     accordionSummaryContent: {
       margin: 0,

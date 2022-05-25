@@ -322,7 +322,7 @@
     height: 96px;
   }
 
-  .sortSelect, .makeStyles-sortSelect-89 {
+  .sortSelect {
     top: 145px;
   }
 
@@ -368,6 +368,10 @@
 }
 
 @media (max-width: 530px) {
+  .tokenSelect {
+    left: 0px;
+  }
+
   .container,
   .container3,
   .reAddPadding3 {
