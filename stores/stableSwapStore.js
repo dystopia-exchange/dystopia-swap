@@ -1070,6 +1070,7 @@ class Store {
           }
         }
       }
+      console.log(baseAssets);
       let localBaseAssets = this.getLocalAssets();
 
       return [...baseAssets, ...localBaseAssets];
@@ -1336,17 +1337,6 @@ class Store {
                     .div(10 ** parseInt(pair.token1.decimals))
                     .toFixed(parseInt(pair.token1.decimals))
                 : 0;
-            const totalVolumeInUsdInReserve0 = BigNumber(
-              pair.reserve0
-            ).multipliedBy(BigNumber(pair.token0Price));
-            const totalVolumeInUsdInReserve1 = BigNumber(
-              pair.reserve1
-            ).multipliedBy(BigNumber(pair.token1Price));
-
-            const totalVolumeInUsd =
-              Number(totalVolumeInUsdInReserve0) +
-              Number(totalVolumeInUsdInReserve1);
-            pair.tvl = Number(totalVolumeInUsd);
 
             return pair;
           } catch (ex) {
@@ -1376,7 +1366,7 @@ class Store {
                   gaugesContract.methods.weights(pair.address),
                   gaugeContract.methods.rewardRate(CONTRACTS.REWARD_ADDRESS),
                 ]);
-            
+
               const bribeContract = new web3.eth.Contract(
                 CONTRACTS.BRIBE_ABI,
                 pair.gauge.bribeAddress
@@ -1454,10 +1444,7 @@ class Store {
                       .div(10 ** 18)
                       .toFixed(18)
                   : 0;
-              pair.gauge.apr = BigNumber(parseInt(rewardRate))
-                .div(pair.tvl)
-                .div(10 ** 18)
-                .toFixed(18);
+              
               pair.gauge.reserve0 =
                 parseFloat(pair.totalSupply) > 0
                   ? parseFloat(
@@ -1488,13 +1475,38 @@ class Store {
                       .div(parseInt(totalWeight))
                       .toFixed(2)
                   : 0;
+                  const a = await axios.get(
+                    `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
+                  );
+                  const totalVolumeInUsdInReserve0 = BigNumber(
+                    pair.gauge.reserve0
+                  ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
+    
+                  const totalVolumeInUsdInReserve1 = BigNumber(
+                    pair.gauge.reserve1
+                  ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
+    
+                  const totalVolumeInUsd =
+                    Number(totalVolumeInUsdInReserve0) +
+                    Number(totalVolumeInUsdInReserve1);
+                  pair.tvl = Number(totalVolumeInUsd);
+                  const secondsPerYear = 31622400;
+                  const valuePerYear = new BigNumber(secondsPerYear)
+                    .times(rewardRate)
+                    .div(10 ** 18);
+                  
+                  
+                  const apr = new BigNumber(valuePerYear)
+                    .div(pair.tvl)
+                    .div(10 ** 18)
+                    .times(100)
+                    .toFixed(4);
+    
+                  pair.gauge.apr = apr;    
             }
 
             return pair;
           } catch (ex) {
-            console.log("EXCEPTION 2");
-            console.log(pair);
-            console.log(ex);
             return pair;
           }
         })
@@ -2094,7 +2106,7 @@ class Store {
         migratorAbi,
         migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
       );
-     
+
       const now = new Date();
       const utcMilllisecondsSinceEpoch = now.getTime();
       const utcSecondsSinceEpoch = Math.round(
