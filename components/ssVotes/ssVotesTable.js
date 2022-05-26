@@ -1491,11 +1491,11 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                     {headCell.id === 'apy' && row?.gaugebribes.length ? (
                                         row?.gaugebribes.map((bribe, idx) => {
                                           return (
-                                            <>
+                                            <div className={['g-flex-column', 'g-flex--align-end'].join(' ')}>
                                               {
                                                 formatCurrency(bribe.rewardAmount)
                                               }
-                                            </>
+                                            </div>
                                           );
                                         })
                                       )
@@ -1540,11 +1540,11 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                     {headCell.id === 'apy' && row?.gaugebribes.length ? (
                                         row?.gaugebribes.map((bribe, idx) => {
                                           return (
-                                            <>
+                                            <div className={['g-flex-column', 'g-flex--align-end'].join(' ')}>
                                               {
                                                 formatSymbol(bribe.symbol)
                                               }
-                                            </>
+                                            </div>
                                           );
                                         })
                                       )
