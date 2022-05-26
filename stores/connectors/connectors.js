@@ -6,7 +6,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 
 const POLLING_INTERVAL = 12000;
 const RPC_URLS = {
-  137: "https://polygon-mainnet.g.alchemy.com/v2/z31K9anv5tvGi7AxPhtSSD2FCBJvK0Wj",
+  137: "https://polygon-mainnet.g.alchemy.com/v2/a0knpm6DeSJZumUlHLrEBCZTYPGIho-r",
   80001: "https://polygon-mumbai.g.alchemy.com/v2/z31K9anv5tvGi7AxPhtSSD2FCBJvK0Wj"
 };
 
