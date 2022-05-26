@@ -81,7 +81,7 @@ const HomePage = () => {
                     </div>
                     <div className={classes.layoutPromoDescription}>
                         <div className={classes.layoutPromoDescriptionItem}>
-                            0.001% FEE
+                        0.05% FEE
                         </div>
                         <div className={classes.layoutPromoDescriptionItem}>
                             TOKENIZED LOCKS AS NFT’s
