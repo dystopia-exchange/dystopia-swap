@@ -290,7 +290,7 @@ export default function Setup() {
     try {
       setLoading(true);
       const migrator = migrate.find((eachMigrate) => eachMigrate == platform);
-      let am = BigNumber((amount).times(10**18))
+      let am = ( BigNumber.from(amount).times(10**18))
       console.log(typeof am,typeof amount)
 
       stores.dispatcher.dispatch({
