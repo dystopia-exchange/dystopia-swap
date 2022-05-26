@@ -205,14 +205,12 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'TVL',
-    isHideInDetails: true,
   },
   {
     id: 'apr',
     numeric: true,
     disablePadding: false,
     label: 'APR %',
-    isHideInDetails: true,
   },
   {
     id: 'balance',
@@ -1515,8 +1513,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                       whiteSpace: 'nowrap',
                                     }}>
-                                    {headCell.id === 'tvl' && `${(numeral(BigNumber(row?.tvl).toLocaleString()).format('($ 0a)'))} `}
-                                    {headCell.id === 'apr' && `${formatCurrency(BigNumber(row?.gauge?.apr))} %`}
+                                   
                                     {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.gauge?.reserve1))}
                                     {headCell.id === 'liquidity' && formatCurrency(BigNumber(row?.reserve1))}
                                     {headCell.id === 'apy' && ''}
@@ -1567,8 +1564,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                      {headCell.id === 'tvl' && ""}
-                                    {headCell.id === 'apr' && ""}
+                                      
                                     {headCell.id === 'balance' && formatSymbol(row.token1.symbol)}
                                     {headCell.id === 'liquidity' && formatSymbol(row.token1.symbol)}
                                     {headCell.id === 'apy' && ''}
