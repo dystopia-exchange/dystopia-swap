@@ -10,6 +10,7 @@ import {
   DialogContent,
   Tooltip,
 } from "@mui/material";
+import {BigNumber} from "ethers";
 import { styled } from "@mui/material/styles";
 import { Search, KeyboardArrowDown, Close } from "@mui/icons-material";
 import migrate from "../../stores/configurations/migrators";
@@ -20,7 +21,7 @@ import classes from "./ssMigrate.module.css";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import stores from "../../stores";
 import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
-import BigNumber from "bignumber.js";
+import BigNum from "bignumber.js";
 import Borders from "../../ui/Borders";
 import AssetSelect from "../../ui/AssetSelect";
 import Loader from "../../ui/Loader";
@@ -290,7 +291,7 @@ export default function Setup() {
     try {
       setLoading(true);
       const migrator = migrate.find((eachMigrate) => eachMigrate == platform);
-      let am = ( BigNumber.from(amount).times(10**18))
+      let am = BigNumber.from((amount).times(10**18))
       console.log(typeof am,typeof amount)
 
       stores.dispatcher.dispatch({
@@ -430,10 +431,10 @@ am = pairDetails.lpBalance
       CONTRACTS.ROUTER_ADDRESS
     );
 
-    const sendAmount0 = BigNumber(amount0)
+    const sendAmount0 = BigNum(amount0)
       .times(10 ** parseInt(token0.decimals))
       .toFixed(0);
-    const sendAmount1 = BigNumber(amount1)
+    const sendAmount1 = BigNum(amount1)
       .times(10 ** parseInt(token1.decimals))
       .toFixed(0);
 
