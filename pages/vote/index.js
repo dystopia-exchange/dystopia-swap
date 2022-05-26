@@ -83,7 +83,7 @@ function Vote({ changeTheme }) {
 
             <div className={[classes.mainDescBg, classes[`mainDescBg--${appTheme}`]].join(' ')}>
               <Typography className={[classes.mainDescNC, classes[`mainDescNC--${appTheme}`]].join(' ')} variant="body2">
-                Use your veDyst to vote for your selected liquidity pair’s rewards distribution or create a bribe to encourage others to do the same.
+                Use your veDYST to vote for your selected liquidity pair’s rewards distribution or create a bribe to encourage others to do the same.
               </Typography>
             </div>
 
