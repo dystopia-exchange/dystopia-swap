@@ -1206,7 +1206,7 @@ export default function EnhancedTable({pairs, isLoading}) {
     //   return false
     // }
     if (toggleActive === true) {
-      if (!BigNumber(pair?.gauge?.balance).gt(0) && !BigNumber(pair?.balance).gt(0)) {
+      if (!BigNumber(pair?.gauge?.balance).gt(0) || !BigNumber(pair?.balance).gt(0)) {
         return false;
       }
     }
