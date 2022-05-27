@@ -140,7 +140,8 @@
 
 .topBarContainer {
   position: relative;
-  padding: 24px 0px;
+  padding: 30px 0px;
+  padding-top: 0px;
   width: 100%;
 }
 
@@ -278,7 +279,7 @@
 @media (max-width: 1360px) {
   .searchInput {
     position: absolute !important;
-    top: 42px;
+    top: 30px;
     right: 0;
   }
 }
@@ -295,6 +296,7 @@
 @media (max-width: 935px) {
   .searchInput {
     width: 300px !important;
+    top: 36px;
   }
 }
 
@@ -302,8 +304,12 @@
   .tokenSelect {
     position: absolute !important;
     top: -42px;
-    left: 0;
+    left: -20px;
     margin: 0;
+  }
+  
+  .topBarContainer {
+    padding-top: 15px;
   }
 }
 
@@ -313,8 +319,20 @@
 }
 
 @media (max-width: 660px) {
+  .topBarContainer {
+    height: 96px;
+  }
+
+  .sortSelect {
+    top: 145px;
+  }
+
   .infoSection {
-    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    bottom: 0;
+    width: 100%;
   }
 
   .controls > .tokenSelect {
@@ -326,7 +344,7 @@
   }
 
   .addButton {
-    top: 0;
+    top: 5px;
     z-index: 11;
   }
 
@@ -341,7 +359,7 @@
 
   .searchInput {
     position: absolute !important;
-    top: 29px;
+    top: 39px;
     left: 0;
     right: auto;
     z-index: 9;
@@ -350,11 +368,15 @@
 
   .searchButton {
     position: absolute;
-    top: 60px;
+    top: 80px;
   }
 }
 
 @media (max-width: 530px) {
+  .tokenSelect {
+    left: 0px;
+  }
+
   .container,
   .container3,
   .reAddPadding3 {

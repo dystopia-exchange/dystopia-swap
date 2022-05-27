@@ -372,8 +372,7 @@ input[type=number].mediumInputAmount {
   position: relative;
 }
 
-.textField--amount0-dark,
-.textField--withdraw-dark {
+.textField--amount0-dark {
   height: 172px;
   background-image: url("/images/ui/swap-coin-top--dark.svg");
 }
@@ -384,10 +383,19 @@ input[type=number].mediumInputAmount {
   background-image: url("/images/ui/swap-coin-bottom--dark.svg");
 }
 
-.textField--amount0-light,
-.textField--withdraw-light {
+.textField--amount0-light {
   height: 172px;
   background-image: url("/images/ui/swap-coin-top--light.svg");
+}
+
+.textField--withdraw-light {
+  height: 136px;
+  background-image: url("/images/ui/withdraw-tokens--light.svg");
+}
+
+.textField--withdraw-dark {
+   height: 136px;
+   background-image: url("/images/ui/withdraw-tokens--dark.svg");
 }
 
 .textField--amount1-light {
@@ -454,6 +462,49 @@ input[type=number].mediumInputAmount {
   -webkit-text-fill-color: #C6CDD2 !important;
 }
 
+.tokenText {
+  position: absolute !important;
+  left: 151px;
+  top: 60px;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 120%;
+  color: #0A2C40;
+  text-transform: uppercase;
+}
+
+.tokenText--dark {
+  color: #FFFFFF !important;
+}
+
+.tokenTextLabel,
+.tokenTextSecond {
+  position: absolute !important;
+  left: 151px;
+  top: 95px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  color: #5688A5;
+}
+
+.tokenTextSecond {
+  left: 18px;
+  top: 52px;
+}
+
+.tokenTextLabel--dark,
+.tokenTextSecond--dark {
+  color: #7C838A;
+}
+
+.tokenTextHeader {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  color: #FFFFFF;
+}
+
 .smallerText {
   position: absolute !important;
   left: 151px;
@@ -464,10 +515,6 @@ input[type=number].mediumInputAmount {
   line-height: 140% !important;
   color: #0A2C40 !important;
   text-transform: uppercase;
-}
-
-.smallerText--light {
-  color: #0A2C40 !important;
 }
 
 .smallerText--dark {
@@ -483,8 +530,12 @@ input[type=number].mediumInputAmount {
   align-items: center;
   justify-content: center;
   margin-left: 320px;
+  margin-top: -20px;
+  z-index: 11;
+}
+
+.swapIconContainer {
   margin-top: -22px;
-  z-index: 1;
 }
 
 .swapIconContainerWithdraw {
@@ -597,7 +648,6 @@ input[type=number].mediumInputAmount {
   padding-bottom: 12px;
 }
 
-.buttonOverride,
 .multiApprovalButton {
   width: 460px;
   height: 65px;
@@ -610,19 +660,6 @@ input[type=number].mediumInputAmount {
   color: #8F5AE8 !important;
   box-shadow: none !important;
   border-radius: 0 !important;
-}
-
-.buttonOverride:hover {
-  background: transparent url("/images/ui/liquidity-add-button-deposit--light.svg") !important;
-}
-
-.buttonOverride--dark,
-.multiApprovalButton--dark {
-  background: transparent url("/images/ui/liquidity-add-button-deposit--dark.svg") !important;
-}
-
-.buttonOverride[disabled] {
-  filter: grayscale(1);
 }
 
 .multiApprovalButton {
@@ -669,6 +706,14 @@ input[type=number].mediumInputAmount {
   margin-right: 20px !important;
 }
 
+.massiveInputAmountUnstake {
+  position: absolute !important;
+  left: 18px;
+  top: 11px;
+  border: none !important;
+  margin-right: 20px !important;
+}
+
 .massiveInputAddress {
   min-width: 100%;
   border-top: 1px solid rgba(128, 128, 128, 0.5);
@@ -703,12 +748,14 @@ input[type=number].mediumInputAmount {
 }
 
 .mediumInputContainer {
+  position: relative;
   display: flex;
   align-items: center;
   width: 190px;
   height: 75px;
   margin-top: 16px;
-  background-image: url("/images/ui/liquidity-swap-token--light.svg");
+  background: #B9DFF5;
+  border: 1px solid #86B9D6;
 }
 
 .mediumInputContainer--withdrawAmount0 {
@@ -716,7 +763,8 @@ input[type=number].mediumInputAmount {
 }
 
 .mediumInputContainer--dark {
-  background-image: url("/images/ui/liquidity-swap-token--dark.svg");
+  background: #24292D;
+  border: 1px solid #5F7285;
 }
 
 .mediumInputAssetSelect {
@@ -783,6 +831,7 @@ input[type=number].mediumInputAmount {
 
 .receiveAssets {
   display: flex;
+  margin-top: 2px;
 }
 
 .depositInfoContainer,
@@ -952,7 +1001,6 @@ input[type=number].mediumInputAmount {
 
 .toggles {
   width: 100%;
-  display: flex;
   margin-top: 20px;
 }
 
@@ -971,7 +1019,7 @@ input[type=number].mediumInputAmount {
 }
 
 .toggleOption:first-child {
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 .toggleOption:hover {
@@ -997,9 +1045,9 @@ input[type=number].mediumInputAmount {
 .toggleOptionText {
   width: 100%;
   text-align: center;
-  font-weight: 600;
+  font-weight: 500 !important;
   font-size: 14px !important;
-  line-height: 120%;
+  line-height: 120% !important;
 }
 
 .toggleOption .toggleOptionText {
@@ -1217,36 +1265,345 @@ input[type=number].mediumInputAmount {
 }
 
 .disclaimerContainer {
+  margin-top: 20px;
+  background: #CFE5F2;
+  border: 2px solid #15B525;
+  color: #1B4F20;
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 100px;
-  position: relative;
-  margin-top: 20px;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 20px 18px 12px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
 }
 
-.disclaimerDivider {
+.disclaimerContainer--dark {
+  background: #24292D;
+  color: #A2E3A9;
+}
+
+.disclaimerContainer::before {
+  content: "";
   position: absolute;
-  top: 12px;
+  top: 0;
   left: 0;
-  width: 400px;
+  width: 80px;
   height: 8px;
-  background-image: url("/images/ui/liquidity-notify-divider.svg");
+  background: #15B525;
 }
 
-.disclaimer {
-  font-size: 14px !important;
-  font-weight: 400 !important;
-  border-radius: 0;
-  background: #CFE5F2 !important;
-  border: 2px solid #15B525 !important;
-  padding: 16px 18px !important;
-  color: #1B4F20 !important;
+.disclaimerContainer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 80px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 8px 0 0;
+  border-color: #15B525 transparent transparent transparent;
 }
 
-.disclaimer--dark {
-  background: #24292D !important;
-  color: #A2E3A9 !important;
+.disclaimerContainerError {
+  border: 2px solid #DB3434;
+  color: #631515;
+}
+
+.disclaimerContainerError::before {
+  background: #DB3434;
+}
+
+.disclaimerContainerError::after {
+  border-color: #DB3434 transparent transparent transparent;
+}
+
+.disclaimerContainerError--dark {
+  background: #24292D;
+  border: 2px solid #DB3434;
+  color: #EC9999;
+}
+
+.disclaimerContainerWarning {
+  border: 2px solid #F9A01A;
+  color: #3A3020;
+}
+
+.disclaimerContainerWarning::before {
+  background: #F9A01A;
+}
+
+.disclaimerContainerWarning::after {
+  border-color: #F9A01A transparent transparent transparent;
+}
+
+.disclaimerContainerWarning--dark {
+  background: #24292D;
+  border: 2px solid #F9A01A;
+  color: #EACFA7;
+}
+
+.buttonOverride {
+  position: relative;
+  width: 460px;
+  height: 65px;
+  margin-top: 20px !important;
+  border-radius: 0 !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  line-height: 120% !important;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  box-shadow: none !important;
+  animation: none !important;
+  transition: all 0.32s ease !important;
+}
+
+.buttonOverride::after,
+.buttonOverride::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.buttonOverride::before {
+  top: 0;
+  left: 0;
+  border-width: 16px 16px 0 0;
+  border-color: #ffffff transparent transparent transparent;
+}
+
+.buttonOverride::after {
+  bottom: 0;
+  right: 0;
+  border-width: 0 0 16px 16px;
+  border-color: transparent transparent #ffffff transparent;
+}
+
+.buttonOverride--light {
+  background: #D2D0F2 !important;
+  border: 1px solid #8F5AE8 !important;
+  color: #8F5AE8 !important;
+}
+
+.buttonOverride--light::before {
+  border-color: #8F5AE8 transparent transparent transparent;
+}
+
+.buttonOverride--light::after {
+  border-color: transparent transparent #8F5AE8 transparent;
+}
+
+.buttonOverride--light:not(:disabled):hover {
+  background: #C6BAF0 !important;
+  border: 1px solid #8F5AE8 !important;
+  color: #8F5AE8 !important;
+}
+
+.buttonOverride--light:not(:disabled):active {
+  background: #B9A4EE !important;
+  border: 1px solid #8F5AE8 !important;
+  color: #8F5AE8 !important;
+}
+
+.buttonOverride--light:disabled {
+  background: #D4D5DB !important;
+  border: 1px solid #A3A9BA !important;
+  color: #7F828B !important;
+}
+
+.buttonOverride--light:disabled::before {
+  border-color: #A3A9BA transparent transparent transparent;
+}
+
+.buttonOverride--light:disabled::after {
+  border-color: transparent transparent #A3A9BA transparent;
+}
+
+.buttonOverride--dark {
+  background: #33284C !important;
+  border: 1px solid #8F5AE8 !important;
+  color: #8F5AE8 !important;
+}
+
+.buttonOverride--dark::before {
+  border-color: #8F5AE8 transparent transparent transparent;
+}
+
+.buttonOverride--dark::after {
+  border-color: transparent transparent #8F5AE8 transparent;
+}
+
+.buttonOverride--dark:not(:disabled):hover {
+  background: #402E61 !important;
+  border: 1px solid #8F5AE8 !important;
+  color: #8F5AE8 !important;
+}
+
+.buttonOverride--dark:not(:disabled):active {
+  background: #523880 !important;
+  border: 1px solid #8F5AE8 !important;
+  color: #8F5AE8 !important;
+}
+
+.buttonOverride--dark:disabled {
+  background: #494B51 !important;
+  border: 1px solid #7F828B !important;
+  color: #7F828B !important;
+}
+
+.buttonOverride--dark:disabled::before {
+  border-color: #7F828B transparent transparent transparent;
+}
+
+.buttonOverride--dark:disabled::after {
+  border-color: transparent transparent #7F828B transparent;
+}
+
+.liqHeader {
+  position: relative;
+  height: 40px;
+  padding-left: 18px;
+  border: 1px solid #86B9D6;
+  background: #9BC9E4;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 120%;
+  color: #FFFFFF;
+}
+
+.liqHeader--dark {
+  background: #2D3741;
+  border: 1px solid #5F7285;
+}
+
+.walletIcon {
+  margin-right: 10px;
+}
+
+.balanceMax {
+  margin-left: 10px;
+  margin-right: 18px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 120%;
+  color: #0B5E8E;
+  cursor: pointer;
+}
+
+.balanceMax--dark {
+  color: #4CADE6;
+}
+
+.liqBody {
+  position: relative;
+  height: 95px;
+  padding-left: 18px;
+  background: #B9DFF5;
+  border: 1px solid #86B9D6;
+  border-top: none;
+}
+
+.liqBody--dark {
+  background: #24292D;
+  border: 1px solid #5F7285;
+  border-top: none;
+}
+
+.liqHeaderLabel,
+.liqBodyLabel {
+  width: 130px;
+  border-right: none;
+}
+
+.liqBodyIconContainer {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 1px solid #9BC9E4;
+  background: #B8DFF5;
+  padding: 4px;
+}
+
+.liqBodyIconContainer:last-child {
+  margin-left: -15px;
+}
+
+.liqBodyIconContainer--dark {
+  border: 1px solid #2D3741;
+  background: #24292D;
+}
+
+.liqBodyIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 100px;
+}
+
+.depositHeader {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 120%;
+  color: #325569;
+}
+
+.depositHeader--dark {
+  color: #C6CDD2;
+}
+
+.depositSwitcherLabel {
+  margin-right: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 120%;
+  color: #5688A5;
+}
+
+.depositSwitcherLabel--dark {
+  color: #7C838A;
+}
+
+.dividerLine {
+  position: relative;
+  width: 100%;
+  height: 1px;
+  margin-top: 20px;
+  background: #86B9D6;
+}
+
+.dividerLine::before {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background: #0B5E8E;
+}
+
+.dividerLine::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 1px;
+  bottom: 0;
+  right: 0;
+  background: #0B5E8E;
+}
+
+.dividerLine--dark {
+  background: #5F7285;
+}
+
+.dividerLine--dark::before,
+.dividerLine--dark::after {
+  background: #4CADE6;
 }
 
 @media (max-width:660px) {
@@ -1351,7 +1708,9 @@ input[type=number].mediumInputAmount {
   }
 
   .swapIconContainerWithdraw {
-    margin-left: 0;
+    position: absolute;
+    margin-left: 110px;
+    margin-top: -20px;
   }
 
   .mediumInputContainer {
@@ -1361,14 +1720,6 @@ input[type=number].mediumInputAmount {
 
   .mediumdisplayDualIconContainer {
     margin-left: 10px;
-  }
-
-  .mediumInputContainer {
-    background-image: url("/images/ui/liquidity-swap-token-360--light.svg");
-  }
-
-  .mediumInputContainer--dark {
-    background-image: url("/images/ui/liquidity-swap-token-360--dark.svg");
   }
 
   .mediumInputContainer--withdrawAmount0 {
@@ -1474,41 +1825,9 @@ input[type=number].mediumInputAmount {
     left: 20px;
   }
 
-  .buttonOverride {
-    left: 50%;
-    transform: translateX(-50%);
-    margin-left: 0 !important;
-    width: 320px !important;
-    height: 50px;
-  }
-
   .displayAssetIconWithdraw {
     padding: 2px;
     border-width: 1px;
-  }
-
-  .buttonOverride--light {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
-  }
-
-  .buttonOverride--light:hover {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
-  }
-
-  .buttonOverride--light:active {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
-  }
-
-  .buttonOverride--dark {
-    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
-  }
-
-  .buttonOverride--dark:hover {
-    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
-  }
-
-  .buttonOverride--dark:active {
-    background: transparent url("/images/ui/swap-btn-360--dark.svg") no-repeat !important;
   }
 
   .dialogContainer {
@@ -1615,7 +1934,7 @@ input[type=number].mediumInputAmount {
   }
 
   .receiveAssets {
-    margin-top: -38px;
+    /*margin-top: -38px;*/
   }
 
   .inputTitleText {
@@ -1643,5 +1962,78 @@ input[type=number].mediumInputAmount {
     transform: translateX(-50%);
     margin-left: 0 !important;
     background: transparent url("/images/ui/btn-simple-disabled--dark.svg") !important;
+  }
+
+  .buttonOverride {
+    width: 320px;
+    height: 50px;
+  }
+
+  .tokenText {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 140%;
+    left: 94px;
+    top: 52px;
+  }
+
+  .tokenTextLabel {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 120%;
+    left: 94px;
+    top: 77px;
+  }
+
+  .priceInfo > .title {
+    font-size: 14px !important;
+  }
+
+  .liqBodyIconContainer {
+    width: 40px;
+    height: 40px;
+    padding: 2px;
+  }
+
+  .liqBodyIcon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .tokenTextHeader {
+    font-size: 12px;
+  }
+
+  .liqBodyLabel,
+  .liqHeaderLabel {
+    padding-left: 5px;
+    width: 80px;
+  }
+
+  .liqHeader {
+    padding-left: 10px;
+    font-size: 12px;
+  }
+
+  .liqBody {
+    height: 72px;
+  }
+
+  .massiveInputAmountUnstake {
+    left: 10px;
+  }
+
+  .tokenTextSecond {
+    left: 10px;
+    top: 38px;
+    font-size: 12px;
+  }
+
+  .depositHeader {
+    font-size: 14px;
+  }
+
+  .depositSwitcherLabel {
+    font-size: 12px;
   }
 }

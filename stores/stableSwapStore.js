@@ -3,7 +3,7 @@ import { MAX_UINT256, ZERO_ADDRESS, ACTIONS, CONTRACTS } from "./constants";
 import { v4 as uuidv4 } from "uuid";
 
 import * as moment from "moment";
-import { formatCurrency } from "../utils";
+import { formatCurrency, retry } from "../utils";
 import stores from "./";
 
 import BigNumber from "bignumber.js";
@@ -4340,15 +4340,36 @@ class Store {
         routeAsset: null,
       });
 
-      const multicall = await stores.accountStore.getMulticall();
-      const receiveAmounts = await multicall.aggregate(
-        amountOuts.map((route) => {
-          return routerContract.methods.getAmountsOut(
-            sendFromAmount,
-            route.routes
-          );
-        })
-      );
+      // const multicall = await stores.accountStore.getMulticall();      
+
+      const retryCall = async () => {
+        const res = await Promise.allSettled(
+        amountOuts.map(async (route) => {
+          const fn = retry({ 
+            fn: routerContract.methods.getAmountsOut(
+              sendFromAmount,
+              route.routes
+            ).call
+          })
+          return await fn()
+          })
+        )
+
+        return res
+          .filter((el, index) => {
+            if (el.status === 'fulfilled' && el.value !== undefined && el.value !== null) {
+              return true
+            } else {
+              amountOuts[index] = null
+              return false
+            }
+          })
+          .map(el => el.value)
+      }
+
+      const receiveAmounts = await retryCall()
+
+      amountOuts = amountOuts.filter(el => el !== null)
 
       for (let i = 0; i < receiveAmounts.length; i++) {
         amountOuts[i].receiveAmounts = receiveAmounts[i];
@@ -4388,7 +4409,7 @@ class Store {
 
       for (let i = 0; i < bestAmountOut.routes.length; i++) {
         let amountIn = bestAmountOut.receiveAmounts[i];
-        let amountOut = bestAmountOut.receiveAmounts[i + 1];
+        // let amountOut = bestAmountOut.receiveAmounts[i + 1];
 
         const res = await libraryContract.methods
           .getTradeDiff(
@@ -4398,7 +4419,6 @@ class Store {
             bestAmountOut.routes[i].stable
           )
           .call();
-
         const ratio = BigNumber(res.b).div(res.a);
         totalRatio = BigNumber(totalRatio).times(ratio).toFixed(18);
       }
@@ -4418,6 +4438,7 @@ class Store {
       this.emitter.emit(ACTIONS.QUOTE_SWAP_RETURNED, returnValue);
     } catch (ex) {
       console.error(ex);
+
       this.emitter.emit(ACTIONS.QUOTE_SWAP_RETURNED, null);
       this.emitter.emit(ACTIONS.ERROR, ex);
     }

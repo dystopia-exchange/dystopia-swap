@@ -151,3 +151,25 @@ export const formatInputAmount = (value) => {
   const formated = formatToString(validateInput(value)) === 'NaN' ? '' : formatToString(validateInput(value))
   return formated
 }
+
+const MAX_REQUEST_RETRY = 3
+
+export const retry = ({ fn, args, defaultValue }) => {
+  let retryCount = 0
+  const wrappedFn = async () => {
+    try {
+      const response = args ? await fn(...args) : await fn()
+      return response
+    } catch (err) {
+      retryCount++
+      if (retryCount > MAX_REQUEST_RETRY) {
+        return defaultValue ?? null
+      } else {
+        console.log('call retry fn')
+        return await wrappedFn()
+      }
+    }
+  }
+
+  return wrappedFn
+}

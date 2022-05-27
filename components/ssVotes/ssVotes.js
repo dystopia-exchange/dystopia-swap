@@ -142,8 +142,6 @@ export default function ssVotes() {
 
   const noTokenSelected = token === null
 
-  console.log('formatCurrency(totalVotes)', formatCurrency(totalVotes), totalVotes);
-
   const disableCastVotes = totalVotes > 100;
 
   return (
@@ -155,25 +153,27 @@ export default function ssVotes() {
           }}
           className={['g-flex', 'g-flex--align-center'].join(' ')}>
           <div
-            className={[classes.infoSection, classes[`infoSection--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--no-wrap'].join(' ')}>
-            <Typography
-              style={{
-                fontWeight: 400,
-                fontSize: 18,
-                color: appTheme === 'dark' ? '#ffffff' : '#5688A5',
-                whiteSpace: 'nowrap',
-              }}>
-              Voting Power Used:
-            </Typography>
+            className={[classes.infoSection, classes[`infoSection--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--no-wrap', 'g-flex--space-between'].join(' ')}>
+            <div className={['g-flex', 'g-flex--align-center'].join(' ')}>
+              <Typography
+                style={{
+                  fontWeight: 400,
+                  fontSize: 18,
+                  color: appTheme === 'dark' ? '#ffffff' : '#5688A5',
+                  whiteSpace: 'nowrap',
+                }}>
+                Voting Power Used:
+              </Typography>
 
-            <Typography
-              className={[
-                `${BigNumber(totalVotes).gt(100) ? classes.errorText : classes.helpText}`,
-                noTokenSelected ? classes.infoSectionPercentDisabled : ''
-              ].join(' ')}
-            >
-              {formatCurrency(totalVotes)}%
-            </Typography>
+              <Typography
+                className={[
+                  `${BigNumber(totalVotes).gt(100) ? classes.errorText : classes.helpText}`,
+                  noTokenSelected ? classes.infoSectionPercentDisabled : ''
+                ].join(' ')}
+              >
+                {formatCurrency(totalVotes)}%
+              </Typography>
+            </div>
 
             <Button
               className={[

@@ -7,6 +7,14 @@
     color: #ffffff !important;
 }
 
+.homePage--dark .layoutPromoSocialsLink a {
+    background: #5F7285;
+}
+
+.homePage--dark .layoutPromoDescriptionItem {
+    color: #4CADE6;
+}
+
 .container {
     max-width: 960px;
     margin-left: auto;

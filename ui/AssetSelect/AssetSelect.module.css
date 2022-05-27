@@ -7,6 +7,11 @@
   cursor: pointer;
 }
 
+.displaySelectContainerMedium {
+  padding: 44px 20px 20px;
+  cursor: pointer;
+}
+
 .displaySelectContainerSmall {
   padding: 0;
   margin-left: 10px;
@@ -151,6 +156,9 @@
   font-weight: 400 !important;
   font-size: 14px !important;
   line-height: 120% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  padding-right: 20px !important;
 }
 
 .assetSelectActions {

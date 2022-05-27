@@ -70,7 +70,6 @@ function Setup() {
     };
 
     const quoteReturned = (val) => {
-
       if (!val) {
         setQuoteLoading(false);
         setQuote(null);
@@ -493,7 +492,8 @@ function Setup() {
 
           <Typography
             className={[classes.inputBalanceText, 'g-flex__item'].join(' ')}
-            noWrap>
+            noWrap
+            onClick={() => setBalance100()}>
             <span>
               {(assetValue && assetValue.balance) ?
                 ' ' + formatCurrency(assetValue.balance) :

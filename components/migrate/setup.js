@@ -34,7 +34,7 @@ export default function Setup() {
   const forceUpdate = React.useCallback(() => updateState({}), []);
   const { appTheme } = useAppThemeContext();
   const [isStable, toggleStablePool] = useState(false);
-  const [toggleArrow, setToggleArrow] = useState(false);
+  const [toggleArrow, setToggleArrow] = useState(true);
   const [pairDetails, setPairDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("");
@@ -80,7 +80,7 @@ export default function Setup() {
           pairDetails.token1
         );
       }
-    } 
+    }
   };
 
   function ValueLabelComponent(props) {
@@ -114,7 +114,7 @@ export default function Setup() {
         } else {
           const factoryContract = new web3.eth.Contract(
             FactoryAbi,
-            platform.value
+            platform.value,
           );
           const pairAddress = await factoryContract.methods
             .getPair(token0, token1)
@@ -122,11 +122,11 @@ export default function Setup() {
           if (pairAddress !== "0x0000000000000000000000000000000000000000") {
             const pairContract = new web3.eth.Contract(
               pairContractAbi,
-              pairAddress
+              pairAddress,
             );
 
             const migrator = migrate.find(
-              (eachMigrate) => eachMigrate == platform
+              (eachMigrate) => eachMigrate == platform,
             );
             let [
               getReserves,
@@ -141,7 +141,7 @@ export default function Setup() {
               pairContract.methods.symbol(),
               pairContract.methods.allowance(
                 account.address,
-                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
+                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID],
               ),
               pairContract.methods.totalSupply(),
               pairContract.methods.balanceOf(account.address),
@@ -151,11 +151,11 @@ export default function Setup() {
 
             const token0Contract = new web3.eth.Contract(
               pairContractAbi,
-              token0Add
+              token0Add,
             );
             const token1Contract = new web3.eth.Contract(
               pairContractAbi,
-              token1Add
+              token1Add,
             );
             let [token0symbol, token1symbol, decimal0, decimal1] =
               await multicall.aggregate([
@@ -167,7 +167,7 @@ export default function Setup() {
 
             let totalSupply = web3.utils.fromWei(
               getTotalSupply.toString(),
-              "ether"
+              "ether",
             );
             lpBalance = web3.utils.fromWei(lpBalance.toString(), "ether");
 
@@ -452,7 +452,7 @@ am = pairDetails.lpBalance
       .call();
     res = { res, token0: token0, token1: token1 };
     setQuote(res);
-    
+
   };
   const checkPair = async (fromAssetValue, toAssetValue, isStable) => {
     const web3 = await stores.accountStore.getWeb3Provider();
@@ -476,7 +476,7 @@ am = pairDetails.lpBalance
     const pair = await stores.stableSwapStore.getPair(
       fromAssetValue,
       toAssetValue,
-      isStable
+      isStable,
     );
 
     if (pair != null) {
@@ -557,13 +557,13 @@ am = pairDetails.lpBalance
           const baseAsset = await stores.stableSwapStore.getBaseAsset(
             event.target.value,
             true,
-            true
+            true,
           );
         }
 
         return () => { };
       },
-      [search]
+      [search],
     );
 
     const onSearchChanged = async (event) => {
@@ -583,8 +583,8 @@ am = pairDetails.lpBalance
         >
           <div
             style={{
-              position: "relative",
-              height: "100%",
+              position: 'relative',
+              height: '100%',
             }}
             className={["g-flex__item", "g-flex", "g-flex--align-center"].join(
               " "
@@ -954,16 +954,8 @@ am = pairDetails.lpBalance
 
           {pairDetails && pairDetails.isValid && (
             <>
-              <div
-                className={["g-flex"].join(" ")}
-                style={{
-                  width: "100%",
-                  marginTop: 20,
-                }}
-              >
-                <div
-                  className={["g-flex-column", "g-flex__item-fixed"].join(" ")}
-                >
+              <div className={['g-flex'].join(" ")} style={{width: '100%', marginTop: 20}}>
+                <div className={['g-flex-column', 'g-flex__item-fixed'].join(' ')}>
                   <div
                     className={[
                       classes.liqHeader,
@@ -1301,7 +1293,7 @@ am = pairDetails.lpBalance
                 parseFloat(amount) <= 0 ||
                 amount == null ||
                 amount == "" ||
-                isNaN(amount)) 
+                isNaN(amount))
                 ? (
                 dystopiaPair ? (
                   <div>

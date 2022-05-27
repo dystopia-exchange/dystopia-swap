@@ -488,7 +488,7 @@ const useStyles = makeStyles({
     ["@media (max-width:660px)"]: {
       position: 'absolute',
       right: 0,
-      top: 60,
+      top: 63,
     },
   },
   myDeposits: {
@@ -528,6 +528,7 @@ const useStyles = makeStyles({
   toolbar: {
     marginBottom: 30,
     padding: 0,
+    minHeight: 'auto',
     ["@media (max-width:660px)"]: {
       paddingBottom: 40,
     },
@@ -754,7 +755,7 @@ const useStyles = makeStyles({
   },
   sortSelect: {
     position: 'absolute',
-    top: 60,
+    top: 63,
     ["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       width: '60%',
@@ -784,6 +785,9 @@ const useStyles = makeStyles({
     borderRadius: 0,
     overflow: 'hidden',
   },
+  displayedRows: {
+    fontSize: 12,
+  }
 });
 
 const getLocalToggles = () => {
@@ -1997,6 +2001,8 @@ export default function EnhancedTable({pairs, isLoading}) {
               count={filteredPairs.length}
               rowsPerPage={rowsPerPage}
               page={page}
+              labelRowsPerPage={window.innerWidth < 550 ? null : 'Rows per page:'}
+              rowsPerPageOptions={window.innerWidth < 435 ? [] : [5, 10, 25]}
               ActionsComponent={TablePaginationActions}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
@@ -2398,6 +2404,31 @@ export default function EnhancedTable({pairs, isLoading}) {
               );
             })
           }
+          <TablePagination
+              className={'g-flex-column__item-fixed'}
+              style={{
+                width: '100%',
+                marginTop: 20,
+                padding: '0 30px',
+                background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
+                border: '1px solid #86B9D6',
+                borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
+                borderRadius: 100,
+                color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+              }}
+              classes={{
+                displayedRows: classes.displayedRows,
+              }}
+              component="div"
+              count={filteredPairs.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              labelRowsPerPage={window.innerWidth < 550 ? null : 'Rows per page:'}
+              rowsPerPageOptions={window.innerWidth < 435 ? [] : [5, 10, 25]}
+              ActionsComponent={TablePaginationActions}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
         </div>
       }
     </div>

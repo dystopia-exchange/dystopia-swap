@@ -567,6 +567,10 @@ const useStyles = makeStyles((theme) => {
     sortSelect: {
       position: 'absolute',
       top: 125,
+      ["@media (max-width:660px)"]: {
+        // eslint-disable-line no-useless-computed-key
+        top: 145,
+      },
     },
     accordionSummaryContent: {
       margin: 0,
@@ -786,6 +790,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
     setTableHeight(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
     setWindowWidth(window.innerWidth);
   });
+
+  console.log('window.innerWidth',window.innerWidth)
 
   return (
     <>
@@ -1084,7 +1090,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
               borderRadius: 100,
               color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
             }}
-            rowsPerPageOptions={[5, 10, 25]}
+            labelRowsPerPage={window.innerWidth < 550 ? '' : 'Rows per page:'}
+            rowsPerPageOptions={window.innerWidth < 435 ? [] : [5, 10, 25]}
             component="div"
             count={gauges.length}
             rowsPerPage={rowsPerPage}
@@ -1097,13 +1104,11 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
       }
 
 
-      {windowWidth <= 660 &&
+      {windowWidth <= 660 && (
+        <>
         <div className={classes.sortSelect}>
           {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
         </div>
-      }
-
-      {windowWidth <= 660 &&
         <div style={{
           overflow: 'auto',
           marginTop: 100,
@@ -1583,7 +1588,30 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
             })
           }
         </div>
-      }
+        <TablePagination
+            className={'g-flex-column__item-fixed'}
+            style={{
+              width: '100%',
+              padding: '0 30px',
+              background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
+              border: '1px solid #86B9D6',
+              borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
+              borderRadius: 100,
+              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+              marginBottom: 40,
+            }}
+            component="div"
+            count={gauges.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            labelRowsPerPage={window.innerWidth < 550 ? null : 'Rows per page:'}
+            rowsPerPageOptions={window.innerWidth < 435 ? [] : [5, 10, 25]}
+            ActionsComponent={TablePaginationActions}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </>
+      )}
     </>
   );
 }
