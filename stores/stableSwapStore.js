@@ -1352,43 +1352,6 @@ class Store {
                   Number(totalVolumeInUsdInReserve0) +
                   Number(totalVolumeInUsdInReserve1);
                 pair.tvl = Number(totalVolumeInUsd);
-                if(pair.token0.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb' || pair.token1.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb'){
-                  let
-                  if(pair.token0.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb'){
-                   a = await axios.get(
-                    `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token1.address}&vs_currencies=usd`
-                  );
-                  const totalVolumeInUsdInReserve1 = BigNumber(
-                    pair.reserve1
-                  ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
-    
-                }
-                  else{
-                     a = await axios.get(
-                      `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address}&vs_currencies=usd`
-                    );
-                    const totalVolumeInUsdInReserve0 = BigNumber(
-                      pair.reserve0
-                    ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
-      
-                    const totalVolumeInUsdInReserve1 = BigNumber(
-                      pair.reserve1
-                    ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
-      
-                  }
-                  const totalVolumeInUsdInReserve0 = BigNumber(
-                    pair.reserve0
-                  ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
-    
-                  const totalVolumeInUsdInReserve1 = BigNumber(
-                    pair.reserve1
-                  ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
-    
-                  const totalVolumeInUsd =
-                    Number(totalVolumeInUsdInReserve0) +
-                    Number(totalVolumeInUsdInReserve1);
-                  pair.tvl = Number(totalVolumeInUsd);
-                }
             return pair;
           } catch (ex) {
             console.log("EXCEPTION 1");
