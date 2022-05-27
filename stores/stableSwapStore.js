@@ -1337,21 +1337,65 @@ class Store {
                     .div(10 ** parseInt(pair.token1.decimals))
                     .toFixed(parseInt(pair.token1.decimals))
                 : 0;
-                const a = await axios.get(
-                  `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
-                );
-                const totalVolumeInUsdInReserve0 = BigNumber(
-                  pair.reserve0
-                ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
-  
-                const totalVolumeInUsdInReserve1 = BigNumber(
-                  pair.reserve1
-                ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
-  
-                const totalVolumeInUsd =
-                  Number(totalVolumeInUsdInReserve0) +
-                  Number(totalVolumeInUsdInReserve1);
-                pair.tvl = Number(totalVolumeInUsd);
+               
+                if(pair.token0.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb' || pair.token1.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb'){
+                  let a,b,totalVolumeInUsdInReserve1,totalVolumeInUsdInReserve0;
+                  if(pair.token0.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb'){
+
+                 
+
+                  b = await axios.get('https://api.dexscreener.io/latest/dex/pairs/polygon/0x1e08a5b6a1694bc1a65395db6f4c506498daa349')
+                  console.log(b,b.data.pair.priceUsd,"hello1")
+                  totalVolumeInUsdInReserve0 = BigNumber(
+                    pair.reserve0
+                  ).multipliedBy(BigNumber(b.data.pair.priceUsd)); 
+                  console.log(b.data.pair.priceUsd,b,"hello2")
+                   a = await axios.get(
+                    `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token1.address}&vs_currencies=usd`
+                  );
+                  totalVolumeInUsdInReserve1 = BigNumber(
+                    pair.reserve1
+                  ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
+                  }
+                  else{
+                     a = await axios.get(
+                      `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address}&vs_currencies=usd`
+                    );
+                     totalVolumeInUsdInReserve0 = BigNumber(
+                      pair.reserve0
+                    ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
+
+                    b = await axios.get('https://api.dexscreener.io/latest/dex/pairs/polygon/0x1e08a5b6a1694bc1a65395db6f4c506498daa349')
+                  totalVolumeInUsdInReserve1 = BigNumber(
+                    pair.reserve1
+                  ).multipliedBy(BigNumber(b.data.pair.priceUsd)); 
+
+                  }
+                  
+    
+                  const totalVolumeInUsd =
+                    Number(totalVolumeInUsdInReserve0) +
+                    Number(totalVolumeInUsdInReserve1);
+                  pair.tvl = Number(totalVolumeInUsd);
+                 
+                }
+                else{
+                  const a = await axios.get(
+                    `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
+                  );
+                  const totalVolumeInUsdInReserve0 = BigNumber(
+                    pair.reserve0
+                  ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
+    
+                  const totalVolumeInUsdInReserve1 = BigNumber(
+                    pair.reserve1
+                  ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
+    
+                  const totalVolumeInUsd =
+                    Number(totalVolumeInUsdInReserve0) +
+                    Number(totalVolumeInUsdInReserve1);
+                  pair.tvl = Number(totalVolumeInUsd);
+                }
             return pair;
           } catch (ex) {
             console.log("EXCEPTION 1");
@@ -1489,33 +1533,91 @@ class Store {
                       .div(parseInt(totalWeight))
                       .toFixed(2)
                   : 0;
-                  const a = await axios.get(
-                    `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
-                  );
-                  const totalVolumeInUsdInReserve0 = BigNumber(
-                    pair.gauge.reserve0
-                  ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
-    
-                  const totalVolumeInUsdInReserve1 = BigNumber(
-                    pair.gauge.reserve1
-                  ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
-    
-                  const totalVolumeInUsd =
-                    Number(totalVolumeInUsdInReserve0) +
-                    Number(totalVolumeInUsdInReserve1);
-                  const secondsPerYear = 31622400;
-                  const valuePerYear = new BigNumber(secondsPerYear)
-                    .times(rewardRate)
-                    .div(10 ** 18);
-                  
-                  
-                  const apr = new BigNumber(valuePerYear)
-                    .div(Number(totalVolumeInUsd))
-                    .div(10 ** 18)
-                    .times(100)
-                    .toFixed(4);
-    
-                  pair.gauge.apr = apr;    
+              
+                  if(pair.token0.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb' || pair.token1.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb'){
+                    let a,b,totalVolumeInUsdInReserve1,totalVolumeInUsdInReserve0;
+                    
+                    if(pair.token0.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb'){
+
+                    b = await axios.get('https://api.dexscreener.io/latest/dex/pairs/polygon/0x1e08a5b6a1694bc1a65395db6f4c506498daa349')
+                    console.log(b,"hello")
+                    totalVolumeInUsdInReserve0 = BigNumber(
+                      pair.gauge.reserve0
+                    ).multipliedBy(BigNumber(b.data.pair.priceUsd)); 
+                   
+                     a = await axios.get(
+                      `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token1.address}&vs_currencies=usd`
+                    );
+                    totalVolumeInUsdInReserve1 = BigNumber(
+                      pair.gauge.reserve1
+                    ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
+                    }
+                    else{
+                       a = await axios.get(
+                        `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address}&vs_currencies=usd`
+                      );
+                       totalVolumeInUsdInReserve0 = BigNumber(
+                        pair.gauge.reserve0
+                      ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
+  
+                      b = await axios.get('https://api.dexscreener.io/latest/dex/pairs/polygon/0x1e08a5b6a1694bc1a65395db6f4c506498daa349')
+                    totalVolumeInUsdInReserve1 = BigNumber(
+                      pair.gauge.reserve1
+                    ).multipliedBy(BigNumber(b.data.pair.priceUsd)); 
+  
+                    }
+                    
+      
+                    const totalVolumeInUsd =
+                      Number(totalVolumeInUsdInReserve0) +
+                      Number(totalVolumeInUsdInReserve1);
+                      const secondsPerYear = 31622400;
+                      const valuePerYear = new BigNumber(secondsPerYear)
+                        .times(rewardRate)
+                        .div(10 ** 18);
+                      
+                      
+                      const apr = new BigNumber(valuePerYear)
+                        .div(Number(totalVolumeInUsd))
+                        .div(10 ** 18)
+                        .times(100)
+                        .toFixed(4);
+        
+                      pair.gauge.apr = apr; 
+                   
+                  }
+                  else{
+                    const a = await axios.get(
+                      `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
+                    );
+                    const totalVolumeInUsdInReserve0 = BigNumber(
+                      pair.gauge.reserve0
+                    ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
+      
+                    const totalVolumeInUsdInReserve1 = BigNumber(
+                      pair.gauge.reserve1
+                    ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
+      
+                    const totalVolumeInUsd =
+                      Number(totalVolumeInUsdInReserve0) +
+                      Number(totalVolumeInUsdInReserve1);
+                      
+                    const secondsPerYear = 31622400;
+                    const valuePerYear = new BigNumber(secondsPerYear)
+                      .times(rewardRate)
+                      .div(10 ** 18);
+                    
+                    
+                    const apr = new BigNumber(valuePerYear)
+                      .div(Number(totalVolumeInUsd))
+                      .div(10 ** 18)
+                      .times(100)
+                      .toFixed(4);
+      
+                    pair.gauge.apr = apr; 
+                  }
+                
+                    
             }
 
             return pair;
@@ -4107,6 +4209,7 @@ class Store {
       const routeAssets = this.getStore("routeAssets");
 
       const { fromAsset, toAsset, fromAmount } = payload.content;
+      console.log(fromAsset, toAsset,fromAmount,"hello")
 
       const routerContract = new web3.eth.Contract(
         CONTRACTS.ROUTER_ABI,
