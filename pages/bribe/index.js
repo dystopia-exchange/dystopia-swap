@@ -63,7 +63,7 @@ function Bribes({ changeTheme }) {
           <BalanceIcon className={ classes.overviewIcon } />
            <Typography className={classes.mainHeadingNC} variant='h1'>Bribes</Typography>
            <Typography className={[classes.mainDescNC, classes[`mainDescNC--${appTheme}`]].join(' ')} variant='body2'>
-             Use your veDyst to vote for your selected pool’s rewards distribution or create a bribe to encourage others to do the same.
+             Use your veDYST to vote for your selected pool’s rewards distribution or create a bribe to encourage others to do the same.
            </Typography>
            <Button
              disableElevation

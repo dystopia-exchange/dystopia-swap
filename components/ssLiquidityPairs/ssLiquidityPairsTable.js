@@ -488,7 +488,7 @@ const useStyles = makeStyles({
     ["@media (max-width:660px)"]: {
       position: 'absolute',
       right: 0,
-      top: 60,
+      top: 63,
     },
   },
   myDeposits: {
@@ -755,7 +755,7 @@ const useStyles = makeStyles({
   },
   sortSelect: {
     position: 'absolute',
-    top: 60,
+    top: 63,
     ["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       width: '60%',
@@ -1588,7 +1588,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                                 }}
                                 align="right">
-                                {(row && row.gauge && row.gauge.balance && row.gauge.totalSupply) &&
+                               
                                   <div
                                     style={{
                                       display: 'flex',
@@ -1609,7 +1609,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                           lineHeight: '120%',
                                           color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                         }}>
-                                        {formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve0))}
+                                        {(row && row.gauge && row.gauge.balance && row.gauge.totalSupply)?formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve0)):"0.00"}
                                       </Typography>
 
                                       <Typography
@@ -1620,7 +1620,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                           lineHeight: '120%',
                                           color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                         }}>
-                                        {formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve1))}
+                                        {(row && row.gauge && row.gauge.balance && row.gauge.totalSupply)?formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve1)):"0.00"}
                                       </Typography>
                                     </div>
 
@@ -1655,8 +1655,8 @@ export default function EnhancedTable({pairs, isLoading}) {
                                       </Typography>
                                     </div>
                                   </div>
-                                }
-                                {!(row && row.gauge && row.gauge.balance && row.gauge.totalSupply) &&
+                                
+                                {/* {!(row && row.gauge && row.gauge.balance && row.gauge.totalSupply) &&
                                   <div
                                     className={classes.inlineEnd}
                                     style={{
@@ -1674,7 +1674,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                         marginBottom: '1px',
                                       }}/>
                                   </div>
-                                }
+                                } */}
                               </TableCell>
                             }
 

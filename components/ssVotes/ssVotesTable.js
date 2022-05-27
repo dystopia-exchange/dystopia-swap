@@ -200,20 +200,18 @@ const headCells = [
     isSticky: true,
     isHideInDetails: true,
   },
-  // {
-  //   id: 'tvl',
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: 'TVL',
-  //   isHideInDetails: true,
-  // },
-  // {
-  //   id: 'apr',
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: 'APR %',
-  //   isHideInDetails: true,
-  // },
+  {
+    id: 'tvl',
+    numeric: true,
+    disablePadding: false,
+    label: 'TVL',
+  },
+  {
+    id: 'apr',
+    numeric: true,
+    disablePadding: false,
+    label: 'APR %',
+  },
   {
     id: 'balance',
     numeric: true,
@@ -900,7 +898,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                             </div>
                           </div>
                         </StickyTableCell>
-                        {/* <TableCell
+                        <TableCell
                           className={classes.cell}
                           align="right"
                           style={{
@@ -936,7 +934,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               null
                             )
                           }
-                        </TableCell> */}
+                        </TableCell>
                         <TableCell
                           className={classes.cell}
                           align="right"
@@ -948,8 +946,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           }}>
                           {
                             tableCellContent(
-                              formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.reserve0)),
-                              formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.reserve1)),
+                              formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.gauge?.reserve0)),
+                              formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.gauge?.reserve1)),
                               row.token0.symbol,
                               row.token1.symbol,
                             )
@@ -1491,20 +1489,23 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                       whiteSpace: 'nowrap',
                                     }}>
-                                    {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.reserve0))}
+                                    {headCell.id === 'tvl' && `${(numeral(BigNumber(row?.tvl).toLocaleString()).format('($ 0a)'))} `}
+                                    {headCell.id === 'apr' && `${formatCurrency(BigNumber(row?.gauge?.apr))} %`}
+                                    {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.gauge?.reserve0))}
                                     {headCell.id === 'liquidity' && formatCurrency(BigNumber(row?.reserve0))}
                                     {headCell.id === 'apy' && row?.gaugebribes.length ? (
                                         row?.gaugebribes.map((bribe, idx) => {
                                           return (
-                                            <>
+                                            <div className={['g-flex-column', 'g-flex--align-end'].join(' ')}>
                                               {
                                                 formatCurrency(bribe.rewardAmount)
                                               }
-                                            </>
+                                            </div>
                                           );
                                         })
                                       )
                                       : null}
+                                    
                                     {headCell.id === 'myVotes' && formatCurrency(BigNumber(sliderValue).div(100).times(token?.lockValue))}
                                   </Typography>
 
@@ -1517,7 +1518,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                       whiteSpace: 'nowrap',
                                     }}>
-                                    {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.reserve1))}
+                                   
+                                    {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.gauge?.reserve1))}
                                     {headCell.id === 'liquidity' && formatCurrency(BigNumber(row?.reserve1))}
                                     {headCell.id === 'apy' && ''}
                                     {headCell.id === 'myVotes' && `${formatCurrency(sliderValue)} %`}
@@ -1540,16 +1542,18 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
+                                    {headCell.id === 'tvl' && ""}
+                                    {headCell.id === 'apr' && ""}
                                     {headCell.id === 'balance' && formatSymbol(row.token0.symbol)}
                                     {headCell.id === 'liquidity' && formatSymbol(row.token0.symbol)}
                                     {headCell.id === 'apy' && row?.gaugebribes.length ? (
                                         row?.gaugebribes.map((bribe, idx) => {
                                           return (
-                                            <>
+                                            <div className={['g-flex-column', 'g-flex--align-end'].join(' ')}>
                                               {
                                                 formatSymbol(bribe.symbol)
                                               }
-                                            </>
+                                            </div>
                                           );
                                         })
                                       )
@@ -1565,6 +1569,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
+                                      
                                     {headCell.id === 'balance' && formatSymbol(row.token1.symbol)}
                                     {headCell.id === 'liquidity' && formatSymbol(row.token1.symbol)}
                                     {headCell.id === 'apy' && ''}

@@ -1070,6 +1070,7 @@ class Store {
           }
         }
       }
+      console.log(baseAssets);
       let localBaseAssets = this.getLocalAssets();
 
       return [...baseAssets, ...localBaseAssets];
@@ -1099,13 +1100,34 @@ class Store {
     try {
       const response = await client.query(queryone).toPromise();
       const pairsCall = response;
-      return pairsCall.data.pairs;
+      const find = "miMATIC";
+      const regex = new RegExp(find, "g");
+      const regex1 = new RegExp("miMATIC", "g");
+      let pairsCall2;
+      try {
+        pairsCall2 = pairsCall.data.pairs.map((object) => {
+          const obj = object;
+          obj.name = obj?.name.replace(regex1, "MAI");
+          obj.symbol = obj?.symbol.replace(regex1, "MAI");
+          obj.token0.name = obj?.token0?.name?.replace(regex, "MAI");
+          obj.token0.symbol = obj?.token0?.symbol?.replace(regex, "MAI");
+          obj.token1.name = obj?.token1?.name?.replace(regex, "MAI");
+          obj.token1.symbol = obj?.token1?.symbol?.replace(regex, "MAI");
+          obj.token0.name = obj?.token0?.name?.replace(regex1, "MAI");
+          obj.token0.symbol = obj?.token0?.symbol?.replace(regex1, "MAI");
+          obj.token1.name = obj?.token1?.name?.replace(regex1, "MAI");
+          obj.token1.symbol = obj?.token1?.symbol?.replace(regex1, "MAI");
+          return obj;
+        });
+      } catch (e) {
+        console.log(e, "res");
+      }
+      return pairsCall2;
     } catch (ex) {
       console.log(ex);
       return [];
     }
   };
-
   _getGovTokenBase = () => {
     return {
       address: CONTRACTS.GOV_TOKEN_ADDRESS,
@@ -1315,17 +1337,6 @@ class Store {
                     .div(10 ** parseInt(pair.token1.decimals))
                     .toFixed(parseInt(pair.token1.decimals))
                 : 0;
-            const totalVolumeInUsdInReserve0 = BigNumber(
-              pair.reserve0
-            ).multipliedBy(BigNumber(pair.token0Price));
-            const totalVolumeInUsdInReserve1 = BigNumber(
-              pair.reserve1
-            ).multipliedBy(BigNumber(pair.token1Price));
-
-            const totalVolumeInUsd =
-              Number(totalVolumeInUsdInReserve0) +
-              Number(totalVolumeInUsdInReserve1);
-            pair.tvl = Number(totalVolumeInUsd);
 
             return pair;
           } catch (ex) {
@@ -1355,14 +1366,7 @@ class Store {
                   gaugesContract.methods.weights(pair.address),
                   gaugeContract.methods.rewardRate(CONTRACTS.REWARD_ADDRESS),
                 ]);
-              console.log(
-                pair.symbol,
-                totalSupply,
-                gaugeBalance,
-                gaugeWeight,
-                rewardRate,
-                "heyya"
-              );
+
               const bribeContract = new web3.eth.Contract(
                 CONTRACTS.BRIBE_ABI,
                 pair.gauge.bribeAddress
@@ -1440,25 +1444,24 @@ class Store {
                       .div(10 ** 18)
                       .toFixed(18)
                   : 0;
-              pair.gauge.apr = BigNumber(parseInt(rewardRate))
-                .div(pair.tvl)
-                .div(10 ** 18)
-                .toFixed(18);
+              
               pair.gauge.reserve0 =
-              parseFloat(pair.totalSupply) > 0
-                  ? parseFloat(BigNumber(parseFloat(pair.reserve0))
-                      .times(parseFloat(pair.gauge.totalSupply))
-                      .div(parseFloat(pair.totalSupply)))
-                      .toFixed(parseInt(pair.token0.decimals))
+                parseFloat(pair.totalSupply) > 0
+                  ? parseFloat(
+                      BigNumber(parseFloat(pair.reserve0))
+                        .times(parseFloat(pair.gauge.totalSupply))
+                        .div(parseFloat(pair.totalSupply))
+                    ).toFixed(parseInt(pair.token0.decimals))
                   : "0";
               pair.gauge.reserve1 =
-              parseFloat(pair.totalSupply) > 0
-                  ? parseFloat(BigNumber(parseFloat(pair.reserve1))
-                  .times(parseFloat(pair.gauge.totalSupply))
-                  .div(parseFloat(pair.totalSupply)))
-                  .toFixed(parseInt(pair.token1.decimals))
+                parseFloat(pair.totalSupply) > 0
+                  ? parseFloat(
+                      BigNumber(parseFloat(pair.reserve1))
+                        .times(parseFloat(pair.gauge.totalSupply))
+                        .div(parseFloat(pair.totalSupply))
+                    ).toFixed(parseInt(pair.token1.decimals))
                   : "0";
-                 
+
               pair.gauge.weight =
                 parseInt(gaugeWeight) != 0
                   ? BigNumber(parseInt(gaugeWeight))
@@ -1472,13 +1475,38 @@ class Store {
                       .div(parseInt(totalWeight))
                       .toFixed(2)
                   : 0;
+                  const a = await axios.get(
+                    `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
+                  );
+                  const totalVolumeInUsdInReserve0 = BigNumber(
+                    pair.gauge.reserve0
+                  ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
+    
+                  const totalVolumeInUsdInReserve1 = BigNumber(
+                    pair.gauge.reserve1
+                  ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
+    
+                  const totalVolumeInUsd =
+                    Number(totalVolumeInUsdInReserve0) +
+                    Number(totalVolumeInUsdInReserve1);
+                  pair.tvl = Number(totalVolumeInUsd);
+                  const secondsPerYear = 31622400;
+                  const valuePerYear = new BigNumber(secondsPerYear)
+                    .times(rewardRate)
+                    .div(10 ** 18);
+                  
+                  
+                  const apr = new BigNumber(valuePerYear)
+                    .div(pair.tvl)
+                    .div(10 ** 18)
+                    .times(100)
+                    .toFixed(4);
+    
+                  pair.gauge.apr = apr;    
             }
 
             return pair;
           } catch (ex) {
-            console.log("EXCEPTION 2");
-            console.log(pair);
-            console.log(ex);
             return pair;
           }
         })
@@ -2078,7 +2106,7 @@ class Store {
         migratorAbi,
         migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
       );
-      const balanceInWei = web3.utils.toWei(amount);
+
       const now = new Date();
       const utcMilllisecondsSinceEpoch = now.getTime();
       const utcSecondsSinceEpoch = Math.round(
@@ -2090,9 +2118,9 @@ class Store {
         token0.address,
         token1.address,
         isStable,
-        balanceInWei,
-        1,
-        1,
+        amount,
+        0,
+        0,
         utcSecondsSinceEpoch,
       ];
       let sendValue = null;

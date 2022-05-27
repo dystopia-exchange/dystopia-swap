@@ -98,7 +98,7 @@ function Setup() {
       setFromAssetOptions(baseAsset);
 
       if (baseAsset.length > 0 && toAssetValue == null) {
-        setToAssetValue(baseAsset[0]);
+        setToAssetValue(baseAsset[2]);
       }
 
       if (baseAsset.length > 0 && fromAssetValue == null) {
@@ -493,7 +493,8 @@ function Setup() {
 
           <Typography
             className={[classes.inputBalanceText, 'g-flex__item'].join(' ')}
-            noWrap>
+            noWrap
+            onClick={() => setBalance100()}>
             <span>
               {(assetValue && assetValue.balance) ?
                 ' ' + formatCurrency(assetValue.balance) :
