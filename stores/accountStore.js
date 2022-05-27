@@ -65,61 +65,73 @@ class Store {
   }
 
   configure = async () => {
-    const provider = await detectProvider();
+    const provider = await detectProvider(); 
+
+    const walletConnectLocal = localStorage.getItem('walletconnect'); // fetch wallet connect data from local storage
+    const walletConnect = walletConnectLocal ? JSON.parse(walletConnectLocal) : null; //failsafe incase local storage is empty
+
     // this.getGasPrices();
-    injected.isAuthorized().then(async (isAuthorized) => {
+    if(provider) { // attempt to connect metamask
+      injected.isAuthorized().then(async (isAuthorized) => {
 
-      const { supportedChainIds } = injected;
-      // fall back to ethereum mainnet if chainId undefined
-      let providerChain = await provider.request({ method: 'eth_chainId' });
-      // const { chainId = process.env.NEXT_PUBLIC_CHAINID } = window.ethereum || {};
-      const { chainId = process.env.NEXT_PUBLIC_CHAINID } = { chainId: providerChain } || {};
-      const parsedChainId = parseInt(chainId, 16);
-      const isChainSupported = supportedChainIds.includes(parsedChainId);
-      if (!isChainSupported) {
-        this.setStore({ chainInvalid: true });
-        this.emitter.emit(ACTIONS.ACCOUNT_CHANGED);
-      }
+        const { supportedChainIds } = injected;
+        // fall back to ethereum mainnet if chainId undefined
+        let providerChain = await provider.request({ method: 'eth_chainId' });
+        // const { chainId = process.env.NEXT_PUBLIC_CHAINID } = window.ethereum || {};
+        const { chainId = process.env.NEXT_PUBLIC_CHAINID } = { chainId: providerChain } || {};
+        const parsedChainId = parseInt(chainId, 16);
+        const isChainSupported = supportedChainIds.includes(parsedChainId);
+        if (!isChainSupported) {
+          this.setStore({ chainInvalid: true });
+          this.emitter.emit(ACTIONS.ACCOUNT_CHANGED);
+        }
 
-      if (isAuthorized && isChainSupported) {
-        injected
-          .activate()
-          .then((a) => {
-            this.setStore({
-              account: { address: a.account },
-              web3context: { library: { provider: a.provider } }
+        if (isAuthorized && isChainSupported) {
+          injected
+            .activate()
+            .then((a) => {
+              this.setStore({
+                account: { address: a.account },
+                web3context: { library: { provider: a.provider } }
+              });
+              this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
+            })
+            .then(() => {
+              this.dispatcher.dispatch({
+                type: ACTIONS.CONFIGURE_SS,
+                content: { connected: true },
+              });
+            })
+            .catch((e) => {
+              this.emitter.emit(ACTIONS.ERROR, e);
+              this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
+
+              this.dispatcher.dispatch({
+                type: ACTIONS.CONFIGURE_SS,
+                content: { connected: false },
+              });
             });
-            this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
-          })
-          .then(() => {
-            this.dispatcher.dispatch({
-              type: ACTIONS.CONFIGURE_SS,
-              content: { connected: true },
-            });
-          })
-          .catch((e) => {
-            this.emitter.emit(ACTIONS.ERROR, e);
-            this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
-
-            this.dispatcher.dispatch({
-              type: ACTIONS.CONFIGURE_SS,
-              content: { connected: false },
-            });
-          });
-      } else {
-        //we can ignore if not authorized.
-        this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
-        this.emitter.emit(ACTIONS.CONFIGURED);
-      }
-    });
-
-    if (window.ethereum || provider) {
+        } else {
+          //we can ignore if not authorized.
+          this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
+          this.emitter.emit(ACTIONS.CONFIGURED);
+        }
+      });
+    }
+    
+    if(walletConnect?.peerId) { // confirm the peerId variable exists & connect via wallet connect
+      this.connectWalletConnect();
+      this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
+    }
+    
+    if (window.ethereum || provider || walletConnect?.peerId) {
       this.updateAccount();
     } else {
       window.removeEventListener('ethereum#initialized', this.updateAccount);
       window.addEventListener('ethereum#initialized', this.updateAccount, {
         once: true,
       });
+      this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED); // no provider detected. Finish configuration
     }
   };
 
