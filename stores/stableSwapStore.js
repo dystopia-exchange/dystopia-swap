@@ -1337,7 +1337,21 @@ class Store {
                     .div(10 ** parseInt(pair.token1.decimals))
                     .toFixed(parseInt(pair.token1.decimals))
                 : 0;
-
+                const a = await axios.get(
+                  `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
+                );
+                const totalVolumeInUsdInReserve0 = BigNumber(
+                  pair.reserve0
+                ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
+  
+                const totalVolumeInUsdInReserve1 = BigNumber(
+                  pair.reserve1
+                ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
+  
+                const totalVolumeInUsd =
+                  Number(totalVolumeInUsdInReserve0) +
+                  Number(totalVolumeInUsdInReserve1);
+                pair.tvl = Number(totalVolumeInUsd);
             return pair;
           } catch (ex) {
             console.log("EXCEPTION 1");
@@ -1489,7 +1503,6 @@ class Store {
                   const totalVolumeInUsd =
                     Number(totalVolumeInUsdInReserve0) +
                     Number(totalVolumeInUsdInReserve1);
-                  pair.tvl = Number(totalVolumeInUsd);
                   const secondsPerYear = 31622400;
                   const valuePerYear = new BigNumber(secondsPerYear)
                     .times(rewardRate)
@@ -1497,7 +1510,7 @@ class Store {
                   
                   
                   const apr = new BigNumber(valuePerYear)
-                    .div(pair.tvl)
+                    .div(Number(totalVolumeInUsd))
                     .div(10 ** 18)
                     .times(100)
                     .toFixed(4);
