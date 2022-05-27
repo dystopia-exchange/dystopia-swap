@@ -70,7 +70,6 @@ function Setup() {
     };
 
     const quoteReturned = (val) => {
-
       if (!val) {
         setQuoteLoading(false);
         setQuote(null);
