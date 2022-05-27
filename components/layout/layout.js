@@ -14,7 +14,7 @@ export default function Layout({
 }) {
   const { appTheme } = useAppThemeContext();
 
-  
+  const isHomePage = window.location.pathname === '/home'
 
   return (
     <>
@@ -36,13 +36,22 @@ export default function Layout({
         <meta name="og:title" content="Dystopia" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <div className={[classes.content, classes[`content--${appTheme}`], 'g-flex-column'].join(' ')}>
+      <div
+        className={[
+          classes.content,
+          classes[`content--${appTheme}`],
+          isHomePage ? classes[`homePage--${appTheme}`] : '',
+          'g-flex-column'
+        ].join(' ')}
+      >
         {!configure && (
           <Header backClicked={backClicked} changeTheme={changeTheme} title={ title } />
         )}
         <SnackbarController />
         <main className={[classes.main, 'g-flex-column__item', 'g-flex-column', 'g-scroll-y'].join(' ')}>
-          {children}
+          <div className={[classes.containerInner, 'g-flex-column'].join(' ')}>
+            {children}
+          </div>
         </main>
       </div>
     </>

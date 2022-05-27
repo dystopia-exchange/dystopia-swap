@@ -106,7 +106,7 @@ class Store {
       veToken: null,
       pairs: [],
       vestNFTs: [],
-      migratePair:[],
+      migratePair: [],
       rewards: {
         bribes: [],
         fees: [],
@@ -237,7 +237,7 @@ class Store {
           // migrate
           case ACTIONS.MIGRATE:
             this.migrate(payload);
-            break; 
+            break;
           default: {
           }
         }
@@ -251,7 +251,6 @@ class Store {
 
   setStore = (obj) => {
     this.store = { ...this.store, ...obj };
-    console.log(this.store);
     return this.emitter.emit(ACTIONS.STORE_UPDATED);
   };
 
@@ -1064,8 +1063,14 @@ class Store {
           ) {
             baseAssets[j].logoURI = response2.data[i].logoURI;
           }
+
+          if (baseAssets[j].name == "miMATIC") {
+            baseAssets[j].symbol = "MAI";
+            baseAssets[j].name = "MAI";
+          }
         }
       }
+      console.log(baseAssets);
       let localBaseAssets = this.getLocalAssets();
 
       return [...baseAssets, ...localBaseAssets];
@@ -1095,14 +1100,34 @@ class Store {
     try {
       const response = await client.query(queryone).toPromise();
       const pairsCall = response;
-      console.log(pairsCall, "response");
-      return pairsCall.data.pairs;
+      const find = "miMATIC";
+      const regex = new RegExp(find, "g");
+      const regex1 = new RegExp("miMATIC", "g");
+      let pairsCall2;
+      try {
+        pairsCall2 = pairsCall.data.pairs.map((object) => {
+          const obj = object;
+          obj.name = obj?.name.replace(regex1, "MAI");
+          obj.symbol = obj?.symbol.replace(regex1, "MAI");
+          obj.token0.name = obj?.token0?.name?.replace(regex, "MAI");
+          obj.token0.symbol = obj?.token0?.symbol?.replace(regex, "MAI");
+          obj.token1.name = obj?.token1?.name?.replace(regex, "MAI");
+          obj.token1.symbol = obj?.token1?.symbol?.replace(regex, "MAI");
+          obj.token0.name = obj?.token0?.name?.replace(regex1, "MAI");
+          obj.token0.symbol = obj?.token0?.symbol?.replace(regex1, "MAI");
+          obj.token1.name = obj?.token1?.name?.replace(regex1, "MAI");
+          obj.token1.symbol = obj?.token1?.symbol?.replace(regex1, "MAI");
+          return obj;
+        });
+      } catch (e) {
+        console.log(e, "res");
+      }
+      return pairsCall2;
     } catch (ex) {
       console.log(ex);
       return [];
     }
   };
-
   _getGovTokenBase = () => {
     return {
       address: CONTRACTS.GOV_TOKEN_ADDRESS,
@@ -1312,18 +1337,21 @@ class Store {
                     .div(10 ** parseInt(pair.token1.decimals))
                     .toFixed(parseInt(pair.token1.decimals))
                 : 0;
-            const totalVolumeInUsdInReserve0 = BigNumber(
-              pair.reserve0
-            ).multipliedBy(BigNumber(pair.token0Price));
-            const totalVolumeInUsdInReserve1 = BigNumber(
-              pair.reserve1
-            ).multipliedBy(BigNumber(pair.token1Price));
-
-            const totalVolumeInUsd =
-              Number(totalVolumeInUsdInReserve0) +
-              Number(totalVolumeInUsdInReserve1);
-            pair.tvl = Number(totalVolumeInUsd);
-
+                const a = await axios.get(
+                  `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
+                );
+                const totalVolumeInUsdInReserve0 = BigNumber(
+                  pair.reserve0
+                ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
+  
+                const totalVolumeInUsdInReserve1 = BigNumber(
+                  pair.reserve1
+                ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
+  
+                const totalVolumeInUsd =
+                  Number(totalVolumeInUsdInReserve0) +
+                  Number(totalVolumeInUsdInReserve1);
+                pair.tvl = Number(totalVolumeInUsd);
             return pair;
           } catch (ex) {
             console.log("EXCEPTION 1");
@@ -1344,10 +1372,7 @@ class Store {
                 CONTRACTS.GAUGE_ABI,
                 pair.gauge.address
               );
-              console.log(
-                pair.gauge.address,
-                "rewardRate2"
-              );
+
               const [totalSupply, gaugeBalance, gaugeWeight, rewardRate] =
                 await multicall.aggregate([
                   gaugeContract.methods.totalSupply(),
@@ -1355,13 +1380,7 @@ class Store {
                   gaugesContract.methods.weights(pair.address),
                   gaugeContract.methods.rewardRate(CONTRACTS.REWARD_ADDRESS),
                 ]);
-              console.log(
-                gaugeWeight,
-                rewardRate,
-                pair.tvl,
-                rewardRate / (pair.tvl * 10 ** 18),
-                "rewardRate"
-              );
+
               const bribeContract = new web3.eth.Contract(
                 CONTRACTS.BRIBE_ABI,
                 pair.gauge.bribeAddress
@@ -1439,26 +1458,24 @@ class Store {
                       .div(10 ** 18)
                       .toFixed(18)
                   : 0;
-              pair.gauge.apr =
-                BigNumber(parseInt(rewardRate))
-                      .div(pair.tvl)
-                      .div(10 ** 18)
-                      .toFixed(18)
-                  ;
+              
               pair.gauge.reserve0 =
-                parseInt(pair.totalSupply) > 0
-                  ? BigNumber(parseInt(pair.reserve0))
-                      .times(parseInt(pair.gauge.totalSupply))
-                      .div(parseInt(pair.totalSupply))
-                      .toFixed(parseInt(pair.token0.decimals))
+                parseFloat(pair.totalSupply) > 0
+                  ? parseFloat(
+                      BigNumber(parseFloat(pair.reserve0))
+                        .times(parseFloat(pair.gauge.totalSupply))
+                        .div(parseFloat(pair.totalSupply))
+                    ).toFixed(parseInt(pair.token0.decimals))
                   : "0";
               pair.gauge.reserve1 =
-                parseInt(pair.totalSupply) > 0
-                  ? BigNumber(parseInt(pair.reserve1))
-                      .times(parseInt(pair.gauge.totalSupply))
-                      .div(parseInt(pair.totalSupply))
-                      .toFixed(parseInt(pair.token1.decimals))
+                parseFloat(pair.totalSupply) > 0
+                  ? parseFloat(
+                      BigNumber(parseFloat(pair.reserve1))
+                        .times(parseFloat(pair.gauge.totalSupply))
+                        .div(parseFloat(pair.totalSupply))
+                    ).toFixed(parseInt(pair.token1.decimals))
                   : "0";
+
               pair.gauge.weight =
                 parseInt(gaugeWeight) != 0
                   ? BigNumber(parseInt(gaugeWeight))
@@ -1472,13 +1489,37 @@ class Store {
                       .div(parseInt(totalWeight))
                       .toFixed(2)
                   : 0;
+                  const a = await axios.get(
+                    `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
+                  );
+                  const totalVolumeInUsdInReserve0 = BigNumber(
+                    pair.gauge.reserve0
+                  ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
+    
+                  const totalVolumeInUsdInReserve1 = BigNumber(
+                    pair.gauge.reserve1
+                  ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
+    
+                  const totalVolumeInUsd =
+                    Number(totalVolumeInUsdInReserve0) +
+                    Number(totalVolumeInUsdInReserve1);
+                  const secondsPerYear = 31622400;
+                  const valuePerYear = new BigNumber(secondsPerYear)
+                    .times(rewardRate)
+                    .div(10 ** 18);
+                  
+                  
+                  const apr = new BigNumber(valuePerYear)
+                    .div(Number(totalVolumeInUsd))
+                    .div(10 ** 18)
+                    .times(100)
+                    .toFixed(4);
+    
+                  pair.gauge.apr = apr;    
             }
 
             return pair;
           } catch (ex) {
-            console.log("EXCEPTION 2");
-            console.log(pair);
-            console.log(ex);
             return pair;
           }
         })
@@ -1520,18 +1561,16 @@ class Store {
               CONTRACTS.ERC20_ABI,
               asset.address
             );
-            console.log(asset.address,assetContract,"balanceof")
             let bal = await web3.eth.getBalance(account.address);
             //rechange isWhitelisted!!
-            const [ balanceOf] = await Promise.all([
-            //  voterContract.methods.isWhitelisted(asset.address).call(),
+            const [balanceOf] = await Promise.all([
+              //  voterContract.methods.isWhitelisted(asset.address).call(),
               assetContract.methods.balanceOf(account.address).call(),
             ]);
-            console.log(asset.address,balanceOf,"balanceof")
             return {
               balanceOf,
               bal,
-              false:Boolean, //rechange isWhitelisted!!
+              false: Boolean, //rechange isWhitelisted!!
             };
           } catch (ex) {
             console.log("EXCEPTION 3 balanceof");
@@ -2050,8 +2089,6 @@ class Store {
     }
   };
 
- 
-
   migrate = async (payload) => {
     try {
       const context = this;
@@ -2078,13 +2115,11 @@ class Store {
         pairDetails,
       } = payload.content;
 
-      console.log(BigNumber(allowance).gt(amount),"supp")
-
       const migratorContract = new web3.eth.Contract(
         migratorAbi,
         migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
       );
-      const balanceInWei = web3.utils.toWei(amount);
+
       const now = new Date();
       const utcMilllisecondsSinceEpoch = now.getTime();
       const utcSecondsSinceEpoch = Math.round(
@@ -2096,9 +2131,9 @@ class Store {
         token0.address,
         token1.address,
         isStable,
-        balanceInWei,
-        1,
-        1,
+        amount,
+        0,
+        0,
         utcSecondsSinceEpoch,
       ];
       let sendValue = null;
@@ -2116,7 +2151,7 @@ class Store {
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let allowanceTXID = this.getTXUUID();
       let depositTXID = this.getTXUUID();
-      console.log(allowanceTXID)
+      console.log(allowanceTXID);
       this.emitter.emit(ACTIONS.TX_ADDED, {
         title: `Migrating liquidity pool for ${token0.symbol}/${token1.symbol}`,
         type: "Migrate Liquidity",
@@ -2134,24 +2169,21 @@ class Store {
           },
         ],
       });
-      console.log(BigNumber(allowance).gt(amount),"hi1")
       // CHECK ALLOWANCES AND SET TX DISPLAY
 
-        if (!BigNumber(allowance).gt(amount)) {
-          this.emitter.emit(ACTIONS.TX_STATUS, {
-            uuid: allowanceTXID,
-            description: `Allow the router to spend your ${pairDetails.symbol}`,
-          });
-          console.log(BigNumber(allowance).gt(amount),"hi2")
-        } else {
-          this.emitter.emit(ACTIONS.TX_STATUS, {
-            uuid: allowanceTXID,
-            description: `Allowance on ${pairDetails.symbol} sufficient`,
-            status: "DONE",
-          });
-          console.log(BigNumber(allowance).gt(amount),"hi3")
-        }
-      
+      if (!BigNumber(allowance).gt(amount)) {
+        this.emitter.emit(ACTIONS.TX_STATUS, {
+          uuid: allowanceTXID,
+          description: `Allow the router to spend your ${pairDetails.symbol}`,
+        });
+        console.log(BigNumber(allowance).gt(amount), "hi2");
+      } else {
+        this.emitter.emit(ACTIONS.TX_STATUS, {
+          uuid: allowanceTXID,
+          description: `Allowance on ${pairDetails.symbol} sufficient`,
+          status: "DONE",
+        });
+      }
 
       if (!BigNumber(allowance).gt(amount)) {
         const pairContract = new web3.eth.Contract(
@@ -2186,25 +2218,24 @@ class Store {
         allowanceCallsPromises.push(tokenPromise);
       }
       const done = await Promise.all(allowanceCallsPromises);
-       
-        this._callContractWait(
-          web3,
-          migratorContract,
-          func,
-          params,
-          account,
-          gasPrice,
-          null,
-          null,
-          depositTXID,
-          async (err) => {
-            if (err) {
-              return this.emitter.emit(ACTIONS.ERROR, err);
-            }
+
+      this._callContractWait(
+        web3,
+        migratorContract,
+        func,
+        params,
+        account,
+        gasPrice,
+        null,
+        null,
+        depositTXID,
+        async (err) => {
+          if (err) {
+            return this.emitter.emit(ACTIONS.ERROR, err);
           }
-        );
-      }
-     catch (ex) {
+        }
+      );
+    } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);
     }
@@ -4113,7 +4144,6 @@ class Store {
         );
       });
 
-      console.log(includesRouteAddress, routeAssets, "routeAssets");
       let amountOuts = [];
 
       if (includesRouteAddress.length === 0) {
@@ -4247,33 +4277,27 @@ class Store {
         return null;
       }
 
+      const libraryContract = new web3.eth.Contract(
+        CONTRACTS.LIBRARY_ABI,
+        CONTRACTS.LIBRARY_ADDRESS
+      );
       let totalRatio = 1;
 
       for (let i = 0; i < bestAmountOut.routes.length; i++) {
-        if (bestAmountOut.routes[i].stable == true) {
-        } else {
-          const reserves = await routerContract.methods
-            .getReserves(
-              bestAmountOut.routes[i].from,
-              bestAmountOut.routes[i].to,
-              bestAmountOut.routes[i].stable
-            )
-            .call();
-          let amountIn = 0;
-          let amountOut = 0;
-          if (i == 0) {
-            amountIn = sendFromAmount;
-            amountOut = bestAmountOut.receiveAmounts[i + 1];
-          } else {
-            amountIn = bestAmountOut.receiveAmounts[i];
-            amountOut = bestAmountOut.receiveAmounts[i + 1];
-          }
+        let amountIn = bestAmountOut.receiveAmounts[i];
+        let amountOut = bestAmountOut.receiveAmounts[i + 1];
 
-          const amIn = BigNumber(amountIn).div(reserves.reserveA);
-          const amOut = BigNumber(amountOut).div(reserves.reserveB);
-          const ratio = BigNumber(amOut).div(amIn);
-          totalRatio = BigNumber(totalRatio).times(ratio).toFixed(18);
-        }
+        const res = await libraryContract.methods
+          .getTradeDiff(
+            amountIn,
+            bestAmountOut.routes[i].from,
+            bestAmountOut.routes[i].to,
+            bestAmountOut.routes[i].stable
+          )
+          .call();
+
+        const ratio = BigNumber(res.b).div(res.a);
+        totalRatio = BigNumber(totalRatio).times(ratio).toFixed(18);
       }
 
       const priceImpact = BigNumber(1).minus(totalRatio).times(100).toFixed(18);
@@ -5124,10 +5148,10 @@ class Store {
 
       const multicall = await stores.accountStore.getMulticall();
       const calls = filteredPairs.map((pair) => {
-        let v = gaugesContract.methods.votes(tokenID, pair.address)
+        let v = gaugesContract.methods.votes(tokenID, pair.address);
         return v;
       });
-      
+
       const voteCounts = await multicall.aggregate(calls);
       let votes = [];
 
@@ -5137,18 +5161,17 @@ class Store {
           : BigNumber(acc).times(-1).toNumber(0);
         return BigNumber(curr).plus(num);
       }, 0);
-      let t=0
+      let t = 0;
       for (let i = 0; i < voteCounts.length; i++) {
-         t = t+parseInt(voteCounts[i])        
+        t = t + parseInt(voteCounts[i]);
       }
 
       for (let i = 0; i < voteCounts.length; i++) {
-
         votes.push({
           address: filteredPairs[i].address,
           votePercent:
             BigNumber(totalVotes).gt(0) || BigNumber(totalVotes).lt(0)
-              ? (voteCounts[i]/t)*100
+              ? (voteCounts[i] / t) * 100
               : "0",
         });
       }
@@ -5472,7 +5495,6 @@ class Store {
               });
             }
 
-            console.log(bribeTokens, "yeahhhhhh");
             bribeTokens.shift();
 
             const bribesEarned = await Promise.all(

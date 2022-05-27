@@ -4,7 +4,7 @@ import {
   CONTRACTS
 } from './constants';
 import Multicall from '@dopex-io/web3-multicall';
-
+import detectProvider from '@metamask/detect-provider'
 import {
   injected,
   walletconnect,
@@ -13,8 +13,6 @@ import {
 } from './connectors';
 
 import Web3 from 'web3'; 
-
-import detectProvider from '@metamask/detect-provider'
 
 class Store {
   constructor(dispatcher, emitter) {
@@ -122,6 +120,7 @@ class Store {
     if(walletConnect?.peerId) { // confirm the peerId variable exists & connect via wallet connect
       this.connectWalletConnect();
       this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
+      
     }
     
     if (window.ethereum || provider || walletConnect?.peerId) {
@@ -223,6 +222,10 @@ class Store {
         account: { address: provider.accounts[0] },
         web3context: { library: { provider: web3 }},
       });
+      this.emitter.emit(ACTIONS.ACCOUNT_CHANGED);
+      this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
+      this.emitter.emit(ACTIONS.CONFIGURED);
+
       return true;
 
     } catch(e) {
@@ -246,6 +249,25 @@ class Store {
     }
     return new Web3(provider);
   };
+  connectWalletConnect = async () => {
+    try {
+      const that = this;
+      const provider = that.getStore('connectorsByName')['WalletConnect'];
+      // const provider = connectorsByName[name];
+      await provider.enable();
+      const web3 = new Web3(provider);
+
+      that.setStore({
+        account: { address: provider.accounts[0] },
+        web3context: { library: { provider: web3 }},
+      });
+      return true;
+
+    } catch(e) {
+      console.log(e);
+      return false;
+    }
+  }
 
   getMulticall = async () => {
     const web3 = await this.getWeb3Provider()

@@ -152,7 +152,6 @@ async function onConnectionClicked(
 ) {
   const connectorsByName = stores.accountStore.getStore("connectorsByName");
   setActivatingConnector(currentConnector);
-
   if(name === 'WalletConnect') {
     try {
       let connected = await stores.accountStore.connectWalletConnect();

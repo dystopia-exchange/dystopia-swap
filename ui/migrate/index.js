@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Typography, Button, Paper, SvgIcon } from "@mui/material";
-import Gauges from '../../components/ssVotes';
+import React, { useEffect, useState } from 'react';
+// import Form from '../../ui/Form';
+import Setup from '../../components/migrate/setup';
+import classes from './migrate.module.css';
+import { Button, Paper, Typography } from '@mui/material';
 import Unlock from '../../components/unlock';
-import classes from './vote.module.css';
-
 import stores from '../../stores';
+import { useRouter } from 'next/router';
 import { ACTIONS } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import BtnEnterApp from '../../ui/BtnEnterApp';
 
-function Vote({ changeTheme }) {
+export default function Migrate() {
   const accountStore = stores.accountStore.getStore('account');
+  const router = useRouter();
   const [account, setAccount] = useState(accountStore);
   const [unlockOpen, setUnlockOpen] = useState(false);
 
@@ -72,18 +74,19 @@ function Vote({ changeTheme }) {
 
   return (
     <>
-      {account && account.address ?
-        <Gauges />
+      {account && account.address
+        ? <Setup/>
         :
         <Paper className={classes.notConnectedContent}>
           <div className={classes.contentFloat}>
             <Typography className={classes.contentFloatText}>
-              Vote
+              Migrate
             </Typography>
 
             <div className={[classes.mainDescBg, classes[`mainDescBg--${appTheme}`]].join(' ')}>
-              <Typography className={[classes.mainDescNC, classes[`mainDescNC--${appTheme}`]].join(' ')} variant="body2">
-                Use your veDYST to vote for your selected liquidity pair’s rewards distribution or create a bribe to encourage others to do the same.
+              <Typography className={[classes.mainDescNC, classes[`mainDescNC--${appTheme}`]].join(' ')}
+                          variant="body2">
+                Migrate your LP tokens.
               </Typography>
             </div>
 
@@ -101,10 +104,8 @@ function Vote({ changeTheme }) {
             </div>
           </div>
         </Paper>
-       }
-       {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
+      }
+      {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock}/>}
     </>
   );
 }
-
-export default Vote;

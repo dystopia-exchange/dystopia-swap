@@ -50,7 +50,7 @@ export default function SSLiquidityCreate() {
   const [ token, setToken ] = useState(null)
   const [ vestNFTs, setVestNFTs ] = useState([])
   const [ veToken, setVeToken ] = useState(null)
-  const [ advanced, setAdvanced ] = useState(false)
+  const [ advanced, setAdvanced ] = useState(true)
 
   const [ pair, setPair ] = useState(null)
 

@@ -98,7 +98,7 @@ function Setup() {
       setFromAssetOptions(baseAsset);
 
       if (baseAsset.length > 0 && toAssetValue == null) {
-        setToAssetValue(baseAsset[0]);
+        setToAssetValue(baseAsset[2]);
       }
 
       if (baseAsset.length > 0 && fromAssetValue == null) {

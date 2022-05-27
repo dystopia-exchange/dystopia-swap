@@ -26,9 +26,23 @@
   background-size: cover;
 }
 
+.homePage--light {
+  background: #DBE6EC;
+}
+
+.homePage--dark {
+  background: #151718;
+}
+
 .main {
   position: relative;
   padding: 60px 90px 30px;
+}
+
+.containerInner {
+  max-width: 1375px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 @media screen and (max-width: 1024px) {
