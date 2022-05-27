@@ -20,10 +20,12 @@ import classes from "./ssMigrate.module.css";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import stores from "../../stores";
 import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
-import BigNumber from "bignumber.js";
+import {BigNumber} from "ethers";
+import {parseUnits} from "ethers/lib/utils";
 import Borders from "../../ui/Borders";
 import AssetSelect from "../../ui/AssetSelect";
 import Loader from "../../ui/Loader";
+import Web3 from 'web3'
 
 export default function Setup() {
   const [fromAssetValue, setFromAssetValue] = useState(null);
@@ -202,7 +204,7 @@ export default function Setup() {
               symbol: symbol,
               token0symbol: token0symbol,
               token1symbol: token1symbol,
-              lpBalance: parseFloat(lpBalance).toFixed(14),
+              lpBalance: parseFloat(lpBalance).toFixed(12),
               totalSupply,
               token0,
               token1,
@@ -215,7 +217,7 @@ export default function Setup() {
               poolTokenPercentage: Math.floor(poolTokenPercentage),
             };
 
-            setAmount(parseFloat(lpBalance).toFixed(14));
+            setAmount(parseFloat(lpBalance).toFixed(12));
             setPairDetails(pairDetails);
             return pairDetails;
           } else {
@@ -290,8 +292,10 @@ export default function Setup() {
     try {
       setLoading(true);
       const migrator = migrate.find((eachMigrate) => eachMigrate == platform);
-      let am = ( BigNumber(amount).times(10**18))
-      console.log(typeof am,typeof amount)
+      const web3 = await stores.accountStore.getWeb3Provider();
+      
+      let am = (parseUnits(amount.toString()));
+      
 
       stores.dispatcher.dispatch({
         type: ACTIONS.MIGRATE,
@@ -429,13 +433,9 @@ am = pairDetails.lpBalance
       CONTRACTS.ROUTER_ABI,
       CONTRACTS.ROUTER_ADDRESS
     );
-
-    const sendAmount0 = BigNumber(amount0)
-      .times(10 ** parseInt(token0.decimals))
-      .toFixed(0);
-    const sendAmount1 = BigNumber(amount1)
-      .times(10 ** parseInt(token1.decimals))
-      .toFixed(0);
+    console
+    const sendAmount0 = parseUnits(amount0.toString(),token0.decimals)
+    const sendAmount1 = parseUnits(amount1.toString(),token0.decimals)
 
     let addy0 = token0.address;
     let addy1 = token1.address;
@@ -1073,7 +1073,7 @@ am = pairDetails.lpBalance
                         classes[`balanceMax--${appTheme}`],
                       ].join(" ")}
                       onClick={() =>
-                        handleMax(Number(pairDetails.lpBalance).toFixed(18))
+                        handleMax(pairDetails.lpBalance)
                       }
                     >
                       MAX
