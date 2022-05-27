@@ -10,7 +10,7 @@ import { tokenABI } from './tokenABI'
 import { veDistABI } from './veDistABI'
 import { minterABI } from './minterABI'
 import { wftmABI } from './wftmABI'
-
+import { dystopiaLibraryABI } from './dystopiaLib'
 
 export default {
   erc20ABI,
@@ -25,4 +25,5 @@ export default {
   tokenABI,
   minterABI,
   wftmABI,
+  dystopiaLibraryABI
 }

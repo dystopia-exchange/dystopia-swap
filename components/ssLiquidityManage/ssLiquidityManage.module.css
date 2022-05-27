@@ -822,6 +822,7 @@ input[type=number].mediumInputAmount {
 }
 
 .priceInfo {
+  position: relative;
   width: 50%;
   display: flex;
   flex-direction: column;
@@ -862,48 +863,6 @@ input[type=number].mediumInputAmount {
 
 .priceInfo--dark > .text {
   color: #5F7285 !important;
-}
-
-
-
-.priceInfo::before,
-.priceInfo::after {
-  margin-top: 3.5px;
-}
-
-.priceInfo::before,
-.priceInfo::after {
-  content: "";
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  z-index: 999;
-}
-
-.priceInfo::before,
-.priceInfo::after {
-  top: -4.5px;
-  border-top: 1px solid var(--main-secondary-dark);
-}
-
-.priceInfo::before {
-  left: -1px;
-  border-left: 1px solid var(--main-secondary-dark);
-}
-
-.priceInfo::after {
-  right: -1px;
-  border-right: 1px solid var(--main-secondary-dark);
-}
-
-.priceInfo--dark::before,
-.priceInfo--dark::after {
-  border-color: var(--main-secondary-dark);
-}
-
-.priceInfo--light::before,
-.priceInfo--light::after {
-  border-color: var(--main-secondary-light);
 }
 
 .titleSection {
@@ -1159,7 +1118,6 @@ input[type=number].mediumInputAmount {
 .slippageRoot {
   padding: 9px 12px !important;
   border: 1px solid #86B9D6 !important;
-  margin-bottom: 20px !important;
 }
 
 .slippageRoot--dark {
@@ -1666,6 +1624,7 @@ input[type=number].mediumInputAmount {
 
   .disclaimerDivider {
     width: 100%;
+    top: 0;
   }
 
   .multiApprovalButton {

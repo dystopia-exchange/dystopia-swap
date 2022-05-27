@@ -4,7 +4,7 @@ import {
   CONTRACTS
 } from './constants';
 import Multicall from '@dopex-io/web3-multicall';
-
+import detectProvider from '@metamask/detect-provider'
 import {
   injected,
   walletconnect,
@@ -63,11 +63,13 @@ class Store {
   }
 
   configure = async () => {
+    const provider = await detectProvider();
     // this.getGasPrices();
-    injected.isAuthorized().then((isAuthorized) => {
+    injected.isAuthorized().then(async (isAuthorized) => {
       const { supportedChainIds } = injected;
+      let providerChain = await provider.request({ method: 'eth_chainId' });
+      const { chainId = process.env.NEXT_PUBLIC_CHAINID } = { chainId: providerChain } || {};
       // fall back to ethereum mainnet if chainId undefined
-      const { chainId = process.env.NEXT_PUBLIC_CHAINID } = window.ethereum || {};
       const parsedChainId = parseInt(chainId, 16);
       const isChainSupported = supportedChainIds.includes(parsedChainId);
       if (!isChainSupported) {
@@ -107,7 +109,7 @@ class Store {
       }
     });
 
-    if (window.ethereum) {
+    if (window.ethereum || provider) {
       this.updateAccount();
     } else {
       window.removeEventListener('ethereum#initialized', this.updateAccount);
@@ -119,10 +121,10 @@ class Store {
 
   updateAccount = () => {
     const that = this;
-    const res = window.ethereum.on('accountsChanged', function (accounts) {
+    const res = window.ethereum.on('accountsChanged', async function (accounts) {
       that.setStore({
         account: { address: accounts[0] },
-        web3context: { library: { provider: window.ethereum } }
+        web3context: { library: { provider: window.ethereum || await detectProvider() } }
       });
       that.emitter.emit(ACTIONS.ACCOUNT_CHANGED);
       that.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
@@ -208,6 +210,25 @@ class Store {
     }
     return new Web3(provider);
   };
+  connectWalletConnect = async () => {
+    try {
+      const that = this;
+      const provider = that.getStore('connectorsByName')['WalletConnect'];
+      // const provider = connectorsByName[name];
+      await provider.enable();
+      const web3 = new Web3(provider);
+
+      that.setStore({
+        account: { address: provider.accounts[0] },
+        web3context: { library: { provider: web3 }},
+      });
+      return true;
+
+    } catch(e) {
+      console.log(e);
+      return false;
+    }
+  }
 
   getMulticall = async () => {
     const web3 = await this.getWeb3Provider()

@@ -144,7 +144,7 @@ function getLibrary(provider) {
   return library;
 }
 
-function onConnectionClicked(
+async function onConnectionClicked(
   currentConnector,
   name,
   setActivatingConnector,
@@ -152,7 +152,18 @@ function onConnectionClicked(
 ) {
   const connectorsByName = stores.accountStore.getStore("connectorsByName");
   setActivatingConnector(currentConnector);
-  activate(connectorsByName[name]);
+  if(name === 'WalletConnect') {
+    try {
+      let connected = await stores.accountStore.connectWalletConnect();
+      if(connected) {
+        stores.emitter.emit(CONNECTION_CONNECTED);
+        stores.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
+      }
+    } catch(e) {
+      console.log(e);
+    }
+  } else 
+    activate(connectorsByName[name]);
 }
 
 function onDeactivateClicked(deactivate, connector) {

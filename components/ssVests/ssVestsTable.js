@@ -632,7 +632,8 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
             className={'g-flex-column__item'}
             style={{
               overflow: 'auto',
-              height: isEmptyTable ? 'auto' : tableHeight,
+              maxHeight: isEmptyTable ? 'auto' : tableHeight,
+              height: 'auto',
               background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
             }}>
             <Table

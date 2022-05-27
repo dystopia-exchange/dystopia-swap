@@ -35,6 +35,7 @@ import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import { formatSymbol, formatInputAmount } from '../../utils';
 import SwapIconBg from '../../ui/SwapIconBg';
 import AssetSelect from '../../ui/AssetSelect';
+import Borders from '../../ui/Borders';
 
 export default function ssLiquidityManage() {
 
@@ -255,13 +256,12 @@ export default function ssLiquidityManage() {
   };
 
   const callQuoteAddLiquidity = (amountA, amountB, pa, sta, pp, assetA, assetB) => {
+    if(Number(parseInt(pp.reserve0)) != Number(0) && Number(parseInt(pp.reserve1)) != Number(0)){
     if (!pp) {
       return null;
     }
 
     let invert = false;
-
-    //TODO: Add check that asset0.address === pp.token0, otherwise we need to invert the calcs
 
     let addy0 = assetA.address;
     let addy1 = assetB.address;
@@ -317,6 +317,7 @@ export default function ssLiquidityManage() {
         stable: sta,
       },
     });
+  }
   };
 
   const callQuoteRemoveLiquidity = (p, amount) => {
@@ -350,27 +351,37 @@ export default function ssLiquidityManage() {
     setAmount1Error(false);
 
     if (input === 'amount0') {
-      let am = BigNumber(asset0.balance).times(percent).div(100).toFixed(parseInt(asset0.decimals));
+      let am = BigNumber(asset0.balance).times(percent).div(100).toFixed(parseFloat(asset0.decimals));
       setAmount0(am);
-      amount0Ref.current.focus();
       callQuoteAddLiquidity(am, amount1, 0, stable, pair, asset0, asset1);
 
     } else if (input === 'amount1') {
-      let am = BigNumber(asset1.balance).times(percent).div(100).toFixed(parseInt(asset1.decimals));
+      let am = BigNumber(asset1.balance).times(percent).div(100).toFixed(parseFloat(asset1.decimals));
       setAmount1(am);
-      amount1Ref.current.focus();
       callQuoteAddLiquidity(amount0, am, 1, stable, pair, asset0, asset1);
 
     } else if (input === 'withdraw') {
       let am = '';
-      if (pair && pair.gauge) {
-        am = BigNumber(pair.gauge.balance).times(percent).div(100).toFixed(18);
-        setWithdrawAmount(am);
-      } else {
+     
         am = BigNumber(pair.balance).times(percent).div(100).toFixed(18);
         setWithdrawAmount(am);
-      }
+      
 
+      if (am === '') {
+        setWithdrawAmount0('');
+        setWithdrawAmount1('');
+      } else if (am !== '' && !isNaN(am)) {
+        calcRemove(pair, am);
+      }
+    }
+  };
+  const setAmountPercentGauge = (input) => {
+    if (input === 'withdraw') {
+      let am = '';
+      if (pair && pair.gauge) {
+        am = BigNumber(pair.gauge.balance).times(100).div(100).toFixed(18);
+        setWithdrawAmount(am);
+      } 
       if (am === '') {
         setWithdrawAmount0('');
         setWithdrawAmount1('');
@@ -647,6 +658,18 @@ export default function ssLiquidityManage() {
       setWithdrawAmountError('Asset is required');
       error = true;
     }
+    if (!withdrawAmount || withdrawAmount === '' || isNaN(withdrawAmount)) {
+      setWithdrawAmountError('Amount is required');
+      error = true;
+    } else {
+      if (BigNumber(withdrawAmount).lte(0)) {
+        setWithdrawAmountError('Invalid amount');
+        error = true;
+      } else if (withdrawAsset && BigNumber(withdrawAmount).gt(withdrawAsset.balance)) {
+        setWithdrawAmountError(`Greater than your available LP balance`);
+        error = true;
+      }
+    }
 
     if (!error) {
       setDepositLoading(true);
@@ -655,7 +678,7 @@ export default function ssLiquidityManage() {
           pair: pair,
           token0: pair.token0,
           token1: pair.token1,
-          quote: withdrawQuote,
+          quote: withdrawAmount,
           slippage: (slippage && slippage) != '' ? slippage : '2',
         },
       });
@@ -917,15 +940,11 @@ export default function ssLiquidityManage() {
               noWrap>
               {(assetValue && assetValue.gauge && assetValue.gauge.balance) ?
                 (' ' + formatCurrency(assetValue.gauge.balance)) :
-                (
-                  (assetValue && assetValue.balance) ?
-                    (' ' + formatCurrency(assetValue.balance)) :
-                    '0.00'
-                )
+                '0.00'
               }
             </Typography>
-
-            {assetValue?.balance && Number(assetValue?.balance) > 0 &&
+            
+            {assetValue?.balance && Number(assetValue?.balance) > 0 && type === 'withdraw' &&
               <div
                 style={{
                   cursor: 'pointer',
@@ -934,10 +953,26 @@ export default function ssLiquidityManage() {
                   lineHeight: '120%',
                   color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
                 }}
-                onClick={() => setAmountPercent(type, 100)}>
-                MAX
+                onClick={() => setAmountPercent(type,100)}>
+                MAXLP
               </div>
             }
+            &nbsp;
+            {assetValue?.gauge?.balance && Number(assetValue?.gauge?.balance) > 0 && type === 'withdraw' &&
+              <div
+                style={{
+                  cursor: 'pointer',
+                  fontWeight: 500,
+                  fontSize: 14,
+                  lineHeight: '120%',
+                  color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                }}
+                onClick={() => setAmountPercentGauge(type)}>
+                MAXSTAKE
+              </div>
+            }
+             
+           
           </div>
         }
 
@@ -990,6 +1025,8 @@ export default function ssLiquidityManage() {
             }}
             className={['g-flex'].join(' ')}>
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.title}>
                 {BigNumber(amount1).gt(0) ? formatCurrency(BigNumber(amount0).div(amount1)) : '0.00'}
               </Typography>
@@ -998,9 +1035,13 @@ export default function ssLiquidityManage() {
                 {`${formatSymbol(asset0?.symbol)} per ${formatSymbol(asset1?.symbol)}`}
               </Typography>
             </div>
+
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography
                 className={classes.title}>{BigNumber(amount0).gt(0) ? formatCurrency(BigNumber(amount1).div(amount0)) : '0.00'}</Typography>
+
               <Typography
                 className={classes.text}>{`${formatSymbol(asset1?.symbol)} per ${formatSymbol(asset0?.symbol)}`}</Typography>
             </div>
@@ -1016,6 +1057,8 @@ export default function ssLiquidityManage() {
 
           <div className={[classes.priceInfos, classes[`priceInfos--${appTheme}`]].join(' ')}>
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.text}>
                 {`${formatSymbol(pair?.token0?.symbol)}`}
               </Typography>
@@ -1026,6 +1069,8 @@ export default function ssLiquidityManage() {
             </div>
 
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.text}>
                 {`${formatSymbol(pair?.token1?.symbol)}`}
               </Typography>
@@ -1042,6 +1087,8 @@ export default function ssLiquidityManage() {
 
           <div className={[classes.priceInfos, classes[`priceInfos--${appTheme}`]].join(' ')}>
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.text}>
                 Pooled
               </Typography>
@@ -1052,6 +1099,8 @@ export default function ssLiquidityManage() {
             </div>
 
             <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+              <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
+
               <Typography className={classes.text}>
                 Staked
               </Typography>
@@ -1072,10 +1121,12 @@ export default function ssLiquidityManage() {
         <Typography className={classes.depositInfoHeading}>Reserve Info</Typography>
         <div className={classes.priceInfos}>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
             <Typography className={classes.text}>{`${formatSymbol(pair?.token0?.symbol)}`}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.reserve0)}</Typography>
           </div>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
             <Typography className={classes.text}>{`${formatSymbol(pair?.token1?.symbol)}`}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.reserve1)}</Typography>
           </div>
@@ -1083,10 +1134,12 @@ export default function ssLiquidityManage() {
         <Typography className={classes.depositInfoHeading}>Your Balances</Typography>
         <div className={classes.priceInfos}>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
             <Typography className={classes.text}>{`Pooled ${formatSymbol(pair?.symbol)}`}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.balance)}</Typography>
           </div>
           <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
+            <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
             <Typography className={classes.text}>{`Staked ${formatSymbol(pair?.symbol)} `}</Typography>
             <Typography className={classes.title}>{formatCurrency(pair?.gauge?.balance)}</Typography>
           </div>
@@ -1504,47 +1557,55 @@ export default function ssLiquidityManage() {
                     Slippage Tolerance
                   </div>
 
-                  <TextField
-                    placeholder="0.00"
-                    fullWidth
-                    error={slippageError}
-                    helperText={slippageError}
-                    value={slippage}
-                    onChange={onSlippageChanged}
-                    disabled={depositLoading || stakeLoading || depositStakeLoading || createLoading}
-                    classes={{
-                      root: [classes.slippageRoot, appTheme === "dark" ? classes['slippageRoot--dark'] : classes['slippageRoot--light']].join(' '),
-                    }}
-                    InputProps={{
-                      style: {
-                        border: 'none',
-                        borderRadius: 0,
-                      },
-                      classes: {
-                        root: classes.searchInput,
-                      },
-                      endAdornment: <InputAdornment position="end">
+                  <div
+                    style={{
+                      position: 'relative',
+                      marginBottom: 20,
+                    }}>
+                    <Borders/>
+
+                    <TextField
+                      placeholder="0.00"
+                      fullWidth
+                      error={slippageError}
+                      helperText={slippageError}
+                      value={slippage}
+                      onChange={onSlippageChanged}
+                      disabled={depositLoading || stakeLoading || depositStakeLoading || createLoading}
+                      classes={{
+                        root: [classes.slippageRoot, appTheme === "dark" ? classes['slippageRoot--dark'] : classes['slippageRoot--light']].join(' '),
+                      }}
+                      InputProps={{
+                        style: {
+                          border: 'none',
+                          borderRadius: 0,
+                        },
+                        classes: {
+                          root: classes.searchInput,
+                        },
+                        endAdornment: <InputAdornment position="end">
                         <span
                           style={{
                             color: appTheme === "dark" ? '#ffffff' : '#325569',
                           }}>
                           %
                         </span>
-                      </InputAdornment>,
-                    }}
-                    inputProps={{
-                      className: [classes.smallInput, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
-                      style: {
-                        padding: 0,
-                        borderRadius: 0,
-                        border: 'none',
-                        fontSize: 14,
-                        fontWeight: 400,
-                        lineHeight: '120%',
-                        color: appTheme === "dark" ? '#C6CDD2' : '#325569',
-                      },
-                    }}
-                  />
+                        </InputAdornment>,
+                      }}
+                      inputProps={{
+                        className: [classes.smallInput, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
+                        style: {
+                          padding: 0,
+                          borderRadius: 0,
+                          border: 'none',
+                          fontSize: 14,
+                          fontWeight: 400,
+                          lineHeight: '120%',
+                          color: appTheme === "dark" ? '#C6CDD2' : '#325569',
+                        },
+                      }}
+                    />
+                  </div>
 
                   {/*TODO: uncomment deadline then logic will be ready*/}
                   {/*
@@ -1702,7 +1763,7 @@ export default function ssLiquidityManage() {
                   className={classes.actionButtonText}>{depositLoading ? `Depositing` : `Deposit`}</Typography>
                 {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
               </Button>
-              {pair.token0.isWhitelisted && pair.token1.isWhitelisted &&
+              {!pair.gauge &&
                 <Button
                   variant="contained"
                   size="large"
@@ -1718,7 +1779,7 @@ export default function ssLiquidityManage() {
                     className={classes.actionButtonText}>{createLoading ? `Creating` : `Create Gauge`}</Typography>
                   {createLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
                 </Button>
-              }
+              } 
             </>
           }
           { // There is a Gauge on the pair. Can deposit and stake
@@ -1761,11 +1822,11 @@ export default function ssLiquidityManage() {
                     variant="contained"
                     size="large"
                     className={[
-                      ((amount0 === '' && amount1 === '') || BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
-                      ((amount0 === '' && amount1 === '') || BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
+                      ( BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes.multiApprovalButton : classes.buttonOverride,
+                      ( BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading) ? classes[`multiApprovalButton--${appTheme}`] : classes[`buttonOverride--${appTheme}`],
                     ].join(' ')}
                     color="primary"
-                    disabled={(amount0 === '' && amount1 === '') || BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading}
+                    disabled={ BigNumber(pair.balance).eq(0) || depositLoading || stakeLoading || depositStakeLoading}
                     onClick={onStake}
                   >
                     <Typography
@@ -1846,7 +1907,7 @@ export default function ssLiquidityManage() {
                     onClick={onWithdraw}
                   >
                     <Typography
-                      className={classes.actionButtonText}>{BigNumber(pair.balance).gt(0) ? (depositLoading ? `Withdrawing` : `Withdraw ${formatCurrency(pair.balance)} LP`) : `Nothing Unstaked`}</Typography>
+                      className={classes.actionButtonText}>{BigNumber(pair.balance).gt(0) ? (depositLoading ? `Withdrawing` : `Withdraw ${formatCurrency(withdrawAmount)} LP`) : `Nothing Unstaked`}</Typography>
                     {depositLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
                   </Button>
                 </>

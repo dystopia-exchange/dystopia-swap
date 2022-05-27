@@ -191,13 +191,13 @@
 }
 
 .paperBody--light {
-  background: #DBE6EC;
-  border: 1px solid #86B9D6;
+  background: #DBE6EC !important;
+  border: 1px solid #86B9D6 !important;
 }
 
 .paperBody--dark {
-  background: #151718;
-  border: 1px solid #5F7285;
+  background: #151718 !important;
+  border: 1px solid #5F7285 !important;
 }
 
 .successDialog {

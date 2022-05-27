@@ -8,8 +8,8 @@ export const GOV_TOKEN_LOGO = 'https://dystopia-swap-seven.vercel.app/logo.svg'
 export const GOV_TOKEN_ABI = abis.tokenABI
 
 export const VE_TOKEN_ADDRESS = '0x060fa7aD32C510F12550c7a967999810dafC5697'
-export const VE_TOKEN_NAME = 'veNFT'
-export const VE_TOKEN_SYMBOL = 'veNFT'
+export const VE_TOKEN_NAME = 'veDYST'
+export const VE_TOKEN_SYMBOL = 'veDYST'
 export const VE_TOKEN_DECIMALS = 18
 export const VE_TOKEN_LOGO = 'https://dystopia-swap-seven.vercel.app/logo.svg'
 export const VE_TOKEN_ABI = abis.veTokenABI
@@ -40,6 +40,9 @@ export const VOTER_ADDRESS = '0x649BdF58B09A0Cd4Ac848b42c4B5e1390A72A49A'
 export const VOTER_ABI = abis.voterABI
 
 export const REWARD_ADDRESS = '0x39aB6574c289c3Ae4d88500eEc792AB5B947A5Eb'
+
+export const LIBRARY_ADDRESS = '0xAC587e0535a278379eB898e3FdbeFd4d713EacB7'
+export const LIBRARY_ABI = abis.dystopiaLibraryABI
 
 export const ERC20_ABI = abis.erc20ABI
 export const PAIR_ABI = abis.pairABI

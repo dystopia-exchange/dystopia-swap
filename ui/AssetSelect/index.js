@@ -19,7 +19,19 @@ import Borders from '../Borders';
 import BigNumber from 'bignumber.js';
 import SwapIconBg from '../SwapIconBg';
 
-const AssetSelect = ({type, value, assetOptions, onSelect, typeIcon = 'single'}) => {
+const AssetSelect = (
+  {
+    type,
+    value,
+    assetOptions,
+    onSelect,
+    typeIcon = 'single',
+    isManageLocal = true,
+    title = 'Select a token',
+    showBalance = true,
+    interactiveBorder = true,
+    size = 'default',
+  }) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [filteredAssetOptions, setFilteredAssetOptions] = useState([]);
@@ -203,13 +215,15 @@ const AssetSelect = ({type, value, assetOptions, onSelect, typeIcon = 'single'})
               {asset ? asset.symbol : ''}
             </div>
 
-            <div
-              className={classes.assetSelectBalanceText}
-              style={{
-                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-              }}>
-              {(asset && asset.balance) ? formatCurrency(asset.balance) : '0.00'}
-            </div>
+            {showBalance &&
+              <div
+                className={classes.assetSelectBalanceText}
+                style={{
+                  color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                }}>
+                {(asset && asset.balance) ? formatCurrency(asset.balance) : '0.00'}
+              </div>
+            }
           </div>
 
           <div
@@ -222,13 +236,15 @@ const AssetSelect = ({type, value, assetOptions, onSelect, typeIcon = 'single'})
               {asset ? asset.name : ''}
             </div>
 
-            <div
-              className={classes.assetSelectBalanceText2}
-              style={{
-                color: appTheme === "dark" ? '#7C838A' : '#5688A5',
-              }}>
-              {typeIcon === 'single' ? 'Balance' : ''}
-            </div>
+            {showBalance &&
+              <div
+                className={classes.assetSelectBalanceText2}
+                style={{
+                  color: appTheme === "dark" ? '#7C838A' : '#5688A5',
+                }}>
+                {typeIcon === 'single' ? 'Balance' : ''}
+              </div>
+            }
           </div>
         </div>
       </MenuItem>
@@ -312,7 +328,7 @@ const AssetSelect = ({type, value, assetOptions, onSelect, typeIcon = 'single'})
           className={['g-flex-column__item', 'g-flex-column'].join(' ')}
           style={{
             position: 'relative',
-            marginBottom: 53,
+            marginBottom: !isManageLocal ? 34 : 53,
             marginTop: 30,
           }}>
           <Borders/>
@@ -334,13 +350,15 @@ const AssetSelect = ({type, value, assetOptions, onSelect, typeIcon = 'single'})
           }
         </div>
 
-        <div className={classes.manageLocalContainer}>
-          <Button
-            className={[classes.manageLocalBtn, classes[`manageLocalBtn--${appTheme}`]].join(' ')}
-            onClick={toggleLocal}>
-            Manage local assets
-          </Button>
-        </div>
+        {isManageLocal &&
+          <div className={classes.manageLocalContainer}>
+            <Button
+              className={[classes.manageLocalBtn, classes[`manageLocalBtn--${appTheme}`]].join(' ')}
+              onClick={toggleLocal}>
+              Manage local assets
+            </Button>
+          </div>
+        }
       </>
     );
   };
@@ -355,22 +373,23 @@ const AssetSelect = ({type, value, assetOptions, onSelect, typeIcon = 'single'})
 
   return (
     <React.Fragment>
-      <div className={classes.displaySelectContainer} onClick={() => {
+      <div className={[classes.displaySelectContainer, size === 'small' ? classes.displaySelectContainerSmall : ''].join(' ')} onClick={() => {
         openSearch();
       }}>
         <div className={classes.assetSelectMenuItem}>
           <div
-            className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+            className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`], size === 'small' ? classes.displayDualIconContainerSmallest : ''].join(' ')}>
 
             {typeIcon === 'single' &&
               <>
-                <SwapIconBg/>
+                {interactiveBorder &&
+                  <SwapIconBg/>
+                }
 
                 <img
-                  className={classes.displayAssetIcon}
+                  className={[classes.displayAssetIcon, size === 'small' ? classes.displayAssetIconSmall : ''].join(' ')}
                   alt=""
                   src={value ? `${value.logoURI}` : ''}
-                  height="100px"
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -452,13 +471,13 @@ const AssetSelect = ({type, value, assetOptions, onSelect, typeIcon = 'single'})
                 alignItems: 'center',
                 color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
               }}>
-                {manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
+                {isManageLocal && manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
                   marginRight: 10,
                   width: 18,
                   height: 18,
                   cursor: 'pointer',
                 }}/>}
-                {manageLocal ? 'Manage local assets' : 'Select a token'}
+                {isManageLocal && manageLocal ? 'Manage local assets' : title}
               </div>
 
               <Close
@@ -474,7 +493,7 @@ const AssetSelect = ({type, value, assetOptions, onSelect, typeIcon = 'single'})
             style={{overflow: 'hidden'}}
             className={[classes.dialogContent, 'g-flex-column__item', 'g-flex-column'].join(' ')}>
             {!manageLocal && renderOptions()}
-            {manageLocal && renderManageLocal()}
+            {isManageLocal && manageLocal && renderManageLocal()}
           </DialogContent>
         </div>
       </Dialog>

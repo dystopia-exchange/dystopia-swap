@@ -2,10 +2,11 @@ import { InjectedConnector } from "@web3-react/injected-connector";
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
 import { WalletLinkConnector } from "@web3-react/walletlink-connector";
 import { NetworkConnector } from "@web3-react/network-connector";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 const POLLING_INTERVAL = 12000;
 const RPC_URLS = {
-  137: "https://polygon-mainnet.g.alchemy.com/v2/z31K9anv5tvGi7AxPhtSSD2FCBJvK0Wj",
+  137: "https://polygon-mainnet.g.alchemy.com/v2/a0knpm6DeSJZumUlHLrEBCZTYPGIho-r",
   80001: "https://polygon-mumbai.g.alchemy.com/v2/z31K9anv5tvGi7AxPhtSSD2FCBJvK0Wj"
 };
 
@@ -22,11 +23,12 @@ export const injected = new InjectedConnector({
   supportedChainIds: [parseInt(process.env.NEXT_PUBLIC_CHAINID)]
 });
 
-export const walletconnect = new WalletConnectConnector({
+export const walletconnect = new WalletConnectProvider({
   rpc: {
     137: RPC_URLS[137],
     80001: RPC_URLS[80001]
   },
+  infuraId:"9b5ceebd213642f0a30711054e4a208d",
   chainId: parseInt(process.env.NEXT_PUBLIC_CHAINID),
   bridge: "https://bridge.walletconnect.org",
   qrcode: true,
