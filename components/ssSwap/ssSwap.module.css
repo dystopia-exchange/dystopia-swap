@@ -115,6 +115,7 @@ input[type=number].massiveInputAmount {
 .inputBalanceSlippageText::after {
   position: absolute;
   content: '%';
+  right: -4px;
 }
 
 .inputBalanceSlippageText > fieldset {
