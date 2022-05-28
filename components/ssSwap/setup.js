@@ -551,7 +551,7 @@ function Setup() {
   const swapIconHover = () => {
     setSwapIconBgColor(appTheme === 'dark' ? '#2D3741' : '#9BC9E4');
     setSwapIconBorderColor(appTheme === 'dark' ? '#4CADE6' : '#0B5E8E');
-    setSwapIconArrowColor(appTheme === 'dark' ? '#ffffff' : '#ffffff');
+    setSwapIconArrowColor(appTheme === 'dark' ? '#4CADE6' : '#0B5E8E');
   };
 
   const swapIconClick = () => {
@@ -626,7 +626,7 @@ function Setup() {
 
             <path
               d="M41.0002 44.172L46.3642 38.808L47.7782 40.222L40.0002 48L32.2222 40.222L33.6362 38.808L39.0002 44.172V32H41.0002V44.172Z"
-              fill={swapIconArrowColor || (appTheme === 'dark' ? '#ffffff' : '#ffffff')}/>
+              fill={swapIconArrowColor || (appTheme === 'dark' ? '#4CADE6' : '#0B5E8E')}/>
           </svg>
         }
 

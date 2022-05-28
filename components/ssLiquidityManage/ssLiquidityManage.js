@@ -908,11 +908,13 @@ export default function ssLiquidityManage() {
           <div className={[classes.inputBalanceTextContainer, 'g-flex', 'g-flex--align-center'].join(' ')}>
             <img
               src="/images/ui/icon-wallet.svg"
-              className={classes.walletIcon}/>
+              className={classes.walletIcon}
+              onClick={() => assetValue?.balance && Number(assetValue?.balance) > 0 ? setAmountPercent(type, 100) : null}/>
 
             <Typography
               className={[classes.inputBalanceText, 'g-flex__item'].join(' ')}
-              noWrap>
+              noWrap
+              onClick={() => assetValue?.balance && Number(assetValue?.balance) > 0 ? setAmountPercent(type, 100) : null}>
             <span>
               {(assetValue && assetValue.balance) ?
                 ' ' + formatCurrency(assetValue.balance) :
@@ -1735,6 +1737,20 @@ export default function ssLiquidityManage() {
                   <>
                     <div
                       className={[classes.swapIconContainer, classes[`swapIconContainer--${appTheme}`]].join(' ')}>
+                      <div
+                        className={[
+                          classes.swapIconContainerInside,
+                          classes[`swapIconContainerInside--${appTheme}`],
+                          'g-flex',
+                          'g-flex--align-center',
+                          'g-flex--justify-center'
+                        ].join(' ')}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M10.95 8.95L9.53605 10.364L7.00005 7.828V21H5.00005V7.828L2.46505 10.364L1.05005 8.95L6.00005 4L10.95 8.95ZM22.9501 16.05L18 21L13.05 16.05L14.464 14.636L17.001 17.172L17 4H19V17.172L21.536 14.636L22.9501 16.05Z"
+                            className={[classes.swapIconContainerIcon, classes[`swapIconContainerIcon--${appTheme}`]].join(' ')}/>
+                        </svg>
+                      </div>
                     </div>
 
                     {renderMassiveInput('amount1', amount1, amount1Error, amount1Changed, asset1, null, assetOptions, onAssetSelect, amount1Focused, amount1Ref)}

@@ -415,6 +415,7 @@ input[type=number].mediumInputAmount {
   width: 18px;
   height: 18px;
   margin-right: 10px;
+  cursor: pointer;
 }
 
 .inputTitleText {
@@ -434,6 +435,7 @@ input[type=number].mediumInputAmount {
 
 .inputBalanceText {
   left: 151px;
+  cursor: pointer;
 }
 
 .massiveInputContainer {
@@ -535,27 +537,94 @@ input[type=number].mediumInputAmount {
 }
 
 .swapIconContainer {
-  margin-top: -22px;
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: #DBE6EC;
+  border: 1px solid #86B9D6;
+  border-radius: 100px;
+  margin-top: -33px;
+  margin-left: 311px;
+  cursor: pointer;
+}
+
+.swapIconContainer::before {
+  position: absolute;
+  width: 4px;
+  height: 20px;
+  left: -1px;
+  top: 30px;
+  background: #DBE6EC;
+  content: "";
+}
+
+.swapIconContainer::after {
+  position: absolute;
+  width: 4px;
+  height: 20px;
+  left: 76px;
+  top: 30px;
+  background: #DBE6EC;
+  content: "";
+}
+
+.swapIconContainer:hover .swapIconContainerInside {
+  background: #9BC9E4;
+  border: 1px solid #0B5E8E;
+}
+
+.swapIconContainer:active .swapIconContainerInside {
+  background: #86B9D6;
+  border: 1px solid #0B5E8E;
+}
+
+.swapIconContainer--dark {
+  background: #151718;
+  border: 1px solid #5F7285;
+}
+
+.swapIconContainerInside {
+  width: 60px;
+  height: 60px;
+  border-radius: 100px;
+  background: #B9DFF5;
+  border: 1px solid #86B9D6;
+  transition: all 0.32s ease;
+}
+
+.swapIconContainerIcon {
+  fill: #0B5E8E;
+}
+
+.swapIconContainerIcon--dark {
+  fill: #4CADE6;
+}
+
+.swapIconContainer--dark .swapIconContainerInside {
+  background: #24292D;
+  border: 1px solid #5F7285;
+}
+
+.swapIconContainer--dark::before {
+  background: #151718;
+}
+
+.swapIconContainer--dark::after {
+  background: #151718;
+}
+
+.swapIconContainer--dark:hover .swapIconContainerInside {
+  background: #2D3741;
+  border: 1px solid #4CADE6;
+}
+
+.swapIconContainer--dark:active .swapIconContainerInside {
+  background: #5F7285;
+  border: 1px solid #4CADE6;
 }
 
 .swapIconContainerWithdraw {
   margin-left: 170px;
-}
-
-.swapIconContainer--light {
-  background-image: url("/images/ui/liquidity-add-button--light.svg");
-}
-
-.swapIconContainer--dark {
-  background-image: url("/images/ui/liquidity-add-button--dark.svg");
-}
-
-.swapIconContainerWithdraw--light {
-  background-image: url("/images/ui/liquidity-swap-btn-circle--light.svg");
-}
-
-.swapIconContainerWithdraw--dark {
-  background-image: url("/images/ui/liquidity-swap-btn-circle--dark.svg");
 }
 
 .assetSelectMenu {
@@ -1661,14 +1730,14 @@ input[type=number].mediumInputAmount {
   }
 
   .textField--amount1-light {
-    margin-top: -30px;
+    margin-top: -20px;
     width: 280px;
     height: 114px;
     background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
   }
 
   .textField--amount1-dark {
-    margin-top: -30px;
+    margin-top: -20px;
     width: 280px;
     height: 114px;
     background-image: url("/images/ui/swap-coin-bottom-360--dark.svg");
@@ -1677,14 +1746,6 @@ input[type=number].mediumInputAmount {
   .textField--To-light,
   .textField--To-dark {
     margin-top: -50px;
-  }
-
-  .swapIconContainer--dark {
-    background-image: url("/images/ui/swap-coin-btn-360--dark.svg");
-  }
-
-  .swapIconContainer--light {
-    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
   }
 
   .inputBalanceText,
@@ -1711,6 +1772,34 @@ input[type=number].mediumInputAmount {
     position: absolute;
     margin-left: 110px;
     margin-top: -20px;
+  }
+
+  .swapIconContainer {
+    width: 50px;
+    height: 50px;
+    position: relative;
+  }
+
+  .swapIconContainerInside {
+    width: 38px;
+    height: 38px;
+  }
+
+  .swapIconContainer::before {
+    width: 3px;
+    height: 10px;
+    top: 19px;
+  }
+
+  .swapIconContainer::after {
+    width: 3px;
+    height: 10px;
+    top: 19px;
+    left: 47px;
+  }
+
+  .swapIconContainer svg {
+    transform: scale(0.83);
   }
 
   .mediumInputContainer {
