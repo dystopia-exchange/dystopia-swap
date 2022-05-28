@@ -1209,11 +1209,19 @@ export default function EnhancedTable({pairs, isLoading}) {
     // if(toggleActiveGauge === true && (!pair.gauge || !pair.gauge.address)) {
     //   return false
     // }
+    console.log(pair?.gauge?.balance,!BigNumber(pair?.gauge?.balance).gt(0),"innhello1")
     if (toggleActive === true) {
-      if (!BigNumber(pair?.gauge?.balance).gt(0) || !BigNumber(pair?.balance).gt(0)) {
+      if (BigNumber(pair?.gauge?.balance).gt(0)) {
+        console.log(pair?.gauge?.balance,!BigNumber(pair?.gauge?.balance).gt(0),"innhello")
+        return true;
+      }
+    }
+    if (toggleActive === true) {
+      if (!BigNumber(pair?.balance).gt(0)) {
         return false;
       }
     }
+    
 
     return true;
   });
