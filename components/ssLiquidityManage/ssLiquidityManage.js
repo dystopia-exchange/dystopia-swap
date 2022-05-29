@@ -262,7 +262,7 @@ export default function ssLiquidityManage() {
   };
 
   const callQuoteAddLiquidity = (amountA, amountB, pa, sta, pp, assetA, assetB) => {
-    if (Number(parseInt(pp.reserve0)) != Number(0) && Number(parseInt(pp.reserve1)) != Number(0)) {
+    if (Number(parseInt(pp?.reserve0)) != Number(0) && Number(parseInt(pp?.reserve1)) != Number(0)) {
       if (!pp) {
         return null;
       }
@@ -360,7 +360,6 @@ export default function ssLiquidityManage() {
       let am = BigNumber(asset0.balance).times(percent).div(100).toFixed(parseFloat(asset0.decimals));
       setAmount0(am);
       callQuoteAddLiquidity(am, amount1, 0, stable, pair, asset0, asset1);
-
     } else if (input === 'amount1') {
       let am = BigNumber(asset1.balance).times(percent).div(100).toFixed(parseFloat(asset1.decimals));
       setAmount1(am);
