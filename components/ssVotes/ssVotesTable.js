@@ -929,7 +929,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                             tableCellContent(
                               `${formatCurrency(BigNumber(row?.gauge?.apr).div(100).times(40))} %`,
                               `${formatCurrency(BigNumber(row?.gauge?.apr))} %`,
-                              `Min.`,
+                              `Min`,
                               `Max`
                             )
                           }
@@ -1542,7 +1542,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
                                     {headCell.id === 'tvl' && ""}
-                                    {headCell.id === 'apr' && `Min.`}
+                                    {headCell.id === 'apr' && `Min`}
                                     {headCell.id === 'balance' && formatSymbol(row.token0.symbol)}
                                     {headCell.id === 'liquidity' && formatSymbol(row.token0.symbol)}
                                     {headCell.id === 'apy' && row?.gaugebribes.length ? (
@@ -1568,7 +1568,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-                                      {headCell.id === 'apr' && `Max.`}
+                                      {headCell.id === 'apr' && `Max`}
                                     {headCell.id === 'balance' && formatSymbol(row.token1.symbol)}
                                     {headCell.id === 'liquidity' && formatSymbol(row.token1.symbol)}
                                     {headCell.id === 'apy' && ''}
