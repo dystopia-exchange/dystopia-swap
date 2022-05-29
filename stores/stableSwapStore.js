@@ -1168,7 +1168,7 @@ class Store {
       } catch (e) {
         console.log(e, "res");
       }
-      return pairsCall.data.pairs;
+      return pairsCall2;
     } catch (ex) {
       console.log(ex);
       return [];
