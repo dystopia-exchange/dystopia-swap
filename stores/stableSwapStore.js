@@ -80,6 +80,7 @@ const queryone = `
 const querytwo = `
   query {
     tokens{
+      id
       address
       balance
       chainId
@@ -88,11 +89,27 @@ const querytwo = `
       decimals
       isWhitelisted
       logoURI
+      derivedETH
+    }
+    bundle(id:1){
+      ethPrice
     }
   }
 `;
 
+const queryv2 = `
+  query {
+    tokens{
+      id
+      derivedETH
+    }
+    bundle(id:1){
+      ethPrice
+    }
+  }
+`;
 const client = createClient({ url: process.env.NEXT_PUBLIC_API });
+const clientV = createClient({ url: process.env.NEXT_PUBLIC_APIV2 });
 
 class Store {
   constructor(dispatcher, emitter) {
@@ -1033,9 +1050,20 @@ class Store {
   _getBaseAssets = async () => {
     try {
       const response = await client.query(querytwo).toPromise();
+      const responsev2 = await clientV.query(queryv2).toPromise();
       const baseAssetsCall = response;
-
       let baseAssets = baseAssetsCall.data.tokens;
+      let baseAssetsv2 = responsev2.data.tokens;
+
+      for (let i = 0; i < baseAssets.length; i++) {
+        for (let j = 0; j < baseAssetsv2.length; j++) {
+          if (
+            baseAssetsv2[j].id.toLowerCase() == baseAssets[i].id.toLowerCase()
+          ) {
+            baseAssets[i].derivedETH = baseAssetsv2[j].derivedETH;
+          }
+        }
+      }
       const response2 =
         process.env.NEXT_PUBLIC_CHAINID == 80001
           ? await axios.get(
@@ -1057,6 +1085,12 @@ class Store {
 
       for (let i = 0; i < response2.data.length; i++) {
         for (let j = 0; j < baseAssets.length; j++) {
+          if (
+            baseAssets[j].address ==
+            "0x104592a158490a9228070e0a8e5343b499e125d0"
+          ) {
+            baseAssets[j] == null;
+          }
           if (
             response2.data[i].address.toLowerCase() ==
             baseAssets[j].address.toLowerCase()
@@ -1100,6 +1134,18 @@ class Store {
     try {
       const response = await client.query(queryone).toPromise();
       const pairsCall = response;
+      for (let i = 0; i < pairsCall.data.pairs.length; i++) {
+        if (
+          pairsCall.data.pairs[i].address ==
+            "0x0dabcde647ba8d912ce173ce8687b3076a66b0b2" ||
+          pairsCall.data.pairs[i].address ==
+            "0xde251792215fee62f458141db2944283740039ec" ||
+          pairsCall.data.pairs[i].address ==
+            "0xf2f2a88bcf47d1a86ae15fd17098f93152606c3d"
+        ) {
+          pairsCall.data.pairs[i] == null;
+        }
+      }
       const find = "miMATIC";
       const regex = new RegExp(find, "g");
       const regex1 = new RegExp("miMATIC", "g");
@@ -1274,7 +1320,8 @@ class Store {
         factoryContract.methods.allPairsLength().call(),
         gaugesContract.methods.totalWeight().call(),
       ]);
-
+      const responsev2 = await clientV.query(queryv2).toPromise();
+      console.log(responsev2.data.bundle.ethPrice);
       const ps = await Promise.all(
         pairs.map(async (pair) => {
           try {
@@ -1337,77 +1384,33 @@ class Store {
                     .div(10 ** parseInt(pair.token1.decimals))
                     .toFixed(parseInt(pair.token1.decimals))
                 : 0;
-               
-                if(pair.token0.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb' || pair.token1.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb'){
-                  let a,b,totalVolumeInUsdInReserve1,totalVolumeInUsdInReserve0;
-                  if(pair.token0.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb'){
 
-                 
+            const totalVolumeInUsdInReserve0 = BigNumber(
+              pair.reserve0
+            ).multipliedBy(BigNumber(pair.token0.derivedETH));
 
-                  b = await axios.get('https://api.dexscreener.io/latest/dex/pairs/polygon/0x1e08a5b6a1694bc1a65395db6f4c506498daa349')
-                  console.log(b,b.data.pair.priceUsd,"hello1")
-                  totalVolumeInUsdInReserve0 = BigNumber(
-                    pair.reserve0
-                  ).multipliedBy(BigNumber(b.data.pair.priceUsd)); 
-                  console.log(b.data.pair.priceUsd,b,"hello2")
-                   a = await axios.get(
-                    `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token1.address}&vs_currencies=usd`
-                  );
-                  totalVolumeInUsdInReserve1 = BigNumber(
-                    pair.reserve1
-                  ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
-                  }
-                  else{
-                     a = await axios.get(
-                      `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address}&vs_currencies=usd`
-                    );
-                     totalVolumeInUsdInReserve0 = BigNumber(
-                      pair.reserve0
-                    ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
+            const totalVolumeInUsdInReserve1 = BigNumber(
+              pair.reserve1
+            ).multipliedBy(BigNumber(pair.token1.derivedETH));
 
-                    b = await axios.get('https://api.dexscreener.io/latest/dex/pairs/polygon/0x1e08a5b6a1694bc1a65395db6f4c506498daa349')
-                  totalVolumeInUsdInReserve1 = BigNumber(
-                    pair.reserve1
-                  ).multipliedBy(BigNumber(b.data.pair.priceUsd)); 
-
-                  }
-                  
-    
-                  const totalVolumeInUsd =
-                    Number(totalVolumeInUsdInReserve0) +
-                    Number(totalVolumeInUsdInReserve1);
-                  pair.tvl = Number(totalVolumeInUsd);
-                 
-                }
-                else{
-                  const a = await axios.get(
-                    `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
-                  );
-                  const totalVolumeInUsdInReserve0 = BigNumber(
-                    pair.reserve0
-                  ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
-    
-                  const totalVolumeInUsdInReserve1 = BigNumber(
-                    pair.reserve1
-                  ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
-    
-                  const totalVolumeInUsd =
-                    Number(totalVolumeInUsdInReserve0) +
-                    Number(totalVolumeInUsdInReserve1);
-                  pair.tvl = Number(totalVolumeInUsd);
-                }
+            const totalVolumeInUsd =
+              Number(totalVolumeInUsdInReserve0) +
+              Number(totalVolumeInUsdInReserve1);
+            pair.tvl = BigNumber(totalVolumeInUsd).multipliedBy(
+              parseInt(responsev2.data.bundle.ethPrice)
+            );
             return pair;
           } catch (ex) {
-            console.log("EXCEPTION 1");
-            console.log(pair);
-            console.log(ex);
             return pair;
           }
         })
       );
       this.setStore({ pairs: ps });
       this.emitter.emit(ACTIONS.UPDATED);
-
+      let b = await axios.get(
+        "https://api.dexscreener.io/latest/dex/pairs/polygon/0x1e08a5b6a1694bc1a65395db6f4c506498daa349"
+      );
+      let dystprice = BigNumber(b.data.pair.priceUsd);
       const ps1 = await Promise.all(
         ps.map(async (pair) => {
           try {
@@ -1502,7 +1505,7 @@ class Store {
                       .div(10 ** 18)
                       .toFixed(18)
                   : 0;
-              
+
               pair.gauge.reserve0 =
                 parseFloat(pair.totalSupply) > 0
                   ? parseFloat(
@@ -1533,93 +1536,37 @@ class Store {
                       .div(parseInt(totalWeight))
                       .toFixed(2)
                   : 0;
-              
-                  if(pair.token0.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb' || pair.token1.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb'){
-                    let a,b,totalVolumeInUsdInReserve1,totalVolumeInUsdInReserve0;
-                    
-                    if(pair.token0.address == '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb'){
 
-                    b = await axios.get('https://api.dexscreener.io/latest/dex/pairs/polygon/0x1e08a5b6a1694bc1a65395db6f4c506498daa349')
-                    console.log(b,"hello")
-                    totalVolumeInUsdInReserve0 = BigNumber(
-                      pair.gauge.reserve0
-                    ).multipliedBy(BigNumber(b.data.pair.priceUsd)); 
-                   
-                     a = await axios.get(
-                      `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token1.address}&vs_currencies=usd`
-                    );
-                    totalVolumeInUsdInReserve1 = BigNumber(
-                      pair.gauge.reserve1
-                    ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
-                    }
-                    else{
-                       a = await axios.get(
-                        `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address}&vs_currencies=usd`
-                      );
-                       totalVolumeInUsdInReserve0 = BigNumber(
-                        pair.gauge.reserve0
-                      ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
-  
-                      b = await axios.get('https://api.dexscreener.io/latest/dex/pairs/polygon/0x1e08a5b6a1694bc1a65395db6f4c506498daa349')
-                    totalVolumeInUsdInReserve1 = BigNumber(
-                      pair.gauge.reserve1
-                    ).multipliedBy(BigNumber(b.data.pair.priceUsd)); 
-  
-                    }
-                    
-      
-                    const totalVolumeInUsd =
-                      Number(totalVolumeInUsdInReserve0) +
-                      Number(totalVolumeInUsdInReserve1);
-                      const secondsPerYear = 31622400;
-                      const valuePerYear = new BigNumber(secondsPerYear)
-                        .times(rewardRate)
-                        .div(10 ** 18);
-                      
-                      
-                      const apr = new BigNumber(valuePerYear)
-                        .div(Number(totalVolumeInUsd))
-                        .div(10 ** 18)
-                        .times(100)
-                        .toFixed(4);
-        
-                      pair.gauge.apr = apr; 
-                   
-                  }
-                  else{
-                    const a = await axios.get(
-                      `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
-                    );
-                    const totalVolumeInUsdInReserve0 = BigNumber(
-                      pair.gauge.reserve0
-                    ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
-      
-                    const totalVolumeInUsdInReserve1 = BigNumber(
-                      pair.gauge.reserve1
-                    ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
-      
-                    const totalVolumeInUsd =
-                      Number(totalVolumeInUsdInReserve0) +
-                      Number(totalVolumeInUsdInReserve1);
-                      
-                    const secondsPerYear = 31622400;
-                    const valuePerYear = new BigNumber(secondsPerYear)
-                      .times(rewardRate)
-                      .div(10 ** 18);
-                    
-                    
-                    const apr = new BigNumber(valuePerYear)
-                      .div(Number(totalVolumeInUsd))
-                      .div(10 ** 18)
-                      .times(100)
-                      .toFixed(4);
-      
-                    pair.gauge.apr = apr; 
-                  }
-                
-                    
+              let totalVolumeInUsdInReserve0 = BigNumber(
+                pair.gauge.reserve0
+              ).multipliedBy(BigNumber(pair.token0.derivedETH));
+
+              let totalVolumeInUsdInReserve1 = BigNumber(
+                pair.gauge.reserve1
+              ).multipliedBy(BigNumber(pair.token1.derivedETH));
+              let totalVolumeInUsd =
+                Number(totalVolumeInUsdInReserve0) +
+                Number(totalVolumeInUsdInReserve1);
+
+              totalVolumeInUsd = BigNumber(totalVolumeInUsd).multipliedBy(
+                parseInt(responsev2.data.bundle.ethPrice)
+              );
+
+              const secondsPerYear = 31622400;
+              const valuePerYear = new BigNumber(secondsPerYear)
+                .times(rewardRate)
+                .div(10 ** 18);
+
+              const apr = new BigNumber(valuePerYear)
+              .times(dystprice)
+                .div(totalVolumeInUsd)
+                .div(10 ** 18)
+                .times(100)
+                .toFixed(4);
+
+              pair.gauge.apr = apr;
+              return pair;
             }
-
             return pair;
           } catch (ex) {
             return pair;
@@ -4209,7 +4156,6 @@ class Store {
       const routeAssets = this.getStore("routeAssets");
 
       const { fromAsset, toAsset, fromAmount } = payload.content;
-      console.log(fromAsset, toAsset,fromAmount,"hello")
 
       const routerContract = new web3.eth.Contract(
         CONTRACTS.ROUTER_ABI,
@@ -4340,36 +4286,40 @@ class Store {
         routeAsset: null,
       });
 
-      // const multicall = await stores.accountStore.getMulticall();      
+      // const multicall = await stores.accountStore.getMulticall();
 
       const retryCall = async () => {
         const res = await Promise.allSettled(
-        amountOuts.map(async (route) => {
-          const fn = retry({ 
-            fn: routerContract.methods.getAmountsOut(
-              sendFromAmount,
-              route.routes
-            ).call
+          amountOuts.map(async (route) => {
+            const fn = retry({
+              fn: routerContract.methods.getAmountsOut(
+                sendFromAmount,
+                route.routes
+              ).call,
+            });
+            return await fn();
           })
-          return await fn()
-          })
-        )
+        );
 
         return res
           .filter((el, index) => {
-            if (el.status === 'fulfilled' && el.value !== undefined && el.value !== null) {
-              return true
+            if (
+              el.status === "fulfilled" &&
+              el.value !== undefined &&
+              el.value !== null
+            ) {
+              return true;
             } else {
-              amountOuts[index] = null
-              return false
+              amountOuts[index] = null;
+              return false;
             }
           })
-          .map(el => el.value)
-      }
+          .map((el) => el.value);
+      };
 
-      const receiveAmounts = await retryCall()
+      const receiveAmounts = await retryCall();
 
-      amountOuts = amountOuts.filter(el => el !== null)
+      amountOuts = amountOuts.filter((el) => el !== null);
 
       for (let i = 0; i < receiveAmounts.length; i++) {
         amountOuts[i].receiveAmounts = receiveAmounts[i];
