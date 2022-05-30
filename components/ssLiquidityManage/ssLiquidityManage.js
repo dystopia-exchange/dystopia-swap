@@ -262,7 +262,7 @@ export default function ssLiquidityManage() {
   };
 
   const callQuoteAddLiquidity = (amountA, amountB, pa, sta, pp, assetA, assetB) => {
-    if (Number(parseInt(pp?.reserve0)) != Number(0) && Number(parseInt(pp?.reserve1)) != Number(0)) {
+    if (parseFloat(pp?.reserve0) != 0 && parseFloat(pp?.reserve1) != 0) {
       if (!pp) {
         return null;
       }
@@ -279,8 +279,10 @@ export default function ssLiquidityManage() {
         addy1 = CONTRACTS.WFTM_ADDRESS;
       }
 
-
-      if (addy1.toLowerCase() == pp.token0.address.toLowerCase() && addy0.toLowerCase() == pp.token1.address.toLowerCase()) {
+      if (
+          addy1.toLowerCase() == pp.token0.address.toLowerCase()
+          && addy0.toLowerCase() == pp.token1.address.toLowerCase()
+        ) {
         invert = true;
       }
 

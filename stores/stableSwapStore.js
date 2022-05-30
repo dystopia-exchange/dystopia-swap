@@ -1689,11 +1689,8 @@ class Store {
         .getPair(toki0, toki1, isStable)
         .call();
 
-      console.log('pairFor', pairFor)
-
       const hasPair = pairFor && pairFor != ZERO_ADDRESS
 
-      // TODO: блокирует флоу интерфейса при создании лп
       // if (pairFor && pairFor != ZERO_ADDRESS) {
       //   await context.updatePairsCall(web3, account);
       //   this.emitter.emit(ACTIONS.ERROR, "Pair already exists");
@@ -1809,7 +1806,6 @@ class Store {
           token0.address
         );
 
-        console.log('123')
         const tokenPromise = new Promise((resolve, reject) => {
           context._callContractWait(
             web3,
@@ -1841,7 +1837,6 @@ class Store {
           token1.address
         );
 
-        console.log('123')
         const tokenPromise = new Promise((resolve, reject) => {
           context._callContractWait(
             web3,
@@ -1886,8 +1881,6 @@ class Store {
         .times(sendSlippage)
         .times(10 ** parseInt(token1.decimals))
         .toFixed(0);
-
-      console.log('123')
       
       let func = "addLiquidity";
       let params = [
@@ -1903,20 +1896,7 @@ class Store {
       ];
       let sendValue = null;
 
-      console.log('addLiquidity', {
-        'token0.address': token0.address,
-        'token1.address': token1.address,
-        'isStable': isStable,
-        'sendAmount0': sendAmount0,
-        'sendAmount1': sendAmount1,
-        'sendAmount0Min': sendAmount0Min,
-        'sendAmount1Min': sendAmount1Min,
-        'account.address': account.address,
-        'deadline': deadline,
-      })
-
       if (token0.address === "MATIC") {
-        console.log('123')
         func = "addLiquidityMATIC";
         params = [
           token1.address,
@@ -1930,7 +1910,6 @@ class Store {
         sendValue = sendAmount0;
       }
       if (token1.address === "MATIC") {
-        console.log('123')
         func = "addLiquidityMATIC";
         params = [
           token0.address,
@@ -1948,7 +1927,6 @@ class Store {
         CONTRACTS.ROUTER_ABI,
         CONTRACTS.ROUTER_ADDRESS
       );
-      console.log('123')
       this._callContractWait(
         web3,
         routerContract,
@@ -1977,8 +1955,6 @@ class Store {
             .getPair(tok0, tok1, isStable)
             .call();
 
-          console.log('pairFor', pairFor)
-
          const gaugesContract = new web3.eth.Contract(
             CONTRACTS.VOTER_ABI,
             CONTRACTS.VOTER_ADDRESS
@@ -2002,26 +1978,13 @@ class Store {
               .balanceOf(account.address)
               .call();
 
-            console.log('balanceOf', balanceOf)
-
             const pair = await this.getPairByAddress(pairFor);
-            console.log('getPairByAddress pair', pair)
             const stakeAllowance = await this._getStakeAllowance(
               web3,
               pair,
               account
             );
-
-            console.log('stakeAllowance', stakeAllowance)
-            console.log('balanceOf', balanceOf)
-            console.log('pair', pair)
-
-            console.log('if', BigNumber(stakeAllowance).lt(
-              BigNumber(balanceOf)
-                .div(10 ** parseInt(pair.decimals))
-                .toFixed(parseInt(pair.decimals))
-            ))
-
+  
               if (
                 BigNumber(stakeAllowance).lt(
                   BigNumber(balanceOf)
@@ -2081,9 +2044,7 @@ class Store {
               if (token && token.id) {
                 sendTok = token.id;
               }
-
-              console.log('deposit [balanceOf, sendTok]', [balanceOf, sendTok])
-
+     
               this._callContractWait(
                 web3,
                 gaugeContract,
@@ -2126,16 +2087,12 @@ class Store {
                 const gaugeAddress = await gaugesContract.methods
                   .gauges(pairFor)
                   .call();
-
-                console.log('gaugeAddress', gaugeAddress)
-                console.log('pairFor', pairFor)
                 
                 await depositInGauge(gaugeAddress, pairFor)
               }
             );
           } else {
             const pair = await this.getPairByAddress(pairFor);
-            
             this.emitter.emit(ACTIONS.TX_STATUS, {
               uuid: createGaugeTXID,
               description: `Allowance on ${pair.symbol} sufficient`,
@@ -2216,7 +2173,7 @@ class Store {
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let allowanceTXID = this.getTXUUID();
       let depositTXID = this.getTXUUID();
-      console.log(allowanceTXID);
+
       this.emitter.emit(ACTIONS.TX_ADDED, {
         title: `Migrating liquidity pool for ${token0.symbol}/${token1.symbol}`,
         type: "Migrate Liquidity",
