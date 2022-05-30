@@ -65,6 +65,7 @@ export default function ssLiquidityManage() {
   const [asset0, setAsset0] = useState(null);
   const [asset1, setAsset1] = useState(null);
   const [assetOptions, setAssetOptions] = useState([]);
+  const [needAddToWhiteList, setNeedAddToWhiteList] = useState('')
 
   const [withdrawAsset, setWithdrawAsset] = useState(null);
   const [withdrawAassetOptions, setWithdrawAssetOptions] = useState([]);
@@ -111,6 +112,39 @@ export default function ssLiquidityManage() {
   const handleClosePopover = () => {
     setAnchorEl(null);
   };
+  
+  const checkIsWhiteListedPair = async (pair) => {
+    if (pair === null) {
+      return
+    }
+    setNeedAddToWhiteList('')
+
+    const web3 = await stores.accountStore.getWeb3Provider();
+
+    const voterContract = new web3.eth.Contract(
+      CONTRACTS.VOTER_ABI,
+      CONTRACTS.VOTER_ADDRESS
+    );
+
+    const [token0, token1] = await Promise.all([
+      voterContract.methods.isWhitelisted(pair.token0.address).call(),
+      voterContract.methods.isWhitelisted(pair.token1.address).call(),
+    ]);
+ 
+    const symbols = []
+
+    if (token0 === false) {
+      symbols.push(pair.token0.symbol)
+    }
+    
+    if (token1 === false) {
+      symbols.push(pair.token1.symbol)
+    }
+
+    if (symbols.length > 0) {
+      setNeedAddToWhiteList(symbols.join(', '))
+    }
+  }
 
   const openSlippage = Boolean(anchorEl);
 
@@ -220,7 +254,7 @@ export default function ssLiquidityManage() {
       setAssetOptions(stores.stableSwapStore.getStore('baseAssets'));
     };
 
-    ssUpdated();
+    // ssUpdated();
 
     stores.emitter.on(ACTIONS.UPDATED, ssUpdated);
     stores.emitter.on(ACTIONS.LIQUIDITY_ADDED, depositReturned);
@@ -796,11 +830,13 @@ export default function ssLiquidityManage() {
     if (type === 'amount0') {
       setAsset0(value);
       const p = await stores.stableSwapStore.getPair(value.address, asset1.address, stable);
+      await checkIsWhiteListedPair(p);
       setPair(p);
       callQuoteAddLiquidity(amount0, amount1, priorityAsset, stable, p, value, asset1);
     } else if (type === 'amount1') {
       setAsset1(value);
       const p = await stores.stableSwapStore.getPair(asset0.address, value.address, stable);
+      await checkIsWhiteListedPair(p);
       setPair(p);
       callQuoteAddLiquidity(amount0, amount1, priorityAsset, stable, p, asset0, value);
     } else if (type === 'withdraw') {
@@ -1758,6 +1794,16 @@ export default function ssLiquidityManage() {
                   </>
                 }
 
+                {needAddToWhiteList !== '' && (
+                   <div className={[
+                    classes.disclaimerContainer,
+                    classes.disclaimerContainerError,
+                    classes[`disclaimerContainerError--${appTheme}`]
+                  ].join(' ')}>
+                    token {needAddToWhiteList} not whitelisted
+                  </div>
+                )}
+
                 {createLP &&
                   <div className={[
                     classes.disclaimerContainer,
@@ -2135,6 +2181,10 @@ export default function ssLiquidityManage() {
             size="large"
             color="primary"
             onClick={() => {
+              if (needAddToWhiteList !== '') {
+                return
+              }
+
               if (amount0 !== '' && amount1 !== '' && createLP) {
                 onCreateAndStake();
               }
@@ -2143,7 +2193,7 @@ export default function ssLiquidityManage() {
                 onStake();
               }
             }}
-            disabled={(amount0 === '' || amount1 === '')}
+            disabled={(amount0 === '' || amount1 === '' || needAddToWhiteList !== '')}
             className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(" ")}>
               <span className={classes.actionButtonText}>
                 {amount0 !== '' && amount1 !== '' && createLP && 'Create LP & Stake'}
@@ -2162,7 +2212,8 @@ export default function ssLiquidityManage() {
               variant="contained"
               size="large"
               color="primary"
-              onClick={onCreateAndDeposit}
+              onClick={needAddToWhiteList !== '' ? null : onCreateAndDeposit}
+              disabled={needAddToWhiteList !== ''}
               className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(" ")}>
               <span className={classes.actionButtonText}>
                 Create LP
