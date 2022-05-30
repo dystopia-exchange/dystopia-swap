@@ -493,6 +493,28 @@
   background: #0B5E8E;
 }
 
+.statButton {
+  padding: 5px;
+  margin-left: 10px;
+  background: #DBE6EC;
+  border: 2px solid #15B525;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.32s ease;
+}
+
+.statButton:hover {
+  background: #B9DFF5;
+}
+
+.statButton--dark {
+  background: #151718;
+}
+
+.statButton--dark:hover {
+  background: #24292D;
+}
+
 @media (max-width: 1550px) {
   .headerContainer {
     outline: 1px solid #86B9D6;
@@ -503,7 +525,7 @@
   }
 }
 
-@media (max-width: 630px) {
+@media (max-width: 650px) {
   .testnetDisclaimer {
     display: none;
   }
@@ -542,6 +564,10 @@
 }
 
 @media (max-width: 380px) {
+  .logoContainer {
+    margin-left: 10px;
+  }
+
   .accountButtonContainer {
     margin-left: 5px;
   }
@@ -549,9 +575,13 @@
   .headBtnTxt {
     font-size: 10px !important;
   }
+
+  .statButton {
+    margin-left: 5px;
+  }
 }
 
-@media (max-width: 345px) {
+@media (max-width: 350px) {
   .logoContainer {
     display: none;
   }
