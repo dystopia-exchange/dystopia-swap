@@ -1452,6 +1452,10 @@ input[type=number].mediumInputAmount {
     border-right: 1px solid #5F7285;
   }
 
+  .priceInfo > .title {
+    font-size: 14px !important;
+  }
+
   .routeLinesLeft,
   .routeLinesRight {
     width: 35%;
