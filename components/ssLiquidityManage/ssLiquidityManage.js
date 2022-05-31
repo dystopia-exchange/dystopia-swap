@@ -158,7 +158,9 @@ export default function ssLiquidityManage() {
       return BigNumber(ppp.balance).gt(0) || (ppp.gauge && BigNumber(ppp.gauge.balance).gt(0));
     });
 
-    setWithdrawAssetOptions(onlyWithBalance);
+    setWithdrawAssetOptions(onlyWithBalance)
+    console.log('------ onlyWithBalance', onlyWithBalance)
+
     setAssetOptions(storeAssetOptions);
     setVeToken(veTok);
     setVestNFTs(nfts);
@@ -806,14 +808,18 @@ export default function ssLiquidityManage() {
     const value = formatInputAmount(event.target.value.replace(',', '.'));
     setAmount0Error(false);
     setAmount0(value);
-    callQuoteAddLiquidity(value, amount1, priorityAsset, stable, pair, asset0, asset1);
+    if (!createLP) {
+      callQuoteAddLiquidity(value, amount1, priorityAsset, stable, pair, asset0, asset1);
+    }
   };
 
   const amount1Changed = (event) => {
     const value = formatInputAmount(event.target.value.replace(',', '.'));
     setAmount1Error(false);
     setAmount1(value);
-    callQuoteAddLiquidity(amount0, value, priorityAsset, stable, pair, asset0, asset1);
+    if (!createLP) {
+      callQuoteAddLiquidity(amount0, value, priorityAsset, stable, pair, asset0, asset1);
+    }
   };
 
   const amount0Focused = (event) => {
@@ -829,16 +835,22 @@ export default function ssLiquidityManage() {
   const onAssetSelect = async (type, value) => {
     if (type === 'amount0') {
       setAsset0(value);
-      const p = await stores.stableSwapStore.getPair(value.address, asset1.address, stable);
+      const p = createLP
+        ? await stores.stableSwapStore.getPair(value.address, asset1.address, stable)
+        : await stores.stableSwapStore.getPair(value.token0.address, value.token1.address, value.isStable)
       await checkIsWhiteListedPair(p);
       setPair(p);
-      callQuoteAddLiquidity(amount0, amount1, priorityAsset, stable, p, value, asset1);
+      if (createLP) {
+        callQuoteAddLiquidity(amount0, amount1, priorityAsset, stable, p, value, asset1);
+      }
     } else if (type === 'amount1') {
       setAsset1(value);
       const p = await stores.stableSwapStore.getPair(asset0.address, value.address, stable);
       await checkIsWhiteListedPair(p);
       setPair(p);
-      callQuoteAddLiquidity(amount0, amount1, priorityAsset, stable, p, asset0, value);
+      if (createLP) {
+        callQuoteAddLiquidity(amount0, amount1, priorityAsset, stable, p, asset0, value);
+      }
     } else if (type === 'withdraw') {
       setWithdrawAsset(value);
       const p = await stores.stableSwapStore.getPair(value.token0.address, value.token1.address, value.isStable);
@@ -959,7 +971,6 @@ export default function ssLiquidityManage() {
               }
             </span>
             </Typography>
-
             {assetValue?.balance && Number(assetValue?.balance) > 0 && type === 'amount0' &&
               <div
                 style={{
@@ -1088,7 +1099,7 @@ export default function ssLiquidityManage() {
               </Typography>
 
               <Typography className={classes.text}>
-                {`${formatSymbol(asset0?.symbol)} per ${formatSymbol(asset1?.symbol)}`}
+                {`${formatSymbol(asset0?.symbol ?? '')} per ${formatSymbol(asset1?.symbol ?? '')}`}
               </Typography>
             </div>
 
@@ -1099,7 +1110,7 @@ export default function ssLiquidityManage() {
                 className={classes.title}>{BigNumber(amount0).gt(0) ? formatCurrency(BigNumber(amount1).div(amount0)) : '0.00'}</Typography>
 
               <Typography
-                className={classes.text}>{`${formatSymbol(asset1?.symbol)} per ${formatSymbol(asset0?.symbol)}`}</Typography>
+                className={classes.text}>{`${formatSymbol(asset1?.symbol ?? '')} per ${formatSymbol(asset0?.symbol ?? '')}`}</Typography>
             </div>
           </div>
         </div>
@@ -1120,11 +1131,11 @@ export default function ssLiquidityManage() {
               <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
 
               <Typography className={classes.text}>
-                {`${formatSymbol(pair?.token0?.symbol)}`}
+                {`${formatSymbol(pair?.token0?.symbol ?? '')}`}
               </Typography>
 
               <Typography className={classes.title}>
-                {formatCurrency(pair?.reserve0)}
+                {formatCurrency(pair?.reserve0 ?? '')}
               </Typography>
             </div>
 
@@ -1132,17 +1143,17 @@ export default function ssLiquidityManage() {
               <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
 
               <Typography className={classes.text}>
-                {`${formatSymbol(pair?.token1?.symbol)}`}
+                {`${formatSymbol(pair?.token1?.symbol ?? '')}`}
               </Typography>
 
               <Typography className={classes.title}>
-                {formatCurrency(pair?.reserve1)}
+                {formatCurrency(pair?.reserve1 ?? '')}
               </Typography>
             </div>
           </div>
 
           <Typography className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`]].join(' ')}>
-            {`Your Balances - ${formatSymbol(pair?.symbol)}`}
+            {`Your Balances - ${formatSymbol(pair?.symbol ?? '')}`}
           </Typography>
 
           <div className={[classes.priceInfos, classes[`priceInfos--${appTheme}`]].join(' ')}>
@@ -1681,6 +1692,32 @@ export default function ssLiquidityManage() {
     setAdvanced(!advanced);
   };
 
+  const switchToggleCreateLP = () => {
+    const nextValue = !createLP
+    setAsset0(null)
+    setAmount0('')
+    setAmount0Error(false)
+    setAsset1(null)
+    setAmount1('')
+    setAmount1Error(false)
+    setCreateLP(nextValue)
+
+    if (nextValue) {
+      ssUpdated()
+    }
+  }
+
+  const hasLpInWallet = withdrawAassetOptions.some((el) => {
+    if (asset0 === null || asset1 === null) {
+      return false
+    }
+    const assets = [asset0.address, asset1.address]
+    if (assets.includes(el.token0.address) && assets.includes(el.token1.address)) {
+      return true
+    }
+    return false
+  })
+
   return (
     <Paper
       elevation={0}
@@ -1762,7 +1799,9 @@ export default function ssLiquidityManage() {
 
                     <SwitchCustom
                       checked={!createLP}
-                      onChange={() => setCreateLP(!createLP)}
+                      onChange={() => {
+                        switchToggleCreateLP()
+                      }}
                       name={'toggleActive'}
                     />
                   </div>
@@ -1804,7 +1843,7 @@ export default function ssLiquidityManage() {
                   </div>
                 )}
 
-                {createLP &&
+                {createLP && (hasLpInWallet || amount0Error || amount1Error) &&
                   <div className={[
                     classes.disclaimerContainer,
                     amount0Error || amount1Error ? classes.disclaimerContainerError : classes.disclaimerContainerWarning,
@@ -1822,7 +1861,7 @@ export default function ssLiquidityManage() {
                       </>
                     }
 
-                    {!amount0Error && !amount1Error &&
+                    {hasLpInWallet && !amount0Error && !amount1Error &&
                       <>
                         {formatSymbol(asset0?.symbol)}/{formatSymbol(asset1?.symbol)} LP exists in your wallet. Choose
                         “I have LP token” to stake it.
@@ -2176,36 +2215,60 @@ export default function ssLiquidityManage() {
 
       {activeTab === 'deposit' &&
         <>
-          <Button
-            variant="contained"
-            size="large"
-            color="primary"
-            onClick={() => {
-              if (needAddToWhiteList !== '') {
-                return
+          {createLP && (
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={() => {
+                if (needAddToWhiteList !== '') {
+                  return
+                }
+
+                if (amount0 !== '' && amount1 !== '' && createLP) {
+                  onCreateAndStake();
+                }
+
+                if (amount0 !== '' && amount1 !== '' && !createLP) {
+                  onStake();
+                }
+              }}
+              disabled={(amount0 === '' || amount1 === '' || needAddToWhiteList !== '')}
+              className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(" ")}>
+                <span className={classes.actionButtonText}>
+                  {amount0 !== '' && amount1 !== '' && createLP && 'Create LP & Stake'}
+
+                  {amount0 !== '' && amount1 !== '' && !createLP && 'Stake LP'}
+
+                  {(amount0 === '' || amount1 === '') && 'Enter Amount'}
+                </span>
+              {depositLoading &&
+                <Loader color={appTheme === 'dark' ? '#8F5AE8' : '#8F5AE8'}/>
               }
+            </Button>
+          )}
 
-              if (amount0 !== '' && amount1 !== '' && createLP) {
-                onCreateAndStake();
+          {!createLP && (
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={() => {
+                if (amount0 !== '') {
+                  onStake();
+                }
+              }}
+              disabled={amount0 === ''}
+              className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(" ")}>
+                <span className={classes.actionButtonText}>
+                  {amount0 !== '' && 'Stake LP'}
+                  {amount0 === '' && 'Enter Amount'}
+                </span>
+              {depositLoading &&
+                <Loader color={appTheme === 'dark' ? '#8F5AE8' : '#8F5AE8'}/>
               }
-
-              if (amount0 !== '' && amount1 !== '' && !createLP) {
-                onStake();
-              }
-            }}
-            disabled={(amount0 === '' || amount1 === '' || needAddToWhiteList !== '')}
-            className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(" ")}>
-              <span className={classes.actionButtonText}>
-                {amount0 !== '' && amount1 !== '' && createLP && 'Create LP & Stake'}
-
-                {amount0 !== '' && amount1 !== '' && !createLP && 'Stake LP'}
-
-                {(amount0 === '' || amount1 === '') && 'Enter Amount'}
-              </span>
-            {depositLoading &&
-              <Loader color={appTheme === 'dark' ? '#8F5AE8' : '#8F5AE8'}/>
-            }
-          </Button>
+            </Button>
+          )}
 
           {amount0 !== '' && amount1 !== '' && createLP &&
             <Button
