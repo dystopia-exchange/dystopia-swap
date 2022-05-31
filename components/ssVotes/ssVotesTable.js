@@ -115,14 +115,25 @@ const CustomSlider = styled(Slider)(({theme, appTheme, disabled}) => {
   });
 });
 
-function descendingComparator(a, b, orderBy) {
+function descendingComparator(a, b, orderBy, sliderValues) {
   if (!a || !b) {
     return 0;
   }
 
   switch (orderBy) {
-    case 'balance':
+    case 'asset':
+      return formatSymbol(a.symbol).localeCompare(formatSymbol(b.symbol));
 
+    case 'tvl':
+      if (BigNumber(b?.tvl).lt(a?.tvl)) {
+        return -1;
+      }
+      if (BigNumber(b?.tvl).gt(a?.tvl)) {
+        return 1;
+      }
+      return 0;
+
+    case 'balance':
       if (BigNumber(b?.gauge?.balance).lt(a?.gauge?.balance)) {
         return -1;
       }
@@ -132,7 +143,6 @@ function descendingComparator(a, b, orderBy) {
       return 0;
 
     case 'liquidity':
-
       let reserveA = BigNumber(a?.reserve0).plus(a?.reserve1).toNumber();
       let reserveB = BigNumber(b?.reserve0).plus(b?.reserve1).toNumber();
 
@@ -145,7 +155,6 @@ function descendingComparator(a, b, orderBy) {
       return 0;
 
     case 'totalVotes':
-
       if (BigNumber(b?.gauge?.weightPercent).lt(a?.gauge?.weightPercent)) {
         return -1;
       }
@@ -155,25 +164,38 @@ function descendingComparator(a, b, orderBy) {
       return 0;
 
     case 'apy':
+      let apyA = a?.gaugebribes.length ? (
+        a?.gaugebribes.map((bribe, idx) => {
+          return BigNumber(bribe.rewardAmount).toNumber()
+        }).reduce((partialSum, a) => partialSum + a, 0)
+      ) : 0;
 
-      if (BigNumber(b?.gauge?.bribes?.length).lt(a?.gauge?.bribes?.length)) {
-        return -1;
-      }
-      if (BigNumber(b?.gauge?.bribes?.length).gt(a?.gauge?.bribes?.length)) {
-        return 1;
-      }
-      return 0;
+      let apyB = b?.gaugebribes.length ? (
+        b?.gaugebribes.map((bribe, idx) => {
+          return BigNumber(bribe.rewardAmount).toNumber()
+        }).reduce((partialSum, a) => partialSum + a, 0)
+      ) : 0;
+
+      return apyA - apyB;
 
     case 'myVotes':
     case 'mvp':
+      // BigNumber(sliderValue).div(100).times(token?.lockValue)
+      let sliderValueA = sliderValues.find((el) => el.address === a?.address)?.value;
+      if (sliderValueA) {
+        sliderValueA = BigNumber(sliderValueA).toNumber(0);
+      } else {
+        sliderValueA = 0;
+      }
 
-      if (BigNumber(b?.gauge?.bribes?.length).lt(a?.gauge?.bribes?.length)) {
-        return -1;
+      let sliderValueB = sliderValues.find((el) => el.address === b?.address)?.value;
+      if (sliderValueB) {
+        sliderValueB = BigNumber(sliderValueB).toNumber(0);
+      } else {
+        sliderValueB = 0;
       }
-      if (BigNumber(b?.gauge?.bribes?.length).gt(a?.gauge?.bribes?.length)) {
-        return 1;
-      }
-      return 0;
+
+      return sliderValueA - sliderValueB;
 
     default:
       return 0;
@@ -181,8 +203,8 @@ function descendingComparator(a, b, orderBy) {
 
 }
 
-function getComparator(order, orderBy) {
-  return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+function getComparator(order, orderBy, sliderValues) {
+  return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy, sliderValues) : (a, b) => -descendingComparator(a, b, orderBy, sliderValues);
 }
 
 function stableSort(array, comparator) {
@@ -275,6 +297,28 @@ const StyledTableCell = styled(TableCell)(({theme, appTheme}) => ({
   padding: '20px 25px 15px',
 }));
 
+const sortIcon = (sortDirection) => {
+  const {appTheme} = useAppThemeContext();
+
+  return (
+    <>
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+        style={{
+          transform: sortDirection === 'desc' ? 'rotate(180deg)' : 'rotate(0deg)',
+        }}
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M5.83325 8.33337L9.99992 12.5L14.1666 8.33337H5.83325Z"
+          fill={appTheme === 'dark' ? '#5F7285' : '#9BC9E4'}/>
+      </svg>
+    </>
+  );
+};
+
 function EnhancedTableHead(props) {
   const {classes, order, orderBy, onRequestSort} = props;
   const createSortHandler = (property) => (event) => {
@@ -310,6 +354,7 @@ function EnhancedTableHead(props) {
                   <TableSortLabel
                     active={orderBy === headCell.id}
                     direction={orderBy === headCell.id ? order : 'asc'}
+                    IconComponent={() => orderBy === headCell.id ? sortIcon(order) : null}
                     onClick={createSortHandler(headCell.id)}>
                     <Typography
                       className={classes.headerText}
@@ -317,6 +362,7 @@ function EnhancedTableHead(props) {
                         fontWeight: 600,
                         fontSize: 12,
                         lineHeight: '120%',
+                        color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
                       }}>
                       {headCell.label}
                     </Typography>
@@ -342,7 +388,7 @@ function EnhancedTableHead(props) {
                   <TableSortLabel
                     active={orderBy === headCell.id}
                     direction={orderBy === headCell.id ? order : 'asc'}
-                    IconComponent={ArrowDropDown}
+                    IconComponent={() => orderBy === headCell.id ? sortIcon(order) : null}
                     style={{
                       color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
                     }}
@@ -354,6 +400,7 @@ function EnhancedTableHead(props) {
                         fontSize: 12,
                         lineHeight: '120%',
                         width: headCell.width || 'auto',
+                        color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
                       }}>
                       {headCell.label}
                     </Typography>
@@ -627,7 +674,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
     {id: 'myVotes--asc', label: 'My Votes: low to high'},
   ];
 
-  const [sortValueId, setSortValueId] = useState(options[0].id);
+  const [sortValueId, setSortValueId] = useState('totalVotes--desc');
   const [sortDirection, setSortDirection] = useState('asc');
   const [expanded, setExpanded] = useState('');
   const [voteDialogOpen, setVoteDialogOpen] = useState(false);
@@ -654,6 +701,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
   const handleChangeSort = ({target: {value}}) => {
     const property = value.substring(0, value.indexOf('--'));
     const event = value.substring(value.indexOf('--') + 2);
+
+    console.log(value, event, property)
 
     setSortValueId(value);
     setSortDirection(event);
@@ -828,7 +877,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
               <TableBody classes={{
                 root: classes.tableBody,
               }}>
-                {stableSort(gauges, getComparator(order, orderBy))
+                {stableSort(gauges, getComparator(order, orderBy, sliderValues))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     if (!row) {
@@ -1118,7 +1167,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
           overflow: 'auto',
           marginTop: 100,
         }}>
-          {stableSort(gauges, getComparator(order, orderBy))
+          {stableSort(gauges, getComparator(order, orderBy, sliderValues))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
               if (!row) {

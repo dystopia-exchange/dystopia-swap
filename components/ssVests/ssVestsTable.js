@@ -35,6 +35,9 @@ function descendingComparator(a, b, orderBy) {
   }
 
   switch (orderBy) {
+    case 'NFT':
+      return Number(a.id) - Number(b.id);
+
     case 'Locked Amount':
       let amountA = BigNumber(a?.lockAmount).toNumber();
       let amountB = BigNumber(b?.lockAmount).toNumber();
@@ -144,6 +147,28 @@ const StyledTableCell = styled(TableCell)(({theme, appTheme}) => ({
   padding: '20px 25px 15px',
 }));
 
+const sortIcon = (sortDirection) => {
+  const {appTheme} = useAppThemeContext();
+
+  return (
+    <>
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+        style={{
+          transform: sortDirection === 'desc' ? 'rotate(180deg)' : 'rotate(0deg)',
+        }}
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M5.83325 8.33337L9.99992 12.5L14.1666 8.33337H5.83325Z"
+          fill={appTheme === 'dark' ? '#5F7285' : '#9BC9E4'}/>
+      </svg>
+    </>
+  );
+};
+
 function EnhancedTableHead(props) {
   const {classes, order, orderBy, onRequestSort} = props;
   const createSortHandler = (property) => (event) => {
@@ -178,13 +203,15 @@ function EnhancedTableHead(props) {
                   <TableSortLabel
                     active={orderBy === headCell.id}
                     direction={orderBy === headCell.id ? order : 'asc'}
-                    onClick={createSortHandler(headCell.id)}>
+                    onClick={createSortHandler(headCell.id)}
+                    IconComponent={() => orderBy === headCell.id ? sortIcon(order) : null}>
                     <Typography
                       className={classes.headerText}
                       style={{
                         fontWeight: 600,
                         fontSize: 12,
                         lineHeight: '120%',
+                        color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
                       }}>
                       {headCell.label}
                     </Typography>
@@ -210,7 +237,7 @@ function EnhancedTableHead(props) {
                   <TableSortLabel
                     active={orderBy === headCell.id}
                     direction={orderBy === headCell.id ? order : 'asc'}
-                    IconComponent={ArrowDropDown}
+                    IconComponent={() => orderBy === headCell.id ? sortIcon(order) : null}
                     style={{
                       color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
                     }}
@@ -221,6 +248,7 @@ function EnhancedTableHead(props) {
                         fontWeight: 600,
                         fontSize: 12,
                         lineHeight: '120%',
+                        color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
                       }}>
                       {headCell.label}
                     </Typography>
@@ -503,7 +531,7 @@ const EnhancedTableToolbar = (props) => {
     {id: 'Lock Expires--asc', label: 'Vest Expires: low to high'},
   ];
 
-  const [sortValueId, setSortValueId] = useState(options[0].id);
+  const [sortValueId, setSortValueId] = useState('Locked Amount--desc');
 
   const onSearchChanged = (event) => {
     setSearch(event.target.value);
