@@ -1,15 +1,17 @@
 input[type=number].massiveInputAmount::-webkit-inner-spin-button,
-input[type=number].massiveInputAmount::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
+input[type=number].massiveInputAmount::-webkit-outer-spin-button {
+  -webkit-appearance: none;
 }
-input[type=number].massiveInputAmount::-webkit-inner-spin-button, 
-input[type=number].massiveInputAmount::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
+
+input[type=number].massiveInputAmount::-webkit-inner-spin-button,
+input[type=number].massiveInputAmount::-webkit-outer-spin-button {
+  -webkit-appearance: none;
 }
 
 input[type=number].massiveInputAmount {
   -moz-appearance: textfield;
 }
+
 .smallerText {
   position: absolute !important;
   left: 151px;
@@ -115,7 +117,11 @@ input[type=number].massiveInputAmount {
 .inputBalanceSlippageText::after {
   position: absolute;
   content: '%';
-  right: -4px;
+  right: -13px;
+  border-bottom: 1px solid #86B9D6 !important;
+  padding-bottom: 2px;
+  padding-top: 3px;
+  padding-left: 4px;
 }
 
 .inputBalanceSlippageText > fieldset {
@@ -128,6 +134,10 @@ input[type=number].massiveInputAmount {
 }
 
 .inputBalanceSlippageText:hover {
+  border-bottom: 1px solid #325569 !important;
+}
+
+.inputBalanceSlippageText:hover::after {
   border-bottom: 1px solid #325569 !important;
 }
 
@@ -231,7 +241,7 @@ input[type=number].massiveInputAmount {
   margin-top: -32px;
   z-index: 1;
   cursor: pointer;
-  -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 
 .headerContainer {
@@ -621,6 +631,12 @@ input[type=number].massiveInputAmount {
 }
 
 @media (max-width: 470px) {
+  .inputBalanceSlippageText::after {
+    font-size: 18px !important;
+    font-weight: 400 !important;
+    line-height: 121% !important;
+  }
+
   .loader {
     bottom: -70px;
     left: 105px;
