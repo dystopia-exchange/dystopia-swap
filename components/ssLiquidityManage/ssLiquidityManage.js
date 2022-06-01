@@ -71,12 +71,10 @@ export default function ssLiquidityManage() {
   const [withdrawAassetOptions, setWithdrawAssetOptions] = useState([]);
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [withdrawAmountError, setWithdrawAmountError] = useState(false);
+  const [withdrawAmountPercent, setWithdrawAmountPercent] = useState(0);
 
   const [withdrawAmount0, setWithdrawAmount0] = useState('');
   const [withdrawAmount1, setWithdrawAmount1] = useState('');
-
-  const [withdrawAmount0Percent, setWithdrawAmount0Percent] = useState('');
-  const [withdrawAmount1Percent, setWithdrawAmount1Percent] = useState('');
 
   const [activeTab, setActiveTab] = useState('deposit');
   const [quote, setQuote] = useState(null);
@@ -95,7 +93,7 @@ export default function ssLiquidityManage() {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const [withdrawAction, setWithdrawAction] = useState(null);
+  const [withdrawAction, setWithdrawAction] = useState('unstake-remove');
 
   const [createLP, setCreateLP] = useState(true);
 
@@ -159,7 +157,6 @@ export default function ssLiquidityManage() {
     });
 
     setWithdrawAssetOptions(onlyWithBalance)
-    console.log('------ onlyWithBalance', onlyWithBalance)
 
     setAssetOptions(storeAssetOptions);
     setVeToken(veTok);
@@ -787,6 +784,20 @@ export default function ssLiquidityManage() {
     });
   };
 
+  const handleWithdraw = () => {
+    if (withdrawAction === 'unstake') {
+      onUnstake()
+    }
+
+    if (withdrawAction === 'remove') {
+      onWithdraw()
+    }
+
+    if (withdrawAction === 'unstake-remove') {
+      onUnstakeAndWithdraw()
+    }
+  }
+
   const onCreateGauge = () => {
     setCreateLoading(true);
     stores.dispatcher.dispatch({
@@ -812,6 +823,31 @@ export default function ssLiquidityManage() {
       callQuoteAddLiquidity(value, amount1, priorityAsset, stable, pair, asset0, asset1);
     }
   };
+
+  const amountPercentWithdrawChanged = event => {
+    const formated = formatInputAmount(event.target.value.replace(',', '.'))
+    const maxValue = 100
+
+    if (
+      ['.', ','].includes(formated[formated.length - 1])
+      || formated === ''
+    ) {
+      if (parseFloat(formated) > 100) {
+        setWithdrawAmountPercent(maxValue)
+        return
+      }
+      setWithdrawAmountPercent(formated)
+      return
+    }
+
+    let value = parseFloat(formated);
+
+    if (value > maxValue) {
+      value = maxValue
+    }
+
+    setWithdrawAmountPercent(value)
+  }
 
   const amount1Changed = (event) => {
     const value = formatInputAmount(event.target.value.replace(',', '.'));
@@ -943,6 +979,7 @@ export default function ssLiquidityManage() {
   };
 
   const renderMassiveInput = (type, amountValue, amountError, amountChanged, assetValue, assetError, assetOptions, onAssetSelect, onFocus, inputRef) => {
+    
     return (
       <div className={[classes.textField, classes[`textField--${type}-${appTheme}`]].join(' ')}>
         <Typography className={classes.inputTitleText} noWrap>
@@ -1217,7 +1254,7 @@ export default function ssLiquidityManage() {
     return (
       <div className={classes.withdrawInfoContainer}>
         <Typography className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`]].join(' ')}>
-          {`Your Balances - ${formatSymbol(pair?.symbol)}`}
+          {`Your Balances - ${formatSymbol(withdrawAsset?.symbol)}`}
         </Typography>
 
         <div className={[classes.priceInfos, classes[`priceInfos--${appTheme}`]].join(' ')}>
@@ -1229,7 +1266,7 @@ export default function ssLiquidityManage() {
             </Typography>
 
             <Typography className={classes.title}>
-              {formatCurrency(pair?.balance)}
+              {formatCurrency(withdrawAsset?.balance)}
             </Typography>
           </div>
 
@@ -1241,7 +1278,7 @@ export default function ssLiquidityManage() {
             </Typography>
 
             <Typography className={classes.title}>
-              {formatCurrency(pair?.gauge?.balance)}
+              {formatCurrency(withdrawAsset?.gauge?.balance)}
             </Typography>
           </div>
         </div>
@@ -1321,7 +1358,7 @@ export default function ssLiquidityManage() {
                   <img
                     className={classes.liqBodyIcon}
                     alt=""
-                    src={pair ? `${pair?.token0?.logoURI}` : ''}
+                    src={withdrawAsset ? `${withdrawAsset?.token0?.logoURI}` : ''}
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -1334,7 +1371,7 @@ export default function ssLiquidityManage() {
                   <img
                     className={classes.liqBodyIcon}
                     alt=""
-                    src={pair ? `${pair?.token1?.logoURI}` : ''}
+                    src={withdrawAsset ? `${withdrawAsset?.token1?.logoURI}` : ''}
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -1357,17 +1394,16 @@ export default function ssLiquidityManage() {
                   <Typography
                     className={[classes.inputBalanceText, 'g-flex__item'].join(' ')}
                     noWrap>
-                    {asset1?.gauge?.balance
-                      ? (' ' + formatCurrency(assetValue.gauge.balance))
-                      : '0.00'
-                    }
+                    {parseInt(withdrawAmountPercent) > 0
+                      ? parseFloat((parseFloat(withdrawAsset.balance) / 100 * withdrawAmountPercent) + '').toFixed(8)
+                      : '0.00'}
                   </Typography>
                 </div>
 
                 <div
                   className={[classes.balanceMax, classes[`balanceMax--${appTheme}`]].join(' ')}
                   onClick={() =>
-                    setAmountPercent(type, 100)
+                    amountPercentWithdrawChanged({ target: { value: '100' } })
                   }>
                   MAX
                 </div>
@@ -1382,14 +1418,15 @@ export default function ssLiquidityManage() {
                   placeholder="0.00"
                   error={amount1Error}
                   helperText={amount1Error}
-                  value={amount1}
-                  onChange={amount1Changed}
+                  value={withdrawAmountPercent}
+                  onChange={amountPercentWithdrawChanged}
                   disabled={depositLoading || stakeLoading || depositStakeLoading || createLoading}
                   onFocus={amount1Focused ? amount1Focused : null}
                   inputProps={{
                     className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
                   }}
                   InputProps={{
+                    startAdornment: '%',
                     disableUnderline: true,
                   }}
                 />
@@ -1413,8 +1450,8 @@ export default function ssLiquidityManage() {
             </div>
 
             <div className={classes.receiveAssets}>
-              {renderMediumInput('withdrawAmount0', withdrawAmount0, pair?.token0?.logoURI, pair?.token0?.symbol)}
-              {renderMediumInput('withdrawAmount1', withdrawAmount1, pair?.token1?.logoURI, pair?.token1?.symbol)}
+              {renderMediumInput('withdrawAmount0', withdrawAmount0, withdrawAsset?.token0?.logoURI, withdrawAsset?.token0?.symbol)}
+              {renderMediumInput('withdrawAmount1', withdrawAmount1, withdrawAsset?.token1?.logoURI, withdrawAsset?.token1?.symbol)}
             </div>
           </div>
         }
@@ -1429,15 +1466,15 @@ export default function ssLiquidityManage() {
               <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
                 <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
                 <Typography
-                  className={classes.text}>{`${formatSymbol(pair?.token0?.symbol)} per ${formatSymbol(pair?.token1?.symbol)}`}</Typography>
-                <Typography className={classes.title}>{formatCurrency(pair?.reserve0)}</Typography>
+                  className={classes.text}>{`${formatSymbol(withdrawAsset?.token0?.symbol)} per ${formatSymbol(withdrawAsset?.token1?.symbol)}`}</Typography>
+                <Typography className={classes.title}>{formatCurrency(withdrawAsset?.reserve0)}</Typography>
               </div>
 
               <div className={[classes.priceInfo, classes[`priceInfo--${appTheme}`]].join(' ')}>
                 <Borders offsetLeft={-1} offsetRight={-1} offsetTop={-1} offsetBottom={-1}/>
                 <Typography
-                  className={classes.text}>{`${formatSymbol(pair?.token1?.symbol)} per ${formatSymbol(pair?.token0?.symbol)}`}</Typography>
-                <Typography className={classes.title}>{formatCurrency(pair?.reserve1)}</Typography>
+                  className={classes.text}>{`${formatSymbol(withdrawAsset?.token1?.symbol)} per ${formatSymbol(withdrawAsset?.token0?.symbol)}`}</Typography>
+                <Typography className={classes.title}>{formatCurrency(withdrawAsset?.reserve1)}</Typography>
               </div>
             </div>
           </>
@@ -2213,7 +2250,7 @@ export default function ssLiquidityManage() {
       }
       */}
 
-      {activeTab === 'deposit' &&
+      {activeTab === 'deposit' && (
         <>
           {createLP && (
             <Button
@@ -2287,7 +2324,7 @@ export default function ssLiquidityManage() {
             </Button>
           }
         </>
-      }
+      )}
 
       {
         activeTab === 'withdraw' &&
@@ -2296,25 +2333,21 @@ export default function ssLiquidityManage() {
             variant="contained"
             size="large"
             color="primary"
-            onClick={() => {
-              if (withdrawAction === 'unstake') {
-                onUnstake();
-              }
-            }}
-            disabled={withdrawAction === null || amount1 === ''}
+            onClick={handleWithdraw}
+            disabled={parseFloat(withdrawAmountPercent) === 0}
             className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(" ")}>
               <span className={classes.actionButtonText}>
                 {withdrawAsset !== null &&
                   <>
                     {withdrawAction === null && 'Choose the action'}
 
-                    {amount1 !== '' && withdrawAction === 'unstake' && 'Unstake LP'}
+                    {parseFloat(withdrawAmountPercent) > 0 && withdrawAction === 'unstake' && 'Unstake LP'}
 
-                    {amount1 !== '' && withdrawAction === 'remove' && 'Remove LP'}
+                    {parseFloat(withdrawAmountPercent) > 0 && withdrawAction === 'remove' && 'Remove LP'}
 
-                    {amount1 !== '' && withdrawAction === 'unstake-remove' && 'Unstake & Remove LP'}
+                    {parseFloat(withdrawAmountPercent) > 0 && withdrawAction === 'unstake-remove' && 'Unstake & Remove LP'}
 
-                    {withdrawAction !== null && amount1 === '' && 'Enter Amount'}
+                    {withdrawAction !== null && parseFloat(withdrawAmountPercent) === 0 && 'Enter Amount'}
                   </>
                 }
 
