@@ -44,3 +44,9 @@
 .theme-button--sun.theme-button--light {
   background: var(--main-secondary-light);
 }
+
+@media (max-width: 380px) {
+  .wrapper {
+    margin-left: 5px;
+  }
+}

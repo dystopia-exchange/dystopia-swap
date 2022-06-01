@@ -446,30 +446,24 @@ function Setup() {
         <TextField
           placeholder="0.00"
           error={amountError}
-          helperText={amountError}
           value={amountValue}
           onChange={amountChanged}
           disabled={loading}
+          autoComplete="off"
           InputProps={{
             classes: {
               root: [classes.inputBalanceSlippageText, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
               inputAdornedStart: [classes.inputBalanceSlippageText, classes[`inputBalanceSlippageText--${appTheme}`]].join(" "),
             },
-            endAdornment: <InputAdornment position="end">
-              <span
-                style={{
-                  color: appTheme === "dark" ? '#ffffff' : '#5688A5',
-                }}>
-                %
-              </span>
-            </InputAdornment>,
           }}
           inputProps={{
+            size: amountValue?.length || 4,
             style: {
               padding: 0,
               borderRadius: 0,
               border: 'none',
               color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+              paddingRight: amountValue?.length >= 8 ? 10 : 0,
             },
           }}
         />

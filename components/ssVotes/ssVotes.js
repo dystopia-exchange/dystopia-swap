@@ -158,7 +158,7 @@ export default function ssVotes() {
               <Typography
                 style={{
                   fontWeight: 400,
-                  fontSize: 18,
+                  fontSize: windowWidth < 660 ? 14 : 18,
                   color: appTheme === 'dark' ? '#ffffff' : '#5688A5',
                   whiteSpace: 'nowrap',
                 }}>
@@ -189,7 +189,7 @@ export default function ssVotes() {
               <Typography
                 style={{
                   fontWeight: 700,
-                  fontSize: 16,
+                  fontSize: windowWidth < 660 ? 14 : 16,
                   // color: appTheme === 'dark' ? '#8F5AE8' : '#8F5AE8',
                   whiteSpace: 'nowrap',
                 }}>

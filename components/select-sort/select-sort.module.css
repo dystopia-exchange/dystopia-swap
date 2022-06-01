@@ -1,16 +1,3 @@
-.sortSelect {
-  min-width: 215px !important;
-  padding: 0 20px 0 60px;
-  background: #B9DFF5 !important;
-  border: 1px solid #0B5E8E !important;
-  border-radius: 100px !important;
-}
-
-.sortSelect--dark {
-  background: #151718 !important;
-  border: 1px solid #4CADE6 !important;
-}
-
 .sortSelect > svg,
 .sortSelect--dark > svg {
   color: #5F7285 !important;
@@ -72,18 +59,119 @@
   padding-right: 0 !important;
 }
 
+
+.sortSelect {
+  position: relative;
+  margin-left: 1px;
+  min-width: 215px !important;
+  cursor: pointer;
+  z-index: 11;
+}
+
 .sortIcon {
+  margin-right: 10px;
+}
+
+.menuOption {
+  padding: 0 40px 0 60px;
+  background: #DBE6EC;
+  border-left: 1px solid #0B5E8E;
+  border-right: 1px solid #0B5E8E;
+  transition: all 0.32s ease;
+}
+
+.menuOption:hover,
+.menuOption:active {
+  background: #B9DFF5;
+}
+
+.menuOption--dark {
+  background: #151718;
+}
+
+.menuOption:nth-child(odd) .optionBorder {
+  background: #86B9D6;
+}
+
+.menuOption:last-child {
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  border-bottom: 1px solid #0B5E8E;
+}
+
+.menuOption:last-child .optionBorder {
+  display: none;
+}
+
+.selectedOption {
+  position: relative;
+  height: 50px;
+  width: 100%;
+  border-radius: 100px;
+  background: #B9DFF5;
+  outline: 1px solid #0B5E8E;
+  z-index: 9;
+}
+
+.selectedOption--dark {
+  background: #151718;
+  outline: 1px solid #4CADE6;
+}
+
+.selectedOptionBg {
   position: absolute;
-  left: -0.5px;
-  top: -0.5px;
+  width: 100%;
+  height: 25px;
+  top: 25px;
+  background: #DBE6EC;
+  border-left: 1px solid #0B5E8E;
+  border-right: 1px solid #0B5E8E;
+}
+
+.selectedOptionBg--dark {
+  background: #151718;
+}
+
+.optionBorder {
+  width: 100%;
+  height: 1px;
+  margin-top: -1px;
+  background: #B9DFF5;
+}
+
+.sortSelectOpened {
+  max-width: 100%;
 }
 
 @media (max-width: 530px) {
   .sortSelect {
+    max-width: 80%;
     min-width: auto !important;
   }
 
   .sortSelectInput {
     width: 95px !important;
+  }
+
+  .menuOption {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 445px) {
+  .sortSelect {
+    max-width: 70%;
+  }
+}
+
+@media (max-width: 405px) {
+  .sortSelect {
+    max-width: 60%;
+  }
+}
+
+@media (max-width: 370px) {
+  .sortSelect {
+    max-width: 50%;
   }
 }

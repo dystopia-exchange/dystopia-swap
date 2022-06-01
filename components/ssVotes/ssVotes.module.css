@@ -45,8 +45,7 @@
 }
 
 .infoSection {
-  padding: 0 20px;
-  padding-right: 0;
+  padding: 0 0 0 20px;
   background: #DBE6EC;
   border: 1px solid #86B9D6;
 }
@@ -329,10 +328,24 @@
 
   .infoSection {
     position: fixed;
-    z-index: 9999;
+    z-index: 9;
     left: 0;
     bottom: 0;
     width: 100%;
+    padding: 0 0 0 10px;
+  }
+
+  .buttonOverrideFixed {
+    padding: 12px 10px !important;
+    margin-left: 10px !important;
+  }
+
+  .helpText {
+    font-size: 14px !important;
+  }
+
+  .errorText {
+    font-size: 14px !important;
   }
 
   .controls > .tokenSelect {
@@ -362,7 +375,7 @@
     top: 39px;
     left: 0;
     right: auto;
-    z-index: 9;
+    z-index: 99;
     width: 440px !important;
   }
 
