@@ -58,8 +58,6 @@ const HomePage = () => {
       // 
     }, [])
 
-    console.log('')
-
     return (
         <div
             className={[classes.homePage, classes[`homePage--${appTheme}`]].join(' ')}

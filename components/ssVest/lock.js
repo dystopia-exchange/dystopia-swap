@@ -72,7 +72,6 @@ export default function ssLock({govToken, veToken}) {
   };
 
   const handleChange = (value) => {
-    console.log('selectedValue', selectedValue);
     setSelectedValue(value);
 
     let days = 0;
