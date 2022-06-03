@@ -134,11 +134,13 @@ export default function ssVotes() {
     });
   };
   const onResetVotes = () => {
-    setVoteLoading(true);
-    stores.dispatcher.dispatch({
-      type: ACTIONS.RESET_VOTE,
-      content: { tokenID: token.id },
-    });
+    if (token?.id) {
+      setVoteLoading(true);
+      stores.dispatcher.dispatch({
+        type: ACTIONS.RESET_VOTE,
+        content: { tokenID: token.id },
+      });
+    }
   };
 
   let totalVotes = votes.reduce((acc, curr) => {
