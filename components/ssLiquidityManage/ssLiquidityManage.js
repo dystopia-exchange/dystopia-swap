@@ -478,9 +478,23 @@ export default function ssLiquidityManage() {
         .toFixed(parseFloat(asset1.decimals));
       setAmount1(am);
       callQuoteAddLiquidity(amount0, am, 1, stable, pair, asset0, asset1);
+    } else if (input === "stake") {
+      let am = BigNumber(asset.balance)
+        .times(percent)
+        .div(100)
+        .toFixed(parseFloat(asset.decimals));
+      setAmount1(am);
+      callQuoteAddLiquidity(
+        amount0,
+        am,
+        1,
+        asset.isStable,
+        asset,
+        asset.token0,
+        asset.token1
+      );
     } else if (input === "withdraw") {
       let am = "";
-      console.log(asset, "hello5");
       am = BigNumber(asset.balance).times(percent).div(100).toFixed(10);
       setWithdrawAmount(parseFloat(am).toFixed(10));
 
@@ -572,7 +586,7 @@ export default function ssLiquidityManage() {
     }
   };
 
-  const onStake = () => {
+  const onStake = (pair) => {
     setAmount0Error(false);
     setAmount1Error(false);
 
@@ -733,7 +747,6 @@ export default function ssLiquidityManage() {
   const onCreateAndDeposit = () => {
     setAmount0Error(false);
     setAmount1Error(false);
-
     let error = false;
 
     if (!amount0 || amount0 === "" || isNaN(amount0)) {
@@ -829,7 +842,6 @@ export default function ssLiquidityManage() {
         error = true;
       }
     }
-    console.log(error, "hello3");
     if (!error) {
       setDepositLoading(true);
       stores.dispatcher.dispatch({
@@ -947,11 +959,21 @@ export default function ssLiquidityManage() {
     setActiveTab("withdraw");
   };
 
-  const amount0Changed = (event) => {
+  const amount0Changed = () => {
     const value = formatInputAmount(event.target.value.replace(",", "."));
     setAmount0Error(false);
     setAmount0(value);
-    if (!createLP) {
+    console.log(
+      value,
+      amount1,
+      priorityAsset,
+      stable,
+      pair,
+      asset0,
+      asset1,
+      createLP
+    );
+    if (createLP) {
       callQuoteAddLiquidity(
         value,
         amount1,
@@ -989,22 +1011,21 @@ export default function ssLiquidityManage() {
     const value = formatInputAmount(event.target.value.replace(",", "."));
     setAmount1Error(false);
     setAmount1(value);
-    if (!createLP) {
-      callQuoteAddLiquidity(
-        amount0,
-        value,
-        priorityAsset,
-        stable,
-        pair,
-        asset0,
-        asset1
-      );
-    }
+    callQuoteAddLiquidity(
+      amount0,
+      value,
+      priorityAsset,
+      stable,
+      pair,
+      asset0,
+      asset1
+    );
   };
 
   const amount0Focused = (event) => {
     setPriorityAsset(0);
-    callQuoteAddLiquidity(amount0, amount1, 0, stable, pair, asset0, asset1);
+    if (createLP)
+      callQuoteAddLiquidity(amount0, amount1, 0, stable, pair, asset0, asset1);
   };
 
   const amount1Focused = (event) => {
@@ -1066,7 +1087,6 @@ export default function ssLiquidityManage() {
         value.token1.address,
         value.isStable
       );
-      console.log(p, "hello");
       setPair(p);
       calcRemove(p, withdrawAmount);
     }
@@ -1221,11 +1241,6 @@ export default function ssLiquidityManage() {
             <img
               src="/images/ui/icon-wallet.svg"
               className={classes.walletIcon}
-              onClick={() =>
-                assetValue?.balance && Number(assetValue?.balance) > 0
-                  ? setAmountPercent(type, 100)
-                  : null
-              }
             />
 
             <Typography
@@ -1233,7 +1248,7 @@ export default function ssLiquidityManage() {
               noWrap
               onClick={() =>
                 assetValue?.balance && Number(assetValue?.balance) > 0
-                  ? setAmountPercent(type, 100)
+                  ? setAmountPercent(assetValue, type, 100)
                   : null
               }
             >
@@ -1245,7 +1260,8 @@ export default function ssLiquidityManage() {
             </Typography>
             {assetValue?.balance &&
               Number(assetValue?.balance) > 0 &&
-              type === "amount0" && (
+              type === "amount0" &&
+              createLP && (
                 <div
                   style={{
                     cursor: "pointer",
@@ -1254,7 +1270,24 @@ export default function ssLiquidityManage() {
                     lineHeight: "120%",
                     color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
                   }}
-                  onClick={() => setAmountPercent(type, 100)}
+                  onClick={() => setAmountPercent(assetValue, type, 100)}
+                >
+                  MAX
+                </div>
+              )}
+            {assetValue?.balance &&
+              Number(assetValue?.balance) > 0 &&
+              type === "amount0" &&
+              !createLP && (
+                <div
+                  style={{
+                    cursor: "pointer",
+                    fontWeight: 500,
+                    fontSize: 14,
+                    lineHeight: "120%",
+                    color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
+                  }}
+                  onClick={() => setAmountPercent(assetValue, "stake", 100)}
                 >
                   MAX
                 </div>
@@ -2733,31 +2766,32 @@ export default function ssLiquidityManage() {
                   </div>
                 )}
 
-                {createLP && (hasLpInWallet || amount0Error || amount1Error) && (
-                  <div
-                    className={[
-                      classes.disclaimerContainer,
-                      amount0Error || amount1Error
-                        ? classes.disclaimerContainerError
-                        : classes.disclaimerContainerWarning,
-                      amount0Error || amount1Error
-                        ? classes[`disclaimerContainerError--${appTheme}`]
-                        : classes[`disclaimerContainerWarning--${appTheme}`],
-                    ].join(" ")}
-                  >
-                    {amount0Error && <>{amount0Error}</>}
+                {createLP &&
+                  pair?.name &&
+                  (hasLpInWallet || amount0Error || amount1Error) && (
+                    <div
+                      className={[
+                        classes.disclaimerContainer,
+                        amount0Error || amount1Error
+                          ? classes.disclaimerContainerError
+                          : classes.disclaimerContainerWarning,
+                        amount0Error || amount1Error
+                          ? classes[`disclaimerContainerError--${appTheme}`]
+                          : classes[`disclaimerContainerWarning--${appTheme}`],
+                      ].join(" ")}
+                    >
+                      {amount0Error && <>{amount0Error}</>}
 
-                    {amount1Error && <>{amount1Error}</>}
+                      {amount1Error && <>{amount1Error}</>}
 
-                    {hasLpInWallet && !amount0Error && !amount1Error && (
-                      <>
-                        {formatSymbol(asset0?.symbol)}/
-                        {formatSymbol(asset1?.symbol)} LP exists in your wallet.
-                        Choose “I have LP token” to stake it.
-                      </>
-                    )}
-                  </div>
-                )}
+                      {hasLpInWallet && !amount0Error && !amount1Error && (
+                        <>
+                          {formatSymbol(pair?.name)} LP exists in your wallet.
+                          Choose “I have LP token” to stake it.
+                        </>
+                      )}
+                    </div>
+                  )}
               </div>
 
               {createLP && renderMediumInputToggle("stable", stable)}
@@ -3163,7 +3197,85 @@ export default function ssLiquidityManage() {
 
       {activeTab === "deposit" && (
         <>
-          {createLP && (
+          {createLP && pair == null && amount0 !== "" && amount1 !== "" && (
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={needAddToWhiteList !== "" ? null : onCreateAndDeposit}
+              disabled={needAddToWhiteList !== ""}
+              className={[
+                classes.buttonOverride,
+                classes[`buttonOverride--${appTheme}`],
+              ].join(" ")}
+            >
+              <span className={classes.actionButtonText}>
+                Create LP & Deposit
+              </span>
+              {depositLoading && (
+                <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
+              )}
+            </Button>
+          )}
+          {amount0 !== "" && amount1 !== "" && createLP && pair !== null && (
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={onDeposit}
+              disabled={
+                (amount0 === "" && amount1 === "") ||
+                depositLoading ||
+                stakeLoading ||
+                depositStakeLoading
+              }
+              className={[
+                classes.buttonOverride,
+                classes[`buttonOverride--${appTheme}`],
+              ].join(" ")}
+            >
+              <span className={classes.actionButtonText}>Add Liquidity</span>
+              {depositLoading && (
+                <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
+              )}
+            </Button>
+          )}
+          {!pair?.gauge && pair && (
+            <Button
+              variant="contained"
+              size="large"
+              className={[
+                createLoading ||
+                depositLoading ||
+                stakeLoading ||
+                depositStakeLoading
+                  ? classes.multiApprovalButton
+                  : classes.buttonOverride,
+                createLoading ||
+                depositLoading ||
+                stakeLoading ||
+                depositStakeLoading
+                  ? classes[`multiApprovalButton--${appTheme}`]
+                  : classes[`buttonOverride--${appTheme}`],
+              ].join(" ")}
+              color="primary"
+              disabled={
+                createLoading ||
+                depositLoading ||
+                stakeLoading ||
+                depositStakeLoading
+              }
+              onClick={onCreateGauge}
+            >
+              <Typography className={classes.actionButtonText}>
+                {createLoading ? `Creating` : `Create Gauge`}
+              </Typography>
+              {createLoading && (
+                <CircularProgress size={10} className={classes.loadingCircle} />
+              )}
+            </Button>
+          )}
+          {createLP && amount0 == "" && amount1 == "" && (
             <Button
               variant="contained"
               size="large"
@@ -3171,14 +3283,6 @@ export default function ssLiquidityManage() {
               onClick={() => {
                 if (needAddToWhiteList !== "") {
                   return;
-                }
-
-                if (amount0 !== "" && amount1 !== "" && createLP) {
-                  onCreateAndStake();
-                }
-
-                if (amount0 !== "" && amount1 !== "" && !createLP) {
-                  onStake();
                 }
               }}
               disabled={
@@ -3190,13 +3294,6 @@ export default function ssLiquidityManage() {
               ].join(" ")}
             >
               <span className={classes.actionButtonText}>
-                {amount0 !== "" &&
-                  amount1 !== "" &&
-                  createLP &&
-                  "Create LP & Stake"}
-
-                {amount0 !== "" && amount1 !== "" && !createLP && "Stake LP"}
-
                 {(amount0 === "" || amount1 === "") && "Enter Amount"}
               </span>
               {depositLoading && (
@@ -3212,10 +3309,10 @@ export default function ssLiquidityManage() {
               color="primary"
               onClick={() => {
                 if (amount0 !== "") {
-                  onStake();
+                  onStake(pair);
                 }
               }}
-              disabled={amount0 === ""}
+              disabled={amount0 === "" || !pair?.gauge}
               className={[
                 classes.buttonOverride,
                 classes[`buttonOverride--${appTheme}`],
@@ -3225,25 +3322,6 @@ export default function ssLiquidityManage() {
                 {amount0 !== "" && "Stake LP"}
                 {amount0 === "" && "Enter Amount"}
               </span>
-              {depositLoading && (
-                <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
-              )}
-            </Button>
-          )}
-
-          {amount0 !== "" && amount1 !== "" && createLP && (
-            <Button
-              variant="contained"
-              size="large"
-              color="primary"
-              onClick={needAddToWhiteList !== "" ? null : onCreateAndDeposit}
-              disabled={needAddToWhiteList !== ""}
-              className={[
-                classes.buttonOverride,
-                classes[`buttonOverride--${appTheme}`],
-              ].join(" ")}
-            >
-              <span className={classes.actionButtonText}>Create LP</span>
               {depositLoading && (
                 <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
               )}
