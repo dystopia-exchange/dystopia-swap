@@ -270,12 +270,7 @@ export default function ssVotes() {
               variant="contained"
               size="large"
               color="primary"
-              disabled={
-                disableCastVotes ||
-                voteLoading ||
-                BigNumber(totalVotes).eq(0) ||
-                BigNumber(totalVotes).gt(100)
-              }
+              disabled={voteLoading}
               onClick={onResetVotes}
             >
               <Typography
