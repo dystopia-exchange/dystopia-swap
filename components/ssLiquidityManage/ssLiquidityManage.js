@@ -59,6 +59,8 @@ export default function ssLiquidityManage() {
   const [amount0Error, setAmount0Error] = useState(false);
   const [amount1, setAmount1] = useState("");
   const [amount1Error, setAmount1Error] = useState(false);
+  const [amount0Percent, setAmount0Percent] = useState("");
+  const [amount1Percent, setAmount1Percent] = useState("");
 
   const [stable, setStable] = useState(false);
 
@@ -460,42 +462,28 @@ export default function ssLiquidityManage() {
     }
   };
 
-  const setAmountPercent = (asset, input, percent) => {
+  const setAmountPercent = (asset, input) => {
     setAmount0Error(false);
     setAmount1Error(false);
 
     if (input === "amount0") {
-      let am = BigNumber(asset0.balance)
-        .times(percent)
-        .div(100)
-        .toFixed(parseFloat(asset0.decimals));
+      let am = BigNumber(asset0.balance).toFixed(parseFloat(asset0.decimals));
       setAmount0(am);
+      setAmount0Percent((am / asset0?.balance) * 100);
       callQuoteAddLiquidity(am, amount1, 0, stable, pair, asset0, asset1);
     } else if (input === "amount1") {
-      let am = BigNumber(asset1.balance)
-        .times(percent)
-        .div(100)
-        .toFixed(parseFloat(asset1.decimals));
+      let am = BigNumber(asset1.balance).toFixed(parseFloat(asset1.decimals));
       setAmount1(am);
+      setAmount1Percent((am / asset1?.balance) * 100);
       callQuoteAddLiquidity(amount0, am, 1, stable, pair, asset0, asset1);
     } else if (input === "stake") {
-      let am = BigNumber(asset.balance)
-        .times(percent)
-        .div(100)
-        .toFixed(parseFloat(asset.decimals));
-      setAmount1(am);
-      callQuoteAddLiquidity(
-        amount0,
-        am,
-        1,
-        asset.isStable,
-        asset,
-        asset.token0,
-        asset.token1
-      );
+      let am = BigNumber(asset.balance).toFixed(parseFloat(asset.decimals));
+
+      setAmount0((am / asset?.balance) * 100);
+      setAmount0Percent((am / asset?.balance) * 100);
     } else if (input === "withdraw") {
       let am = "";
-      am = BigNumber(asset.balance).times(percent).div(100).toFixed(10);
+      am = BigNumber(asset.balance).toFixed(10);
       setWithdrawAmount(parseFloat(am).toFixed(10));
 
       if (am === "") {
@@ -586,19 +574,18 @@ export default function ssLiquidityManage() {
     }
   };
 
-  const onStake = (pair) => {
+  const onStake = (pair, percent, balance) => {
     setAmount0Error(false);
-    setAmount1Error(false);
 
     let error = false;
 
     if (!error) {
       setStakeLoading(true);
-
       stores.dispatcher.dispatch({
         type: ACTIONS.STAKE_LIQUIDITY,
         content: {
           pair: pair,
+          amount: (percent / 100) * balance,
           token: token,
           slippage: (slippage && slippage) != "" ? slippage : "2",
         },
@@ -959,30 +946,27 @@ export default function ssLiquidityManage() {
     setActiveTab("withdraw");
   };
 
-  const amount0Changed = () => {
+  const amount0Changed = (balance) => {
     const value = formatInputAmount(event.target.value.replace(",", "."));
+
     setAmount0Error(false);
-    setAmount0(value);
-    console.log(
-      value,
-      amount1,
-      priorityAsset,
-      stable,
-      pair,
-      asset0,
-      asset1,
-      createLP
-    );
-    if (createLP) {
-      callQuoteAddLiquidity(
-        value,
-        amount1,
-        priorityAsset,
-        stable,
-        pair,
-        asset0,
-        asset1
-      );
+    if (!createLP) {
+      if (value <= 100) {
+        setAmount0(value);
+      }
+    } else {
+      setAmount0(value);
+      if (createLP) {
+        callQuoteAddLiquidity(
+          value,
+          amount1,
+          priorityAsset,
+          stable,
+          pair,
+          asset0,
+          asset1
+        );
+      }
     }
   };
 
@@ -1100,6 +1084,7 @@ export default function ssLiquidityManage() {
       val
     );
     setPair(p);
+
     callQuoteAddLiquidity(
       amount0,
       amount1,
@@ -1243,21 +1228,39 @@ export default function ssLiquidityManage() {
               className={classes.walletIcon}
             />
 
-            <Typography
-              className={[classes.inputBalanceText, "g-flex__item"].join(" ")}
-              noWrap
-              onClick={() =>
-                assetValue?.balance && Number(assetValue?.balance) > 0
-                  ? setAmountPercent(assetValue, type, 100)
-                  : null
-              }
-            >
-              <span>
-                {assetValue && assetValue.balance
-                  ? " " + formatCurrency(assetValue.balance)
-                  : ""}
-              </span>
-            </Typography>
+            {createLP ? (
+              <Typography
+                className={[classes.inputBalanceText, "g-flex__item"].join(" ")}
+                noWrap
+                onClick={() =>
+                  assetValue?.balance && Number(assetValue?.balance) > 0
+                    ? setAmountPercent(assetValue, type)
+                    : null
+                }
+              >
+                <span>
+                  {assetValue && assetValue.balance
+                    ? " " + formatCurrency(assetValue.balance)
+                    : ""}
+                </span>
+              </Typography>
+            ) : (
+              <Typography
+                className={[classes.inputBalanceText, "g-flex__item"].join(" ")}
+                noWrap
+                onClick={() =>
+                  assetValue?.balance && Number(assetValue?.balance) > 0
+                    ? setAmountPercent(assetValue, "stake")
+                    : null
+                }
+              >
+                <span>
+                  {assetValue && assetValue.balance
+                    ? " " + formatCurrency(assetValue.balance)
+                    : ""}
+                </span>
+              </Typography>
+            )}
             {assetValue?.balance &&
               Number(assetValue?.balance) > 0 &&
               type === "amount0" &&
@@ -1270,7 +1273,7 @@ export default function ssLiquidityManage() {
                     lineHeight: "120%",
                     color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
                   }}
-                  onClick={() => setAmountPercent(assetValue, type, 100)}
+                  onClick={() => setAmountPercent(assetValue, type)}
                 >
                   MAX
                 </div>
@@ -1287,7 +1290,7 @@ export default function ssLiquidityManage() {
                     lineHeight: "120%",
                     color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
                   }}
-                  onClick={() => setAmountPercent(assetValue, "stake", 100)}
+                  onClick={() => setAmountPercent(assetValue, "stake")}
                 >
                   MAX
                 </div>
@@ -1369,8 +1372,8 @@ export default function ssLiquidityManage() {
                 placeholder="0.00"
                 error={amountError}
                 helperText={amountError}
-                value={amountValue}
-                onChange={amountChanged}
+                value={createLP ? amountValue : `${amountValue}%`}
+                onChange={() => amountChanged(assetValue?.balance)}
                 disabled={
                   depositLoading ||
                   stakeLoading ||
@@ -1931,9 +1934,7 @@ export default function ssLiquidityManage() {
                       classes.balanceMax,
                       classes[`balanceMax--${appTheme}`],
                     ].join(" ")}
-                    onClick={() =>
-                      setAmountPercent(withdrawAsset, "withdraw", 100)
-                    }
+                    onClick={() => setAmountPercent(withdrawAsset, "withdraw")}
                   >
                     MAX LP
                   </div>
@@ -2532,20 +2533,6 @@ export default function ssLiquidityManage() {
     }
   };
 
-  const hasLpInWallet = withdrawAassetOptions.some((el) => {
-    if (asset0 === null || asset1 === null) {
-      return false;
-    }
-    const assets = [asset0.address, asset1.address];
-    if (
-      assets.includes(el.token0.address) &&
-      assets.includes(el.token1.address)
-    ) {
-      return true;
-    }
-    return false;
-  });
-
   return (
     <Paper elevation={0} className={[classes.container, "g-flex-column"]}>
       <div
@@ -2768,7 +2755,7 @@ export default function ssLiquidityManage() {
 
                 {createLP &&
                   pair?.name &&
-                  (hasLpInWallet || amount0Error || amount1Error) && (
+                  (pair?.balance > 0 || amount0Error || amount1Error) && (
                     <div
                       className={[
                         classes.disclaimerContainer,
@@ -2784,7 +2771,7 @@ export default function ssLiquidityManage() {
 
                       {amount1Error && <>{amount1Error}</>}
 
-                      {hasLpInWallet && !amount0Error && !amount1Error && (
+                      {pair?.balance > 0 && !amount0Error && !amount1Error && (
                         <>
                           {formatSymbol(pair?.name)} LP exists in your wallet.
                           Choose “I have LP token” to stake it.
@@ -3309,7 +3296,7 @@ export default function ssLiquidityManage() {
               color="primary"
               onClick={() => {
                 if (amount0 !== "") {
-                  onStake(pair);
+                  onStake(pair, amount0, pair.balance);
                 }
               }}
               disabled={amount0 === "" || !pair?.gauge}

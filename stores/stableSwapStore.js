@@ -2929,7 +2929,7 @@ class Store {
         return null;
       }
 
-      const { pair, token } = payload.content;
+      const { pair, token, amount } = payload.content;
 
       let stakeAllowanceTXID = this.getTXUUID();
       let stakeTXID = this.getTXUUID();
@@ -3033,7 +3033,7 @@ class Store {
         web3,
         gaugeContract,
         "deposit",
-        [balanceOf, sendTok],
+        [amount, sendTok],
         account,
         gasPrice,
         null,
