@@ -3060,7 +3060,7 @@ export default function ssLiquidityManage() {
                     "Remove LP"}
 
                   {(parseFloat(withdrawAmount) == 0 || withdrawAmount == "") &&
-                    withdrawAction}
+                    "Enter Amount"}
                 </>
               )}
 
