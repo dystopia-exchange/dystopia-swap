@@ -1793,7 +1793,7 @@ export default function ssLiquidityManage() {
                     ].join(" ")}
                     onClick={() => setAmountPercent(withdrawAsset, "withdraw")}
                   >
-                    MAX LP
+                    MAX
                   </div>
                 </div>
               )}
@@ -1842,7 +1842,7 @@ export default function ssLiquidityManage() {
                       setAmountPercentGauge(withdrawAsset, "withdraw")
                     }
                   >
-                    MAX STAKE
+                    MAX
                   </div>
                 </div>
               )}
