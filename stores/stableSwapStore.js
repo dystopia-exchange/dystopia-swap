@@ -1741,11 +1741,13 @@ class Store {
         .getPair(toki0, toki1, isStable)
         .call();
 
-      if (pairFor && pairFor != ZERO_ADDRESS) {
-        await context.updatePairsCall(web3, account);
-        this.emitter.emit(ACTIONS.ERROR, "Pair already exists");
-        return null;
-      }
+      const hasPair = pairFor && pairFor != ZERO_ADDRESS;
+
+      // if (pairFor && pairFor != ZERO_ADDRESS) {
+      //   await context.updatePairsCall(web3, account);
+      //   this.emitter.emit(ACTIONS.ERROR, "Pair already exists");
+      //   return null;
+      // }
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let allowance0TXID = this.getTXUUID();
@@ -1774,7 +1776,7 @@ class Store {
           },
           {
             uuid: depositTXID,
-            description: `Create liquidity pool`,
+            description: `Add liquidity`,
             status: "WAITING",
           },
           {
@@ -2005,132 +2007,152 @@ class Store {
             .getPair(tok0, tok1, isStable)
             .call();
 
-          // SUBMIT CREATE GAUGE TRANSACTION
           const gaugesContract = new web3.eth.Contract(
             CONTRACTS.VOTER_ABI,
             CONTRACTS.VOTER_ADDRESS
           );
-          this._callContractWait(
-            web3,
-            gaugesContract,
-            "createGauge",
-            [pairFor],
-            account,
-            gasPrice,
-            null,
-            null,
-            createGaugeTXID,
-            async (err) => {
-              if (err) {
-                return this.emitter.emit(ACTIONS.ERROR, err);
-              }
 
-              const gaugeAddress = await gaugesContract.methods
-                .gauges(pairFor)
-                .call();
+          const gaugeAddress = await gaugesContract.methods
+            .gauges(pairFor)
+            .call();
 
-              const pairContract = new web3.eth.Contract(
-                CONTRACTS.PAIR_ABI,
-                pairFor
-              );
-              const gaugeContract = new web3.eth.Contract(
-                CONTRACTS.GAUGE_ABI,
-                gaugeAddress
-              );
+          const depositInGauge = async (gaugeAddress, pairFor) => {
+            const pairContract = new web3.eth.Contract(
+              CONTRACTS.PAIR_ABI,
+              pairFor
+            );
+            const gaugeContract = new web3.eth.Contract(
+              CONTRACTS.GAUGE_ABI,
+              gaugeAddress
+            );
 
-              const balanceOf = await pairContract.methods
-                .balanceOf(account.address)
-                .call();
+            const balanceOf = await pairContract.methods
+              .balanceOf(account.address)
+              .call();
 
-              const pair = await this.getPairByAddress(pairFor);
-              const stakeAllowance = await this._getStakeAllowance(
-                web3,
-                pair,
-                account
-              );
+            const pair = await this.getPairByAddress(pairFor);
+            const stakeAllowance = await this._getStakeAllowance(
+              web3,
+              pair,
+              account
+            );
 
-              if (
-                BigNumber(stakeAllowance).lt(
-                  BigNumber(balanceOf)
-                    .div(10 ** parseInt(pair.decimals))
-                    .toFixed(parseInt(pair.decimals))
-                )
-              ) {
-                this.emitter.emit(ACTIONS.TX_STATUS, {
-                  uuid: stakeAllowanceTXID,
-                  description: `Allow the router to spend your ${pair.symbol}`,
-                });
-              } else {
-                this.emitter.emit(ACTIONS.TX_STATUS, {
-                  uuid: stakeAllowanceTXID,
-                  description: `Allowance on ${pair.symbol} sufficient`,
-                  status: "DONE",
-                });
-              }
-
-              const allowanceCallsPromise = [];
-
-              if (
-                BigNumber(stakeAllowance).lt(
-                  BigNumber(balanceOf)
-                    .div(10 ** parseInt(pair.decimals))
-                    .toFixed(parseInt(pair.decimals))
-                )
-              ) {
-                const stakePromise = new Promise((resolve, reject) => {
-                  context._callContractWait(
-                    web3,
-                    pairContract,
-                    "approve",
-                    [pair.gauge.address, MAX_UINT256],
-                    account,
-                    gasPrice,
-                    null,
-                    null,
-                    stakeAllowanceTXID,
-                    (err) => {
-                      if (err) {
-                        reject(err);
-                        return;
-                      }
-
-                      resolve();
-                    }
-                  );
-                });
-
-                allowanceCallsPromise.push(stakePromise);
-              }
-
-              const done = await Promise.all(allowanceCallsPromise);
-
-              let sendTok = "0";
-              if (token && token.id) {
-                sendTok = token.id;
-              }
-
-              this._callContractWait(
-                web3,
-                gaugeContract,
-                "deposit",
-                [balanceOf, sendTok],
-                account,
-                gasPrice,
-                null,
-                null,
-                stakeTXID,
-                async (err) => {
-                  if (err) {
-                    return this.emitter.emit(ACTIONS.ERROR, err);
-                  }
-
-                  await context.updatePairsCall(web3, account);
-
-                  this.emitter.emit(ACTIONS.PAIR_CREATED, pairFor);
-                }
-              );
+            if (
+              BigNumber(stakeAllowance).lt(
+                BigNumber(balanceOf)
+                  .div(10 ** parseInt(pair.decimals))
+                  .toFixed(parseInt(pair.decimals))
+              )
+            ) {
+              this.emitter.emit(ACTIONS.TX_STATUS, {
+                uuid: stakeAllowanceTXID,
+                description: `Allow the router to spend your ${pair.symbol}`,
+              });
+            } else {
+              this.emitter.emit(ACTIONS.TX_STATUS, {
+                uuid: stakeAllowanceTXID,
+                description: `Allowance on ${pair.symbol} sufficient`,
+                status: "DONE",
+              });
             }
-          );
+
+            const allowanceCallsPromise = [];
+
+            if (
+              BigNumber(stakeAllowance).lt(
+                BigNumber(balanceOf)
+                  .div(10 ** parseInt(pair.decimals))
+                  .toFixed(parseInt(pair.decimals))
+              )
+            ) {
+              const stakePromise = new Promise((resolve, reject) => {
+                context._callContractWait(
+                  web3,
+                  pairContract,
+                  "approve",
+                  [pair.gauge.address, MAX_UINT256],
+                  account,
+                  gasPrice,
+                  null,
+                  null,
+                  stakeAllowanceTXID,
+                  (err) => {
+                    if (err) {
+                      reject(err);
+                      return;
+                    }
+
+                    resolve();
+                  }
+                );
+              });
+
+              allowanceCallsPromise.push(stakePromise);
+            }
+
+            const done = await Promise.all(allowanceCallsPromise);
+
+            let sendTok = "0";
+            if (token && token.id) {
+              sendTok = token.id;
+            }
+
+            this._callContractWait(
+              web3,
+              gaugeContract,
+              "deposit",
+              [balanceOf, sendTok],
+              account,
+              gasPrice,
+              null,
+              null,
+              stakeTXID,
+              async (err) => {
+                if (err) {
+                  return this.emitter.emit(ACTIONS.ERROR, err);
+                }
+
+                await context.updatePairsCall(web3, account);
+
+                this.emitter.emit(ACTIONS.PAIR_CREATED, pairFor);
+              }
+            );
+          };
+
+          if (gaugeAddress === "0x0000000000000000000000000000000000000000") {
+            // SUBMIT CREATE GAUGE TRANSACTION
+            this._callContractWait(
+              web3,
+              gaugesContract,
+              "createGauge",
+              [pairFor],
+              account,
+              gasPrice,
+              null,
+              null,
+              createGaugeTXID,
+              async (err) => {
+                if (err) {
+                  return this.emitter.emit(ACTIONS.ERROR, err);
+                }
+
+                const gaugeAddress = await gaugesContract.methods
+                  .gauges(pairFor)
+                  .call();
+
+                await depositInGauge(gaugeAddress, pairFor);
+              }
+            );
+          } else {
+            const pair = await this.getPairByAddress(pairFor);
+            this.emitter.emit(ACTIONS.TX_STATUS, {
+              uuid: createGaugeTXID,
+              description: `Allowance on ${pair.symbol} sufficient`,
+              status: "DONE",
+            });
+
+            await depositInGauge(gaugeAddress, pairFor);
+          }
         },
         null,
         sendValue
@@ -2203,7 +2225,7 @@ class Store {
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let allowanceTXID = this.getTXUUID();
       let depositTXID = this.getTXUUID();
-      console.log(allowanceTXID);
+
       this.emitter.emit(ACTIONS.TX_ADDED, {
         title: `Migrating liquidity pool for ${token0.symbol}/${token1.symbol}`,
         type: "Migrate Liquidity",
@@ -2910,7 +2932,7 @@ class Store {
         return null;
       }
 
-      const { pair, token } = payload.content;
+      const { pair, token, amount } = payload.content;
 
       let stakeAllowanceTXID = this.getTXUUID();
       let stakeTXID = this.getTXUUID();
@@ -3009,12 +3031,14 @@ class Store {
       if (token && token.id) {
         sendTok = token.id;
       }
-
+      let am = BigNumber(amount)
+        .times(10 ** pair.decimals)
+        .toFixed(0);
       this._callContractWait(
         web3,
         gaugeContract,
         "deposit",
-        [balanceOf, sendTok],
+        [am, sendTok],
         account,
         gasPrice,
         null,
@@ -3965,6 +3989,12 @@ class Store {
 
       const { token0, token1, amount, amount0, amount1, pair } =
         payload.content;
+      console.log(
+        BigNumber(amount)
+          .times(10 ** pair.decimals)
+          .toFixed(0),
+        "inn"
+      );
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let unstakeTXID = this.getTXUUID();

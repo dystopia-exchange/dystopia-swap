@@ -20,12 +20,12 @@ import classes from "./ssMigrate.module.css";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import stores from "../../stores";
 import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
-import {BigNumber} from "ethers";
-import {parseUnits} from "ethers/lib/utils";
+import { BigNumber } from "ethers";
+import { parseUnits } from "ethers/lib/utils";
 import Borders from "../../ui/Borders";
 import AssetSelect from "../../ui/AssetSelect";
 import Loader from "../../ui/Loader";
-import Web3 from 'web3'
+import Web3 from "web3";
 
 export default function Setup() {
   const [fromAssetValue, setFromAssetValue] = useState(null);
@@ -114,7 +114,7 @@ export default function Setup() {
         } else {
           const factoryContract = new web3.eth.Contract(
             FactoryAbi,
-            platform.value,
+            platform.value
           );
           const pairAddress = await factoryContract.methods
             .getPair(token0, token1)
@@ -122,11 +122,11 @@ export default function Setup() {
           if (pairAddress !== "0x0000000000000000000000000000000000000000") {
             const pairContract = new web3.eth.Contract(
               pairContractAbi,
-              pairAddress,
+              pairAddress
             );
 
             const migrator = migrate.find(
-              (eachMigrate) => eachMigrate == platform,
+              (eachMigrate) => eachMigrate == platform
             );
             let [
               getReserves,
@@ -141,7 +141,7 @@ export default function Setup() {
               pairContract.methods.symbol(),
               pairContract.methods.allowance(
                 account.address,
-                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID],
+                migrator.migratorAddress[process.env.NEXT_PUBLIC_CHAINID]
               ),
               pairContract.methods.totalSupply(),
               pairContract.methods.balanceOf(account.address),
@@ -151,11 +151,11 @@ export default function Setup() {
 
             const token0Contract = new web3.eth.Contract(
               pairContractAbi,
-              token0Add,
+              token0Add
             );
             const token1Contract = new web3.eth.Contract(
               pairContractAbi,
-              token1Add,
+              token1Add
             );
             let [token0symbol, token1symbol, decimal0, decimal1] =
               await multicall.aggregate([
@@ -167,7 +167,7 @@ export default function Setup() {
 
             let totalSupply = web3.utils.fromWei(
               getTotalSupply.toString(),
-              "ether",
+              "ether"
             );
             lpBalance = web3.utils.fromWei(lpBalance.toString(), "ether");
 
@@ -293,9 +293,8 @@ export default function Setup() {
       setLoading(true);
       const migrator = migrate.find((eachMigrate) => eachMigrate == platform);
       const web3 = await stores.accountStore.getWeb3Provider();
-      
-      let am = (parseUnits(amount.toString()));
-      
+
+      let am = parseUnits(amount.toString());
 
       stores.dispatcher.dispatch({
         type: ACTIONS.MIGRATE,
@@ -317,21 +316,16 @@ export default function Setup() {
   };
 
   const handleAmountChange = async (event) => {
-let am
+    let am;
     if (parseFloat(event.target.value) >= parseFloat(pairDetails.lpBalance)) {
       setAmount(pairDetails.lpBalance);
-am = pairDetails.lpBalance
+      am = pairDetails.lpBalance;
     } else {
       setAmount(event.target.value);
-      am = event.target.value
+      am = event.target.value;
     }
 
-    if (
-      parseFloat(am) <= 0 ||
-      am == null ||
-      am == "" ||
-      isNaN(am)
-    ) {
+    if (parseFloat(am) <= 0 || am == null || am == "" || isNaN(am)) {
       setdystopiaPair(false);
     } else {
       setdystopiaPair(true);
@@ -348,11 +342,9 @@ am = pairDetails.lpBalance
       parseFloat(pairDetails.weiReserve2.toString());
 
     let removedToken0 =
-      (am * pairDetails?.weiReserve1) /
-      pairDetails?.totalSupply;
+      (am * pairDetails?.weiReserve1) / pairDetails?.totalSupply;
     let removedToken1 =
-      (am * pairDetails?.weiReserve2) /
-      pairDetails?.totalSupply;
+      (am * pairDetails?.weiReserve2) / pairDetails?.totalSupply;
 
     if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0)
       await callQuoteAddLiquidity(
@@ -380,7 +372,7 @@ am = pairDetails.lpBalance
     let removedToken1 =
       (lpBalance * pairDetails?.weiReserve2) / pairDetails?.totalSupply;
 
-    if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0){
+    if (pairDetails?.isValid && removedToken0 > 0 && removedToken1 > 0) {
       await callQuoteAddLiquidity(
         removedToken0,
         removedToken1,
@@ -388,7 +380,8 @@ am = pairDetails.lpBalance
         pairDetails.token0,
         pairDetails.token1
       );
-      setdystopiaPair(true) }
+      setdystopiaPair(true);
+    }
   };
 
   let buttonText = "Approve";
@@ -433,9 +426,9 @@ am = pairDetails.lpBalance
       CONTRACTS.ROUTER_ABI,
       CONTRACTS.ROUTER_ADDRESS
     );
-    console
-    const sendAmount0 = parseUnits(amount0.toString(),token0.decimals)
-    const sendAmount1 = parseUnits(amount1.toString(),token0.decimals)
+    console;
+    const sendAmount0 = parseUnits(amount0.toString(), token0.decimals);
+    const sendAmount1 = parseUnits(amount1.toString(), token0.decimals);
 
     let addy0 = token0.address;
     let addy1 = token1.address;
@@ -452,7 +445,6 @@ am = pairDetails.lpBalance
       .call();
     res = { res, token0: token0, token1: token1 };
     setQuote(res);
-
   };
   const checkPair = async (fromAssetValue, toAssetValue, isStable) => {
     const web3 = await stores.accountStore.getWeb3Provider();
@@ -476,7 +468,7 @@ am = pairDetails.lpBalance
     const pair = await stores.stableSwapStore.getPair(
       fromAssetValue,
       toAssetValue,
-      isStable,
+      isStable
     );
 
     if (pair != null) {
@@ -557,13 +549,13 @@ am = pairDetails.lpBalance
           const baseAsset = await stores.stableSwapStore.getBaseAsset(
             event.target.value,
             true,
-            true,
+            true
           );
         }
 
-        return () => { };
+        return () => {};
       },
-      [search],
+      [search]
     );
 
     const onSearchChanged = async (event) => {
@@ -583,8 +575,8 @@ am = pairDetails.lpBalance
         >
           <div
             style={{
-              position: 'relative',
-              height: '100%',
+              position: "relative",
+              height: "100%",
             }}
             className={["g-flex__item", "g-flex", "g-flex--align-center"].join(
               " "
@@ -730,46 +722,46 @@ am = pairDetails.lpBalance
             >
               {filteredPlatform.length === 0
                 ? migrate.map((eachPlatform, index) => (
-                  <div
-                    key={index}
-                    className={[
-                      classes.pairDetails,
-                      classes[`pairDetails--${appTheme}`],
-                      "g-flex",
-                      "g-flex--align-center",
-                    ].join(" ")}
-                  >
-                    <Borders
-                      offsetLeft={-1}
-                      offsetRight={-1}
-                      offsetTop={-1}
-                      offsetBottom={-1}
-                    />
+                    <div
+                      key={index}
+                      className={[
+                        classes.pairDetails,
+                        classes[`pairDetails--${appTheme}`],
+                        "g-flex",
+                        "g-flex--align-center",
+                      ].join(" ")}
+                    >
+                      <Borders
+                        offsetLeft={-1}
+                        offsetRight={-1}
+                        offsetTop={-1}
+                        offsetBottom={-1}
+                      />
 
-                    {eachPlatform.label}
-                  </div>
-                ))
+                      {eachPlatform.label}
+                    </div>
+                  ))
                 : filteredPlatform.map((eachPlatform, index) => (
-                  <div
-                    key={index}
-                    className={[
-                      classes.pairDetails,
-                      classes[`pairDetails--${appTheme}`],
-                      "g-flex",
-                      "g-flex--align-center",
-                    ].join(" ")}
-                    onClick={() => handleCloseSelect(eachPlatform)}
-                  >
-                    <Borders
-                      offsetLeft={-1}
-                      offsetRight={-1}
-                      offsetTop={-1}
-                      offsetBottom={-1}
-                    />
+                    <div
+                      key={index}
+                      className={[
+                        classes.pairDetails,
+                        classes[`pairDetails--${appTheme}`],
+                        "g-flex",
+                        "g-flex--align-center",
+                      ].join(" ")}
+                      onClick={() => handleCloseSelect(eachPlatform)}
+                    >
+                      <Borders
+                        offsetLeft={-1}
+                        offsetRight={-1}
+                        offsetTop={-1}
+                        offsetBottom={-1}
+                      />
 
-                    {eachPlatform.label}
-                  </div>
-                ))}
+                      {eachPlatform.label}
+                    </div>
+                  ))}
             </DialogContent>
           </div>
         </Dialog>
@@ -954,8 +946,13 @@ am = pairDetails.lpBalance
 
           {pairDetails && pairDetails.isValid && (
             <>
-              <div className={['g-flex'].join(" ")} style={{width: '100%', marginTop: 20}}>
-                <div className={['g-flex-column', 'g-flex__item-fixed'].join(' ')}>
+              <div
+                className={["g-flex"].join(" ")}
+                style={{ width: "100%", marginTop: 20 }}
+              >
+                <div
+                  className={["g-flex-column", "g-flex__item-fixed"].join(" ")}
+                >
                   <div
                     className={[
                       classes.liqHeader,
@@ -1064,9 +1061,7 @@ am = pairDetails.lpBalance
                         classes.balanceMax,
                         classes[`balanceMax--${appTheme}`],
                       ].join(" ")}
-                      onClick={() =>
-                        handleMax(pairDetails.lpBalance)
-                      }
+                      onClick={() => handleMax(pairDetails.lpBalance)}
                     >
                       MAX
                     </div>
@@ -1289,12 +1284,13 @@ am = pairDetails.lpBalance
                 </div>
               </div>
 
-              {!(parseFloat(pairDetails.lpBalance) <= 0 ||
+              {!(
+                parseFloat(pairDetails.lpBalance) <= 0 ||
                 parseFloat(amount) <= 0 ||
                 amount == null ||
                 amount == "" ||
-                isNaN(amount))
-                ? (
+                isNaN(amount)
+              ) ? (
                 dystopiaPair ? (
                   <div>
                     <div
@@ -1465,7 +1461,7 @@ am = pairDetails.lpBalance
                               ~
                               {Number(
                                 quote?.res?.amountA /
-                                10 ** quote?.token0?.decimals
+                                  10 ** quote?.token0?.decimals
                               ).toFixed(2)}
                             </div>
                           </div>
@@ -1498,7 +1494,7 @@ am = pairDetails.lpBalance
                               ~
                               {Number(
                                 quote?.res?.amountB /
-                                10 ** quote?.token1?.decimals
+                                  10 ** quote?.token1?.decimals
                               ).toFixed(2)}
                             </div>
                           </div>
@@ -1649,7 +1645,7 @@ am = pairDetails.lpBalance
                             Number(pairDetails.token0Bal) -
                             Number(
                               quote?.res?.amountA /
-                              10 ** quote?.token0?.decimals
+                                10 ** quote?.token0?.decimals
                             )
                           ).toFixed(2)}
                           {quote?.token0?.symbol} and ~
@@ -1657,7 +1653,7 @@ am = pairDetails.lpBalance
                             Number(pairDetails.token1Bal) -
                             Number(
                               quote?.res?.amountB /
-                              10 ** quote?.token1?.decimals
+                                10 ** quote?.token1?.decimals
                             )
                           ).toFixed(2)}
                           {quote?.token1?.symbol} will be refunded to your

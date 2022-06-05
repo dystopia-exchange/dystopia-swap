@@ -63,7 +63,6 @@ function Swap({changeTheme}) {
     switch (appTheme) {
       case 'dark':
         return isClickState ? '#523880' : (isHoverState ? '#402E61' : '#33284C');
-
       case 'light':
       default:
         return isClickState ? '#B9A4EE' : (isHoverState ? '#C6BAF0' : '#D2D0F2');
