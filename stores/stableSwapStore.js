@@ -213,6 +213,9 @@ class Store {
           case ACTIONS.VOTE:
             this.vote(payload);
             break;
+          case ACTIONS.RESET_VOTE:
+            this.resetVote(payload);
+            break;
           case ACTIONS.GET_VEST_VOTES:
             this.getVestVotes(payload);
             break;
@@ -5195,6 +5198,69 @@ class Store {
         gaugesContract,
         "vote",
         [tokenID, tokens, voteCounts],
+        account,
+        gasPrice,
+        null,
+        null,
+        voteTXID,
+        (err) => {
+          if (err) {
+            return this.emitter.emit(ACTIONS.ERROR, err);
+          }
+
+          this.emitter.emit(ACTIONS.VOTE_RETURNED);
+        }
+      );
+    } catch (ex) {
+      console.error(ex);
+      this.emitter.emit(ACTIONS.ERROR, ex);
+    }
+  };
+
+  resetVote = async (payload) => {
+    try {
+      const account = stores.accountStore.getStore("account");
+      if (!account) {
+        console.warn("account not found");
+        return null;
+      }
+
+      const web3 = await stores.accountStore.getWeb3Provider();
+      if (!web3) {
+        console.warn("web3 not found");
+        return null;
+      }
+
+      const { tokenID } = payload.content;
+
+      // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
+      let voteTXID = this.getTXUUID();
+
+      this.emitter.emit(ACTIONS.TX_ADDED, {
+        title: `Reset vote using token #${tokenID}`,
+        verb: "Reset Votes",
+        transactions: [
+          {
+            uuid: voteTXID,
+            description: `Reset votes`,
+            status: "WAITING",
+          },
+        ],
+      });
+
+      const gasPrice = await stores.accountStore.getGasPrice();
+
+      // SUBMIT INCREASE TRANSACTION
+      const gaugesContract = new web3.eth.Contract(
+        CONTRACTS.VOTER_ABI,
+        CONTRACTS.VOTER_ADDRESS
+      );
+
+      this._callContractWait(
+        web3,
+        gaugesContract,
+        "reset",
+        [tokenID],
         account,
         gasPrice,
         null,
