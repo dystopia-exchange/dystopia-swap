@@ -3984,6 +3984,12 @@ class Store {
 
       const { token0, token1, amount, amount0, amount1, pair } =
         payload.content;
+      console.log(
+        BigNumber(amount)
+          .times(10 ** pair.decimals)
+          .toFixed(0),
+        "inn"
+      );
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let unstakeTXID = this.getTXUUID();

@@ -59,8 +59,6 @@ export default function ssLiquidityManage() {
   const [amount0Error, setAmount0Error] = useState(false);
   const [amount1, setAmount1] = useState("");
   const [amount1Error, setAmount1Error] = useState(false);
-  const [amount0Percent, setAmount0Percent] = useState("");
-  const [amount1Percent, setAmount1Percent] = useState("");
 
   const [stable, setStable] = useState(false);
 
@@ -469,22 +467,18 @@ export default function ssLiquidityManage() {
     if (input === "amount0") {
       let am = BigNumber(asset0.balance).toFixed(parseFloat(asset0.decimals));
       setAmount0(am);
-      setAmount0Percent((am / asset0?.balance) * 100);
       callQuoteAddLiquidity(am, amount1, 0, stable, pair, asset0, asset1);
     } else if (input === "amount1") {
       let am = BigNumber(asset1.balance).toFixed(parseFloat(asset1.decimals));
       setAmount1(am);
-      setAmount1Percent((am / asset1?.balance) * 100);
       callQuoteAddLiquidity(amount0, am, 1, stable, pair, asset0, asset1);
     } else if (input === "stake") {
       let am = BigNumber(asset.balance).toFixed(parseFloat(asset.decimals));
-
       setAmount0((am / asset?.balance) * 100);
-      setAmount0Percent((am / asset?.balance) * 100);
     } else if (input === "withdraw") {
       let am = "";
-      am = BigNumber(asset.balance).toFixed(10);
-      setWithdrawAmount(parseFloat(am).toFixed(10));
+      am = BigNumber(asset.balance).toFixed(parseFloat(asset.decimals));
+      setWithdrawAmount((am / asset.balance) * 100);
 
       if (am === "") {
         setWithdrawAmount0("");
@@ -498,8 +492,8 @@ export default function ssLiquidityManage() {
     if (input === "withdraw") {
       let am = "";
       if (asset && asset.gauge) {
-        am = BigNumber(asset.gauge.balance).times(100).div(100).toFixed(18);
-        setWithdrawAmount(parseFloat(am).toFixed(10));
+        am = BigNumber(asset.gauge.balance);
+        setWithdrawAmount((am / asset.gauge.balance) * 100);
       }
       if (am === "") {
         setWithdrawAmount0("");
@@ -819,16 +813,9 @@ export default function ssLiquidityManage() {
       if (BigNumber(withdrawAmount).lte(0)) {
         setWithdrawAmountError("Invalid amount");
         error = true;
-      } else if (
-        withdrawAsset &&
-        BigNumber(parseFloat(withdrawAmount)).gt(
-          parseFloat(withdrawAsset.balance).toFixed(10)
-        )
-      ) {
-        setWithdrawAmountError(`Greater than your available LP balance`);
-        error = true;
       }
     }
+    console.log((withdrawAmount * pair.balance) / 100);
     if (!error) {
       setDepositLoading(true);
       stores.dispatcher.dispatch({
@@ -837,60 +824,7 @@ export default function ssLiquidityManage() {
           pair: withdrawAsset,
           token0: withdrawAsset.token0,
           token1: withdrawAsset.token1,
-          quote: withdrawAmount,
-          slippage: (slippage && slippage) != "" ? slippage : "2",
-        },
-      });
-    }
-  };
-
-  const onUnstakeAndWithdraw = () => {
-    setWithdrawAmountError(false);
-
-    let error = false;
-
-    if (!withdrawAmount || withdrawAmount === "" || isNaN(withdrawAmount)) {
-      setWithdrawAmountError("Amount is required");
-      error = true;
-    } else {
-      if (
-        withdrawAsset &&
-        withdrawAsset.gauge &&
-        (!withdrawAsset.gauge.balance ||
-          isNaN(withdrawAsset.gauge.balance) ||
-          BigNumber(withdrawAsset.gauge.balance).lte(0))
-      ) {
-        setWithdrawAmountError("Invalid balance");
-        error = true;
-      } else if (BigNumber(withdrawAmount).lte(0)) {
-        setWithdrawAmountError("Invalid amount");
-        error = true;
-      } else if (
-        withdrawAsset &&
-        BigNumber(withdrawAmount).gt(withdrawAsset.gauge.balance)
-      ) {
-        setWithdrawAmountError(`Greater than your available balance`);
-        error = true;
-      }
-    }
-
-    if (!withdrawAsset || withdrawAsset === null) {
-      setWithdrawAmountError("From asset is required");
-      error = true;
-    }
-
-    if (!error) {
-      setDepositStakeLoading(true);
-      stores.dispatcher.dispatch({
-        type: ACTIONS.UNSTAKE_AND_REMOVE_LIQUIDITY,
-        content: {
-          pair: pair,
-          token0: pair.token0,
-          token1: pair.token1,
-          amount: withdrawAmount,
-          amount0: withdrawAmount0,
-          amount1: withdrawAmount1,
-          quote: withdrawQuote,
+          quote: (withdrawAmount * pair.balance) / 100,
           slippage: (slippage && slippage) != "" ? slippage : "2",
         },
       });
@@ -899,13 +833,14 @@ export default function ssLiquidityManage() {
 
   const onUnstake = () => {
     setStakeLoading(true);
+
     stores.dispatcher.dispatch({
       type: ACTIONS.UNSTAKE_LIQUIDITY,
       content: {
         pair: pair,
         token0: pair.token0,
         token1: pair.token1,
-        amount: withdrawAmount,
+        amount: (withdrawAmount * pair.gauge.balance) / 100,
         amount0: withdrawAmount0,
         amount1: withdrawAmount1,
         quote: withdrawQuote,
@@ -921,10 +856,6 @@ export default function ssLiquidityManage() {
 
     if (withdrawAction === "remove") {
       onWithdraw(withdrawAsset);
-    }
-
-    if (withdrawAction === "unstake-remove") {
-      onUnstakeAndWithdraw();
     }
   };
 
@@ -968,27 +899,6 @@ export default function ssLiquidityManage() {
         );
       }
     }
-  };
-
-  const amountPercentWithdrawChanged = (event) => {
-    const formated = formatInputAmount(event.target.value.replace(",", "."));
-    const maxValue = 100;
-
-    if ([".", ","].includes(formated[formated.length - 1]) || formated === "") {
-      if (parseFloat(formated) > 100) {
-        setWithdrawAmountPercent(maxValue);
-        return;
-      }
-      setWithdrawAmountPercent(formated);
-      return;
-    }
-
-    let value = parseFloat(formated);
-
-    if (value > maxValue) {
-      value = maxValue;
-    }
-    setWithdrawAmountPercent(value);
   };
 
   const amount1Changed = (event) => {
@@ -1072,7 +982,7 @@ export default function ssLiquidityManage() {
         value.isStable
       );
       setPair(p);
-      calcRemove(p, withdrawAmount);
+      calcRemove(p, withdrawAsset?.balance);
     }
   };
 
@@ -1098,15 +1008,16 @@ export default function ssLiquidityManage() {
 
   const withdrawAmountChanged = (withdrawAsset) => {
     const value = formatInputAmount(event.target.value.replace(",", "."));
-    console.log(value !== "");
+
     setWithdrawAmountError(false);
-    setWithdrawAmount(value);
+    if (value <= 100) {
+      setWithdrawAmount(value);
+    }
     if (value === "") {
       setWithdrawAmount0("");
       setWithdrawAmount1("");
-    } else if (value !== "" && !isNaN(value)) {
-      console.log(withdrawAsset, "inn");
-      calcRemove(withdrawAsset, value);
+    } else if (value !== "" && !isNaN(value) && value <= 100) {
+      calcRemove(withdrawAsset, (value * withdrawAsset?.balance) / 100);
     }
   };
 
@@ -1314,34 +1225,6 @@ export default function ssLiquidityManage() {
             >
               Liquidity pool
             </div>
-
-            {/*{assetValue?.balance && Number(assetValue?.balance) > 0 && type === 'withdraw' &&
-              <div
-                style={{
-                  cursor: 'pointer',
-                  fontWeight: 500,
-                  fontSize: 14,
-                  lineHeight: '120%',
-                  color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
-                }}
-                onClick={() => setAmountPercent(type, 100)}>
-                MAXLP
-              </div>
-            }
-            &nbsp;
-            {assetValue?.gauge?.balance && Number(assetValue?.gauge?.balance) > 0 && type === 'withdraw' &&
-              <div
-                style={{
-                  cursor: 'pointer',
-                  fontWeight: 500,
-                  fontSize: 14,
-                  lineHeight: '120%',
-                  color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
-                }}
-                onClick={() => setAmountPercentGauge(type)}>
-                MAXSTAKE
-              </div>
-            }*/}
           </div>
         )}
 
@@ -1783,32 +1666,6 @@ export default function ssLiquidityManage() {
               </Typography>
             </div>
           </div>
-
-          <div
-            style={{
-              width: "100%",
-              marginTop: 10,
-            }}
-            className={[
-              classes.toggleOption,
-              classes[`toggleOption--${appTheme}`],
-              `${withdrawAction === "unstake-remove" && classes.active}`,
-            ].join(" ")}
-            onClick={() => {
-              setWithdrawAction("unstake-remove");
-            }}
-          >
-            {renderToggleIcon("unstake-remove")}
-
-            <Typography
-              className={[
-                classes.toggleOptionText,
-                classes[`toggleOptionText--${appTheme}`],
-              ].join(" ")}
-            >
-              Unstake & Remove LP
-            </Typography>
-          </div>
         </div>
 
         {withdrawAsset !== null && withdrawAction !== null && (
@@ -2010,7 +1867,7 @@ export default function ssLiquidityManage() {
                   placeholder="0.00"
                   error={amount1Error}
                   helperText={amount1Error}
-                  value={withdrawAmount}
+                  value={`${withdrawAmount}%`}
                   onChange={() => withdrawAmountChanged(withdrawAsset)}
                   disabled={
                     depositLoading ||
@@ -3324,20 +3181,7 @@ export default function ssLiquidityManage() {
             size="large"
             color="primary"
             onClick={() => handleWithdraw(withdrawAsset)}
-            disabled={
-              withdrawAction === "remove"
-                ? parseFloat(withdrawAsset?.balance).toFixed(10) <
-                  parseFloat(withdrawAmount).toFixed(10)
-                : false || withdrawAction === "unstake"
-                ? parseFloat(withdrawAsset?.gauge?.balance).toFixed(10) <
-                  parseFloat(withdrawAmount).toFixed(10)
-                : false || withdrawAction === "unstake-remove"
-                ? parseFloat(withdrawAsset?.gauge?.balance).toFixed(10) <
-                  parseFloat(withdrawAmount).toFixed(10)
-                : false ||
-                  withdrawAmount == "" ||
-                  parseFloat(withdrawAmount) == 0
-            }
+            disabled={withdrawAmount == "" || parseFloat(withdrawAmount) == 0}
             className={[
               classes.buttonOverride,
               classes[`buttonOverride--${appTheme}`],
@@ -3355,10 +3199,6 @@ export default function ssLiquidityManage() {
                   {parseFloat(withdrawAmount) > 0 &&
                     withdrawAction === "remove" &&
                     "Remove LP"}
-
-                  {parseFloat(withdrawAmount) > 0 &&
-                    withdrawAction === "unstake-remove" &&
-                    "Unstake & Remove LP"}
 
                   {(parseFloat(withdrawAmount) == 0 || withdrawAmount == "") &&
                     "Enter Amount"}
