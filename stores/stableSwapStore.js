@@ -3031,12 +3031,14 @@ class Store {
       if (token && token.id) {
         sendTok = token.id;
       }
-
+      let am = BigNumber(amount)
+        .times(10 ** pair.decimals)
+        .toFixed(0);
       this._callContractWait(
         web3,
         gaugeContract,
         "deposit",
-        [amount, sendTok],
+        [am, sendTok],
         account,
         gasPrice,
         null,

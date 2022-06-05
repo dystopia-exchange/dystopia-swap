@@ -579,7 +579,7 @@ export default function ssLiquidityManage() {
         type: ACTIONS.STAKE_LIQUIDITY,
         content: {
           pair: pair,
-          amount: (percent / 100) * balance,
+          amount: (percent * balance) / 100,
           token: token,
           slippage: (slippage && slippage) != "" ? slippage : "2",
         },
