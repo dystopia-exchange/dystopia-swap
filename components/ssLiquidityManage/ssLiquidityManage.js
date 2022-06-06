@@ -903,7 +903,7 @@ export default function ssLiquidityManage() {
     }
   };
 
-  const amount1Changed = (event) => {
+  const amount1Changed = () => {
     const value = formatInputAmount(event.target.value.replace(",", "."));
     setAmount1Error(false);
     if (!isNaN(value)) setAmount1(value);
