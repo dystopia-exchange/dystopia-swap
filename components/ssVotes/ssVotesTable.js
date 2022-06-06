@@ -702,8 +702,6 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
     const property = value.substring(0, value.indexOf('--'));
     const event = value.substring(value.indexOf('--') + 2);
 
-    console.log(value, event, property)
-
     setSortValueId(value);
     setSortDirection(event);
 
