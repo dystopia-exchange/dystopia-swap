@@ -903,7 +903,7 @@ export default function ssLiquidityManage() {
     }
   };
 
-  const amount1Changed = (event) => {
+  const amount1Changed = () => {
     const value = formatInputAmount(event.target.value.replace(",", "."));
     setAmount1Error(false);
     if (!isNaN(value)) setAmount1(value);
@@ -1007,7 +1007,26 @@ export default function ssLiquidityManage() {
       asset1
     );
   };
-
+  const swapAssets = async () => {
+    const fa = asset0;
+    const ta = asset1;
+    setAsset0(ta);
+    setAsset1(fa);
+    let pair = await stores.stableSwapStore.getPair(
+      asset1.address,
+      asset0.address,
+      stable
+    );
+    callQuoteAddLiquidity(
+      amount0,
+      amount1,
+      priorityAsset,
+      stable,
+      pair,
+      asset1,
+      asset0
+    );
+  };
   const withdrawAmountChanged = (withdrawAsset) => {
     const value = formatInputAmount(event.target.value.replace(",", "."));
 
@@ -2557,6 +2576,7 @@ export default function ssLiquidityManage() {
                         classes.swapIconContainer,
                         classes[`swapIconContainer--${appTheme}`],
                       ].join(" ")}
+                      onClick={swapAssets}
                     >
                       <div
                         className={[
