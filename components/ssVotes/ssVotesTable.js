@@ -16,7 +16,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails, Button, DialogTitle, DialogContent, Dialog, Hidden,
-
+  
 } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import QuizIcon from '@mui/icons-material/Quiz';
@@ -277,7 +277,7 @@ const headCells = [
     width: 200,
     isHideInDetails: true,
   },
-
+  
 ];
 
 const StickyTableCell = styled(TableCell)(({theme, appTheme}) => ({
@@ -959,7 +959,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                             borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
                             overflow: 'hidden',
                           }}>
-
+                            
                           {
                             tableCellContent(
                               `${(numeral(BigNumber(row?.tvl).toLocaleString()).format('($ 0a)'))} `,
@@ -980,58 +980,15 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           }}>
                           {
                             tableCellContent(
-                                `${
-                                    formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
-                                        BigNumber(row?.gauge?.boostedApr0),
-                                        BigNumber(row?.gauge?.boostedApr1)
-                                    ),0)
-                                }→${
-                                    formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
-                                        BigNumber(row?.gauge?.boostedApr0),
-                                        BigNumber(row?.gauge?.boostedApr1)
-                                    ),0)
-                                }%`,
-                                null,
-                                <Tooltip title={
-                                  <React.Fragment>
-                                    {"APR based on current prices of tokens, token boosted APR and your locked DYST amount."}
-                                    <br/><br/>
-                                    {"Total APR"}
-                                    <br/>
-                                    <b>
-                                      {
-                                        formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
-                                            BigNumber(row?.gauge?.boostedApr0),
-                                            BigNumber(row?.gauge?.boostedApr1)
-                                        ),2)
-                                      }%
-                                      {" - "}
-                                      {
-                                        formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
-                                            BigNumber(row?.gauge?.boostedApr0),
-                                            BigNumber(row?.gauge?.boostedApr1)
-                                        ),2)
-                                      }%
-                                    </b>
-                                    <br/>
-                                    <dl>
-                                      <dt><b>{formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.boostedApr0), BigNumber(row?.gauge?.boostedApr1)), 2)}%</b> Boosted APR</dt>
-                                      <dd><b>{formatCurrency(BigNumber(row?.gauge?.boostedApr0), 2)}%</b> {row.token0.symbol} APR</dd>
-                                      <dd><b>{formatCurrency(BigNumber(row?.gauge?.boostedApr1), 2)}%</b> {row.token1.symbol} APR</dd>
-                                      <dt><b>{formatCurrency(BigNumber(row?.gauge?.apr).div(100).times(40), 2)}%</b> Min staking APR</dt>
-                                      <dd><b>{formatCurrency(BigNumber(row?.gauge?.apr).div(100).times(40), 2)}%</b> Min APR</dd>
-                                      <dd><b>{formatCurrency(BigNumber(row?.gauge?.apr), 2)}%</b> Max APR</dd>
-                                    </dl>
-                                  </React.Fragment>
-                                }>
-                                  <QuizIcon fontSize='small'/>
-                                </Tooltip> ,
-                                null
+                              `${formatCurrency(BigNumber(row?.gauge?.apr).div(100).times(40),0)}→${formatCurrency(BigNumber(row?.gauge?.apr),0)}%`,
+                              null,
+                             <Tooltip title="APR based on current prices of tokens and your locked DYST amount."><QuizIcon fontSize='small'/></Tooltip> ,
+                              null
                             )
                           }
-
+                          
                         </TableCell>
-
+                        
                         <TableCell
                           className={classes.cell}
                           align="right"
@@ -1167,7 +1124,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                             />
                           </div>
                         </TableCell>
-
+                        
                       </TableRow>
                     );
                   })}
@@ -1587,17 +1544,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       whiteSpace: 'nowrap',
                                     }}>
                                     {headCell.id === 'tvl' && `${(numeral(BigNumber(row?.tvl).toLocaleString()).format('($ 0a)'))} `}
-                                    {headCell.id === 'apr' && `${
-                                        formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
-                                            BigNumber(row?.gauge?.boostedApr0),
-                                            BigNumber(row?.gauge?.boostedApr1)
-                                        ), 0)
-                                    }→${
-                                        formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
-                                            BigNumber(row?.gauge?.boostedApr0),
-                                            BigNumber(row?.gauge?.boostedApr1)
-                                        ),0)
-                                    } %`}
+                                    {headCell.id === 'apr' && `${formatCurrency(BigNumber(row?.gauge?.apr).div(100).times(40),0)}->${formatCurrency(BigNumber(row?.gauge?.apr),0)} %`}
                                     {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.gauge?.reserve0))}
                                     {headCell.id === 'liquidity' && formatCurrency(BigNumber(row?.reserve0))}
                                     {headCell.id === 'apy' && row?.gaugebribes.length ? (
@@ -1612,7 +1559,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                         })
                                       )
                                       : null}
-
+                                    
                                     {headCell.id === 'myVotes' && formatCurrency(BigNumber(sliderValue).div(100).times(token?.lockValue))}
                                   </Typography>
 
@@ -1625,7 +1572,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                       whiteSpace: 'nowrap',
                                     }}>
-
+                                   
                                     {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.gauge?.reserve1))}
                                     {headCell.id === 'liquidity' && formatCurrency(BigNumber(row?.reserve1))}
                                     {headCell.id === 'apy' && ''}
@@ -1649,7 +1596,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-
+                                    
                                     {headCell.id === 'balance' && formatSymbol(row.token0.symbol)}
                                     {headCell.id === 'liquidity' && formatSymbol(row.token0.symbol)}
                                     {headCell.id === 'apy' && row?.gaugebribes.length ? (
@@ -1675,7 +1622,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                     }}>
-
+                                      
                                     {headCell.id === 'balance' && formatSymbol(row.token1.symbol)}
                                     {headCell.id === 'liquidity' && formatSymbol(row.token1.symbol)}
                                     {headCell.id === 'apy' && ''}
