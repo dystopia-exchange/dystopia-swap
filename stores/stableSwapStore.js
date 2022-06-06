@@ -1107,7 +1107,6 @@ class Store {
           }
         }
       }
-      console.log(baseAssets);
       let localBaseAssets = this.getLocalAssets();
 
       return [...baseAssets, ...localBaseAssets];
@@ -1169,7 +1168,7 @@ class Store {
           return obj;
         });
       } catch (e) {
-        console.log(e, "res");
+        console.log(e, "error");
       }
       return pairsCall2;
     } catch (ex) {
@@ -1324,7 +1323,6 @@ class Store {
         gaugesContract.methods.totalWeight().call(),
       ]);
       const responsev2 = await clientV.query(queryv2).toPromise();
-      console.log(responsev2.data.bundle.ethPrice);
       const ps = await Promise.all(
         pairs.map(async (pair) => {
           try {
@@ -1625,9 +1623,6 @@ class Store {
               false: Boolean, //rechange isWhitelisted!!
             };
           } catch (ex) {
-            console.log("EXCEPTION 3 balanceof");
-            console.log(asset);
-            console.log(ex);
             return {
               balanceOf: "0",
               maticBalance: "0",
@@ -2250,7 +2245,6 @@ class Store {
           uuid: allowanceTXID,
           description: `Allow the router to spend your ${pairDetails.symbol}`,
         });
-        console.log(BigNumber(allowance).gt(amount), "hi2");
       } else {
         this.emitter.emit(ACTIONS.TX_STATUS, {
           uuid: allowanceTXID,
@@ -3989,12 +3983,6 @@ class Store {
 
       const { token0, token1, amount, amount0, amount1, pair } =
         payload.content;
-      console.log(
-        BigNumber(amount)
-          .times(10 ** pair.decimals)
-          .toFixed(0),
-        "inn"
-      );
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let unstakeTXID = this.getTXUUID();
@@ -5679,7 +5667,6 @@ class Store {
                 const [earned] = await Promise.all([
                   bribeContract.methods.earned(bribe.address, add).call(),
                 ]);
-                console.log(add, earned, "yeahhh");
                 const tokenContract = new web3.eth.Contract(
                   CONTRACTS.ERC20_ABI,
                   bribe.address

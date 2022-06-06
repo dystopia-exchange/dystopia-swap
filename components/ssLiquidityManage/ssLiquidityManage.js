@@ -817,7 +817,6 @@ export default function ssLiquidityManage() {
         error = true;
       }
     }
-    console.log((withdrawAmount * pair.balance) / 100);
     if (!error) {
       setDepositLoading(true);
       stores.dispatcher.dispatch({
