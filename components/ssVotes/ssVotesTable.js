@@ -893,8 +893,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                         <StickyTableCell
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                           }}
                           className={classes.cell}>
                           <div className={classes.inline}>
@@ -953,8 +952,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           align="right"
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             overflow: 'hidden',
                           }}>
                             
@@ -972,8 +970,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           align="right"
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             overflow: 'hidden',
                           }}>
                           {
@@ -1035,8 +1032,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           align="right"
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             overflow: 'hidden',
                           }}>
                           {
@@ -1054,8 +1050,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           align="right"
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             overflow: 'hidden',
                           }}>
                           {
@@ -1073,8 +1068,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           align="right"
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             overflow: 'hidden',
                           }}>
                           {
@@ -1092,8 +1086,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           align="right"
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             overflow: 'hidden',
                           }}>
                           {
@@ -1122,8 +1115,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           align="right"
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             overflow: 'hidden',
                           }}>
                           {
@@ -1141,8 +1133,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           align="right"
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             overflow: 'hidden',
                           }}>
                           <div style={{
