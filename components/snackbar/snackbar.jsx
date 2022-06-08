@@ -180,6 +180,7 @@ export default function MySnackbar(props) {
             style={{
               display: 'flex',
               padding: 20,
+              paddingRight: 10,
             }}>
             <div
               style={{
