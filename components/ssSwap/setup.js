@@ -166,6 +166,8 @@ function Setup() {
 
   const onAssetSelect = (type, value) => {
     if (type === "From") {
+      let SPHERE_ADDRESS = "0x17e9c5b37283ac5fbe527011cec257b832f03eb3";
+      if(value.id === SPHERE_ADDRESS) setSlippage('49');
       if (value.address === toAssetValue.address) {
         setToAssetValue(fromAssetValue);
         setFromAssetValue(toAssetValue);
