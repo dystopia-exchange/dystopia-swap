@@ -172,6 +172,7 @@ export default function Transaction({ transaction }) {
         style={{
           display: "flex",
           padding: 20,
+          paddingRight: 0,
         }}
       >
         <div

@@ -14,6 +14,7 @@ import pairContractAbi from "./abis/pairOldRouter.json";
 import migratorAbi from "./abis/migrator.json";
 import FactoryAbi from "./abis/FactoryAbi.json";
 import { ConstructionOutlined } from "@mui/icons-material";
+import {USD_PLUS_ADDRESS, USD_PLUS_BOOSTED_DATA_URL} from "./constants/contracts";
 
 const queryone = `
   query {
@@ -1566,6 +1567,25 @@ class Store {
                 .toFixed(4);
 
               pair.gauge.apr = apr;
+              pair.gauge.boostedApr0 = new BigNumber(0);
+              pair.gauge.boostedApr1 = new BigNumber(0);
+
+              if (pair.token0.address.toLowerCase() === CONTRACTS.USD_PLUS_ADDRESS.toLowerCase()) {
+                let boostedApr0Response = await axios.get(CONTRACTS.USD_PLUS_BOOSTED_DATA_URL);
+
+                if (boostedApr0Response.data) {
+                  pair.gauge.boostedApr0 = new BigNumber(boostedApr0Response.data).times(100);
+                }
+              }
+
+              if (pair.token1.address.toLowerCase() === CONTRACTS.USD_PLUS_ADDRESS.toLowerCase()) {
+                let boostedApr1Response = await axios.get(CONTRACTS.USD_PLUS_BOOSTED_DATA_URL);
+
+                if (boostedApr1Response.data) {
+                  pair.gauge.boostedApr1 = new BigNumber(boostedApr1Response.data).times(100);
+                }
+              }
+
               return pair;
             }
             return pair;
