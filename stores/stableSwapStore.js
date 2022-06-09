@@ -4558,6 +4558,8 @@ class Store {
         CONTRACTS.ROUTER_ABI,
         CONTRACTS.ROUTER_ADDRESS
       );
+      let SPHERE_ADDRESS = "0x17e9c5b37283ac5fbe527011cec257b832f03eb3";
+      
 
       let func = "swapExactTokensForTokens";
       let params = [
@@ -4569,6 +4571,10 @@ class Store {
       ];
       let sendValue = null;
 
+      if(fromAsset.address === SPHERE_ADDRESS) { // SPHERE token address
+        func = 'swapExactTokensForTokensSupportingFeeOnTransferTokens';
+      }
+      
       if (fromAsset.address === "MATIC") {
         func = "swapExactMATICForTokens";
         params = [
@@ -4581,6 +4587,9 @@ class Store {
       }
       if (toAsset.address === "MATIC") {
         func = "swapExactTokensForMATIC";
+        if(fromAsset.address === SPHERE_ADDRESS) {
+          func = 'swapExactTokensForMATICSupportingFeeOnTransferTokens';
+        }
       }
 
       this._callContractWait(
