@@ -1570,11 +1570,23 @@ class Store {
               pair.gauge.boostedApr0 = new BigNumber(0);
               pair.gauge.boostedApr1 = new BigNumber(0);
 
+              let totalReserve = Number(totalVolumeInUsdInReserve0) + Number(totalVolumeInUsdInReserve1);
+              let partReserve0 = new BigNumber(totalVolumeInUsdInReserve0);
+              let partReserve1 = new BigNumber(totalVolumeInUsdInReserve1);
+
+              if (totalReserve > 0) {
+                partReserve0 = partReserve0.div(new BigNumber(totalReserve));
+                partReserve1 = partReserve1.div(new BigNumber(totalReserve));
+              } else {
+                partReserve0 = new BigNumber(1);
+                partReserve1 = new BigNumber(1);
+              }
+
               if (pair.token0.address.toLowerCase() === CONTRACTS.USD_PLUS_ADDRESS.toLowerCase()) {
                 let boostedApr0Response = await axios.get(CONTRACTS.USD_PLUS_BOOSTED_DATA_URL);
 
                 if (boostedApr0Response.data) {
-                  pair.gauge.boostedApr0 = new BigNumber(boostedApr0Response.data).times(100);
+                  pair.gauge.boostedApr0 = new BigNumber(boostedApr0Response.data).times(partReserve0).times(100);
                 }
               }
 
@@ -1582,7 +1594,7 @@ class Store {
                 let boostedApr1Response = await axios.get(CONTRACTS.USD_PLUS_BOOSTED_DATA_URL);
 
                 if (boostedApr1Response.data) {
-                  pair.gauge.boostedApr1 = new BigNumber(boostedApr1Response.data).times(100);
+                  pair.gauge.boostedApr1 = new BigNumber(boostedApr1Response.data).times(partReserve1).times(100);
                 }
               }
 
