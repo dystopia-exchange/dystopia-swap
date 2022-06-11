@@ -3,7 +3,7 @@ import { ACTIONS, CONTRACTS } from "./constants";
 import Multicall from "@dopex-io/web3-multicall";
 import detectProvider from "@metamask/detect-provider";
 import { injected, walletconnect, walletlink, network } from "./connectors";
-
+import { providers } from "ethers";
 import Web3 from "web3";
 
 class Store {
@@ -193,7 +193,7 @@ class Store {
   getWeb3Provider = async () => {
     let web3context = this.getStore("web3context");
     let provider = null;
-
+    console.log(web3context, "heyyyy");
     if (!web3context) {
       provider = network.providers["1"];
     } else {
@@ -212,11 +212,12 @@ class Store {
       // const provider = connectorsByName[name];
       await provider.enable();
       const web3 = new Web3(provider);
-
+      const web3Provider = new providers.Web3Provider(provider);
       that.setStore({
         account: { address: provider.accounts[0] },
-        web3context: { library: { provider: web3 } },
+        web3context: { library: { provider: web3Provider.provider } },
       });
+      this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
       return true;
     } catch (e) {
       console.log(e);

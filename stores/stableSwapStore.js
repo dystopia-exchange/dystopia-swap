@@ -14,7 +14,10 @@ import pairContractAbi from "./abis/pairOldRouter.json";
 import migratorAbi from "./abis/migrator.json";
 import FactoryAbi from "./abis/FactoryAbi.json";
 import { ConstructionOutlined } from "@mui/icons-material";
-import {USD_PLUS_ADDRESS, USD_PLUS_BOOSTED_DATA_URL} from "./constants/contracts";
+import {
+  USD_PLUS_ADDRESS,
+  USD_PLUS_BOOSTED_DATA_URL,
+} from "./constants/contracts";
 
 const queryone = `
   query {
@@ -1058,7 +1061,7 @@ class Store {
       const baseAssetsCall = response;
       let baseAssets = baseAssetsCall.data.tokens;
       let baseAssetsv2 = responsev2.data.tokens;
-
+      console.log(baseAssetsv2, baseAssets);
       for (let i = 0; i < baseAssets.length; i++) {
         for (let j = 0; j < baseAssetsv2.length; j++) {
           if (
@@ -1570,19 +1573,33 @@ class Store {
               pair.gauge.boostedApr0 = new BigNumber(0);
               pair.gauge.boostedApr1 = new BigNumber(0);
 
-              if (pair.token0.address.toLowerCase() === CONTRACTS.USD_PLUS_ADDRESS.toLowerCase()) {
-                let boostedApr0Response = await axios.get(CONTRACTS.USD_PLUS_BOOSTED_DATA_URL);
+              if (
+                pair.token0.address.toLowerCase() ===
+                CONTRACTS.USD_PLUS_ADDRESS.toLowerCase()
+              ) {
+                let boostedApr0Response = await axios.get(
+                  CONTRACTS.USD_PLUS_BOOSTED_DATA_URL
+                );
 
                 if (boostedApr0Response.data) {
-                  pair.gauge.boostedApr0 = new BigNumber(boostedApr0Response.data).times(100);
+                  pair.gauge.boostedApr0 = new BigNumber(
+                    boostedApr0Response.data
+                  ).times(100);
                 }
               }
 
-              if (pair.token1.address.toLowerCase() === CONTRACTS.USD_PLUS_ADDRESS.toLowerCase()) {
-                let boostedApr1Response = await axios.get(CONTRACTS.USD_PLUS_BOOSTED_DATA_URL);
+              if (
+                pair.token1.address.toLowerCase() ===
+                CONTRACTS.USD_PLUS_ADDRESS.toLowerCase()
+              ) {
+                let boostedApr1Response = await axios.get(
+                  CONTRACTS.USD_PLUS_BOOSTED_DATA_URL
+                );
 
                 if (boostedApr1Response.data) {
-                  pair.gauge.boostedApr1 = new BigNumber(boostedApr1Response.data).times(100);
+                  pair.gauge.boostedApr1 = new BigNumber(
+                    boostedApr1Response.data
+                  ).times(100);
                 }
               }
 
@@ -4568,7 +4585,7 @@ class Store {
         deadline,
       ];
       let sendValue = null;
-
+      console.log(params, "hello");
       if (fromAsset.address === "MATIC") {
         func = "swapExactMATICForTokens";
         params = [
@@ -5086,6 +5103,25 @@ class Store {
 
   withdrawVest = async (payload) => {
     try {
+      const { tokenID } = payload.content;
+      const queryVestWithdraw = `
+     query {
+         veDysts(where :{id:${tokenID.toString()}})  {
+            id
+            addresses
+      }
+    }`;
+
+      const response = await client.query(queryVestWithdraw).toPromise();
+      let res;
+
+      if (response.data.veDysts != "") {
+        console.log(response.data.veDysts, "heyy");
+        console.log(response.data.veDysts != "");
+        res = response.data.veDysts[0].addresses.length;
+      } else {
+        res = 0;
+      }
       const account = stores.accountStore.getStore("account");
       if (!account) {
         console.warn("account not found");
@@ -5099,22 +5135,43 @@ class Store {
       }
 
       const govToken = this.getStore("govToken");
-      const { tokenID } = payload.content;
-
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let vestTXID = this.getTXUUID();
+
+      let withdrawAllTXID = [];
+      let arrTx = [];
+      if (res != 0 || res != null || res != "") {
+        for (var i = 0; i < res; i++) {
+          withdrawAllTXID[i] = this.getTXUUID();
+          let a = {
+            uuid: withdrawAllTXID[i],
+            description: `Withdrawing your tokens for gauge `,
+            status: "WAITING",
+          };
+          arrTx.push(a);
+        }
+      }
+      let voteTXID = this.getTXUUID();
+
+      let b = {
+        uuid: voteTXID,
+        description: `Reset votes`,
+        status: "WAITING",
+      };
+
+      let c = {
+        uuid: vestTXID,
+        description: `Withdrawing your expired tokens`,
+        status: "WAITING",
+      };
+      arrTx.push(b);
+      arrTx.push(c);
 
       this.emitter.emit(ACTIONS.TX_ADDED, {
         title: `Withdraw vest amount on token #${tokenID}`,
         type: "Vest",
         verb: "Vest Withdrawn",
-        transactions: [
-          {
-            uuid: vestTXID,
-            description: `Withdrawing your expired tokens`,
-            status: "WAITING",
-          },
-        ],
+        transactions: arrTx,
       });
 
       const gasPrice = await stores.accountStore.getGasPrice();
@@ -5124,27 +5181,94 @@ class Store {
         CONTRACTS.VE_TOKEN_ABI,
         CONTRACTS.VE_TOKEN_ADDRESS
       );
+      let allowanceCallsPromise = [];
+      if (res != 0 || res != null || res != "") {
+        for (var i = 0; i < res; i++) {
+          let gaugeContract = new web3.eth.Contract(
+            CONTRACTS.GAUGE_ABI,
+            response.data.veDysts[0].addresses[i]
+          );
+          const withdrawAll = new Promise((resolve, reject) => {
+            this._callContractWait(
+              web3,
+              gaugeContract,
+              "withdrawAll",
+              [],
+              account,
+              gasPrice,
+              null,
+              null,
+              withdrawAllTXID[i],
+              (err) => {
+                if (err) {
+                  reject(err);
+                  return;
+                }
 
-      this._callContractWait(
-        web3,
-        veTokenContract,
-        "withdraw",
-        [tokenID],
-        account,
-        gasPrice,
-        null,
-        null,
-        vestTXID,
-        (err) => {
-          if (err) {
-            return this.emitter.emit(ACTIONS.ERROR, err);
-          }
+                resolve();
+              }
+            );
+          });
 
-          this._updateVestNFTByID(tokenID);
+          allowanceCallsPromise.push(withdrawAll);
 
-          this.emitter.emit(ACTIONS.WITHDRAW_VEST_RETURNED);
+          const done = await Promise.all(allowanceCallsPromise);
         }
+      }
+      // SUBMIT INCREASE TRANSACTION
+      const gaugesContract = new web3.eth.Contract(
+        CONTRACTS.VOTER_ABI,
+        CONTRACTS.VOTER_ADDRESS
       );
+
+      const reset = new Promise((resolve, reject) => {
+        this._callContractWait(
+          web3,
+          gaugesContract,
+          "reset",
+          [tokenID],
+          account,
+          gasPrice,
+          null,
+          null,
+          voteTXID,
+          (err) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            resolve();
+          }
+        );
+      });
+
+      allowanceCallsPromise.push(reset);
+      await Promise.all(allowanceCallsPromise);
+
+      const withdraw = new Promise((resolve, reject) => {
+        this._callContractWait(
+          web3,
+          veTokenContract,
+          "withdraw",
+          [tokenID],
+          account,
+          gasPrice,
+          null,
+          null,
+          vestTXID,
+          (err) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+            this._updateVestNFTByID(tokenID);
+
+            this.emitter.emit(ACTIONS.WITHDRAW_VEST_RETURNED);
+            resolve();
+          }
+        );
+      });
     } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);
