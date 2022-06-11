@@ -147,7 +147,6 @@ async function onConnectionClicked(
   activate
 ) {
   const connectorsByName = stores.accountStore.getStore("connectorsByName");
-  console.log(currentConnector, "inn3");
   setActivatingConnector(currentConnector);
   if (name === "WalletConnect") {
     try {

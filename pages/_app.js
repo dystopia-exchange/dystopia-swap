@@ -5,7 +5,6 @@ import Layout from "../components/layout/layout.js";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useRouter } from "next/router";
 
-import { useWeb3React } from "@web3-react/core";
 import { AppThemeProvider, useAppTheme } from "../ui/AppThemeProvider";
 
 import Configure from "./configure";
@@ -22,9 +21,6 @@ import classes from "./home/home.module.css";
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const { appTheme, setAppTheme } = useAppTheme();
-  const { activate } = useWeb3React();
-  const { ERROR, CONNECTION_DISCONNECTED, CONNECTION_CONNECTED, CONFIGURE_SS } =
-    ACTIONS;
 
   const [stalbeSwapConfigured, setStableSwapConfigured] = useState(false);
   const [accountConfigured, setAccountConfigured] = useState(false);
@@ -84,26 +80,7 @@ export default function MyApp({ Component, pageProps }) {
         return accountConfigured;
     }
   };
-  useEffect(() => {
-    connectWalletOnPageLoad();
-  });
-  const connectWalletOnPageLoad = async () => {
-    if (localStorage?.getItem("isWalletConnected") === "true") {
-      try {
-        console.log("inn");
-        let connected = await stores.accountStore.connectWalletConnect();
-        console.log(connected, "inn2");
-        if (connected) {
-          stores.emitter.emit(CONNECTION_CONNECTED);
-          stores.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
-        }
-        localStorage.setItem("isWalletConnected", true);
-      } catch (ex) {
-        console.log(ex);
-      }
-    }
-    console.log("outt");
-  };
+
   const theme = createTheme({
     typography: {
       allVariants: {

@@ -1061,7 +1061,6 @@ class Store {
       const baseAssetsCall = response;
       let baseAssets = baseAssetsCall.data.tokens;
       let baseAssetsv2 = responsev2.data.tokens;
-      console.log(baseAssetsv2, baseAssets);
       for (let i = 0; i < baseAssets.length; i++) {
         for (let j = 0; j < baseAssetsv2.length; j++) {
           if (
@@ -4585,7 +4584,6 @@ class Store {
         deadline,
       ];
       let sendValue = null;
-      console.log(params, "hello");
       if (fromAsset.address === "MATIC") {
         func = "swapExactMATICForTokens";
         params = [
@@ -5116,8 +5114,6 @@ class Store {
       let res;
 
       if (response.data.veDysts != "") {
-        console.log(response.data.veDysts, "heyy");
-        console.log(response.data.veDysts != "");
         res = response.data.veDysts[0].addresses.length;
       } else {
         res = 0;

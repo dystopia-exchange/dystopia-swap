@@ -9,7 +9,6 @@ import Whitelist from "./whitelist";
 import Bribe from "./bribe/create";
 
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 function Route({ changeTheme, ...props }) {
   const router = useRouter();
