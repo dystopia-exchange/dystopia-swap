@@ -4559,8 +4559,15 @@ class Store {
 
       const done = await Promise.all(allowanceCallsPromises);
 
+      const SPHERE_ADDRESS = "0x17e9c5b37283ac5fbe527011cec257b832f03eb3";
+
       // SUBMIT SWAP TRANSACTION
-      const sendSlippage = BigNumber(100).minus(slippage).div(100);
+      let _slippage = slippage;
+      if (fromAsset.address === SPHERE_ADDRESS && Number(slippage) <= 22) {
+        _slippage = (30 + Number(slippage)).toString();
+      }
+      const sendSlippage = BigNumber(100).minus(_slippage).div(100);
+
       const sendFromAmount = BigNumber(fromAmount)
         .times(10 ** fromAsset.decimals)
         .toFixed(0);
@@ -4584,6 +4591,12 @@ class Store {
         deadline,
       ];
       let sendValue = null;
+
+      if (fromAsset.address === SPHERE_ADDRESS) {
+        // SPHERE token address
+        func = "swapExactTokensForTokensSupportingFeeOnTransferTokens";
+      }
+
       if (fromAsset.address === "MATIC") {
         func = "swapExactMATICForTokens";
         params = [
@@ -4596,6 +4609,9 @@ class Store {
       }
       if (toAsset.address === "MATIC") {
         func = "swapExactTokensForMATIC";
+        if (fromAsset.address === SPHERE_ADDRESS) {
+          func = "swapExactTokensForMATICSupportingFeeOnTransferTokens";
+        }
       }
 
       this._callContractWait(
