@@ -117,7 +117,6 @@ function Setup() {
           const dystIndex = baseAsset.findIndex((token) => {
             return token.id == "0x39ab6574c289c3ae4d88500eec792ab5b947a5eb";
           });
-          console.log(baseAsset, "heyaa");
           setToAssetValue(baseAsset[dystIndex]);
         }
 
@@ -125,7 +124,6 @@ function Setup() {
           const wmaticIndex = baseAsset.findIndex((token) => {
             return token.id == "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270";
           });
-          console.log(baseAsset[wmaticIndex], "heyaa2");
           setFromAssetValue(baseAsset[wmaticIndex]);
         }
         forceUpdate();
