@@ -114,11 +114,19 @@ function Setup() {
         setFromAssetOptions(baseAsset);
 
         if (baseAsset.length > 0 && toAssetValue == null) {
-          setToAssetValue(baseAsset[13]);
+          const dystIndex = baseAsset.findIndex(token => {
+            return token.id == "0x39ab6574c289c3ae4d88500eec792ab5b947a5eb";
+          });
+
+          setToAssetValue(baseAsset[dystIndex]);
         }
 
         if (baseAsset.length > 0 && fromAssetValue == null) {
-          setFromAssetValue(baseAsset[1]);
+          const wmaticIndex = baseAsset.findIndex(token => {
+            return token.id == "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270";
+          });
+
+          setFromAssetValue(baseAsset[wmaticIndex]);
         }
         forceUpdate();
       };
@@ -201,7 +209,7 @@ function Setup() {
     }
   };
 
-  const toAmountChanged = (event) => {};
+  const toAmountChanged = (event) => { };
 
   const onSlippageChanged = (event) => {
     if (event.target.value == "" || !isNaN(event.target.value)) {
@@ -710,9 +718,8 @@ function Setup() {
         </div>
 
         <div
-          className={`${classes.massiveInputContainer} ${
-            (amountError || assetError) && classes.error
-          }`}
+          className={`${classes.massiveInputContainer} ${(amountError || assetError) && classes.error
+            }`}
         >
           <div className={classes.massiveInputAssetSelect}>
             <AssetSelect
@@ -1016,8 +1023,8 @@ function Setup() {
         className={classes.btnSwap}
         labelClassName={
           !fromAmountValue ||
-          fromAmountValue > Number(fromAssetValue.balance) ||
-          Number(fromAmountValue) <= 0
+            fromAmountValue > Number(fromAssetValue.balance) ||
+            Number(fromAmountValue) <= 0
             ? classes["actionButtonText--disabled"]
             : classes.actionButtonText
         }
@@ -1030,8 +1037,8 @@ function Setup() {
           loading
             ? "Swapping"
             : !fromAmountValue || Number(fromAmountValue) <= 0
-            ? "Enter Amount"
-            : "Swap"
+              ? "Enter Amount"
+              : "Swap"
         }
       ></BtnSwap>
     </div>
