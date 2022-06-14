@@ -1134,6 +1134,21 @@ class Store {
       return [];
     }
   };
+  _getUSDPRouteAssets = async () => {
+    try {
+      const USDPlus = {
+        address: CONTRACTS.USDP_ADDRESS,
+        decimals: CONTRACTS.USDP_DECIMALS,
+        logoURI: CONTRACTS.USDP_LOGO,
+        name: CONTRACTS.USDP_NAME,
+        symbol: CONTRACTS.USDP_SYMBOL,
+      };
+      return [USDPlus];
+    } catch (ex) {
+      console.log(ex);
+      return [];
+    }
+  };
 
   _getPairs = async () => {
     try {
@@ -4210,9 +4225,10 @@ class Store {
       }
 
       // some path logic. Have a base asset (FTM) swap from start asset to FTM, swap from FTM back to out asset. Don't know.
-      const routeAssets = this.getStore("routeAssets");
+      const _routeAssets = this.getStore("routeAssets");
 
       const { fromAsset, toAsset, fromAmount } = payload.content;
+
 
       const routerContract = new web3.eth.Contract(
         CONTRACTS.ROUTER_ABI,
@@ -4232,6 +4248,17 @@ class Store {
       ) {
         return null;
       }
+      // override the routeAsset
+      let newRouteAssets = null;
+      if (
+        fromAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase() ||
+        toAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase()
+      ) {
+        newRouteAssets = await this._getUSDPRouteAssets();
+      }
+      const routeAssets = newRouteAssets || _routeAssets
+
+
 
       let addy0 = fromAsset.address;
       let addy1 = toAsset.address;
@@ -4559,11 +4586,9 @@ class Store {
 
       const done = await Promise.all(allowanceCallsPromises);
 
-      const SPHERE_ADDRESS = "0x62f594339830b90ae4c084ae7d223ffafd9658a7"// V2.1 // 0x17e9c5b37283ac5fbe527011cec257b832f03eb3 V2;
-
       // SUBMIT SWAP TRANSACTION
       let _slippage = slippage;
-      if (fromAsset.address === SPHERE_ADDRESS && Number(slippage) <= 22) {
+      if (fromAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase() && Number(slippage) <= 22) {
         _slippage = (30 + Number(slippage)).toString();
       }
       const sendSlippage = BigNumber(100).minus(_slippage).div(100);
@@ -4592,7 +4617,7 @@ class Store {
       ];
       let sendValue = null;
 
-      if (fromAsset.address === SPHERE_ADDRESS) {
+      if (fromAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase()) {
         // SPHERE token address
         func = "swapExactTokensForTokensSupportingFeeOnTransferTokens";
       }
@@ -4609,7 +4634,7 @@ class Store {
       }
       if (toAsset.address === "MATIC") {
         func = "swapExactTokensForMATIC";
-        if (fromAsset.address === SPHERE_ADDRESS) {
+        if (fromAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase()) {
           func = "swapExactTokensForMATICSupportingFeeOnTransferTokens";
         }
       }
