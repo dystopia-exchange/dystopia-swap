@@ -4559,7 +4559,7 @@ class Store {
 
       const done = await Promise.all(allowanceCallsPromises);
 
-      const SPHERE_ADDRESS = "0x17e9c5b37283ac5fbe527011cec257b832f03eb3";
+      const SPHERE_ADDRESS = "0x62f594339830b90ae4c084ae7d223ffafd9658a7"// V2.1 // 0x17e9c5b37283ac5fbe527011cec257b832f03eb3 V2;
 
       // SUBMIT SWAP TRANSACTION
       let _slippage = slippage;
