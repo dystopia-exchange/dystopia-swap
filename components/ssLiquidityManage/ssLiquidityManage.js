@@ -315,9 +315,9 @@ export default function ssLiquidityManage() {
     };
   }, []);
 
-  // useEffect(async () => {
-  //   ssUpdated();
-  // }, [router.query.address]);
+  useEffect(async () => {
+    ssUpdated();
+  }, [router.query.address]);
 
   const onBack = () => {
     router.push("/liquidity");
@@ -1050,8 +1050,8 @@ export default function ssLiquidityManage() {
                 }
               >
                 <span>
-                  {assetValue && assetValue.balance
-                    ? " " + formatCurrency(assetValue.balance)
+                  {assetValue && assetValue?.balance
+                    ? " " + formatCurrency(assetValue?.balance)
                     : ""}
                 </span>
               </Typography>
