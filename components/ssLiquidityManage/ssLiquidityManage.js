@@ -2454,7 +2454,6 @@ export default function ssLiquidityManage() {
                       amount0Focused,
                       amount0Ref
                     )}
-
                 {createLP && (
                   <>
                     <div
@@ -2505,7 +2504,6 @@ export default function ssLiquidityManage() {
                     )}
                   </>
                 )}
-
                 {needAddToWhiteList !== "" && (
                   <div
                     className={[
@@ -2516,8 +2514,24 @@ export default function ssLiquidityManage() {
                   >
                     token {needAddToWhiteList} not whitelisted
                   </div>
+                )}{" "}
+                {(asset0?.symbol === "SPHERE" ||
+                  asset1?.symbol === "SPHERE") && (
+                  <div
+                    className={[
+                      classes.disclaimerContainer,
+                      classes.disclaimerContainerError,
+                      classes[`disclaimerContainerError--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    <Typography className={classes.quoteError}>
+                      <b>SPHERE</b> is a <b>Taxed</b> token, providing liquidity
+                      will result in a reduced amount based on your transfer tax
+                    </Typography>
+                    {/* SPHERE is a taxed token, providing liquidity will result in
+                    a reduced amount based on your transfer tax */}
+                  </div>
                 )}
-
                 {createLP &&
                   pair?.name &&
                   (pair?.balance > 0 || amount0Error || amount1Error) && (
