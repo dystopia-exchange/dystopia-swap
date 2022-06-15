@@ -13,7 +13,7 @@ import {
   IconButton,
   Select, InputBase, DialogTitle, DialogContent,
 } from '@mui/material';
-import { Add, Search, ArrowBack, DeleteOutline, ArrowBackIosNew, Close } from '@mui/icons-material';
+import { Search, DeleteOutline, ArrowBackIosNew, Close } from '@mui/icons-material';
 import BigNumber from 'bignumber.js';
 import { formatCurrency } from '../../utils';
 import classes from './ssBribeCreate.module.css';

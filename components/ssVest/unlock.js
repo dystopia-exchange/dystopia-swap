@@ -12,14 +12,13 @@ import {
 import classes from "./ssVest.module.css";
 import { formatCurrency } from "../../utils";
 
-import { ArrowBack, ArrowBackIosNew } from "@mui/icons-material";
+import { ArrowBackIosNew } from "@mui/icons-material";
 import VestingInfo from "./vestingInfo";
 import stores from "../../stores";
 import { ACTIONS } from "../../stores/constants";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import Form from "../../ui/MigratorForm";
 import SwapIconBg from "../../ui/SwapIconBg";
-import AssetSelect from "../../ui/AssetSelect";
 
 export default function Unlock({ nft, govToken, veToken }) {
   const router = useRouter();

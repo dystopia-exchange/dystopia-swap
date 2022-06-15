@@ -1,4 +1,4 @@
-import { Dialog, Typography, Button } from "@mui/material";
+import { Dialog, Typography } from "@mui/material";
 import classes from "./ssWarning.module.css";
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 

@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import { DialogContent, DialogTitle, Dialog, Slide } from "@mui/material";
 import Unlock from "./unlock.js";
 import { Close } from '@mui/icons-material';

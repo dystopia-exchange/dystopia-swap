@@ -1,5 +1,5 @@
-import React, { Component, useState } from 'react';
-import { Snackbar, IconButton, Button, Typography, SvgIcon } from '@mui/material';
+import React, { useState } from 'react';
+import { IconButton, Button, Typography, SvgIcon } from '@mui/material';
 import { colors } from '../../theme/coreTheme';
 import { ETHERSCAN_URL } from '../../stores/constants';
 import classes from './snackbar.module.css';

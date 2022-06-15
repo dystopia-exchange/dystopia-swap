@@ -2,12 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Typography, DialogContent, Dialog, Slide, IconButton, DialogTitle } from "@mui/material";
 import { OpenInNew, Close } from '@mui/icons-material';
 
-import Lottie from "lottie-react";
-import successAnim from "../../public/lottiefiles/successAnim.json";
-import swapSuccessAnim from "../../public/lottiefiles/swapSuccess.json";
-import lockSuccessAnim from "../../public/lottiefiles/lockSuccess.json";
-import pairSuccessAnim from "../../public/lottiefiles/pairSuccess.json";
-
 import Transaction from './transaction';
 
 function Transition(props) {
@@ -16,7 +10,7 @@ function Transition(props) {
 
 import classes from './transactionQueue.module.css';
 import stores from '../../stores';
-import { ACTIONS, ETHERSCAN_URL } from '../../stores/constants';
+import { ACTIONS } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 export default function TransactionQueue({setQueueLength}) {

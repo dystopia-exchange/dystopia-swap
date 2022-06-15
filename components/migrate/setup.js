@@ -10,7 +10,6 @@ import {
   DialogContent,
   Tooltip,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { Search, KeyboardArrowDown, Close } from "@mui/icons-material";
 import migrate from "../../stores/configurations/migrators";
 import FactoryAbi from "../../stores/abis/FactoryAbi.json";
@@ -19,13 +18,11 @@ import Form from "../../ui/MigratorForm";
 import classes from "./ssMigrate.module.css";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import stores from "../../stores";
-import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
-import { BigNumber } from "ethers";
+import { ACTIONS, CONTRACTS } from "../../stores/constants";
 import { parseUnits } from "ethers/lib/utils";
 import Borders from "../../ui/Borders";
 import AssetSelect from "../../ui/AssetSelect";
 import Loader from "../../ui/Loader";
-import Web3 from "web3";
 
 export default function Setup() {
   const [fromAssetValue, setFromAssetValue] = useState(null);

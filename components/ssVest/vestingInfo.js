@@ -1,8 +1,7 @@
-import { Paper, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import classes from "./ssVest.module.css";
 import moment from "moment";
 import { formatCurrency } from "../../utils";
-import BigNumber from "bignumber.js";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import Borders from "../../ui/Borders";
 

@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  Paper,
   TextField,
   InputAdornment,
   CircularProgress,
   Typography,
-  Tooltip,
-  Button, Popover,
+  Tooltip
 } from '@mui/material';
 import BigNumber from 'bignumber.js';
 import TokenSelect from '../select-token/select-token';
