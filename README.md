@@ -1,6 +1,8 @@
 # Dystopia - ve(3,3)
 
 ## What is Dystopia
+Dystopia is a decentralized exchange and automated market marker focused on providing efficient token swaps and deep liquidity for stablecoins and other assets. Dystopia has a sophisticated governance structure using the ve(3,3) system that provides the possibility to maximize gains for all users of the ecosystem.
+
 - [Dystopia Smart Contracts](https://github.com/dystopia-exchange/dystopia-contracts)
 
 
@@ -13,5 +15,3 @@
 - Run `npm install`
 - You can now run the nextjs app this way: `npm run dev`
 - That's it! You can now start hacking and submit PRs.
-
-0x771B99f97F8529943aBDe1e76d91AF8d34F7277e
