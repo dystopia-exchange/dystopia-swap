@@ -3821,7 +3821,6 @@ class Store {
       const sendAmount1Min = BigNumber(quoteRemove.amountB)
         .times(sendSlippage)
         .toFixed(0);
-      console.log(sendAmount, "heyy");
       this._callContractWait(
         web3,
         routerContract,
