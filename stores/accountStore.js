@@ -1,4 +1,3 @@
-import async from "async";
 import { ACTIONS, CONTRACTS } from "./constants";
 import Multicall from "@dopex-io/web3-multicall";
 import detectProvider from "@metamask/detect-provider";

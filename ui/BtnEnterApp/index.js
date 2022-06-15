@@ -1,7 +1,6 @@
 import React from "react";
 
 import { useAppThemeContext } from "../AppThemeProvider";
-import { Typography } from '@mui/material';
 
 const BtnEnterApp = (props) => {
   const {label, labelClassName, btnColor} = props;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 // import Form from '../../ui/Form';
 import Setup from '../../components/migrate/setup';
 import classes from './migrate.module.css';
-import { Button, Paper, Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import Unlock from '../../components/unlock';
 import stores from '../../stores';
 import { useRouter } from 'next/router';
