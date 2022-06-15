@@ -159,7 +159,7 @@ export default function ssLiquidityManage() {
     });
 
     setWithdrawAssetOptions(onlyWithBalance);
-
+    setWithdrawAsset(onlyWithBalance[0]);
     setAssetOptions(storeAssetOptions);
     setVeToken(veTok);
     setVestNFTs(nfts);
@@ -200,7 +200,7 @@ export default function ssLiquidityManage() {
         aa1 = storeAssetOptions[1];
       }
       if (withdrawAassetOptions.length > 0 && withdrawAsset == null) {
-        setWithdrawAsset(withdrawAassetOptions[1]);
+        setWithdrawAsset(withdrawAassetOptions[0]);
       }
 
       if (aa0 && aa1) {
@@ -793,7 +793,7 @@ export default function ssLiquidityManage() {
   };
 
   const onAssetSelect = async (type, value) => {
-    if (type === "amount0") {
+    if (type === "amount0" && createLP) {
       setAsset0(value);
       const p = createLP
         ? await stores.stableSwapStore.getPair(
@@ -819,6 +819,15 @@ export default function ssLiquidityManage() {
           asset1
         );
       }
+    } else if (type === "amount0" && !createLP) {
+      setWithdrawAsset(value);
+      setAsset0(value);
+      const p = await stores.stableSwapStore.getPair(
+        value.token0.address,
+        value.token1.address,
+        value.isStable
+      );
+      setPair(p);
     } else if (type === "amount1") {
       setAsset1(value);
       const p = await stores.stableSwapStore.getPair(
@@ -2262,6 +2271,7 @@ export default function ssLiquidityManage() {
   const switchToggleCreateLP = () => {
     const nextValue = !createLP;
     setAsset0(null);
+    setWithdrawAsset(null);
     setAmount0("");
     setAmount0Error(false);
     setAsset1(null);
@@ -2418,19 +2428,32 @@ export default function ssLiquidityManage() {
                     />
                   </div>
                 </div>
-
-                {renderMassiveInput(
-                  "amount0",
-                  amount0,
-                  amount0Error,
-                  amount0Changed,
-                  asset0,
-                  null,
-                  createLP ? assetOptions : withdrawAassetOptions,
-                  onAssetSelect,
-                  amount0Focused,
-                  amount0Ref
-                )}
+                {console.log(withdrawAassetOptions)}
+                {createLP
+                  ? renderMassiveInput(
+                      "amount0",
+                      amount0,
+                      amount0Error,
+                      amount0Changed,
+                      asset0,
+                      null,
+                      assetOptions,
+                      onAssetSelect,
+                      amount0Focused,
+                      amount0Ref
+                    )
+                  : renderMassiveInput(
+                      "amount0",
+                      amount0,
+                      amount0Error,
+                      amount0Changed,
+                      withdrawAsset,
+                      null,
+                      withdrawAassetOptions,
+                      onAssetSelect,
+                      amount0Focused,
+                      amount0Ref
+                    )}
 
                 {createLP && (
                   <>
