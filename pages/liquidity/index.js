@@ -1,11 +1,10 @@
-import { Typography, Button, Paper, SvgIcon } from "@mui/material"
+import { Typography, Paper } from "@mui/material"
 import LiquidityPairs from '../../components/ssLiquidityPairs'
 
 import React, { useState, useEffect } from 'react';
 import { ACTIONS } from '../../stores/constants';
 
 import stores from '../../stores';
-import { useRouter } from "next/router";
 import Unlock from '../../components/unlock';
 
 import classes from './liquidity.module.css';
@@ -15,7 +14,6 @@ import BtnEnterApp from '../../ui/BtnEnterApp';
 function Liquidity({ changeTheme }) {
 
   const accountStore = stores.accountStore.getStore('account');
-  const router = useRouter();
   const [account, setAccount] = useState(accountStore);
   const [unlockOpen, setUnlockOpen] = useState(false);
 

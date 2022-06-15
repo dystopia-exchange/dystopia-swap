@@ -1,4 +1,4 @@
-import { Typography, Button, Paper } from "@mui/material";
+import { Typography, Paper } from "@mui/material";
 import SwapComponent from '../../components/ssSwap';
 
 import React, { useState, useEffect } from 'react';

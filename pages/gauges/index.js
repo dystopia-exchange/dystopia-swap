@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react';
 import { ACTIONS } from '../../stores/constants';
 
 import stores from '../../stores';
-import { useRouter } from "next/router";
 import Unlock from '../../components/unlock';
 
 import classes from './gauges.module.css';
@@ -22,7 +21,6 @@ function BalanceIcon(props) {
 function Liquidity({ changeTheme }) {
 
   const accountStore = stores.accountStore.getStore('account');
-  const router = useRouter();
   const [account, setAccount] = useState(accountStore);
   const [unlockOpen, setUnlockOpen] = useState(false);
 

@@ -1,4 +1,4 @@
-import { Typography, Button, Paper, SvgIcon } from "@mui/material";
+import { Typography, Paper} from "@mui/material";
 import WhitelistTokens from '../../components/ssWhitelist';
 
 import React, { useState, useEffect } from 'react';
