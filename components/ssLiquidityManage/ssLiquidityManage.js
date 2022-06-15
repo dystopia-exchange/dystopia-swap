@@ -583,144 +583,7 @@ export default function ssLiquidityManage() {
           pair: pair,
           amount: (percent * balance) / 100,
           token: token,
-          slippage: (slippage && slippage) != "" ? slippage : "2",
-        },
-      });
-    }
-  };
-
-  const onDepositAndStake = () => {
-    setAmount0Error(false);
-    setAmount1Error(false);
-
-    let error = false;
-
-    if (!amount0 || amount0 === "" || isNaN(amount0)) {
-      setAmount0Error("Amount 0 is required");
-      error = true;
-    } else {
-      if (
-        !asset0.balance ||
-        isNaN(asset0.balance) ||
-        BigNumber(asset0.balance).lte(0)
-      ) {
-        setAmount0Error("Invalid balance");
-        error = true;
-      } else if (BigNumber(amount0).lte(0)) {
-        setAmount0Error("Invalid amount");
-        error = true;
-      } else if (asset0 && BigNumber(amount0).gt(asset0.balance)) {
-        setAmount0Error(`Greater than your available balance`);
-        error = true;
-      }
-    }
-
-    if (!amount1 || amount1 === "" || isNaN(amount1)) {
-      setAmount1Error("Amount 0 is required");
-      error = true;
-    } else {
-      if (
-        !asset1.balance ||
-        isNaN(asset1.balance) ||
-        BigNumber(asset1.balance).lte(0)
-      ) {
-        setAmount1Error("Invalid balance");
-        error = true;
-      } else if (BigNumber(amount1).lte(0)) {
-        setAmount1Error("Invalid amount");
-        error = true;
-      } else if (asset1 && BigNumber(amount1).gt(asset1.balance)) {
-        setAmount1Error(`Greater than your available balance`);
-        error = true;
-      }
-    }
-
-    if (!error) {
-      setDepositStakeLoading(true);
-
-      stores.dispatcher.dispatch({
-        type: ACTIONS.ADD_LIQUIDITY_AND_STAKE,
-        content: {
-          pair: pair,
-          token0: asset0,
-          token1: asset1,
-          amount0: amount0,
-          amount1: amount1,
-          minLiquidity: quote ? quote : "0",
-          token: token,
-          slippage: (slippage && slippage) != "" ? slippage : "2",
-        },
-      });
-    }
-  };
-
-  const onCreateAndStake = () => {
-    setAmount0Error(false);
-    setAmount1Error(false);
-
-    let error = false;
-
-    if (!amount0 || amount0 === "" || isNaN(amount0)) {
-      setAmount0Error("Amount 0 is required");
-      error = true;
-    } else {
-      if (
-        !asset0.balance ||
-        isNaN(asset0.balance) ||
-        BigNumber(asset0.balance).lte(0)
-      ) {
-        setAmount0Error("Invalid balance");
-        error = true;
-      } else if (BigNumber(amount0).lte(0)) {
-        setAmount0Error("Invalid amount");
-        error = true;
-      } else if (asset0 && BigNumber(amount0).gt(asset0.balance)) {
-        setAmount0Error(`Greater than your available balance`);
-        error = true;
-      }
-    }
-
-    if (!amount1 || amount1 === "" || isNaN(amount1)) {
-      setAmount1Error("Amount 0 is required");
-      error = true;
-    } else {
-      if (
-        !asset1.balance ||
-        isNaN(asset1.balance) ||
-        BigNumber(asset1.balance).lte(0)
-      ) {
-        setAmount1Error("Invalid balance");
-        error = true;
-      } else if (BigNumber(amount1).lte(0)) {
-        setAmount1Error("Invalid amount");
-        error = true;
-      } else if (asset1 && BigNumber(amount1).gt(asset1.balance)) {
-        setAmount1Error(`Greater than your available balance`);
-        error = true;
-      }
-    }
-
-    if (!asset0 || asset0 === null) {
-      setAmount0Error("Asset is required");
-      error = true;
-    }
-
-    if (!asset1 || asset1 === null) {
-      setAmount1Error("Asset is required");
-      error = true;
-    }
-
-    if (!error) {
-      setCreateLoading(true);
-      stores.dispatcher.dispatch({
-        type: ACTIONS.CREATE_PAIR_AND_STAKE,
-        content: {
-          token0: asset0,
-          token1: asset1,
-          amount0: amount0,
-          amount1: amount1,
-          isStable: stable,
-          token: token,
+          percent: percent,
           slippage: (slippage && slippage) != "" ? slippage : "2",
         },
       });
@@ -825,7 +688,7 @@ export default function ssLiquidityManage() {
           pair: withdrawAsset,
           token0: withdrawAsset.token0,
           token1: withdrawAsset.token1,
-          quote: (withdrawAmount * pair.balance) / 100,
+          percent: withdrawAmount,
           slippage: (slippage && slippage) != "" ? slippage : "2",
         },
       });
@@ -845,6 +708,7 @@ export default function ssLiquidityManage() {
         amount0: withdrawAmount0,
         amount1: withdrawAmount1,
         quote: withdrawQuote,
+        percent: withdrawAmount,
         slippage: (slippage && slippage) != "" ? slippage : "2",
       },
     });
