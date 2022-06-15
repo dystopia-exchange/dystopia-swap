@@ -2977,7 +2977,7 @@ class Store {
         return null;
       }
 
-      const { pair, token, amount } = payload.content;
+      const { pair, token, amount, percent } = payload.content;
 
       let stakeAllowanceTXID = this.getTXUUID();
       let stakeTXID = this.getTXUUID();
@@ -3079,26 +3079,50 @@ class Store {
       let am = BigNumber(amount)
         .times(10 ** pair.decimals)
         .toFixed(0);
-      this._callContractWait(
-        web3,
-        gaugeContract,
-        "deposit",
-        [am, sendTok],
-        account,
-        gasPrice,
-        null,
-        null,
-        stakeTXID,
-        (err) => {
-          if (err) {
-            return this.emitter.emit(ACTIONS.ERROR, err);
+
+      if (percent == 100) {
+        this._callContractWait(
+          web3,
+          gaugeContract,
+          "depositAll",
+          [sendTok],
+          account,
+          gasPrice,
+          null,
+          null,
+          stakeTXID,
+          (err) => {
+            if (err) {
+              return this.emitter.emit(ACTIONS.ERROR, err);
+            }
+
+            this._getPairInfo(web3, account);
+
+            this.emitter.emit(ACTIONS.LIQUIDITY_STAKED);
           }
+        );
+      } else {
+        this._callContractWait(
+          web3,
+          gaugeContract,
+          "deposit",
+          [am, sendTok],
+          account,
+          gasPrice,
+          null,
+          null,
+          stakeTXID,
+          (err) => {
+            if (err) {
+              return this.emitter.emit(ACTIONS.ERROR, err);
+            }
 
-          this._getPairInfo(web3, account);
+            this._getPairInfo(web3, account);
 
-          this.emitter.emit(ACTIONS.LIQUIDITY_STAKED);
-        }
-      );
+            this.emitter.emit(ACTIONS.LIQUIDITY_STAKED);
+          }
+        );
+      }
     } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);
@@ -3689,7 +3713,7 @@ class Store {
         return null;
       }
 
-      const { token0, token1, pair, slippage } = payload.content;
+      const { token0, token1, pair, percent, slippage } = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let allowanceTXID = this.getTXUUID();
@@ -3770,6 +3794,8 @@ class Store {
 
       // SUBMIT WITHDRAW TRANSACTION
       const sendAmount = BigNumber(pair.balance)
+        .times(percent)
+        .div(100)
         .times(10 ** pair.decimals)
         .toFixed(0);
 
@@ -3795,7 +3821,7 @@ class Store {
       const sendAmount1Min = BigNumber(quoteRemove.amountB)
         .times(sendSlippage)
         .toFixed(0);
-
+      console.log(sendAmount, "heyy");
       this._callContractWait(
         web3,
         routerContract,
@@ -4032,7 +4058,7 @@ class Store {
         return null;
       }
 
-      const { token0, token1, amount, amount0, amount1, pair } =
+      const { token0, token1, amount, percent, amount0, amount1, pair } =
         payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
@@ -4063,26 +4089,49 @@ class Store {
         pair.gauge.address
       );
 
-      this._callContractWait(
-        web3,
-        gaugeContract,
-        "withdraw",
-        [sendAmount],
-        account,
-        gasPrice,
-        null,
-        null,
-        unstakeTXID,
-        async (err) => {
-          if (err) {
-            return this.emitter.emit(ACTIONS.ERROR, err);
+      if (percent == 100) {
+        this._callContractWait(
+          web3,
+          gaugeContract,
+          "withdrawAll",
+          [],
+          account,
+          gasPrice,
+          null,
+          null,
+          unstakeTXID,
+          async (err) => {
+            if (err) {
+              return this.emitter.emit(ACTIONS.ERROR, err);
+            }
+
+            this._getPairInfo(web3, account);
+
+            this.emitter.emit(ACTIONS.LIQUIDITY_UNSTAKED);
           }
+        );
+      } else {
+        this._callContractWait(
+          web3,
+          gaugeContract,
+          "withdraw",
+          [sendAmount],
+          account,
+          gasPrice,
+          null,
+          null,
+          unstakeTXID,
+          async (err) => {
+            if (err) {
+              return this.emitter.emit(ACTIONS.ERROR, err);
+            }
 
-          this._getPairInfo(web3, account);
+            this._getPairInfo(web3, account);
 
-          this.emitter.emit(ACTIONS.LIQUIDITY_UNSTAKED);
-        }
-      );
+            this.emitter.emit(ACTIONS.LIQUIDITY_UNSTAKED);
+          }
+        );
+      }
     } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);
@@ -4229,7 +4278,6 @@ class Store {
 
       const { fromAsset, toAsset, fromAmount } = payload.content;
 
-
       const routerContract = new web3.eth.Contract(
         CONTRACTS.ROUTER_ABI,
         CONTRACTS.ROUTER_ADDRESS
@@ -4251,14 +4299,13 @@ class Store {
       // override the routeAsset
       let newRouteAssets = null;
       if (
-        fromAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase() ||
+        fromAsset.address.toLowerCase() ===
+          CONTRACTS.SPHERE_ADDRESS.toLowerCase() ||
         toAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase()
       ) {
         newRouteAssets = await this._getUSDPRouteAssets();
       }
-      const routeAssets = newRouteAssets || _routeAssets
-
-
+      const routeAssets = newRouteAssets || _routeAssets;
 
       let addy0 = fromAsset.address;
       let addy1 = toAsset.address;
@@ -4588,7 +4635,11 @@ class Store {
 
       // SUBMIT SWAP TRANSACTION
       let _slippage = slippage;
-      if (fromAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase() && Number(slippage) <= 22) {
+      if (
+        fromAsset.address.toLowerCase() ===
+          CONTRACTS.SPHERE_ADDRESS.toLowerCase() &&
+        Number(slippage) <= 22
+      ) {
         _slippage = (30 + Number(slippage)).toString();
       }
       const sendSlippage = BigNumber(100).minus(_slippage).div(100);
@@ -4617,7 +4668,10 @@ class Store {
       ];
       let sendValue = null;
 
-      if (fromAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase()) {
+      if (
+        fromAsset.address.toLowerCase() ===
+        CONTRACTS.SPHERE_ADDRESS.toLowerCase()
+      ) {
         // SPHERE token address
         func = "swapExactTokensForTokensSupportingFeeOnTransferTokens";
       }
@@ -4634,7 +4688,10 @@ class Store {
       }
       if (toAsset.address === "MATIC") {
         func = "swapExactTokensForMATIC";
-        if (fromAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase()) {
+        if (
+          fromAsset.address.toLowerCase() ===
+          CONTRACTS.SPHERE_ADDRESS.toLowerCase()
+        ) {
           func = "swapExactTokensForMATICSupportingFeeOnTransferTokens";
         }
       }
