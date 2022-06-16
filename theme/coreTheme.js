@@ -16,7 +16,7 @@ const coreTheme = {
       fontSize: 16,
     },
     fontFamily: [
-      "'Roboto Mono'",
+      "'Poppins'",
       "Inter",
       "Arial",
       "-apple-system",
@@ -119,7 +119,7 @@ const coreTheme = {
       }
     },
     body: {
-      fontFamily: "Roboto Mono",
+      fontFamily: "Poppins",
     }
   },
   palette: {
@@ -235,7 +235,7 @@ const coreTheme = {
       }
     },
     Mui: {
-      fontFamily: "Roboto Mono",
+      fontFamily: "Poppins",
       '&$disabled': {
         '&:before': {
           borderBottom: 'none'

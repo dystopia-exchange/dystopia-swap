@@ -1,13 +1,14 @@
 .form {
   position: relative;
-  width: 463px;
+  /* width: 463px; */
+  width: 782px;
   height: auto;
-  margin-left: 1px;
-  background: var(--background-dark);
-  padding: 13px 30px;
-  border: 1px solid var(--border-dark);
-  border-top: none;
-  border-bottom: none;
+  /* margin-left: 1px; */
+  /* background: var(--background-dark); */
+  /* padding: 13px 30px; */
+  /* border: 1px solid var(--border-dark); */
+  /* border-top: none; */
+  /* border-bottom: none; */
   z-index: 2;
 }
 
@@ -21,12 +22,13 @@
 }
 
 .top {
-  top: 0;
-  left: 0.5px;
-  width: 463px;
-  height: 17px;
-  background: var(--border-light);
-  clip-path: polygon(4% 0, 100% 0%, 100% 100%, 0 100%);
+  /* top: 0; */
+  /* left: 0.5px; */
+  /* width: 463px; */
+  /* width: 782px; */
+  /* height: 17px; */
+  /* background: var(--border-light); */
+  /* clip-path: polygon(4% 0, 100% 0%, 100% 100%, 0 100%); */
 }
 
 .top--inside {
@@ -49,7 +51,7 @@
 .bottom {
   top: 0;
   left: 0.5px;
-  width: 463px;
+  /* width: 463px; */
   height: 93px;
   background: var(--border-light);
   clip-path: polygon(0 0, 100% 0, 96% 17%, 44% 17%, 27% 100%, 0 100%)
@@ -73,13 +75,13 @@
 }
 
 .form--dark {
-  background: var(--background-dark);
-  border-color: var(--border-dark);
+  /* background: var(--background-dark); */
+  /* border-color: var(--border-dark); */
 }
 
 .form--light {
-  background: var(--background-light);
-  border-color: var(--border-light);
+  /* background: var(--background-light); */
+  /* border-color: var(--border-light); */
 }
 
 @media (max-width: 470px) {

@@ -388,9 +388,9 @@ const AssetSelect = (
 
             {typeIcon === 'single' &&
               <>
-                {interactiveBorder &&
+                {/* {interactiveBorder &&
                   <SwapIconBg/>
-                }
+                } */}
 
                 <img
                   className={[classes.displayAssetIcon, size === 'small' ? classes.displayAssetIconSmall : ''].join(' ')}
@@ -431,6 +431,12 @@ const AssetSelect = (
                 </div>
               </div>
             }
+
+            <Typography className={classes.labelSelect}>
+              {value?.symbol}
+            </Typography>
+
+            <div className={classes.dotsSelectMenu} />
           </div>
         </div>
       </div>
@@ -446,7 +452,9 @@ const AssetSelect = (
           if (e.target.classList.contains('MuiDialog-container')) {
             onClose();
           }
-        }}>
+        }}
+        width={600}
+      >
         <div
           className={[classes.dialogContainer, 'g-flex-column'].join(' ')}
           style={{
@@ -463,9 +471,10 @@ const AssetSelect = (
               padding: 30,
               paddingBottom: 0,
               fontWeight: 500,
-              fontSize: 18,
-              lineHeight: '140%',
-              color: '#0A2C40',
+              fontSize: 60,
+              lineHeight: '72px',
+              color: '#E4E9F4',
+              letterSpacing: '0.04em',
             }}>
             <div style={{
               display: 'flex',

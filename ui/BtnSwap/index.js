@@ -90,8 +90,10 @@ const BtnSwap = (props) => {
         {updateState()}
         <div
           className={['g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}
-          onClick={onClick}>
-          {windowWidth > 470 && (
+          onClick={onClick}
+          style={{ width: '100%', height: '100%' }}
+        >
+          {/* {windowWidth > 470 && (
             <svg
               width="292"
               height="65"
@@ -166,13 +168,11 @@ const BtnSwap = (props) => {
                 ></polygon>
               </g>
             </svg>
-          )}
-
+          )} */}
 
           <div
             className={labelClassName}
             style={{
-              position: "absolute",
               userSelect: "none",
               pointerEvents: "none",
               lineHeight: '120%',

@@ -3,7 +3,11 @@
 }
 
 .displaySelectContainer {
-  padding: 61px 20px 20px;
+  /* padding: 61px 20px 20px; */
+  border-radius: 12px;
+
+  background: #171D2D;
+
   cursor: pointer;
 }
 
@@ -19,11 +23,13 @@
 
 .displayDualIconContainer {
   position: relative;
-  width: 90px;
-  height: 90px;
+  /* width: 90px; */
+  height: 92px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* justify-content: space-between; */
+  padding: 18px;
+  padding-right: 16px;
   transition: fill 0.16s ease;
   fill: #9BC9E4;
 }
@@ -82,9 +88,53 @@
   margin-right: 15px;
 }
 
+p.labelSelect {
+  margin: 0 18px;
+
+  font-size: 24px;
+  font-weight: 500;
+
+  color: #E4E9F4;
+}
+
+.dotsSelectMenu {
+  position: relative;
+
+  width: 6px;
+  height: 6px;
+
+  margin-left: auto;
+
+  border-radius: 50%;
+
+  background: #3F4C6B;
+}
+
+.dotsSelectMenu::before,
+.dotsSelectMenu::after {
+  content: '';
+
+  position: absolute;
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #3F4C6B;
+}
+
+.dotsSelectMenu::before {
+  bottom: 10px;
+}
+
+.dotsSelectMenu::after {
+  top: 10px;
+}
+
 .displayAssetIcon {
-  width: 60px;
-  height: 60px;
+  width: 56px;
+  height: 56px;
   border-radius: 100px;
 }
 
