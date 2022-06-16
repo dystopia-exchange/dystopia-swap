@@ -75,10 +75,10 @@
 }
 
 .displayDualIconContainerSmall {
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   position: relative;
-  margin-right: 15px;
+  margin-right: 12px;
 }
 
 .displayDualIconContainerDouble {
@@ -144,18 +144,24 @@ p.labelSelect {
 }
 
 .assetSelectMenu {
-  min-height: 70px !important;
-  padding: 10px !important;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1px !important;
+
+  min-height: 92px !important;
+
+  padding: 16px !important;
+  margin-bottom: 4px !important;
+
+  border-radius: 12px !important;
+  background: #171D2D !important;
+
   transition: all ease 300ms;
 }
 
 .assetSelectMenu--light {
-  background: #B9DFF5 !important;
-  box-shadow: 0 1px 0 rgba(11, 94, 142, 0);
+  /* background: #B9DFF5 !important; */
+  /* box-shadow: 0 1px 0 rgba(11, 94, 142, 0); */
 }
 
 .assetSelectMenu--light:hover {
@@ -164,38 +170,39 @@ p.labelSelect {
 }
 
 .assetSelectMenu--dark {
-  background: #24292D !important;
-  box-shadow: 0 1px 0 rgba(76, 173, 229, 0);
+  /* background: #24292D !important; */
+  /* box-shadow: 0 1px 0 rgba(76, 173, 229, 0); */
 }
 
 .assetSelectMenu--dark:hover {
-  background: #2D3741 !important;
-  box-shadow: 0 1px 0 rgba(76, 173, 229, 0.5);
+  /* background: #2D3741 !important; */
+  /* box-shadow: 0 1px 0 rgba(76, 173, 229, 0.5); */
 }
 
 .assetOptionIcon {
-  width: 50px;
-  height: 50px;
-  padding: 4px;
+  width: 56px;
+  height: 56px;
+  /* padding: 4px; */
   border-radius: 100px;
-  border: 1px solid #9BC9E4;
-  background: #CFE5F2;
+  /* border: 1px solid #9BC9E4; */
+  /* background: #CFE5F2; */
 }
 
 .assetOptionIcon--light {
-  background: #CFE5F2;
-  border: 1px solid #86B9D6;
+  /* background: #CFE5F2; */
+  /* border: 1px solid #86B9D6; */
 }
 
 .assetOptionIcon--dark {
-  background: #304E61;
-  border: 1px solid #5F7285;
+  /* background: #304E61; */
+  /* border: 1px solid #5F7285; */
 }
 
 .assetSymbolName {
   font-weight: 500 !important;
   font-size: 24px !important;
-  line-height: 120% !important;
+  line-height: 130% !important;
+  color: #E4E9F4 !important;
 }
 
 .assetSymbolNameDouble {
@@ -203,12 +210,16 @@ p.labelSelect {
 }
 
 .assetSymbolName2 {
-  font-weight: 400 !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
   padding-right: 20px !important;
+
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  line-height: 150% !important;
+  text-overflow: ellipsis !important;
+
+  overflow: hidden !important;
+
+  color: #8191B9 !important;
 }
 
 .assetSelectActions {
@@ -219,14 +230,16 @@ p.labelSelect {
 
 .assetSelectBalanceText {
   font-weight: 500 !important;
-  font-size: 18px !important;
-  line-height: 120% !important;
+  font-size: 20px !important;
+  line-height: 130% !important;
+  color: #E4E9F4 !important;
 }
 
 .assetSelectBalanceText2 {
-  font-weight: 400 !important;
+  font-weight: 500 !important;
   font-size: 14px !important;
   line-height: 120% !important;
+  color: #8191B9 !important;
 }
 
 .assetSelectBalance {
@@ -240,10 +253,16 @@ p.labelSelect {
 }
 
 .searchInput {
-  height: 40px;
-  background: #DBE6EC !important;
-  border: 1px solid #86B9D6 !important;
-  border-radius: 0 !important;
+  height: 72px;
+  padding-right: 26px !important;
+  background: #171D2D !important;
+  border: 1px solid #779BF4 !important;
+  border-radius: 12px !important;
+}
+
+.searchInput input {
+  padding-left: 24px !important;
+  color: #8191B9 !important;
 }
 
 .searchInput:hover {
@@ -262,8 +281,8 @@ p.labelSelect {
 }
 
 .searchInput--dark {
-  background: #151718 !important;
-  border: 1px solid #5F7285 !important;
+  /* background: #151718 !important; */
+  /* border: 1px solid #5F7285 !important; */
 }
 
 .searchInput--dark:hover {
@@ -286,12 +305,15 @@ p.labelSelect {
 }
 
 .searchInputText {
-  padding: 10px !important;
+  padding: 24px !important;
+
+  font-size: 16px !important;
+  line-height: 120% !important;
+
   border-radius: 0 !important;
   border: none !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
-  color: #325569 !important;
+  
+  color: #8191B9 !important;
 }
 
 .searchInputText--dark {
@@ -308,13 +330,13 @@ p.labelSelect {
 }
 
 .assetSearchResults--light {
-  background: #9BC9E4;
-  border: 1px solid #86B9D6;
+  /* background: #9BC9E4; */
+  /* border: 1px solid #86B9D6; */
 }
 
 .assetSearchResults--dark {
-  background: #2D3741;
-  border: 1px solid #5F7285;
+  /* background: #2D3741; */
+  /* border: 1px solid #5F7285; */
 }
 
 .manageLocalContainer {

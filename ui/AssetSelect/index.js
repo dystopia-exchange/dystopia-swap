@@ -267,9 +267,10 @@ const AssetSelect = (
                 root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
                 inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
               },
-              startAdornment: <InputAdornment position="start">
+              endAdornment: <InputAdornment position="end">
                 <Search style={{
-                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  color: '#779BF4',
+                  // color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
                 }}/>
               </InputAdornment>,
             }}
@@ -278,7 +279,7 @@ const AssetSelect = (
 
         {filteredAssetOptions?.filter(option => option.local === true).length > 0 &&
           <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
-            <Borders/>
+            {/* <Borders/> */}
             {
               filteredAssetOptions
                 .filter(option => option.local === true)
@@ -302,12 +303,12 @@ const AssetSelect = (
     return (
       <>
         <div className={classes.searchInline}>
-          <Borders/>
+          {/* <Borders/> */}
 
           <TextField
             variant="outlined"
             fullWidth
-            placeholder="Search by name or paste address"
+            placeholder="Search by name or paste addres"
             value={search}
             onChange={onSearchChanged}
             InputProps={{
@@ -315,9 +316,10 @@ const AssetSelect = (
                 root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
                 inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
               },
-              startAdornment: <InputAdornment position="start">
+              endAdornment: <InputAdornment position="end">
                 <Search style={{
-                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  color: '#779BF4',
+                  // color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
                 }}/>
               </InputAdornment>,
             }}
@@ -329,9 +331,9 @@ const AssetSelect = (
           style={{
             position: 'relative',
             marginBottom: !isManageLocal ? 34 : 53,
-            marginTop: 30,
+            marginTop: 28,
           }}>
-          <Borders/>
+          {/* <Borders/> */}
 
           {filteredAssetOptions?.length > 0 &&
             <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
@@ -458,9 +460,10 @@ const AssetSelect = (
         <div
           className={[classes.dialogContainer, 'g-flex-column'].join(' ')}
           style={{
-            width: 460,
-            height: 710,
-            background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+            width: 600,
+            height: 724,
+            // background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+            background: '#2B3446',
             border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
             borderRadius: 0,
             overflow: 'hidden',
@@ -506,7 +509,8 @@ const AssetSelect = (
 
           <DialogContent
             style={{overflow: 'hidden'}}
-            className={[classes.dialogContent, 'g-flex-column__item', 'g-flex-column'].join(' ')}>
+            className={[classes.dialogContent, 'g-flex-column__item', 'g-flex-column'].join(' ')}
+          >
             {!manageLocal && renderOptions()}
             {isManageLocal && manageLocal && renderManageLocal()}
           </DialogContent>
