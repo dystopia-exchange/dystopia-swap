@@ -119,7 +119,7 @@ function Navigation(props) {
         ].join(" ")}
         classes={{ selected: classes[`nav-button--active`] }}
       >
-        <div
+        {/* <div
           className={[
             classes[`nav-button-corner-top`],
             classes[`nav-button-corner-top--${appTheme}`],
@@ -130,12 +130,12 @@ function Navigation(props) {
               classes[`nav-button-corner-bottom`],
               classes[`nav-button-corner-bottom--${appTheme}`],
             ].join(" ")}
-          >
+          > */}
             <Typography variant="h2" className={classes.subtitleText}>
               {title}
             </Typography>
-          </div>
-        </div>
+          {/* </div> */}
+        {/* </div> */}
       </ToggleButton>
     );
   };

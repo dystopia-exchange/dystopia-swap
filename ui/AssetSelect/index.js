@@ -27,7 +27,7 @@ const AssetSelect = (
     onSelect,
     typeIcon = 'single',
     isManageLocal = true,
-    title = 'Select a token',
+    title = 'Select a Token',
     showBalance = true,
     interactiveBorder = true,
     size = 'default',
@@ -330,7 +330,7 @@ const AssetSelect = (
           className={['g-flex-column__item', 'g-flex-column'].join(' ')}
           style={{
             position: 'relative',
-            marginBottom: !isManageLocal ? 34 : 53,
+            marginBottom: !isManageLocal ? 34 : 45,
             marginTop: 28,
           }}>
           {/* <Borders/> */}
@@ -460,12 +460,12 @@ const AssetSelect = (
         <div
           className={[classes.dialogContainer, 'g-flex-column'].join(' ')}
           style={{
-            width: 600,
-            height: 724,
+            width: 782,
+            height: 768,
             // background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-            background: '#2B3446',
-            border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
-            borderRadius: 0,
+            background: '#1F2B49',
+            // border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
+            borderRadius: 12,
             overflow: 'hidden',
           }}>
           <DialogTitle
@@ -498,12 +498,28 @@ const AssetSelect = (
                 {isManageLocal && manageLocal ? 'Manage local assets' : title}
               </div>
 
-              <Close
+              <div
                 style={{
-                  cursor: 'pointer',
-                  color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: 20,
+                  height: 20,
+                  backgroundColor: '#8191B9',
+                  borderRadius: 5,
                 }}
-                onClick={onClose}/>
+              >
+                <Close
+                  style={{
+                    cursor: 'pointer',
+                    // color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                    color: '#1e2c48',
+                    fontSize: 12,
+                  }}
+                  onClick={onClose}
+                />
+              </div>
+              
             </div>
           </DialogTitle>
 

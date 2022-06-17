@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useAppThemeContext } from "../AppThemeProvider";
 import { Typography, Button } from "@mui/material";
+import Loader from "../Loader";
 
 const BtnSwap = (props) => {
-  const {label, className, labelClassName, isDisabled, onClick} = props;
+  const {label, className, labelClassName, isDisabled, onClick, loading} = props;
   const [disabledState, setDisabledState] = useState(isDisabled);
   const {appTheme} = useAppThemeContext();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -179,7 +180,13 @@ const BtnSwap = (props) => {
             }}
           >
             {`${label}`}
+            {loading && (
+              <div style={{ marginLeft: 13 }}>
+                <Loader color={"#060B17"} />
+              </div>
+            )}
           </div>
+          
         </div>
       </>
     </div>

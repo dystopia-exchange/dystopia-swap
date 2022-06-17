@@ -354,7 +354,7 @@ function Setup() {
                       align="center"
                     >
                       <span className={classes.priceImpactTitle}>
-                        Price impact:
+                        Price impact
                       </span>{" "}
                       <span className={[classes.priceImpactValue,
                         BigNumber(quote.priceImpact).gt(5)
@@ -373,7 +373,51 @@ function Setup() {
       );
     }
 
-    return null;
+    return (
+      <div style={{ width: 164, marginRight: 16 }}>
+        <div className={classes.depositInfoContainer}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+            }}
+          >
+              <div
+                className={[
+                  classes.warningContainer,
+                  classes[`warningContainer--${appTheme}`],
+                  // BigNumber(quote.priceImpact).gt(5)
+                  //   ? classes.warningContainerError
+                  //   : classes.warningContainerWarning,
+                ].join(" ")}
+              >
+                <Typography
+                  className={[
+                    // BigNumber(quote.priceImpact).gt(5)
+                    //   ? classes.warningError
+                    //   : classes.warningWarning,
+                    classes[`warningText--${appTheme}`],
+                  ].join(" ")}
+                  align="center"
+                >
+                  <span className={classes.priceImpactTitle}>
+                    Price impact
+                  </span>{" "}
+                  <span className={[classes.priceImpactValue,
+                    // BigNumber(quote.priceImpact).gt(5)
+                      // ? classes.priceImpactValueError
+                      // : classes.priceImpactValueWarning,
+                  ].join(" ")}>
+                    0.00%
+                    {/* {formatCurrency(quote.priceImpact)}% */}
+                  </span>
+                </Typography>
+              </div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   const renderBalanceIsBellowError = () => {
@@ -407,7 +451,7 @@ function Setup() {
             ].join(" ")}
             align="center"
           >
-            Balance is below the entered value
+            Insufficient funds {fromAssetValue?.symbol}
           </Typography>
         </div>
       )
@@ -567,16 +611,18 @@ function Setup() {
             Slippage
           </Typography>
 
-          {/* <Hint
-            hintText={
-              "Slippage is the difference between the price you expect to get on the crypto you have ordered and the price you actually get when the order executes."
-            }
-            open={openHint}
-            anchor={hintAnchor}
-            handleClick={handleClickPopover}
-            handleClose={handleClosePopover}
-            vertical={-110}
-          ></Hint> */}
+          <div style={{ marginRight: 14 }}>
+            <Hint
+              hintText={
+                "Slippage is the difference between the price you expect to get on the crypto you have ordered and the price you actually get when the order executes."
+              }
+              open={openHint}
+              anchor={hintAnchor}
+              handleClick={handleClickPopover}
+              handleClose={handleClosePopover}
+              vertical={-110}
+            />
+          </div>
         </div>
 
         <TextField
@@ -697,9 +743,12 @@ function Setup() {
                   )}
               </div>
             </div>
-
+            
             <InputBase
-              className={classes.massiveInputAmount}
+              className={[
+                classes.massiveInputAmount,
+                type === "From" && fromAmountValue > Number(fromAssetValue?.balance) ? classes.massiveInputAmountError : ''
+              ].join(" ")}
               placeholder="0.00"
               error={amountError}
               value={amountValue}
@@ -1075,11 +1124,14 @@ function Setup() {
               fromAmountValue > Number(fromAssetValue.balance) ||
               Number(fromAmountValue) <= 0
             }
+            loading={loading}
             label={
               loading
                 ? "Swapping"
                 : !fromAmountValue || Number(fromAmountValue) <= 0
                 ? "Enter Amount"
+                : fromAmountValue > Number(fromAssetValue.balance)
+                ? "Insufficient funds"
                 : quote && BigNumber(quote.priceImpact).gt(5)
                 ? "Swap | Are you sure?"
                 : "Swap"

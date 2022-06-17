@@ -115,6 +115,10 @@ input[type=number].massiveInputAmount {
   margin-right: 20px !important; */
 }
 
+.massiveInputAmountError {
+  outline: 1px solid #E93131;
+}
+
 .inputBalanceTextContainer {
   /* position: absolute;
   left: 151px;
@@ -163,6 +167,7 @@ p.inputTitleText {
   margin-right: 10px !important; */
 
   margin: 0 16px !important;
+  margin-right: 2px !important;
 
   font-size: 16px !important;
   font-weight: 500 !important;
@@ -180,7 +185,7 @@ p.inputTitleText {
 .inputBalanceSlippageText {
   position: relative;
 
-  width: 113px;
+  width: 110px;
   height: 100% !important;
 
   padding: 16px !important;
@@ -248,7 +253,7 @@ p.inputTitleText {
 
   margin-left: auto;
 
-  width: 220px;
+  width: 237px;
   height: 56px;
 
   border-radius: 12px;
@@ -751,7 +756,8 @@ p.inputTitleText {
   /* margin-top: 20px; */
   padding: 20px !important;
 
-  border: 1px solid #15B525;
+  /* border: 1px solid #15B525; */
+  border: 1px solid #1F2B49;
   border-radius: 12px;
 
   font-size: 14px !important;
@@ -787,8 +793,8 @@ p.inputTitleText {
   font-size: 20px;
   font-weight: 500;
   line-height: 28px;
-
   text-align: left;
+  color: #1F2B49;
 }
 
 .priceImpactValueError {
@@ -828,19 +834,19 @@ p.inputTitleText {
 }
 
 .warningError.warningText--light {
-  color: #631515 !important;
+  /* color: #631515 !important; */
 }
 
 .warningError.warningText--dark {
-  color: #EC9999 !important;
+  /* color: #EC9999 !important; */
 }
 
 .warningWarning.warningText--light {
-  color: #1B4F20 !important;
+  /* color: #1B4F20 !important; */
 }
 
 .warningWarning.warningText--dark {
-  color: #A2E3A9 !important;
+  /* color: #A2E3A9 !important; */
 }
 
 .quoteLoaderError {
