@@ -101,6 +101,8 @@ export const INCREASE_VEST_DURATION_RETURNED =
 export const WITHDRAW_VEST = "WITHDRAW_VEST";
 export const WITHDRAW_VEST_RETURNED = "WITHDRAW_VEST_RETURNED";
 
+export const MERGE_NFT = "MERGE_NFT";
+
 //VOTING
 export const VOTE = "VOTE";
 export const RESET_VOTE = "RESET_VOTE";

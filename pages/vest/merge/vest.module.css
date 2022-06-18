@@ -1,0 +1,289 @@
+.container3 {
+    align-self: center;
+    width: 460px;
+    background: transparent !important;
+}
+
+.titleSection {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    margin-left: -95px;
+    background: #DBE6EC;
+    border: 1px solid #86B9D6;
+}
+  
+.titleSection--dark {
+    background: #151718;
+    border: 1px solid #5F7285;
+}
+
+.backIcon {
+    width: 19px !important;
+    height: 19px !important;
+    color: #5688A5 !important;
+}
+  
+.backIcon--dark {
+    color: #C6CDD2 !important;
+}
+
+.heading1{
+    color: #0A2C40;    
+}
+
+.dropdownCtn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown{
+    position: relative;
+    width: 100%;
+    border: 1px solid #86B9D6;
+    margin: 1em;
+}
+
+.line{
+    position: relative;
+    border: 1px solid #86B9D6;
+    background-color: #86B9D6;
+}
+
+.actionsContainer {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.buttonOverride {
+    width: 460px;
+    height: 65px;
+    margin-left: 1px;
+    margin-top: 20px !important;
+    background: transparent url("/images/ui/liquidity-add-button-deposit--light.svg") !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    line-height: 120% !important;
+    text-align: center !important;
+    color: #8F5AE8 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+  
+.buttonOverride[disabled] {
+    filter: grayscale(1);
+}
+  
+.buttonOverride:hover {
+    background: transparent url("/images/ui/liquidity-add-button-deposit--light.svg") !important;
+}
+
+.actionButtonText {
+    font-size: 15px !important;
+    text-transform: capitalize !important;
+    font-weight: 700 !important;
+}
+
+.loadingCircle {
+    margin-left: 6px !important;
+}
+
+.newLockNft{
+    /* width: 90%; */
+    width: 98%;
+    position: relative;
+    /* border: 1px solid #86B9D6; */
+    /* padding: 5px 0px; */
+    /* padding: 15px; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.newLockNftImp{
+    width: 100%;
+    position: relative;
+    border: 1px solid #86B9D6;
+    padding: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.newNftTitle{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;    
+}
+
+.newNftValue{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;    
+}
+
+.tokenNo {
+    color: #325569;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.expiry {
+    color: #5688A5;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.menuOption {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100%;
+  padding: 6px 12px;
+}
+
+.tokenSelect {
+    border-radius: 0 !important;
+}
+
+.tokenSelect > svg {
+    color: #5F7285 !important;
+}
+  
+.tokenSelect > fieldset {
+    display: none !important;
+}
+
+.tokenSelectInput {
+    /* padding: 4.5px !important; */
+    padding: 0px !important;
+    /* border: 1px solid #86B9D6 !important; */
+    border-right: none !important;
+    border-radius: 0 !important;
+  }
+  
+  .tokenSelectInput--dark {
+    padding: 0px !important;
+    /* padding: 4.5px !important; */
+    /* border: 1px solid #5F7285 !important; */
+    border-right: none !important;
+    border-radius: 0 !important;
+    color: #4CADE6 !important;
+  }
+  
+  .tokenSelectInput > .menuOption > .menuOptionSec,
+  .tokenSelectInput--dark > .menuOption > .menuOptionSec {
+    display: none !important;
+  }
+  
+  .tokenSelectInput > .menuOption > .menuOptionLabel,
+  .tokenSelectInput--dark > .menuOption > .menuOptionLabel {
+    font-weight: 400 !important;
+    font-size: 14px !important;
+  }
+  
+  .list,
+  .list--dark {
+    padding: 0 !important;
+    background: #DBE6EC !important;
+  }
+  
+  .list--dark {
+    background: #151718 !important;
+  }
+  
+  .list > li,
+  .list--dark > li {
+    padding: 0 !important;
+  }
+  
+  .list > li > .menuOption,
+  .list--dark > li > .menuOption {
+    width: 100%;
+    padding: 10px !important;
+    border: 1px solid #0B5E8E !important;
+  }
+  
+  .list > li:not(:last-of-type) > .menuOption,
+  .list--dark > li:not(:last-of-type) > .menuOption {
+    border-bottom: none !important;
+  }
+  
+  .list > li > .menuOption > .menuOptionSec,
+  .list--dark > li > .menuOption > .menuOptionSec {
+    padding-right: 0 !important;
+  }
+
+  .slippageIcon {
+    width: 20px;
+    height: 20px;
+    fill: #0B5E8E;
+  }
+  
+  .slippageIcon--active {
+    fill: #ffffff;
+  }
+  
+  .slippageIcon--dark {
+    fill: #4CADE6;
+  }
+
+  .slippageIconContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem;
+    width: 3rem;
+    /* padding: 11px; */
+    background: transparent;
+    border: 1px solid #86b9d6;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .slippageIconContainer--active {
+    background: #0b5e8e;
+    border: 1px solid #0b5e8e;
+  }
+  
+  .selectTokenIconContainer--active {
+    background: #0b5e8e;
+    border: 1px solid #0b5e8e;
+    transform: rotate(180deg);
+  }
+  
+  .slippageIconContainer--dark {
+    background: transparent;
+    border: 1px solid #5F7285;
+  }
+  
+  .slippageIconContainer--dark.slippageIconContainer--active {
+    background: #5F7285;
+    border: 1px solid #5F7285;
+  }
+
+@media (max-width:660px) {
+    .container3{
+        position: relative;
+        margin-top: 60px;
+    }
+
+    .titleSection {
+        margin-left: 16px;
+        top: -72px;
+    }
+}
+
+@media (max-width:530px) {
+    .container3{
+       width: 100%;
+    }
+}

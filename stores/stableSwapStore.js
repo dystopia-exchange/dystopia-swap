@@ -18,6 +18,7 @@ import {
   USD_PLUS_ADDRESS,
   USD_PLUS_BOOSTED_DATA_URL,
 } from "./constants/contracts";
+import router from "next/router";
 
 const queryone = `
   query {
@@ -208,6 +209,9 @@ class Store {
             break;
           case ACTIONS.INCREASE_VEST_DURATION:
             this.increaseVestDuration(payload);
+            break;
+          case ACTIONS.MERGE_NFT:
+            this.merge(payload);
             break;
           case ACTIONS.WITHDRAW_VEST:
             this.withdrawVest(payload);
@@ -5362,6 +5366,243 @@ class Store {
           }
         );
       });
+    } catch (ex) {
+      console.error(ex);
+      this.emitter.emit(ACTIONS.ERROR, ex);
+    }
+  };
+  merge = async (payload) => {
+    try {
+      const { tokenIDOne, tokenIDTwo } = payload.content;
+      console.log(tokenIDOne, tokenIDTwo);
+      const queryVestWithdraw = `
+     query {
+         veDysts(where :{id:${tokenIDOne.id.toString()}})  {
+            id
+            addresses
+      }
+    }`;
+
+      const response = await client.query(queryVestWithdraw).toPromise();
+      let res;
+      let allowanceCallsPromise = [];
+      let voteTXID = this.getTXUUID();
+      let allowanceTXID = this.getTXUUID();
+      let mergeTXID= this.getTXUUID();
+
+      if (response.data.veDysts != "") {
+        res = response.data.veDysts[0].addresses.length;
+      } else {
+        res = 0;
+      }
+      const account = stores.accountStore.getStore("account");
+      if (!account) {
+        console.warn("account not found");
+        return null;
+      }
+
+      const web3 = await stores.accountStore.getWeb3Provider();
+      if (!web3) {
+        console.warn("web3 not found");
+        return null;
+      }
+
+      const vedystcontract = new web3.eth.Contract(
+        CONTRACTS.VE_TOKEN_ABI,
+        CONTRACTS.VE_TOKEN_ADDRESS
+      );
+
+      let withdrawAllTXID = [];
+      let arrTx = [];
+      let c = {
+        uuid: allowanceTXID,
+        description: `Checking Allowance for veDYST to Merge`,
+        status: "WAITING",
+      };
+      arrTx.push(c);
+
+      if (res != 0 || res != null || res != "") {
+        for (var i = 0; i < res; i++) {
+          withdrawAllTXID[i] = this.getTXUUID();
+          let a = {
+            uuid: withdrawAllTXID[i],
+            description: `Withdrawing your tokens for gauge `,
+            status: "WAITING",
+          };
+          arrTx.push(a);
+        }
+      }
+
+      let b = {
+        uuid: voteTXID,
+        description: `Reset votes`,
+        status: "WAITING",
+      };
+
+      arrTx.push(b);
+
+      let d = {
+        uuid: mergeTXID,
+        description: `Merge veDYST`,
+        status: "WAITING",
+      };
+
+      arrTx.push(d);
+
+      this.emitter.emit(ACTIONS.TX_ADDED, {
+        title: `Withdraw vest amount on token #${tokenIDOne.id}`,
+        type: "Vest",
+        verb: "Vest Withdrawn",
+        transactions: arrTx,
+      });
+
+      let isApproved = await vedystcontract.methods
+        .isApprovedForAll(account.address, CONTRACTS.VE_TOKEN_ADDRESS)
+        .call();
+      let isvoted = await vedystcontract.methods.voted(tokenIDOne.id).call();
+
+      if (!isApproved) {
+        this.emitter.emit(ACTIONS.TX_STATUS, {
+          uuid: allowanceTXID,
+          description: `Allow the veDYST For Merge`,
+        });
+      } else {
+        this.emitter.emit(ACTIONS.TX_STATUS, {
+          uuid: allowanceTXID,
+          description: `Allowance on veDYST sufficient`,
+          status: "DONE",
+        });
+      }
+      if (isvoted){
+        this.emitter.emit(ACTIONS.TX_STATUS, {
+          uuid: voteTXID,
+          description: `Reset the veDYST Votes`,
+        });
+      }else{
+        this.emitter.emit(ACTIONS.TX_STATUS, {
+          uuid: voteTXID,
+          description: `Votes Reseted`,
+          status: "DONE",
+        });
+      }
+
+      const gasPrice = await stores.accountStore.getGasPrice();
+      if (!isApproved) {
+        const approve = new Promise((resolve, reject) => {
+          this._callContractWait(
+            web3,
+            vedystcontract,
+            "setApprovalForAll",
+            [CONTRACTS.VE_TOKEN_ADDRESS, "true"],
+            account,
+            gasPrice,
+            null,
+            null,
+            allowanceTXID,
+            (err) => {
+              if (err) {
+                reject(err);
+                return;
+              }
+
+              resolve();
+            }
+          );
+        });
+
+        allowanceCallsPromise.push(approve);
+        await Promise.all(allowanceCallsPromise);
+      }
+      if (res != 0 || res != null || res != "") {
+        for (var i = 0; i < res; i++) {
+          let gaugeContract = new web3.eth.Contract(
+            CONTRACTS.GAUGE_ABI,
+            response.data.veDysts[0].addresses[i]
+          );
+          const withdrawAll = new Promise((resolve, reject) => {
+            this._callContractWait(
+              web3,
+              gaugeContract,
+              "withdrawAll",
+              [],
+              account,
+              gasPrice,
+              null,
+              null,
+              withdrawAllTXID[i],
+              (err) => {
+                if (err) {
+                  reject(err);
+                  return;
+                }
+
+                resolve();
+              }
+            );
+          });
+
+          allowanceCallsPromise.push(withdrawAll);
+
+          const done = await Promise.all(allowanceCallsPromise);
+        }
+      }
+      // SUBMIT INCREASE TRANSACTION
+      const gaugesContract = new web3.eth.Contract(
+        CONTRACTS.VOTER_ABI,
+        CONTRACTS.VOTER_ADDRESS
+      );
+     
+      if (isvoted) {
+        const reset = new Promise((resolve, reject) => {
+          this._callContractWait(
+            web3,
+            gaugesContract,
+            "reset",
+            [tokenIDOne.id],
+            account,
+            gasPrice,
+            null,
+            null,
+            voteTXID,
+            (err) => {
+              if (err) {
+                reject(err);
+                return;
+              }
+
+              resolve();
+            }
+          );
+        });
+
+        allowanceCallsPromise.push(reset);
+        await Promise.all(allowanceCallsPromise);
+      }
+      const merge = new Promise((resolve, reject) => {
+        this._callContractWait(
+          web3,
+          vedystcontract,
+          "merge",
+          [tokenIDOne.id,tokenIDTwo.id],
+          account,
+          gasPrice,
+          null,
+          null,
+          mergeTXID,
+          (err) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            resolve();
+          }
+        );
+      });
+
+      allowanceCallsPromise.push(merge);
+      await Promise.all(allowanceCallsPromise);
+      router.push("/vest")
     } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);
