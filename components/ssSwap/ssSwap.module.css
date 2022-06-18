@@ -771,9 +771,16 @@ p.inputTitleText {
 .quoteLoader {
   display: flex;
   align-items: center;
+
   margin-bottom: 20px;
+
+  border: 1px solid #1F2B49;
+
   font-size: 16px !important;
   line-height: 24px !important;
+
+  background: #171D2D;
+
   color: #1B4F20 !important;
 }
 
@@ -830,7 +837,7 @@ p.inputTitleText {
 }
 
 .warningContainerWarning {
-  border: 1px solid #15B525;
+  border: 1px solid #F2D056;
 }
 
 .warningError.warningText--light {

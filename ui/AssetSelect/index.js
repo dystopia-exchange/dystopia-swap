@@ -292,7 +292,7 @@ const AssetSelect = (
 
         <div className={classes.manageLocalContainer}>
           <Button onClick={toggleLocal}>
-            Back to Assets
+            Back to token list
           </Button>
         </div>
       </>
@@ -308,7 +308,7 @@ const AssetSelect = (
           <TextField
             variant="outlined"
             fullWidth
-            placeholder="Search by name or paste addres"
+            placeholder="Search by name or paste address"
             value={search}
             onChange={onSearchChanged}
             InputProps={{
@@ -477,7 +477,7 @@ const AssetSelect = (
               fontSize: 60,
               lineHeight: '72px',
               color: '#E4E9F4',
-              letterSpacing: '0.04em',
+              // letterSpacing: '0.04em',
             }}>
             <div style={{
               display: 'flex',
@@ -489,13 +489,13 @@ const AssetSelect = (
                 alignItems: 'center',
                 color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
               }}>
-                {isManageLocal && manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
+                {/* {isManageLocal && manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
                   marginRight: 10,
                   width: 18,
                   height: 18,
                   cursor: 'pointer',
-                }}/>}
-                {isManageLocal && manageLocal ? 'Manage local assets' : title}
+                }}/>} */}
+                {isManageLocal && manageLocal ? 'Select a Token' : title}
               </div>
 
               <div

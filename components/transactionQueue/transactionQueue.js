@@ -198,12 +198,12 @@ export default function TransactionQueue({setQueueLength}) {
       <DialogTitle
         className={classes.dialogTitle}
         style={{
-          padding: '30px',
+          padding: 28,
           fontWeight: 500,
-          fontSize: 24,
+          fontSize: 20,
           lineHeight: '120%',
-          color: '#0A2C40',
-          background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+          color: '#E4E9F4',
+          // background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
         }}>
         <div style={{
           display: 'flex',
@@ -211,25 +211,40 @@ export default function TransactionQueue({setQueueLength}) {
           justifyContent: 'space-between',
         }}>
           <div style={{
-            color: appTheme === "dark" ? '#7C838A' : '#0A2C40',
+            // color: appTheme === "dark" ? '#7C838A' : '#0A2C40',
           }}>
             Notification History
           </div>
 
-          <Close
+          <div
             style={{
-              cursor: 'pointer',
-              color: appTheme === "dark" ? '#7C838A' : '#0A2C40',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: 20,
+              height: 20,
+              backgroundColor: '#8191B9',
+              borderRadius: 5,
             }}
-            onClick={handleClose}/>
+          >
+            <Close
+              style={{
+                cursor: 'pointer',
+                // color: appTheme === "dark" ? '#7C838A' : '#0A2C40',
+                color: '#1e2c48',
+                fontSize: 12,
+              }}
+              onClick={handleClose}
+            />
+          </div>
         </div>
       </DialogTitle>
 
       <DialogContent
         className={classes.dialogContent}
         style={{
-          padding: '0 30px 30px',
-          background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+          padding: '4px 28px 30px',
+          // background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
         }}>
         {renderTransactions(transactions)}
         {renderDone(transactions)}

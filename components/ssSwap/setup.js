@@ -440,7 +440,11 @@ function Setup() {
                 : classes.warningDividerWarning,
             ].join(" ")}
           ></div> */}
-          <img src="/images/ui/info-circle-red.svg" width="24px" style={{ marginRight: 8 }} />
+          {BigNumber(quote.priceImpact).gt(5) ? (
+            <img src="/images/ui/info-circle-red.svg" width="24px" style={{ marginRight: 8 }} />
+          ) : (
+            <img src="/images/ui/info-circle-yellow.svg" width="24px" style={{ marginRight: 8 }} />
+          )}
 
           <Typography
             className={[
@@ -620,7 +624,7 @@ function Setup() {
               anchor={hintAnchor}
               handleClick={handleClickPopover}
               handleClose={handleClosePopover}
-              vertical={-110}
+              vertical={46}
             />
           </div>
         </div>

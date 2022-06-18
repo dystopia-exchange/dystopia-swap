@@ -1,8 +1,10 @@
 export const colors = {
-  blue: "#2D7DDB",
-  red: "#ed4337",
+  blue: "#779BF4",
+  red: "#E93131",
   orange: "#ffb347",
-  lightBlack: "rgba(0, 0, 0, 0.87)"
+  yellow: "#E1B413",
+  lightBlack: "rgba(0, 0, 0, 0.87)",
+  green: "#4FC83A",
 };
 
 const coreTheme = {
@@ -72,7 +74,7 @@ const coreTheme = {
     h4: {
       // yearn title text finance
       fontSize: "1.5rem",
-      letterSpacing: "0.3rem",
+      // letterSpacing: "0.3rem",
       fontWeight: 300,
       lineHeight: 1.167,
       ["@media (max-width:576px)"]: {

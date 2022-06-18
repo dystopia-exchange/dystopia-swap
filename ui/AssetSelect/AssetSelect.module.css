@@ -342,11 +342,25 @@ p.labelSelect {
 
 .manageLocalContainer {
   position: absolute;
+
   bottom: 30px;
+
   display: flex;
   align-items: center;
   justify-content: flex-start;
+
   margin-top: 20px;
+
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.manageLocalContainer button {
+  text-transform: uppercase !important;
+  text-decoration: underline !important;
+  letter-spacing: 0 !important;
+  color: #779BF4 !important;
 }
 
 .manageLocalBtn {

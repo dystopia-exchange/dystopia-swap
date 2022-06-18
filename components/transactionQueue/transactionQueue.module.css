@@ -13,8 +13,8 @@
 }
 
 .transaction {
-  width: 460px;
-  margin-bottom: 20px;
+  width: 377px;
+  margin-bottom: 12px;
 }
 
 .transactionTopBg {
@@ -42,95 +42,107 @@
 
 .transactionInfo {
   display: flex;
+  border-radius: 12px;
+  background: #171D2D;
 }
 
 .transactionInfo--CONFIRMED,
 .transactionInfo--DONE {
-  border: 1px solid #15B525;
+  /* border: 1px solid #15B525; */
 }
 
 .transactionInfo--PENDING,
 .transactionInfo--WAITING {
-  border: 1px solid #86B9D6;
+  /* border: 1px solid #86B9D6; */
 }
 
 .transactionInfo--SUBMITTED {
-  border: 1px solid #F9A01A;
+  /* border: 1px solid #F9A01A; */
 }
 
 .transactionInfo--REJECTED {
-  border: 1px solid #DB3434;
+  /* border: 1px solid #DB3434; */
 }
 
 .transactionStatusText {
-  padding: 5px 2px;
-  border-top: 1px solid #86B9D6;
-  font-weight: 500;
-  font-size: 12px;
+  /* padding: 5px 2px; */
+  /* border-top: 1px solid #86B9D6; */
+  margin-bottom: 4px;
+  font-weight: 400;
+  font-size: 14px;
   line-height: 120%;
   text-transform: lowercase;
+  text-align: left;
+  color: #8191B9;
 }
 
 .transactionStatusText--CONFIRMED,
 .transactionStatusText--DONE {
-  color: #15B525;
+  /* color: #15B525; */
 }
 
 .transactionStatusText--PENDING,
 .transactionStatusText--WAITING {
-  color: #86B9D6;
+  /* color: #86B9D6; */
 }
 
 .transactionStatusText--SUBMITTED {
-  color: #F9A01A;
+  /* color: #F9A01A; */
 }
 
 .transactionStatusText--REJECTED {
-  color: #DB3434;
+  /* color: #DB3434; */
 }
 
 .transactionDescriptionTitle {
-  margin-left: 10px !important;
-  padding-bottom: 10px !important;
+  margin-bottom: 4px !important;
+  /* margin-left: 10px !important; */
+  /* padding-bottom: 10px !important; */
   font-weight: 500 !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
-  border-bottom: 1px solid #86B9D6;
+  font-size: 16px !important;
+  line-height: 150% !important;
+  /* border-bottom: 1px solid #86B9D6; */
   text-align: left;
+  color: #E4E9F4;
 }
 
 .transactionDescriptionTitle--CONFIRMED,
 .transactionDescriptionTitle--DONE {
-  color: #15B525;
+  /* color: #15B525; */
 }
 
 .transactionDescriptionTitle--PENDING,
 .transactionDescriptionTitle--WAITING {
-  color: #86B9D6;
+  /* color: #86B9D6; */
 }
 
 .transactionDescriptionTitle--SUBMITTED {
-  color: #F9A01A;
+  /* color: #F9A01A; */
 }
 
 .transactionDescriptionTitle--REJECTED {
-  color: #DB3434;
+  /* color: #DB3434; */
 }
 
 .transactionDescription {
   max-height: 200px;
+
+  /* margin-left: 10px !important; */
+  /* margin-top: 10px !important; */
+
+  /* padding-right: 10px !important; */
+  /* padding-top: 10px !important; */
+  /* padding-bottom: 10px !important; */
+
   overflow-y: auto;
   word-break: break-all;
   white-space: pre-wrap;
-  padding-right: 10px !important;
-  padding-top: 10px !important;
-  padding-bottom: 10px !important;
-  margin-left: 10px !important;
-  margin-top: 10px !important;
+
   font-weight: 400 !important;
   font-size: 14px !important;
   line-height: 120% !important;
-  color: #5688A5 !important;
+  color: #8191B9 !important;
+
   text-align: left;
 }
 
@@ -139,6 +151,11 @@
 }
 
 .transactionExpanded {
+}
+
+.transactionHashWrapper {
+  display: flex;
+  justify-content: space-between;
 }
 
 .transactionHash {
@@ -179,7 +196,7 @@
 
 .topScrollPaper {
   align-items: flex-start !important;
-  justify-content: flex-end !important;
+  justify-content: flex-start !important;
 }
 
 .rootPaper {
@@ -188,23 +205,24 @@
 
 .paperBody--dark,
 .paperBody--light {
-  top: 49px !important;
+  /* top: 49px !important; */
   width: auto !important;
   height: 100%;
   max-height: none !important;
   margin: 0 !important;
   border-radius: 0 !important;
   box-shadow: none;
+  background: #1F2B49 !important;
 }
 
 .paperBody--light {
-  background: #DBE6EC !important;
-  border: 1px solid #86B9D6 !important;
+  /* background: #DBE6EC !important; */
+  /* border: 1px solid #86B9D6 !important; */
 }
 
 .paperBody--dark {
-  background: #151718 !important;
-  border: 1px solid #5F7285 !important;
+  /* background: #151718 !important; */
+  /* border: 1px solid #5F7285 !important; */
 }
 
 .successDialog {
