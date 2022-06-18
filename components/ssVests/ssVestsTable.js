@@ -496,6 +496,17 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: 45,
   },
+  ["@media (max-width: 660px)"]: {
+    toolbar:{
+      display: 'flex',
+      paddingLeft:"10px",
+      paddingRight:"10px",
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }
+  },
+  
   cellPaddings: {
     padding: '11px 20px',
     ["@media (max-width:530px)"]: {
