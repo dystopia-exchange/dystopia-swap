@@ -196,6 +196,12 @@ class Store {
           case ACTIONS.SWAP:
             this.swap(payload);
             break;
+          case ACTIONS.WRAP:
+            this.wrap(payload);
+            break;
+          case ACTIONS.UNWRAP:
+            this.unwrap(payload);
+            break;
 
           // VESTING
           case ACTIONS.GET_VEST_NFTS:
@@ -4728,7 +4734,157 @@ class Store {
       this.emitter.emit(ACTIONS.ERROR, ex);
     }
   };
+  wrap = async (payload) => {
+    try {
+      const allowanceCallsPromises = [];
 
+      const account = stores.accountStore.getStore("account");
+      if (!account) {
+        console.warn("account not found");
+        return null;
+      }
+
+      const web3 = await stores.accountStore.getWeb3Provider();
+      if (!web3) {
+        console.warn("web3 not found");
+        return null;
+      }
+
+      const { fromAsset, toAsset, fromAmount, toAmount } = payload.content;
+      console.log(fromAsset, toAsset, fromAmount, toAmount,"heyy")
+
+      const gasPrice = await stores.accountStore.getGasPrice();
+      let wrapTXID = this.getTXUUID();
+
+      const sendFromAmount = BigNumber(fromAmount)
+        .times(10 ** fromAsset.decimals)
+        .toFixed(0);
+      const sendValue = sendFromAmount;
+      const wmaticContract = new web3.eth.Contract(
+        CONTRACTS.WFTM_ABI,
+        CONTRACTS.WFTM_ADDRESS
+      );
+      this.emitter.emit(ACTIONS.TX_ADDED, {
+        title: `Wrap ${fromAsset.symbol} for ${toAsset.symbol}`,
+        type: "Warp",
+        verb: "Wrap Successful",
+        transactions: [
+          
+          {
+            uuid: wrapTXID,
+            description: `Wrap ${formatCurrency(fromAmount)} ${
+              fromAsset.symbol
+            } for ${toAsset.symbol}`,
+            status: "WAITING",
+          },
+        ],
+      });
+
+      const depositPromise = new Promise((resolve, reject) => {
+        this._callContractWait(
+          web3,
+          wmaticContract,
+          "deposit",
+          [],
+          account,
+          gasPrice,
+          null,
+          null,
+          wrapTXID,
+          (err) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            resolve();
+          },
+          null,
+          sendValue
+        );
+      });
+
+      allowanceCallsPromises.push(depositPromise);
+      const done = await Promise.all(allowanceCallsPromises);
+      this.emitter.emit(ACTIONS.WRAP_RETURNED);
+    } catch (e) {
+      console.log(e);
+      this.emitter.emit(ACTIONS.ERROR, e);
+    }
+  };
+  unwrap = async (payload) => {
+    try {
+      const allowanceCallsPromises = [];
+
+      const account = stores.accountStore.getStore("account");
+      if (!account) {
+        console.warn("account not found");
+        return null;
+      }
+
+      const web3 = await stores.accountStore.getWeb3Provider();
+      if (!web3) {
+        console.warn("web3 not found");
+        return null;
+      }
+
+      const { fromAsset, toAsset, fromAmount, toAmount } = payload.content;
+
+      let unwrapTXID = this.getTXUUID();
+      const gasPrice = await stores.accountStore.getGasPrice();
+
+      const sendFromAmount = BigNumber(fromAmount)
+        .times(10 ** fromAsset.decimals)
+        .toFixed(0);
+      const wmaticContract = new web3.eth.Contract(
+        CONTRACTS.WFTM_ABI,
+        CONTRACTS.WFTM_ADDRESS
+      );
+      this.emitter.emit(ACTIONS.TX_ADDED, {
+        title: `Unwrap ${fromAsset.symbol} for ${toAsset.symbol}`,
+        type: "Unwarp",
+        verb: "Unwrap Successful",
+        transactions: [
+          
+          {
+            uuid: unwrapTXID,
+            description: `Unwrap ${formatCurrency(fromAmount)} ${
+              fromAsset.symbol
+            } for ${toAsset.symbol}`,
+            status: "WAITING",
+          },
+        ],
+      });
+      const withdrawPromise = new Promise((resolve, reject) => {
+        this._callContractWait(
+          web3,
+          wmaticContract,
+          "withdraw",
+          [sendFromAmount],
+          account,
+          gasPrice,
+          null,
+          null,
+          unwrapTXID,
+          (err) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            resolve();
+          }
+        );
+      });
+
+      allowanceCallsPromises.push(withdrawPromise);
+      const done = await Promise.all(allowanceCallsPromises);
+      this.emitter.emit(ACTIONS.UNWRAP_RETURNED);
+    } catch (e) {
+      console.log(e);
+      this.emitter.emit(ACTIONS.ERROR, e);
+    }
+  };
   _getSpecificAssetInfo = async (web3, account, assetAddress) => {
     try {
       const baseAssets = this.getStore("baseAssets");
@@ -5388,7 +5544,7 @@ class Store {
       let allowanceCallsPromise = [];
       let voteTXID = this.getTXUUID();
       let allowanceTXID = this.getTXUUID();
-      let mergeTXID= this.getTXUUID();
+      let mergeTXID = this.getTXUUID();
 
       if (response.data.veDysts != "") {
         res = response.data.veDysts[0].addresses.length;
@@ -5473,12 +5629,12 @@ class Store {
           status: "DONE",
         });
       }
-      if (isvoted){
+      if (isvoted) {
         this.emitter.emit(ACTIONS.TX_STATUS, {
           uuid: voteTXID,
           description: `Reset the veDYST Votes`,
         });
-      }else{
+      } else {
         this.emitter.emit(ACTIONS.TX_STATUS, {
           uuid: voteTXID,
           description: `Votes Reseted`,
@@ -5551,7 +5707,7 @@ class Store {
         CONTRACTS.VOTER_ABI,
         CONTRACTS.VOTER_ADDRESS
       );
-     
+
       if (isvoted) {
         const reset = new Promise((resolve, reject) => {
           this._callContractWait(
@@ -5583,7 +5739,7 @@ class Store {
           web3,
           vedystcontract,
           "merge",
-          [tokenIDOne.id,tokenIDTwo.id],
+          [tokenIDOne.id, tokenIDTwo.id],
           account,
           gasPrice,
           null,
@@ -5602,7 +5758,7 @@ class Store {
 
       allowanceCallsPromise.push(merge);
       await Promise.all(allowanceCallsPromise);
-      router.push("/vest")
+      router.push("/vest");
     } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);

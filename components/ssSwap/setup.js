@@ -49,6 +49,7 @@ function Setup() {
 
   const [quoteError, setQuoteError] = useState(null);
   const [quote, setQuote] = useState(null);
+  const [hidequote, sethidequote] = useState(false);
   const [hintAnchor, setHintAnchor] = React.useState(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -140,13 +141,30 @@ function Setup() {
         setLoading(false);
         setFromAmountValue("");
         setToAmountValue("");
-        calculateReceiveAmount(0, fromAssetValue, toAssetValue);
+        if (
+          !(
+            (fromAssetValue?.symbol == "MATIC" ||
+              fromAssetValue?.symbol == "WMATIC") &&
+            (toAssetValue?.symbol == "WMATIC" ||
+              toAssetValue?.symbol == "MATIC")
+          )
+        )
+          calculateReceiveAmount(0, fromAssetValue, toAssetValue);
+        else {
+          sethidequote(true);
+          setToAmountValue(0);
+        }
         setQuote(null);
         setQuoteLoading(false);
+      };
+      const wrapReturned = () => {
+        setLoading(false);
       };
 
       stores.emitter.on(ACTIONS.ERROR, errorReturned);
       stores.emitter.on(ACTIONS.UPDATED, ssUpdated);
+      stores.emitter.on(ACTIONS.WRAP_RETURNED, wrapReturned);
+      stores.emitter.on(ACTIONS.UNWRAP_RETURNED, wrapReturned);
       stores.emitter.on(ACTIONS.SWAP_RETURNED, swapReturned);
       stores.emitter.on(ACTIONS.QUOTE_SWAP_RETURNED, quoteReturned);
       stores.emitter.on(ACTIONS.BASE_ASSETS_UPDATED, assetsUpdated);
@@ -171,23 +189,70 @@ function Setup() {
   );
 
   const onAssetSelect = (type, value) => {
+    console.log(type, value);
     if (type === "From") {
       if (value.address === toAssetValue.address) {
         setToAssetValue(fromAssetValue);
         setFromAssetValue(toAssetValue);
-        calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
+        if (
+          !(
+            (fromAssetValue?.symbol == "MATIC" ||
+              fromAssetValue?.symbol == "WMATIC") &&
+            (toAssetValue?.symbol == "WMATIC" ||
+              toAssetValue?.symbol == "MATIC")
+          )
+        )
+          calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
+        else {
+          sethidequote(true);
+          setToAmountValue(fromAmountValue);
+        }
       } else {
         setFromAssetValue(value);
-        calculateReceiveAmount(fromAmountValue, value, toAssetValue);
+        if (
+          !(
+            (value?.symbol == "MATIC" || value?.symbol == "WMATIC") &&
+            (toAssetValue?.symbol == "WMATIC" ||
+              toAssetValue?.symbol == "MATIC")
+          )
+        )
+          calculateReceiveAmount(fromAmountValue, value, toAssetValue);
+        else {
+          sethidequote(true);
+          setToAmountValue(fromAmountValue);
+        }
       }
     } else {
       if (value.address === fromAssetValue.address) {
         setFromAssetValue(toAssetValue);
         setToAssetValue(fromAssetValue);
-        calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
+        if (
+          !(
+            (fromAssetValue?.symbol == "MATIC" ||
+              fromAssetValue?.symbol == "WMATIC") &&
+            (toAssetValue?.symbol == "WMATIC" ||
+              toAssetValue?.symbol == "MATIC")
+          )
+        )
+          calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
+        else {
+          sethidequote(true);
+          setToAmountValue(fromAmountValue);
+        }
       } else {
         setToAssetValue(value);
-        calculateReceiveAmount(fromAmountValue, fromAssetValue, value);
+        if (
+          !(
+            (fromAssetValue?.symbol == "MATIC" ||
+              fromAssetValue?.symbol == "WMATIC") &&
+            (value?.symbol == "WMATIC" || value?.symbol == "MATIC")
+          )
+        )
+          calculateReceiveAmount(fromAmountValue, fromAssetValue, value);
+        else {
+          sethidequote(true);
+          setToAmountValue(fromAmountValue);
+        }
       }
     }
 
@@ -203,7 +268,19 @@ function Setup() {
       setToAmountValue("");
       setQuote(null);
     } else {
-      calculateReceiveAmount(value, fromAssetValue, toAssetValue);
+      if (
+        !(
+          (fromAssetValue?.symbol == "MATIC" ||
+            fromAssetValue?.symbol == "WMATIC") &&
+          (toAssetValue?.symbol == "WMATIC" || toAssetValue?.symbol == "MATIC")
+        )
+      )
+        calculateReceiveAmount(value, fromAssetValue, toAssetValue);
+      else {
+        sethidequote(true);
+        setToAmountValue(value);
+      }
+      // else setToAmountValue(value);
     }
   };
 
@@ -295,14 +372,153 @@ function Setup() {
       });
     }
   };
+  const onWrap = () => {
+    if (
+      !fromAmountValue ||
+      fromAmountValue > Number(fromAssetValue.balance) ||
+      Number(fromAmountValue) <= 0
+    ) {
+      return;
+    }
+
+    setFromAmountError(false);
+    setFromAssetError(false);
+    setToAssetError(false);
+
+    let error = false;
+
+    if (!fromAmountValue || fromAmountValue === "" || isNaN(fromAmountValue)) {
+      setFromAmountError("From amount is required");
+      error = true;
+    } else {
+      if (
+        !fromAssetValue.balance ||
+        isNaN(fromAssetValue.balance) ||
+        BigNumber(fromAssetValue.balance).lte(0)
+      ) {
+        setFromAmountError("Invalid balance");
+        error = true;
+      } else if (BigNumber(fromAmountValue).lt(0)) {
+        setFromAmountError("Invalid amount");
+        error = true;
+      } else if (
+        fromAssetValue &&
+        BigNumber(fromAmountValue).gt(fromAssetValue.balance)
+      ) {
+        setFromAmountError(`Greater than your available balance`);
+        error = true;
+      }
+    }
+
+    if (!fromAssetValue || fromAssetValue === null) {
+      setFromAssetError("From asset is required");
+      error = true;
+    }
+
+    if (!toAssetValue || toAssetValue === null) {
+      setFromAssetError("To asset is required");
+      error = true;
+    }
+
+    if (!error) {
+      setLoading(true);
+
+      stores.dispatcher.dispatch({
+        type: ACTIONS.WRAP,
+        content: {
+          fromAsset: fromAssetValue,
+          toAsset: toAssetValue,
+          fromAmount: fromAmountValue,
+          toAmount: toAmountValue,
+          quote: quote,
+          slippage: slippage,
+        },
+      });
+    }
+  };
+  const onUnwrap = () => {
+    if (
+      !fromAmountValue ||
+      fromAmountValue > Number(fromAssetValue.balance) ||
+      Number(fromAmountValue) <= 0
+    ) {
+      return;
+    }
+
+    setFromAmountError(false);
+    setFromAssetError(false);
+    setToAssetError(false);
+
+    let error = false;
+
+    if (!fromAmountValue || fromAmountValue === "" || isNaN(fromAmountValue)) {
+      setFromAmountError("From amount is required");
+      error = true;
+    } else {
+      if (
+        !fromAssetValue.balance ||
+        isNaN(fromAssetValue.balance) ||
+        BigNumber(fromAssetValue.balance).lte(0)
+      ) {
+        setFromAmountError("Invalid balance");
+        error = true;
+      } else if (BigNumber(fromAmountValue).lt(0)) {
+        setFromAmountError("Invalid amount");
+        error = true;
+      } else if (
+        fromAssetValue &&
+        BigNumber(fromAmountValue).gt(fromAssetValue.balance)
+      ) {
+        setFromAmountError(`Greater than your available balance`);
+        error = true;
+      }
+    }
+
+    if (!fromAssetValue || fromAssetValue === null) {
+      setFromAssetError("From asset is required");
+      error = true;
+    }
+
+    if (!toAssetValue || toAssetValue === null) {
+      setFromAssetError("To asset is required");
+      error = true;
+    }
+
+    if (!error) {
+      setLoading(true);
+
+      stores.dispatcher.dispatch({
+        type: ACTIONS.UNWRAP,
+        content: {
+          fromAsset: fromAssetValue,
+          toAsset: toAssetValue,
+          fromAmount: fromAmountValue,
+          toAmount: toAmountValue,
+          quote: quote,
+          slippage: slippage,
+        },
+      });
+    }
+  };
 
   const setBalance100 = () => {
     setFromAmountValue(fromAssetValue.balance);
-    calculateReceiveAmount(
-      fromAssetValue.balance,
-      fromAssetValue,
-      toAssetValue
-    );
+    if (
+      !(
+        (fromAssetValue?.symbol == "MATIC" ||
+          fromAssetValue?.symbol == "WMATIC") &&
+        (toAssetValue?.symbol == "WMATIC" || toAssetValue?.symbol == "MATIC")
+      )
+    )
+      calculateReceiveAmount(
+        fromAssetValue.balance,
+        fromAssetValue,
+        toAssetValue
+      );
+    else {
+      sethidequote(true);
+      setToAmountValue(fromAssetValue.balance);
+    }
   };
 
   const swapAssets = () => {
@@ -310,7 +526,18 @@ function Setup() {
     const ta = toAssetValue;
     setFromAssetValue(ta);
     setToAssetValue(fa);
-    calculateReceiveAmount(fromAmountValue, ta, fa);
+    if (
+      !(
+        (fromAssetValue?.symbol == "MATIC" ||
+          fromAssetValue?.symbol == "WMATIC") &&
+        (toAssetValue?.symbol == "WMATIC" || toAssetValue?.symbol == "MATIC")
+      )
+    )
+      calculateReceiveAmount(fromAmountValue, ta, fa);
+    else {
+      sethidequote(true);
+      setToAmountValue(fromAmountValue);
+    }
   };
 
   const renderSwapInformation = () => {
@@ -1009,7 +1236,7 @@ function Setup() {
         </div>
       )}
 
-      {renderSwapInformation()}
+      {!hidequote?renderSwapInformation():null}
 
       {loading && (
         <div className={classes.loader}>
@@ -1018,7 +1245,15 @@ function Setup() {
       )}
 
       <BtnSwap
-        onClick={onSwap}
+        onClick={
+          !(fromAssetValue?.symbol == "MATIC" ||
+            fromAssetValue?.symbol == "WMATIC") &&
+          (toAssetValue?.symbol == "WMATIC" || toAssetValue?.symbol == "MATIC")
+            ? onSwap
+            : fromAssetValue?.symbol == "MATIC"
+            ? onWrap
+            : onUnwrap
+        }
         className={classes.btnSwap}
         labelClassName={
           !fromAmountValue ||
@@ -1033,10 +1268,24 @@ function Setup() {
           Number(fromAmountValue) <= 0
         }
         label={
-          loading
+          loading && fromAssetValue?.symbol == "MATIC" && toAssetValue?.symbol == "WMATIC"
+            ? "Wrapping"
+            : loading && fromAssetValue?.symbol == "WMATIC" && toAssetValue?.symbol == "MATIC"
+            ? "Unwrapping"
+            : loading &&
+              !(
+                (fromAssetValue?.symbol == "MATIC" ||
+                  fromAssetValue?.symbol == "WMATIC") &&
+                (toAssetValue?.symbol == "WMATIC" ||
+                  toAssetValue?.symbol == "MATIC")
+              )
             ? "Swapping"
             : !fromAmountValue || Number(fromAmountValue) <= 0
             ? "Enter Amount"
+            : (fromAssetValue?.symbol == "MATIC"&&toAssetValue?.symbol == "WMATIC")
+            ? "Wrap"
+            :(fromAssetValue?.symbol == "WMATIC"&&toAssetValue?.symbol == "MATIC")
+            ? "Unwrap"
             : "Swap"
         }
       ></BtnSwap>
