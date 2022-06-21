@@ -329,11 +329,11 @@ function Setup() {
                 {fromAmountValue <= Number(fromAssetValue.balance) && (
                   <div
                     className={[
-                      classes.warningContainer,
+                      classes.priceImpactWrapper,
                       classes[`warningContainer--${appTheme}`],
                       BigNumber(quote.priceImpact).gt(5)
-                        ? classes.warningContainerError
-                        : classes.warningContainerWarning,
+                        ? classes.priceImpactWrapperError
+                        : classes.priceImpactWrapperWarning,
                     ].join(" ")}
                   >
                     {/* <div
@@ -467,7 +467,7 @@ function Setup() {
   const renderRoute = () => {
     if (!quoteError && !quoteLoading && quote) {
       return (
-        <div style={{ marginTop: 20, marginBottom: 20 }}>
+        <div style={{ marginTop: 0, marginBottom: 20 }}>
           <div
             className={[classes.route, classes[`route--${appTheme}`]].join(" ")}
           >

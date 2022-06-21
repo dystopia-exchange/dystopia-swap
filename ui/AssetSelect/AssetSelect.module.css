@@ -1,3 +1,8 @@
+.paper {
+  border-radius: 12px !important;
+  background: #1F2B49 !important;
+}
+
 .paperScrollPaper {
   margin: 0 !important;
   max-width: 782px !important;

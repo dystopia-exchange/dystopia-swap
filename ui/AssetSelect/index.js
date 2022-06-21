@@ -446,6 +446,7 @@ const AssetSelect = (
       <Dialog
         classes={{
           paperScrollPaper: classes.paperScrollPaper,
+          paper: classes.paper
         }}
         aria-labelledby="simple-dialog-title"
         open={open}
@@ -463,9 +464,7 @@ const AssetSelect = (
             width: 782,
             height: 768,
             // background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-            background: '#1F2B49',
             // border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
-            borderRadius: 12,
             overflow: 'hidden',
           }}>
           <DialogTitle
@@ -487,7 +486,8 @@ const AssetSelect = (
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                color: "#E4E9F4",
+                // color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
               }}>
                 {/* {isManageLocal && manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
                   marginRight: 10,

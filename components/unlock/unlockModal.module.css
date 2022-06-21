@@ -18,29 +18,39 @@
   animation: rotating 2s linear infinite;
 }
 
+.unlockModal {
+  background: #1F2B49 !important;
+  border-radius: 12px !important;
+}
+
 .networkButton {
   position: relative;
-  padding: 10px 20px !important;
-  background-color: #CFE5F2 !important;
-  border: 1px solid #86B9D6 !important;
+
+  padding: 40px !important;
+
+  border: 1px solid #779BF4 !important;
+
+  background: rgba(119, 155, 244, 0.15) !important;
 }
 
 .networkButton--dark {
-  background-color: #24292D !important;
-  border: 1px solid #5F7285 !important;
+  /* background-color: #24292D !important; */
+  /* border: 1px solid #5F7285 !important; */
 }
 
 .networkButton:hover,
 .networkButton--dark:hover {
-  border: 1px solid #ffffff !important;
+  background: rgba(119, 155, 244, 0.25) !important;
+  /* border: 1px solid #ffffff !important; */
 }
 
 .networkButton:active {
-  border: 1px solid #0B5E8E !important;
+  /* border: 1px solid #0B5E8E !important; */
+  background: #1F2B49 !important;
 }
 
 .networkButton--dark:active {
-  border: 1px solid #4CADE6 !important;
+  /* border: 1px solid #4CADE6 !important; */
 }
 
 .networkButtonCornerLT,

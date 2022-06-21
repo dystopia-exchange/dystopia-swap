@@ -294,7 +294,10 @@ function Header(props) {
             <div className={classes.accountButtonContainer}>
               <Button
                 disableElevation
-                className={[classes.accountButton, classes[`accountButton--${appTheme}`]].join(' ')}
+                className={[
+                  classes.accountButton, classes[`accountButton--${appTheme}`],
+                  anchorEl ? classes.accountButtonActive : '',
+                ].join(' ')}
                 variant="contained"
                 aria-controls="simple-menu"
                 aria-haspopup="true"
@@ -304,16 +307,18 @@ function Header(props) {
                   className={[classes.accountButtonAddress, classes[`accountButtonAddress--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
                   {account && account.address && (
                     <>
-                      <div className={`${classes.accountIcon} ${classes.metamask}`}>
+                      <div className={`${classes.accountIcon} ${classes.metamask}`} style={{ marginRight: 8 }}>
                       </div>
 
-                      <div style={{
-                        marginLeft: 5,
-                        marginRight: 5,
-                        color: appTheme === "dark" ? '#ffffff' : '#0B5E8E',
-                      }}>
+                      {/* <div
+                        style={{
+                          marginLeft: 5,
+                          marginRight: 5,
+                          color: appTheme === "dark" ? '#ffffff' : '#0B5E8E',
+                        }}
+                      >
                         •
-                      </div>
+                      </div> */}
                     </>
                   )}
                   <Typography className={classes.headBtnTxt}>
@@ -334,7 +339,7 @@ function Header(props) {
                 <div
                   className={[classes.headSwitchBtn, classes[`headSwitchBtn--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}
                   onClick={onAddressClicked}>
-                  <img src="/images/ui/icon-wallet.svg" className={classes.walletIcon}/>
+                  <img src="/images/ui/icon-wallet-white.svg" className={classes.walletIcon}/>
 
                   <div style={{
                     marginLeft: 5,
@@ -387,19 +392,22 @@ function Header(props) {
 
           <div
             className={[classes.statButton, classes[`statButton--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}
-            onClick={() => window.open("https://info.dystopia.exchange/home", "_blank")}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                style={{marginRight: 5}}
-                d="M1.3335 8.66667H5.3335V14H1.3335V8.66667ZM6.00016 2H10.0002V14H6.00016V2ZM10.6668 5.33333H14.6668V14H10.6668V5.33333Z"
-                fill={appTheme === 'dark' ? '#4CADE6' : '#0B5E8E'}/>
+            onClick={() => window.open("https://info.dystopia.exchange/home", "_blank")}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 22H2C1.59 22 1.25 21.66 1.25 21.25C1.25 20.84 1.59 20.5 2 20.5H22C22.41 20.5 22.75 20.84 22.75 21.25C22.75 21.66 22.41 22 22 22Z" fill="#779BF4"/>
+              <path d="M9.75 4V22H14.25V4C14.25 2.9 13.8 2 12.45 2H11.55C10.2 2 9.75 2.9 9.75 4Z" fill="#779BF4"/>
+              <path d="M3 10V22H7V10C7 8.9 6.6 8 5.4 8H4.6C3.4 8 3 8.9 3 10Z" fill="#779BF4"/>
+              <path d="M17 15V22H21V15C21 13.9 20.6 13 19.4 13H18.6C17.4 13 17 13.9 17 15Z" fill="#779BF4"/>
             </svg>
 
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M10.6694 6.276L4.93144 12.014L3.98877 11.0713L9.7261 5.33333H4.66944V4H12.0028V11.3333H10.6694V6.276Z"
-                fill={appTheme === 'dark' ? '#5688A5' : '#5688A5'}/>
-            </svg>
+
+            <span style={{ display: 'flex', alignItems: 'center', marginLeft: 9 }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.4301 18.8201C14.2401 18.8201 14.0501 18.7501 13.9001 18.6001C13.6101 18.3101 13.6101 17.8301 13.9001 17.5401L19.4401 12.0001L13.9001 6.46012C13.6101 6.17012 13.6101 5.69012 13.9001 5.40012C14.1901 5.11012 14.6701 5.11012 14.9601 5.40012L21.0301 11.4701C21.3201 11.7601 21.3201 12.2401 21.0301 12.5301L14.9601 18.6001C14.8101 18.7501 14.6201 18.8201 14.4301 18.8201Z" fill="#586586"/>
+                <path d="M20.33 12.75H3.5C3.09 12.75 2.75 12.41 2.75 12C2.75 11.59 3.09 11.25 3.5 11.25H20.33C20.74 11.25 21.08 11.59 21.08 12C21.08 12.41 20.74 12.75 20.33 12.75Z" fill="#586586"/>
+              </svg>
+            </span>
           </div>
 
           <ThemeSwitcher/>

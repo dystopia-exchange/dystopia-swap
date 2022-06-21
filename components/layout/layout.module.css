@@ -4,7 +4,7 @@
   height: 100%;
   width: 100%;
   display: flex;
-  background-image: url('/images/solid_background.png');
+  /* background-image: url('/images/solid_background.png'); */
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -14,15 +14,16 @@
   position: absolute;
   height: 100%;
   width: 100%;
+  background: #2B3446;
 }
 
 .content--light {
-  background: var(--background-light) url("/images/background/background-light.jpg") no-repeat top left;
+  /* background: var(--background-light) url("/images/background/background-light.jpg") no-repeat top left; */
   background-size: cover;
 }
 
 .content--dark {
-  background: var(--background-dark) url("/images/background/background-dark.jpg") no-repeat top left;
+  /* background: var(--background-dark) url("/images/background/background-dark.jpg") no-repeat top left; */
   background-size: cover;
 }
 

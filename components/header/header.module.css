@@ -1,18 +1,25 @@
 .headerContainer {
+  z-index: 9 !important;
+
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  box-sizing: border-box;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   align-content: center;
+
   flex-wrap: wrap;
-  height: 50px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9 !important;
+
   width: 100%;
+  height: calc(40px + 28px + 28px);
+
   border: 0;
   border-radius: 0 !important;
-  box-sizing: border-box;
 }
 
 .hidden {
@@ -164,115 +171,169 @@
 }
 
 .accountButton {
-  min-width: 168px !important;
-  padding: 0 !important;
   position: fixed;
+
+  min-width: 230px !important;
+  padding: 0 !important;
+
   z-index: 10030 !important;
-  border-radius: 40px !important;
-  border: 1px solid #0B5E8E !important;
-  background: none !important;
+
+  border: 1px solid #779BF4 !important;
+  border-radius: 10px !important;
+
+  background: rgba(23, 29, 45, 0.5) !important;
+}
+
+.accountButton:hover {
+  background: rgba(23, 29, 45, 0.25) !important;
+}
+
+.accountButton:active {
+  background: rgba(23, 29, 45, 0.7) !important;
+}
+
+.accountButtonActive {
+  background: rgba(23, 29, 45, 0.5) !important;
+  border: 3px solid #5E9FEC !important;
+}
+
+.accountButton:hover + .headSwitchBtn {
+  /* background: rgba(119, 155, 244, 0.8) !important; */
 }
 
 .accountButton:hover .accountButtonAddress {
-  background: #86B9D6 !important;
+  /* background: #86B9D6 !important; */
 }
 
 .accountButton:active .accountButtonAddress {
-  background: #9BC9E4 !important;
+  /* background: #9BC9E4 !important; */
 }
 
 .accountButton:active .headBalanceTxt {
-  color: #0B5E8E !important;
+  /* color: #0B5E8E !important; */
 }
 
 .accountButton--dark {
-  border-color: #4CADE6 !important;
+  /* border-color: #4CADE6 !important; */
 }
 
 .accountButton--dark:hover .accountButtonAddress {
-  background: #5F7285 !important;
+  /* background: #5F7285 !important; */
 }
 
 .accountButton--dark:active .accountButtonAddress {
-  background: #2D3741 !important;
+  /* background: #2D3741 !important; */
 }
 
 .accountButton--dark:active .headBalanceTxt {
-  color: #4CADE6 !important;
+  /* color: #4CADE6 !important; */
 }
 
 .accountButtonConnect--light {
-  background: #9BC9E4 !important;
+  /* background: #9BC9E4 !important; */
 }
 
 .accountButtonConnect--light:hover {
-  background: #86B9D6 !important;
+  /* background: #86B9D6 !important; */
 }
 
 .accountButtonConnect--dark {
-  background: #2D3741 !important;
-  border: 1px solid #4CADE6 !important;
+  /* background: #2D3741 !important; */
+  /* border: 1px solid #4CADE6 !important; */
 }
 
 .accountButtonConnect--dark:hover {
-  background: #5F7285 !important;
+  /* background: #5F7285 !important; */
 }
 
 .accountButtonAddress {
-  height: 28px;
-  border-radius: 40px !important;
-  outline: 1px solid #0B5E8E !important;
-  color: #ffffff !important;
-  padding-left: 10px !important;
-  padding-right: 10px !important;
-  background: #9BC9E4 !important;
+  height: 40px;
+
+  padding: 8px 12px !important;
+
+  border-radius: 10px !important;
+  /* border: 1px solid #779BF4; */
+  outline: 1px solid #779BF4 !important;
+
+  /* outline: 1px solid #0B5E8E !important; */
+
+  /* background: rgba(119, 155, 244, 0.25) !important; */
+  background: rgba(119, 155, 244, 0.25) !important;
+  color: #E4E9F4 !important;
+
+  /* transition: all 0.16s ease; */
+
   z-index: 2;
-  transition: all 0.16s ease;
 }
 
 .accountButtonAddress--dark {
-  background-color: #2D3741 !important;
-  outline-color: #4CADE6 !important;
+  /* background-color: #2D3741 !important; */
+  /* outline-color: #4CADE6 !important; */
 }
 
 .headBalanceTxt {
-  height: 28px;
-  border-radius: 40px;
+  height: 40px;
+
   margin-left: -22px !important;
+
   padding-left: 32px !important;
   padding-right: 15px !important;
-  font-weight: 400 !important;
+
+  /* border: 1px solid #779BF4; */
+  border-radius: 10px;
+
+  /* background: rgba(119, 155, 244, 0.25) !important; */
+  /* border: 1px solid #779BF4 !important; */
+
   font-size: 14px !important;
-  color: #0A2C40 !important;
-  background: #DBE6EC !important;
+  line-height: 120% !important;
+  font-weight: 400 !important; 
+
+  color: #E4E9F4 !important;
+}
+
+.headBalanceTxt:hover {
+  /* background: rgba(119, 155, 244, 0.25) !important; */
+  /* border: 1px solid #779BF4 !important; */
 }
 
 .headBalanceTxt--dark {
-  color: #DBE6EC !important;
-  background: #151718 !important;
+  /* color: #DBE6EC !important; */
+  /* background: #151718 !important; */
 }
 
 .headSwitchBtn {
   position: absolute;
+
   top: 0;
-  height: 68px;
+
   width: 100%;
-  background: #0B5E8E;
-  border-radius: 16px;
+  height: 80px;
+
   padding-left: 12.5px;
-  padding-top: 30px;
+  padding-top: 40px;
+
+  border-radius: 12px;
+
+  background: #779BF4;
+
   cursor: pointer;
 }
 
+.headSwitchBtn:hover {
+  /* background: rgba(119, 155, 244, 0.8) !important; */
+}
+
 .headSwitchBtn--dark {
-  background: #4CADE6;
+  /* background: #4CADE6; */
 }
 
 .headSwitchBtnText {
   font-weight: 500;
   font-size: 14px;
   line-height: 120%;
-  color: #FFFFFF;
+
+  color: #E4E9F4;
 }
 
 .switchNetworkBtn {
@@ -347,6 +408,7 @@
   font-size: 14px !important;
   line-height: 120%;
   white-space: nowrap;
+  color: #E4E9F4;
 }
 
 .metamask {
@@ -494,25 +556,41 @@
 }
 
 .statButton {
-  padding: 5px;
+  display: flex;
+  align-items: center;
+
+  height: 40px;
+
   margin-left: 10px;
-  background: #DBE6EC;
-  border: 2px solid #15B525;
-  border-radius: 100px;
-  cursor: pointer;
+
+  padding-left: 13px;
+  padding-right: 13px;
+
+  background: rgba(23, 29, 45, 0.5);
+
+  border: 1px solid #586586;
+  border-radius: 12px;
+
   transition: all 0.32s ease;
+
+  cursor: pointer;
 }
 
 .statButton:hover {
-  background: #B9DFF5;
+  /* background: #B9DFF5; */
+  background: rgba(23, 29, 45, 0.4);
+}
+
+.statButton:active {
+  background: rgba(23, 29, 45, 0.6);
 }
 
 .statButton--dark {
-  background: #151718;
+  /* background: #151718; */
 }
 
 .statButton--dark:hover {
-  background: #24292D;
+  /* background: #24292D; */
 }
 
 @media (max-width: 1550px) {

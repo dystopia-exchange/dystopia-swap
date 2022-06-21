@@ -36,7 +36,6 @@ input[type=number].massiveInputAmount {
 .swapInputsHeader {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
 
   margin-bottom: 32px;
 
@@ -255,6 +254,7 @@ p.inputTitleText {
 
   width: 237px;
   height: 56px;
+  margin-top: 10px;
 
   border-radius: 12px;
 
@@ -744,7 +744,8 @@ p.inputTitleText {
 }
 
 .quoteLoader,
-.warningContainer {
+.warningContainer,
+.priceImpactWrapper {
   position: relative;
 
   display: flex;
@@ -825,11 +826,19 @@ p.inputTitleText {
 }
 
 .warningContainer--light {
-  background: #CFE5F2;
+  /* background: #CFE5F2; */
 }
 
 .warningContainer--dark {
-  background: #171D2D;
+  /* background: #171D2D; */
+}
+
+.priceImpactWrapperError {
+  border: 1px solid #E25656;
+}
+
+.priceImpactWrapperWarning {
+  border: 1px solid #5EE852;
 }
 
 .warningContainerError {
