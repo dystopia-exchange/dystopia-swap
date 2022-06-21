@@ -2428,7 +2428,6 @@ export default function ssLiquidityManage() {
                     />
                   </div>
                 </div>
-                {console.log(withdrawAassetOptions)}
                 {createLP
                   ? renderMassiveInput(
                       "amount0",

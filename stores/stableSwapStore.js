@@ -1102,12 +1102,6 @@ class Store {
       for (let i = 0; i < response2.data.length; i++) {
         for (let j = 0; j < baseAssets.length; j++) {
           if (
-            baseAssets[j].address ==
-            "0x104592a158490a9228070e0a8e5343b499e125d0"
-          ) {
-            baseAssets[j] == null;
-          }
-          if (
             response2.data[i].address.toLowerCase() ==
             baseAssets[j].address.toLowerCase()
           ) {
@@ -1122,6 +1116,9 @@ class Store {
       }
       let localBaseAssets = this.getLocalAssets();
 
+      baseAssets = baseAssets.filter(token => {
+        return token.id != "0x104592a158490a9228070e0a8e5343b499e125d0";
+      });
       return [...baseAssets, ...localBaseAssets];
     } catch (ex) {
       console.log(ex);
@@ -1164,18 +1161,7 @@ class Store {
     try {
       const response = await client.query(queryone).toPromise();
       const pairsCall = response;
-      for (let i = 0; i < pairsCall.data.pairs.length; i++) {
-        if (
-          pairsCall.data.pairs[i].address ==
-            "0x0dabcde647ba8d912ce173ce8687b3076a66b0b2" ||
-          pairsCall.data.pairs[i].address ==
-            "0xde251792215fee62f458141db2944283740039ec" ||
-          pairsCall.data.pairs[i].address ==
-            "0xf2f2a88bcf47d1a86ae15fd17098f93152606c3d"
-        ) {
-          pairsCall.data.pairs[i] == null;
-        }
-      }
+      
       const find = "miMATIC";
       const regex = new RegExp(find, "g");
       const regex1 = new RegExp("miMATIC", "g");
@@ -1198,6 +1184,12 @@ class Store {
       } catch (e) {
         console.log(e, "error");
       }
+      pairsCall2 = pairsCall2.filter(pair => {
+        return (pair.token0.address.toString() != "0x104592a158490a9228070e0a8e5343b499e125d0");
+      });
+      pairsCall2 = pairsCall2.filter(pair => {
+        return (pair.token1.address.toString() != "0x104592a158490a9228070e0a8e5343b499e125d0");
+      });
       return pairsCall2;
     } catch (ex) {
       console.log(ex);
@@ -4751,7 +4743,6 @@ class Store {
       }
 
       const { fromAsset, toAsset, fromAmount, toAmount } = payload.content;
-      console.log(fromAsset, toAsset, fromAmount, toAmount,"heyy")
 
       const gasPrice = await stores.accountStore.getGasPrice();
       let wrapTXID = this.getTXUUID();
@@ -5530,7 +5521,6 @@ class Store {
   merge = async (payload) => {
     try {
       const { tokenIDOne, tokenIDTwo } = payload.content;
-      console.log(tokenIDOne, tokenIDTwo);
       const queryVestWithdraw = `
      query {
          veDysts(where :{id:${tokenIDOne.id.toString()}})  {

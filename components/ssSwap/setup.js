@@ -189,7 +189,6 @@ function Setup() {
   );
 
   const onAssetSelect = (type, value) => {
-    console.log(type, value);
     if (type === "From") {
       if (value.address === toAssetValue.address) {
         setToAssetValue(fromAssetValue);
