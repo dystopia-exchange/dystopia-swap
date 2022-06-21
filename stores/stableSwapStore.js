@@ -4751,6 +4751,7 @@ class Store {
       }
 
       const { fromAsset, toAsset, fromAmount, toAmount } = payload.content;
+      console.log(fromAsset, toAsset, fromAmount, toAmount,"heyy")
 
       const gasPrice = await stores.accountStore.getGasPrice();
       let wrapTXID = this.getTXUUID();

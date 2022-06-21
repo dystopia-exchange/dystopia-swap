@@ -1246,9 +1246,9 @@ function Setup() {
 
       <BtnSwap
         onClick={
-          (fromAssetValue?.symbol != "MATIC" ||
-            fromAssetValue?.symbol != "WMATIC") &&
-          (toAssetValue?.symbol != "WMATIC" || toAssetValue?.symbol != "MATIC")
+          !(fromAssetValue?.symbol == "MATIC" ||
+            fromAssetValue?.symbol == "WMATIC") &&
+          (toAssetValue?.symbol == "WMATIC" || toAssetValue?.symbol == "MATIC")
             ? onSwap
             : fromAssetValue?.symbol == "MATIC"
             ? onWrap
@@ -1268,9 +1268,9 @@ function Setup() {
           Number(fromAmountValue) <= 0
         }
         label={
-          loading && fromAssetValue?.symbol == "MATIC"
+          loading && fromAssetValue?.symbol == "MATIC" && toAssetValue?.symbol == "WMATIC"
             ? "Wrapping"
-            : loading && fromAssetValue?.symbol == "WMATIC"
+            : loading && fromAssetValue?.symbol == "WMATIC" && toAssetValue?.symbol == "MATIC"
             ? "Unwrapping"
             : loading &&
               !(
@@ -1282,16 +1282,11 @@ function Setup() {
             ? "Swapping"
             : !fromAmountValue || Number(fromAmountValue) <= 0
             ? "Enter Amount"
-            : !(
-                (fromAssetValue?.symbol == "MATIC" ||
-                  fromAssetValue?.symbol == "WMATIC") &&
-                (toAssetValue?.symbol == "WMATIC" ||
-                  toAssetValue?.symbol == "MATIC")
-              )
-            ? "Swap"
-            : fromAssetValue?.symbol == "MATIC"
+            : (fromAssetValue?.symbol == "MATIC"&&toAssetValue?.symbol == "WMATIC")
             ? "Wrap"
-            : "Unwrap"
+            :(fromAssetValue?.symbol == "WMATIC"&&toAssetValue?.symbol == "MATIC")
+            ? "Unwrap"
+            : "Swap"
         }
       ></BtnSwap>
     </div>
