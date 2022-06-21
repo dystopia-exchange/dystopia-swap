@@ -1245,13 +1245,11 @@ function Setup() {
 
       <BtnSwap
         onClick={
-          !(fromAssetValue?.symbol == "MATIC" ||
-            fromAssetValue?.symbol == "WMATIC") &&
-          (toAssetValue?.symbol == "WMATIC" || toAssetValue?.symbol == "MATIC")
-            ? onSwap
-            : fromAssetValue?.symbol == "MATIC"
+          (fromAssetValue?.symbol == "MATIC"&&toAssetValue?.symbol == "WMATIC")
             ? onWrap
-            : onUnwrap
+            : (fromAssetValue?.symbol == "WMATIC"&&toAssetValue?.symbol == "MATIC")
+            ? onUnwrap
+            : onSwap
         }
         className={classes.btnSwap}
         labelClassName={
