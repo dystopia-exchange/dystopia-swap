@@ -39,11 +39,20 @@ import AssetSelect from "../../ui/AssetSelect";
 import Borders from "../../ui/Borders";
 import Loader from "../../ui/Loader";
 import SwitchCustom from "../../ui/Switch";
+import Hint from "../hint/hint";
 
-export default function ssLiquidityManage() {
+export default function ssLiquidityManage({activeTab = 'deposit',}) {
   const router = useRouter();
   const amount0Ref = useRef(null);
   const amount1Ref = useRef(null);
+
+  const [hintAnchor, setHintAnchor] = React.useState(null);
+  const [stablePoolHntAnchor, setStablePoolHntAnchor] = React.useState(null);
+  const [volatilePoolHntAnchor, setVolatilePoolHntAnchor] = React.useState(null);
+
+  const openHint = Boolean(hintAnchor);
+  const openStablePoolHint = Boolean(stablePoolHntAnchor);
+  const openVolatilePoolHint = Boolean(volatilePoolHntAnchor);
 
   const [pairReadOnly, setPairReadOnly] = useState(false);
 
@@ -75,7 +84,7 @@ export default function ssLiquidityManage() {
   const [withdrawAmount0, setWithdrawAmount0] = useState("");
   const [withdrawAmount1, setWithdrawAmount1] = useState("");
 
-  const [activeTab, setActiveTab] = useState("deposit");
+  // const [activeTab, setActiveTab] = useState("deposit");
   const [quote, setQuote] = useState(null);
   const [withdrawQuote, setWithdrawQuote] = useState(null);
 
@@ -90,8 +99,6 @@ export default function ssLiquidityManage() {
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
   const [withdrawAction, setWithdrawAction] = useState("");
 
   const [createLP, setCreateLP] = useState(true);
@@ -103,11 +110,27 @@ export default function ssLiquidityManage() {
   });
 
   const handleClickPopover = (event) => {
-    setAnchorEl(event.currentTarget);
+    setHintAnchor(event.currentTarget)
   };
 
   const handleClosePopover = () => {
-    setAnchorEl(null);
+    setHintAnchor(null)
+  };
+
+  const handleStablePoolClickPopover = (event) => {
+    setStablePoolHntAnchor(event.currentTarget)
+  };
+
+  const handleStablePoolClosePopover = () => {
+    setStablePoolHntAnchor(null)
+  };
+
+  const handleVolatilePoolClickPopover = (event) => {
+    setVolatilePoolHntAnchor(event.currentTarget)
+  };
+
+  const handleVolatilePoolClosePopover = () => {
+    setVolatilePoolHntAnchor(null)
   };
 
   const checkIsWhiteListedPair = async (pair) => {
@@ -142,8 +165,6 @@ export default function ssLiquidityManage() {
       setNeedAddToWhiteList(symbols.join(", "));
     }
   };
-
-  const openSlippage = Boolean(anchorEl);
 
   const ssUpdated = async () => {
     const storeAssetOptions = stores.stableSwapStore.getStore("baseAssets");
@@ -870,14 +891,6 @@ export default function ssLiquidityManage() {
     });
   };
 
-  const toggleDeposit = () => {
-    setActiveTab("deposit");
-  };
-
-  const toggleWithdraw = () => {
-    setActiveTab("withdraw");
-  };
-
   const amount0Changed = (balance) => {
     const value = formatInputAmount(event.target.value.replace(",", "."));
 
@@ -1139,10 +1152,10 @@ export default function ssLiquidityManage() {
         <Typography className={classes.inputTitleText} noWrap>
           {type === "amount0"
             ? createLP
-              ? `1st ${windowWidth > 530 ? "token" : ""}`
+              ? `1st token`
               : "LP"
             : type !== "withdraw"
-            ? `2nd ${windowWidth > 530 ? "token" : ""}`
+            ? `2nd token`
             : "LP"}
         </Typography>
 
@@ -1294,15 +1307,6 @@ export default function ssLiquidityManage() {
                   disableUnderline: true,
                 }}
               />
-
-              <Typography
-                className={[
-                  classes.smallerText,
-                  classes[`smallerText--${appTheme}`],
-                ].join(" ")}
-              >
-                {formatSymbol(assetValue?.symbol)}
-              </Typography>
             </>
           )}
 
@@ -2053,7 +2057,6 @@ export default function ssLiquidityManage() {
           ].join(" ")}
         >
           <div style={{ marginRight: 5 }}>Slippage:</div>
-
           <TextField
             placeholder="0.00"
             fullWidth
@@ -2099,32 +2102,6 @@ export default function ssLiquidityManage() {
               },
             }}
           />
-        </div>
-
-        <div
-          onClick={handleClickPopover}
-          className={[
-            classes.slippageIconContainer,
-            anchorEl ? classes["slippageIconContainer--active"] : "",
-            classes[`slippageIconContainer--${appTheme}`],
-          ].join(" ")}
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              className={[
-                classes.slippageIcon,
-                anchorEl ? classes["slippageIcon--active"] : "",
-                classes[`slippageIcon--${appTheme}`],
-              ].join(" ")}
-              d="M9.99998 0.833496L17.9166 5.41683V14.5835L9.99998 19.1668L2.08331 14.5835V5.41683L9.99998 0.833496ZM9.99998 2.75933L3.74998 6.37766V13.6227L9.99998 17.241L16.25 13.6227V6.37766L9.99998 2.75933ZM9.99998 13.3335C9.11592 13.3335 8.26808 12.9823 7.64296 12.3572C7.01784 11.7321 6.66665 10.8842 6.66665 10.0002C6.66665 9.11611 7.01784 8.26826 7.64296 7.64314C8.26808 7.01802 9.11592 6.66683 9.99998 6.66683C10.884 6.66683 11.7319 7.01802 12.357 7.64314C12.9821 8.26826 13.3333 9.11611 13.3333 10.0002C13.3333 10.8842 12.9821 11.7321 12.357 12.3572C11.7319 12.9823 10.884 13.3335 9.99998 13.3335ZM9.99998 11.6668C10.442 11.6668 10.8659 11.4912 11.1785 11.1787C11.4911 10.8661 11.6666 10.4422 11.6666 10.0002C11.6666 9.55813 11.4911 9.13421 11.1785 8.82165C10.8659 8.50909 10.442 8.3335 9.99998 8.3335C9.55795 8.3335 9.13403 8.50909 8.82147 8.82165C8.50891 9.13421 8.33331 9.55813 8.33331 10.0002C8.33331 10.4422 8.50891 10.8661 8.82147 11.1787C9.13403 11.4912 9.55795 11.6668 9.99998 11.6668Z"
-            />
-          </svg>
         </div>
       </div>
     );
@@ -2188,8 +2165,20 @@ export default function ssLiquidityManage() {
               classes[`toggleOptionText--${appTheme}`],
             ].join(" ")}
           >
-            Stable
+            Stable Pool
           </Typography>
+
+          <Hint
+              fill="#586586"
+              hintText={
+                "New curve: x3y+y3x, which allows efficient stable swaps"
+              }
+              open={openStablePoolHint}
+              anchor={stablePoolHntAnchor}
+              handleClick={handleStablePoolClickPopover}
+              handleClose={handleStablePoolClosePopover}
+              vertical={46}
+          />
         </div>
 
         <div
@@ -2244,8 +2233,20 @@ export default function ssLiquidityManage() {
               classes[`toggleOptionText--${appTheme}`],
             ].join(" ")}
           >
-            Volatile
+            Volatile Pool
           </Typography>
+
+          <Hint
+              fill="#586586"
+              hintText={
+                "Classic Uniswap V2 pool"
+              }
+              open={openVolatilePoolHint}
+              anchor={volatilePoolHntAnchor}
+              handleClick={handleVolatilePoolClickPopover}
+              handleClose={handleVolatilePoolClosePopover}
+              vertical={46}
+          />
         </div>
       </div>
     );
@@ -2319,7 +2320,7 @@ export default function ssLiquidityManage() {
                           color: appTheme === "dark" ? "#7C838A" : "#5688A5",
                         }}
                       >
-                        Select veDYST
+                        Select veTET
                       </div>
                     );
                   }
@@ -2411,427 +2412,391 @@ export default function ssLiquidityManage() {
   };
 
   return (
-    <Paper elevation={0} className={[classes.container, "g-flex-column"]}>
-      <div
-        className={[
-          classes.titleSection,
-          classes[`titleSection--${appTheme}`],
-        ].join(" ")}
-      >
-        <Tooltip title="Back to Liquidity" placement="top">
+      <div className="g-flex g-flex--justify-center">
+        <div className={classes.bigscreenSidebar}>
+          <div
+              className={[
+                classes.titleSectionBack,
+                classes[`titleSectionBack--${appTheme}`],
+              ].join(" ")}
+          >
           <IconButton onClick={onBack}>
             <ArrowBackIosNew
-              className={[
-                classes.backIcon,
-                classes[`backIcon--${appTheme}`],
-              ].join(" ")}
+                className={[
+                  classes.backIcon,
+                  classes[`backIcon--${appTheme}`],
+                ].join(" ")}
             />
           </IconButton>
-        </Tooltip>
-      </div>
-
-      <div className={classes.toggleButtons}>
-        <Grid container spacing={0}>
-          <Grid item lg={6} md={6} sm={6} xs={6}>
-            <Paper
-              className={`${
-                activeTab === "deposit" ? classes.buttonActive : classes.button
-              } ${classes.topLeftButton} ${
-                appTheme === "dark" ? classes["topLeftButton--dark"] : ""
-              }`}
-              onClick={toggleDeposit}
-              disabled={depositLoading}
+            <span>
+              Back to Liquidity
+            </span>
+          </div>
+        </div>
+        <Paper elevation={0} className={[classes.container, "g-flex-column"]}>
+          <div className={[classes.titleTitle, "g-flex g-flex--align-center g-flex--wrap"].join(" ")}>
+            <div
+                className={[
+                  classes.titleSection,
+                  classes[`titleSection--${appTheme}`],
+                ].join(" ")}
             >
-              <Typography
-                style={{
-                  fontWeight: 500,
-                  fontSize: 18,
-                  color:
-                    appTheme === "dark"
-                      ? activeTab === "deposit"
-                        ? "#ffffff"
-                        : "#7C838A"
-                      : activeTab === "deposit"
-                      ? "#0A2C40"
-                      : "#5688A5",
-                }}
-              >
-                Deposit
-              </Typography>
-            </Paper>
-          </Grid>
+              <Tooltip title="Back to Liquidity" placement="top">
+                <IconButton onClick={onBack}>
+                  <ArrowBackIosNew
+                      className={[
+                        classes.backIcon,
+                        classes[`backIcon--${appTheme}`],
+                      ].join(" ")}
+                  />
+                </IconButton>
+              </Tooltip>
+            </div>
 
-          <Grid item lg={6} md={6} sm={6} xs={6}>
-            <Paper
-              className={`${
-                activeTab === "withdraw" ? classes.buttonActive : classes.button
-              } ${classes.bottomLeftButton} ${
-                appTheme === "dark" ? classes["bottomLeftButton--dark"] : ""
-              }`}
-              onClick={toggleWithdraw}
-              disabled={depositLoading}
-            >
-              <Typography
-                style={{
-                  fontWeight: 500,
-                  fontSize: 18,
-                  color:
-                    appTheme === "dark"
-                      ? activeTab === "withdraw"
-                        ? "#ffffff"
-                        : "#7C838A"
-                      : activeTab === "withdraw"
-                      ? "#0A2C40"
-                      : "#5688A5",
-                }}
-              >
-                Withdraw
-              </Typography>
-            </Paper>
-          </Grid>
-        </Grid>
-      </div>
-
-      <div
-        className={[
-          classes.reAddPadding,
-          classes[`reAddPadding--${appTheme}`],
-        ].join(" ")}
-      >
-        <div className={classes.inputsContainer}>
-          {activeTab === "deposit" && (
-            <>
-              <div className={classes.amountsContainer}>
+            {createLP && activeTab === "deposit" && (
                 <div
-                  style={{
-                    width: "100%",
-                    marginBottom: 20,
-                  }}
-                  className={[
-                    "g-flex",
-                    "g-flex--align-center",
-                    "g-flex--space-between",
-                  ].join(" ")}
+                    className={[
+                      classes.depositHeader,
+                      classes[`depositHeader--${appTheme}`],
+                    ].join(" ")}
                 >
-                  {createLP && (
-                    <div
-                      className={[
-                        classes.depositHeader,
-                        classes[`depositHeader--${appTheme}`],
-                      ].join(" ")}
-                    >
-                      Create LP
-                    </div>
-                  )}
+                  Create LP
+                </div>
+            )}
 
-                  {!createLP && (
-                    <div
-                      className={[
-                        classes.depositHeader,
-                        classes[`depositHeader--${appTheme}`],
-                      ].join(" ")}
-                    >
-                      Stake LP
-                    </div>
-                  )}
+            {createLP && activeTab === "withdraw" && (
+                <div
+                    className={[
+                      classes.depositHeader,
+                      classes[`depositHeader--${appTheme}`],
+                    ].join(" ")}
+                >
+                  Withdraw LP
+                </div>
+            )}
 
-                  <div className={["g-flex", "g-flex--align-center"].join(" ")}>
-                    <div
+            {!createLP && (
+                <div
+                    className={[
+                      classes.depositHeader,
+                      classes[`depositHeader--${appTheme}`],
+                    ].join(" ")}
+                >
+                  Stake LP
+                </div>
+            )}
+
+            {activeTab === "deposit" && (
+                <div
+                    className={[
+                      classes.depositSwitcherLabelCont,
+                      "g-flex",
+                      "g-flex--align-center",
+                      "g-flex--space-between",
+                    ].join(" ")}
+                >
+                  <div
                       className={[
+                        "g-flex",
                         classes.depositSwitcherLabel,
                         classes[`depositSwitcherLabel--${appTheme}`],
                       ].join(" ")}
-                    >
-                      I have LP token
-                    </div>
+                  >
+                    I have LP token
+                  </div>
 
-                    <SwitchCustom
+                  <SwitchCustom
                       checked={!createLP}
                       onChange={() => {
                         switchToggleCreateLP();
                       }}
                       name={"toggleActive"}
-                    />
-                  </div>
+                  />
                 </div>
+            )}
+          </div>
 
-                {renderMassiveInput(
-                  "amount0",
-                  amount0,
-                  amount0Error,
-                  amount0Changed,
-                  asset0,
-                  null,
-                  createLP ? assetOptions : withdrawAassetOptions,
-                  onAssetSelect,
-                  amount0Focused,
-                  amount0Ref
-                )}
-
-                {createLP && (
+          <div
+              className={[
+                classes.reAddPadding,
+                classes[`reAddPadding--${appTheme}`],
+              ].join(" ")}
+          >
+            <div className={classes.inputsContainer}>
+              {activeTab === "deposit" && (
                   <>
-                    <div
-                      className={[
-                        classes.swapIconContainer,
-                        classes[`swapIconContainer--${appTheme}`],
-                      ].join(" ")}
-                      onClick={swapAssets}
-                    >
-                      <div
-                        className={[
-                          classes.swapIconContainerInside,
-                          classes[`swapIconContainerInside--${appTheme}`],
-                          "g-flex",
-                          "g-flex--align-center",
-                          "g-flex--justify-center",
-                        ].join(" ")}
-                      >
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M10.95 8.95L9.53605 10.364L7.00005 7.828V21H5.00005V7.828L2.46505 10.364L1.05005 8.95L6.00005 4L10.95 8.95ZM22.9501 16.05L18 21L13.05 16.05L14.464 14.636L17.001 17.172L17 4H19V17.172L21.536 14.636L22.9501 16.05Z"
-                            className={[
-                              classes.swapIconContainerIcon,
-                              classes[`swapIconContainerIcon--${appTheme}`],
-                            ].join(" ")}
-                          />
-                        </svg>
+                    <div className={classes.amountsContainer}>
+
+                      {renderMassiveInput(
+                          "amount0",
+                          amount0,
+                          amount0Error,
+                          amount0Changed,
+                          asset0,
+                          null,
+                          createLP ? assetOptions : withdrawAassetOptions,
+                          onAssetSelect,
+                          amount0Focused,
+                          amount0Ref
+                      )}
+
+                      {createLP && (
+                          <>
+                            <div
+                                className={[
+                                  classes.swapIconContainer,
+                                  classes[`swapIconContainer--${appTheme}`],
+                                ].join(" ")}
+                                onClick={swapAssets}
+                            >
+                              <div
+                                  className={[
+                                    classes.swapIconContainerInside,
+                                    classes[`swapIconContainerInside--${appTheme}`],
+                                    "g-flex",
+                                    "g-flex--align-center",
+                                    "g-flex--justify-center",
+                                  ].join(" ")}
+                              >
+                                <svg
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                      d="M10.95 8.95L9.53605 10.364L7.00005 7.828V21H5.00005V7.828L2.46505 10.364L1.05005 8.95L6.00005 4L10.95 8.95ZM22.9501 16.05L18 21L13.05 16.05L14.464 14.636L17.001 17.172L17 4H19V17.172L21.536 14.636L22.9501 16.05Z"
+                                      className={[
+                                        classes.swapIconContainerIcon,
+                                        classes[`swapIconContainerIcon--${appTheme}`],
+                                      ].join(" ")}
+                                  />
+                                </svg>
+                              </div>
+                            </div>
+
+                            {renderMassiveInput(
+                                "amount1",
+                                amount1,
+                                amount1Error,
+                                amount1Changed,
+                                asset1,
+                                null,
+                                assetOptions,
+                                onAssetSelect,
+                                amount1Focused,
+                                amount1Ref
+                            )}
+                          </>
+                      )}
+                    </div>
+
+                    <div className={classes.myLiqCont}>
+                      <div className={classes.myLiq}>
+                        <div className={classes.myLiqBal}>
+                          <div>My Pool</div>
+                          <div>
+                            {pair?.balance ?? '0.0'}
+                            <span className={classes.myLiqSpacer}></span>
+                          </div>
+                          <div className={classes.myLiqSplit}></div>
+                        </div>
+                        <div className={classes.myLiqBal}>
+                          <div>
+                            <span className={classes.myLiqSpacer}></span>
+                            My Stake
+                          </div>
+                          <div>{withdrawAsset?.gauge?.balance ?? '0.0'}</div>
+                        </div>
                       </div>
                     </div>
 
-                    {renderMassiveInput(
-                      "amount1",
-                      amount1,
-                      amount1Error,
-                      amount1Changed,
-                      asset1,
-                      null,
-                      assetOptions,
-                      onAssetSelect,
-                      amount1Focused,
-                      amount1Ref
-                    )}
-                  </>
-                )}
 
-                {needAddToWhiteList !== "" && (
-                  <div
-                    className={[
-                      classes.disclaimerContainer,
-                      classes.disclaimerContainerError,
-                      classes[`disclaimerContainerError--${appTheme}`],
-                    ].join(" ")}
-                  >
-                    token {needAddToWhiteList} not whitelisted
-                  </div>
-                )}
-
-                {createLP &&
-                  pair?.name &&
-                  (pair?.balance > 0 || amount0Error || amount1Error) && (
-                    <div
-                      className={[
-                        classes.disclaimerContainer,
-                        amount0Error || amount1Error
-                          ? classes.disclaimerContainerError
-                          : classes.disclaimerContainerWarning,
-                        amount0Error || amount1Error
-                          ? classes[`disclaimerContainerError--${appTheme}`]
-                          : classes[`disclaimerContainerWarning--${appTheme}`],
-                      ].join(" ")}
-                    >
-                      {amount0Error && <>{amount0Error}</>}
-
-                      {amount1Error && <>{amount1Error}</>}
-
-                      {pair?.balance > 0 && !amount0Error && !amount1Error && (
-                        <>
-                          {formatSymbol(pair?.name)} LP exists in your wallet.
-                          Choose “I have LP token” to stake it.
-                        </>
-                      )}
-                    </div>
-                  )}
-              </div>
-
-              {createLP && renderMediumInputToggle("stable", stable)}
-
-              <div className={classes.controls}>
-                <div className={classes.controlItem}>{renderTokenSelect()}</div>
-
-                <div
-                  className={[
-                    classes.controlItem,
-                    classes.controlPopover,
-                    classes[`controlPopover--${appTheme}`],
-                    "g-flex",
-                    "g-flex--align-center",
-                  ].join(" ")}
-                >
-                  {renderSmallInput(
-                    "slippage",
-                    slippage,
-                    slippageError,
-                    onSlippageChanged
-                  )}
-                  {slippageError && (
-                    <div
-                      style={{ marginTop: 20 }}
-                      className={[
-                        classes.warningContainer,
-                        classes[`warningContainer--${appTheme}`],
-                        classes.warningContainerError,
-                      ].join(" ")}
-                    >
+                    <div className="g-flex g-flex--wrap" style={{width: '100%'}}>
                       <div
-                        className={[
-                          classes.warningDivider,
-                          classes.warningDividerError,
-                        ].join(" ")}
-                      ></div>
-                      <Typography
-                        className={[
-                          classes.warningError,
-                          classes[`warningText--${appTheme}`],
-                        ].join(" ")}
-                        align="center"
+                          className={["g-flex g-flex--align-center g-flex--space-between", classes.slippageCont].join(' ')}
                       >
-                        {slippageError}
-                      </Typography>
-                    </div>
-                  )}
-                </div>
+                        <div
+                            style={{
+                              display: 'flex',
+                              fontWeight: 400,
+                              fontSize: 14,
+                              // marginBottom: 10,
+                              color: '#E4E9F4',
+                            }}
+                        >
+                          <span style={{marginRight: 10,}}>Slippage</span>
+                          <Hint
+                              fill="#586586"
+                              hintText={
+                                "Slippage is the difference between the price you expect to get on the crypto you have ordered and the price you actually get when the order executes."
+                              }
+                              open={openHint}
+                              anchor={hintAnchor}
+                              handleClick={handleClickPopover}
+                              handleClose={handleClosePopover}
+                              vertical={46}
+                          />
+                        </div>
 
-                <Popover
-                  classes={{
-                    paper: [
-                      classes.popoverPaper,
-                      classes[`popoverPaper--${appTheme}`],
-                    ].join(" "),
-                  }}
-                  open={openSlippage}
-                  anchorEl={anchorEl}
-                  onClose={handleClosePopover}
-                  anchorOrigin={{
-                    vertical: -190,
-                    horizontal: windowWidth > 530 ? -295 : -257,
-                  }}
-                >
-                  <div
-                    style={{
-                      marginBottom: 30,
-                    }}
-                    className={[
-                      "g-flex",
-                      "g-flex--align-center",
-                      "g-flex--space-between",
-                    ].join(" ")}
-                  >
-                    <div
-                      style={{
-                        fontWeight: 500,
-                        fontSize: 18,
-                        color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
-                      }}
-                    >
-                      Settings
-                    </div>
 
-                    <Close
-                      style={{
-                        cursor: "pointer",
-                        color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
-                      }}
-                      onClick={handleClosePopover}
-                    />
-                  </div>
 
-                  <div
-                    style={{
-                      fontWeight: 500,
-                      fontSize: 14,
-                      marginBottom: 10,
-                      color: appTheme === "dark" ? "#7C838A" : "#5688A5",
-                    }}
-                  >
-                    Slippage Tolerance
-                  </div>
+                        <div
+                            style={{
+                              position: "relative",
+                              // marginBottom: 20,
+                            }}
+                        >
 
-                  <div
-                    style={{
-                      position: "relative",
-                      marginBottom: 20,
-                    }}
-                  >
-                    <Borders />
-
-                    <TextField
-                      placeholder="0.00"
-                      fullWidth
-                      error={slippageError}
-                      helperText={slippageError}
-                      value={slippage}
-                      onChange={onSlippageChanged}
-                      disabled={
-                        depositLoading ||
-                        stakeLoading ||
-                        depositStakeLoading ||
-                        createLoading
-                      }
-                      classes={{
-                        root: [
-                          classes.slippageRoot,
-                          appTheme === "dark"
-                            ? classes["slippageRoot--dark"]
-                            : classes["slippageRoot--light"],
-                        ].join(" "),
-                      }}
-                      InputProps={{
-                        style: {
-                          border: "none",
-                          borderRadius: 0,
-                        },
-                        classes: {
-                          root: classes.searchInput,
-                        },
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <span
-                              style={{
-                                color:
-                                  appTheme === "dark" ? "#ffffff" : "#325569",
+                          <TextField
+                              placeholder="0.00"
+                              fullWidth
+                              error={slippageError}
+                              helperText={slippageError}
+                              value={slippage}
+                              onChange={onSlippageChanged}
+                              disabled={
+                                  depositLoading ||
+                                  stakeLoading ||
+                                  depositStakeLoading ||
+                                  createLoading
+                              }
+                              classes={{
+                                root: [
+                                  classes.slippageRoot,
+                                  appTheme === "dark"
+                                      ? classes["slippageRoot--dark"]
+                                      : classes["slippageRoot--light"],
+                                ].join(" "),
                               }}
+                              InputProps={{
+                                style: {
+                                  border: "none",
+                                  borderRadius: 0,
+                                },
+                                classes: {
+                                  root: classes.searchInput,
+                                },
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                            <span
+                                style={{
+                                  color:
+                                      appTheme === "dark" ? "#ffffff" : "#325569",
+                                }}
                             >
                               %
                             </span>
-                          </InputAdornment>
-                        ),
-                      }}
-                      inputProps={{
-                        className: [
-                          classes.smallInput,
-                          classes[`inputBalanceSlippageText--${appTheme}`],
-                        ].join(" "),
-                        style: {
-                          padding: 0,
-                          borderRadius: 0,
-                          border: "none",
-                          fontSize: 14,
-                          fontWeight: 400,
-                          lineHeight: "120%",
-                          color: appTheme === "dark" ? "#C6CDD2" : "#325569",
-                        },
-                      }}
-                    />
-                  </div>
+                                    </InputAdornment>
+                                ),
+                              }}
+                              inputProps={{
+                                className: [
+                                  classes.smallInput,
+                                  classes[`inputBalanceSlippageText--${appTheme}`],
+                                ].join(" "),
+                                style: {
+                                  padding: 0,
+                                  borderRadius: 0,
+                                  border: "none",
+                                  fontSize: 14,
+                                  fontWeight: 400,
+                                  lineHeight: "120%",
+                                  color: appTheme === "dark" ? "#C6CDD2" : "#325569",
+                                },
+                              }}
+                          />
+                        </div>
+                      </div>
 
-                  {/*TODO: uncomment deadline then logic will be ready*/}
-                  {/*
+                      {slippageError && (
+                          <div
+                              style={{ marginTop: 20 }}
+                              className={[
+                                classes.warningContainer,
+                                classes[`warningContainer--${appTheme}`],
+                                classes.warningContainerError,
+                              ].join(" ")}
+                          >
+                            <div
+                                className={[
+                                  classes.warningDivider,
+                                  classes.warningDividerError,
+                                ].join(" ")}
+                            ></div>
+                            <Typography
+                                className={[
+                                  classes.warningError,
+                                  classes[`warningText--${appTheme}`],
+                                ].join(" ")}
+                                align="center"
+                            >
+                              {slippageError}
+                            </Typography>
+                          </div>
+                      )}
+
+
+                      {createLP && renderMediumInputToggle("stable", stable)}
+                    </div>
+
+                    {/*{renderDepositInformation()}*/}
+
+                    <div className={classes.controls}>
+
+                      {!createLP &&
+                          <div className={classes.controlItem}>{renderTokenSelect()}</div>
+                      }
+
+                      {needAddToWhiteList !== "" && (
+                          <div
+                              className={[
+                                classes.disclaimerContainer,
+                                classes.disclaimerContainerError,
+                                classes[`disclaimerContainerError--${appTheme}`],
+                              ].join(" ")}
+                          >
+                            token {needAddToWhiteList} not whitelisted
+                          </div>
+                      )}
+
+                      {createLP &&
+                          pair?.name &&
+                          (pair?.balance > 0 || amount0Error || amount1Error) && (
+                              <div
+                                  className={[
+                                    classes.disclaimerContainer,
+                                    amount0Error || amount1Error
+                                        ? classes.disclaimerContainerError
+                                        : classes.disclaimerContainerWarning,
+                                    amount0Error || amount1Error
+                                        ? classes[`disclaimerContainerError--${appTheme}`]
+                                        : classes[`disclaimerContainerWarning--${appTheme}`],
+                                  ].join(" ")}
+                              >
+                                <div className={classes.disclaimerContainerWarnSymbol}>
+                                  !
+                                </div>
+
+                                <div>
+                                  {amount0Error && <>{amount0Error}</>}
+
+                                  {amount1Error && <>{amount1Error}</>}
+
+                                  {pair?.balance > 0 && !amount0Error && !amount1Error && (
+                                      <>
+                                        {formatSymbol(pair?.name)} LP exists in your wallet.
+                                        Choose “I have LP token” to stake it.
+                                      </>
+                                  )}
+                                </div>
+                              </div>
+                          )}
+                    </div>
+
+                    {/*TODO: uncomment deadline then logic will be ready*/}
+                    {/*
                   <div className={[classes.slippageDivider, classes[`slippageDivider--${appTheme}`]].join(" ")}>
                   </div>
 
@@ -2886,211 +2851,212 @@ export default function ssLiquidityManage() {
                       },
                     }}
                   />*/}
-                </Popover>
-              </div>
-
-              {renderDepositInformation()}
-            </>
-          )}
-          {activeTab === "withdraw" && (
-            <>
-              {renderMassiveInput(
-                "withdraw",
-                withdrawAmount,
-                withdrawAmountError,
-                withdrawAmountChanged,
-                withdrawAsset,
-                null,
-                withdrawAassetOptions,
-                onAssetSelect,
-                null,
-                null
+                    {/*</Popover>*/}
+                    {/*</div>*/}
+                  </>
               )}
+              {activeTab === "withdraw" && (
+                  <>
+                    {renderMassiveInput(
+                        "withdraw",
+                        withdrawAmount,
+                        withdrawAmountError,
+                        withdrawAmountChanged,
+                        withdrawAsset,
+                        null,
+                        withdrawAassetOptions,
+                        onAssetSelect,
+                        null,
+                        null
+                    )}
 
-              {renderWithdrawInformation()}
-            </>
-          )}
-        </div>
-      </div>
+                    {renderWithdrawInformation()}
+                  </>
+              )}
+            </div>
+          </div>
 
-      {activeTab === "deposit" && (
-        <>
-          {createLP && pair == null && amount0 !== "" && amount1 !== "" && (
-            <Button
-              variant="contained"
-              size="large"
-              color="primary"
-              onClick={needAddToWhiteList !== "" ? null : onCreateAndDeposit}
-              disabled={needAddToWhiteList !== ""}
-              className={[
-                classes.buttonOverride,
-                classes[`buttonOverride--${appTheme}`],
-              ].join(" ")}
-            >
+          {activeTab === "deposit" && (
+              <>
+                {createLP && pair == null && amount0 !== "" && amount1 !== "" && (
+                    <Button
+                        variant="contained"
+                        size="large"
+                        color="primary"
+                        onClick={needAddToWhiteList !== "" ? null : onCreateAndDeposit}
+                        disabled={needAddToWhiteList !== ""}
+                        className={[
+                          classes.buttonOverride,
+                          classes[`buttonOverride--${appTheme}`],
+                        ].join(" ")}
+                    >
               <span className={classes.actionButtonText}>
                 Create LP & Deposit
               </span>
-              {depositLoading && (
-                <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
-              )}
-            </Button>
-          )}
-          {amount0 !== "" && amount1 !== "" && createLP && pair !== null && (
-            <Button
-              variant="contained"
-              size="large"
-              color="primary"
-              onClick={onDeposit}
-              disabled={
-                (amount0 === "" && amount1 === "") ||
-                depositLoading ||
-                stakeLoading ||
-                depositStakeLoading
-              }
-              className={[
-                classes.buttonOverride,
-                classes[`buttonOverride--${appTheme}`],
-              ].join(" ")}
-            >
-              <span className={classes.actionButtonText}>Add Liquidity</span>
-              {depositLoading && (
-                <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
-              )}
-            </Button>
-          )}
-          {!pair?.gauge && pair && (
-            <Button
-              variant="contained"
-              size="large"
-              className={[
-                createLoading ||
-                depositLoading ||
-                stakeLoading ||
-                depositStakeLoading
-                  ? classes.multiApprovalButton
-                  : classes.buttonOverride,
-                createLoading ||
-                depositLoading ||
-                stakeLoading ||
-                depositStakeLoading
-                  ? classes[`multiApprovalButton--${appTheme}`]
-                  : classes[`buttonOverride--${appTheme}`],
-              ].join(" ")}
-              color="primary"
-              disabled={
-                createLoading ||
-                depositLoading ||
-                stakeLoading ||
-                depositStakeLoading
-              }
-              onClick={onCreateGauge}
-            >
-              <Typography className={classes.actionButtonText}>
-                {createLoading ? `Creating` : `Create Gauge`}
-              </Typography>
-              {createLoading && (
-                <CircularProgress size={10} className={classes.loadingCircle} />
-              )}
-            </Button>
-          )}
-          {createLP && amount0 == "" && amount1 == "" && (
-            <Button
-              variant="contained"
-              size="large"
-              color="primary"
-              onClick={() => {
-                if (needAddToWhiteList !== "") {
-                  return;
-                }
-              }}
-              disabled={
-                amount0 === "" || amount1 === "" || needAddToWhiteList !== ""
-              }
-              className={[
-                classes.buttonOverride,
-                classes[`buttonOverride--${appTheme}`],
-              ].join(" ")}
-            >
+                      {depositLoading && (
+                          <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
+                      )}
+                    </Button>
+                )}
+                {amount0 !== "" && amount1 !== "" && createLP && pair !== null && (
+                    <Button
+                        variant="contained"
+                        size="large"
+                        color="primary"
+                        onClick={onDeposit}
+                        disabled={
+                            (amount0 === "" && amount1 === "") ||
+                            depositLoading ||
+                            stakeLoading ||
+                            depositStakeLoading
+                        }
+                        className={[
+                          classes.buttonOverride,
+                          classes[`buttonOverride--${appTheme}`],
+                        ].join(" ")}
+                    >
+                      <span className={classes.actionButtonText}>Add Liquidity</span>
+                      {depositLoading && (
+                          <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
+                      )}
+                    </Button>
+                )}
+                {!pair?.gauge && pair && (
+                    <Button
+                        variant="contained"
+                        size="large"
+                        className={[
+                          createLoading ||
+                          depositLoading ||
+                          stakeLoading ||
+                          depositStakeLoading
+                              ? classes.multiApprovalButton
+                              : classes.buttonOverride,
+                          createLoading ||
+                          depositLoading ||
+                          stakeLoading ||
+                          depositStakeLoading
+                              ? classes[`multiApprovalButton--${appTheme}`]
+                              : classes[`buttonOverride--${appTheme}`],
+                        ].join(" ")}
+                        color="primary"
+                        disabled={
+                            createLoading ||
+                            depositLoading ||
+                            stakeLoading ||
+                            depositStakeLoading
+                        }
+                        onClick={onCreateGauge}
+                    >
+                      <Typography className={classes.actionButtonText}>
+                        {createLoading ? `Creating` : `Create Gauge`}
+                      </Typography>
+                      {createLoading && (
+                          <CircularProgress size={10} className={classes.loadingCircle} />
+                      )}
+                    </Button>
+                )}
+                <div style={{padding: '0 6px'}}>
+                  {createLP && amount0 == "" && amount1 == "" && (
+                      <Button
+                          variant="contained"
+                          size="large"
+                          color="primary"
+                          onClick={() => {
+                            if (needAddToWhiteList !== "") {
+                              return;
+                            }
+                          }}
+                          disabled={
+                              amount0 === "" || amount1 === "" || needAddToWhiteList !== ""
+                          }
+                          className={[
+                            classes.buttonOverride,
+                            classes[`buttonOverride--${appTheme}`],
+                          ].join(" ")}
+                      >
               <span className={classes.actionButtonText}>
                 {(amount0 === "" || amount1 === "") && "Enter Amount"}
               </span>
-              {depositLoading && (
-                <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
-              )}
-            </Button>
-          )}
+                        {depositLoading && (
+                            <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
+                        )}
+                      </Button>
+                  )}
 
-          {!createLP && (
-            <Button
-              variant="contained"
-              size="large"
-              color="primary"
-              onClick={() => {
-                if (amount0 !== "") {
-                  onStake(pair, amount0, pair.balance);
-                }
-              }}
-              disabled={amount0 === "" || !pair?.gauge}
-              className={[
-                classes.buttonOverride,
-                classes[`buttonOverride--${appTheme}`],
-              ].join(" ")}
-            >
+                  {!createLP && (
+                      <Button
+                          variant="contained"
+                          size="large"
+                          color="primary"
+                          onClick={() => {
+                            if (amount0 !== "") {
+                              onStake(pair, amount0, pair.balance);
+                            }
+                          }}
+                          disabled={amount0 === "" || !pair?.gauge}
+                          className={[
+                            classes.buttonOverride,
+                            classes[`buttonOverride--${appTheme}`],
+                          ].join(" ")}
+                      >
               <span className={classes.actionButtonText}>
                 {amount0 !== "" && "Stake LP"}
                 {amount0 === "" && "Enter Amount"}
               </span>
-              {depositLoading && (
-                <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
-              )}
-            </Button>
+                        {depositLoading && (
+                            <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
+                        )}
+                      </Button>
+                  )}
+                </div>
+              </>
           )}
-        </>
-      )}
 
-      {activeTab === "withdraw" && (
-        <>
-          <Button
-            variant="contained"
-            size="large"
-            color="primary"
-            onClick={() => handleWithdraw(withdrawAsset)}
-            disabled={
-              withdrawAmount == "" ||
-              parseFloat(withdrawAmount) == 0 ||
-              withdrawAction == ""
-            }
-            className={[
-              classes.buttonOverride,
-              classes[`buttonOverride--${appTheme}`],
-            ].join(" ")}
-          >
+          {activeTab === "withdraw" && (
+              <>
+                <Button
+                    variant="contained"
+                    size="large"
+                    color="primary"
+                    onClick={() => handleWithdraw(withdrawAsset)}
+                    disabled={
+                        withdrawAmount == "" ||
+                        parseFloat(withdrawAmount) == 0 ||
+                        withdrawAction == ""
+                    }
+                    className={[
+                      classes.buttonOverride,
+                      classes[`buttonOverride--${appTheme}`],
+                    ].join(" ")}
+                >
             <span className={classes.actionButtonText}>
               {withdrawAsset !== null && (
-                <>
-                  {withdrawAction == "" && "Choose the action"}
+                  <>
+                    {withdrawAction == "" && "Choose the action"}
 
-                  {parseFloat(withdrawAmount) > 0 &&
-                    withdrawAction === "unstake" &&
-                    "Unstake LP"}
+                    {parseFloat(withdrawAmount) > 0 &&
+                        withdrawAction === "unstake" &&
+                        "Unstake LP"}
 
-                  {parseFloat(withdrawAmount) > 0 &&
-                    withdrawAction === "remove" &&
-                    "Remove LP"}
+                    {parseFloat(withdrawAmount) > 0 &&
+                        withdrawAction === "remove" &&
+                        "Remove LP"}
 
-                  {(parseFloat(withdrawAmount) == 0 || withdrawAmount == "") &&
-                    "Enter Amount"}
-                </>
+                    {(parseFloat(withdrawAmount) == 0 || withdrawAmount == "") &&
+                        "Enter Amount"}
+                  </>
               )}
 
               {withdrawAsset === null && "Choose the pair"}
             </span>
-            {depositLoading && (
-              <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
-            )}
-          </Button>
-        </>
-      )}
-    </Paper>
+                  {depositLoading && (
+                      <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
+                  )}
+                </Button>
+              </>
+          )}
+        </Paper>
+      </div>
   );
 }

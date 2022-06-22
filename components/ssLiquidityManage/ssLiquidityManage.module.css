@@ -51,13 +51,13 @@ input[type=number].mediumInputAmount {
   margin-bottom: 20px;
 }
 
-.warningContainer--light {
+/*.warningContainer--light {
   background: #CFE5F2;
-}
+}*/
 
 .container {
   align-self: center;
-  width: 460px;
+  width: 782px;
   background: transparent !important;
 }
 
@@ -92,7 +92,7 @@ input[type=number].mediumInputAmount {
 
 .inputsContainer {
   position: relative;
-  padding: 0 30px;
+  padding: 0 4px;
 }
 
 .multiApproval {
@@ -203,12 +203,12 @@ input[type=number].mediumInputAmount {
 
 .reAddPadding {
   position: relative;
-  padding: 24px 0;
-  background: #DBE6EC !important;
+  padding: 24px 0 0 0;
+  /*background: #DBE6EC !important;*/
 }
 
 .reAddPadding--dark {
-  background: #151718 !important;
+  /*background: #151718 !important;*/
 }
 
 .loadingCircle {
@@ -370,27 +370,21 @@ input[type=number].mediumInputAmount {
   margin-top: 2px;
   margin-bottom: 2px;
   position: relative;
+
+  background-color: #131314;
 }
 
 .textField--amount0-dark {
-  height: 172px;
-  background-image: url("/images/ui/swap-coin-top--dark.svg");
+  padding: 16px;
+  border-radius: 14px;
+  /*height: 172px;*/
+  /*background-image: url("/images/ui/swap-coin-top--dark.svg");*/
 }
 
 .textField--amount1-dark {
-  height: 171px;
-  margin-top: 20px;
-  background-image: url("/images/ui/swap-coin-bottom--dark.svg");
-}
-
-.textField--amount0-light {
-  height: 172px;
-  background-image: url("/images/ui/swap-coin-top--light.svg");
-}
-
-.textField--withdraw-light {
-  height: 136px;
-  background-image: url("/images/ui/withdraw-tokens--light.svg");
+  margin-top: 32px;
+  padding: 16px;
+  border-radius: 14px;
 }
 
 .textField--withdraw-dark {
@@ -398,17 +392,11 @@ input[type=number].mediumInputAmount {
    background-image: url("/images/ui/withdraw-tokens--dark.svg");
 }
 
-.textField--amount1-light {
-  height: 171px;
-  margin-top: 20px;
-  background-image: url("/images/ui/swap-coin-bottom--light.svg");
-}
-
 .inputBalanceTextContainer {
   position: absolute;
-  left: 151px;
-  top: 12px;
-  width: 225px;
+  left: 318px;
+  top: 14px;
+  width: 436px;
 }
 
 .walletIcon {
@@ -419,9 +407,8 @@ input[type=number].mediumInputAmount {
 }
 
 .inputTitleText {
-  position: absolute;
-  top: 12px;
-  left: 20px;
+  display: flex;
+  margin: 0 0 8px 0 !important;
 }
 
 .inputBalanceText,
@@ -434,13 +421,12 @@ input[type=number].mediumInputAmount {
 }
 
 .inputBalanceText {
-  left: 151px;
+  padding-top:2px;
   cursor: pointer;
 }
 
 .massiveInputContainer {
   display: flex;
-  flex-wrap: wrap;
   border-radius: 10px;
   align-items: center;
 }
@@ -454,14 +440,10 @@ input[type=number].mediumInputAmount {
   outline: none !important;
 }
 
-.largeInput--light {
-  color: #325569 !important;
-  -webkit-text-fill-color: #325569 !important;
-}
-
 .largeInput--dark {
   color: #C6CDD2 !important;
   -webkit-text-fill-color: #C6CDD2 !important;
+  background-color: gray;
 }
 
 .tokenText {
@@ -526,8 +508,8 @@ input[type=number].mediumInputAmount {
 .swapIconContainer,
 .swapIconContainerWithdraw {
   position: absolute;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -538,57 +520,33 @@ input[type=number].mediumInputAmount {
 
 .swapIconContainer {
   position: absolute;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   background: #DBE6EC;
-  border: 1px solid #86B9D6;
+  /*border: 1px solid #86B9D6;*/
   border-radius: 100px;
-  margin-top: -33px;
-  margin-left: 311px;
+  margin-top: -18px;
+  margin-left: 39px;
   cursor: pointer;
-}
-
-.swapIconContainer::before {
-  position: absolute;
-  width: 4px;
-  height: 20px;
-  left: -1px;
-  top: 30px;
-  background: #DBE6EC;
-  content: "";
-}
-
-.swapIconContainer::after {
-  position: absolute;
-  width: 4px;
-  height: 20px;
-  left: 76px;
-  top: 30px;
-  background: #DBE6EC;
-  content: "";
 }
 
 .swapIconContainer:hover .swapIconContainerInside {
   background: #9BC9E4;
-  border: 1px solid #0B5E8E;
 }
 
 .swapIconContainer:active .swapIconContainerInside {
   background: #86B9D6;
-  border: 1px solid #0B5E8E;
 }
 
 .swapIconContainer--dark {
   background: #151718;
-  border: 1px solid #5F7285;
 }
 
 .swapIconContainerInside {
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   border-radius: 100px;
   background: #B9DFF5;
-  border: 1px solid #86B9D6;
   transition: all 0.32s ease;
 }
 
@@ -602,7 +560,6 @@ input[type=number].mediumInputAmount {
 
 .swapIconContainer--dark .swapIconContainerInside {
   background: #24292D;
-  border: 1px solid #5F7285;
 }
 
 .swapIconContainer--dark::before {
@@ -615,12 +572,10 @@ input[type=number].mediumInputAmount {
 
 .swapIconContainer--dark:hover .swapIconContainerInside {
   background: #2D3741;
-  border: 1px solid #4CADE6;
 }
 
 .swapIconContainer--dark:active .swapIconContainerInside {
   background: #5F7285;
-  border: 1px solid #4CADE6;
 }
 
 .swapIconContainerWithdraw {
@@ -634,16 +589,6 @@ input[type=number].mediumInputAmount {
   align-items: center;
   margin-bottom: 1px !important;
   transition: all ease 300ms;
-}
-
-.assetSelectMenu--light {
-  background: #B9DFF5 !important;
-  box-shadow: 0 1px 0 rgba(11, 94, 142, 0);
-}
-
-.assetSelectMenu--light:hover {
-  background: #CFE5F2 !important;
-  box-shadow: 0 1px 0 rgba(11, 94, 142, 0.5);
 }
 
 .assetSelectMenu--dark {
@@ -667,11 +612,6 @@ input[type=number].mediumInputAmount {
   border-radius: 100px;
   border: 1px solid #9BC9E4;
   background: #CFE5F2;
-}
-
-.assetOptionIcon--light {
-  background: #CFE5F2;
-  border: 1px solid #86B9D6;
 }
 
 .assetOptionIcon--dark {
@@ -759,20 +699,15 @@ input[type=number].mediumInputAmount {
   border-radius: 6px;
 }
 
-.error {
-  /* border: 1px solid #dc3545; */
-}
-
-.massiveInputAssetSelect {
-  height: 100%;
-}
-
 .massiveInputAmount {
-  position: absolute !important;
-  left: 151px;
-  top: 66px;
+  display: flex;
   border: none !important;
-  margin-right: 20px !important;
+  background-color: #181d2d;
+  padding: 8px 12px;
+  height: 92px;
+  margin-top: 2px;
+  border-radius: 14px;
+  margin-left: 20px;
 }
 
 .massiveInputAmountUnstake {
@@ -888,11 +823,6 @@ input[type=number].mediumInputAmount {
   outline: none !important;
 }
 
-.mediumInput--light {
-  color: #325569 !important;
-  -webkit-text-fill-color: #325569 !important;
-}
-
 .mediumInput--dark {
   color: #C6CDD2 !important;
   -webkit-text-fill-color: #C6CDD2 !important;
@@ -983,35 +913,67 @@ input[type=number].mediumInputAmount {
   color: #5F7285 !important;
 }
 
-.titleSection {
-  position: absolute;
+.titleSectionBack {
+  width: 100%;
+  height: 52px;
+  padding: 0 10px;
+  background: transparent;
+  border: 1px solid #C6CDD2;
+  border-radius: 14px;
+  color: #E4E9F4;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 58px;
-  height: 58px;
+}
+
+.titleSection {
+  /*position: absolute;*/
+  display: none;
+  align-items: center;
+  justify-content: start;
+  width: 152px;
+  height: 52px;
   margin-left: -95px;
   background: #DBE6EC;
   border: 1px solid #86B9D6;
+  padding: 0 10px;
 }
 
 .titleSection--dark {
-  background: #151718;
-  border: 1px solid #5F7285;
+  background: transparent;
+  border: 1px solid #C6CDD2;
+  border-radius: 14px;
 }
+
+.titleTitle {
+  position: relative;
+  /* Create LP */
+  width: 100%;
+
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 48px;
+  /* identical to box height, or 120% */
+  display: flex;
+  align-items: center;
+
+  /* white */
+  color: #E4E9F4;
+}
+
 
 .buttonDeposit {
   background-image: url("/images/ui/liquidity-add-button-deposit--light.svg");
 }
 
 .backIcon {
-  width: 19px !important;
-  height: 19px !important;
-  color: #5688A5 !important;
-}
-
-.backIcon--dark {
-  color: #C6CDD2 !important;
+  width: 20px !important;
+  height: 20px !important;
+  padding: 4px;
+  color: #151718 !important;
+  background-color: #C6CDD2;
+  border-radius: 10px;
 }
 
 .titleText {
@@ -1046,7 +1008,6 @@ input[type=number].mediumInputAmount {
 .controls {
   width: 100%;
   display: flex;
-  margin-top: 20px;
 }
 
 .controlItem {
@@ -1069,7 +1030,8 @@ input[type=number].mediumInputAmount {
 }
 
 .toggles {
-  width: 100%;
+  width: 67%;
+  padding-left: 16px;
   margin-top: 20px;
 }
 
@@ -1081,10 +1043,11 @@ input[type=number].mediumInputAmount {
   flex-shrink: 1;
   width: 1%;
   padding: 9px;
-  color: #7E99B0;
+  color: #FFFFFF;
   border: 1px solid #86B9D6;
   transition: all ease 300ms;
   cursor: pointer;
+  border-radius: 14px;
 }
 
 .toggleOption:first-child {
@@ -1092,23 +1055,20 @@ input[type=number].mediumInputAmount {
 }
 
 .toggleOption:hover {
-  background: #86B9D6 !important;
-  color: #FFFFFF !important;
+  background: #394178 !important;
 }
 
 .toggleOption.active {
-  border: 1px solid #86B9D6;
-  background: #86B9D6 !important;
-  color: #FFFFFF !important;
+  color: #7E99B0;
 }
 
 .toggleOption--dark {
-  border: 1px solid #5F7285;
+  border: 1px solid transparent;
+  background: #1a1c2c;
 }
 
 .toggleOption--dark.active {
   border: 1px solid #5F7285;
-  background: #5F7285 !important;
 }
 
 .toggleOptionText {
@@ -1123,16 +1083,17 @@ input[type=number].mediumInputAmount {
   color: #0B5E8E;
 }
 
-.toggleOption.active .toggleOptionText {
-  color: #FFFFFF !important;
+.toggleOption--dark .toggleOptionText {
+  color: #FFFFFF;
 }
 
-.toggleOption--dark .toggleOptionText {
+.toggleOption.active .toggleOptionText {
   color: #4CADE6;
 }
 
+
 .toggleOption--dark.active .toggleOptionText {
-  color: #FFFFFF !important;
+  color: #4CADE6;
 }
 
 .tokenSelect {
@@ -1232,13 +1193,23 @@ input[type=number].mediumInputAmount {
   border: none;
 }
 
-.slippageRoot {
-  padding: 9px 12px !important;
-  border: 1px solid #86B9D6 !important;
+.slippageCont {
+  width: 33%;
+  background-color: #131314;
+  border-radius: 14px;
+  margin-top: 20px;
+  padding-left: 12px;
 }
 
-.slippageRoot--dark {
-  border-color: #5F7285 !important;
+.slippageRoot {
+  display: flex;
+  justify-content: center;
+  padding: 9px 12px !important;
+  width: 100px !important;
+
+  background-color: #181d2d;
+  border-radius: 14px;
+  height: 58px;
 }
 
 .slippageDivider {
@@ -1248,12 +1219,6 @@ input[type=number].mediumInputAmount {
 
 .slippageDivider--dark {
   border-color: #5F7285;
-}
-
-.inputBalanceSlippageText--light,
-.inputAdornment--light {
-  color: #325569 !important;
-  -webkit-text-fill-color: #325569 !important;
 }
 
 .inputBalanceSlippageText--dark,
@@ -1298,11 +1263,6 @@ input[type=number].mediumInputAmount {
   min-width: 390px;
 }
 
-.assetSearchResults--light {
-  background: #9BC9E4;
-  border: 1px solid #86B9D6;
-}
-
 .assetSearchResults--dark {
   background: #2D3741;
   border: 1px solid #5F7285;
@@ -1335,15 +1295,16 @@ input[type=number].mediumInputAmount {
 
 .disclaimerContainer {
   margin-top: 20px;
-  background: #CFE5F2;
-  border: 2px solid #15B525;
-  color: #1B4F20;
+  background: rgba(6, 11, 23, 0.5);
+  border: 1px solid #F2D056;
+  border-radius: 12px;
+  color: #E4E9F4;
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: flex-start;
   width: 100%;
-  padding: 20px 18px 12px;
+  padding: 16px 18px 12px;
   font-weight: 400;
   font-size: 14px;
   line-height: 120%;
@@ -1354,75 +1315,43 @@ input[type=number].mediumInputAmount {
   color: #A2E3A9;
 }
 
-.disclaimerContainer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 80px;
-  height: 8px;
-  background: #15B525;
-}
-
-.disclaimerContainer::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 80px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 8px 8px 0 0;
-  border-color: #15B525 transparent transparent transparent;
+.disclaimerContainerWarnSymbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  width: 22px;
+  height: 22px;
+  border-radius: 11px;
+  background-color: #E1B413;
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 10px;
 }
 
 .disclaimerContainerError {
-  border: 2px solid #DB3434;
+  border: 1px solid #DB3434;
   color: #631515;
-}
-
-.disclaimerContainerError::before {
-  background: #DB3434;
-}
-
-.disclaimerContainerError::after {
-  border-color: #DB3434 transparent transparent transparent;
 }
 
 .disclaimerContainerError--dark {
   background: #24292D;
-  border: 2px solid #DB3434;
+  border: 1px solid #DB3434;
   color: #EC9999;
 }
 
 .disclaimerContainerWarning {
-  border: 2px solid #F9A01A;
-  color: #3A3020;
-}
-
-.disclaimerContainerWarning::before {
-  background: #F9A01A;
-}
-
-.disclaimerContainerWarning::after {
-  border-color: #F9A01A transparent transparent transparent;
-}
-
-.disclaimerContainerWarning--dark {
-  background: #24292D;
-  border: 2px solid #F9A01A;
-  color: #EACFA7;
+  border: 1px solid #F2D056;
+  color: #E4E9F4;
 }
 
 .buttonOverride {
   position: relative;
-  width: 460px;
+  width: 100%;
   height: 65px;
   margin-top: 20px !important;
-  border-radius: 0 !important;
-  font-style: normal !important;
-  font-weight: 700 !important;
-  font-size: 16px !important;
+  border-radius: 12px !important;
   line-height: 120% !important;
   display: flex;
   align-items: center;
@@ -1430,109 +1359,32 @@ input[type=number].mediumInputAmount {
   box-shadow: none !important;
   animation: none !important;
   transition: all 0.32s ease !important;
-}
 
-.buttonOverride::after,
-.buttonOverride::before {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-}
-
-.buttonOverride::before {
-  top: 0;
-  left: 0;
-  border-width: 16px 16px 0 0;
-  border-color: #ffffff transparent transparent transparent;
-}
-
-.buttonOverride::after {
-  bottom: 0;
-  right: 0;
-  border-width: 0 0 16px 16px;
-  border-color: transparent transparent #ffffff transparent;
-}
-
-.buttonOverride--light {
-  background: #D2D0F2 !important;
-  border: 1px solid #8F5AE8 !important;
-  color: #8F5AE8 !important;
-}
-
-.buttonOverride--light::before {
-  border-color: #8F5AE8 transparent transparent transparent;
-}
-
-.buttonOverride--light::after {
-  border-color: transparent transparent #8F5AE8 transparent;
-}
-
-.buttonOverride--light:not(:disabled):hover {
-  background: #C6BAF0 !important;
-  border: 1px solid #8F5AE8 !important;
-  color: #8F5AE8 !important;
-}
-
-.buttonOverride--light:not(:disabled):active {
-  background: #B9A4EE !important;
-  border: 1px solid #8F5AE8 !important;
-  color: #8F5AE8 !important;
-}
-
-.buttonOverride--light:disabled {
-  background: #D4D5DB !important;
-  border: 1px solid #A3A9BA !important;
-  color: #7F828B !important;
-}
-
-.buttonOverride--light:disabled::before {
-  border-color: #A3A9BA transparent transparent transparent;
-}
-
-.buttonOverride--light:disabled::after {
-  border-color: transparent transparent #A3A9BA transparent;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px !important;
 }
 
 .buttonOverride--dark {
-  background: #33284C !important;
-  border: 1px solid #8F5AE8 !important;
-  color: #8F5AE8 !important;
-}
-
-.buttonOverride--dark::before {
-  border-color: #8F5AE8 transparent transparent transparent;
-}
-
-.buttonOverride--dark::after {
-  border-color: transparent transparent #8F5AE8 transparent;
+  background: #D3F85A !important;
+  border-radius: 12px !important;
+  color: #060B17 !important;
 }
 
 .buttonOverride--dark:not(:disabled):hover {
-  background: #402E61 !important;
-  border: 1px solid #8F5AE8 !important;
-  color: #8F5AE8 !important;
+  background: #c5ff00 !important;
 }
 
 .buttonOverride--dark:not(:disabled):active {
-  background: #523880 !important;
-  border: 1px solid #8F5AE8 !important;
-  color: #8F5AE8 !important;
+  background: #D3F85A !important;
+  border-radius: 12px !important;
+  color: #060B17 !important;
 }
 
 .buttonOverride--dark:disabled {
-  background: #494B51 !important;
-  border: 1px solid #7F828B !important;
-  color: #7F828B !important;
-}
-
-.buttonOverride--dark:disabled::before {
-  border-color: #7F828B transparent transparent transparent;
-}
-
-.buttonOverride--dark:disabled::after {
-  border-color: transparent transparent #7F828B transparent;
+  background: #586586 !important;
+  color: #1F2B49 !important;
 }
 
 .liqHeader {
@@ -1616,8 +1468,9 @@ input[type=number].mediumInputAmount {
 }
 
 .depositHeader {
+  margin-left: 6px;
   font-weight: 500;
-  font-size: 18px;
+  /*font-size: 18px;*/
   line-height: 120%;
   color: #325569;
 }
@@ -1626,7 +1479,18 @@ input[type=number].mediumInputAmount {
   color: #C6CDD2;
 }
 
+.depositSwitcherLabelCont {
+  background-color: #131314;
+  padding: 8px 16px;
+  border-radius: 14px;
+  position: absolute;
+  right: 0;
+  top: 6px;
+}
+
+
 .depositSwitcherLabel {
+  width: 100%;
   margin-right: 10px;
   font-weight: 500;
   font-size: 14px;
@@ -1675,23 +1539,113 @@ input[type=number].mediumInputAmount {
   background: #4CADE6;
 }
 
-@media (max-width:660px) {
-  .container {
-    position: relative;
-    margin-top: 60px;
-  }
+.bigscreenSidebar {
+  display:flex;
+  position: absolute;
+  left: 16px;
+  width: 377px;
+  height: calc(100vh - 200px);
+}
 
-  .titleSection {
-    margin-left: 16px;
-    top: -72px;
+.myLiqCont {
+  width: 100%;
+  padding: 0 4px;
+}
+
+.myLiq {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  color: #E4E9F4;
+  border-bottom: 1px solid #8191B9;
+  margin-top: 20px;
+}
+
+.myLiqBal {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  flex: 1 2;
+  padding: 6px 0;
+  border-top: 1px solid #8191B9;
+}
+
+.myLiqSplit {
+  display: flex;
+  height: 20px;
+  margin-top: 2px;
+  width: 1px;
+  background-color: #8191B9;
+  position: absolute;
+  right: 0;
+}
+
+.myLiqSpacer {
+  display: inline-flex;
+  width: 24px;
+}
+
+@media (max-width:1600px) {
+  .bigscreenSidebar {
+    display:flex;
+    position: absolute;
+    left: 16px;
+    width: 198px;
+    height: calc(100vh - 200px);
   }
 }
 
-@media (max-width: 470px) {
+
+@media (max-width:1200px) {
+  .container {
+    position: relative;
+    /*margin-top: 60px;*/
+  }
+
+  .titleSection {
+    display: flex;
+    margin-left: 6px;
+    /*top: -72px;*/
+    width: 52px;
+    justify-content: center;
+  }
+
+  .depositHeader {
+    /*font-size: 14px;*/
+    margin-left: 20px;
+  }
+
+  .bigscreenSidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 800px) {
+  .myLiqCont {
+    padding: 0;
+  }
+  .myLiqSpacer {
+    display: none;
+  }
+  .myLiqSplit {
+    display: none;
+  }
+  .myLiqBal {
+    /*width: 100%;*/
+    flex: 1 1 100%;
+  }
+
+  .depositSwitcherLabelCont {
+    width: 100%;
+    margin-top: 20px;
+    position: relative !important;
+  }
+
   .container,
   .container3,
   .reAddPadding3 {
-    width: 320px;
+    width: 360px;
   }
 
   .controls {
@@ -1717,33 +1671,18 @@ input[type=number].mediumInputAmount {
 
   .textField--amount0-dark,
   .textField--withdraw-dark {
-    width: 280px;
-    height: 114px;
-    background-image: url("/images/ui/swap-coin-top-360--dark.svg");
-  }
-
-  .textField--amount0-light,
-  .textField--withdraw-light {
-    width: 280px;
-    height: 114px;
-    background-image: url("/images/ui/swap-coin-top-360--light.svg");
-  }
-
-  .textField--amount1-light {
-    margin-top: -20px;
-    width: 280px;
-    height: 114px;
-    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
+    width: 350px;
+    padding: 16px;
+    border-radius: 14px;
   }
 
   .textField--amount1-dark {
-    margin-top: -20px;
-    width: 280px;
-    height: 114px;
-    background-image: url("/images/ui/swap-coin-bottom-360--dark.svg");
+    margin-top: -16px;
+    width: 350px;
+    padding: 16px;
+    border-radius: 14px;
   }
 
-  .textField--To-light,
   .textField--To-dark {
     margin-top: -50px;
   }
@@ -1755,17 +1694,17 @@ input[type=number].mediumInputAmount {
 
   .inputBalanceTextContainer {
     position: absolute;
-    left: 94px;
-    top: 10px;
-    width: 172px;
+    left: 99px;
+    top: 14px;
+    width: 231px;
   }
 
   .swapIconContainer,
   .swapIconContainerWithdraw {
     position: static;
     background-repeat: no-repeat;
-    margin-left: 220px;
-    margin-top: -22px;
+    margin-left: -206px;
+    margin-top: -16px;
   }
 
   .swapIconContainerWithdraw {
@@ -1775,27 +1714,14 @@ input[type=number].mediumInputAmount {
   }
 
   .swapIconContainer {
-    width: 50px;
-    height: 50px;
+    width: 62px;
+    height: 62px;
     position: relative;
   }
 
   .swapIconContainerInside {
-    width: 38px;
-    height: 38px;
-  }
-
-  .swapIconContainer::before {
-    width: 3px;
-    height: 10px;
-    top: 19px;
-  }
-
-  .swapIconContainer::after {
-    width: 3px;
-    height: 10px;
-    top: 19px;
-    left: 47px;
+    width: 46px;
+    height: 46px;
   }
 
   .swapIconContainer svg {
@@ -1831,6 +1757,7 @@ input[type=number].mediumInputAmount {
 
   .inputBalanceText {
     left: 90px;
+    padding-top:0;
   }
 
   .displayDualIconContainer {
@@ -1843,19 +1770,13 @@ input[type=number].mediumInputAmount {
     height: 40px;
   }
 
-  .displaySelectContainer,
-  .displaySelectContainerDate {
-    padding: 43px 10px 10px;
-  }
-
   .largeInput {
     font-size: 18px !important;
   }
 
   .massiveInputAmount,
   .massiveInputAmountDate {
-    top: 49px;
-    left: 100px;
+    height: 58px;
   }
 
   .smallerText,
@@ -1895,10 +1816,6 @@ input[type=number].mediumInputAmount {
   .routeLinesLeft,
   .routeLinesRight {
     width: 35%;
-  }
-
-  .routeArrow--light {
-    background: var(--background-light) url("/images/ui/swap-route-arrow--light.svg");
   }
 
   .routeArrow--dark {
@@ -1978,11 +1895,6 @@ input[type=number].mediumInputAmount {
     flex-direction: row;
   }
 
-  .vestInfoTextTop--light {
-    border-right: none;
-    border-bottom: 1px solid #86B9D6;
-  }
-
   .vestInfoTextTop--dark {
     border-right: none;
     border-bottom: 1px solid #5F7285;
@@ -2013,7 +1925,7 @@ input[type=number].mediumInputAmount {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 20px;
+    /*padding: 0 20px;*/
   }
 
   .amountsContainer {
@@ -2022,12 +1934,9 @@ input[type=number].mediumInputAmount {
     align-items: center;
   }
 
-  .receiveAssets {
-    /*margin-top: -38px;*/
-  }
-
   .inputTitleText {
     left: 10px;
+    margin: 0 0 8px 0 !important;
   }
 
   .disclaimerDivider {
@@ -2054,7 +1963,7 @@ input[type=number].mediumInputAmount {
   }
 
   .buttonOverride {
-    width: 320px;
+    /*width: 100%;*/
     height: 50px;
   }
 
@@ -2119,10 +2028,27 @@ input[type=number].mediumInputAmount {
   }
 
   .depositHeader {
-    font-size: 14px;
+    /*font-size: 14px;*/
+    margin-left: 20px;
   }
 
   .depositSwitcherLabel {
     font-size: 12px;
+  }
+
+  .slippageCont {
+    width: 100%;
+    height: 40px;
+  }
+
+  .slippageRoot {
+    height: 36px;
+    width: 200px !important;
+  }
+
+  .toggles {
+    width: 100%;
+    margin-top: 20px;
+    padding-left: 0;
   }
 }

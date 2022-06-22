@@ -11,6 +11,7 @@
 .displaySelectContainer {
   /* padding: 61px 20px 20px; */
   border-radius: 12px;
+  width: 280px;
 
   background: #171D2D;
 
@@ -95,20 +96,19 @@
 }
 
 p.labelSelect {
-  margin: 0 18px;
-
-  font-size: 24px;
-  font-weight: 500;
-
+  margin: 0 4px;
+  margin-right: 10px;
+  margin-left: 12px;
   color: #E4E9F4;
+  font-weight: 500;
+  font-size: 24px;
 }
 
 .dotsSelectMenu {
-  position: relative;
-
-  width: 6px;
-  height: 6px;
-
+  position: absolute;
+  right: 10px;
+  width: 5px;
+  height: 5px;
   margin-left: auto;
 
   border-radius: 50%;
@@ -122,8 +122,8 @@ p.labelSelect {
 
   position: absolute;
 
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 
   border-radius: 50%;
 
@@ -139,14 +139,14 @@ p.labelSelect {
 }
 
 .displayAssetIcon {
-  width: 56px;
-  height: 56px;
-  border-radius: 100px;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
 }
 
 .displayAssetIconSmall {
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
 }
 
 .assetSelectMenu {
@@ -406,9 +406,14 @@ p.labelSelect {
   margin-left: -10px;
 }
 
-@media (max-width: 470px) {
+@media (max-width: 800px) {
+  p.labelSelect {
+    font-size: 16px;
+    font-weight: 500;
+    margin-left: 8px;
+  }
   .displaySelectContainer {
-    padding: 43px 10px 10px;
+    width: 140px;
   }
 
   .displaySelectContainerSmall {
@@ -430,7 +435,7 @@ p.labelSelect {
   }
 
   .displayDualIconContainer {
-    width: 60px;
+    /*width: 60px;*/
     height: 60px;
   }
 
@@ -440,13 +445,13 @@ p.labelSelect {
   }
 
   .displayAssetIcon {
-    width: 40px;
-    height: 40px;
+    width: 20px;
+    height: 20px;
   }
 
   .displayAssetIconSmall {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
   }
 
   .dialogContainer {
