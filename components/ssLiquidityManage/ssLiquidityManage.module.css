@@ -1621,7 +1621,7 @@ input[type=number].mediumInputAmount {
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 860px) {
   .myLiqCont {
     padding: 0;
   }

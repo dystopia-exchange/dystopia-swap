@@ -406,7 +406,7 @@ p.labelSelect {
   margin-left: -10px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 860px) {
   p.labelSelect {
     font-size: 16px;
     font-weight: 500;

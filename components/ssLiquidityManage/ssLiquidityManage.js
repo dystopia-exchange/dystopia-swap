@@ -1207,7 +1207,6 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
             )}
             {assetValue?.balance &&
               Number(assetValue?.balance) > 0 &&
-              type === "amount0" &&
               createLP && (
                 <div
                   style={{
