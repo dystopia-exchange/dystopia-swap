@@ -4,3 +4,4 @@ SWAP PAGE
 2. modal - overflow borders
 3. modal - Manage local assets
 4. modal add to the wallet
+5. copy address / add to the wallet

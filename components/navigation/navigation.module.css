@@ -8,6 +8,124 @@
   background: transparent;
 }
 
+@media (max-width: 1500px) {
+  .navigationContainer {
+    order: 1;
+  }
+}
+
+.navigationToggle {
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  width: 40px;
+  height: 40px;
+
+  margin-right: 12px;
+
+  cursor: pointer;
+}
+
+@media (max-width: 1500px) {
+  .navigationToggle {
+    display: flex;
+  }
+}
+
+@media (max-width: 650px) {
+  .navigationToggle {
+    margin-right: 8px;
+  }
+}
+
+.navigationToggle span {
+  position: relative;
+}
+
+.navigationToggle span,
+.navigationToggle span::before,
+.navigationToggle span::after {
+  width: 25px;
+  height: 3px;
+
+  border-radius: 3px;
+
+  background-color: #769cf5;
+}
+
+.navigationToggle span::before,
+.navigationToggle span::after {
+  content: '';
+
+  position: absolute;
+
+  left: 0;
+}
+
+.navigationToggle span::before {
+  bottom: 8px;
+}
+
+.navigationToggle span::after {
+  top: 8px;
+}
+
+.navigationToggleActive span {
+  background-color: transparent;
+}
+
+.navigationToggleActive span::before,
+.navigationToggleActive span::after {
+  top: 50%;
+  left: 50%;
+}
+
+.navigationToggleActive span::before {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.navigationToggleActive span::after {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.navigationContent {
+  width: 100%;
+}
+
+@media (max-width: 1500px) {
+  .navigationContent {
+    display: none;
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 90px 12px 20px;
+  }
+}
+
+@media (max-width: 850px) {
+  .navigationContent {
+    padding: 72px 12px 12px;
+  }
+}
+
+@media (max-width: 650px) {
+  .navigationContent {
+    flex-direction: column;
+  }
+}
+
+.navigationContentActive {
+  display: flex;
+  border-bottom: 1px solid rgba(228, 233, 244, 0.5);
+  backdrop-filter: blur(80px);
+  background: rgba(228, 233, 244, 0.05);
+}
+
+
+
 a.linkz {
   cursor: pointer !important;
 }
@@ -31,10 +149,6 @@ a.linkz {
   flex-direction: column;
   align-items: center;
   display: none;
-}
-
-.navigationContent {
-  width: 100%;
 }
 
 .ffTitle {
@@ -199,11 +313,21 @@ a.linkz {
 }
 
 .subtitleText {
+  margin: 0 !important;
+
   font-style: normal !important;
   font-weight: 500 !important;
-  font-size: 18px !important;
+  font-size: 20px !important;
   line-height: 140% !important;
-  margin: 0 !important;
+  letter-spacing: 0 !important;
+}
+
+@media (max-width: 1500px) {
+  .subtitleText {
+    font-size: 40px !important;
+    line-height: 48px !important;
+    text-align: left !important;
+  }
 }
 
 .sectionDivider {
@@ -313,6 +437,13 @@ a.linkz {
   background: transparent;
 }
 
+@media (max-width: 1500px) {
+  .navToggles {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 /* .nav-button-corner-top,
 .nav-button-corner-bottom {
   position: relative;
@@ -399,6 +530,14 @@ a.linkz {
 
   background: none !important;
   color: #E4E9F4 !important;
+}
+
+@media (max-width: 1500px) {
+  .nav-button {
+    justify-content: flex-start !important;
+    margin-bottom: 12px !important;
+    padding: 0 !important;
+  }
 }
 
 .nav-button:hover {
@@ -491,34 +630,34 @@ a.linkz {
   /* background-color: var(--main-secondary-light) !important; */
 }
 
-@media (min-width: 1950px) {
-  .navigationContainer {
+/* @media (min-width: 1950px) { */
+  /* .navigationContainer {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-  }
-}
+  } */
+/* } */
 
 @media (max-width: 1550px) {
-  .navigationContainer {
+  /* .navigationContainer {
     position: absolute;
     top: 50px;
     left: 50%;
     transform: translateX(-50%);
-  }
+  } */
 }
 
-@media (max-width: 900px) {
-  .nav-button {
+/* @media (max-width: 900px) { */
+  /* .nav-button {
     height: 39px;
     padding: 10px !important;
-  }
+  } */
 
-  .subtitleText {
+  /* .subtitleText {
     font-size: 14px !important;
-  }
+  } */
 
-  .nav-button-corner-top::before,
+  /* .nav-button-corner-top::before,
   .nav-button-corner-bottom::before {
     left: -16px;
   }
@@ -540,19 +679,19 @@ a.linkz {
 
   .navToggles {
     height: 39px;
-  }
-}
+  } */
+/* } */
 
-@media (max-width: 530px) {
+/* @media (max-width: 530px) {
   .navigationContainer {
     width: 100%;
     padding: 0 10px;
     overflow-x: auto;
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
   .navigationContainer::-webkit-scrollbar {
-    display: none;  /* Safari and Chrome */
+    display: none;
   }
-}
+} */

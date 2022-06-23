@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-
 import { useAppThemeContext } from "../AppThemeProvider";
+import classes from "./logo.module.css";
 
 const Logo = (props) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -14,14 +14,8 @@ const Logo = (props) => {
 
   return (
     <>
-      <img src="/images/ui/logo.svg" width="40" height="40" />
-      <span style={{
-        marginLeft: 16,
-        fontSize: 30,
-        fontWeight: 600,
-        lineHeight: '40px',
-        color: "#fff"
-      }}>TETRAEDER</span>
+      <img className={classes.logoImg} src="/images/ui/logo.svg" width="40" height="40" />
+      <span className={classes.logoText}>TETRAEDER</span>
       {/* {windowWidth > 770 &&
         <svg
           width={width}

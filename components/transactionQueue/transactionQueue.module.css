@@ -12,9 +12,22 @@
   margin-bottom: 12px;
 }
 
+@media (max-width: 650px) {
+  .transactionsContainer {
+    margin-bottom: 8px;
+  }
+}
+
 .transaction {
   width: 377px;
   margin-bottom: 12px;
+}
+
+@media (max-width: 650px) {
+  .transaction {
+    width: 100%;
+    margin-bottom: 8px;
+  }
 }
 
 .transactionTopBg {
@@ -44,6 +57,12 @@
   display: flex;
   border-radius: 12px;
   background: #171D2D;
+}
+
+@media (max-width: 650px) {
+  .transactionInfo {
+    padding: 16px !important;
+  }
 }
 
 .transactionInfo--CONFIRMED,
@@ -194,19 +213,40 @@
   text-align: center;
 }
 
+@media (max-width: 650px) {
+  .dialogScale {
+    max-width: none;
+  }
+}
+
 .topScrollPaper {
   align-items: flex-start !important;
   justify-content: flex-start !important;
+}
+
+@media (max-width: 650px) {
+  .topScrollPaper {
+    align-items: flex-end !important;
+  }
+
+  .topScrollPaper::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+  }
 }
 
 .rootPaper {
   max-width: none !important;
 }
 
-.paperBody--dark,
-.paperBody--light {
-  /* top: 49px !important; */
+.paperBody {
   width: auto !important;
+  min-width: 443px;
   height: 100%;
   max-height: none !important;
   margin: 0 !important;
@@ -215,14 +255,14 @@
   background: #1F2B49 !important;
 }
 
-.paperBody--light {
-  /* background: #DBE6EC !important; */
-  /* border: 1px solid #86B9D6 !important; */
-}
-
-.paperBody--dark {
-  /* background: #151718 !important; */
-  /* border: 1px solid #5F7285 !important; */
+@media (max-width: 650px) {
+  .paperBody {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: 312px !important;
+    max-height: 100% !important;
+    min-width: auto;
+  }
 }
 
 .successDialog {
@@ -268,7 +308,20 @@
   margin-left: 3px;
 }
 
-@media (max-width: 660px) {
+@media (max-width: 650px) {
+  .dialogTitle {
+    margin-bottom: 12px;
+    padding: 16px !important;
+    padding-bottom: 12px !important;
+    line-height: 40px !important;
+  }
+
+  .dialogContent {
+    padding: 0px 16px 24px !important;
+  }
+}
+
+/* @media (max-width: 660px) {
   .paperBody--dark,
   .paperBody--light {
     top: 0 !important;
@@ -278,9 +331,9 @@
   .transactionsContainer {
     padding-top: 40px;
   }
-}
+} */
 
-@media (max-width: 530px) {
+/* @media (max-width: 530px) {
   .dialogTitle {
     padding: 20px !important;
     font-size: 18px !important;
@@ -294,4 +347,4 @@
   .transactionTopBg {
     width: 100%;
   }
-}
+} */
