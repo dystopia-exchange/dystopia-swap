@@ -21,14 +21,16 @@
   /* border-bottom: 1px solid #5f7285; */
 }
 
-@media (max-width: 1550px) {
+/* @media (max-width: 1550px) {
   .top-header {
     height: 100px;
   }
-}
+} */
 
-@media (max-width: 900px) {
+@media (max-width: 850px) {
   .top-header {
-    height: 89px;
+    height: 56px;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }

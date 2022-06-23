@@ -180,7 +180,7 @@ export default function TransactionQueue({setQueueLength}) {
       classes={{
         root: classes.rootPaper,
         scrollPaper: classes.topScrollPaper,
-        paper: appTheme === "dark" ? classes['paperBody--dark'] : classes['paperBody--light'],
+        paper: classes.paperBody,
       }}
       open={open}
       onClose={handleClose}
@@ -242,10 +242,7 @@ export default function TransactionQueue({setQueueLength}) {
 
       <DialogContent
         className={classes.dialogContent}
-        style={{
-          padding: '4px 28px 30px',
-          // background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-        }}>
+        style={{ padding: '4px 28px 30px' }}>
         {renderTransactions(transactions)}
         {renderDone(transactions)}
       </DialogContent>
