@@ -58,8 +58,6 @@ const HomePage = () => {
       // 
     }, [])
 
-    console.log('')
-
     return (
         <div
             className={[classes.homePage, classes[`homePage--${appTheme}`]].join(' ')}
@@ -81,7 +79,7 @@ const HomePage = () => {
                     </div>
                     <div className={classes.layoutPromoDescription}>
                         <div className={classes.layoutPromoDescriptionItem}>
-                        0.05% FEE
+                            0.05% FEE
                         </div>
                         <div className={classes.layoutPromoDescriptionItem}>
                             TOKENIZED LOCKS AS NFT’s

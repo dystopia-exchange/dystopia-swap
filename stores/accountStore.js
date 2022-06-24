@@ -5,14 +5,15 @@ import {
 } from './constants';
 import Multicall from '@dopex-io/web3-multicall';
 import detectProvider from '@metamask/detect-provider'
-import {
-  injected,
-  walletconnect,
-  walletlink,
-  network
-} from './connectors';
+import { ethers, Contract, providers } from 'ethers'
+// import {
+//   injected,
+//   walletconnect,
+//   walletlink,
+//   network
+// } from './connectors';
 
-import Web3 from 'web3'; 
+import Web3 from 'web3';
 
 class Store {
   constructor(dispatcher, emitter) {
@@ -22,14 +23,16 @@ class Store {
     this.store = {
       account: null,
       chainInvalid: false,
+      web3provider: null,
+      web3modal: null,
       web3context: null,
       tokens: [],
-      connectorsByName: {
-        MetaMask: injected,
-        TrustWallet: injected,
-        WalletLink: walletlink,
-        WalletConnect: walletconnect,
-      },
+      // connectorsByName: {
+      //   MetaMask: injected,
+      //   TrustWallet: injected,
+      //   WalletLink: walletlink,
+      //   WalletConnect: walletconnect,
+      // },
       gasPrices: {
         standard: 90,
         fast: 100,
@@ -58,77 +61,63 @@ class Store {
 
   setStore(obj) {
     this.store = { ...this.store, ...obj };
-    console.log(this.store);
     return this.emitter.emit(ACTIONS.STORE_UPDATED);
   }
 
   configure = async () => {
+    const supportedChainIds = [process.env.NEXT_PUBLIC_CHAINID]
     const provider = await detectProvider();
-    // this.getGasPrices();
-    injected.isAuthorized().then(async (isAuthorized) => {
-      const { supportedChainIds } = injected;
-      let providerChain = await provider.request({ method: 'eth_chainId' });
-      const { chainId = process.env.NEXT_PUBLIC_CHAINID } = { chainId: providerChain } || {};
-      // fall back to ethereum mainnet if chainId undefined
-      const parsedChainId = parseInt(chainId, 16);
-      const isChainSupported = supportedChainIds.includes(parsedChainId);
-      if (!isChainSupported) {
-        this.setStore({ chainInvalid: true });
-        this.emitter.emit(ACTIONS.ACCOUNT_CHANGED);
-      }
+    this.getGasPrices();
 
-      if (isAuthorized && isChainSupported) {
-        injected
-          .activate()
-          .then((a) => {
-            this.setStore({
-              account: { address: a.account },
-              web3context: { library: { provider: a.provider } }
-            });
-            this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
-          })
-          .then(() => {
-            this.dispatcher.dispatch({
-              type: ACTIONS.CONFIGURE_SS,
-              content: { connected: true },
-            });
-          })
-          .catch((e) => {
-            this.emitter.emit(ACTIONS.ERROR, e);
-            this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
+    let providerChain = await provider.request({ method: 'eth_chainId' });
 
-            this.dispatcher.dispatch({
-              type: ACTIONS.CONFIGURE_SS,
-              content: { connected: false },
-            });
-          });
-      } else {
-        //we can ignore if not authorized.
-        this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
-        this.emitter.emit(ACTIONS.CONFIGURED);
-      }
+    console.log('configure provider', provider)
+    this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
+
+    this.dispatcher.dispatch({
+      type: ACTIONS.CONFIGURE_SS,
+      content: { connected: false },
     });
 
     if (window.ethereum || provider) {
-      this.updateAccount();
-    } else {
-      window.removeEventListener('ethereum#initialized', this.updateAccount);
-      window.addEventListener('ethereum#initialized', this.updateAccount, {
-        once: true,
-      });
-    }
-  };
+      // this.subscribeProvider();
+    } else { }
 
-  updateAccount = () => {
+    window.removeEventListener('ethereum#initialized', this.subscribeProvider);
+    window.addEventListener('ethereum#initialized', this.subscribeProvider, {
+      once: true,
+    });
+  }
+
+  setProvider = async (provider) => {
+    this.ethersProvider = new ethers.providers.Web3Provider(provider)
+    const signer = this.ethersProvider.getSigner()
+    this.provider = provider
+
+    try {
+      const address = await signer.getAddress()
+      this.setWalletAddress(address)
+      // await this.getNetwork()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  subscribeProvider = () => {
     const that = this;
-    const res = window.ethereum.on('accountsChanged', async function (accounts) {
+
+    window.ethereum.on('accountsChanged', async function (accounts) {
+      const provider = new ethers.providers.Web3Provider(
+        that.getStore('web3context').library.instance
+      )
+      const signer = provider.getSigner();
+      const address = await signer.getAddress()
       that.setStore({
-        account: { address: accounts[0] },
-        web3context: { library: { provider: window.ethereum || await detectProvider() } }
+        account: { address },
+        web3context: { library: { provider } }
       });
       that.emitter.emit(ACTIONS.ACCOUNT_CHANGED);
       that.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
-
       that.dispatcher.dispatch({
         type: ACTIONS.CONFIGURE_SS,
         content: { connected: true },
@@ -137,12 +126,11 @@ class Store {
 
     window.ethereum.on('chainChanged', function (chainId) {
       const supportedChainIds = [process.env.NEXT_PUBLIC_CHAINID];
-      const parsedChainId = (parseInt(chainId+'', 16)+'');
+      const parsedChainId = (parseInt(chainId + '', 16) + '');
       const isChainSupported = supportedChainIds.includes(parsedChainId);
       that.setStore({ chainInvalid: !isChainSupported });
       that.emitter.emit(ACTIONS.ACCOUNT_CHANGED);
       that.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
-
       that.configure()
     });
   };
@@ -196,39 +184,26 @@ class Store {
   };
 
   getWeb3Provider = async () => {
-    let web3context = this.getStore('web3context');
-    let provider = null;
+    // let web3context = this.getStore('web3context');
+    // let provider = null;
 
-    if (!web3context) {
-      provider = network.providers['1'];
-    } else {
-      provider = web3context.library.provider;
+    // if (!web3context) {
+    //   provider = network.providers['1'];
+    // } else {
+    //   provider = web3context.library.provider;
+    // }
+
+    // if (!provider) {
+    //   return null;
+    // }
+    let web3provider = this.getStore('web3provider');
+
+    if (web3provider === null) {
+      return new Web3(window.ethereum || await detectProvider())
     }
 
-    if (!provider) {
-      return null;
-    }
-    return new Web3(provider);
+    return web3provider;
   };
-  connectWalletConnect = async () => {
-    try {
-      const that = this;
-      const provider = that.getStore('connectorsByName')['WalletConnect'];
-      // const provider = connectorsByName[name];
-      await provider.enable();
-      const web3 = new Web3(provider);
-
-      that.setStore({
-        account: { address: provider.accounts[0] },
-        web3context: { library: { provider: web3 }},
-      });
-      return true;
-
-    } catch(e) {
-      console.log(e);
-      return false;
-    }
-  }
 
   getMulticall = async () => {
     const web3 = await this.getWeb3Provider()

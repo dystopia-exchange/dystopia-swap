@@ -15,6 +15,7 @@ import { ACTIONS } from "../stores/constants";
 import "../styles/global.css";
 import "../styles/variables.css";
 import "../styles/grid.css";
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import classes from './home/home.module.css';
 

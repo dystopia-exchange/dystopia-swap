@@ -94,6 +94,14 @@ const querytwo = `
 
 const client = createClient({ url: process.env.NEXT_PUBLIC_API });
 
+const removeDuplicate = (arr) => {
+  const assets = arr.reduce((acc, item) => {
+    acc[item.symbol] = item
+    return acc
+  }, {})
+  return Object.values(assets)
+}
+
 class Store {
   constructor(dispatcher, emitter) {
     this.dispatcher = dispatcher;
@@ -118,6 +126,8 @@ class Store {
 
     dispatcher.register(
       function (payload) {
+        // console.log(':::', payload.type, payload)
+
         switch (payload.type) {
           case ACTIONS.CONFIGURE_SS:
             this.configure(payload);
@@ -698,6 +708,7 @@ class Store {
       CONTRACTS.FACTORY_ABI,
       CONTRACTS.FACTORY_ADDRESS
     );
+
     const pairAddress = await factoryContract.methods
       .getPair(addressA, addressB, stab)
       .call();
@@ -910,8 +921,8 @@ class Store {
           );
         });
 
-        this.setStore({ baseAssets: baseAssets });
-        this.emitter.emit(ACTIONS.BASE_ASSETS_UPDATED, baseAssets);
+        this.setStore({ baseAssets: removeDuplicate(baseAssets) });
+        this.emitter.emit(ACTIONS.BASE_ASSETS_UPDATED, removeDuplicate(baseAssets));
       }
     } catch (ex) {
       console.log(ex);
@@ -995,7 +1006,7 @@ class Store {
         );
 
         const baseAssets = this.getStore("baseAssets");
-        const storeBaseAssets = [...baseAssets, newBaseAsset];
+        const storeBaseAssets = removeDuplicate([...baseAssets, newBaseAsset]);
 
         this.setStore({ baseAssets: storeBaseAssets });
         this.emitter.emit(ACTIONS.BASE_ASSETS_UPDATED, storeBaseAssets);
@@ -1039,11 +1050,11 @@ class Store {
       const response2 =
         process.env.NEXT_PUBLIC_CHAINID == 80001
           ? await axios.get(
-              `https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`
-            )
+            `https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`
+          )
           : await axios.get(
-              `https://raw.githubusercontent.com/dystopia-exchange/default-token-list/master/tokens/matic.json`
-            );
+            `https://raw.githubusercontent.com/dystopia-exchange/default-token-list/master/tokens/matic.json`
+          );
 
       const nativeFTM = {
         address: CONTRACTS.FTM_ADDRESS,
@@ -1073,7 +1084,7 @@ class Store {
       console.log(baseAssets);
       let localBaseAssets = this.getLocalAssets();
 
-      return [...baseAssets, ...localBaseAssets];
+      return removeDuplicate([...baseAssets, ...localBaseAssets])
     } catch (ex) {
       console.log(ex);
       return [];
@@ -1151,6 +1162,8 @@ class Store {
   getBalances = async (payload) => {
     try {
       const account = stores.accountStore.getStore("account");
+      console.log('account', account)
+
       if (!account) {
         console.warn("account not found");
         return null;
@@ -1328,30 +1341,30 @@ class Store {
             pair.claimable0 =
               claimable0 != 0
                 ? BigNumber(claimable0)
-                    .div(10 ** parseInt(pair.token0.decimals))
-                    .toFixed(parseInt(pair.token0.decimals))
+                  .div(10 ** parseInt(pair.token0.decimals))
+                  .toFixed(parseInt(pair.token0.decimals))
                 : 0;
             pair.claimable1 =
               claimable1 != 0
                 ? BigNumber(claimable1)
-                    .div(10 ** parseInt(pair.token1.decimals))
-                    .toFixed(parseInt(pair.token1.decimals))
+                  .div(10 ** parseInt(pair.token1.decimals))
+                  .toFixed(parseInt(pair.token1.decimals))
                 : 0;
-                const a = await axios.get(
-                  `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
-                );
-                const totalVolumeInUsdInReserve0 = BigNumber(
-                  pair.reserve0
-                ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
-  
-                const totalVolumeInUsdInReserve1 = BigNumber(
-                  pair.reserve1
-                ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
-  
-                const totalVolumeInUsd =
-                  Number(totalVolumeInUsdInReserve0) +
-                  Number(totalVolumeInUsdInReserve1);
-                pair.tvl = Number(totalVolumeInUsd);
+            const a = await axios.get(
+              `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
+            );
+            const totalVolumeInUsdInReserve0 = BigNumber(
+              pair.reserve0
+            ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
+
+            const totalVolumeInUsdInReserve1 = BigNumber(
+              pair.reserve1
+            ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
+
+            const totalVolumeInUsd =
+              Number(totalVolumeInUsdInReserve0) +
+              Number(totalVolumeInUsdInReserve1);
+            pair.tvl = Number(totalVolumeInUsd);
             return pair;
           } catch (ex) {
             console.log("EXCEPTION 1");
@@ -1449,73 +1462,73 @@ class Store {
               pair.gauge.balance =
                 parseInt(gaugeBalance) != 0
                   ? BigNumber(parseInt(gaugeBalance))
-                      .div(10 ** 18)
-                      .toFixed(18)
+                    .div(10 ** 18)
+                    .toFixed(18)
                   : 0;
               pair.gauge.totalSupply =
                 parseInt(totalSupply) != 0
                   ? BigNumber(parseInt(totalSupply))
-                      .div(10 ** 18)
-                      .toFixed(18)
+                    .div(10 ** 18)
+                    .toFixed(18)
                   : 0;
-              
+
               pair.gauge.reserve0 =
                 parseFloat(pair.totalSupply) > 0
                   ? parseFloat(
-                      BigNumber(parseFloat(pair.reserve0))
-                        .times(parseFloat(pair.gauge.totalSupply))
-                        .div(parseFloat(pair.totalSupply))
-                    ).toFixed(parseInt(pair.token0.decimals))
+                    BigNumber(parseFloat(pair.reserve0))
+                      .times(parseFloat(pair.gauge.totalSupply))
+                      .div(parseFloat(pair.totalSupply))
+                  ).toFixed(parseInt(pair.token0.decimals))
                   : "0";
               pair.gauge.reserve1 =
                 parseFloat(pair.totalSupply) > 0
                   ? parseFloat(
-                      BigNumber(parseFloat(pair.reserve1))
-                        .times(parseFloat(pair.gauge.totalSupply))
-                        .div(parseFloat(pair.totalSupply))
-                    ).toFixed(parseInt(pair.token1.decimals))
+                    BigNumber(parseFloat(pair.reserve1))
+                      .times(parseFloat(pair.gauge.totalSupply))
+                      .div(parseFloat(pair.totalSupply))
+                  ).toFixed(parseInt(pair.token1.decimals))
                   : "0";
 
               pair.gauge.weight =
                 parseInt(gaugeWeight) != 0
                   ? BigNumber(parseInt(gaugeWeight))
-                      .div(10 ** 18)
-                      .toFixed(18)
+                    .div(10 ** 18)
+                    .toFixed(18)
                   : 0;
               pair.gauge.weightPercent =
                 parseInt(totalWeight) != 0
                   ? BigNumber(parseInt(gaugeWeight))
-                      .times(100)
-                      .div(parseInt(totalWeight))
-                      .toFixed(2)
-                  : 0;
-                  const a = await axios.get(
-                    `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
-                  );
-                  const totalVolumeInUsdInReserve0 = BigNumber(
-                    pair.gauge.reserve0
-                  ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
-    
-                  const totalVolumeInUsdInReserve1 = BigNumber(
-                    pair.gauge.reserve1
-                  ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
-    
-                  const totalVolumeInUsd =
-                    Number(totalVolumeInUsdInReserve0) +
-                    Number(totalVolumeInUsdInReserve1);
-                  const secondsPerYear = 31622400;
-                  const valuePerYear = new BigNumber(secondsPerYear)
-                    .times(rewardRate)
-                    .div(10 ** 18);
-                  
-                  
-                  const apr = new BigNumber(valuePerYear)
-                    .div(Number(totalVolumeInUsd))
-                    .div(10 ** 18)
                     .times(100)
-                    .toFixed(4);
-    
-                  pair.gauge.apr = apr;    
+                    .div(parseInt(totalWeight))
+                    .toFixed(2)
+                  : 0;
+              const a = await axios.get(
+                `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
+              );
+              const totalVolumeInUsdInReserve0 = BigNumber(
+                pair.gauge.reserve0
+              ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
+
+              const totalVolumeInUsdInReserve1 = BigNumber(
+                pair.gauge.reserve1
+              ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
+
+              const totalVolumeInUsd =
+                Number(totalVolumeInUsdInReserve0) +
+                Number(totalVolumeInUsdInReserve1);
+              const secondsPerYear = 31622400;
+              const valuePerYear = new BigNumber(secondsPerYear)
+                .times(rewardRate)
+                .div(10 ** 18);
+
+
+              const apr = new BigNumber(valuePerYear)
+                .div(Number(totalVolumeInUsd))
+                .div(10 ** 18)
+                .times(100)
+                .toFixed(4);
+
+              pair.gauge.apr = apr;
             }
 
             return pair;
@@ -1550,6 +1563,7 @@ class Store {
           try {
             if (asset.address === "MATIC") {
               let bal = await web3.eth.getBalance(account.address);
+              console.log('----- bal', bal)
               return {
                 balanceOf: bal,
                 maticBalance: bal,
@@ -1562,6 +1576,7 @@ class Store {
               asset.address
             );
             let bal = await web3.eth.getBalance(account.address);
+            console.log('----- bal', bal)
             //rechange isWhitelisted!!
             const [balanceOf] = await Promise.all([
               //  voterContract.methods.isWhitelisted(asset.address).call(),
@@ -1642,7 +1657,7 @@ class Store {
       );
 
       const baseAssets = this.getStore("baseAssets");
-      const storeBaseAssets = [...baseAssets, ...localBaseAssets];
+      const storeBaseAssets = removeDuplicate([...baseAssets, ...localBaseAssets]);
 
       this.setStore({ baseAssets: storeBaseAssets });
 
@@ -1881,7 +1896,7 @@ class Store {
         .times(sendSlippage)
         .times(10 ** parseInt(token1.decimals))
         .toFixed(0);
-      
+
       let func = "addLiquidity";
       let params = [
         token0.address,
@@ -1955,7 +1970,7 @@ class Store {
             .getPair(tok0, tok1, isStable)
             .call();
 
-         const gaugesContract = new web3.eth.Contract(
+          const gaugesContract = new web3.eth.Contract(
             CONTRACTS.VOTER_ABI,
             CONTRACTS.VOTER_ADDRESS
           );
@@ -1984,87 +1999,87 @@ class Store {
               pair,
               account
             );
-  
-              if (
-                BigNumber(stakeAllowance).lt(
-                  BigNumber(balanceOf)
-                    .div(10 ** parseInt(pair.decimals))
-                    .toFixed(parseInt(pair.decimals))
-                )
-              ) {
-                this.emitter.emit(ACTIONS.TX_STATUS, {
-                  uuid: stakeAllowanceTXID,
-                  description: `Allow the router to spend your ${pair.symbol}`,
-                });
-              } else {
-                this.emitter.emit(ACTIONS.TX_STATUS, {
-                  uuid: stakeAllowanceTXID,
-                  description: `Allowance on ${pair.symbol} sufficient`,
-                  status: "DONE",
-                });
-              }
 
-              const allowanceCallsPromise = [];
+            if (
+              BigNumber(stakeAllowance).lt(
+                BigNumber(balanceOf)
+                  .div(10 ** parseInt(pair.decimals))
+                  .toFixed(parseInt(pair.decimals))
+              )
+            ) {
+              this.emitter.emit(ACTIONS.TX_STATUS, {
+                uuid: stakeAllowanceTXID,
+                description: `Allow the router to spend your ${pair.symbol}`,
+              });
+            } else {
+              this.emitter.emit(ACTIONS.TX_STATUS, {
+                uuid: stakeAllowanceTXID,
+                description: `Allowance on ${pair.symbol} sufficient`,
+                status: "DONE",
+              });
+            }
 
-              if (
-                BigNumber(stakeAllowance).lt(
-                  BigNumber(balanceOf)
-                    .div(10 ** parseInt(pair.decimals))
-                    .toFixed(parseInt(pair.decimals))
-                )
-              ) {
-                const stakePromise = new Promise((resolve, reject) => {
-                  context._callContractWait(
-                    web3,
-                    pairContract,
-                    "approve",
-                    [pair.gauge.address, MAX_UINT256],
-                    account,
-                    gasPrice,
-                    null,
-                    null,
-                    stakeAllowanceTXID,
-                    (err) => {
-                      if (err) {
-                        reject(err);
-                        return;
-                      }
+            const allowanceCallsPromise = [];
 
-                      resolve();
+            if (
+              BigNumber(stakeAllowance).lt(
+                BigNumber(balanceOf)
+                  .div(10 ** parseInt(pair.decimals))
+                  .toFixed(parseInt(pair.decimals))
+              )
+            ) {
+              const stakePromise = new Promise((resolve, reject) => {
+                context._callContractWait(
+                  web3,
+                  pairContract,
+                  "approve",
+                  [pair.gauge.address, MAX_UINT256],
+                  account,
+                  gasPrice,
+                  null,
+                  null,
+                  stakeAllowanceTXID,
+                  (err) => {
+                    if (err) {
+                      reject(err);
+                      return;
                     }
-                  );
-                });
 
-                allowanceCallsPromise.push(stakePromise);
-              }
-
-              const done = await Promise.all(allowanceCallsPromise);
-
-              let sendTok = "0";
-              if (token && token.id) {
-                sendTok = token.id;
-              }
-     
-              this._callContractWait(
-                web3,
-                gaugeContract,
-                "deposit",
-                [balanceOf, sendTok],
-                account,
-                gasPrice,
-                null,
-                null,
-                stakeTXID,
-                async (err) => {
-                  if (err) {
-                    return this.emitter.emit(ACTIONS.ERROR, err);
+                    resolve();
                   }
+                );
+              });
 
-                  await context.updatePairsCall(web3, account);
+              allowanceCallsPromise.push(stakePromise);
+            }
 
-                  this.emitter.emit(ACTIONS.PAIR_CREATED, pairFor);
+            const done = await Promise.all(allowanceCallsPromise);
+
+            let sendTok = "0";
+            if (token && token.id) {
+              sendTok = token.id;
+            }
+
+            this._callContractWait(
+              web3,
+              gaugeContract,
+              "deposit",
+              [balanceOf, sendTok],
+              account,
+              gasPrice,
+              null,
+              null,
+              stakeTXID,
+              async (err) => {
+                if (err) {
+                  return this.emitter.emit(ACTIONS.ERROR, err);
                 }
-              );
+
+                await context.updatePairsCall(web3, account);
+
+                this.emitter.emit(ACTIONS.PAIR_CREATED, pairFor);
+              }
+            );
           }
 
           if (gaugeAddress === '0x0000000000000000000000000000000000000000') {
@@ -2087,7 +2102,7 @@ class Store {
                 const gaugeAddress = await gaugesContract.methods
                   .gauges(pairFor)
                   .call();
-                
+
                 await depositInGauge(gaugeAddress, pairFor)
               }
             );
@@ -3561,8 +3576,8 @@ class Store {
       if (pair.gauge) {
         returnVal.gauge = gaugeBalance
           ? BigNumber(gaugeBalance)
-              .div(10 ** 18)
-              .toFixed(18)
+            .div(10 ** 18)
+            .toFixed(18)
           : null;
         // returnVal.earned = BigNumber(earned).div(10**incentiveAsset.decimals).toFixed(incentiveAsset.decimals),
       }
@@ -4259,18 +4274,18 @@ class Store {
         routeAsset: null,
       });
 
-      // const multicall = await stores.accountStore.getMulticall();      
+      // const multicall = await stores.accountStore.getMulticall();
 
       const retryCall = async () => {
         const res = await Promise.allSettled(
-        amountOuts.map(async (route) => {
-          const fn = retry({ 
-            fn: routerContract.methods.getAmountsOut(
-              sendFromAmount,
-              route.routes
-            ).call
-          })
-          return await fn()
+          amountOuts.map(async (route) => {
+            const fn = retry({
+              fn: routerContract.methods.getAmountsOut(
+                sendFromAmount,
+                route.routes
+              ).call
+            })
+            return await fn()
           })
         )
 
@@ -4398,9 +4413,8 @@ class Store {
           },
           {
             uuid: swapTXID,
-            description: `Swap ${formatCurrency(fromAmount)} ${
-              fromAsset.symbol
-            } for ${toAsset.symbol}`,
+            description: `Swap ${formatCurrency(fromAmount)} ${fromAsset.symbol
+              } for ${toAsset.symbol}`,
             status: "WAITING",
           },
         ],
@@ -4554,6 +4568,7 @@ class Store {
           if (asset.address.toLowerCase() === assetAddress.toLowerCase()) {
             if (asset.address === "MATIC") {
               let bal = await web3.eth.getBalance(account.address);
+              console.log('----- bal', bal)
               asset.balance = BigNumber(bal)
                 .div(10 ** parseInt(asset.decimals))
                 .toFixed(parseInt(asset.decimals));
@@ -4577,7 +4592,7 @@ class Store {
         })
       );
 
-      this.setStore({ baseAssets: ba });
+      this.setStore({ baseAssets: removeDuplicate(ba) });
       this.emitter.emit(ACTIONS.UPDATED);
     } catch (ex) {
       console.log(ex);
