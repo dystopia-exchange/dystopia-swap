@@ -5354,14 +5354,15 @@ class Store {
 
   withdrawVest = async (payload) => {
     try {
-      const { tokenID } = payload.content;
+      const tokenID = payload.content.tokenID;
+
       const queryVestWithdraw = `
-     query {
-         veDysts(where :{id:${tokenID.toString()}})  {
+        query {
+          veDysts(where :{id:${tokenID.toString()}})  {
             id
             addresses
-      }
-    }`;
+        }
+      }`;
 
       const response = await client.query(queryVestWithdraw).toPromise();
       let res;
@@ -5384,7 +5385,7 @@ class Store {
       }
 
       const govToken = this.getStore("govToken");
-      const { tokenID } = payload.content;
+      // const { tokenID } = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let vestTXID = this.getTXUUID();
@@ -5525,6 +5526,7 @@ class Store {
       this.emitter.emit(ACTIONS.ERROR, ex);
     }
   };
+
   merge = async (payload) => {
     try {
       const { tokenIDOne, tokenIDTwo } = payload.content;
