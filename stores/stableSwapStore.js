@@ -14,6 +14,11 @@ import pairContractAbi from "./abis/pairOldRouter.json";
 import migratorAbi from "./abis/migrator.json";
 import FactoryAbi from "./abis/FactoryAbi.json";
 import { ConstructionOutlined } from "@mui/icons-material";
+import {
+  USD_PLUS_ADDRESS,
+  USD_PLUS_BOOSTED_DATA_URL,
+} from "./constants/contracts";
+import router from "next/router";
 
 const queryone = `
   query {
@@ -80,6 +85,7 @@ const queryone = `
 const querytwo = `
   query {
     tokens{
+      id
       address
       balance
       chainId
@@ -88,11 +94,16 @@ const querytwo = `
       decimals
       isWhitelisted
       logoURI
+      derivedETH
+    }
+    bundle(id:1){
+      ethPrice
     }
   }
 `;
 
 const client = createClient({ url: process.env.NEXT_PUBLIC_API });
+const clientV = createClient({ url: process.env.NEXT_PUBLIC_APIV2 });
 
 const removeDuplicate = (arr) => {
   const assets = arr.reduce((acc, item) => {
@@ -126,8 +137,6 @@ class Store {
 
     dispatcher.register(
       function (payload) {
-        // console.log(':::', payload.type, payload)
-
         switch (payload.type) {
           case ACTIONS.CONFIGURE_SS:
             this.configure(payload);
@@ -184,6 +193,12 @@ class Store {
           case ACTIONS.SWAP:
             this.swap(payload);
             break;
+          case ACTIONS.WRAP:
+            this.wrap(payload);
+            break;
+          case ACTIONS.UNWRAP:
+            this.unwrap(payload);
+            break;
 
           // VESTING
           case ACTIONS.GET_VEST_NFTS:
@@ -198,6 +213,9 @@ class Store {
           case ACTIONS.INCREASE_VEST_DURATION:
             this.increaseVestDuration(payload);
             break;
+          case ACTIONS.MERGE_NFT:
+            this.merge(payload);
+            break;
           case ACTIONS.WITHDRAW_VEST:
             this.withdrawVest(payload);
             break;
@@ -205,6 +223,9 @@ class Store {
           //VOTE
           case ACTIONS.VOTE:
             this.vote(payload);
+            break;
+          case ACTIONS.RESET_VOTE:
+            this.resetVote(payload);
             break;
           case ACTIONS.GET_VEST_VOTES:
             this.getVestVotes(payload);
@@ -708,7 +729,6 @@ class Store {
       CONTRACTS.FACTORY_ABI,
       CONTRACTS.FACTORY_ADDRESS
     );
-
     const pairAddress = await factoryContract.methods
       .getPair(addressA, addressB, stab)
       .call();
@@ -1044,17 +1064,28 @@ class Store {
   _getBaseAssets = async () => {
     try {
       const response = await client.query(querytwo).toPromise();
+      const responsev2 = await clientV.query(queryv2).toPromise();
       const baseAssetsCall = response;
 
       let baseAssets = baseAssetsCall.data.tokens;
+      let baseAssetsv2 = responsev2.data.tokens;
+      for (let i = 0; i < baseAssets.length; i++) {
+        for (let j = 0; j < baseAssetsv2.length; j++) {
+          if (
+            baseAssetsv2[j].id.toLowerCase() == baseAssets[i].id.toLowerCase()
+          ) {
+            baseAssets[i].derivedETH = baseAssetsv2[j].derivedETH;
+          }
+        }
+      }
       const response2 =
         process.env.NEXT_PUBLIC_CHAINID == 80001
           ? await axios.get(
-            `https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`
-          )
+              `https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`
+            )
           : await axios.get(
-            `https://raw.githubusercontent.com/dystopia-exchange/default-token-list/master/tokens/matic.json`
-          );
+              `https://raw.githubusercontent.com/dystopia-exchange/default-token-list/master/tokens/matic.json`
+            );
 
       const nativeFTM = {
         address: CONTRACTS.FTM_ADDRESS,
@@ -1084,6 +1115,9 @@ class Store {
       console.log(baseAssets);
       let localBaseAssets = this.getLocalAssets();
 
+      baseAssets = baseAssets.filter(token => {
+        return token.id != "0x104592a158490a9228070e0a8e5343b499e125d0";
+      });
       return removeDuplicate([...baseAssets, ...localBaseAssets])
     } catch (ex) {
       console.log(ex);
@@ -1101,6 +1135,21 @@ class Store {
         symbol: CONTRACTS.WFTM_SYMBOL,
       };
       return [nativeFTM];
+    } catch (ex) {
+      console.log(ex);
+      return [];
+    }
+  };
+  _getUSDPRouteAssets = async () => {
+    try {
+      const USDPlus = {
+        address: CONTRACTS.USDP_ADDRESS,
+        decimals: CONTRACTS.USDP_DECIMALS,
+        logoURI: CONTRACTS.USDP_LOGO,
+        name: CONTRACTS.USDP_NAME,
+        symbol: CONTRACTS.USDP_SYMBOL,
+      };
+      return [USDPlus];
     } catch (ex) {
       console.log(ex);
       return [];
@@ -1133,6 +1182,12 @@ class Store {
       } catch (e) {
         console.log(e, "res");
       }
+      pairsCall2 = pairsCall2.filter(pair => {
+        return (pair.token0.address.toString() != "0x104592a158490a9228070e0a8e5343b499e125d0");
+      });
+      pairsCall2 = pairsCall2.filter(pair => {
+        return (pair.token1.address.toString() != "0x104592a158490a9228070e0a8e5343b499e125d0");
+      });
       return pairsCall2;
     } catch (ex) {
       console.log(ex);
@@ -1162,8 +1217,6 @@ class Store {
   getBalances = async (payload) => {
     try {
       const account = stores.accountStore.getStore("account");
-      console.log('account', account)
-
       if (!account) {
         console.warn("account not found");
         return null;
@@ -1287,7 +1340,7 @@ class Store {
         factoryContract.methods.allPairsLength().call(),
         gaugesContract.methods.totalWeight().call(),
       ]);
-
+      const responsev2 = await clientV.query(queryv2).toPromise();
       const ps = await Promise.all(
         pairs.map(async (pair) => {
           try {
@@ -1341,30 +1394,30 @@ class Store {
             pair.claimable0 =
               claimable0 != 0
                 ? BigNumber(claimable0)
-                  .div(10 ** parseInt(pair.token0.decimals))
-                  .toFixed(parseInt(pair.token0.decimals))
+                    .div(10 ** parseInt(pair.token0.decimals))
+                    .toFixed(parseInt(pair.token0.decimals))
                 : 0;
             pair.claimable1 =
               claimable1 != 0
                 ? BigNumber(claimable1)
-                  .div(10 ** parseInt(pair.token1.decimals))
-                  .toFixed(parseInt(pair.token1.decimals))
+                    .div(10 ** parseInt(pair.token1.decimals))
+                    .toFixed(parseInt(pair.token1.decimals))
                 : 0;
-            const a = await axios.get(
-              `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
-            );
+
             const totalVolumeInUsdInReserve0 = BigNumber(
               pair.reserve0
-            ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
+            ).multipliedBy(BigNumber(pair.token0.derivedETH));
 
             const totalVolumeInUsdInReserve1 = BigNumber(
               pair.reserve1
-            ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
+            ).multipliedBy(BigNumber(pair.token1.derivedETH));
 
             const totalVolumeInUsd =
               Number(totalVolumeInUsdInReserve0) +
               Number(totalVolumeInUsdInReserve1);
-            pair.tvl = Number(totalVolumeInUsd);
+            pair.tvl = BigNumber(totalVolumeInUsd).multipliedBy(
+              parseInt(responsev2.data.bundle.ethPrice)
+            );
             return pair;
           } catch (ex) {
             console.log("EXCEPTION 1");
@@ -1376,7 +1429,10 @@ class Store {
       );
       this.setStore({ pairs: ps });
       this.emitter.emit(ACTIONS.UPDATED);
-
+      let b = await axios.get(
+        "https://api.dexscreener.io/latest/dex/pairs/polygon/0x1e08a5b6a1694bc1a65395db6f4c506498daa349"
+      );
+      let dystprice = BigNumber(b.data.pair.priceUsd);
       const ps1 = await Promise.all(
         ps.map(async (pair) => {
           try {
@@ -1462,75 +1518,110 @@ class Store {
               pair.gauge.balance =
                 parseInt(gaugeBalance) != 0
                   ? BigNumber(parseInt(gaugeBalance))
-                    .div(10 ** 18)
-                    .toFixed(18)
+                      .div(10 ** 18)
+                      .toFixed(18)
                   : 0;
               pair.gauge.totalSupply =
                 parseInt(totalSupply) != 0
                   ? BigNumber(parseInt(totalSupply))
-                    .div(10 ** 18)
-                    .toFixed(18)
+                      .div(10 ** 18)
+                      .toFixed(18)
                   : 0;
 
               pair.gauge.reserve0 =
                 parseFloat(pair.totalSupply) > 0
                   ? parseFloat(
-                    BigNumber(parseFloat(pair.reserve0))
-                      .times(parseFloat(pair.gauge.totalSupply))
-                      .div(parseFloat(pair.totalSupply))
-                  ).toFixed(parseInt(pair.token0.decimals))
+                      BigNumber(parseFloat(pair.reserve0))
+                        .times(parseFloat(pair.gauge.totalSupply))
+                        .div(parseFloat(pair.totalSupply))
+                    ).toFixed(parseInt(pair.token0.decimals))
                   : "0";
               pair.gauge.reserve1 =
                 parseFloat(pair.totalSupply) > 0
                   ? parseFloat(
-                    BigNumber(parseFloat(pair.reserve1))
-                      .times(parseFloat(pair.gauge.totalSupply))
-                      .div(parseFloat(pair.totalSupply))
-                  ).toFixed(parseInt(pair.token1.decimals))
+                      BigNumber(parseFloat(pair.reserve1))
+                        .times(parseFloat(pair.gauge.totalSupply))
+                        .div(parseFloat(pair.totalSupply))
+                    ).toFixed(parseInt(pair.token1.decimals))
                   : "0";
 
               pair.gauge.weight =
                 parseInt(gaugeWeight) != 0
                   ? BigNumber(parseInt(gaugeWeight))
-                    .div(10 ** 18)
-                    .toFixed(18)
+                      .div(10 ** 18)
+                      .toFixed(18)
                   : 0;
               pair.gauge.weightPercent =
                 parseInt(totalWeight) != 0
                   ? BigNumber(parseInt(gaugeWeight))
-                    .times(100)
-                    .div(parseInt(totalWeight))
-                    .toFixed(2)
+                      .times(100)
+                      .div(parseInt(totalWeight))
+                      .toFixed(2)
                   : 0;
-              const a = await axios.get(
-                `https://api.coingecko.com/api/v3/simple/token_price/polygon-pos?contract_addresses=${pair.token0.address},${pair.token1.address}&vs_currencies=usd`
-              );
-              const totalVolumeInUsdInReserve0 = BigNumber(
+
+              let totalVolumeInUsdInReserve0 = BigNumber(
                 pair.gauge.reserve0
-              ).multipliedBy(BigNumber(a.data[pair.token0.address].usd));
+              ).multipliedBy(BigNumber(pair.token0.derivedETH));
 
-              const totalVolumeInUsdInReserve1 = BigNumber(
+              let totalVolumeInUsdInReserve1 = BigNumber(
                 pair.gauge.reserve1
-              ).multipliedBy(BigNumber(a.data[pair.token1.address].usd));
-
-              const totalVolumeInUsd =
+              ).multipliedBy(BigNumber(pair.token1.derivedETH));
+              let totalVolumeInUsd =
                 Number(totalVolumeInUsdInReserve0) +
                 Number(totalVolumeInUsdInReserve1);
+
+              totalVolumeInUsd = BigNumber(totalVolumeInUsd).multipliedBy(
+                parseInt(responsev2.data.bundle.ethPrice)
+              );
+
               const secondsPerYear = 31622400;
               const valuePerYear = new BigNumber(secondsPerYear)
                 .times(rewardRate)
                 .div(10 ** 18);
 
-
               const apr = new BigNumber(valuePerYear)
-                .div(Number(totalVolumeInUsd))
+                .times(dystprice)
+                .div(totalVolumeInUsd)
                 .div(10 ** 18)
                 .times(100)
                 .toFixed(4);
 
               pair.gauge.apr = apr;
-            }
+              pair.gauge.boostedApr0 = new BigNumber(0);
+              pair.gauge.boostedApr1 = new BigNumber(0);
 
+              if (
+                pair.token0.address.toLowerCase() ===
+                CONTRACTS.USD_PLUS_ADDRESS.toLowerCase()
+              ) {
+                let boostedApr0Response = await axios.get(
+                  CONTRACTS.USD_PLUS_BOOSTED_DATA_URL
+                );
+
+                if (boostedApr0Response.data) {
+                  pair.gauge.boostedApr0 = new BigNumber(
+                    boostedApr0Response.data
+                  ).times(100);
+                }
+              }
+
+              if (
+                pair.token1.address.toLowerCase() ===
+                CONTRACTS.USD_PLUS_ADDRESS.toLowerCase()
+              ) {
+                let boostedApr1Response = await axios.get(
+                  CONTRACTS.USD_PLUS_BOOSTED_DATA_URL
+                );
+
+                if (boostedApr1Response.data) {
+                  pair.gauge.boostedApr1 = new BigNumber(
+                    boostedApr1Response.data
+                  ).times(100);
+                }
+              }
+
+              return pair;
+            }
             return pair;
           } catch (ex) {
             return pair;
@@ -1563,7 +1654,6 @@ class Store {
           try {
             if (asset.address === "MATIC") {
               let bal = await web3.eth.getBalance(account.address);
-              console.log('----- bal', bal)
               return {
                 balanceOf: bal,
                 maticBalance: bal,
@@ -1576,7 +1666,6 @@ class Store {
               asset.address
             );
             let bal = await web3.eth.getBalance(account.address);
-            console.log('----- bal', bal)
             //rechange isWhitelisted!!
             const [balanceOf] = await Promise.all([
               //  voterContract.methods.isWhitelisted(asset.address).call(),
@@ -1970,7 +2059,7 @@ class Store {
             .getPair(tok0, tok1, isStable)
             .call();
 
-          const gaugesContract = new web3.eth.Contract(
+         const gaugesContract = new web3.eth.Contract(
             CONTRACTS.VOTER_ABI,
             CONTRACTS.VOTER_ADDRESS
           );
@@ -2000,86 +2089,86 @@ class Store {
               account
             );
 
-            if (
-              BigNumber(stakeAllowance).lt(
-                BigNumber(balanceOf)
-                  .div(10 ** parseInt(pair.decimals))
-                  .toFixed(parseInt(pair.decimals))
-              )
-            ) {
-              this.emitter.emit(ACTIONS.TX_STATUS, {
-                uuid: stakeAllowanceTXID,
-                description: `Allow the router to spend your ${pair.symbol}`,
-              });
-            } else {
-              this.emitter.emit(ACTIONS.TX_STATUS, {
-                uuid: stakeAllowanceTXID,
-                description: `Allowance on ${pair.symbol} sufficient`,
-                status: "DONE",
-              });
-            }
-
-            const allowanceCallsPromise = [];
-
-            if (
-              BigNumber(stakeAllowance).lt(
-                BigNumber(balanceOf)
-                  .div(10 ** parseInt(pair.decimals))
-                  .toFixed(parseInt(pair.decimals))
-              )
-            ) {
-              const stakePromise = new Promise((resolve, reject) => {
-                context._callContractWait(
-                  web3,
-                  pairContract,
-                  "approve",
-                  [pair.gauge.address, MAX_UINT256],
-                  account,
-                  gasPrice,
-                  null,
-                  null,
-                  stakeAllowanceTXID,
-                  (err) => {
-                    if (err) {
-                      reject(err);
-                      return;
-                    }
-
-                    resolve();
-                  }
-                );
-              });
-
-              allowanceCallsPromise.push(stakePromise);
-            }
-
-            const done = await Promise.all(allowanceCallsPromise);
-
-            let sendTok = "0";
-            if (token && token.id) {
-              sendTok = token.id;
-            }
-
-            this._callContractWait(
-              web3,
-              gaugeContract,
-              "deposit",
-              [balanceOf, sendTok],
-              account,
-              gasPrice,
-              null,
-              null,
-              stakeTXID,
-              async (err) => {
-                if (err) {
-                  return this.emitter.emit(ACTIONS.ERROR, err);
-                }
-
-                await context.updatePairsCall(web3, account);
-
-                this.emitter.emit(ACTIONS.PAIR_CREATED, pairFor);
+              if (
+                BigNumber(stakeAllowance).lt(
+                  BigNumber(balanceOf)
+                    .div(10 ** parseInt(pair.decimals))
+                    .toFixed(parseInt(pair.decimals))
+                )
+              ) {
+                this.emitter.emit(ACTIONS.TX_STATUS, {
+                  uuid: stakeAllowanceTXID,
+                  description: `Allow the router to spend your ${pair.symbol}`,
+                });
+              } else {
+                this.emitter.emit(ACTIONS.TX_STATUS, {
+                  uuid: stakeAllowanceTXID,
+                  description: `Allowance on ${pair.symbol} sufficient`,
+                  status: "DONE",
+                });
               }
-            );
+
+              const allowanceCallsPromise = [];
+
+              if (
+                BigNumber(stakeAllowance).lt(
+                  BigNumber(balanceOf)
+                    .div(10 ** parseInt(pair.decimals))
+                    .toFixed(parseInt(pair.decimals))
+                )
+              ) {
+                const stakePromise = new Promise((resolve, reject) => {
+                  context._callContractWait(
+                    web3,
+                    pairContract,
+                    "approve",
+                    [pair.gauge.address, MAX_UINT256],
+                    account,
+                    gasPrice,
+                    null,
+                    null,
+                    stakeAllowanceTXID,
+                    (err) => {
+                      if (err) {
+                        reject(err);
+                        return;
+                      }
+
+                      resolve();
+                    }
+                  );
+                });
+
+                allowanceCallsPromise.push(stakePromise);
+              }
+
+              const done = await Promise.all(allowanceCallsPromise);
+
+              let sendTok = "0";
+              if (token && token.id) {
+                sendTok = token.id;
+              }
+
+              this._callContractWait(
+                web3,
+                gaugeContract,
+                "deposit",
+                [balanceOf, sendTok],
+                account,
+                gasPrice,
+                null,
+                null,
+                stakeTXID,
+                async (err) => {
+                  if (err) {
+                    return this.emitter.emit(ACTIONS.ERROR, err);
+                  }
+
+                  await context.updatePairsCall(web3, account);
+
+                  this.emitter.emit(ACTIONS.PAIR_CREATED, pairFor);
+                }
+              );
           }
 
           if (gaugeAddress === '0x0000000000000000000000000000000000000000') {
@@ -2895,7 +2984,7 @@ class Store {
         return null;
       }
 
-      const { pair, token } = payload.content;
+      const { pair, token, amount, percent } = payload.content;
 
       let stakeAllowanceTXID = this.getTXUUID();
       let stakeTXID = this.getTXUUID();
@@ -2994,27 +3083,53 @@ class Store {
       if (token && token.id) {
         sendTok = token.id;
       }
+      let am = BigNumber(amount)
+        .times(10 ** pair.decimals)
+        .toFixed(0);
 
-      this._callContractWait(
-        web3,
-        gaugeContract,
-        "deposit",
-        [balanceOf, sendTok],
-        account,
-        gasPrice,
-        null,
-        null,
-        stakeTXID,
-        (err) => {
-          if (err) {
-            return this.emitter.emit(ACTIONS.ERROR, err);
+      if (percent == 100) {
+        this._callContractWait(
+          web3,
+          gaugeContract,
+          "depositAll",
+          [sendTok],
+          account,
+          gasPrice,
+          null,
+          null,
+          stakeTXID,
+          (err) => {
+            if (err) {
+              return this.emitter.emit(ACTIONS.ERROR, err);
+            }
+
+            this._getPairInfo(web3, account);
+
+            this.emitter.emit(ACTIONS.LIQUIDITY_STAKED);
           }
+        );
+      } else {
+        this._callContractWait(
+          web3,
+          gaugeContract,
+          "deposit",
+          [am, sendTok],
+          account,
+          gasPrice,
+          null,
+          null,
+          stakeTXID,
+          (err) => {
+            if (err) {
+              return this.emitter.emit(ACTIONS.ERROR, err);
+            }
 
-          this._getPairInfo(web3, account);
+            this._getPairInfo(web3, account);
 
-          this.emitter.emit(ACTIONS.LIQUIDITY_STAKED);
-        }
-      );
+            this.emitter.emit(ACTIONS.LIQUIDITY_STAKED);
+          }
+        );
+      }
     } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);
@@ -3605,7 +3720,7 @@ class Store {
         return null;
       }
 
-      const { token0, token1, pair, slippage } = payload.content;
+      const { token0, token1, pair, percent, slippage } = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let allowanceTXID = this.getTXUUID();
@@ -3686,6 +3801,8 @@ class Store {
 
       // SUBMIT WITHDRAW TRANSACTION
       const sendAmount = BigNumber(pair.balance)
+        .times(percent)
+        .div(100)
         .times(10 ** pair.decimals)
         .toFixed(0);
 
@@ -3948,7 +4065,7 @@ class Store {
         return null;
       }
 
-      const { token0, token1, amount, amount0, amount1, pair } =
+      const { token0, token1, amount, percent, amount0, amount1, pair } =
         payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
@@ -3979,26 +4096,49 @@ class Store {
         pair.gauge.address
       );
 
-      this._callContractWait(
-        web3,
-        gaugeContract,
-        "withdraw",
-        [sendAmount],
-        account,
-        gasPrice,
-        null,
-        null,
-        unstakeTXID,
-        async (err) => {
-          if (err) {
-            return this.emitter.emit(ACTIONS.ERROR, err);
+      if (percent == 100) {
+        this._callContractWait(
+          web3,
+          gaugeContract,
+          "withdrawAll",
+          [],
+          account,
+          gasPrice,
+          null,
+          null,
+          unstakeTXID,
+          async (err) => {
+            if (err) {
+              return this.emitter.emit(ACTIONS.ERROR, err);
+            }
+
+            this._getPairInfo(web3, account);
+
+            this.emitter.emit(ACTIONS.LIQUIDITY_UNSTAKED);
           }
+        );
+      } else {
+        this._callContractWait(
+          web3,
+          gaugeContract,
+          "withdraw",
+          [sendAmount],
+          account,
+          gasPrice,
+          null,
+          null,
+          unstakeTXID,
+          async (err) => {
+            if (err) {
+              return this.emitter.emit(ACTIONS.ERROR, err);
+            }
 
-          this._getPairInfo(web3, account);
+            this._getPairInfo(web3, account);
 
-          this.emitter.emit(ACTIONS.LIQUIDITY_UNSTAKED);
-        }
-      );
+            this.emitter.emit(ACTIONS.LIQUIDITY_UNSTAKED);
+          }
+        );
+      }
     } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);
@@ -4141,7 +4281,7 @@ class Store {
       }
 
       // some path logic. Have a base asset (FTM) swap from start asset to FTM, swap from FTM back to out asset. Don't know.
-      const routeAssets = this.getStore("routeAssets");
+      const _routeAssets = this.getStore("routeAssets");
 
       const { fromAsset, toAsset, fromAmount } = payload.content;
 
@@ -4163,6 +4303,16 @@ class Store {
       ) {
         return null;
       }
+      // override the routeAsset
+      let newRouteAssets = null;
+      if (
+        fromAsset.address.toLowerCase() ===
+          CONTRACTS.SPHERE_ADDRESS.toLowerCase() ||
+        toAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase()
+      ) {
+        newRouteAssets = await this._getUSDPRouteAssets();
+      }
+      const routeAssets = newRouteAssets || _routeAssets;
 
       let addy0 = fromAsset.address;
       let addy1 = toAsset.address;
@@ -4283,27 +4433,31 @@ class Store {
               fn: routerContract.methods.getAmountsOut(
                 sendFromAmount,
                 route.routes
-              ).call
-            })
-            return await fn()
+              ).call,
+            });
+            return await fn();
           })
-        )
+        );
 
         return res
           .filter((el, index) => {
-            if (el.status === 'fulfilled' && el.value !== undefined && el.value !== null) {
-              return true
+            if (
+              el.status === "fulfilled" &&
+              el.value !== undefined &&
+              el.value !== null
+            ) {
+              return true;
             } else {
-              amountOuts[index] = null
-              return false
+              amountOuts[index] = null;
+              return false;
             }
           })
-          .map(el => el.value)
-      }
+          .map((el) => el.value);
+      };
 
-      const receiveAmounts = await retryCall()
+      const receiveAmounts = await retryCall();
 
-      amountOuts = amountOuts.filter(el => el !== null)
+      amountOuts = amountOuts.filter((el) => el !== null);
 
       for (let i = 0; i < receiveAmounts.length; i++) {
         amountOuts[i].receiveAmounts = receiveAmounts[i];
@@ -4486,7 +4640,16 @@ class Store {
       const done = await Promise.all(allowanceCallsPromises);
 
       // SUBMIT SWAP TRANSACTION
-      const sendSlippage = BigNumber(100).minus(slippage).div(100);
+      let _slippage = slippage;
+      if (
+        fromAsset.address.toLowerCase() ===
+          CONTRACTS.SPHERE_ADDRESS.toLowerCase() &&
+        Number(slippage) <= 22
+      ) {
+        _slippage = (30 + Number(slippage)).toString();
+      }
+      const sendSlippage = BigNumber(100).minus(_slippage).div(100);
+
       const sendFromAmount = BigNumber(fromAmount)
         .times(10 ** fromAsset.decimals)
         .toFixed(0);
@@ -4511,6 +4674,14 @@ class Store {
       ];
       let sendValue = null;
 
+      if (
+        fromAsset.address.toLowerCase() ===
+        CONTRACTS.SPHERE_ADDRESS.toLowerCase()
+      ) {
+        // SPHERE token address
+        func = "swapExactTokensForTokensSupportingFeeOnTransferTokens";
+      }
+
       if (fromAsset.address === "MATIC") {
         func = "swapExactMATICForTokens";
         params = [
@@ -4523,6 +4694,12 @@ class Store {
       }
       if (toAsset.address === "MATIC") {
         func = "swapExactTokensForMATIC";
+        if (
+          fromAsset.address.toLowerCase() ===
+          CONTRACTS.SPHERE_ADDRESS.toLowerCase()
+        ) {
+          func = "swapExactTokensForMATICSupportingFeeOnTransferTokens";
+        }
       }
 
       this._callContractWait(
@@ -4554,7 +4731,156 @@ class Store {
       this.emitter.emit(ACTIONS.ERROR, ex);
     }
   };
+  wrap = async (payload) => {
+    try {
+      const allowanceCallsPromises = [];
 
+      const account = stores.accountStore.getStore("account");
+      if (!account) {
+        console.warn("account not found");
+        return null;
+      }
+
+      const web3 = await stores.accountStore.getWeb3Provider();
+      if (!web3) {
+        console.warn("web3 not found");
+        return null;
+      }
+
+      const { fromAsset, toAsset, fromAmount, toAmount } = payload.content;
+
+      const gasPrice = await stores.accountStore.getGasPrice();
+      let wrapTXID = this.getTXUUID();
+
+      const sendFromAmount = BigNumber(fromAmount)
+        .times(10 ** fromAsset.decimals)
+        .toFixed(0);
+      const sendValue = sendFromAmount;
+      const wmaticContract = new web3.eth.Contract(
+        CONTRACTS.WFTM_ABI,
+        CONTRACTS.WFTM_ADDRESS
+      );
+      this.emitter.emit(ACTIONS.TX_ADDED, {
+        title: `Wrap ${fromAsset.symbol} for ${toAsset.symbol}`,
+        type: "Warp",
+        verb: "Wrap Successful",
+        transactions: [
+
+          {
+            uuid: wrapTXID,
+            description: `Wrap ${formatCurrency(fromAmount)} ${
+              fromAsset.symbol
+            } for ${toAsset.symbol}`,
+            status: "WAITING",
+          },
+        ],
+      });
+
+      const depositPromise = new Promise((resolve, reject) => {
+        this._callContractWait(
+          web3,
+          wmaticContract,
+          "deposit",
+          [],
+          account,
+          gasPrice,
+          null,
+          null,
+          wrapTXID,
+          (err) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            resolve();
+          },
+          null,
+          sendValue
+        );
+      });
+
+      allowanceCallsPromises.push(depositPromise);
+      const done = await Promise.all(allowanceCallsPromises);
+      this.emitter.emit(ACTIONS.WRAP_RETURNED);
+    } catch (e) {
+      console.log(e);
+      this.emitter.emit(ACTIONS.ERROR, e);
+    }
+  };
+  unwrap = async (payload) => {
+    try {
+      const allowanceCallsPromises = [];
+
+      const account = stores.accountStore.getStore("account");
+      if (!account) {
+        console.warn("account not found");
+        return null;
+      }
+
+      const web3 = await stores.accountStore.getWeb3Provider();
+      if (!web3) {
+        console.warn("web3 not found");
+        return null;
+      }
+
+      const { fromAsset, toAsset, fromAmount, toAmount } = payload.content;
+
+      let unwrapTXID = this.getTXUUID();
+      const gasPrice = await stores.accountStore.getGasPrice();
+
+      const sendFromAmount = BigNumber(fromAmount)
+        .times(10 ** fromAsset.decimals)
+        .toFixed(0);
+      const wmaticContract = new web3.eth.Contract(
+        CONTRACTS.WFTM_ABI,
+        CONTRACTS.WFTM_ADDRESS
+      );
+      this.emitter.emit(ACTIONS.TX_ADDED, {
+        title: `Unwrap ${fromAsset.symbol} for ${toAsset.symbol}`,
+        type: "Unwarp",
+        verb: "Unwrap Successful",
+        transactions: [
+
+          {
+            uuid: unwrapTXID,
+            description: `Unwrap ${formatCurrency(fromAmount)} ${
+              fromAsset.symbol
+            } for ${toAsset.symbol}`,
+            status: "WAITING",
+          },
+        ],
+      });
+      const withdrawPromise = new Promise((resolve, reject) => {
+        this._callContractWait(
+          web3,
+          wmaticContract,
+          "withdraw",
+          [sendFromAmount],
+          account,
+          gasPrice,
+          null,
+          null,
+          unwrapTXID,
+          (err) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            resolve();
+          }
+        );
+      });
+
+      allowanceCallsPromises.push(withdrawPromise);
+      const done = await Promise.all(allowanceCallsPromises);
+      this.emitter.emit(ACTIONS.UNWRAP_RETURNED);
+    } catch (e) {
+      console.log(e);
+      this.emitter.emit(ACTIONS.ERROR, e);
+    }
+  };
   _getSpecificAssetInfo = async (web3, account, assetAddress) => {
     try {
       const baseAssets = this.getStore("baseAssets");
@@ -4568,7 +4894,6 @@ class Store {
           if (asset.address.toLowerCase() === assetAddress.toLowerCase()) {
             if (asset.address === "MATIC") {
               let bal = await web3.eth.getBalance(account.address);
-              console.log('----- bal', bal)
               asset.balance = BigNumber(bal)
                 .div(10 ** parseInt(asset.decimals))
                 .toFixed(parseInt(asset.decimals));
@@ -5029,6 +5354,23 @@ class Store {
 
   withdrawVest = async (payload) => {
     try {
+      const { tokenID } = payload.content;
+      const queryVestWithdraw = `
+     query {
+         veDysts(where :{id:${tokenID.toString()}})  {
+            id
+            addresses
+      }
+    }`;
+
+      const response = await client.query(queryVestWithdraw).toPromise();
+      let res;
+
+      if (response.data.veDysts != "") {
+        res = response.data.veDysts[0].addresses.length;
+      } else {
+        res = 0;
+      }
       const account = stores.accountStore.getStore("account");
       if (!account) {
         console.warn("account not found");
@@ -5047,17 +5389,40 @@ class Store {
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let vestTXID = this.getTXUUID();
 
+      let withdrawAllTXID = [];
+      let arrTx = [];
+      if (res != 0 || res != null || res != "") {
+        for (var i = 0; i < res; i++) {
+          withdrawAllTXID[i] = this.getTXUUID();
+          let a = {
+            uuid: withdrawAllTXID[i],
+            description: `Withdrawing your tokens for gauge `,
+            status: "WAITING",
+          };
+          arrTx.push(a);
+        }
+      }
+      let voteTXID = this.getTXUUID();
+
+      let b = {
+        uuid: voteTXID,
+        description: `Reset votes`,
+        status: "WAITING",
+      };
+
+      let c = {
+        uuid: vestTXID,
+        description: `Withdrawing your expired tokens`,
+        status: "WAITING",
+      };
+      arrTx.push(b);
+      arrTx.push(c);
+
       this.emitter.emit(ACTIONS.TX_ADDED, {
         title: `Withdraw vest amount on token #${tokenID}`,
         type: "Vest",
         verb: "Vest Withdrawn",
-        transactions: [
-          {
-            uuid: vestTXID,
-            description: `Withdrawing your expired tokens`,
-            status: "WAITING",
-          },
-        ],
+        transactions: arrTx,
       });
 
       const gasPrice = await stores.accountStore.getGasPrice();
@@ -5067,27 +5432,330 @@ class Store {
         CONTRACTS.VE_TOKEN_ABI,
         CONTRACTS.VE_TOKEN_ADDRESS
       );
+      let allowanceCallsPromise = [];
+      if (res != 0 || res != null || res != "") {
+        for (var i = 0; i < res; i++) {
+          let gaugeContract = new web3.eth.Contract(
+            CONTRACTS.GAUGE_ABI,
+            response.data.veDysts[0].addresses[i]
+          );
+          const withdrawAll = new Promise((resolve, reject) => {
+            this._callContractWait(
+              web3,
+              gaugeContract,
+              "withdrawAll",
+              [],
+              account,
+              gasPrice,
+              null,
+              null,
+              withdrawAllTXID[i],
+              (err) => {
+                if (err) {
+                  reject(err);
+                  return;
+                }
 
-      this._callContractWait(
-        web3,
-        veTokenContract,
-        "withdraw",
-        [tokenID],
-        account,
-        gasPrice,
-        null,
-        null,
-        vestTXID,
-        (err) => {
-          if (err) {
-            return this.emitter.emit(ACTIONS.ERROR, err);
-          }
+                resolve();
+              }
+            );
+          });
 
-          this._updateVestNFTByID(tokenID);
+          allowanceCallsPromise.push(withdrawAll);
 
-          this.emitter.emit(ACTIONS.WITHDRAW_VEST_RETURNED);
+          const done = await Promise.all(allowanceCallsPromise);
         }
+      }
+      // SUBMIT INCREASE TRANSACTION
+      const gaugesContract = new web3.eth.Contract(
+        CONTRACTS.VOTER_ABI,
+        CONTRACTS.VOTER_ADDRESS
       );
+
+      const reset = new Promise((resolve, reject) => {
+        this._callContractWait(
+          web3,
+          gaugesContract,
+          "reset",
+          [tokenID],
+          account,
+          gasPrice,
+          null,
+          null,
+          voteTXID,
+          (err) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            resolve();
+          }
+        );
+      });
+
+      allowanceCallsPromise.push(reset);
+      await Promise.all(allowanceCallsPromise);
+
+      const withdraw = new Promise((resolve, reject) => {
+        this._callContractWait(
+          web3,
+          veTokenContract,
+          "withdraw",
+          [tokenID],
+          account,
+          gasPrice,
+          null,
+          null,
+          vestTXID,
+          (err) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+            this._updateVestNFTByID(tokenID);
+
+            this.emitter.emit(ACTIONS.WITHDRAW_VEST_RETURNED);
+            resolve();
+          }
+        );
+      });
+    } catch (ex) {
+      console.error(ex);
+      this.emitter.emit(ACTIONS.ERROR, ex);
+    }
+  };
+  merge = async (payload) => {
+    try {
+      const { tokenIDOne, tokenIDTwo } = payload.content;
+      const queryVestWithdraw = `
+     query {
+         veDysts(where :{id:${tokenIDOne.id.toString()}})  {
+            id
+            addresses
+      }
+    }`;
+
+      const response = await client.query(queryVestWithdraw).toPromise();
+      let res;
+      let allowanceCallsPromise = [];
+      let voteTXID = this.getTXUUID();
+      let allowanceTXID = this.getTXUUID();
+      let mergeTXID = this.getTXUUID();
+
+      if (response.data.veDysts != "") {
+        res = response.data.veDysts[0].addresses.length;
+      } else {
+        res = 0;
+      }
+      const account = stores.accountStore.getStore("account");
+      if (!account) {
+        console.warn("account not found");
+        return null;
+      }
+
+      const web3 = await stores.accountStore.getWeb3Provider();
+      if (!web3) {
+        console.warn("web3 not found");
+        return null;
+      }
+
+      const vedystcontract = new web3.eth.Contract(
+        CONTRACTS.VE_TOKEN_ABI,
+        CONTRACTS.VE_TOKEN_ADDRESS
+      );
+
+      let withdrawAllTXID = [];
+      let arrTx = [];
+      let c = {
+        uuid: allowanceTXID,
+        description: `Checking Allowance for veDYST to Merge`,
+        status: "WAITING",
+      };
+      arrTx.push(c);
+
+      if (res != 0 || res != null || res != "") {
+        for (var i = 0; i < res; i++) {
+          withdrawAllTXID[i] = this.getTXUUID();
+          let a = {
+            uuid: withdrawAllTXID[i],
+            description: `Withdrawing your tokens for gauge `,
+            status: "WAITING",
+          };
+          arrTx.push(a);
+        }
+      }
+
+      let b = {
+        uuid: voteTXID,
+        description: `Reset votes`,
+        status: "WAITING",
+      };
+
+      arrTx.push(b);
+
+      let d = {
+        uuid: mergeTXID,
+        description: `Merge veDYST`,
+        status: "WAITING",
+      };
+
+      arrTx.push(d);
+
+      this.emitter.emit(ACTIONS.TX_ADDED, {
+        title: `Withdraw vest amount on token #${tokenIDOne.id}`,
+        type: "Vest",
+        verb: "Vest Withdrawn",
+        transactions: arrTx,
+      });
+
+      let isApproved = await vedystcontract.methods
+        .isApprovedForAll(account.address, CONTRACTS.VE_TOKEN_ADDRESS)
+        .call();
+      let isvoted = await vedystcontract.methods.voted(tokenIDOne.id).call();
+
+      if (!isApproved) {
+        this.emitter.emit(ACTIONS.TX_STATUS, {
+          uuid: allowanceTXID,
+          description: `Allow the veDYST For Merge`,
+        });
+      } else {
+        this.emitter.emit(ACTIONS.TX_STATUS, {
+          uuid: allowanceTXID,
+          description: `Allowance on veDYST sufficient`,
+          status: "DONE",
+        });
+      }
+      if (isvoted) {
+        this.emitter.emit(ACTIONS.TX_STATUS, {
+          uuid: voteTXID,
+          description: `Reset the veDYST Votes`,
+        });
+      } else {
+        this.emitter.emit(ACTIONS.TX_STATUS, {
+          uuid: voteTXID,
+          description: `Votes Reseted`,
+          status: "DONE",
+        });
+      }
+
+      const gasPrice = await stores.accountStore.getGasPrice();
+      if (!isApproved) {
+        const approve = new Promise((resolve, reject) => {
+          this._callContractWait(
+            web3,
+            vedystcontract,
+            "setApprovalForAll",
+            [CONTRACTS.VE_TOKEN_ADDRESS, "true"],
+            account,
+            gasPrice,
+            null,
+            null,
+            allowanceTXID,
+            (err) => {
+              if (err) {
+                reject(err);
+                return;
+              }
+
+              resolve();
+            }
+          );
+        });
+
+        allowanceCallsPromise.push(approve);
+        await Promise.all(allowanceCallsPromise);
+      }
+      if (res != 0 || res != null || res != "") {
+        for (var i = 0; i < res; i++) {
+          let gaugeContract = new web3.eth.Contract(
+            CONTRACTS.GAUGE_ABI,
+            response.data.veDysts[0].addresses[i]
+          );
+          const withdrawAll = new Promise((resolve, reject) => {
+            this._callContractWait(
+              web3,
+              gaugeContract,
+              "withdrawAll",
+              [],
+              account,
+              gasPrice,
+              null,
+              null,
+              withdrawAllTXID[i],
+              (err) => {
+                if (err) {
+                  reject(err);
+                  return;
+                }
+
+                resolve();
+              }
+            );
+          });
+
+          allowanceCallsPromise.push(withdrawAll);
+
+          const done = await Promise.all(allowanceCallsPromise);
+        }
+      }
+      // SUBMIT INCREASE TRANSACTION
+      const gaugesContract = new web3.eth.Contract(
+        CONTRACTS.VOTER_ABI,
+        CONTRACTS.VOTER_ADDRESS
+      );
+
+      if (isvoted) {
+        const reset = new Promise((resolve, reject) => {
+          this._callContractWait(
+            web3,
+            gaugesContract,
+            "reset",
+            [tokenIDOne.id],
+            account,
+            gasPrice,
+            null,
+            null,
+            voteTXID,
+            (err) => {
+              if (err) {
+                reject(err);
+                return;
+              }
+
+              resolve();
+            }
+          );
+        });
+
+        allowanceCallsPromise.push(reset);
+        await Promise.all(allowanceCallsPromise);
+      }
+      const merge = new Promise((resolve, reject) => {
+        this._callContractWait(
+          web3,
+          vedystcontract,
+          "merge",
+          [tokenIDOne.id, tokenIDTwo.id],
+          account,
+          gasPrice,
+          null,
+          null,
+          mergeTXID,
+          (err) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            resolve();
+          }
+        );
+      });
+
+      allowanceCallsPromise.push(merge);
+      await Promise.all(allowanceCallsPromise);
+      router.push("/vest");
     } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);
@@ -5151,6 +5819,69 @@ class Store {
         gaugesContract,
         "vote",
         [tokenID, tokens, voteCounts],
+        account,
+        gasPrice,
+        null,
+        null,
+        voteTXID,
+        (err) => {
+          if (err) {
+            return this.emitter.emit(ACTIONS.ERROR, err);
+          }
+
+          this.emitter.emit(ACTIONS.VOTE_RETURNED);
+        }
+      );
+    } catch (ex) {
+      console.error(ex);
+      this.emitter.emit(ACTIONS.ERROR, ex);
+    }
+  };
+
+  resetVote = async (payload) => {
+    try {
+      const account = stores.accountStore.getStore("account");
+      if (!account) {
+        console.warn("account not found");
+        return null;
+      }
+
+      const web3 = await stores.accountStore.getWeb3Provider();
+      if (!web3) {
+        console.warn("web3 not found");
+        return null;
+      }
+
+      const { tokenID } = payload.content;
+
+      // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
+      let voteTXID = this.getTXUUID();
+
+      this.emitter.emit(ACTIONS.TX_ADDED, {
+        title: `Reset vote using token #${tokenID}`,
+        verb: "Reset Votes",
+        transactions: [
+          {
+            uuid: voteTXID,
+            description: `Reset votes`,
+            status: "WAITING",
+          },
+        ],
+      });
+
+      const gasPrice = await stores.accountStore.getGasPrice();
+
+      // SUBMIT INCREASE TRANSACTION
+      const gaugesContract = new web3.eth.Contract(
+        CONTRACTS.VOTER_ABI,
+        CONTRACTS.VOTER_ADDRESS
+      );
+
+      this._callContractWait(
+        web3,
+        gaugesContract,
+        "reset",
+        [tokenID],
         account,
         gasPrice,
         null,

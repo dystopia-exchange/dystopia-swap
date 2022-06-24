@@ -15,9 +15,8 @@ import { ACTIONS } from "../stores/constants";
 import "../styles/global.css";
 import "../styles/variables.css";
 import "../styles/grid.css";
-
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import classes from './home/home.module.css';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import classes from "./home/home.module.css";
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -35,9 +34,9 @@ export default function MyApp({ Component, pageProps }) {
   }, []);
 
   const changeTheme = (dark) => {
-    setAppTheme(dark ? 'dark' : 'light')
+    setAppTheme(dark ? "dark" : "light");
 
-    localStorage.setItem('dystopia.finance-dark-mode', dark ? 'dark' : 'light');
+    localStorage.setItem("dystopia.finance-dark-mode", dark ? "dark" : "light");
   };
 
   const accountConfigureReturned = () => {
@@ -88,39 +87,41 @@ export default function MyApp({ Component, pageProps }) {
         fontFamily: '"Roboto Mono", serif',
       },
     },
-  })
+  });
 
   return (
     <ThemeProvider theme={theme}>
       <React.Fragment>
         <Head>
           <title>Dystopia</title>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1"
-          />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
-        <AppThemeProvider value={{appTheme, setAppTheme}}>
+        <AppThemeProvider value={{ appTheme, setAppTheme }}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline/>
+          <CssBaseline />
           {validateConfigured() && (
             <Layout>
-              <Component {...pageProps} changeTheme={changeTheme}/>
+              <Component {...pageProps} changeTheme={changeTheme} />
             </Layout>
           )}
 
           {!validateConfigured() && (
             <div>
               <img
-                src={appTheme === "dark" ? "/images/big-logo--dark.svg" : "/images/big-logo.svg"}
+                src={
+                  appTheme === "dark"
+                    ? "/images/big-logo--dark.svg"
+                    : "/images/big-logo.svg"
+                }
                 style={{
-                  position: 'absolute',
-                  width: '242px',
-                  height: '30px',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                }}/>
+                  position: "absolute",
+                  width: "242px",
+                  height: "30px",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
             </div>
           )}
         </AppThemeProvider>

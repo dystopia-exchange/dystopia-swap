@@ -102,13 +102,13 @@ const BtnSwap = (props) => {
               <mask id="path-1-inside-1_471_7693" fill="white">
                 <path
                   fillRule="evenodd"
-                  clip-rule="evenodd"
+                  clipRule="evenodd"
                   d="M227 65L292 7.37235e-06L227 0H65L0 65L227 65Z"
                 />
               </mask>
               <path
                 fillRule="evenodd"
-                clip-rule="evenodd"
+                clipRule="evenodd"
                 d="M227 65L292 7.37235e-06L227 0H65L0 65L227 65Z"
                 fill={appTheme === "dark" ? borderColorDark : borderColorLight}
               />
