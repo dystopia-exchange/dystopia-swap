@@ -132,7 +132,6 @@ function Setup() {
 
       const assetsUpdated = () => {
         const baseAsset = stores.stableSwapStore.getStore("baseAssets");
-
         setToAssetOptions(baseAsset);
         setFromAssetOptions(baseAsset);
       };
@@ -283,7 +282,7 @@ function Setup() {
     }
   };
 
-  const toAmountChanged = (event) => {};
+  const toAmountChanged = (event) => { };
 
   const onSlippageChanged = (event) => {
     if (event.target.value == "" || !isNaN(event.target.value)) {
@@ -942,9 +941,8 @@ function Setup() {
         </div>
 
         <div
-          className={`${classes.massiveInputContainer} ${
-            (amountError || assetError) && classes.error
-          }`}
+          className={`${classes.massiveInputContainer} ${(amountError || assetError) && classes.error
+            }`}
         >
           <div className={classes.massiveInputAssetSelect}>
             <AssetSelect
@@ -1235,7 +1233,7 @@ function Setup() {
         </div>
       )}
 
-      {!hidequote?renderSwapInformation():null}
+      {!hidequote ? renderSwapInformation() : null}
 
       {loading && (
         <div className={classes.loader}>
@@ -1245,17 +1243,17 @@ function Setup() {
 
       <BtnSwap
         onClick={
-          (fromAssetValue?.symbol == "MATIC"&&toAssetValue?.symbol == "WMATIC")
+          (fromAssetValue?.symbol == "MATIC" && toAssetValue?.symbol == "WMATIC")
             ? onWrap
-            : (fromAssetValue?.symbol == "WMATIC"&&toAssetValue?.symbol == "MATIC")
-            ? onUnwrap
-            : onSwap
+            : (fromAssetValue?.symbol == "WMATIC" && toAssetValue?.symbol == "MATIC")
+              ? onUnwrap
+              : onSwap
         }
         className={classes.btnSwap}
         labelClassName={
           !fromAmountValue ||
-          fromAmountValue > Number(fromAssetValue.balance) ||
-          Number(fromAmountValue) <= 0
+            fromAmountValue > Number(fromAssetValue.balance) ||
+            Number(fromAmountValue) <= 0
             ? classes["actionButtonText--disabled"]
             : classes.actionButtonText
         }
@@ -1268,22 +1266,22 @@ function Setup() {
           loading && fromAssetValue?.symbol == "MATIC" && toAssetValue?.symbol == "WMATIC"
             ? "Wrapping"
             : loading && fromAssetValue?.symbol == "WMATIC" && toAssetValue?.symbol == "MATIC"
-            ? "Unwrapping"
-            : loading &&
-              !(
-                (fromAssetValue?.symbol == "MATIC" ||
-                  fromAssetValue?.symbol == "WMATIC") &&
-                (toAssetValue?.symbol == "WMATIC" ||
-                  toAssetValue?.symbol == "MATIC")
-              )
-            ? "Swapping"
-            : !fromAmountValue || Number(fromAmountValue) <= 0
-            ? "Enter Amount"
-            : (fromAssetValue?.symbol == "MATIC"&&toAssetValue?.symbol == "WMATIC")
-            ? "Wrap"
-            :(fromAssetValue?.symbol == "WMATIC"&&toAssetValue?.symbol == "MATIC")
-            ? "Unwrap"
-            : "Swap"
+              ? "Unwrapping"
+              : loading &&
+                !(
+                  (fromAssetValue?.symbol == "MATIC" ||
+                    fromAssetValue?.symbol == "WMATIC") &&
+                  (toAssetValue?.symbol == "WMATIC" ||
+                    toAssetValue?.symbol == "MATIC")
+                )
+                ? "Swapping"
+                : !fromAmountValue || Number(fromAmountValue) <= 0
+                  ? "Enter Amount"
+                  : (fromAssetValue?.symbol == "MATIC" && toAssetValue?.symbol == "WMATIC")
+                    ? "Wrap"
+                    : (fromAssetValue?.symbol == "WMATIC" && toAssetValue?.symbol == "MATIC")
+                      ? "Unwrap"
+                      : "Swap"
         }
       ></BtnSwap>
     </div>

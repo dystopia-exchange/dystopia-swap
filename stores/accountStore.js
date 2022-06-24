@@ -6,6 +6,7 @@ import {
 import Multicall from '@dopex-io/web3-multicall';
 import detectProvider from '@metamask/detect-provider'
 import { ethers, Contract, providers } from 'ethers'
+import stores from '../stores'
 // import {
 //   injected,
 //   walletconnect,
@@ -71,7 +72,6 @@ class Store {
 
         let providerChain = await provider.request({ method: 'eth_chainId' });
 
-        console.log('configure provider', provider)
         this.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
 
         this.dispatcher.dispatch({
@@ -107,14 +107,10 @@ class Store {
         const that = this;
 
         window.ethereum.on('accountsChanged', async function (accounts) {
-            const provider = new ethers.providers.Web3Provider(
-                that.getStore('web3context').library.instance
-            )
-            const signer = provider.getSigner();
-            const address = await signer.getAddress()
+            const address = accounts[0]
+            await stores.stableSwapStore.configure()
             that.setStore({
                 account: { address },
-                web3context: { library: { provider } }
             });
             that.emitter.emit(ACTIONS.ACCOUNT_CHANGED);
             that.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
@@ -124,11 +120,12 @@ class Store {
             });
         });
 
-        window.ethereum.on('chainChanged', function (chainId) {
+        window.ethereum.on('chainChanged', async function (chainId) {
             const supportedChainIds = [process.env.NEXT_PUBLIC_CHAINID];
             const parsedChainId = (parseInt(chainId + '', 16) + '');
             const isChainSupported = supportedChainIds.includes(parsedChainId);
             that.setStore({ chainInvalid: !isChainSupported });
+            await stores.stableSwapStore.configure()
             that.emitter.emit(ACTIONS.ACCOUNT_CHANGED);
             that.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
             that.configure()

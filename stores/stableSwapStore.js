@@ -102,10 +102,23 @@ const querytwo = `
   }
 `;
 
+const queryv2 = `
+  query {
+    tokens{
+      id
+      derivedETH
+    }
+    bundle(id:1){
+      ethPrice
+    }
+  }
+`;
+
 const client = createClient({ url: process.env.NEXT_PUBLIC_API });
 const clientV = createClient({ url: process.env.NEXT_PUBLIC_APIV2 });
 
 const removeDuplicate = (arr) => {
+  console.log('--- arr', arr)
   const assets = arr.reduce((acc, item) => {
     acc[item.symbol] = item
     return acc
@@ -1069,10 +1082,12 @@ class Store {
 
       let baseAssets = baseAssetsCall.data.tokens;
       let baseAssetsv2 = responsev2.data.tokens;
+
       for (let i = 0; i < baseAssets.length; i++) {
         for (let j = 0; j < baseAssetsv2.length; j++) {
           if (
-            baseAssetsv2[j].id.toLowerCase() == baseAssets[i].id.toLowerCase()
+            baseAssetsv2[j]?.id?.toLowerCase() !== undefined &&
+            baseAssetsv2[j]?.id?.toLowerCase() == baseAssets[i]?.id?.toLowerCase()
           ) {
             baseAssets[i].derivedETH = baseAssetsv2[j].derivedETH;
           }
@@ -1081,11 +1096,11 @@ class Store {
       const response2 =
         process.env.NEXT_PUBLIC_CHAINID == 80001
           ? await axios.get(
-              `https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`
-            )
+            `https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`
+          )
           : await axios.get(
-              `https://raw.githubusercontent.com/dystopia-exchange/default-token-list/master/tokens/matic.json`
-            );
+            `https://raw.githubusercontent.com/dystopia-exchange/default-token-list/master/tokens/matic.json`
+          );
 
       const nativeFTM = {
         address: CONTRACTS.FTM_ADDRESS,
@@ -1112,11 +1127,10 @@ class Store {
           }
         }
       }
-      console.log(baseAssets);
       let localBaseAssets = this.getLocalAssets();
 
       baseAssets = baseAssets.filter(token => {
-        return token.id != "0x104592a158490a9228070e0a8e5343b499e125d0";
+        return token?.id != "0x104592a158490a9228070e0a8e5343b499e125d0";
       });
       return removeDuplicate([...baseAssets, ...localBaseAssets])
     } catch (ex) {
@@ -1394,14 +1408,14 @@ class Store {
             pair.claimable0 =
               claimable0 != 0
                 ? BigNumber(claimable0)
-                    .div(10 ** parseInt(pair.token0.decimals))
-                    .toFixed(parseInt(pair.token0.decimals))
+                  .div(10 ** parseInt(pair.token0.decimals))
+                  .toFixed(parseInt(pair.token0.decimals))
                 : 0;
             pair.claimable1 =
               claimable1 != 0
                 ? BigNumber(claimable1)
-                    .div(10 ** parseInt(pair.token1.decimals))
-                    .toFixed(parseInt(pair.token1.decimals))
+                  .div(10 ** parseInt(pair.token1.decimals))
+                  .toFixed(parseInt(pair.token1.decimals))
                 : 0;
 
             const totalVolumeInUsdInReserve0 = BigNumber(
@@ -1518,45 +1532,45 @@ class Store {
               pair.gauge.balance =
                 parseInt(gaugeBalance) != 0
                   ? BigNumber(parseInt(gaugeBalance))
-                      .div(10 ** 18)
-                      .toFixed(18)
+                    .div(10 ** 18)
+                    .toFixed(18)
                   : 0;
               pair.gauge.totalSupply =
                 parseInt(totalSupply) != 0
                   ? BigNumber(parseInt(totalSupply))
-                      .div(10 ** 18)
-                      .toFixed(18)
+                    .div(10 ** 18)
+                    .toFixed(18)
                   : 0;
 
               pair.gauge.reserve0 =
                 parseFloat(pair.totalSupply) > 0
                   ? parseFloat(
-                      BigNumber(parseFloat(pair.reserve0))
-                        .times(parseFloat(pair.gauge.totalSupply))
-                        .div(parseFloat(pair.totalSupply))
-                    ).toFixed(parseInt(pair.token0.decimals))
+                    BigNumber(parseFloat(pair.reserve0))
+                      .times(parseFloat(pair.gauge.totalSupply))
+                      .div(parseFloat(pair.totalSupply))
+                  ).toFixed(parseInt(pair.token0.decimals))
                   : "0";
               pair.gauge.reserve1 =
                 parseFloat(pair.totalSupply) > 0
                   ? parseFloat(
-                      BigNumber(parseFloat(pair.reserve1))
-                        .times(parseFloat(pair.gauge.totalSupply))
-                        .div(parseFloat(pair.totalSupply))
-                    ).toFixed(parseInt(pair.token1.decimals))
+                    BigNumber(parseFloat(pair.reserve1))
+                      .times(parseFloat(pair.gauge.totalSupply))
+                      .div(parseFloat(pair.totalSupply))
+                  ).toFixed(parseInt(pair.token1.decimals))
                   : "0";
 
               pair.gauge.weight =
                 parseInt(gaugeWeight) != 0
                   ? BigNumber(parseInt(gaugeWeight))
-                      .div(10 ** 18)
-                      .toFixed(18)
+                    .div(10 ** 18)
+                    .toFixed(18)
                   : 0;
               pair.gauge.weightPercent =
                 parseInt(totalWeight) != 0
                   ? BigNumber(parseInt(gaugeWeight))
-                      .times(100)
-                      .div(parseInt(totalWeight))
-                      .toFixed(2)
+                    .times(100)
+                    .div(parseInt(totalWeight))
+                    .toFixed(2)
                   : 0;
 
               let totalVolumeInUsdInReserve0 = BigNumber(
@@ -2059,7 +2073,7 @@ class Store {
             .getPair(tok0, tok1, isStable)
             .call();
 
-         const gaugesContract = new web3.eth.Contract(
+          const gaugesContract = new web3.eth.Contract(
             CONTRACTS.VOTER_ABI,
             CONTRACTS.VOTER_ADDRESS
           );
@@ -2089,86 +2103,86 @@ class Store {
               account
             );
 
-              if (
-                BigNumber(stakeAllowance).lt(
-                  BigNumber(balanceOf)
-                    .div(10 ** parseInt(pair.decimals))
-                    .toFixed(parseInt(pair.decimals))
-                )
-              ) {
-                this.emitter.emit(ACTIONS.TX_STATUS, {
-                  uuid: stakeAllowanceTXID,
-                  description: `Allow the router to spend your ${pair.symbol}`,
-                });
-              } else {
-                this.emitter.emit(ACTIONS.TX_STATUS, {
-                  uuid: stakeAllowanceTXID,
-                  description: `Allowance on ${pair.symbol} sufficient`,
-                  status: "DONE",
-                });
-              }
+            if (
+              BigNumber(stakeAllowance).lt(
+                BigNumber(balanceOf)
+                  .div(10 ** parseInt(pair.decimals))
+                  .toFixed(parseInt(pair.decimals))
+              )
+            ) {
+              this.emitter.emit(ACTIONS.TX_STATUS, {
+                uuid: stakeAllowanceTXID,
+                description: `Allow the router to spend your ${pair.symbol}`,
+              });
+            } else {
+              this.emitter.emit(ACTIONS.TX_STATUS, {
+                uuid: stakeAllowanceTXID,
+                description: `Allowance on ${pair.symbol} sufficient`,
+                status: "DONE",
+              });
+            }
 
-              const allowanceCallsPromise = [];
+            const allowanceCallsPromise = [];
 
-              if (
-                BigNumber(stakeAllowance).lt(
-                  BigNumber(balanceOf)
-                    .div(10 ** parseInt(pair.decimals))
-                    .toFixed(parseInt(pair.decimals))
-                )
-              ) {
-                const stakePromise = new Promise((resolve, reject) => {
-                  context._callContractWait(
-                    web3,
-                    pairContract,
-                    "approve",
-                    [pair.gauge.address, MAX_UINT256],
-                    account,
-                    gasPrice,
-                    null,
-                    null,
-                    stakeAllowanceTXID,
-                    (err) => {
-                      if (err) {
-                        reject(err);
-                        return;
-                      }
-
-                      resolve();
+            if (
+              BigNumber(stakeAllowance).lt(
+                BigNumber(balanceOf)
+                  .div(10 ** parseInt(pair.decimals))
+                  .toFixed(parseInt(pair.decimals))
+              )
+            ) {
+              const stakePromise = new Promise((resolve, reject) => {
+                context._callContractWait(
+                  web3,
+                  pairContract,
+                  "approve",
+                  [pair.gauge.address, MAX_UINT256],
+                  account,
+                  gasPrice,
+                  null,
+                  null,
+                  stakeAllowanceTXID,
+                  (err) => {
+                    if (err) {
+                      reject(err);
+                      return;
                     }
-                  );
-                });
 
-                allowanceCallsPromise.push(stakePromise);
-              }
-
-              const done = await Promise.all(allowanceCallsPromise);
-
-              let sendTok = "0";
-              if (token && token.id) {
-                sendTok = token.id;
-              }
-
-              this._callContractWait(
-                web3,
-                gaugeContract,
-                "deposit",
-                [balanceOf, sendTok],
-                account,
-                gasPrice,
-                null,
-                null,
-                stakeTXID,
-                async (err) => {
-                  if (err) {
-                    return this.emitter.emit(ACTIONS.ERROR, err);
+                    resolve();
                   }
+                );
+              });
 
-                  await context.updatePairsCall(web3, account);
+              allowanceCallsPromise.push(stakePromise);
+            }
 
-                  this.emitter.emit(ACTIONS.PAIR_CREATED, pairFor);
+            const done = await Promise.all(allowanceCallsPromise);
+
+            let sendTok = "0";
+            if (token && token.id) {
+              sendTok = token.id;
+            }
+
+            this._callContractWait(
+              web3,
+              gaugeContract,
+              "deposit",
+              [balanceOf, sendTok],
+              account,
+              gasPrice,
+              null,
+              null,
+              stakeTXID,
+              async (err) => {
+                if (err) {
+                  return this.emitter.emit(ACTIONS.ERROR, err);
                 }
-              );
+
+                await context.updatePairsCall(web3, account);
+
+                this.emitter.emit(ACTIONS.PAIR_CREATED, pairFor);
+              }
+            );
           }
 
           if (gaugeAddress === '0x0000000000000000000000000000000000000000') {
@@ -4307,7 +4321,7 @@ class Store {
       let newRouteAssets = null;
       if (
         fromAsset.address.toLowerCase() ===
-          CONTRACTS.SPHERE_ADDRESS.toLowerCase() ||
+        CONTRACTS.SPHERE_ADDRESS.toLowerCase() ||
         toAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase()
       ) {
         newRouteAssets = await this._getUSDPRouteAssets();
@@ -4643,7 +4657,7 @@ class Store {
       let _slippage = slippage;
       if (
         fromAsset.address.toLowerCase() ===
-          CONTRACTS.SPHERE_ADDRESS.toLowerCase() &&
+        CONTRACTS.SPHERE_ADDRESS.toLowerCase() &&
         Number(slippage) <= 22
       ) {
         _slippage = (30 + Number(slippage)).toString();
@@ -4768,9 +4782,8 @@ class Store {
 
           {
             uuid: wrapTXID,
-            description: `Wrap ${formatCurrency(fromAmount)} ${
-              fromAsset.symbol
-            } for ${toAsset.symbol}`,
+            description: `Wrap ${formatCurrency(fromAmount)} ${fromAsset.symbol
+              } for ${toAsset.symbol}`,
             status: "WAITING",
           },
         ],
@@ -4844,9 +4857,8 @@ class Store {
 
           {
             uuid: unwrapTXID,
-            description: `Unwrap ${formatCurrency(fromAmount)} ${
-              fromAsset.symbol
-            } for ${toAsset.symbol}`,
+            description: `Unwrap ${formatCurrency(fromAmount)} ${fromAsset.symbol
+              } for ${toAsset.symbol}`,
             status: "WAITING",
           },
         ],
