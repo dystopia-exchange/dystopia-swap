@@ -118,7 +118,6 @@ const client = createClient({ url: process.env.NEXT_PUBLIC_API });
 const clientV = createClient({ url: process.env.NEXT_PUBLIC_APIV2 });
 
 const removeDuplicate = (arr) => {
-  console.log('--- arr', arr)
   const assets = arr.reduce((acc, item) => {
     acc[item.symbol] = item
     return acc
