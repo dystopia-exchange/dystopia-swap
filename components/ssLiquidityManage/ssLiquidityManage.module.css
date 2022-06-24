@@ -1,3 +1,10 @@
+.flyPercent {
+  position: absolute;
+  right: 28px;
+  font-size: 30px;
+  color: #8191B9 !important;
+}
+
 .quoteLoaderDivider,
 .warningDivider {
   position: absolute;
@@ -300,7 +307,7 @@ input[type=number].mediumInputAmount {
   display: flex;
   padding: 11px;
   background: transparent;
-  border: 1px solid #86b9d6;
+  /*border: 1px solid #86b9d6;*/
   cursor: pointer;
 }
 
@@ -311,13 +318,13 @@ input[type=number].mediumInputAmount {
 
 .selectTokenIconContainer--active {
   background: #0b5e8e;
-  border: 1px solid #0b5e8e;
-  transform: rotate(180deg);
+  /*border: 1px solid #0b5e8e;*/
+  /*transform: rotate(180deg);*/
 }
 
 .slippageIconContainer--dark {
   background: transparent;
-  border: 1px solid #5F7285;
+  /*border: 1px solid #5F7285;*/
 }
 
 .slippageIconContainer--dark.slippageIconContainer--active {
@@ -339,15 +346,11 @@ input[type=number].mediumInputAmount {
 .slippageIcon {
   width: 20px;
   height: 20px;
-  fill: #0B5E8E;
+  fill: #D3F85A;
 }
 
 .slippageIcon--active {
-  fill: #ffffff;
-}
-
-.slippageIcon--dark {
-  fill: #4CADE6;
+  /*fill: #D3F85A;*/
 }
 
 .popoverPaper {
@@ -399,6 +402,13 @@ input[type=number].mediumInputAmount {
   width: 436px;
 }
 
+.inputBalanceTextContainerForPair {
+  position: absolute;
+  left: 551px;
+  top: 14px;
+  width: 198px;
+}
+
 .walletIcon {
   width: 18px;
   height: 18px;
@@ -417,7 +427,7 @@ input[type=number].mediumInputAmount {
   font-weight: 500 !important;
   font-size: 14px !important;
   line-height: 120% !important;
-  color: #ffffff;
+  color: #8191B9;
 }
 
 .inputBalanceText {
@@ -1005,6 +1015,33 @@ input[type=number].mediumInputAmount {
   padding: 6px 12px;
 }
 
+
+.nftRow {
+  margin-top: 20px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  background: #151718;
+}
+
+.nftTitle {
+  display: flex;
+  min-width: 540px;
+  align-items: center;
+  font-size: 13px;
+  color: #E4E9F4;
+  padding: 0 10px;
+  height: 45px;
+}
+
+.nftItems {
+  display: flex;
+  width: 100%;
+  background-color: #181d2d;
+  border-radius: 12px;
+  color: #D3F85A;
+}
+
 .controls {
   width: 100%;
   display: flex;
@@ -1116,16 +1153,16 @@ input[type=number].mediumInputAmount {
 }
 
 .tokenSelectInput--dark {
-  padding: 4.5px !important;
-  border: 1px solid #5F7285 !important;
-  border-right: none !important;
-  border-radius: 0 !important;
-  color: #4CADE6 !important;
+  padding: 6px 12px 6px 6px !important;
+  /*border: 1px solid #5F7285 !important;*/
+  /*border-right: none !important;*/
+  /*border-radius: 0 !important;*/
+  color: #D3F85A !important;
 }
 
 .tokenSelectInput > .menuOption > .menuOptionSec,
 .tokenSelectInput--dark > .menuOption > .menuOptionSec {
-  display: none !important;
+  /*display: none !important;*/
 }
 
 .tokenSelectInput > .menuOption > .menuOptionLabel,
@@ -1622,6 +1659,22 @@ input[type=number].mediumInputAmount {
 }
 
 @media (max-width: 860px) {
+  .nftRow {
+    flex-direction: column;
+  }
+  .flyPercent {
+    position: absolute;
+    right: 28px;
+    font-size: 24px;
+    color: #8191B9 !important;
+  }
+
+  .inputBalanceTextContainerForPair {
+    left: 97px;
+    top: 14px;
+    width: 229px;
+  }
+
   .myLiqCont {
     padding: 0;
   }

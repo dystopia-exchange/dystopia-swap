@@ -380,6 +380,7 @@ const AssetSelect = (
           classes.displaySelectContainer,
           size === 'small' ? classes.displaySelectContainerSmall : '',
           size === 'medium' ? classes.displaySelectContainerMedium : '',
+            typeIcon === 'double' ? classes.displaySelectContainerD : '',
         ].join(' ')}
         onClick={() => {
           openSearch();
@@ -434,9 +435,20 @@ const AssetSelect = (
               </div>
             }
 
-            <Typography className={classes.labelSelect}>
-              {value?.symbol}
-            </Typography>
+              {typeIcon === 'double' ? (
+                  <div className="g-flex g-flex-column">
+                      <Typography className={[classes.labelSelect, classes.labelSelectDouble].join(' ')}>
+                          {value?.symbol}
+                      </Typography>
+                      <Typography className={classes.labelSelectSecondary}>
+                          {value?.isStable ? 'Stable pool' : 'VolatilePool'}
+                      </Typography>
+                  </div>
+              ) : (
+                  <Typography className={classes.labelSelect}>
+                      {value?.symbol}
+                  </Typography>
+              )}
 
             <div className={classes.dotsSelectMenu} />
           </div>

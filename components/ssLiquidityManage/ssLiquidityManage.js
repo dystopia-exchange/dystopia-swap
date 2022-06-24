@@ -45,7 +45,6 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
   const router = useRouter();
   const amount0Ref = useRef(null);
   const amount1Ref = useRef(null);
-
   const [hintAnchor, setHintAnchor] = React.useState(null);
   const [stablePoolHntAnchor, setStablePoolHntAnchor] = React.useState(null);
   const [volatilePoolHntAnchor, setVolatilePoolHntAnchor] = React.useState(null);
@@ -1153,7 +1152,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
           {type === "amount0"
             ? createLP
               ? `1st token`
-              : "LP"
+              : "LP token"
             : type !== "withdraw"
             ? `2nd token`
             : "LP"}
@@ -1162,7 +1161,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
         {type !== "withdraw" && (
           <div
             className={[
-              classes.inputBalanceTextContainer,
+              createLP ? classes.inputBalanceTextContainer : classes.inputBalanceTextContainerForPair,
               "g-flex",
               "g-flex--align-center",
             ].join(" ")}
@@ -1287,7 +1286,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                 placeholder="0.00"
                 error={amountError}
                 helperText={amountError}
-                value={createLP ? amountValue : `${amountValue}%`}
+                value={/*createLP ? */amountValue/* : `${amountValue}%`*/}
                 onChange={() => amountChanged(assetValue?.balance)}
                 disabled={
                   depositLoading ||
@@ -1306,6 +1305,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   disableUnderline: true,
                 }}
               />
+              {!createLP && <span className={classes.flyPercent}>%</span>}
             </>
           )}
 
@@ -2359,10 +2359,10 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                       fontWeight: 500,
                       fontSize: 12,
                       marginRight: 30,
-                      color: appTheme === "dark" ? "#ffffff" : "#325569",
+                      color: "#D3F85A",
                     }}
                   >
-                    Token #{option.id}
+                    #{option.id}
                   </Typography>
 
                   <div
@@ -2591,6 +2591,15 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                       )}
                     </div>
 
+                    {!createLP &&
+                        <div className={classes.nftRow} style={{width: '100%',}}>
+                          <div className={classes.nftTitle}>
+                            Choose Locked NFT to connect with your Staking
+                          </div>
+                          <div className={classes.nftItems}>{renderTokenSelect()}</div>
+                        </div>
+                    }
+
                     <div className={classes.myLiqCont}>
                       <div className={classes.myLiq}>
                         <div className={classes.myLiqBal}>
@@ -2606,79 +2615,76 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                             <span className={classes.myLiqSpacer}></span>
                             My Stake
                           </div>
-                          <div>{withdrawAsset?.gauge?.balance ?? '0.0'}</div>
+                          <div>{pair?.gauge?.balance ?? '0.00'}</div>
                         </div>
                       </div>
                     </div>
 
-
                     <div className="g-flex g-flex--wrap" style={{width: '100%'}}>
-                      <div
-                          className={["g-flex g-flex--align-center g-flex--space-between", classes.slippageCont].join(' ')}
-                      >
-                        <div
-                            style={{
-                              display: 'flex',
-                              fontWeight: 400,
-                              fontSize: 14,
-                              // marginBottom: 10,
-                              color: '#E4E9F4',
-                            }}
-                        >
-                          <span style={{marginRight: 10,}}>Slippage</span>
-                          <Hint
-                              fill="#586586"
-                              hintText={
-                                "Slippage is the difference between the price you expect to get on the crypto you have ordered and the price you actually get when the order executes."
-                              }
-                              open={openHint}
-                              anchor={hintAnchor}
-                              handleClick={handleClickPopover}
-                              handleClose={handleClosePopover}
-                              vertical={46}
-                          />
-                        </div>
+                      {createLP &&
+                          <div
+                              className={["g-flex g-flex--align-center g-flex--space-between", classes.slippageCont].join(' ')}
+                          >
+                            <div
+                                style={{
+                                  display: 'flex',
+                                  fontWeight: 400,
+                                  fontSize: 14,
+                                  // marginBottom: 10,
+                                  color: '#E4E9F4',
+                                }}
+                            >
+                              <span style={{marginRight: 10,}}>Slippage</span>
+                              <Hint
+                                  fill="#586586"
+                                  hintText={
+                                    "Slippage is the difference between the price you expect to get on the crypto you have ordered and the price you actually get when the order executes."
+                                  }
+                                  open={openHint}
+                                  anchor={hintAnchor}
+                                  handleClick={handleClickPopover}
+                                  handleClose={handleClosePopover}
+                                  vertical={46}
+                              />
+                            </div>
 
-
-
-                        <div
-                            style={{
-                              position: "relative",
-                              // marginBottom: 20,
-                            }}
-                        >
-
-                          <TextField
-                              placeholder="0.00"
-                              fullWidth
-                              error={slippageError}
-                              helperText={slippageError}
-                              value={slippage}
-                              onChange={onSlippageChanged}
-                              disabled={
-                                  depositLoading ||
-                                  stakeLoading ||
-                                  depositStakeLoading ||
-                                  createLoading
-                              }
-                              classes={{
-                                root: [
-                                  classes.slippageRoot,
-                                  appTheme === "dark"
-                                      ? classes["slippageRoot--dark"]
-                                      : classes["slippageRoot--light"],
-                                ].join(" "),
-                              }}
-                              InputProps={{
-                                style: {
-                                  border: "none",
-                                  borderRadius: 0,
-                                },
-                                classes: {
-                                  root: classes.searchInput,
-                                },
-                                endAdornment: (
-                                    <InputAdornment position="end">
+                            <div
+                                style={{
+                                  position: "relative",
+                                  // marginBottom: 20,
+                                }}
+                            >
+                              <TextField
+                                  placeholder="0.00"
+                                  fullWidth
+                                  error={slippageError}
+                                  helperText={slippageError}
+                                  value={slippage}
+                                  onChange={onSlippageChanged}
+                                  disabled={
+                                      depositLoading ||
+                                      stakeLoading ||
+                                      depositStakeLoading ||
+                                      createLoading
+                                  }
+                                  classes={{
+                                    root: [
+                                      classes.slippageRoot,
+                                      appTheme === "dark"
+                                          ? classes["slippageRoot--dark"]
+                                          : classes["slippageRoot--light"],
+                                    ].join(" "),
+                                  }}
+                                  InputProps={{
+                                    style: {
+                                      border: "none",
+                                      borderRadius: 0,
+                                    },
+                                    classes: {
+                                      root: classes.searchInput,
+                                    },
+                                    endAdornment: (
+                                        <InputAdornment position="end">
                             <span
                                 style={{
                                   color:
@@ -2687,54 +2693,54 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                             >
                               %
                             </span>
-                                    </InputAdornment>
-                                ),
-                              }}
-                              inputProps={{
-                                className: [
-                                  classes.smallInput,
-                                  classes[`inputBalanceSlippageText--${appTheme}`],
-                                ].join(" "),
-                                style: {
-                                  padding: 0,
-                                  borderRadius: 0,
-                                  border: "none",
-                                  fontSize: 14,
-                                  fontWeight: 400,
-                                  lineHeight: "120%",
-                                  color: appTheme === "dark" ? "#C6CDD2" : "#325569",
-                                },
-                              }}
-                          />
-                        </div>
-                      </div>
-
-                      {slippageError && (
-                          <div
-                              style={{ marginTop: 20 }}
-                              className={[
-                                classes.warningContainer,
-                                classes[`warningContainer--${appTheme}`],
-                                classes.warningContainerError,
-                              ].join(" ")}
-                          >
-                            <div
-                                className={[
-                                  classes.warningDivider,
-                                  classes.warningDividerError,
-                                ].join(" ")}
-                            ></div>
-                            <Typography
-                                className={[
-                                  classes.warningError,
-                                  classes[`warningText--${appTheme}`],
-                                ].join(" ")}
-                                align="center"
-                            >
-                              {slippageError}
-                            </Typography>
+                                        </InputAdornment>
+                                    ),
+                                  }}
+                                  inputProps={{
+                                    className: [
+                                      classes.smallInput,
+                                      classes[`inputBalanceSlippageText--${appTheme}`],
+                                    ].join(" "),
+                                    style: {
+                                      padding: 0,
+                                      borderRadius: 0,
+                                      border: "none",
+                                      fontSize: 14,
+                                      fontWeight: 400,
+                                      lineHeight: "120%",
+                                      color: appTheme === "dark" ? "#C6CDD2" : "#325569",
+                                    },
+                                  }}
+                              />
+                            </div>
+                            {slippageError && (
+                                <div
+                                    style={{ marginTop: 20 }}
+                                    className={[
+                                      classes.warningContainer,
+                                      classes[`warningContainer--${appTheme}`],
+                                      classes.warningContainerError,
+                                    ].join(" ")}
+                                >
+                                  <div
+                                      className={[
+                                        classes.warningDivider,
+                                        classes.warningDividerError,
+                                      ].join(" ")}
+                                  ></div>
+                                  <Typography
+                                      className={[
+                                        classes.warningError,
+                                        classes[`warningText--${appTheme}`],
+                                      ].join(" ")}
+                                      align="center"
+                                  >
+                                    {slippageError}
+                                  </Typography>
+                                </div>
+                            )}
                           </div>
-                      )}
+                      }
 
 
                       {createLP && renderMediumInputToggle("stable", stable)}
@@ -2743,11 +2749,6 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                     {/*{renderDepositInformation()}*/}
 
                     <div className={classes.controls}>
-
-                      {!createLP &&
-                          <div className={classes.controlItem}>{renderTokenSelect()}</div>
-                      }
-
                       {needAddToWhiteList !== "" && (
                           <div
                               className={[

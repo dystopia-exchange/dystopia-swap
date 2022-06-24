@@ -12,10 +12,12 @@
   /* padding: 61px 20px 20px; */
   border-radius: 12px;
   width: 280px;
-
   background: #171D2D;
-
   cursor: pointer;
+}
+
+.displaySelectContainerD {
+  width: 510px;
 }
 
 .displaySelectContainerMedium {
@@ -102,6 +104,13 @@ p.labelSelect {
   color: #E4E9F4;
   font-weight: 500;
   font-size: 24px;
+}
+
+p.labelSelectSecondary {
+  margin-left: 12px;
+  color: #8191B9;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .dotsSelectMenu {
@@ -412,8 +421,18 @@ p.labelSelect {
     font-weight: 500;
     margin-left: 8px;
   }
+  p.labelSelectDouble {
+    font-size: 14px;
+    min-width: 160px;
+  }
+  p.labelSelectSecondary {
+    margin-left: 8px;
+    color: #8191B9;
+    font-size: 12px;
+    font-weight: 500;
+  }
   .displaySelectContainer {
-    width: 140px;
+    width: 210px;
   }
 
   .displaySelectContainerSmall {
@@ -435,8 +454,9 @@ p.labelSelect {
   }
 
   .displayDualIconContainer {
-    /*width: 60px;*/
+    width: 36px;
     height: 60px;
+    padding: 6px;
   }
 
   .displayDualIconContainerSmallest {
@@ -493,5 +513,9 @@ p.labelSelect {
   .displayAssetIconSecond {
     padding: 2px;
     border-width: 1px;
+  }
+
+  .dotsSelectMenu {
+    right: -162px;
   }
 }
