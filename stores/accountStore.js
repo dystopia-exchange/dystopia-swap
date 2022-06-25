@@ -58,9 +58,11 @@ class Store {
     // this.getGasPrices();
     injected.isAuthorized().then(async (isAuthorized) => {
       const { supportedChainIds } = injected;
-      let providerChain = await provider.request({ method: "eth_chainId" });
+      let providerChain = provider
+        ? await provider.request({ method: "eth_chainId" })
+        : null;
       const { chainId = process.env.NEXT_PUBLIC_CHAINID } =
-        { chainId: providerChain } || {};
+        { chainId: providerChain ? providerChain : null } || {};
       // fall back to ethereum mainnet if chainId undefined
       const parsedChainId = parseInt(chainId, 16);
       const isChainSupported = supportedChainIds.includes(parsedChainId);
@@ -101,7 +103,7 @@ class Store {
       }
     });
 
-    if (window.ethereum || provider) {
+    if (window.ethereum || provider ? provider : null) {
       this.updateAccount();
     } else {
       window.removeEventListener("ethereum#initialized", this.updateAccount);
@@ -111,15 +113,16 @@ class Store {
     }
   };
 
-  updateAccount = () => {
+  updateAccount = async() => {
     const that = this;
+    const provider = await detectProvider();
     const res = window.ethereum.on(
       "accountsChanged",
       async function (accounts) {
         that.setStore({
           account: { address: accounts[0] },
           web3context: {
-            library: { provider: window.ethereum || (await detectProvider()) },
+            library: { provider: window.ethereum || provider ? provider : null },
           },
         });
         that.emitter.emit(ACTIONS.ACCOUNT_CHANGED);
