@@ -102,7 +102,6 @@ function Setup() {
             );
             return;
           }
-
           setToAmountValue(BigNumber(val.output.finalValue).toFixed(8));
           setQuote(val);
         }
@@ -578,7 +577,7 @@ function Setup() {
               width: "100%",
             }}
           >
-            {fromAmountValue <= Number(fromAssetValue.balance) && (
+            {
               <div
                 className={[
                   classes.warningContainer,
@@ -608,7 +607,7 @@ function Setup() {
                   Price impact: {formatCurrency(quote.priceImpact)}%
                 </Typography>
               </div>
-            )}
+            }
 
             {fromAmountValue > Number(fromAssetValue.balance) && (
               <div
@@ -1235,7 +1234,7 @@ function Setup() {
         </div>
       )}
 
-      {!hidequote?renderSwapInformation():null}
+      {!hidequote ? renderSwapInformation() : null}
 
       {loading && (
         <div className={classes.loader}>
@@ -1245,9 +1244,10 @@ function Setup() {
 
       <BtnSwap
         onClick={
-          (fromAssetValue?.symbol == "MATIC"&&toAssetValue?.symbol == "WMATIC")
+          fromAssetValue?.symbol == "MATIC" && toAssetValue?.symbol == "WMATIC"
             ? onWrap
-            : (fromAssetValue?.symbol == "WMATIC"&&toAssetValue?.symbol == "MATIC")
+            : fromAssetValue?.symbol == "WMATIC" &&
+              toAssetValue?.symbol == "MATIC"
             ? onUnwrap
             : onSwap
         }
@@ -1265,9 +1265,13 @@ function Setup() {
           Number(fromAmountValue) <= 0
         }
         label={
-          loading && fromAssetValue?.symbol == "MATIC" && toAssetValue?.symbol == "WMATIC"
+          loading &&
+          fromAssetValue?.symbol == "MATIC" &&
+          toAssetValue?.symbol == "WMATIC"
             ? "Wrapping"
-            : loading && fromAssetValue?.symbol == "WMATIC" && toAssetValue?.symbol == "MATIC"
+            : loading &&
+              fromAssetValue?.symbol == "WMATIC" &&
+              toAssetValue?.symbol == "MATIC"
             ? "Unwrapping"
             : loading &&
               !(
@@ -1279,9 +1283,11 @@ function Setup() {
             ? "Swapping"
             : !fromAmountValue || Number(fromAmountValue) <= 0
             ? "Enter Amount"
-            : (fromAssetValue?.symbol == "MATIC"&&toAssetValue?.symbol == "WMATIC")
+            : fromAssetValue?.symbol == "MATIC" &&
+              toAssetValue?.symbol == "WMATIC"
             ? "Wrap"
-            :(fromAssetValue?.symbol == "WMATIC"&&toAssetValue?.symbol == "MATIC")
+            : fromAssetValue?.symbol == "WMATIC" &&
+              toAssetValue?.symbol == "MATIC"
             ? "Unwrap"
             : "Swap"
         }
