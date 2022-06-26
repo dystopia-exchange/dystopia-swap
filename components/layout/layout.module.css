@@ -19,21 +19,21 @@
 
 .content--light {
   /* background: var(--background-light) url("/images/background/background-light.jpg") no-repeat top left; */
-  background-size: cover;
+  /* background-size: cover; */
 }
 
 .content--dark {
   /* background: var(--background-dark) url("/images/background/background-dark.jpg") no-repeat top left; */
-  background-size: cover;
+  /* background-size: cover; */
 }
 
-.homePage--light {
+/* .homePage--light {
   background: #DBE6EC;
 }
 
 .homePage--dark {
   background: #151718;
-}
+} */
 
 .main {
   position: relative;
@@ -54,6 +54,12 @@
 
 @media screen and (max-width: 680px) {
   .main {
-    padding: 40px 20px;
+    padding: 48px 20px;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .main {
+    padding: 48px 12px;
   }
 }

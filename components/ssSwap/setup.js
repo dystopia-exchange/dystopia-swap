@@ -316,7 +316,7 @@ function Setup() {
   const renderSwapInformation = () => {
     if (!quoteError && !quoteLoading && quote && fromAmountValue <= Number(fromAssetValue.balance)) {
       return (
-        <div style={{ width: 164, marginRight: 16 }}>
+        <div className={classes.controlsInfo}>
           <div className={classes.depositInfoContainer}>
             {quote && (
               <div
@@ -374,7 +374,7 @@ function Setup() {
     }
 
     return (
-      <div style={{ width: 164, marginRight: 16 }}>
+      <div className={classes.controlsInfo}>
         <div className={classes.depositInfoContainer}>
           <div
             style={{
@@ -615,7 +615,7 @@ function Setup() {
             Slippage
           </Typography>
 
-          <div style={{ marginRight: 14 }}>
+          <div className={classes.inputBalanceSlippageHelp}>
             <Hint
               hintText={
                 "Slippage is the difference between the price you expect to get on the crypto you have ordered and the price you actually get when the order executes."
@@ -654,7 +654,7 @@ function Setup() {
               padding: 0,
               borderRadius: 0,
               border: "none",
-              color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+              color: "#E4E9F4",
               paddingRight: amountValue?.length >= 8 ? 10 : 0,
             },
           }}
@@ -733,13 +733,7 @@ function Setup() {
                   Number(assetValue?.balance) > 0 &&
                   type === "From" && (
                     <div
-                      style={{
-                        cursor: "pointer",
-                        fontWeight: 500,
-                        fontSize: 14,
-                        lineHeight: "120%",
-                        color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
-                      }}
+                      className={classes.max}
                       onClick={() => setBalance100()}
                     >
                       MAX
@@ -1104,10 +1098,10 @@ function Setup() {
 
       {renderRoute()}
 
-      <div style={{ display: "flex" }}>
+      <div className={classes.controls}>
         {renderSwapInformation()}
 
-        <div style={{ flexGrow: 1 }}>
+        <div className={classes.controlsBtn}>
           <BtnSwap
             onClick={onSwap}
             className={classes.btnSwap}

@@ -325,13 +325,12 @@ const AssetSelect = (
             }}
           />
         </div>
-
+        {/*  */}
         <div
-          className={['g-flex-column__item', 'g-flex-column'].join(' ')}
+          className={[classes.dialogOptions, 'g-flex-column__item', 'g-flex-column'].join(' ')}
           style={{
             position: 'relative',
             marginBottom: !isManageLocal ? 34 : 45,
-            marginTop: 28,
           }}>
           {/* <Borders/> */}
 
@@ -462,6 +461,8 @@ const AssetSelect = (
           className={[classes.dialogContainer, 'g-flex-column'].join(' ')}
           style={{
             width: 782,
+            maxWidth: "100%",
+            maxHeight: "100%",
             height: 768,
             // background: appTheme === "dark" ? '#151718' : '#DBE6EC',
             // border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',

@@ -25,7 +25,7 @@ export default function UnlockModal(props) {
       fullWidth={false}
       maxWidth="false"
       TransitionComponent={Transition}
-      style={{borderRadius: 0}}
+      style={{ borderRadius: 0 }}
       onClick={(e) => {
         if (e.target.classList.contains('MuiDialog-container')) {
           closeModal()
@@ -44,24 +44,15 @@ export default function UnlockModal(props) {
       }}>
         <DialogTitle
           style={{
-            // padding: windowWidth > 530 ? 40 : 15,
-            padding: 40,
+            padding: windowWidth > 1000 ? 40 : "30px 16px 16px",
             paddingBottom: 0,
-            fontWeight: 500,
-            fontSize: 60,
-            lineHeight: '72px',
-            color: '#fff',
           }}
         >
           <div style={{
             display: 'flex',
-            // alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-            <div style={{
-              // color: appTheme === "dark" ? '#ffffff' : '#0A2C40'
-              color: "#fff"
-            }}>
+            <div className={classes.unlockModalTitle}>
               Select your wallet provider
             </div>
 
@@ -81,7 +72,6 @@ export default function UnlockModal(props) {
                   cursor: 'pointer',
                   fontSize: 14,
                   color: '#1e2c48',
-                  // color: appTheme === "dark" ? '#ffffff' : '#0A2C40'
                 }}
                 onClick={closeModal}
               />
@@ -90,12 +80,10 @@ export default function UnlockModal(props) {
         </DialogTitle>
 
         <DialogContent style={{
-          // padding: windowWidth > 530 ? 30 : 15,
-          padding: 40,
+          padding: windowWidth > 1000 ? 40 : 16,
           paddingBottom: 12,
-          // paddingBottom: windowWidth > 530 ? 20 : 10,
         }}>
-          <Unlock closeModal={closeModal}/>
+          <Unlock closeModal={closeModal} />
         </DialogContent>
       </div>
     </Dialog>
