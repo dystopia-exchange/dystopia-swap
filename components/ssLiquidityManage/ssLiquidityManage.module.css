@@ -5,6 +5,14 @@
   color: #8191B9 !important;
 }
 
+.flyPercentWithdraw {
+  position: absolute;
+  top: 20px;
+  right: 28px;
+  font-size: 30px;
+  color: #8191B9 !important;
+}
+
 .quoteLoaderDivider,
 .warningDivider {
   position: absolute;
@@ -373,8 +381,14 @@ input[type=number].mediumInputAmount {
   margin-top: 2px;
   margin-bottom: 2px;
   position: relative;
-
   background-color: #131314;
+}
+
+.textFieldReceiveAsset {
+  padding: 12px 20px;
+  position: relative;
+  background-color: #131314;
+  border-radius: 12px;
 }
 
 .textField--amount0-dark {
@@ -391,15 +405,17 @@ input[type=number].mediumInputAmount {
 }
 
 .textField--withdraw-dark {
-   height: 136px;
-   background-image: url("/images/ui/withdraw-tokens--dark.svg");
+   /*height: 136px;*/
+   /*background-image: url("/images/ui/withdraw-tokens--dark.svg");*/
+  border-radius: 12px;
+  padding: 20px;
 }
 
 .inputBalanceTextContainer {
   position: absolute;
-  left: 318px;
+  left: 434px;
   top: 14px;
-  width: 436px;
+  width: 320px;
 }
 
 .inputBalanceTextContainerForPair {
@@ -414,11 +430,13 @@ input[type=number].mediumInputAmount {
   height: 18px;
   margin-right: 10px;
   cursor: pointer;
+  /*margin-left: 24px;*/
 }
 
 .inputTitleText {
   display: flex;
   margin: 0 0 8px 0 !important;
+
 }
 
 .inputBalanceText,
@@ -439,6 +457,10 @@ input[type=number].mediumInputAmount {
   display: flex;
   border-radius: 10px;
   align-items: center;
+}
+
+.massiveInputAssetSelect {
+  width: 100%;
 }
 
 .largeInput {
@@ -483,13 +505,14 @@ input[type=number].mediumInputAmount {
 }
 
 .tokenTextSecond {
-  left: 18px;
+  left: 148px;
   top: 52px;
+  font-size: 24px;
 }
 
 .tokenTextLabel--dark,
 .tokenTextSecond--dark {
-  color: #7C838A;
+  color: #E4E9F4;
 }
 
 .tokenTextHeader {
@@ -526,6 +549,11 @@ input[type=number].mediumInputAmount {
   margin-left: 320px;
   margin-top: -20px;
   z-index: 11;
+}
+
+.swapIconContainerWithdraw {
+  width: 60px;
+  height: 60px;
 }
 
 .swapIconContainer {
@@ -589,7 +617,7 @@ input[type=number].mediumInputAmount {
 }
 
 .swapIconContainerWithdraw {
-  margin-left: 170px;
+  margin-left: 366px;
 }
 
 .assetSelectMenu {
@@ -722,8 +750,8 @@ input[type=number].mediumInputAmount {
 
 .massiveInputAmountUnstake {
   position: absolute !important;
-  left: 18px;
-  top: 11px;
+  left: 20px;
+  top: 22px;
   border: none !important;
   margin-right: 20px !important;
 }
@@ -765,11 +793,9 @@ input[type=number].mediumInputAmount {
   position: relative;
   display: flex;
   align-items: center;
-  width: 190px;
+  width: 100%;
   height: 75px;
-  margin-top: 16px;
   background: #B9DFF5;
-  border: 1px solid #86B9D6;
 }
 
 .mediumInputContainer--withdrawAmount0 {
@@ -777,8 +803,8 @@ input[type=number].mediumInputAmount {
 }
 
 .mediumInputContainer--dark {
-  background: #24292D;
-  border: 1px solid #5F7285;
+  background: #181d2d;
+  border-radius: 12px;
 }
 
 .mediumInputAssetSelect {
@@ -802,6 +828,12 @@ input[type=number].mediumInputAmount {
   height: 36px;
   margin-left: 20px;
   position: relative;
+}
+
+.mediumdisplayDualIconContainerTitle {
+  color: #8191B9;
+  font-size: 14px;
+  margin-bottom: 6px;
 }
 
 .mediumdisplayAssetIcon {
@@ -839,8 +871,9 @@ input[type=number].mediumInputAmount {
 }
 
 .receiveAssets {
+  column-gap: 20px;
   display: flex;
-  margin-top: 2px;
+  margin-top: 22px;
 }
 
 .depositInfoContainer,
@@ -1069,6 +1102,11 @@ input[type=number].mediumInputAmount {
 .toggles {
   width: 67%;
   padding-left: 16px;
+  margin-top: 20px;
+}
+
+.togglesWithdraw {
+  width: 100%;
   margin-top: 20px;
 }
 
@@ -1424,21 +1462,31 @@ input[type=number].mediumInputAmount {
   color: #1F2B49 !important;
 }
 
+.liqWrapper {
+  background-color: #131314;
+  border-radius: 12px;
+  padding: 4px 0;
+}
+
+.liqTokens {
+  width: 56%;
+  position: relative;
+}
+
+.labelSelectSecondary {
+  color: #8191B9;
+  font-size: 16px;
+  font-weight: 500;
+}
+
 .liqHeader {
   position: relative;
   height: 40px;
   padding-left: 18px;
-  border: 1px solid #86B9D6;
-  background: #9BC9E4;
   font-weight: 500;
   font-size: 14px;
   line-height: 120%;
   color: #FFFFFF;
-}
-
-.liqHeader--dark {
-  background: #2D3741;
-  border: 1px solid #5F7285;
 }
 
 .walletIcon {
@@ -1461,23 +1509,32 @@ input[type=number].mediumInputAmount {
 
 .liqBody {
   position: relative;
-  height: 95px;
-  padding-left: 18px;
-  background: #B9DFF5;
-  border: 1px solid #86B9D6;
+  height: 78px;
+  margin: 0 0 12px 20px;
+  padding-left: 20px;
   border-top: none;
 }
 
+.liqBodyIn {
+  background: #171D2D;
+  margin: 0 20px 0 40px;
+  border-radius: 12px;
+}
+
 .liqBody--dark {
-  background: #24292D;
-  border: 1px solid #5F7285;
   border-top: none;
 }
 
 .liqHeaderLabel,
 .liqBodyLabel {
-  width: 130px;
-  border-right: none;
+  color: #8191B9;
+  width: 100%;
+  /*border-right: none;*/
+}
+
+.liqBodyLabelOutline {
+  border: 1px solid #5F7285;
+  border-radius: 12px;
 }
 
 .liqBodyIconContainer {
@@ -1659,14 +1716,28 @@ input[type=number].mediumInputAmount {
 }
 
 @media (max-width: 860px) {
+  .liqBodyIn {
+    margin: 0 20px 0 36px;
+  }
+
+  .liqHeaderWithdraw {
+    left: -90px;
+    width: 211px;
+  }
+
+  .liqTokens {
+    width: 64%;
+  }
+
   .nftRow {
     flex-direction: column;
   }
   .flyPercent {
     position: absolute;
-    right: 28px;
-    font-size: 24px;
+    right: 3px;
+    font-size: 20px;
     color: #8191B9 !important;
+    top: 19px;
   }
 
   .inputBalanceTextContainerForPair {
@@ -1762,7 +1833,7 @@ input[type=number].mediumInputAmount {
 
   .swapIconContainerWithdraw {
     position: absolute;
-    margin-left: 110px;
+    margin-left: 150px;
     margin-top: -20px;
   }
 
@@ -1782,7 +1853,7 @@ input[type=number].mediumInputAmount {
   }
 
   .mediumInputContainer {
-    width: 130px;
+    width: 100%;
     height: 61px;
   }
 
@@ -2041,14 +2112,14 @@ input[type=number].mediumInputAmount {
   }
 
   .liqBodyIconContainer {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     padding: 2px;
   }
 
   .liqBodyIcon {
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
   }
 
   .tokenTextHeader {
@@ -2058,7 +2129,7 @@ input[type=number].mediumInputAmount {
   .liqBodyLabel,
   .liqHeaderLabel {
     padding-left: 5px;
-    width: 80px;
+    width: 100%;
   }
 
   .liqHeader {
@@ -2075,9 +2146,10 @@ input[type=number].mediumInputAmount {
   }
 
   .tokenTextSecond {
-    left: 10px;
-    top: 38px;
-    font-size: 12px;
+    left: 86px;
+    top: 57px;
+    font-size: 14px;
+    width: 100%;
   }
 
   .depositHeader {
