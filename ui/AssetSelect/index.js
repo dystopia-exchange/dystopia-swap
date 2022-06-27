@@ -12,6 +12,7 @@ import {
   MenuItem,
   TextField,
   Typography,
+  Popover,
 } from '@mui/material';
 import { ArrowBackIosNew, Close, DeleteOutline, Search } from '@mui/icons-material';
 import { formatCurrency } from '../../utils';
@@ -438,6 +439,37 @@ const AssetSelect = (
             </Typography>
 
             <div className={classes.dotsSelectMenu} />
+            {/* <Button
+              // aria-describedby={id}
+              // variant="contained"
+              // onClick={handleClick}
+            >
+              Open Popover
+            </Button>
+            <Popover
+              // id={id}
+              open={true}
+              // anchorEl={anchorEl}
+              // onClose={handleClose}
+              // className={classes.popover}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              classes={{
+                paper: classes.popover,
+              }}
+            >
+              <div className={classes.popoverContent}>
+                <button>
+                  Copy address
+                </button>
+                <button>
+                  <img src="/connectors/icn-metamask.svg" width="16px" />
+                  Add to the wallet
+                </button>
+              </div>
+            </Popover> */}
           </div>
         </div>
       </div>

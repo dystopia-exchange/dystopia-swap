@@ -512,6 +512,51 @@ p.labelSelect {
   }
 }
 
+.popover {
+  border-radius: 12px !important;
+  border: 1px solid #779BF4;
+
+  background: #1F2B49 !important;
+}
+
+.popoverContent {
+  display: flex;
+  flex-direction: column;
+
+  padding: 24px;
+}
+
+.popoverContent button {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  height: 40px;
+
+  margin-bottom: 12px;
+  padding: 0 16px;
+
+  font-family: 'Poppins';
+  font-weight: 600;
+  font-size: 14px !important;
+  line-height: 16px !important;
+  text-transform: uppercase !important;
+
+  border: 1px solid #779BF4;
+  border-radius: 12px;
+
+  background: rgba(119, 155, 244, 0.15);
+  color: #779BF4 !important;
+}
+
+.popoverContent button img {
+  margin-right: 8px;
+}
+
+.popoverContent button:last-child {
+  margin-bottom: 0;
+}
+
 /* @media (max-width: 470px) {
   .displaySelectContainer {
     padding: 43px 10px 10px;
