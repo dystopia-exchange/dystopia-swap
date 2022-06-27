@@ -266,12 +266,7 @@ function MyComponent(props) {
         return (
           <div
             key={name}
-            style={{
-              width: "calc(50% - 14px)",
-              padding: "0px",
-              display: "flex",
-              marginBottom: "28px",
-            }}
+            className={classes.column}
           >
             <Button
               TouchRippleProps={{ classes: classes.rippleClasses }}
@@ -354,25 +349,11 @@ function MyComponent(props) {
                     )}
 
                     <img
-                      style={{
-                        width: "40px",
-                        height: "40px",
-                        marginRight: 20,
-                      }}
+                      className={classes.icon}
                       src={url}
                       alt=""
                     />
-                    <Typography
-                      style={{
-                        fontWeight: 500,
-                        // fontSize: windowWidth > 530 ? 24 : 18,
-                        fontSize: 32,
-                        lineHeight: "125%",
-                        textAlign: "left",
-                        // color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
-                        color: "#779BF4",
-                      }}
-                    >
+                    <Typography className={classes.text}>
                       {display}
                     </Typography>
                   </div>

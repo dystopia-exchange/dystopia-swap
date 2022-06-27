@@ -316,7 +316,7 @@ function Setup() {
   const renderSwapInformation = () => {
     if (!quoteError && !quoteLoading && quote && fromAmountValue <= Number(fromAssetValue.balance)) {
       return (
-        <div style={{ width: 164, marginRight: 16 }}>
+        <div className={classes.controlsInfo}>
           <div className={classes.depositInfoContainer}>
             {quote && (
               <div
@@ -374,7 +374,7 @@ function Setup() {
     }
 
     return (
-      <div style={{ width: 164, marginRight: 16 }}>
+      <div className={classes.controlsInfo}>
         <div className={classes.depositInfoContainer}>
           <div
             style={{
@@ -424,6 +424,7 @@ function Setup() {
     if (!quoteError && !quoteLoading && quote && fromAmountValue > Number(fromAssetValue.balance)) {
       return (
         <div
+          style={{ marginBottom: 20 }}
           className={[
             classes.warningContainer,
             classes[`warningContainer--${appTheme}`],
@@ -489,23 +490,27 @@ function Setup() {
             </div>
 
             <div className={classes.line}>
-              <div
-                className={[
-                  classes.routeLinesLeft,
-                  classes[`routeLinesLeft--${appTheme}`],
-                ].join(" ")}
-              >
-                <div className={classes.routeLinesLeftArrow} />
-              </div>
-              {/* <div
-                className={[
-                  classes.routeLinesLeft,
-                  classes[`routeLinesLeft2--${appTheme}`],
-                ].join(" ")}
-              ></div> */}
-
+              {!quote?.output?.routeAsset && (
+                <div
+                  className={[
+                    classes.routeLinesLeft,
+                    classes[`routeLinesLeft--${appTheme}`],
+                  ].join(" ")}
+                >
+                  <div className={classes.routeLinesLeftArrow} />
+                </div>
+              )}
+              
               {quote?.output?.routeAsset && (
                 <>
+                  <div
+                    className={[
+                      classes.routeLinesLeftPart1,
+                      classes[`routeLinesLeft--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    <div className={classes.routeLinesLeftPart1Arrow} />
+                  </div>
                   <div
                     className={[
                       classes.routeLinesLeftText,
@@ -514,25 +519,43 @@ function Setup() {
                   >
                     {quote.output.routes[0].stable ? "Stable" : "Volatile"}
                   </div>
-
-                  <img
+                  <div
                     className={[
-                      classes.routeIcon,
-                      classes[`routeIcon--${appTheme}`],
+                      classes.routeLinesLeftPart2,
+                      classes[`routeLinesLeft--${appTheme}`],
                     ].join(" ")}
-                    alt=""
-                    src={
-                      quote.output.routeAsset
-                        ? `${quote.output.routeAsset.logoURI}`
-                        : ""
-                    }
-                    height="40px"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                    }}
-                  />
+                  >
+                    <div className={classes.routeLinesLeftPart2Arrow} />
+                  </div>
 
+                  <div className={classes.routeIconWrap}>
+                    <img
+                      className={[
+                        classes.routeIcon,
+                        classes[`routeIcon--${appTheme}`],
+                      ].join(" ")}
+                      alt=""
+                      src={
+                        quote.output.routeAsset
+                          ? `${quote.output.routeAsset.logoURI}`
+                          : ""
+                      }
+                      height="40px"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                      }}
+                    />
+                  </div>
+
+                  <div
+                    className={[
+                      classes.routeLinesRightPart1,
+                      classes[`routeLinesLeft--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    <div className={classes.routeLinesRightPart1Arrow} />
+                  </div>
                   <div
                     className={[
                       classes.routeLinesRightText,
@@ -540,6 +563,14 @@ function Setup() {
                     ].join(" ")}
                   >
                     {quote.output.routes[1].stable ? "Stable" : "Volatile"}
+                  </div>
+                  <div
+                    className={[
+                      classes.routeLinesRightPart2,
+                      classes[`routeLinesLeft--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    <div className={classes.routeLinesRightPart2Arrow} />
                   </div>
                 </>
               )}
@@ -555,20 +586,16 @@ function Setup() {
                 </div>
               )}
 
-              <div
-                className={[
-                  classes.routeLinesRight,
-                  classes[`routeLinesRight--${appTheme}`],
-                ].join(" ")}
-              >
-                <div className={classes.routeLinesRightArrow} />
-              </div>
-              {/* <div
-                className={[
-                  classes.routeLinesRight,
-                  classes[`routeLinesRight2--${appTheme}`],
-                ].join(" ")}
-              ></div> */}
+              {!quote?.output?.routeAsset && (
+                <div
+                  className={[
+                    classes.routeLinesRight,
+                    classes[`routeLinesRight--${appTheme}`],
+                  ].join(" ")}
+                >
+                  <div className={classes.routeLinesRightArrow} />
+                </div>
+              )}
             </div>
 
             <div className={classes.routeIconWrap}>
@@ -615,7 +642,7 @@ function Setup() {
             Slippage
           </Typography>
 
-          <div style={{ marginRight: 14 }}>
+          <div className={classes.inputBalanceSlippageHelp}>
             <Hint
               hintText={
                 "Slippage is the difference between the price you expect to get on the crypto you have ordered and the price you actually get when the order executes."
@@ -654,7 +681,7 @@ function Setup() {
               padding: 0,
               borderRadius: 0,
               border: "none",
-              color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+              color: "#E4E9F4",
               paddingRight: amountValue?.length >= 8 ? 10 : 0,
             },
           }}
@@ -733,13 +760,7 @@ function Setup() {
                   Number(assetValue?.balance) > 0 &&
                   type === "From" && (
                     <div
-                      style={{
-                        cursor: "pointer",
-                        fontWeight: 500,
-                        fontSize: 14,
-                        lineHeight: "120%",
-                        color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
-                      }}
+                      className={classes.max}
                       onClick={() => setBalance100()}
                     >
                       MAX
@@ -1011,7 +1032,7 @@ function Setup() {
 
       {toAssetError && (
         <div
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 20, marginBottom: 20 }}
           className={[
             classes.warningContainer,
             classes[`warningContainer--${appTheme}`],
@@ -1038,7 +1059,7 @@ function Setup() {
 
       {slippageError && (
         <div
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 20, marginBottom: 20 }}
           className={[
             classes.warningContainer,
             classes[`warningContainer--${appTheme}`],
@@ -1104,10 +1125,10 @@ function Setup() {
 
       {renderRoute()}
 
-      <div style={{ display: "flex" }}>
+      <div className={classes.controls}>
         {renderSwapInformation()}
 
-        <div style={{ flexGrow: 1 }}>
+        <div className={classes.controlsBtn}>
           <BtnSwap
             onClick={onSwap}
             className={classes.btnSwap}

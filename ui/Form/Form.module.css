@@ -2,6 +2,7 @@
   position: relative;
   /* width: 463px; */
   width: 782px;
+  max-width: 100%;
   height: auto;
   /* margin-left: 1px; */
   /* background: var(--background-dark); */
@@ -84,7 +85,7 @@
   /* border-color: var(--border-light); */
 }
 
-@media (max-width: 470px) {
+/* @media (max-width: 470px) {
   .form,
   .top,
   .bottom {
@@ -126,4 +127,4 @@
   .form--light {
     border-bottom: 1px solid var(--border-light);
   }
-}
+} */
