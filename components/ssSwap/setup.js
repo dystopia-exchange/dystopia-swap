@@ -424,6 +424,7 @@ function Setup() {
     if (!quoteError && !quoteLoading && quote && fromAmountValue > Number(fromAssetValue.balance)) {
       return (
         <div
+          style={{ marginBottom: 20 }}
           className={[
             classes.warningContainer,
             classes[`warningContainer--${appTheme}`],
@@ -489,23 +490,27 @@ function Setup() {
             </div>
 
             <div className={classes.line}>
-              <div
-                className={[
-                  classes.routeLinesLeft,
-                  classes[`routeLinesLeft--${appTheme}`],
-                ].join(" ")}
-              >
-                <div className={classes.routeLinesLeftArrow} />
-              </div>
-              {/* <div
-                className={[
-                  classes.routeLinesLeft,
-                  classes[`routeLinesLeft2--${appTheme}`],
-                ].join(" ")}
-              ></div> */}
-
+              {!quote?.output?.routeAsset && (
+                <div
+                  className={[
+                    classes.routeLinesLeft,
+                    classes[`routeLinesLeft--${appTheme}`],
+                  ].join(" ")}
+                >
+                  <div className={classes.routeLinesLeftArrow} />
+                </div>
+              )}
+              
               {quote?.output?.routeAsset && (
                 <>
+                  <div
+                    className={[
+                      classes.routeLinesLeftPart1,
+                      classes[`routeLinesLeft--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    <div className={classes.routeLinesLeftPart1Arrow} />
+                  </div>
                   <div
                     className={[
                       classes.routeLinesLeftText,
@@ -514,25 +519,43 @@ function Setup() {
                   >
                     {quote.output.routes[0].stable ? "Stable" : "Volatile"}
                   </div>
-
-                  <img
+                  <div
                     className={[
-                      classes.routeIcon,
-                      classes[`routeIcon--${appTheme}`],
+                      classes.routeLinesLeftPart2,
+                      classes[`routeLinesLeft--${appTheme}`],
                     ].join(" ")}
-                    alt=""
-                    src={
-                      quote.output.routeAsset
-                        ? `${quote.output.routeAsset.logoURI}`
-                        : ""
-                    }
-                    height="40px"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                    }}
-                  />
+                  >
+                    <div className={classes.routeLinesLeftPart2Arrow} />
+                  </div>
 
+                  <div className={classes.routeIconWrap}>
+                    <img
+                      className={[
+                        classes.routeIcon,
+                        classes[`routeIcon--${appTheme}`],
+                      ].join(" ")}
+                      alt=""
+                      src={
+                        quote.output.routeAsset
+                          ? `${quote.output.routeAsset.logoURI}`
+                          : ""
+                      }
+                      height="40px"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                      }}
+                    />
+                  </div>
+
+                  <div
+                    className={[
+                      classes.routeLinesRightPart1,
+                      classes[`routeLinesLeft--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    <div className={classes.routeLinesRightPart1Arrow} />
+                  </div>
                   <div
                     className={[
                       classes.routeLinesRightText,
@@ -540,6 +563,14 @@ function Setup() {
                     ].join(" ")}
                   >
                     {quote.output.routes[1].stable ? "Stable" : "Volatile"}
+                  </div>
+                  <div
+                    className={[
+                      classes.routeLinesRightPart2,
+                      classes[`routeLinesLeft--${appTheme}`],
+                    ].join(" ")}
+                  >
+                    <div className={classes.routeLinesRightPart2Arrow} />
                   </div>
                 </>
               )}
@@ -555,20 +586,16 @@ function Setup() {
                 </div>
               )}
 
-              <div
-                className={[
-                  classes.routeLinesRight,
-                  classes[`routeLinesRight--${appTheme}`],
-                ].join(" ")}
-              >
-                <div className={classes.routeLinesRightArrow} />
-              </div>
-              {/* <div
-                className={[
-                  classes.routeLinesRight,
-                  classes[`routeLinesRight2--${appTheme}`],
-                ].join(" ")}
-              ></div> */}
+              {!quote?.output?.routeAsset && (
+                <div
+                  className={[
+                    classes.routeLinesRight,
+                    classes[`routeLinesRight--${appTheme}`],
+                  ].join(" ")}
+                >
+                  <div className={classes.routeLinesRightArrow} />
+                </div>
+              )}
             </div>
 
             <div className={classes.routeIconWrap}>
@@ -1005,7 +1032,7 @@ function Setup() {
 
       {toAssetError && (
         <div
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 20, marginBottom: 20 }}
           className={[
             classes.warningContainer,
             classes[`warningContainer--${appTheme}`],
@@ -1032,7 +1059,7 @@ function Setup() {
 
       {slippageError && (
         <div
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 20, marginBottom: 20 }}
           className={[
             classes.warningContainer,
             classes[`warningContainer--${appTheme}`],

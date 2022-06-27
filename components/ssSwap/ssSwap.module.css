@@ -661,6 +661,8 @@ p.inputTitleText {
 }
 
 .route {
+  position: relative;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -704,7 +706,8 @@ p.inputTitleText {
 .routeLinesRightText {
   position: absolute;
 
-  left: calc(25% + 2px);
+  top: 50%;
+  left: calc(25%);
 
   font-size: 16px;
   font-weight: 500;
@@ -712,10 +715,28 @@ p.inputTitleText {
   color: #779BF4;
 }
 
+@media (max-width: 580px) {
+  .routeLinesLeftText,
+  .routeLinesRightText {
+    font-size: 12px;
+  }
+}
+
+.routeLinesLeftText {
+  left: calc(25%);
+  transform: translateX(-25%) translateY(-50%);
+}
+
 .routeLinesRightText {
   left: auto;
-  right: calc(25% - 7px);
-  padding: 2px 6px;
+  right: calc(25%);
+  transform: translateX(25%) translateY(-50%);
+}
+
+@media (max-width: 580px) {
+  .routeLinesRightText {
+    transform: translateX(25%) translateX(3px) translateY(-50%);
+  }
 }
 
 .routeLinesLeft,
@@ -724,6 +745,114 @@ p.inputTitleText {
   width: 50%;
   margin: 0 7px;
   border: 1px dashed #779BF4;
+}
+
+.routeLinesLeftPart1,
+.routeLinesLeftPart2,
+.routeLinesRightPart1,
+.routeLinesRightPart2 {
+  position: absolute;
+  top: 50%;
+  width: calc(25% - 100px);
+  border: 1px dashed #779BF4;
+  transform: translateY(-50%);
+}
+
+.routeLinesLeftPart1 {
+  left: 60px;
+}
+
+.routeLinesLeftPart2 {
+  right: calc(50% + 30px);
+}
+
+.routeLinesRightPart1 {
+  left: calc(50% + 30px);
+}
+
+.routeLinesRightPart2 {
+  right: 60px;
+}
+
+@media (max-width: 580px) {
+  .routeLinesLeftPart1,
+  .routeLinesLeftPart2,
+  .routeLinesRightPart1,
+  .routeLinesRightPart2 {
+    width: calc(25% - 70px);
+  }
+
+  .routeLinesLeftPart1 {
+    left: 45px;
+  }
+  .routeLinesLeftPart2 {
+    width: calc(25% - 75px);
+    right: calc(50% + 25px);
+  }
+
+  .routeLinesRightPart1 {
+    left: calc(50% + 25px);
+  }
+
+  .routeLinesRightPart2 {
+    width: calc(25% - 75px);
+    right: 45px;
+  }
+}
+
+.routeLinesLeftPart1Arrow,
+.routeLinesLeftPart2Arrow,
+.routeLinesRightPart1Arrow,
+.routeLinesRightPart2Arrow {
+  position: absolute;
+
+  top: 50%;
+
+  width: 15px;
+  height: 15px;
+
+  border-bottom: 1.5px solid #779BF4;
+  border-right: 1.5px solid #779BF4;
+
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+@media (max-width: 580px) {
+  .routeLinesLeftPart1Arrow,
+  .routeLinesLeftPart2Arrow,
+  .routeLinesRightPart1Arrow,
+  .routeLinesRightPart2Arrow {
+    width: 9px;
+    height: 9px;
+  }
+}
+
+.routeLinesLeftPart1Arrow {
+  left: 100%;
+}
+.routeLinesLeftPart2Arrow {
+  left: -25px;
+}
+.routeLinesRightPart1Arrow {
+  left: 100%;
+}
+.routeLinesRightPart2Arrow {
+  left: -25px;
+}
+
+@media (max-width: 580px) {
+  .routeLinesLeftPart1Arrow {
+    left: 100%;
+  }
+  .routeLinesLeftPart2Arrow {
+    left: -16px;
+  }
+  .routeLinesRightPart1Arrow {
+    left: 100%;
+  }
+  .routeLinesRightPart2Arrow {
+    left: -16px;
+  }
 }
 
 .routeLinesLeft {
@@ -867,6 +996,11 @@ p.inputTitleText {
 }
 
 @media (max-width: 630px) {
+  .quoteLoader,
+  .warningContainer {
+    padding: 16px !important;
+  }
+
   .priceImpactWrapper {
     padding: 17px 15px 12px !important;
   }
@@ -879,7 +1013,7 @@ p.inputTitleText {
 }
 
 .warningContainer {
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 .quoteLoader {
