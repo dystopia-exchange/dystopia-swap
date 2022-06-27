@@ -12,6 +12,7 @@ import {
   MenuItem,
   TextField,
   Typography,
+  Popover,
 } from '@mui/material';
 import { ArrowBackIosNew, Close, DeleteOutline, Search } from '@mui/icons-material';
 import { formatCurrency } from '../../utils';
@@ -27,7 +28,7 @@ const AssetSelect = (
     onSelect,
     typeIcon = 'single',
     isManageLocal = true,
-    title = 'Select a token',
+    title = 'Select a Token',
     showBalance = true,
     interactiveBorder = true,
     size = 'default',
@@ -267,9 +268,10 @@ const AssetSelect = (
                 root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
                 inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
               },
-              startAdornment: <InputAdornment position="start">
+              endAdornment: <InputAdornment position="end">
                 <Search style={{
-                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  color: '#779BF4',
+                  // color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
                 }}/>
               </InputAdornment>,
             }}
@@ -278,7 +280,7 @@ const AssetSelect = (
 
         {filteredAssetOptions?.filter(option => option.local === true).length > 0 &&
           <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
-            <Borders/>
+            {/* <Borders/> */}
             {
               filteredAssetOptions
                 .filter(option => option.local === true)
@@ -291,7 +293,7 @@ const AssetSelect = (
 
         <div className={classes.manageLocalContainer}>
           <Button onClick={toggleLocal}>
-            Back to Assets
+            Back to token list
           </Button>
         </div>
       </>
@@ -302,7 +304,7 @@ const AssetSelect = (
     return (
       <>
         <div className={classes.searchInline}>
-          <Borders/>
+          {/* <Borders/> */}
 
           <TextField
             variant="outlined"
@@ -315,23 +317,23 @@ const AssetSelect = (
                 root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
                 inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
               },
-              startAdornment: <InputAdornment position="start">
+              endAdornment: <InputAdornment position="end">
                 <Search style={{
-                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  color: '#779BF4',
+                  // color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
                 }}/>
               </InputAdornment>,
             }}
           />
         </div>
-
+        {/*  */}
         <div
-          className={['g-flex-column__item', 'g-flex-column'].join(' ')}
+          className={[classes.dialogOptions, 'g-flex-column__item', 'g-flex-column'].join(' ')}
           style={{
             position: 'relative',
-            marginBottom: !isManageLocal ? 34 : 53,
-            marginTop: 30,
+            marginBottom: !isManageLocal ? 34 : 45,
           }}>
-          <Borders/>
+          {/* <Borders/> */}
 
           {filteredAssetOptions?.length > 0 &&
             <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
@@ -388,9 +390,9 @@ const AssetSelect = (
 
             {typeIcon === 'single' &&
               <>
-                {interactiveBorder &&
+                {/* {interactiveBorder &&
                   <SwapIconBg/>
-                }
+                } */}
 
                 <img
                   className={[classes.displayAssetIcon, size === 'small' ? classes.displayAssetIconSmall : ''].join(' ')}
@@ -431,6 +433,43 @@ const AssetSelect = (
                 </div>
               </div>
             }
+
+            <Typography className={classes.labelSelect}>
+              {value?.symbol}
+            </Typography>
+
+            <div className={classes.dotsSelectMenu} />
+            {/* <Button
+              // aria-describedby={id}
+              // variant="contained"
+              // onClick={handleClick}
+            >
+              Open Popover
+            </Button>
+            <Popover
+              // id={id}
+              open={true}
+              // anchorEl={anchorEl}
+              // onClose={handleClose}
+              // className={classes.popover}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              classes={{
+                paper: classes.popover,
+              }}
+            >
+              <div className={classes.popoverContent}>
+                <button>
+                  Copy address
+                </button>
+                <button>
+                  <img src="/connectors/icn-metamask.svg" width="16px" />
+                  Add to the wallet
+                </button>
+              </div>
+            </Popover> */}
           </div>
         </div>
       </div>
@@ -438,6 +477,7 @@ const AssetSelect = (
       <Dialog
         classes={{
           paperScrollPaper: classes.paperScrollPaper,
+          paper: classes.paper
         }}
         aria-labelledby="simple-dialog-title"
         open={open}
@@ -446,15 +486,18 @@ const AssetSelect = (
           if (e.target.classList.contains('MuiDialog-container')) {
             onClose();
           }
-        }}>
+        }}
+        width={600}
+      >
         <div
           className={[classes.dialogContainer, 'g-flex-column'].join(' ')}
           style={{
-            width: 460,
-            height: 710,
-            background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-            border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
-            borderRadius: 0,
+            width: 782,
+            maxWidth: "100%",
+            maxHeight: "100%",
+            height: 768,
+            // background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+            // border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
             overflow: 'hidden',
           }}>
           <DialogTitle
@@ -463,9 +506,10 @@ const AssetSelect = (
               padding: 30,
               paddingBottom: 0,
               fontWeight: 500,
-              fontSize: 18,
-              lineHeight: '140%',
-              color: '#0A2C40',
+              fontSize: 60,
+              lineHeight: '72px',
+              color: '#E4E9F4',
+              // letterSpacing: '0.04em',
             }}>
             <div style={{
               display: 'flex',
@@ -475,29 +519,47 @@ const AssetSelect = (
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                color: "#E4E9F4",
+                // color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
               }}>
-                {isManageLocal && manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
+                {/* {isManageLocal && manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
                   marginRight: 10,
                   width: 18,
                   height: 18,
                   cursor: 'pointer',
-                }}/>}
-                {isManageLocal && manageLocal ? 'Manage local assets' : title}
+                }}/>} */}
+                {isManageLocal && manageLocal ? 'Select a Token' : title}
               </div>
 
-              <Close
+              <div
                 style={{
-                  cursor: 'pointer',
-                  color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: 20,
+                  height: 20,
+                  backgroundColor: '#8191B9',
+                  borderRadius: 5,
                 }}
-                onClick={onClose}/>
+              >
+                <Close
+                  style={{
+                    cursor: 'pointer',
+                    // color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                    color: '#1e2c48',
+                    fontSize: 12,
+                  }}
+                  onClick={onClose}
+                />
+              </div>
+              
             </div>
           </DialogTitle>
 
           <DialogContent
             style={{overflow: 'hidden'}}
-            className={[classes.dialogContent, 'g-flex-column__item', 'g-flex-column'].join(' ')}>
+            className={[classes.dialogContent, 'g-flex-column__item', 'g-flex-column'].join(' ')}
+          >
             {!manageLocal && renderOptions()}
             {isManageLocal && manageLocal && renderManageLocal()}
           </DialogContent>

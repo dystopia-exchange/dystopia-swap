@@ -1,18 +1,33 @@
 .headerContainer {
+  z-index: 9 !important;
+
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  box-sizing: border-box;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   align-content: center;
+
   flex-wrap: wrap;
-  height: 50px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9 !important;
+
   width: 100%;
+  height: calc(40px + 28px + 28px);
+
   border: 0;
   border-radius: 0 !important;
-  box-sizing: border-box;
+}
+
+@media (max-width: 850px) {
+  .headerContainer {
+    height: 56px;
+    background: rgba(228, 233, 244, 0.05);
+    border-bottom: 1px solid rgba(228, 233, 244, 0.5);
+  }
 }
 
 .hidden {
@@ -53,6 +68,12 @@
   margin-left: 30px;
 }
 
+@media (max-width: 1500px) {
+  .logoContainer {
+    margin-left: 12px;
+  }
+}
+
 .logoLink {
   display: flex;
   font-size: 0;
@@ -64,6 +85,42 @@
   display: flex;
   justify-content: flex-end;
   margin-right: 30px;
+}
+
+@media (max-width: 1500px) {
+  .userBlock {
+    margin-left: auto;
+    margin-right: 12px;
+  }
+}
+
+@media (max-width: 650px) {
+  .userBlock {
+    margin-left: auto;
+    margin-right: 8px;
+  }
+}
+
+.network {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 40px;
+  height: 40px;
+
+  margin-left: 10px;
+
+  border: 1px solid #779BF4;
+  border-radius: 10px;
+
+  background: rgba(119, 155, 244, 0.25)
+}
+
+@media (max-width: 650px) {
+  .network {
+    display: none;
+  }
 }
 
 .walletPointContainer {
@@ -151,128 +208,264 @@
 }
 
 .notificationsButton {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
+
   margin-left: 10px !important;
-  border-radius: 100px !important;
-  background: transparent !important;
+  padding: 10px !important;
+
+  border-radius: 12px !important;
+  border: 1px solid #586586 !important;
+
+  background: rgba(23, 29, 45, 0.25) !important;
+}
+
+@media (max-width: 650px) {
+  .notificationsButton {
+    margin-left: 8px !important;
+  }
+}
+
+.notificationsButton svg {
+  font-size: 10px;
+  color: #779BF4;
+  fill: #779BF4;
+}
+
+.notificationsButton:hover {
+  background: rgba(23, 29, 45, 0.4) !important;
+}
+
+.notificationsButton:active {
+  background: rgba(23, 29, 45, 0.6) !important;
+}
+
+.connectButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 184px;
+  height: 40px;
+
+  font-family: 'Poppins';
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 150% !important;
+  letter-spacing: 0 !important;
+
+  border: 1px solid #D3F85A !important;
+  border-radius: 12px !important;
+
+  color: #D3F85A !important;
+}
+
+.connectButton:hover {
+  background: rgba(211, 248, 90, 0.15) !important;
+}
+
+.connectButton:active {
+  background: rgba(211, 248, 90, 0.3) !important;
 }
 
 .accountButtonContainer {
   position: relative;
-  margin-left: 14px;
+  margin-left: 10px;
+}
+
+@media (max-width: 650px) {
+  .accountButtonContainer {
+    margin-left: 8px;
+  }
 }
 
 .accountButton {
-  min-width: 168px !important;
-  padding: 0 !important;
   position: fixed;
+
+  justify-content: space-between !important;
+
+  min-width: 230px !important;
+  padding: 0 !important;
+
   z-index: 10030 !important;
-  border-radius: 40px !important;
-  border: 1px solid #0B5E8E !important;
-  background: none !important;
+
+  border: 1px solid #779BF4 !important;
+  border-radius: 10px !important;
+
+  background: rgba(23, 29, 45, 0.5) !important;
+}
+
+@media (max-width: 650px) {
+  .accountButton {
+    min-width: auto !important;
+  }
+}
+
+.accountButton:hover {
+  background: rgba(23, 29, 45, 0.25) !important;
+}
+
+.accountButton:active {
+  background: rgba(23, 29, 45, 0.7) !important;
+}
+
+.accountButtonActive {
+  background: rgba(23, 29, 45, 0.5) !important;
+  /* outline: 3px solid #5E9FEC !important; */
+  /* border: 3px solid #5E9FEC !important; */
+}
+
+.accountButton:hover + .headSwitchBtn {
+  /* background: rgba(119, 155, 244, 0.8) !important; */
 }
 
 .accountButton:hover .accountButtonAddress {
-  background: #86B9D6 !important;
+  /* background: #86B9D6 !important; */
 }
 
 .accountButton:active .accountButtonAddress {
-  background: #9BC9E4 !important;
+  /* background: #9BC9E4 !important; */
 }
 
 .accountButton:active .headBalanceTxt {
-  color: #0B5E8E !important;
+  /* color: #0B5E8E !important; */
 }
 
 .accountButton--dark {
-  border-color: #4CADE6 !important;
+  /* border-color: #4CADE6 !important; */
 }
 
 .accountButton--dark:hover .accountButtonAddress {
-  background: #5F7285 !important;
+  /* background: #5F7285 !important; */
 }
 
 .accountButton--dark:active .accountButtonAddress {
-  background: #2D3741 !important;
+  /* background: #2D3741 !important; */
 }
 
 .accountButton--dark:active .headBalanceTxt {
-  color: #4CADE6 !important;
+  /* color: #4CADE6 !important; */
 }
 
 .accountButtonConnect--light {
-  background: #9BC9E4 !important;
+  /* background: #9BC9E4 !important; */
 }
 
 .accountButtonConnect--light:hover {
-  background: #86B9D6 !important;
+  /* background: #86B9D6 !important; */
 }
 
 .accountButtonConnect--dark {
-  background: #2D3741 !important;
-  border: 1px solid #4CADE6 !important;
+  /* background: #2D3741 !important; */
+  /* border: 1px solid #4CADE6 !important; */
 }
 
 .accountButtonConnect--dark:hover {
-  background: #5F7285 !important;
+  /* background: #5F7285 !important; */
 }
 
 .accountButtonAddress {
-  height: 28px;
-  border-radius: 40px !important;
-  outline: 1px solid #0B5E8E !important;
-  color: #ffffff !important;
-  padding-left: 10px !important;
-  padding-right: 10px !important;
-  background: #9BC9E4 !important;
+  height: 38px;
+
+  padding: 8px 12px !important;
+
+  border-radius: 10px !important;
+  /* border: 1px solid #779BF4; */
+  outline: 1px solid #779BF4 !important;
+
+  /* outline: 1px solid #0B5E8E !important; */
+
+  /* background: rgba(119, 155, 244, 0.25) !important; */
+  background: rgba(119, 155, 244, 0.25) !important;
+  color: #E4E9F4 !important;
+
+  /* transition: all 0.16s ease; */
+
   z-index: 2;
-  transition: all 0.16s ease;
+}
+
+@media (max-width: 650px) {
+  .accountButtonAddress {
+    padding: 8px !important;
+  }
 }
 
 .accountButtonAddress--dark {
-  background-color: #2D3741 !important;
-  outline-color: #4CADE6 !important;
+  /* background-color: #2D3741 !important; */
+  /* outline-color: #4CADE6 !important; */
 }
 
 .headBalanceTxt {
-  height: 28px;
-  border-radius: 40px;
+  height: 38px;
+
   margin-left: -22px !important;
+
   padding-left: 32px !important;
   padding-right: 15px !important;
-  font-weight: 400 !important;
+
+  /* border: 1px solid #779BF4; */
+  border-radius: 10px;
+
+  /* background: rgba(119, 155, 244, 0.25) !important; */
+  /* border: 1px solid #779BF4 !important; */
+
   font-size: 14px !important;
-  color: #0A2C40 !important;
-  background: #DBE6EC !important;
+  line-height: 120% !important;
+  font-weight: 400 !important; 
+
+  color: #E4E9F4 !important;
+}
+
+@media (max-width: 650px) {
+  .headBalanceTxt {
+    margin-left: 0 !important;
+    padding-right: 8px !important;
+    padding-left: 8px !important;
+  }
+}
+
+.headBalanceTxt:hover {
+  /* background: rgba(119, 155, 244, 0.25) !important; */
+  /* border: 1px solid #779BF4 !important; */
 }
 
 .headBalanceTxt--dark {
-  color: #DBE6EC !important;
-  background: #151718 !important;
+  /* color: #DBE6EC !important; */
+  /* background: #151718 !important; */
 }
 
 .headSwitchBtn {
   position: absolute;
+
   top: 0;
-  height: 68px;
+
   width: 100%;
-  background: #0B5E8E;
-  border-radius: 16px;
+  height: 80px;
+
   padding-left: 12.5px;
-  padding-top: 30px;
+  padding-top: 40px;
+
+  border-radius: 12px;
+
+  background: #779BF4;
+
   cursor: pointer;
 }
 
+.headSwitchBtn:hover {
+  /* background: rgba(119, 155, 244, 0.8) !important; */
+}
+
 .headSwitchBtn--dark {
-  background: #4CADE6;
+  /* background: #4CADE6; */
 }
 
 .headSwitchBtnText {
   font-weight: 500;
   font-size: 14px;
   line-height: 120%;
-  color: #FFFFFF;
+
+  color: #E4E9F4;
 }
 
 .switchNetworkBtn {
@@ -336,8 +529,8 @@
 }
 
 .accountIcon {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   background-size: 100%;
 }
 
@@ -347,6 +540,23 @@
   font-size: 14px !important;
   line-height: 120%;
   white-space: nowrap;
+  color: #E4E9F4;
+}
+
+@media (max-width: 650px) {
+  .headBtnTxtDesktop {
+    display: none;
+  }
+}
+
+.headBtnTxtMobile {
+  display: none;
+}
+
+@media (max-width: 650px) {
+  .headBtnTxtMobile {
+    display: inline;
+  }
 }
 
 .metamask {
@@ -494,44 +704,81 @@
 }
 
 .statButton {
-  padding: 5px;
+  display: flex;
+  align-items: center;
+
+  height: 40px;
+
   margin-left: 10px;
-  background: #DBE6EC;
-  border: 2px solid #15B525;
-  border-radius: 100px;
-  cursor: pointer;
+
+  padding-left: 9px;
+  padding-right: 9px;
+
+  background: rgba(23, 29, 45, 0.5);
+
+  border: 1px solid #586586;
+  border-radius: 10px;
+
   transition: all 0.32s ease;
-}
 
-.statButton:hover {
-  background: #B9DFF5;
-}
-
-.statButton--dark {
-  background: #151718;
-}
-
-.statButton--dark:hover {
-  background: #24292D;
-}
-
-@media (max-width: 1550px) {
-  .headerContainer {
-    outline: 1px solid #86B9D6;
-  }
-
-  .headerContainer--dark {
-    outline: 1px solid #5F7285;
-  }
+  cursor: pointer;
 }
 
 @media (max-width: 650px) {
-  .testnetDisclaimer {
-    display: none;
+  .statButton {
+    margin-left: 0;
+  }
+
+  .statButtonDesktopWrapper {
+    display: none !important;
   }
 }
 
-@media (max-width: 530px) {
+.statButtonMobileWrapper {
+  display: none;
+  margin: 12px 0;
+}
+
+@media (max-width: 650px) {
+  .statButtonMobileWrapper {
+    display: inline-flex !important;
+  }
+}
+
+.statButton:hover {
+  /* background: #B9DFF5; */
+  background: rgba(23, 29, 45, 0.4);
+}
+
+.statButton:active {
+  background: rgba(23, 29, 45, 0.6);
+}
+
+.statButton--dark {
+  /* background: #151718; */
+}
+
+.statButton--dark:hover {
+  /* background: #24292D; */
+}
+
+/* @media (max-width: 1550px) { */
+  /* .headerContainer {
+    outline: 1px solid #86B9D6;
+  } */
+
+  /* .headerContainer--dark {
+    outline: 1px solid #5F7285;
+  } */
+/* } */
+
+/* @media (max-width: 650px) {
+  .testnetDisclaimer {
+    display: none;
+  }
+} */
+
+/* @media (max-width: 530px) {
   .testnetDisclaimer {
     display: none;
   }
@@ -561,9 +808,9 @@
   .headSwitchBtnText {
     font-size: 12px;
   }
-}
+} */
 
-@media (max-width: 410px) {
+/* @media (max-width: 410px) {
   .logoContainer {
     margin-left: 10px;
   }
@@ -590,4 +837,4 @@
     width: 100%;
     justify-content: center;
   }
-}
+} */

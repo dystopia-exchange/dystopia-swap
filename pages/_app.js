@@ -84,7 +84,7 @@ export default function MyApp({ Component, pageProps }) {
   const theme = createTheme({
     typography: {
       allVariants: {
-        fontFamily: '"Roboto Mono", serif',
+        fontFamily: '"Poppins", serif',
       },
     },
   });

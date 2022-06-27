@@ -221,8 +221,9 @@ function MyComponent(props) {
       style={{
         display: "flex",
         flexWrap: "wrap",
-        justifyContent: windowWidth > 530 ? "space-between" : "center",
+        justifyContent: "space-between",
         alignItems: "center",
+        // justifyContent: windowWidth > 530 ? "space-between" : "center",
       }}
     >
       {Object.keys(connectorsByName).map((name) => {
@@ -265,16 +266,14 @@ function MyComponent(props) {
         return (
           <div
             key={name}
-            style={{
-              padding: "0px",
-              display: "flex",
-              marginBottom: "10px",
-            }}
+            className={classes.column}
           >
             <Button
               TouchRippleProps={{ classes: classes.rippleClasses }}
               style={{
-                width: windowWidth > 530 ? "400px" : "calc(100vw - 100px)",
+                width: "100%",
+                // width: windowWidth > 530 ? "400px" : "calc(100vw - 100px)",
+                // width: "calc(50% - 14px)",
                 borderRadius: 0,
               }}
               className={[
@@ -293,33 +292,33 @@ function MyComponent(props) {
               disableElevation
               disabled={disabled}
             >
-              <div
+              {/* <div
                 className={[
                   classes.networkButtonCornerLT,
                   classes[`networkButtonCornerLT--${appTheme}`],
                 ].join(" ")}
-              ></div>
+              ></div> */}
 
-              <div
+              {/* <div
                 className={[
                   classes.networkButtonCornerLB,
                   classes[`networkButtonCornerLB--${appTheme}`],
                 ].join(" ")}
-              ></div>
+              ></div> */}
 
-              <div
+              {/* <div
                 className={[
                   classes.networkButtonCornerRT,
                   classes[`networkButtonCornerRT--${appTheme}`],
                 ].join(" ")}
-              ></div>
+              ></div> */}
 
-              <div
+              {/* <div
                 className={[
                   classes.networkButtonCornerRB,
                   classes[`networkButtonCornerRB--${appTheme}`],
                 ].join(" ")}
-              ></div>
+              ></div> */}
 
               <div
                 style={{
@@ -334,7 +333,7 @@ function MyComponent(props) {
                     width: "100%",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "space-between",
+                    justifyContent: "center",
                   }}
                 >
                   <div
@@ -349,27 +348,15 @@ function MyComponent(props) {
                       />
                     )}
 
-                    <Typography
-                      style={{
-                        fontWeight: 500,
-                        fontSize: windowWidth > 530 ? 24 : 18,
-                        lineHeight: "120%",
-                        textAlign: "left",
-                        color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
-                      }}
-                    >
+                    <img
+                      className={classes.icon}
+                      src={url}
+                      alt=""
+                    />
+                    <Typography className={classes.text}>
                       {display}
                     </Typography>
                   </div>
-
-                  <img
-                    style={{
-                      width: "60px",
-                      height: "60px",
-                    }}
-                    src={url}
-                    alt=""
-                  />
                 </div>
 
                 {descriptor && (
