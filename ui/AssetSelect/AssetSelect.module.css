@@ -523,161 +523,75 @@ p.labelSelectSecondary {
     font-weight: 500;
     margin-left: 8px;
   }
+
   p.labelSelectDouble {
     font-size: 14px;
     min-width: 160px;
   }
+
   p.labelSelectSecondary {
     margin-left: 8px;
     color: #8191B9;
     font-size: 12px;
     font-weight: 500;
   }
-@media (max-width: 600px) {
-  .dialogTitle {
-    padding: 20px 16px 0 !important;
-    font-size: 20px !important;
-    line-height: 100% !important;
-  }
-}
 
-@media (max-width: 600px) {
-  .dialogContainer {
-    height: 500px !important;
-  }
-}
-
-.popover {
-  border-radius: 12px !important;
-  border: 1px solid #779BF4;
-
-  background: #1F2B49 !important;
-}
-
-.popoverContent {
-  display: flex;
-  flex-direction: column;
-
-  padding: 24px;
-}
-
-.popoverContent button {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-
-  height: 40px;
-
-  margin-bottom: 12px;
-  padding: 0 16px;
-
-  font-family: 'Poppins';
-  font-weight: 600;
-  font-size: 14px !important;
-  line-height: 16px !important;
-  text-transform: uppercase !important;
-
-  border: 1px solid #779BF4;
-  border-radius: 12px;
-
-  background: rgba(119, 155, 244, 0.15);
-  color: #779BF4 !important;
-}
-
-.popoverContent button img {
-  margin-right: 8px;
-}
-
-.popoverContent button:last-child {
-  margin-bottom: 0;
-}
-
-/* @media (max-width: 470px) {
-  .displaySelectContainer {
-    width: 210px;
+  @media (max-width: 600px) {
+    .dialogTitle {
+      padding: 20px 16px 0 !important;
+      font-size: 20px !important;
+      line-height: 100% !important;
+    }
   }
 
-  .displaySelectContainerSmall {
-    padding: 0;
-    margin-left: 10px;
+  @media (max-width: 600px) {
+    .dialogContainer {
+      height: 500px !important;
+    }
   }
 
-  .displayDualIconContainerSmall,
-  .assetOptionIcon {
-    width: 40px;
+  .popover {
+    border-radius: 12px !important;
+    border: 1px solid #779BF4;
+
+    background: #1F2B49 !important;
+  }
+
+  .popoverContent {
+    display: flex;
+    flex-direction: column;
+
+    padding: 24px;
+  }
+
+  .popoverContent button {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
     height: 40px;
-  }
 
-  .displayDualIconContainerDouble {
-    width: 65px;
-    height: 40px;
-    position: relative;
-    margin-right: 10px;
-  }
+    margin-bottom: 12px;
+    padding: 0 16px;
 
-  .displayDualIconContainer {
-    width: 50px;
-    height: 60px;
-    padding: 6px;
-  }
-
-  .displayDualIconContainerSmallest {
-    width: 38px;
-    height: 38px;
-  }
-
-  .displayAssetIcon {
-    width: 30px;
-    height: 30px;
-  }
-
-  .displayAssetIconSmall {
-    width: 20px;
-    height: 20px;
-  }
-
-  .dialogContainer {
-    width: 100% !important;
-  }
-
-  .dialogTitle {
-    padding: 20px 20px 0;
-  }
-
-  .dialogContent {
-    padding: 20px !important;
-  }
-
-  .assetSymbolName,
-  .assetSelectBalanceText {
+    font-family: 'Poppins';
+    font-weight: 600;
     font-size: 14px !important;
+    line-height: 16px !important;
+    text-transform: uppercase !important;
+
+    border: 1px solid #779BF4;
+    border-radius: 12px;
+
+    background: rgba(119, 155, 244, 0.15);
+    color: #779BF4 !important;
   }
 
-  .assetSymbolName2,
-  .assetSelectBalanceText2 {
-    font-size: 12px !important;
+  .popoverContent button img {
+    margin-right: 8px;
   }
 
-  .assetSymbolName,
-  .assetSymbolName2 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .assetSearchResults {
-    min-width: auto;
-  }
-
-  .assetSelectMenu {
-    min-height: 50px !important;
-  }
-
-  .displayAssetIconSecond {
-    padding: 2px;
-    border-width: 1px;
-  }
-
-  .dotsSelectMenu {
-    right: -146px;
+  .popoverContent button:last-child {
+    margin-bottom: 0;
   }
 }
