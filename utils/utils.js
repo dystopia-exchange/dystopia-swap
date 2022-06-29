@@ -177,7 +177,6 @@ export const retry = ({ fn, args, defaultValue }) => {
       if (retryCount > MAX_REQUEST_RETRY) {
         return defaultValue ?? null;
       } else {
-        console.log("call retry fn");
         return await wrappedFn();
       }
     }
