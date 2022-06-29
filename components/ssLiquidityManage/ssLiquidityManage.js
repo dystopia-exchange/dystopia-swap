@@ -866,6 +866,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
         amount1: withdrawAmount1,
         quote: withdrawQuote,
         slippage: (slippage && slippage) != "" ? slippage : "2",
+        all: (withdrawAmount == 100)
       },
     });
   };

@@ -4017,7 +4017,7 @@ class Store {
         return null;
       }
 
-      const { token0, token1, amount, amount0, amount1, pair } =
+      const { token0, token1, amount, amount0, amount1, pair, all } =
         payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
@@ -4051,8 +4051,8 @@ class Store {
       this._callContractWait(
         web3,
         gaugeContract,
-        "withdraw",
-        [sendAmount],
+        all ? "withdrawAll" : "withdraw",
+          all ? [] : [sendAmount],
         account,
         gasPrice,
         null,
