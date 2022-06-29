@@ -4871,7 +4871,7 @@ class Store {
       if (
         fromAsset.address.toLowerCase() ===
           CONTRACTS.SPHERE_ADDRESS.toLowerCase() &&
-        Number(slippage) <= 22
+        Number(slippage) <= 5
       ) {
         _slippage = (30 + Number(slippage)).toString();
       }
