@@ -21,3 +21,53 @@ button {
     left: -71px;
   }
 }
+
+.web3modal-modal-lightbox {
+  z-index: 100 !important;
+}
+
+.web3modal-modal-card {
+  width: 360px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: rgb(219, 230, 236) !important;
+  border: 1px solid rgb(134, 185, 214) !important;
+  border-radius: 0px !important;
+  padding: 20px !important;
+}
+
+.web3modal-provider-container {
+  border-radius: 0px !important;
+  padding: 10px 20px !important;
+  background-color: #cfe5f2 !important;
+  border: 1px solid #86b9d6 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  flex-direction: row !important;
+  align-items: center !important;
+}
+
+.web3modal-provider-container:hover {
+  border-color: #fff !important;
+}
+
+.web3modal-provider-wrapper {
+  border: none !important;
+}
+
+.web3modal-provider-description {
+    display: none !important;
+}
+
+.web3modal-provider-name {
+    width: auto !important;
+    order: 0 !important;
+    margin-top: 0 !important;
+    font-size: 20px !important;
+}
+
+.web3modal-provider-icon {
+  order: 1 !important;
+  width: 38px !important;
+  height: 38px !important;
+}
