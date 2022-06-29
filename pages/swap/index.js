@@ -11,8 +11,8 @@ import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import BtnEnterApp from '../../ui/BtnEnterApp';
 import { WalletConnect } from '../../components/WalletConnect'
 
-function Swap({changeTheme}) {
 
+function Swap({ changeTheme }) {
   const [account, setAccount] = useState(stores.accountStore.getStore('account'));
   const [unlockOpen, setUnlockOpen] = useState(false);
 
@@ -47,7 +47,7 @@ function Swap({changeTheme}) {
     setUnlockOpen(false);
   };
 
-  const {appTheme} = useAppThemeContext();
+  const { appTheme } = useAppThemeContext();
 
   const [isHoverState, setIsHoverState] = useState(false);
   const [isClickState, setIsClickState] = useState(false);
@@ -79,7 +79,7 @@ function Swap({changeTheme}) {
   return (
     <>
       {account && account.address ?
-        <SwapComponent/>
+        <SwapComponent />
         :
         <Paper className={classes.notConnectedContent}>
           <div className={classes.contentFloat}>
@@ -116,7 +116,7 @@ function Swap({changeTheme}) {
           </div>
         </Paper>
       }
-      {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock}/>}
+      {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
     </>
   );
 }

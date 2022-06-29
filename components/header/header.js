@@ -235,6 +235,7 @@ function Header(props) {
       content: { connected: false },
     });
 
+    window.localStorage.removeItem('walletconnect')
     window.localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER')
 
     stores.accountStore.emitter.emit(ACTIONS.DISCONNECT_WALLET)
