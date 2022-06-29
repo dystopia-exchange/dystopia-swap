@@ -159,7 +159,7 @@ const headCells = [
     id: 'pair',
     numeric: false,
     disablePadding: false,
-    label: 'Pool',
+    label: 'Asset',
     isSticky: true,
     isHideInDetails: true,
   },
@@ -167,32 +167,32 @@ const headCells = [
     id: 'balance',
     numeric: true,
     disablePadding: false,
-    label: 'Wallet',
+    label: 'TVL / APR',
   },
   {
     id: 'poolBalance',
     numeric: true,
     disablePadding: false,
-    label: 'My Pool Amount',
+    label: 'My Pool',
   },
   {
     id: 'stakedBalance',
     numeric: true,
     disablePadding: false,
-    label: 'My Staked Amount',
+    label: 'My Stake',
   },
   {
     id: 'poolAmount',
     numeric: true,
     disablePadding: false,
-    label: 'Total Pool Amount',
+    label: 'Total Liquidity',
     isHideInDetails: true,
   },
   {
     id: 'stakedAmount',
     numeric: true,
     disablePadding: false,
-    label: 'Total Pool Staked',
+    label: 'Total Stake',
   },
   // {
   //   id: 'apy',
@@ -260,8 +260,8 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow
         style={{
-          border: '1px solid #9BC9E4',
-          borderColor: appTheme === 'dark' ? '#5F7285' : '#9BC9E4',
+          // borderBottom: '1px solid #9BC9E4',
+          // borderColor: appTheme === 'dark' ? '#5F7285' : '#9BC9E4',
           whiteSpace: 'nowrap',
         }}>
         {
@@ -276,8 +276,8 @@ function EnhancedTableHead(props) {
                     padding={'normal'}
                     sortDirection={orderBy === headCell.id ? order : false}
                     style={{
-                      background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
-                      borderBottom: `1px solid ${appTheme === 'dark' ? '#5F7285' : '#9BC9E4'}`,
+                      background: '#060B17',
+                      borderBottom: `1px solid #d3f85a`,
                       zIndex: 10,
                     }}>
                     <TableSortLabel
@@ -291,7 +291,7 @@ function EnhancedTableHead(props) {
                           fontWeight: 600,
                           fontSize: 12,
                           lineHeight: '120%',
-                          color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                          color: '#8191B9',
                         }}>
                         {headCell.label}
                       </Typography>
@@ -305,9 +305,9 @@ function EnhancedTableHead(props) {
                   </StickyTableCell>
                   : <StyledTableCell
                     style={{
-                      background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
-                      borderBottom: `1px solid ${appTheme === 'dark' ? '#5F7285' : '#9BC9E4'}`,
-                      color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                      background: '#060B17',
+                      borderBottom: `1px solid #d3f85a`,
+                      color: '#8191B9',
                     }}
                     key={headCell.id}
                     align={headCell.numeric ? 'right' : 'left'}
@@ -327,7 +327,7 @@ function EnhancedTableHead(props) {
                           fontWeight: 600,
                           fontSize: 12,
                           lineHeight: '120%',
-                          color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                          color: '#8191B9',
                         }}>
                         {headCell.label}
                       </Typography>
@@ -356,6 +356,33 @@ EnhancedTableHead.propTypes = {
 };
 
 const useStyles = makeStyles({
+  toolbarFirst: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    position: 'relative',
+    ["@media (min-width:1200px)"]: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+  },
+  toolbarTitle: {
+    fontSize: '40px',
+    fontWeight: 500,
+    color: '#E4E9F4',
+  },
+  sidebar: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    // position: 'absolute',
+    ["@media (min-width:1200px)"]: {
+      width: '370px',
+      position: 'absolute',
+      left: -400,
+    },
+  },
   root: {
     width: '100%',
   },
@@ -498,27 +525,35 @@ const useStyles = makeStyles({
   searchContainer: {
     display: 'flex',
   },
+  textSearchField: {
+    width: 'auto',
+    paddingRight: 60,
+    ["@media (max-width:1200px)"]: {
+      paddingRight: 0,
+    },
+  },
   searchInput: {
     width: 430,
-    height: 52,
-    zIndex: 99,
+    height: 48,
+    // zIndex: 99,
     '& > fieldset': {
       border: 'none',
     },
-    ["@media (max-width:1360px)"]: {
+    /*["@media (max-width:1360px)"]: {
       // eslint-disable-line no-useless-computed-key
       position: 'absolute',
       top: 31,
       right: 0,
-    },
-    ["@media (max-width:660px)"]: {
-      top: 31,
+    },*/
+    ["@media (max-width:1200px)"]: {
+      position: 'relative',
+      top: '6px',
       left: 0,
-      width: 'calc(100% - 60px)',
+      width: '100%',
     },
   },
   actionsButtons: {
-    ["@media (max-width:660px)"]: {
+    ["@media (max-width:1200px)"]: {
       position: 'absolute',
       right: 0,
       top: 63,
@@ -527,20 +562,25 @@ const useStyles = makeStyles({
   myDeposits: {
     display: 'flex',
     alignItems: 'center',
-    paddingLeft: 30,
-    borderRadius: 100,
-    marginLeft: 20,
+    height: 60,
+    paddingLeft: 20,
+    borderRadius: 12,
+    marginTop: 20,
+    // marginLeft: 20,
     fontSize: '18px !important',
+    ["@media (min-width:1200px)"]: {
+      marginTop: 0,
+    },
     ["@media (max-width:660px)"]: {
       // eslint-disable-line no-useless-computed-key
-      padding: '9px 0',
-      paddingLeft: 20,
+      // padding: '9px 0',
+      // paddingLeft: 20,
     },
     ["@media (max-width:540px)"]: {
       // eslint-disable-line no-useless-computed-key
       fontSize: '12px !important',
-      paddingLeft: 10,
-      marginLeft: 10,
+      // paddingLeft: 10,
+      // marginLeft: 10,
     },
   },
   myDepositsText: {
@@ -559,38 +599,34 @@ const useStyles = makeStyles({
     border: '1px solid #5F7285',
   },
   toolbar: {
-    marginBottom: 30,
+    // marginBottom: 30,
     padding: 0,
     minHeight: 'auto',
     ["@media (max-width:660px)"]: {
-      paddingBottom: 40,
+      paddingBottom: 10,
     },
   },
   filterButton: {
-    width: 50,
-    height: 50,
+    width: 48,
+    height: 48,
     marginLeft: 10,
-    borderRadius: 100,
-  },
-  'filterButton--light': {
-    background: '#0B5E8E',
-    color: '#fff',
+    borderRadius: 12,
+    position: 'absolute',
+    right: 0,
+    top: 6,
+    ["@media (max-width:1200px)"]: {
+      // position: 'absolute',
+      right: 0,
+      top: '-54px',
+    },
+    background: 'rgba(119, 155, 244, 0.15)',
+    border: '1px solid #779BF4',
+    // color: '#0A2C40',
     '&:hover': {
-      background: '#86B9D6',
+      background: 'rgba(60,107,227,0.15)',
     },
     '&:active': {
-      background: '#86B9D6',
-      border: '1px solid #0B5E8E',
-    },
-  },
-  'filterButton--dark': {
-    background: '#4CADE6',
-    color: '#0A2C40',
-    '&:hover': {
-      background: '#5F7285',
-    },
-    '&:active': {
-      background: '#5F7285',
+      background: 'rgba(85,128,236,0.15)',
       border: '1px solid #4CADE6',
     },
   },
@@ -724,60 +760,60 @@ const useStyles = makeStyles({
     // },
   },
   addButton: {
+    marginTop: 16,
     display: 'flex',
     alignItems: 'center',
-    width: 215,
-    height: 50,
+    borderRadius: 12,
+    width: '100%',
+    height: 64,
     cursor: 'pointer',
-  },
-  'addButton--light': {
     '&:hover > p': {
-      background: '#C6BAF0',
+      background: '#c4ff00',
     },
-    '&:active > p': {
-      background: '#B9A4EE',
-    },
-  },
-  'addButton--dark': {
-    '&:hover > p': {
-      background: '#402E61',
-    },
-    '&:active > p': {
-      background: '#523880',
-    },
-  },
-  addButtonIcon: {
-    width: 50,
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    background: '#8F5AE8',
   },
   actionButtonText: {
-    width: 200,
+    width: '100%',
     height: '100%',
+    borderRadius: 12,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontWeight: 700,
-    fontSize: 16,
+    fontWeight: 600,
+    fontSize: 20,
+    textTransform: 'uppercase',
     lineHeight: '120%',
-    background: '#D2D0F2',
-    color: '#8F5AE8',
+    background: '#D3F85A',
+    color: '#060B17',
     transition: 'all ease 300ms',
-    ["@media (max-width:530px)"]: {
+    /*["@media (max-width:530px)"]: {
       // eslint-disable-line no-useless-computed-key
       width: 100,
       fontSize: 14,
       padding: '8px 10px',
-    },
+    },*/
   },
-  'actionButtonText--light': {
-    background: '#D2D0F2',
+  withdrawButton: {
+    marginTop: 16,
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: 12,
+    width: '100%',
+    height: 50,
+    cursor: 'pointer',
+    /*'&:hover > p': {
+      background: '#c4ff00',
+    },*/
   },
-  'actionButtonText--dark': {
-    background: '#33284C',
+  actionButtonWithdrawText: {
+    background: 'rgba(119, 155, 244, 0.15)',
+    color: '#779BF4',
+    border: '1px solid #779BF4',
+    borderRadius: 12,
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   table: {
     tableLayout: 'auto',
@@ -787,8 +823,8 @@ const useStyles = makeStyles({
     padding: 0,
   },
   sortSelect: {
-    position: 'absolute',
-    top: 63,
+    // position: 'absolute',
+    // top: 63,
   },
   cellPaddings: {
     padding: '11px 20px',
@@ -924,6 +960,10 @@ const EnhancedTableToolbar = (props) => {
     router.push('/liquidity/create');
   };
 
+  const onWithdraw = () => {
+    router.push('/liquidity/withdraw');
+  };
+
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -954,36 +994,19 @@ const EnhancedTableToolbar = (props) => {
   const {appTheme} = useAppThemeContext();
 
   return (
-    <Toolbar className={[classes.toolbar, 'g-flex-column__item-fixed', 'g-flex', 'g-flex--space-between'].join(' ')}>
-      <div
-        className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
-        onClick={onCreate}>
-        <div className={classes.addButtonIcon}>
-          <Add style={{width: 20, color: '#fff'}}/>
-        </div>
+    <Toolbar className={[classes.toolbar, 'g-flex-column__item-fixed', 'g-flex', 'g-flex--space-between', 'g-flex-column'].join(' ')}>
 
-        <Typography className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}>
-          Add Liquidity
+      <div className={classes.toolbarFirst}>
+        <Typography className={classes.toolbarTitle}>
+          Liquidity
         </Typography>
-      </div>
 
-      {windowWidth <= 660 &&
-        <div className={classes.sortSelect}>
-          <SortSelect
-            value={sortValueId}
-            options={options}
-            handleChange={handleChangeSort}
-            sortDirection={sortDirection}/>
-        </div>
-      }
-
-      <div className={classes.searchContainer}>
-        {(windowWidth > 1360 || showSearch) &&
-          <TextField
-            className={classes.searchInput}
+        <TextField
+            // className={classes.searchInput}
+            className={classes.textSearchField}
             variant="outlined"
             fullWidth
-            placeholder="Search by name or paste address"
+            placeholder="Type name or paste the address"
             value={search}
             onChange={onSearchChanged}
             InputProps={{
@@ -991,12 +1014,13 @@ const EnhancedTableToolbar = (props) => {
                 background: appTheme === "dark" ? '#151718' : '#DBE6EC',
                 border: '1px solid',
                 borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-                borderRadius: 0,
+                borderRadius: 12,
+                paddingLeft: 8,
               },
               classes: {
                 root: classes.searchInput,
               },
-              startAdornment: <InputAdornment position="start">
+              endAdornment: <InputAdornment position="end">
                 <Search style={{
                   width: 20,
                   height: 20,
@@ -1015,49 +1039,75 @@ const EnhancedTableToolbar = (props) => {
                 color: appTheme === "dark" ? '#C6CDD2' : '#325569',
               },
             }}
-          />
-        }
+        />
+      </div>
 
-        <div
-          className={[classes.myDeposits, classes[`myDeposits--${appTheme}`]].join(' ')}>
-          <Typography
-            className={classes.myDepositsText}
-            style={{
-              fontSize: 'inherit',
-            }}>
-            <span
-              style={{
-                fontSize: 'inherit',
-                fontWeight: 500,
-                color: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-                paddingRight: 4,
-              }}>
-              Show:
-            </span>
-
-            <span
-              style={{
-                fontSize: 'inherit',
-                fontWeight: 500,
-                color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
-                whiteSpace: 'nowrap',
-              }}>
-              My Deposits
-            </span>
-          </Typography>
-
+      <div className={classes.sidebar}>
+        <div className={[classes.myDeposits, classes[`myDeposits--${appTheme}`]].join(' ')}>
           <div
-            style={{
-              marginLeft: windowWidth > 540 ? 10 : 0,
-              marginRight: 10,
-            }}>
+              style={{
+                // marginLeft: 10,
+                marginRight: 10,
+              }}>
             <SwitchCustom
-              checked={toggleActive}
-              onChange={onToggle}
-              name={'toggleActive'}
+                checked={toggleActive}
+                onChange={onToggle}
+                name={'toggleActive'}
             />
           </div>
+
+          <Typography
+              className={classes.myDepositsText}
+              style={{
+                fontSize: 'inherit',
+              }}>
+            <span
+                style={{
+                  fontSize: 'inherit',
+                  fontWeight: 500,
+                  color: '#E4E9F4',
+                  paddingRight: 4,
+                }}>
+              Show only my Deposits
+            </span>
+          </Typography>
         </div>
+
+        <div
+            className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
+            onClick={onCreate}
+        >
+          <Typography className={[classes.actionButtonText,].join(' ')}>
+            Add Liquidity
+          </Typography>
+        </div>
+
+        <div
+            className={[classes.withdrawButton,].join(' ')}
+            onClick={onWithdraw}
+        >
+          <Typography className={[classes.actionButtonWithdrawText,].join(' ')}>
+            WITHDRAW LIQUIDITY
+          </Typography>
+        </div>
+      </div>
+
+
+
+      {/*{windowWidth <= 660 &&
+        <div className={classes.sortSelect}>
+          <SortSelect
+            value={sortValueId}
+            options={options}
+            handleChange={handleChangeSort}
+            sortDirection={sortDirection}/>
+        </div>
+      }*/}
+
+      <div className={classes.searchContainer}>
+        {/*{(windowWidth > 1360 || showSearch) &&
+
+        }*/}
 
         <div className={[classes.actionsButtons, 'g-flex', 'g-flex--align-center'].join(' ')}>
           <Tooltip placement="top" title="Filter list">
@@ -1065,18 +1115,20 @@ const EnhancedTableToolbar = (props) => {
               className={[classes.filterButton, classes[`filterButton--${appTheme}`]].join(' ')}
               onClick={handleClick}
               aria-label="filter list">
-              <FilterAltOutlined/>
+              <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.125 9.625V18.25C12.125 18.5484 12.0065 18.8345 11.7955 19.0455C11.5845 19.2565 11.2984 19.375 11 19.375C10.7016 19.375 10.4155 19.2565 10.2045 19.0455C9.99353 18.8345 9.875 18.5484 9.875 18.25V9.625C9.875 9.32663 9.99353 9.04048 10.2045 8.8295C10.4155 8.61853 10.7016 8.5 11 8.5C11.2984 8.5 11.5845 8.61853 11.7955 8.8295C12.0065 9.04048 12.125 9.32663 12.125 9.625ZM17.75 16C17.4516 16 17.1655 16.1185 16.9545 16.3295C16.7435 16.5405 16.625 16.8266 16.625 17.125V18.25C16.625 18.5484 16.7435 18.8345 16.9545 19.0455C17.1655 19.2565 17.4516 19.375 17.75 19.375C18.0484 19.375 18.3345 19.2565 18.5455 19.0455C18.7565 18.8345 18.875 18.5484 18.875 18.25V17.125C18.875 16.8266 18.7565 16.5405 18.5455 16.3295C18.3345 16.1185 18.0484 16 17.75 16ZM20 12.25H18.875V1.75C18.875 1.45163 18.7565 1.16548 18.5455 0.954505C18.3345 0.743526 18.0484 0.625 17.75 0.625C17.4516 0.625 17.1655 0.743526 16.9545 0.954505C16.7435 1.16548 16.625 1.45163 16.625 1.75V12.25H15.5C15.2016 12.25 14.9155 12.3685 14.7045 12.5795C14.4935 12.7905 14.375 13.0766 14.375 13.375C14.375 13.6734 14.4935 13.9595 14.7045 14.1705C14.9155 14.3815 15.2016 14.5 15.5 14.5H20C20.2984 14.5 20.5845 14.3815 20.7955 14.1705C21.0065 13.9595 21.125 13.6734 21.125 13.375C21.125 13.0766 21.0065 12.7905 20.7955 12.5795C20.5845 12.3685 20.2984 12.25 20 12.25ZM4.25 13C3.95163 13 3.66548 13.1185 3.4545 13.3295C3.24353 13.5405 3.125 13.8266 3.125 14.125V18.25C3.125 18.5484 3.24353 18.8345 3.4545 19.0455C3.66548 19.2565 3.95163 19.375 4.25 19.375C4.54837 19.375 4.83452 19.2565 5.0455 19.0455C5.25647 18.8345 5.375 18.5484 5.375 18.25V14.125C5.375 13.8266 5.25647 13.5405 5.0455 13.3295C4.83452 13.1185 4.54837 13 4.25 13ZM6.5 9.25H5.375V1.75C5.375 1.45163 5.25647 1.16548 5.0455 0.954505C4.83452 0.743526 4.54837 0.625 4.25 0.625C3.95163 0.625 3.66548 0.743526 3.4545 0.954505C3.24353 1.16548 3.125 1.45163 3.125 1.75V9.25H2C1.70163 9.25 1.41548 9.36853 1.2045 9.5795C0.993526 9.79048 0.875 10.0766 0.875 10.375C0.875 10.6734 0.993526 10.9595 1.2045 11.1705C1.41548 11.3815 1.70163 11.5 2 11.5H6.5C6.79837 11.5 7.08452 11.3815 7.2955 11.1705C7.50647 10.9595 7.625 10.6734 7.625 10.375C7.625 10.0766 7.50647 9.79048 7.2955 9.5795C7.08452 9.36853 6.79837 9.25 6.5 9.25ZM13.25 4.75H12.125V1.75C12.125 1.45163 12.0065 1.16548 11.7955 0.954505C11.5845 0.743526 11.2984 0.625 11 0.625C10.7016 0.625 10.4155 0.743526 10.2045 0.954505C9.99353 1.16548 9.875 1.45163 9.875 1.75V4.75H8.75C8.45163 4.75 8.16548 4.86853 7.9545 5.0795C7.74353 5.29048 7.625 5.57663 7.625 5.875C7.625 6.17337 7.74353 6.45952 7.9545 6.6705C8.16548 6.88147 8.45163 7 8.75 7H13.25C13.5484 7 13.8345 6.88147 14.0455 6.6705C14.2565 6.45952 14.375 6.17337 14.375 5.875C14.375 5.57663 14.2565 5.29048 14.0455 5.0795C13.8345 4.86853 13.5484 4.75 13.25 4.75Z" fill="#779BF4"/>
+              </svg>
             </IconButton>
           </Tooltip>
 
-          {windowWidth <= 1360 &&
+          {/*{windowWidth <= 1360 &&
             <IconButton
               className={[classes.searchButton, classes[`searchButton--${appTheme}`]].join(' ')}
               onClick={handleSearch}
               aria-label="filter list">
               <Search/>
             </IconButton>
-          }
+          }*/}
         </div>
       </div>
 
@@ -1274,6 +1326,7 @@ export default function EnhancedTable({pairs, isLoading}) {
       className={['g-flex-column__item', 'g-flex-column'].join(' ')}
       style={{
         overflowY: windowWidth <= 400 ? 'auto' : 'hidden',
+        paddingLeft: windowWidth > 1200 ? 400 : 0,
       }}
     >
       <EnhancedTableToolbar
@@ -1286,11 +1339,14 @@ export default function EnhancedTable({pairs, isLoading}) {
         handleRequestSort={handleRequestSort}
         setSortDirection={setSortDirection}/>
 
-      {windowWidth > 660 &&
+      {windowWidth > 800 &&
         <>
           <div
             style={{
-              marginTop: windowWidth <= 1360 && showSearch ? 45 : 0,
+              marginTop: 20,
+              border: '1px solid #D3F85A',
+              borderRadius: 12,
+              overflow: 'hidden',
             }}
             // className={['g-flex-column__item', 'g-flex-column'].join(' ')}
           >
@@ -1349,7 +1405,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                           className={classes.assetTableRow}>
                           <StickyTableCell
                             style={{
-                              background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                              background: '#171D2D',
                               borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             }}
                             className={classes.cell}>
@@ -1415,7 +1471,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                           <TableCell
                             className={[classes.cell, classes.hiddenMobile].join(' ')}
                             style={{
-                              background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                              background: '#171D2D',
                               borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                               overflow: 'hidden',
                             }}
@@ -1442,7 +1498,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                     }}>
-                                    {formatCurrency(row.token0.balance)}
+                                    {BigNumber(row.tvl).toFixed(2)} <span style={{color: 'rgb(124, 131, 138)'}}>$</span>
                                   </Typography>
 
                                   <Typography
@@ -1453,11 +1509,27 @@ export default function EnhancedTable({pairs, isLoading}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                     }}>
-                                    {formatCurrency(row.token1.balance)}
+                                    {BigNumber(row?.gauge?.apr).gt(0) ? (
+                                        <div>
+                                          {`${
+                                              formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
+                                                  BigNumber(row?.gauge?.boostedApr0),
+                                                  BigNumber(row?.gauge?.boostedApr1)
+                                              ),0)
+                                          }-${
+                                              formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
+                                                  BigNumber(row?.gauge?.boostedApr0),
+                                                  BigNumber(row?.gauge?.boostedApr1)
+                                              ),0)
+                                          }`}
+                                          <span style={{color: 'rgb(124, 131, 138)'}}> %</span>
+                                        </div>
+                                        )
+                                        : '-'}
                                   </Typography>
                                 </div>
                               }
-                              {!(row && row.token0 && row.token0.balance) &&
+                              {/*{!(row && row.token0 && row.token0.balance) &&
                                 <div
                                   className={classes.inlineEnd}
                                   style={{
@@ -1472,8 +1544,8 @@ export default function EnhancedTable({pairs, isLoading}) {
                                     height={16}
                                     style={{marginTop: '1px', marginBottom: '1px'}}/>
                                 </div>
-                              }
-                              {(row && row.token1 && row.token1.balance) &&
+                              }*/}
+                              {/*{(row && row.token1 && row.token1.balance) &&
                                 <div
                                   className={classes.inlineEnd}
                                   style={{
@@ -1504,8 +1576,8 @@ export default function EnhancedTable({pairs, isLoading}) {
                                     {formatSymbol(row.token1.symbol)}
                                   </Typography>
                                 </div>
-                              }
-                              {!(row && row.token1 && row.token1.balance) &&
+                              }*/}
+                              {/*{!(row && row.token1 && row.token1.balance) &&
                                 <div
                                   className={classes.inlineEnd}
                                   style={{
@@ -1520,14 +1592,14 @@ export default function EnhancedTable({pairs, isLoading}) {
                                     height={16}
                                     style={{marginTop: '1px', marginBottom: '1px'}}/>
                                 </div>
-                              }
+                              }*/}
                             </div>
                           </TableCell>
 
                           <TableCell
                             className={[classes.cell, classes.hiddenMobile].join(' ')}
                             style={{
-                              background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                              background: '#171D2D',
                               borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             }}
                             align="right">
@@ -1624,7 +1696,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                             <TableCell
                               className={[classes.cell, classes.hiddenMobile].join(' ')}
                               style={{
-                                background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                                background: '#171D2D',
                                 borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                               }}
                               align="right">
@@ -1723,7 +1795,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                             <TableCell
                               className={[classes.cell, classes.hiddenMobile].join(' ')}
                               style={{
-                                background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                                background: '#171D2D',
                                 borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                               }}
                               align="right">
@@ -1744,7 +1816,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                           <TableCell
                             className={[classes.cell, classes.hiddenSmallMobile].join(' ')}
                             style={{
-                              background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                              background: '#171D2D',
                               borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             }}
                             align="right">
@@ -1858,7 +1930,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                             <TableCell
                               className={[classes.cell, classes.hiddenMobile].join(' ')}
                               style={{
-                                background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                                background: '#171D2D',
                                 borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                               }}
                               align="right">
@@ -1973,7 +2045,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                             <TableCell
                               className={[classes.cell, classes.hiddenMobile].join(' ')}
                               style={{
-                                background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                                background: '#171D2D',
                                 borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                               }}
                               align="right">
@@ -1994,7 +2066,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                           <TableCell
                             className={classes.cell}
                             style={{
-                              background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
+                              background: '#171D2D',
                               borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             }}
                             align="right">
@@ -2003,18 +2075,17 @@ export default function EnhancedTable({pairs, isLoading}) {
                               color="primary"
                               style={{
                                 padding: '7px 14px',
-                                border: '1px solid #5688A5',
-                                borderColor: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
-                                borderRadius: 100,
-                                fontWeight: 500,
+                                border: `1px solid #D3F85A`,
+                                borderRadius: 12,
+                                fontWeight: 600,
                                 fontSize: 14,
                                 lineHeight: '120%',
-                                color: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                                color: '#D3F85A',
                               }}
                               onClick={() => {
                                 onView(row);
                               }}>
-                              Manage
+                              EDIT
                             </Button>
                           </TableCell>
                         </TableRow>
@@ -2028,12 +2099,12 @@ export default function EnhancedTable({pairs, isLoading}) {
               className={'g-flex-column__item-fixed'}
               style={{
                 width: '100%',
-                marginTop: 20,
+                // marginTop: 20,
                 padding: '0 30px',
-                background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
-                border: '1px solid #86B9D6',
-                borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-                borderRadius: 100,
+                background: '#060B17',
+                borderTop: '1px solid #d3f85a',
+                // borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
+                // borderRadius: 100,
                 color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
               }}
               rowsPerPageOptions={[5, 10, 25]}
@@ -2051,7 +2122,7 @@ export default function EnhancedTable({pairs, isLoading}) {
         </>
       }
 
-      {windowWidth <= 660 &&
+      {windowWidth <= 800 &&
         <div
           style={{
             overflowY: windowWidth > 400 ? 'auto' : 'visible',
@@ -2071,9 +2142,9 @@ export default function EnhancedTable({pairs, isLoading}) {
                   style={{
                     margin: 0,
                     marginBottom: 20,
-                    background: appTheme === 'dark' ? '#24292D' : '#DBE6EC',
+                    background: '#171D2D',
                     border: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
-                    borderRadius: 0,
+                    borderRadius: 12,
                   }}
                   disableGutters={true}
                   expanded={expanded === labelId}
@@ -2081,6 +2152,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                   <AccordionSummary
                     style={{
                       padding: 0,
+                      borderRadius: 12,
                     }}
                     classes={{
                       content: classes.accordionSummaryContent,
@@ -2130,7 +2202,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                             className={classes.textSpaced}
                             style={{
                               fontWeight: 500,
-                              fontSize: 14,
+                              fontSize: 16,
                               lineHeight: '120%',
                               color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                             }}
@@ -2181,14 +2253,13 @@ export default function EnhancedTable({pairs, isLoading}) {
                               variant="outlined"
                               color="primary"
                               style={{
-                                padding: '7px 14px',
-                                border: `1px solid ${appTheme === 'dark' ? '#C6CDD2' : '#5688A5'}`,
-                                borderColor: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
-                                borderRadius: 100,
-                                fontWeight: 500,
+                                padding: '10px 18px',
+                                border: `1px solid #D3F85A`,
+                                borderRadius: 12,
+                                fontWeight: 600,
                                 fontSize: 14,
-                                lineHeight: '120%',
-                                color: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
+                                lineHeight: '16px',
+                                color: '#D3F85A',
                               }}
                               onClick={(event) => {
                                 event.stopPropagation();
@@ -2196,7 +2267,7 @@ export default function EnhancedTable({pairs, isLoading}) {
 
                                 onView(row);
                               }}>
-                              Manage
+                              EDIT
                             </Button>
                           </div>
                         </div>
@@ -2210,14 +2281,14 @@ export default function EnhancedTable({pairs, isLoading}) {
                             style={{
                               background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
                               fontWeight: 500,
-                              fontSize: 12,
+                              fontSize: 14,
                               lineHeight: '120%',
                               borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
-                              color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                              color: '#8191B9',
                               textAlign: 'right',
                             }}
                             noWrap>
-                            Total Pool Amount
+                            TVL / APR
                           </Typography>
 
                           <div
@@ -2242,7 +2313,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   whiteSpace: 'nowrap',
                                 }}>
-                                {formatCurrency(row.reserve0)}
+                                {BigNumber(row?.tvl).toFixed(2)}
                               </Typography>
 
                               <Typography
@@ -2254,7 +2325,17 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   whiteSpace: 'nowrap',
                                 }}>
-                                {formatCurrency(row.reserve1)}
+                                {BigNumber(row?.gauge?.apr).gt(0) ? `${
+                                    formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
+                                        BigNumber(row?.gauge?.boostedApr0),
+                                        BigNumber(row?.gauge?.boostedApr1)
+                                    ),0)
+                                }-${
+                                    formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
+                                        BigNumber(row?.gauge?.boostedApr0),
+                                        BigNumber(row?.gauge?.boostedApr1)
+                                    ),0)
+                                }%` : '-'}
                               </Typography>
                             </div>
 
@@ -2274,7 +2355,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   lineHeight: '120%',
                                   color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                 }}>
-                                {formatSymbol(row.token0.symbol)}
+                                $
                               </Typography>
 
                               <Typography
@@ -2285,7 +2366,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   lineHeight: '120%',
                                   color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
                                 }}>
-                                {formatSymbol(row.token1.symbol)}
+                                %
                               </Typography>
                             </div>
                           </div>
@@ -2300,12 +2381,12 @@ export default function EnhancedTable({pairs, isLoading}) {
                         <Typography
                           style={{
                             fontWeight: 500,
-                            fontSize: 12,
-                            lineHeight: '120%',
-                            color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                            fontSize: 14,
+                            lineHeight: '16px',
+                            color: '#779BF4',
                           }}
                           noWrap>
-                          {expanded !== labelId ? 'Show' : 'Hide'} Details
+                          {expanded !== labelId ? 'Show' : 'Hide'} details
                         </Typography>
 
                         {expanded !== labelId &&
