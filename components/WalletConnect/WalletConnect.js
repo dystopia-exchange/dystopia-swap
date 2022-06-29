@@ -66,6 +66,12 @@ export const WalletConnect = (props) => {
     const web3 = new Web3(instance);
     stores.accountStore.subscribeProvider();
 
+    const chainId = await web3.eth.getChainId()
+
+    const supportedChainIds = [process.env.NEXT_PUBLIC_CHAINID];
+    const isChainSupported = supportedChainIds.includes(String(chainId));
+    stores.accountStore.setStore({ chainInvalid: !isChainSupported });
+
     stores.accountStore.setStore({
       account: { address },
       web3provider: web3,
