@@ -445,6 +445,7 @@ const useStyles = makeStyles({
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
+    width: "max-content",
   },
   icon: {
     marginRight: "12px",
@@ -2050,7 +2051,6 @@ export default function EnhancedTable({ pairs, isLoading }) {
                             className={[
                               classes.cell,
                               classes.hiddenMobile,
-                              classes.inlineEnd,
                             ].join(" ")}
                             style={{
                               background:
@@ -2078,7 +2078,7 @@ export default function EnhancedTable({ pairs, isLoading }) {
                                   display: "flex",
                                   flexDirection: "column",
                                   alignItems: "flex-end",
-                                  paddingLeft: 0,
+                                  paddingLeft: 10,
                                 }}
                               >
                                 <Skeleton
