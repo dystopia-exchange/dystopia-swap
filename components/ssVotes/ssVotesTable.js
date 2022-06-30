@@ -1063,7 +1063,7 @@ export default function EnhancedTable({
                           </div>
                         </StickyTableCell>
                         <TableCell
-                          className={(classes.cell, classes.inlineEnd)}
+                          className={classes.cell}
                           align="right"
                           style={{
                             background:
