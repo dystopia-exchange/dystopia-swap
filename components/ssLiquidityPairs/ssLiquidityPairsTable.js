@@ -2060,9 +2060,9 @@ export default function EnhancedTable({ pairs, isLoading }) {
                             {tableCellContent(
                               isNaN(BigNumber(row?.tvl))
                                 ? "$ 0"
-                                : `${numeral(
-                                    parseFloat(row?.tvl).toLocaleString()
-                                  ).format("($ 0a)")} `,
+                                : `${numeral(parseInt(row?.tvl)).format(
+                                    "($ 0a)"
+                                  )} `,
                               null,
                               null,
                               null
@@ -3378,9 +3378,9 @@ export default function EnhancedTable({ pairs, isLoading }) {
                                     )}
                                   {headCell.id === "tvl" &&
                                     tableCellContent(
-                                      `${numeral(
-                                        parseFloat(row?.tvl).toLocaleString()
-                                      ).format("($ 0a)")} `
+                                      `${numeral(parseInt(row?.tvl)).format(
+                                        "($ 0a)"
+                                      )} `
                                     )}
                                   {headCell.id === "poolBalance" &&
                                     formatCurrency(

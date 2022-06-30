@@ -1072,9 +1072,7 @@ export default function EnhancedTable({
                           }}
                         >
                           {tableCellContent(
-                            `${numeral(
-                              parseFloat(row?.tvl).toLocaleString()
-                            ).format("($ 0a)")} `,
+                            `${numeral(parseInt(row?.tvl)).format("($ 0a)")} `,
                             null,
                             null,
                             null
@@ -1936,9 +1934,9 @@ export default function EnhancedTable({
                                       }}
                                     >
                                       {headCell.id === "tvl" &&
-                                        `${numeral(
-                                          parseFloat(row?.tvl).toLocaleString()
-                                        ).format("($ 0a)")} `}
+                                        `${numeral(parseInt(row?.tvl)).format(
+                                          "($ 0a)"
+                                        )} `}
                                       {headCell.id === "apr" &&
                                         `${formatCurrency(
                                           BigNumber.sum(
