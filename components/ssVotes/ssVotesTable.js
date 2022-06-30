@@ -508,7 +508,9 @@ const useStyles = makeStyles((theme) => {
     symbol: {
       minWidth: "40px",
     },
-    cell: {},
+    cell: {
+      width: "100px",
+    },
     cellSuccess: {
       color: "#4eaf0a",
     },
@@ -641,6 +643,7 @@ const useStyles = makeStyles((theme) => {
       display: "flex",
       alignItems: "center",
       justifyContent: "flex-end",
+      width: "max-content",
     },
     table: {
       tableLayout: "auto",
@@ -1060,7 +1063,7 @@ export default function EnhancedTable({
                           </div>
                         </StickyTableCell>
                         <TableCell
-                          className={classes.cell}
+                          className={(classes.cell, classes.inlineEnd)}
                           align="right"
                           style={{
                             background:

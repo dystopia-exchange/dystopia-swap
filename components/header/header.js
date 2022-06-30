@@ -42,7 +42,7 @@ import SSWarning from "../ssWarning";
 import { WalletConnect } from "../WalletConnect/WalletConnect";
 import { ethers } from "ethers";
 import Web3 from "web3";
-import { useEthers } from "@usedapp/core"
+import { useEthers } from "@usedapp/core";
 
 const {
   CONNECT_WALLET,
@@ -214,11 +214,11 @@ function Header(props) {
   };
 
   const onAddressClicked = () => {
-    stores.accountStore.getStore("web3modal").clearCachedProvider()
+    stores.accountStore.getStore("web3modal").clearCachedProvider();
 
-    deactivate()
+    deactivate();
 
-    setAccount(null)
+    setAccount(null);
 
     stores.accountStore.setStore({
       account: { address: null },
@@ -226,7 +226,7 @@ function Header(props) {
       web3context: {
         library: {
           provider: null,
-        }
+        },
       },
     });
 
@@ -235,10 +235,10 @@ function Header(props) {
       content: { connected: false },
     });
 
-    window.localStorage.removeItem('walletconnect')
-    window.localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER')
+    window.localStorage.removeItem("walletconnect");
+    window.localStorage.removeItem("WEB3_CONNECT_CACHED_PROVIDER");
 
-    stores.accountStore.emitter.emit(ACTIONS.DISCONNECT_WALLET)
+    stores.accountStore.emitter.emit(ACTIONS.DISCONNECT_WALLET);
   };
 
   const handleClickAway = () => {

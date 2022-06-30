@@ -458,7 +458,10 @@ const useStyles = makeStyles({
     fontWeight: "500 !important",
     fontSize: "12px !important",
   },
-  cell: {},
+  cell: {
+    width: "100px",
+  },
+
   cellSuccess: {
     color: "#4eaf0a",
   },
@@ -2047,6 +2050,7 @@ export default function EnhancedTable({ pairs, isLoading }) {
                             className={[
                               classes.cell,
                               classes.hiddenMobile,
+                              classes.inlineEnd,
                             ].join(" ")}
                             style={{
                               background:
@@ -2059,7 +2063,7 @@ export default function EnhancedTable({ pairs, isLoading }) {
                           >
                             {tableCellContent(
                               isNaN(BigNumber(row?.tvl))
-                                ? "$ 0"
+                                ? null
                                 : `${numeral(parseInt(row?.tvl)).format(
                                     "($ 0a)"
                                   )} `,
@@ -2074,12 +2078,12 @@ export default function EnhancedTable({ pairs, isLoading }) {
                                   display: "flex",
                                   flexDirection: "column",
                                   alignItems: "flex-end",
-                                  paddingLeft: 10,
+                                  paddingLeft: 0,
                                 }}
                               >
                                 <Skeleton
                                   variant="rect"
-                                  width={120}
+                                  width={80}
                                   height={16}
                                   style={{
                                     marginTop: "1px",
