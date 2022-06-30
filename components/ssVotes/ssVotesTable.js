@@ -508,7 +508,9 @@ const useStyles = makeStyles((theme) => {
     symbol: {
       minWidth: "40px",
     },
-    cell: {},
+    cell: {
+      width: "100px",
+    },
     cellSuccess: {
       color: "#4eaf0a",
     },
@@ -641,6 +643,7 @@ const useStyles = makeStyles((theme) => {
       display: "flex",
       alignItems: "center",
       justifyContent: "flex-end",
+      width: "max-content",
     },
     table: {
       tableLayout: "auto",
@@ -1072,9 +1075,7 @@ export default function EnhancedTable({
                           }}
                         >
                           {tableCellContent(
-                            `${numeral(
-                              parseFloat(row?.tvl).toLocaleString()
-                            ).format("($ 0a)")} `,
+                            `${numeral(parseInt(row?.tvl)).format("($ 0a)")} `,
                             null,
                             null,
                             null
@@ -1936,9 +1937,9 @@ export default function EnhancedTable({
                                       }}
                                     >
                                       {headCell.id === "tvl" &&
-                                        `${numeral(
-                                          parseFloat(row?.tvl).toLocaleString()
-                                        ).format("($ 0a)")} `}
+                                        `${numeral(parseInt(row?.tvl)).format(
+                                          "($ 0a)"
+                                        )} `}
                                       {headCell.id === "apr" &&
                                         `${formatCurrency(
                                           BigNumber.sum(
