@@ -167,7 +167,8 @@ const headCells = [
     id: 'balance',
     numeric: true,
     disablePadding: false,
-    label: 'TVL / APR',
+    label: 'Wallet',
+    isHideInDetails: true,
   },
   {
     id: 'poolBalance',
@@ -186,7 +187,7 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Total Liquidity',
-    isHideInDetails: true,
+    // isHideInDetails: true,
   },
   {
     id: 'stakedAmount',
@@ -214,7 +215,7 @@ const StickyTableCell = styled(TableCell)(({theme, appTheme}) => ({
   width: 310,
   left: 0,
   position: "sticky",
-  zIndex: 5,
+  // zIndex: 5,
   whiteSpace: 'nowrap',
   padding: '20px 25px 15px',
 }));
@@ -278,7 +279,7 @@ function EnhancedTableHead(props) {
                     style={{
                       background: '#060B17',
                       borderBottom: `1px solid #d3f85a`,
-                      zIndex: 10,
+                      // zIndex: 10,
                     }}>
                     <TableSortLabel
                       active={orderBy === headCell.id}
@@ -356,6 +357,16 @@ EnhancedTableHead.propTypes = {
 };
 
 const useStyles = makeStyles({
+  mobmsg: {
+    display: 'flex',
+    background: '#171D2D',
+    borderRadius: 12,
+    color: '#E4E9F4',
+    fontSize: 20,
+    fontWeight: 500,
+    padding: '12px 24px',
+    alignItems: 'center',
+  },
   toolbarFirst: {
     display: 'flex',
     flexDirection: 'column',
@@ -607,6 +618,7 @@ const useStyles = makeStyles({
     },
   },
   filterButton: {
+    padding: 0,
     width: 48,
     height: 48,
     marginLeft: 10,
@@ -619,15 +631,13 @@ const useStyles = makeStyles({
       right: 0,
       top: '-54px',
     },
-    background: 'rgba(119, 155, 244, 0.15)',
-    border: '1px solid #779BF4',
-    // color: '#0A2C40',
+    // background: 'rgba(119, 155, 244, 0.15)',
     '&:hover': {
       background: 'rgba(60,107,227,0.15)',
     },
     '&:active': {
-      background: 'rgba(85,128,236,0.15)',
-      border: '1px solid #4CADE6',
+      // background: 'rgba(85,128,236,0.15)',
+      // border: '1px solid #4CADE6',
     },
   },
   searchButton: {
@@ -664,14 +674,9 @@ const useStyles = makeStyles({
     padding: '30px',
     paddingBottom: '20px',
     boxShadow: '0 10px 20px 0 rgba(0,0,0,0.2)',
-  },
-  'filterContainer--light': {
-    background: '#DBE6EC',
-    border: '1px solid #0B5E8E',
-  },
-  'filterContainer--dark': {
-    background: '#151718',
-    border: '1px solid #4CADE6',
+    borderRadius: 12,
+    background: '#171D2D',
+    border: '1px solid #779BF4',
   },
   alignContentRight: {
     textAlign: 'right',
@@ -682,29 +687,7 @@ const useStyles = makeStyles({
   },
   filterItem: {
     position: 'relative',
-    padding: '10px 0',
-    borderBottom: '1px solid #86B9D6',
-    '&:last-child': {
-      borderBottom: 'none',
-    },
-    '&:not(:last-child)::before': {
-      content: `''`,
-      position: 'absolute',
-      width: 5,
-      height: 1,
-      bottom: -1,
-      left: 0,
-      background: '#0B5E8E',
-    },
-    '&:not(:last-child)::after': {
-      content: `''`,
-      position: 'absolute',
-      width: 5,
-      height: 1,
-      bottom: -1,
-      right: 0,
-      background: '#0B5E8E',
-    },
+    padding: '8px 0',
   },
   'filterItem--dark': {
     borderColor: '#5F7285',
@@ -716,23 +699,14 @@ const useStyles = makeStyles({
     },
   },
   filterLabel: {
-    fontSize: '18px',
-  },
-  'filterLabel--light': {
-    color: '#325569',
-  },
-  'filterLabel--dark': {
-    color: '#C6CDD2',
+    fontSize: '16px',
+    fontWeight: 400,
+    color: '#E4E9F4',
   },
   filterListTitle: {
-    fontWeight: 600,
-    fontSize: 18,
-  },
-  'filterListTitle--light': {
-    color: '#0A2C40',
-  },
-  'filterListTitle--dark': {
-    color: '#ffffff',
+    fontWeight: 500,
+    fontSize: 40,
+    color: '#E4E9F4',
   },
   infoIcon: {
     color: '#06D3D7',
@@ -785,12 +759,6 @@ const useStyles = makeStyles({
     background: '#D3F85A',
     color: '#060B17',
     transition: 'all ease 300ms',
-    /*["@media (max-width:530px)"]: {
-      // eslint-disable-line no-useless-computed-key
-      width: 100,
-      fontSize: 14,
-      padding: '8px 10px',
-    },*/
   },
   withdrawButton: {
     marginTop: 16,
@@ -800,9 +768,6 @@ const useStyles = makeStyles({
     width: '100%',
     height: 50,
     cursor: 'pointer',
-    /*'&:hover > p': {
-      background: '#c4ff00',
-    },*/
   },
   actionButtonWithdrawText: {
     background: 'rgba(119, 155, 244, 0.15)',
@@ -823,8 +788,10 @@ const useStyles = makeStyles({
     padding: 0,
   },
   sortSelect: {
-    // position: 'absolute',
-    // top: 63,
+    position: 'absolute',
+    right: 60,
+    top: 8,
+    width: 48,
   },
   cellPaddings: {
     padding: '11px 20px',
@@ -842,7 +809,7 @@ const useStyles = makeStyles({
   },
   popoverPaper: {
     width: 340,
-    height: 256,
+    minHeight: 292,
     padding: 0,
     background: 'none',
     border: 'none !important',
@@ -885,14 +852,14 @@ const EnhancedTableToolbar = (props) => {
   const options = [
     {id: 'balance--asc', label: 'Wallet: high to low'},
     {id: 'balance--desc', label: 'Wallet: low to high'},
-    {id: 'poolBalance--asc', label: 'My Pool Amount: high to low'},
-    {id: 'poolBalance--desc', label: 'My Pool Amount: low to high'},
-    {id: 'stakedBalance--asc', label: 'My Staked Amount: high to low'},
-    {id: 'stakedBalance--desc', label: 'My Staked Amount: low to high'},
-    {id: 'poolAmount--asc', label: 'Total Pool Amount: high to low'},
-    {id: 'poolAmount--desc', label: 'Total Pool Amount: low to high'},
-    {id: 'stakedAmount--asc', label: 'Total Pool Staked: high to low'},
-    {id: 'stakedAmount--desc', label: 'Total Pool Staked: low to high'},
+    {id: 'poolBalance--asc', label: 'My Pool: high to low'},
+    {id: 'poolBalance--desc', label: 'My Pool: low to high'},
+    {id: 'stakedBalance--asc', label: 'My Stake: high to low'},
+    {id: 'stakedBalance--desc', label: 'My Stake: low to high'},
+    {id: 'poolAmount--asc', label: 'Total Liquidity: high to low'},
+    {id: 'poolAmount--desc', label: 'Total Liquidity: low to high'},
+    {id: 'stakedAmount--asc', label: 'Total Stake: high to low'},
+    {id: 'stakedAmount--desc', label: 'Total Stake: low to high'},
   ];
 
   const [search, setSearch] = useState('');
@@ -1092,9 +1059,7 @@ const EnhancedTableToolbar = (props) => {
         </div>
       </div>
 
-
-
-      {/*{windowWidth <= 660 &&
+      {windowWidth <= 800 &&
         <div className={classes.sortSelect}>
           <SortSelect
             value={sortValueId}
@@ -1102,33 +1067,29 @@ const EnhancedTableToolbar = (props) => {
             handleChange={handleChangeSort}
             sortDirection={sortDirection}/>
         </div>
-      }*/}
+      }
 
       <div className={classes.searchContainer}>
-        {/*{(windowWidth > 1360 || showSearch) &&
-
-        }*/}
-
-        <div className={[classes.actionsButtons, 'g-flex', 'g-flex--align-center'].join(' ')}>
-          <Tooltip placement="top" title="Filter list">
-            <IconButton
+        <div className={[classes.actionsButtons, 'g-flex', 'g-flex--align-center'].join(' ')} title="Filter list">
+          <IconButton
               className={[classes.filterButton, classes[`filterButton--${appTheme}`]].join(' ')}
               onClick={handleClick}
               aria-label="filter list">
-              <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.125 9.625V18.25C12.125 18.5484 12.0065 18.8345 11.7955 19.0455C11.5845 19.2565 11.2984 19.375 11 19.375C10.7016 19.375 10.4155 19.2565 10.2045 19.0455C9.99353 18.8345 9.875 18.5484 9.875 18.25V9.625C9.875 9.32663 9.99353 9.04048 10.2045 8.8295C10.4155 8.61853 10.7016 8.5 11 8.5C11.2984 8.5 11.5845 8.61853 11.7955 8.8295C12.0065 9.04048 12.125 9.32663 12.125 9.625ZM17.75 16C17.4516 16 17.1655 16.1185 16.9545 16.3295C16.7435 16.5405 16.625 16.8266 16.625 17.125V18.25C16.625 18.5484 16.7435 18.8345 16.9545 19.0455C17.1655 19.2565 17.4516 19.375 17.75 19.375C18.0484 19.375 18.3345 19.2565 18.5455 19.0455C18.7565 18.8345 18.875 18.5484 18.875 18.25V17.125C18.875 16.8266 18.7565 16.5405 18.5455 16.3295C18.3345 16.1185 18.0484 16 17.75 16ZM20 12.25H18.875V1.75C18.875 1.45163 18.7565 1.16548 18.5455 0.954505C18.3345 0.743526 18.0484 0.625 17.75 0.625C17.4516 0.625 17.1655 0.743526 16.9545 0.954505C16.7435 1.16548 16.625 1.45163 16.625 1.75V12.25H15.5C15.2016 12.25 14.9155 12.3685 14.7045 12.5795C14.4935 12.7905 14.375 13.0766 14.375 13.375C14.375 13.6734 14.4935 13.9595 14.7045 14.1705C14.9155 14.3815 15.2016 14.5 15.5 14.5H20C20.2984 14.5 20.5845 14.3815 20.7955 14.1705C21.0065 13.9595 21.125 13.6734 21.125 13.375C21.125 13.0766 21.0065 12.7905 20.7955 12.5795C20.5845 12.3685 20.2984 12.25 20 12.25ZM4.25 13C3.95163 13 3.66548 13.1185 3.4545 13.3295C3.24353 13.5405 3.125 13.8266 3.125 14.125V18.25C3.125 18.5484 3.24353 18.8345 3.4545 19.0455C3.66548 19.2565 3.95163 19.375 4.25 19.375C4.54837 19.375 4.83452 19.2565 5.0455 19.0455C5.25647 18.8345 5.375 18.5484 5.375 18.25V14.125C5.375 13.8266 5.25647 13.5405 5.0455 13.3295C4.83452 13.1185 4.54837 13 4.25 13ZM6.5 9.25H5.375V1.75C5.375 1.45163 5.25647 1.16548 5.0455 0.954505C4.83452 0.743526 4.54837 0.625 4.25 0.625C3.95163 0.625 3.66548 0.743526 3.4545 0.954505C3.24353 1.16548 3.125 1.45163 3.125 1.75V9.25H2C1.70163 9.25 1.41548 9.36853 1.2045 9.5795C0.993526 9.79048 0.875 10.0766 0.875 10.375C0.875 10.6734 0.993526 10.9595 1.2045 11.1705C1.41548 11.3815 1.70163 11.5 2 11.5H6.5C6.79837 11.5 7.08452 11.3815 7.2955 11.1705C7.50647 10.9595 7.625 10.6734 7.625 10.375C7.625 10.0766 7.50647 9.79048 7.2955 9.5795C7.08452 9.36853 6.79837 9.25 6.5 9.25ZM13.25 4.75H12.125V1.75C12.125 1.45163 12.0065 1.16548 11.7955 0.954505C11.5845 0.743526 11.2984 0.625 11 0.625C10.7016 0.625 10.4155 0.743526 10.2045 0.954505C9.99353 1.16548 9.875 1.45163 9.875 1.75V4.75H8.75C8.45163 4.75 8.16548 4.86853 7.9545 5.0795C7.74353 5.29048 7.625 5.57663 7.625 5.875C7.625 6.17337 7.74353 6.45952 7.9545 6.6705C8.16548 6.88147 8.45163 7 8.75 7H13.25C13.5484 7 13.8345 6.88147 14.0455 6.6705C14.2565 6.45952 14.375 6.17337 14.375 5.875C14.375 5.57663 14.2565 5.29048 14.0455 5.0795C13.8345 4.86853 13.5484 4.75 13.25 4.75Z" fill="#779BF4"/>
-              </svg>
-            </IconButton>
-          </Tooltip>
+            {open ?
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0.5" y="0.5" width="47" height="47" rx="11.5" fill="#779BF4"/>
+                  <path d="M25.125 23.625V32.25C25.125 32.5484 25.0065 32.8345 24.7955 33.0455C24.5845 33.2565 24.2984 33.375 24 33.375C23.7016 33.375 23.4155 33.2565 23.2045 33.0455C22.9935 32.8345 22.875 32.5484 22.875 32.25V23.625C22.875 23.3266 22.9935 23.0405 23.2045 22.8295C23.4155 22.6185 23.7016 22.5 24 22.5C24.2984 22.5 24.5845 22.6185 24.7955 22.8295C25.0065 23.0405 25.125 23.3266 25.125 23.625ZM30.75 30C30.4516 30 30.1655 30.1185 29.9545 30.3295C29.7435 30.5405 29.625 30.8266 29.625 31.125V32.25C29.625 32.5484 29.7435 32.8345 29.9545 33.0455C30.1655 33.2565 30.4516 33.375 30.75 33.375C31.0484 33.375 31.3345 33.2565 31.5455 33.0455C31.7565 32.8345 31.875 32.5484 31.875 32.25V31.125C31.875 30.8266 31.7565 30.5405 31.5455 30.3295C31.3345 30.1185 31.0484 30 30.75 30ZM33 26.25H31.875V15.75C31.875 15.4516 31.7565 15.1655 31.5455 14.9545C31.3345 14.7435 31.0484 14.625 30.75 14.625C30.4516 14.625 30.1655 14.7435 29.9545 14.9545C29.7435 15.1655 29.625 15.4516 29.625 15.75V26.25H28.5C28.2016 26.25 27.9155 26.3685 27.7045 26.5795C27.4935 26.7905 27.375 27.0766 27.375 27.375C27.375 27.6734 27.4935 27.9595 27.7045 28.1705C27.9155 28.3815 28.2016 28.5 28.5 28.5H33C33.2984 28.5 33.5845 28.3815 33.7955 28.1705C34.0065 27.9595 34.125 27.6734 34.125 27.375C34.125 27.0766 34.0065 26.7905 33.7955 26.5795C33.5845 26.3685 33.2984 26.25 33 26.25ZM17.25 27C16.9516 27 16.6655 27.1185 16.4545 27.3295C16.2435 27.5405 16.125 27.8266 16.125 28.125V32.25C16.125 32.5484 16.2435 32.8345 16.4545 33.0455C16.6655 33.2565 16.9516 33.375 17.25 33.375C17.5484 33.375 17.8345 33.2565 18.0455 33.0455C18.2565 32.8345 18.375 32.5484 18.375 32.25V28.125C18.375 27.8266 18.2565 27.5405 18.0455 27.3295C17.8345 27.1185 17.5484 27 17.25 27ZM19.5 23.25H18.375V15.75C18.375 15.4516 18.2565 15.1655 18.0455 14.9545C17.8345 14.7435 17.5484 14.625 17.25 14.625C16.9516 14.625 16.6655 14.7435 16.4545 14.9545C16.2435 15.1655 16.125 15.4516 16.125 15.75V23.25H15C14.7016 23.25 14.4155 23.3685 14.2045 23.5795C13.9935 23.7905 13.875 24.0766 13.875 24.375C13.875 24.6734 13.9935 24.9595 14.2045 25.1705C14.4155 25.3815 14.7016 25.5 15 25.5H19.5C19.7984 25.5 20.0845 25.3815 20.2955 25.1705C20.5065 24.9595 20.625 24.6734 20.625 24.375C20.625 24.0766 20.5065 23.7905 20.2955 23.5795C20.0845 23.3685 19.7984 23.25 19.5 23.25ZM26.25 18.75H25.125V15.75C25.125 15.4516 25.0065 15.1655 24.7955 14.9545C24.5845 14.7435 24.2984 14.625 24 14.625C23.7016 14.625 23.4155 14.7435 23.2045 14.9545C22.9935 15.1655 22.875 15.4516 22.875 15.75V18.75H21.75C21.4516 18.75 21.1655 18.8685 20.9545 19.0795C20.7435 19.2905 20.625 19.5766 20.625 19.875C20.625 20.1734 20.7435 20.4595 20.9545 20.6705C21.1655 20.8815 21.4516 21 21.75 21H26.25C26.5484 21 26.8345 20.8815 27.0455 20.6705C27.2565 20.4595 27.375 20.1734 27.375 19.875C27.375 19.5766 27.2565 19.2905 27.0455 19.0795C26.8345 18.8685 26.5484 18.75 26.25 18.75Z" fill="#E4E9F4"/>
+                  <rect x="0.5" y="0.5" width="47" height="47" rx="11.5" stroke="#779BF4"/>
+                </svg>
+                :
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0.5" y="0.5" width="47" height="47" rx="11.5" fill="#779BF4" fillOpacity="0.15"/>
+                  <path d="M25.125 23.625V32.25C25.125 32.5484 25.0065 32.8345 24.7955 33.0455C24.5845 33.2565 24.2984 33.375 24 33.375C23.7016 33.375 23.4155 33.2565 23.2045 33.0455C22.9935 32.8345 22.875 32.5484 22.875 32.25V23.625C22.875 23.3266 22.9935 23.0405 23.2045 22.8295C23.4155 22.6185 23.7016 22.5 24 22.5C24.2984 22.5 24.5845 22.6185 24.7955 22.8295C25.0065 23.0405 25.125 23.3266 25.125 23.625ZM30.75 30C30.4516 30 30.1655 30.1185 29.9545 30.3295C29.7435 30.5405 29.625 30.8266 29.625 31.125V32.25C29.625 32.5484 29.7435 32.8345 29.9545 33.0455C30.1655 33.2565 30.4516 33.375 30.75 33.375C31.0484 33.375 31.3345 33.2565 31.5455 33.0455C31.7565 32.8345 31.875 32.5484 31.875 32.25V31.125C31.875 30.8266 31.7565 30.5405 31.5455 30.3295C31.3345 30.1185 31.0484 30 30.75 30ZM33 26.25H31.875V15.75C31.875 15.4516 31.7565 15.1655 31.5455 14.9545C31.3345 14.7435 31.0484 14.625 30.75 14.625C30.4516 14.625 30.1655 14.7435 29.9545 14.9545C29.7435 15.1655 29.625 15.4516 29.625 15.75V26.25H28.5C28.2016 26.25 27.9155 26.3685 27.7045 26.5795C27.4935 26.7905 27.375 27.0766 27.375 27.375C27.375 27.6734 27.4935 27.9595 27.7045 28.1705C27.9155 28.3815 28.2016 28.5 28.5 28.5H33C33.2984 28.5 33.5845 28.3815 33.7955 28.1705C34.0065 27.9595 34.125 27.6734 34.125 27.375C34.125 27.0766 34.0065 26.7905 33.7955 26.5795C33.5845 26.3685 33.2984 26.25 33 26.25ZM17.25 27C16.9516 27 16.6655 27.1185 16.4545 27.3295C16.2435 27.5405 16.125 27.8266 16.125 28.125V32.25C16.125 32.5484 16.2435 32.8345 16.4545 33.0455C16.6655 33.2565 16.9516 33.375 17.25 33.375C17.5484 33.375 17.8345 33.2565 18.0455 33.0455C18.2565 32.8345 18.375 32.5484 18.375 32.25V28.125C18.375 27.8266 18.2565 27.5405 18.0455 27.3295C17.8345 27.1185 17.5484 27 17.25 27ZM19.5 23.25H18.375V15.75C18.375 15.4516 18.2565 15.1655 18.0455 14.9545C17.8345 14.7435 17.5484 14.625 17.25 14.625C16.9516 14.625 16.6655 14.7435 16.4545 14.9545C16.2435 15.1655 16.125 15.4516 16.125 15.75V23.25H15C14.7016 23.25 14.4155 23.3685 14.2045 23.5795C13.9935 23.7905 13.875 24.0766 13.875 24.375C13.875 24.6734 13.9935 24.9595 14.2045 25.1705C14.4155 25.3815 14.7016 25.5 15 25.5H19.5C19.7984 25.5 20.0845 25.3815 20.2955 25.1705C20.5065 24.9595 20.625 24.6734 20.625 24.375C20.625 24.0766 20.5065 23.7905 20.2955 23.5795C20.0845 23.3685 19.7984 23.25 19.5 23.25ZM26.25 18.75H25.125V15.75C25.125 15.4516 25.0065 15.1655 24.7955 14.9545C24.5845 14.7435 24.2984 14.625 24 14.625C23.7016 14.625 23.4155 14.7435 23.2045 14.9545C22.9935 15.1655 22.875 15.4516 22.875 15.75V18.75H21.75C21.4516 18.75 21.1655 18.8685 20.9545 19.0795C20.7435 19.2905 20.625 19.5766 20.625 19.875C20.625 20.1734 20.7435 20.4595 20.9545 20.6705C21.1655 20.8815 21.4516 21 21.75 21H26.25C26.5484 21 26.8345 20.8815 27.0455 20.6705C27.2565 20.4595 27.375 20.1734 27.375 19.875C27.375 19.5766 27.2565 19.2905 27.0455 19.0795C26.8345 18.8685 26.5484 18.75 26.25 18.75Z" fill="#779BF4"/>
+                  <rect x="0.5" y="0.5" width="47" height="47" rx="11.5" stroke="#779BF4"/>
+                </svg>
+            }
 
-          {/*{windowWidth <= 1360 &&
-            <IconButton
-              className={[classes.searchButton, classes[`searchButton--${appTheme}`]].join(' ')}
-              onClick={handleSearch}
-              aria-label="filter list">
-              <Search/>
-            </IconButton>
-          }*/}
+          </IconButton>
         </div>
       </div>
 
@@ -1146,26 +1107,41 @@ const EnhancedTableToolbar = (props) => {
         <div className={[classes.filterContainer, classes[`filterContainer--${appTheme}`]].join(' ')}>
           <div style={{
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'start',
             justifyContent: 'space-between',
             marginBottom: 10,
           }}>
             <Typography className={[classes.filterListTitle, classes[`filterListTitle--${appTheme}`]].join(' ')}>
-              List Filters
+              Filters
             </Typography>
 
-            <Close
-              style={{
-                cursor: 'pointer',
-                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-              }}
-              onClick={handleClick}/>
+            <span
+                style={{
+                  width: 20,
+                  height: 20,
+                  cursor: 'pointer',
+                  backgroundColor: '#586586',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 4,
+                  marginTop: 4,
+                }}
+                onClick={handleClick}
+            >
+              <Close
+                  style={{
+                    // color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                    fontSize: 14,
+                  }}
+              />
+            </span>
           </div>
 
           <div
             className={[classes.filterItem, classes[`filterItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
             <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>
-              Show Active Gauges
+              Active Gauges
             </Typography>
 
             <SwitchCustom
@@ -1178,7 +1154,7 @@ const EnhancedTableToolbar = (props) => {
           <div
             className={[classes.filterItem, classes[`filterItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
             <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>
-              Show Stable Pools
+              Stable Pools
             </Typography>
 
             <SwitchCustom
@@ -1191,7 +1167,7 @@ const EnhancedTableToolbar = (props) => {
           <div
             className={[classes.filterItem, classes[`filterItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
             <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>
-              Show Volatile Pools
+              Volatile Pools
             </Typography>
 
             <SwitchCustom
@@ -2459,7 +2435,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                     color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                     whiteSpace: 'nowrap',
                                   }}>
-                                  {headCell.id === 'balance' && formatCurrency(row.token0.balance)}
+                                  {headCell.id === 'poolAmount' && formatCurrency(row.reserve0)}
                                   {headCell.id === 'poolBalance' && formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve0))}
                                   {headCell.id === 'stakedBalance' && row?.gauge?.address && formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve0))}
                                   {headCell.id === 'stakedBalance' && !row?.gauge?.address && 'Gauge not available'}
@@ -2476,7 +2452,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                     color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                     whiteSpace: 'nowrap',
                                   }}>
-                                  {headCell.id === 'balance' && formatCurrency(row.token1.balance)}
+                                  {headCell.id === 'poolAmount' && formatCurrency(row.reserve1)}
                                   {headCell.id === 'poolBalance' && formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve1))}
                                   {headCell.id === 'stakedBalance' && row?.gauge?.address && formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve1))}
                                   {headCell.id === 'stakedBalance' && !row?.gauge?.address && 'Gauge not available'}
@@ -2525,31 +2501,49 @@ export default function EnhancedTable({pairs, isLoading}) {
               );
             })
           }
-          <TablePagination
-            className={'g-flex-column__item-fixed'}
-            style={{
-              width: '100%',
-              marginTop: 20,
-              padding: '0 30px',
-              background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
-              border: '1px solid #86B9D6',
-              borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-              borderRadius: 100,
-              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-            }}
-            classes={{
-              displayedRows: classes.displayedRows,
-            }}
-            component="div"
-            count={filteredPairs.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            labelRowsPerPage={window.innerWidth < 550 ? null : 'Rows per page:'}
-            rowsPerPageOptions={window.innerWidth < 435 ? [] : [5, 10, 25]}
-            ActionsComponent={TablePaginationActions}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+
+          {filteredPairs.length === 0 && !isLoading && (
+              <div className={classes.mobmsg}>
+                You have not added any liquidity yet
+              </div>
+          )}
+
+          {filteredPairs.length === 0 && isLoading && (
+              <div className={classes.mobmsg}>
+                <svg style={{marginRight: 16,}} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 0C10.2652 0 10.5196 0.105357 10.7071 0.292893C10.8946 0.48043 11 0.734784 11 1V4C11 4.26522 10.8946 4.51957 10.7071 4.70711C10.5196 4.89464 10.2652 5 10 5C9.73478 5 9.48043 4.89464 9.29289 4.70711C9.10536 4.51957 9 4.26522 9 4V1C9 0.734784 9.10536 0.48043 9.29289 0.292893C9.48043 0.105357 9.73478 0 10 0ZM10 15C10.2652 15 10.5196 15.1054 10.7071 15.2929C10.8946 15.4804 11 15.7348 11 16V19C11 19.2652 10.8946 19.5196 10.7071 19.7071C10.5196 19.8946 10.2652 20 10 20C9.73478 20 9.48043 19.8946 9.29289 19.7071C9.10536 19.5196 9 19.2652 9 19V16C9 15.7348 9.10536 15.4804 9.29289 15.2929C9.48043 15.1054 9.73478 15 10 15ZM20 10C20 10.2652 19.8946 10.5196 19.7071 10.7071C19.5196 10.8946 19.2652 11 19 11H16C15.7348 11 15.4804 10.8946 15.2929 10.7071C15.1054 10.5196 15 10.2652 15 10C15 9.73478 15.1054 9.48043 15.2929 9.29289C15.4804 9.10536 15.7348 9 16 9H19C19.2652 9 19.5196 9.10536 19.7071 9.29289C19.8946 9.48043 20 9.73478 20 10ZM5 10C5 10.2652 4.89464 10.5196 4.70711 10.7071C4.51957 10.8946 4.26522 11 4 11H1C0.734784 11 0.48043 10.8946 0.292893 10.7071C0.105357 10.5196 0 10.2652 0 10C0 9.73478 0.105357 9.48043 0.292893 9.29289C0.48043 9.10536 0.734784 9 1 9H4C4.26522 9 4.51957 9.10536 4.70711 9.29289C4.89464 9.48043 5 9.73478 5 10ZM17.071 17.071C16.8835 17.2585 16.6292 17.3638 16.364 17.3638C16.0988 17.3638 15.8445 17.2585 15.657 17.071L13.536 14.95C13.3538 14.7614 13.253 14.5088 13.2553 14.2466C13.2576 13.9844 13.3628 13.7336 13.5482 13.5482C13.7336 13.3628 13.9844 13.2576 14.2466 13.2553C14.5088 13.253 14.7614 13.3538 14.95 13.536L17.071 15.656C17.164 15.7489 17.2377 15.8592 17.2881 15.9806C17.3384 16.102 17.3643 16.2321 17.3643 16.3635C17.3643 16.4949 17.3384 16.625 17.2881 16.7464C17.2377 16.8678 17.164 16.9781 17.071 17.071ZM6.464 6.464C6.27647 6.65147 6.02216 6.75679 5.757 6.75679C5.49184 6.75679 5.23753 6.65147 5.05 6.464L2.93 4.344C2.74236 4.15649 2.63689 3.90212 2.6368 3.63685C2.6367 3.37158 2.74199 3.11714 2.9295 2.9295C3.11701 2.74186 3.37138 2.63639 3.63665 2.6363C3.90192 2.6362 4.15636 2.74149 4.344 2.929L6.464 5.05C6.65147 5.23753 6.75679 5.49184 6.75679 5.757C6.75679 6.02216 6.65147 6.27647 6.464 6.464ZM2.93 17.071C2.74253 16.8835 2.63721 16.6292 2.63721 16.364C2.63721 16.0988 2.74253 15.8445 2.93 15.657L5.051 13.536C5.14325 13.4405 5.25359 13.3643 5.3756 13.3119C5.4976 13.2595 5.62882 13.2319 5.7616 13.2307C5.89438 13.2296 6.02606 13.2549 6.14895 13.3052C6.27185 13.3555 6.3835 13.4297 6.4774 13.5236C6.57129 13.6175 6.64554 13.7291 6.69582 13.852C6.7461 13.9749 6.7714 14.1066 6.77025 14.2394C6.7691 14.3722 6.74151 14.5034 6.6891 14.6254C6.63669 14.7474 6.56051 14.8578 6.465 14.95L4.345 17.071C4.25213 17.164 4.14184 17.2377 4.02044 17.2881C3.89904 17.3384 3.76892 17.3643 3.6375 17.3643C3.50608 17.3643 3.37596 17.3384 3.25456 17.2881C3.13316 17.2377 3.02287 17.164 2.93 17.071ZM13.536 6.464C13.3485 6.27647 13.2432 6.02216 13.2432 5.757C13.2432 5.49184 13.3485 5.23753 13.536 5.05L15.656 2.929C15.8435 2.74136 16.0979 2.63589 16.3631 2.6358C16.6284 2.6357 16.8829 2.74099 17.0705 2.9285C17.2581 3.11601 17.3636 3.37038 17.3637 3.63565C17.3638 3.90092 17.2585 4.15536 17.071 4.343L14.95 6.464C14.7625 6.65147 14.5082 6.75679 14.243 6.75679C13.9778 6.75679 13.7235 6.65147 13.536 6.464Z" fill="#E4E9F4"/>
+                </svg>
+                <div>
+                  Loading your Deposit from the blockchain, please wait
+                </div>
+              </div>
+          )}
+
+          {filteredPairs.length > 0 &&
+              <TablePagination
+                  className={'g-flex-column__item-fixed'}
+                  style={{
+                    width: '100%',
+                    marginTop: 20,
+                    padding: '0 30px',
+                    background: '#060B17',
+                    borderRadius: 12,
+                    color: '#8191B9',
+                  }}
+                  classes={{
+                    displayedRows: classes.displayedRows,
+                  }}
+                  component="div"
+                  count={filteredPairs.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  labelRowsPerPage={window.innerWidth < 550 ? null : 'Rows per page:'}
+                  rowsPerPageOptions={window.innerWidth < 435 ? [] : [5, 10, 25]}
+                  ActionsComponent={TablePaginationActions}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+          }
         </div>
       }
     </div>
