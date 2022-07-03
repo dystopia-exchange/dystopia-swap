@@ -65,11 +65,11 @@ input[type=number].massiveInputAmount {
 }
 
 .inputColumn:last-child {
-  width: calc(61% - 9px);
+  width: calc(61% - 8px);
 }
 
 .inputColumn:first-child {
-  width: calc(39% - 9px);
+  width: calc(39% - 8px);
 }
 
 @media (max-width: 580px) {
