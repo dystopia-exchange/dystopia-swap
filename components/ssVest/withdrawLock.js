@@ -187,6 +187,16 @@ export function WithdrawLock({ nft, govToken, veToken }) {
       <div className={classes.reAddPadding3}>
         <LockAmount govToken={govToken} />
 
+        <Typography className={[classes.info, classes.infoWarning].join(" ")} color="textSecondary">
+          <img src="/images/ui/info-circle-yellow.svg" />
+          <span>veDYST NFT #1234 has expired, to continue receiving boosted rewards you must unstake the expired veDYST NFT from your LP and stake one that is currently locked.</span>
+        </Typography>
+
+        <Typography className={[classes.info, classes.infoError].join(" ")} color="textSecondary">
+          <img src="/images/ui/info-circle-red.svg" />
+          <span>Please reset votes connected with #1234 NFT before withdrawing!</span>
+        </Typography>
+
         <VestingInfo
           currentNFT={nft}
           futureNFT={futureNFT}

@@ -69,7 +69,17 @@ export const NFTSelect = ({ text }) => {
           openSearch();
         }}
       >
-        {text}
+        <div className={classes.selectContainerRow}>
+          <div className={classes.selectContainerCol}>
+            <div className={classes.selectContainerTitle}>#1234</div>
+            <div className={classes.selectContainerValue}>50 000 000 veTET</div>
+          </div>
+          <div className={classes.selectContainerCol}>
+            <div className={classes.selectContainerTitle} style={{ fontSize: 16 }}>2022-06-19</div>
+            <div className={classes.selectContainerValue}>Expiry date</div>
+          </div>
+        </div>
+        {/* {text} */}
       </div>
 
       <Dialog

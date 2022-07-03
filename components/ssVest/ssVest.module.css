@@ -1130,6 +1130,16 @@ input[type=number].massiveInputAmount {
   }
 }
 
+.infoWarning {
+  border: 1px solid #F2D056;
+  background: rgba(6, 11, 23, 0.5);
+}
+
+.infoError {
+  border: 1px solid #E25656;
+  background: rgba(6, 11, 23, 0.5);
+}
+
 .info img {
   flex-shrink: 0;
   width: 24px;
