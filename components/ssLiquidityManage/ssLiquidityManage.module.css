@@ -1734,10 +1734,16 @@ input[type=number].mediumInputAmount {
   }
   .flyPercent {
     position: absolute;
-    right: 3px;
+    right: 26px;
     font-size: 20px;
     color: #8191B9 !important;
-    top: 19px;
+    top: 66px;
+  }
+
+  .flyPercentWithdraw {
+    top: 20px;
+    right: 4px;
+    font-size: 20px;
   }
 
   .inputBalanceTextContainerForPair {
@@ -1898,9 +1904,10 @@ input[type=number].mediumInputAmount {
     font-size: 18px !important;
   }
 
+
   .massiveInputAmount,
   .massiveInputAmountDate {
-    height: 58px;
+    height: 80px;
   }
 
   .smallerText,
@@ -2175,5 +2182,19 @@ input[type=number].mediumInputAmount {
     width: 100%;
     margin-top: 20px;
     padding-left: 0;
+  }
+}
+
+@media (max-width: 582px) {
+  .massiveInputAmount,
+  .massiveInputAmountDate {
+    height: 44px;
+    margin-top: 0;
+  }
+
+  .flyPercent {
+    position: absolute;
+    right: 25px;
+    top: 46px;
   }
 }

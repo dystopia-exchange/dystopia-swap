@@ -1778,7 +1778,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   "g-flex--align-center",
                 ].join(" ")}
               >
-                <span className={classes.flyPercent}>%</span>
+                <span className={classes.flyPercentWithdraw}>%</span>
                 <InputBase
                   className={classes.massiveInputAmountUnstake}
                   placeholder="0.00"

@@ -1301,7 +1301,7 @@ export default function EnhancedTable({pairs, isLoading}) {
     <div
       className={['g-flex-column__item', 'g-flex-column'].join(' ')}
       style={{
-        overflowY: windowWidth <= 400 ? 'auto' : 'hidden',
+        overflowY: 'initial'/*windowWidth <= 400 ? 'auto' : 'hidden'*/,
         paddingLeft: windowWidth > 1200 ? 400 : 0,
       }}
     >

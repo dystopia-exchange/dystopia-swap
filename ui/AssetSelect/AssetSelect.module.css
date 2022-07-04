@@ -23,6 +23,12 @@
   width: 100% !important;
 }
 
+@media (max-width: 860px) {
+  .displaySelectContainerCreate {
+    width: 216px;
+  }
+}
+
 .displaySelectContainer:hover {
   background: #1F2B49;
 }
@@ -51,7 +57,7 @@
 @media (max-width: 860px) {
   .displayDualIconContainer {
     height: 80px;
-    padding: 16px;
+    padding: 16px 4px;
   }
 }
 
@@ -65,7 +71,7 @@
 @media (max-width: 580px) {
   .displayDualIconContainer {
     height: 44px;
-    padding: 12px;
+    padding: 12px 4px;
   }
 }
 
@@ -507,6 +513,13 @@ p.labelSelectSecondary {
 .displayAssetIconSecond--dark {
   border: 2px solid #2D3741;
   background: #24292D;
+}
+
+@media (max-width: 860px) {
+  .displayAssetIconSecond {
+    width: 34px;
+    height: 34px;
+  }
 }
 
 .displayAssetIconSec {
