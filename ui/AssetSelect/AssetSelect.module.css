@@ -49,7 +49,7 @@
   display: flex;
   align-items: center;
   /* justify-content: space-between; */
-  padding: 18px 4px 16px 0;
+  padding: 18px 4px 16px 16px;
   transition: fill 0.16s ease;
   fill: #9BC9E4;
 }

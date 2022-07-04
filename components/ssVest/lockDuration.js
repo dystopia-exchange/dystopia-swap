@@ -130,7 +130,7 @@ export default function ffLockDuration({nft, updateLockDuration}) {
             inputRef={inputEl}
             id="someDate"
             type="date"
-            placeholder="Lock Expiry Date"
+            placeholder="Set Lock Expiry Date"
             error={amountError}
             helperText={amountError}
             value={amountValue}
@@ -148,7 +148,7 @@ export default function ffLockDuration({nft, updateLockDuration}) {
 
           <Typography
             className={[classes.smallerTextDate, classes[`smallerTextDate--${appTheme}`]].join(" ")}>
-            Lock Expiry Date
+              Set Lock Expiry Date
           </Typography>
         </div>
       </div>

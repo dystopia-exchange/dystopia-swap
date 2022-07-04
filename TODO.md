@@ -5,3 +5,9 @@ SWAP PAGE
 3. copy address / add to the wallet
 4. search modal item
 5. copy address modal select
+
+
+VEST PAGE
+
+withdraw messages
+merge lock filled state
