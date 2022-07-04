@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useAppThemeContext } from "../AppThemeProvider";
 import { Typography, Button } from "@mui/material";
+import Loader from "../Loader";
 
 const BtnSwap = (props) => {
-  const {label, className, labelClassName, isDisabled, onClick} = props;
+  const {label, className, labelClassName, isDisabled, onClick, loading} = props;
   const [disabledState, setDisabledState] = useState(isDisabled);
   const {appTheme} = useAppThemeContext();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -90,8 +91,10 @@ const BtnSwap = (props) => {
         {updateState()}
         <div
           className={['g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}
-          onClick={onClick}>
-          {windowWidth > 470 && (
+          onClick={onClick}
+          style={{ width: '100%', height: '100%' }}
+        >
+          {/* {windowWidth > 470 && (
             <svg
               width="292"
               height="65"
@@ -166,20 +169,24 @@ const BtnSwap = (props) => {
                 ></polygon>
               </g>
             </svg>
-          )}
-
+          )} */}
 
           <div
             className={labelClassName}
             style={{
-              position: "absolute",
               userSelect: "none",
               pointerEvents: "none",
               lineHeight: '120%',
             }}
           >
             {`${label}`}
+            {loading && (
+              <div style={{ marginLeft: 13 }}>
+                <Loader color={"#060B17"} />
+              </div>
+            )}
           </div>
+          
         </div>
       </>
     </div>

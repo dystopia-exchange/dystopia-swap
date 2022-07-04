@@ -1,0 +1,159 @@
+.inputRow {
+  position: relative;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 650px) {
+  .inputRow {
+    flex-direction: column;
+  }
+}
+
+.inputCol {
+  width: calc(50% - 8px);
+}
+
+@media (max-width: 650px) {
+  .inputCol {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .inputMergeCol {
+    margin-bottom: 32px;
+  }
+
+  @media (max-width: 650px) {
+    .inputCol:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.inputWrapper {
+  padding: 24px;
+
+  border-radius: 12px;
+
+  background: #060B17;
+}
+
+@media (max-width: 860px) {
+  .inputWrapper {
+    padding: 16px;
+  }
+}
+
+.inputTitleText {
+  margin-bottom: 8px !important;
+
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 120% !important;
+
+  color: #8191B9 !important;
+}
+
+.divider {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 58px;
+  height: 58px;
+
+  border-radius: 50%;
+  background-color: #060b17;
+
+  transform: translate(-50%, -50%) translateY(15px);
+}
+
+@media (max-width: 650px) {
+  .divider {
+    transform: translate(-50%, -50%);
+  }
+}
+
+.dividerInner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 50%;
+  background-color: #161d2c;
+}
+
+.dividerInner span {
+  position: relative;
+
+  width: 20px;
+  height: 20px;
+
+  border: 1.5px solid #8191B9;
+  border-radius: 50%;
+}
+
+.dividerInner span::before,
+.dividerInner span::after {
+  content: '';
+
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 8px;
+  height: 1.5px;
+
+  background-color: #8191B9;
+}
+
+.dividerInner span::before {
+  transform: translate(-50%, -50%);
+}
+
+.dividerInner span::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.subtitle {
+  margin: 0;
+
+  font-size: 20px;
+  font-family: 'Poppins';
+  font-weight: 500;
+  line-height: 28px;
+    
+  color: #E4E9F4;
+}
+
+@media (max-width: 650px) {
+  .subtitle {
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+
+.info {
+  margin-bottom: 20px;
+}
+
+.pageTitle2 {
+  margin-bottom: 8px;
+}
+
+@media (max-width: 600px) {
+  .pageTitle2 {
+    font-size: 48px !important;
+  }
+}

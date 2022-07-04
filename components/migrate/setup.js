@@ -681,7 +681,7 @@ export default function Setup() {
             </DialogTitle>
 
             <div className={classes.searchInline}>
-              <Borders />
+              {/* <Borders /> */}
 
               <TextField
                 variant="outlined"
@@ -700,11 +700,12 @@ export default function Setup() {
                       classes[`searchInputText--${appTheme}`],
                     ].join(" "),
                   },
-                  startAdornment: (
-                    <InputAdornment position="start">
+                  endAdornment: (
+                    <InputAdornment position="end">
                       <Search
                         style={{
-                          color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
+                          color: '#779BF4',
+                          // color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
                         }}
                       />
                     </InputAdornment>

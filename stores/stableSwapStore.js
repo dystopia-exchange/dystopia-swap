@@ -113,17 +113,8 @@ const queryv2 = `
     }
   }
 `;
-
 const client = createClient({ url: process.env.NEXT_PUBLIC_API });
 const clientV = createClient({ url: process.env.NEXT_PUBLIC_APIV2 });
-
-const removeDuplicate = (arr) => {
-  const assets = arr.reduce((acc, item) => {
-    acc[item.symbol] = item
-    return acc
-  }, {})
-  return Object.values(assets)
-}
 
 class Store {
   constructor(dispatcher, emitter) {
@@ -1269,6 +1260,12 @@ class Store {
 
       for (let i = 0; i < response2.data.length; i++) {
         for (let j = 0; j < baseAssets.length; j++) {
+          if (
+            baseAssets[j].address ==
+            "0x104592a158490a9228070e0a8e5343b499e125d0"
+          ) {
+            baseAssets[j] == null;
+          }
           if (
             response2.data[i].address.toLowerCase() ==
             baseAssets[j].address.toLowerCase()
@@ -4064,6 +4061,7 @@ class Store {
       const sendAmount1Min = BigNumber(quoteRemove.amountB)
         .times(sendSlippage)
         .toFixed(0);
+
       this._callContractWait(
         web3,
         routerContract,
@@ -4300,7 +4298,7 @@ class Store {
         return null;
       }
 
-      const { token0, token1, amount, percent, amount0, amount1, pair } =
+      const { token0, token1, amount, percent, amount0, amount1, pair, all } =
         payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
@@ -5103,19 +5101,6 @@ class Store {
               return;
             }
 
-            resolve();
-          }
-        );
-      });
-
-      allowanceCallsPromises.push(withdrawPromise);
-      const done = await Promise.all(allowanceCallsPromises);
-      this.emitter.emit(ACTIONS.UNWRAP_RETURNED);
-    } catch (e) {
-      console.log(e);
-      this.emitter.emit(ACTIONS.ERROR, e);
-    }
-  };
   _getSpecificAssetInfo = async (web3, account, assetAddress) => {
     try {
       const baseAssets = this.getStore("baseAssets");

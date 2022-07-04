@@ -139,31 +139,33 @@ export default function ssLock({govToken, veToken}) {
 
   const renderMassiveDateInput = (type, amountValue, amountError, amountChanged, balance, logo) => {
     return (
-      <div className={[classes.textField, classes[`textFieldDate--${appTheme}`]].join(' ')}>
-        <div className={`${classes.massiveInputContainer} ${(amountError) && classes.error}`}>
-          <div className={classes.massiveInputAssetSelect}>
-            <div className={classes.displaySelectContainerDate}>
-              <div
-                className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
-                <SwapIconBg/>
-                <div className={[classes.displayAssetIcon, classes[`displayAssetIcon--${appTheme}`]].join(' ')}/>
-              </div>
+      <div className={[classes.lockDateRow ,`${(amountError) && classes.error}`].join(" ")}>
+        {/* <div className={classes.massiveInputAssetSelect}>
+          <div className={classes.displaySelectContainerDate}>
+            <div
+              className={[classes.displayDualIconContainer].join(' ')}>
+              <div className={[classes.displayAssetIcon].join(' ')}/>
             </div>
           </div>
+        </div> */}
+        <div className={classes.lockDateWrapper}>
+          <Typography className={classes.smallerTextDate}>
+            Set Lock Expiry Date
+          </Typography>
 
           <InputBase
             className={classes.massiveInputAmountDate}
             inputRef={inputEl}
             id="someDate"
             type="date"
-            placeholder="Lock Expiry Date"
+            placeholder="Set Lock Expiry Date"
             error={amountError}
             helperText={amountError}
             value={amountValue}
             onChange={amountChanged}
             disabled={lockLoading}
             inputProps={{
-              className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
+              className: classes.dateInput,
               min: moment().add(7, 'days').format('YYYY-MM-DD'),
               max: moment().add(1460, 'days').format('YYYY-MM-DD'),
             }}
@@ -171,11 +173,6 @@ export default function ssLock({govToken, veToken}) {
               disableUnderline: true,
             }}
           />
-
-          <Typography
-            className={[classes.smallerTextDate, classes[`smallerTextDate--${appTheme}`]].join(" ")}>
-            Lock Expiry Date
-          </Typography>
         </div>
       </div>
     );
@@ -183,73 +180,79 @@ export default function ssLock({govToken, veToken}) {
 
   const renderMassiveInput = (type, amountValue, amountError, amountChanged, token) => {
     return (
-      <div className={[classes.textField, classes[`textField--${appTheme}`]].join(' ')}>
-        <Typography className={classes.inputTitleText} noWrap>
-          {windowWidth > 530 ? 'Manage Lock' : 'Lock'}
-        </Typography>
-
-        <Typography className={classes.inputBalanceText} noWrap onClick={() => {
-          setAmountPercent(100);
-        }}>
-          Balance: {(token && token.balance) ? ' ' + formatCurrency(token.balance) : ''}
-        </Typography>
-
+      <div className={[classes.textField].join(' ')}>
         <div className={`${classes.massiveInputContainer} ${(amountError) && classes.error}`}>
-          <div className={classes.massiveInputAssetSelect}>
-            <div className={classes.displaySelectContainer}>
-              <div
-                className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
-                <SwapIconBg/>
-                {
-                  token && token.logoURI &&
-                  <img
-                    className={classes.displayAssetIcon}
-                    alt=""
-                    src={token.logoURI}
-                    height="100px"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                    }}
-                  />
-                }
-                {
-                  !(token && token.logoURI) &&
-                  <img
-                    className={classes.displayAssetIcon}
-                    alt=""
-                    src={`/tokens/unknown-logo--${appTheme}.svg`}
-                    height="100px"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                    }}
-                  />
-                }
+          <div className={classes.inputRow}>
+            <div className={classes.inputColumn}>
+              <Typography className={classes.inputTitleText} noWrap>
+                {windowWidth > 530 ? 'Manage Lock' : 'Lock'}
+              </Typography>
+
+              <div className={classes.massiveInputAssetSelect}>
+                <div className={classes.displaySelectContainer}>
+                  <div className={classes.displayDualIconContainer}>
+                    {
+                      token && token.logoURI &&
+                      <img
+                        className={classes.displayAssetIcon}
+                        alt=""
+                        src={token.logoURI}
+                        width="60px"
+                        height="60px"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                        }}
+                      />
+                    }
+                    {
+                      !(token && token.logoURI) &&
+                      <img
+                        className={classes.displayAssetIcon}
+                        alt=""
+                        src={`/tokens/unknown-logo--${appTheme}.svg`}
+                        width="60px"
+                        height="60px"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                        }}
+                      />
+                    }
+
+                    <Typography
+                      className={[classes.smallerText, classes[`smallerText--${appTheme}`]].join(" ")}>
+                      {token?.symbol}
+                    </Typography>
+                  </div>
+                </div>
               </div>
             </div>
+
+            <div className={classes.inputColumn}>
+              <Typography className={classes.inputBalanceText} noWrap onClick={() => {
+                setAmountPercent(100);
+              }}>
+                Balance: {(token && token.balance) ? ' ' + formatCurrency(token.balance) : ''}
+              </Typography>
+
+              <InputBase
+                className={classes.massiveInputAmount}
+                placeholder="0.00"
+                error={amountError}
+                helperText={amountError}
+                value={amountValue}
+                onChange={amountChanged}
+                disabled={lockLoading}
+                inputProps={{
+                  className: classes.largeInput,
+                }}
+                InputProps={{
+                  disableUnderline: true,
+                }}
+              />
+            </div>
           </div>
-
-          <InputBase
-            className={classes.massiveInputAmount}
-            placeholder="0.00"
-            error={amountError}
-            helperText={amountError}
-            value={amountValue}
-            onChange={amountChanged}
-            disabled={lockLoading}
-            inputProps={{
-              className: [classes.largeInput, classes[`largeInput--${appTheme}`]].join(" "),
-            }}
-            InputProps={{
-              disableUnderline: true,
-            }}
-          />
-
-          <Typography
-            className={[classes.smallerText, classes[`smallerText--${appTheme}`]].join(" ")}>
-            {token?.symbol}
-          </Typography>
         </div>
       </div>
     );
@@ -279,90 +282,97 @@ export default function ssLock({govToken, veToken}) {
     <>
       <Paper
         elevation={0}
-        className={[classes.container3, classes[`container3--${appTheme}`, 'g-flex-column']].join(' ')}>
-        <div
-          className={[classes.titleSection, classes[`titleSection--${appTheme}`]].join(' ')}>
-          <Tooltip title="Back to Vest" placement="top">
-            <IconButton onClick={onBack}>
-              <ArrowBackIosNew className={[classes.backIcon, classes[`backIcon--${appTheme}`]].join(' ')}/>
-            </IconButton>
-          </Tooltip>
-        </div>
+        className={[classes.container3, classes['g-flex-column']].join(' ')}>
+        <p className={classes.pageTitle}>
+          <div className={classes.titleSection} onClick={onBack}>
+            <Tooltip title="Back to Vest" placement="top">
+              <IconButton>
+                <div className={classes.backIconWrap}>
+                  <ArrowBackIosNew className={classes.backIcon} />
+                </div>
+              </IconButton>
+            </Tooltip>
+            <p>Back to Vest</p>
+          </div>
 
-        <div className={[classes[`top`], classes[`top--${appTheme}`]].join(' ')}>
-        </div>
+          <span>Create Lock</span>
+        </p>
 
-        <div className={[classes.reAddPadding3, classes[`reAddPadding3--${appTheme}`]].join(' ')}>
+        <div className={classes.reAddPadding3}>
           {renderMassiveInput('amount', amount, amountError, onAmountChanged, govToken)}
           
           {amountError && <div
-                style={{ marginTop: 20 }}
-                className={[
-                  classes.warningContainer,
-                  classes[`warningContainer--${appTheme}`],
-                  classes.warningContainerError].join(" ")}>
-                <div className={[
-                  classes.warningDivider,
-                  classes.warningDividerError
-                ].join(" ")}>
-                </div>
-                <Typography
-                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
-                  align="center">{amountError}</Typography>
-              </div>}
+            style={{ marginTop: 20 }}
+            className={[
+              classes.warningContainer,
+              classes[`warningContainer--${appTheme}`],
+              classes.warningContainerError].join(" ")}>
+            <div className={[
+              classes.warningDivider,
+              classes.warningDividerError
+            ].join(" ")}>
+            </div>
+            <Typography
+              className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+              align="center">{amountError}</Typography>
+          </div>}
 
           <div>
-            {renderMassiveDateInput('date', selectedDate, selectedDateError, handleDateChange, govToken?.balance, govToken?.logoURI)}
+            <div className={classes.setDateRow}>
+              <div className={[classes.vestPeriodToggle, 'g-flex', 'g-flex--align-center'].join(' ')}>
+                <div
+                  className={[classes.vestPeriodLabel, classes[`vestPeriodLabel--${selectedValue === 'week' ? 'checked' : ''}`]].join(' ')}
+                  onClick={() => handleChange('week')}>
+                  1 week
+                </div>
+
+                <div
+                  className={[classes.vestPeriodLabel, classes[`vestPeriodLabel--${selectedValue === 'month' ? 'checked' : ''}`]].join(' ')}
+                  onClick={() => handleChange('month')}>
+                  1 month
+                </div>
+
+                <div
+                  className={[classes.vestPeriodLabel, classes[`vestPeriodLabel--${selectedValue === 'year' ? 'checked' : ''}`]].join(' ')}
+                  onClick={() => handleChange('year')}>
+                  1 year
+                </div>
+
+                <div
+                  className={[classes.vestPeriodLabel, classes[`vestPeriodLabel--${selectedValue === 'years' ? 'checked' : ''}`]].join(' ')}
+                  onClick={() => handleChange('years')}>
+                  4 years
+                </div>
+              </div>
+
+              {renderMassiveDateInput('date', selectedDate, selectedDateError, handleDateChange, govToken?.balance, govToken?.logoURI)}
+            </div>
 
             {selectedDateError && <div
-                style={{ marginTop: 20 }}
-                className={[
-                  classes.warningContainer,
-                  classes[`warningContainer--${appTheme}`],
-                  classes.warningContainerError].join(" ")}>
-                <div className={[
-                  classes.warningDivider,
-                  classes.warningDividerError
-                ].join(" ")}>
-                </div>
-                <Typography
-                  className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
-                  align="center">{selectedDateError}</Typography>
-              </div>}
-
-            <div
-              className={[classes.vestPeriodToggle, classes[`vestPeriodToggle--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
-              <div
-                className={[classes.vestPeriodLabel, classes[`vestPeriodLabel--${appTheme}`], classes[`vestPeriodLabel--${selectedValue === 'week' ? 'checked' : ''}`]].join(' ')}
-                onClick={() => handleChange('week')}>
-                1 week
+              style={{ marginTop: 20 }}
+              className={[
+                classes.warningContainer,
+                classes[`warningContainer--${appTheme}`],
+                classes.warningContainerError].join(" ")}>
+              <div className={[
+                classes.warningDivider,
+                classes.warningDividerError
+              ].join(" ")}>
               </div>
-
-              <div
-                className={[classes.vestPeriodLabel, classes[`vestPeriodLabel--${appTheme}`], classes[`vestPeriodLabel--${selectedValue === 'month' ? 'checked' : ''}`]].join(' ')}
-                onClick={() => handleChange('month')}>
-                1 month
-              </div>
-
-              <div
-                className={[classes.vestPeriodLabel, classes[`vestPeriodLabel--${appTheme}`], classes[`vestPeriodLabel--${selectedValue === 'year' ? 'checked' : ''}`]].join(' ')}
-                onClick={() => handleChange('year')}>
-                1 year
-              </div>
-
-              <div
-                className={[classes.vestPeriodLabel, classes[`vestPeriodLabel--${appTheme}`], classes[`vestPeriodLabel--${selectedValue === 'years' ? 'checked' : ''}`]].join(' ')}
-                onClick={() => handleChange('years')}>
-                4 years
-              </div>
-            </div>
+              <Typography
+                className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
+                align="center">{selectedDateError}</Typography>
+            </div>}
           </div>
 
           {renderVestInformation()}
         </div>
 
         <Button
-          className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`]].join(' ')}
+          className={[
+            classes.buttonOverride,
+            (lockLoading || amount === '' || Number(amount) === 0 ? classes.buttonOverrideDisabled : "")
+          ].join(" ")}
           fullWidth
           variant="contained"
           size="large"
@@ -370,7 +380,10 @@ export default function ssLock({govToken, veToken}) {
           disabled={lockLoading || amount === '' || Number(amount) === 0}
           onClick={onLock}>
           <Typography className={classes.actionButtonText}>
-            {lockLoading ? `Locking` : `Lock Tokens & Get veDYST`}
+            {lockLoading ? `Locking` :
+              (lockLoading || amount === '' || Number(amount) === 0) ? 'Enter Lock Amount' :
+                `Lock Tokens & Get veDYST`
+            }
           </Typography>
 
           {lockLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}

@@ -47,13 +47,16 @@
 
 .transactionInfo {
   display: flex;
-  background: #DBE6EC;
-  border: 1px solid #DB3434;
+
+  border-radius: 12px;
+  border: 1px solid #E93131;
+
+  background: #171D2D;
 }
 
 .transactionInfo--dark {
-  background: #151718;
-  border: 1px solid #DB3434;
+  /* background: #151718; */
+  /* border: 1px solid #DB3434; */
 }
 
 .transactionInfo--Success,
@@ -103,8 +106,9 @@
 
 .transactionDescriptionTitle {
   font-weight: 500 !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
+  font-size: 20px !important;
+  line-height: 140% !important;
+
   text-align: left;
 }
 
@@ -129,21 +133,23 @@
 .transactionDescription {
   max-height: 200px;
   overflow-y: auto;
-  padding-right: 10px !important;
-  padding-top: 10px !important;
-  padding-bottom: 10px !important;
-  margin-top: 10px !important;
+  /* padding-right: 10px !important; */
+  /* padding-top: 10px !important; */
+  /* padding-bottom: 10px !important; */
+  /* margin-top: 10px !important; */
+  font-size: 16px !important;
+  line-height: 150% !important;
   font-weight: 400 !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
-  color: #5688A5 !important;
+
+  color: #E4E9F4 !important;
   text-align: left;
+
   white-space: pre-wrap !important;
   word-break: break-all !important;
 }
 
 .transactionDescription--dark {
-  color: #7C838A !important;
+  /* color: #7C838A !important; */
 }
 
 .capitalise {

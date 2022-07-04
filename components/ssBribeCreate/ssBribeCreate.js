@@ -505,20 +505,21 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
               classes: {
                 root: classes.searchInput,
               },
-              startAdornment: <InputAdornment position="start">
+              endAdornment: <InputAdornment position="end">
                 <Search style={{
-                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  color: '#779BF4',
+                  // color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
                 }}/>
               </InputAdornment>,
             }}
             inputProps={{
               style: {
-                padding: '10px',
+                padding: '24px',
                 borderRadius: 0,
                 border: 'none',
-                fontSize: '14px',
+                fontSize: '16px',
                 lineHeight: '120%',
-                color: '#86B9D6',
+                color: '#8191B9',
               },
             }}
           />
@@ -549,7 +550,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
     return (
       <>
         <div className={classes.searchInline}>
-          <Borders/>
+          {/* <Borders/> */}
 
           <TextField
             autoFocus
@@ -563,9 +564,10 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
                 root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
                 inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
               },
-              startAdornment: <InputAdornment position="start">
+              endAdornment: <InputAdornment position="end">
                 <Search style={{
-                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  color: '#779BF4',
+                  // color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
                 }}/>
               </InputAdornment>,
             }}
@@ -872,7 +874,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
     return (
       <>
         <div className={classes.searchInline}>
-          <Borders/>
+          {/* <Borders/> */}
 
           <TextField
             autoFocus
@@ -891,9 +893,10 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
               classes: {
                 root: classes.searchInput,
               },
-              startAdornment: <InputAdornment position="start">
+              endAdornment: <InputAdornment position="end">
                 <Search style={{
-                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  color: '#779BF4',
+                  // color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
                 }}/>
               </InputAdornment>,
             }}
@@ -948,9 +951,10 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
                 root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
                 inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
               },
-              startAdornment: <InputAdornment position="start">
+              endAdornment: <InputAdornment position="end">
                 <Search style={{
-                  color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
+                  color: '#779BF4',
+                  // color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
                 }}/>
               </InputAdornment>,
             }}

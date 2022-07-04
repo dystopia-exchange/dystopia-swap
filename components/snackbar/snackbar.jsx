@@ -24,47 +24,62 @@ function CloseIcon(props) {
 
 function SuccessIcon(props) {
   const {color} = props;
+
   return (
-    <SvgIcon style={iconStyle}>
-      <path fill={color}
-            d="M12,0A12,12,0,1,0,24,12,12,12,0,0,0,12,0ZM10.75,16.518,6.25,12.2l1.4-1.435L10.724,13.7l6.105-6.218L18.25,8.892Z"/>
-    </SvgIcon>
-  );
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill={color} />
+      <path d="M12 13.75C12.41 13.75 12.75 13.41 12.75 13V8C12.75 7.59 12.41 7.25 12 7.25C11.59 7.25 11.25 7.59 11.25 8V13C11.25 13.41 11.59 13.75 12 13.75Z" fill="#171D2D" />
+      <path d="M12.92 15.6199C12.87 15.4999 12.8 15.3899 12.71 15.2899C12.61 15.1999 12.5 15.1299 12.38 15.0799C12.14 14.9799 11.86 14.9799 11.62 15.0799C11.5 15.1299 11.39 15.1999 11.29 15.2899C11.2 15.3899 11.13 15.4999 11.08 15.6199C11.03 15.7399 11 15.8699 11 15.9999C11 16.1299 11.03 16.2599 11.08 16.3799C11.13 16.5099 11.2 16.6099 11.29 16.7099C11.39 16.7999 11.5 16.8699 11.62 16.9199C11.74 16.9699 11.87 16.9999 12 16.9999C12.13 16.9999 12.26 16.9699 12.38 16.9199C12.5 16.8699 12.61 16.7999 12.71 16.7099C12.8 16.6099 12.87 16.5099 12.92 16.3799C12.97 16.2599 13 16.1299 13 15.9999C13 15.8699 12.97 15.7399 12.92 15.6199Z" fill="#171D2D" />
+    </svg>
+  )
 }
 
 function ErrorIcon(props) {
   const {color} = props;
+
   return (
-    <svg width="30" height="31" viewBox="0 0 30 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M20.2725 3.62479L27.3763 10.7273V20.7723L20.2725 27.876H10.2275L3.12378 20.7723V10.7273L10.2275 3.62354H20.2725V3.62479ZM13.75 19.2498V21.7498H16.25V19.2498H13.75ZM13.75 9.24978V16.7498H16.25V9.24978H13.75Z"
-        fill="#DB3434"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill={color} />
+      <path d="M12 13.75C12.41 13.75 12.75 13.41 12.75 13V8C12.75 7.59 12.41 7.25 12 7.25C11.59 7.25 11.25 7.59 11.25 8V13C11.25 13.41 11.59 13.75 12 13.75Z" fill="#171D2D" />
+      <path d="M12.92 15.6199C12.87 15.4999 12.8 15.3899 12.71 15.2899C12.61 15.1999 12.5 15.1299 12.38 15.0799C12.14 14.9799 11.86 14.9799 11.62 15.0799C11.5 15.1299 11.39 15.1999 11.29 15.2899C11.2 15.3899 11.13 15.4999 11.08 15.6199C11.03 15.7399 11 15.8699 11 15.9999C11 16.1299 11.03 16.2599 11.08 16.3799C11.13 16.5099 11.2 16.6099 11.29 16.7099C11.39 16.7999 11.5 16.8699 11.62 16.9199C11.74 16.9699 11.87 16.9999 12 16.9999C12.13 16.9999 12.26 16.9699 12.38 16.9199C12.5 16.8699 12.61 16.7999 12.71 16.7099C12.8 16.6099 12.87 16.5099 12.92 16.3799C12.97 16.2599 13 16.1299 13 15.9999C13 15.8699 12.97 15.7399 12.92 15.6199Z" fill="#171D2D" />
     </svg>
-  );
+  )
 }
 
 function WarningIcon(props) {
   const {color} = props;
+
   return (
-    <SvgIcon style={iconStyle}>
-      <path
-        fill={color}
-        d="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z"
-      />
-    </SvgIcon>
-  );
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill={color} />
+      <path d="M12 13.75C12.41 13.75 12.75 13.41 12.75 13V8C12.75 7.59 12.41 7.25 12 7.25C11.59 7.25 11.25 7.59 11.25 8V13C11.25 13.41 11.59 13.75 12 13.75Z" fill="#171D2D" />
+      <path d="M12.92 15.6199C12.87 15.4999 12.8 15.3899 12.71 15.2899C12.61 15.1999 12.5 15.1299 12.38 15.0799C12.14 14.9799 11.86 14.9799 11.62 15.0799C11.5 15.1299 11.39 15.1999 11.29 15.2899C11.2 15.3899 11.13 15.4999 11.08 15.6199C11.03 15.7399 11 15.8699 11 15.9999C11 16.1299 11.03 16.2599 11.08 16.3799C11.13 16.5099 11.2 16.6099 11.29 16.7099C11.39 16.7999 11.5 16.8699 11.62 16.9199C11.74 16.9699 11.87 16.9999 12 16.9999C12.13 16.9999 12.26 16.9699 12.38 16.9199C12.5 16.8699 12.61 16.7999 12.71 16.7099C12.8 16.6099 12.87 16.5099 12.92 16.3799C12.97 16.2599 13 16.1299 13 15.9999C13 15.8699 12.97 15.7399 12.92 15.6199Z" fill="#171D2D" />
+    </svg>
+  )
 }
 
 function InfoIcon(props) {
   const {color} = props;
+
   return (
-    <SvgIcon style={iconStyle}>
-      <path
-        fill={color}
-        d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5"
-      />
-    </SvgIcon>
-  );
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill={color} />
+      <path d="M12 13.75C12.41 13.75 12.75 13.41 12.75 13V8C12.75 7.59 12.41 7.25 12 7.25C11.59 7.25 11.25 7.59 11.25 8V13C11.25 13.41 11.59 13.75 12 13.75Z" fill="#171D2D" />
+      <path d="M12.92 15.6199C12.87 15.4999 12.8 15.3899 12.71 15.2899C12.61 15.1999 12.5 15.1299 12.38 15.0799C12.14 14.9799 11.86 14.9799 11.62 15.0799C11.5 15.1299 11.39 15.1999 11.29 15.2899C11.2 15.3899 11.13 15.4999 11.08 15.6199C11.03 15.7399 11 15.8699 11 15.9999C11 16.1299 11.03 16.2599 11.08 16.3799C11.13 16.5099 11.2 16.6099 11.29 16.7099C11.39 16.7999 11.5 16.8699 11.62 16.9199C11.74 16.9699 11.87 16.9999 12 16.9999C12.13 16.9999 12.26 16.9699 12.38 16.9199C12.5 16.8699 12.61 16.7999 12.71 16.7099C12.8 16.6099 12.87 16.5099 12.92 16.3799C12.97 16.2599 13 16.1299 13 15.9999C13 15.8699 12.97 15.7399 12.92 15.6199Z" fill="#171D2D" />
+    </svg>
+  )
+}
+
+function HashIcon(props) {
+  const {color} = props;
+
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill={color} />
+      <path d="M12 13.75C12.41 13.75 12.75 13.41 12.75 13V8C12.75 7.59 12.41 7.25 12 7.25C11.59 7.25 11.25 7.59 11.25 8V13C11.25 13.41 11.59 13.75 12 13.75Z" fill="#171D2D" />
+      <path d="M12.92 15.6199C12.87 15.4999 12.8 15.3899 12.71 15.2899C12.61 15.1999 12.5 15.1299 12.38 15.0799C12.14 14.9799 11.86 14.9799 11.62 15.0799C11.5 15.1299 11.39 15.1999 11.29 15.2899C11.2 15.3899 11.13 15.4999 11.08 15.6199C11.03 15.7399 11 15.8699 11 15.9999C11 16.1299 11.03 16.2599 11.08 16.3799C11.13 16.5099 11.2 16.6099 11.29 16.7099C11.39 16.7999 11.5 16.8699 11.62 16.9199C11.74 16.9699 11.87 16.9999 12 16.9999C12.13 16.9999 12.26 16.9699 12.38 16.9199C12.5 16.8699 12.61 16.7999 12.71 16.7099C12.8 16.6099 12.87 16.5099 12.92 16.3799C12.97 16.2599 13 16.1299 13 15.9999C13 15.8699 12.97 15.7399 12.92 15.6199Z" fill="#171D2D" />
+    </svg>
+  )
 }
 
 export default function MySnackbar(props) {
@@ -96,12 +111,12 @@ export default function MySnackbar(props) {
       messageType = 'Error';
       break;
     case 'Success':
-      icon = <SuccessIcon color={colors.blue}/>;
+      icon = <SuccessIcon color={colors.green}/>;
       color = colors.blue;
       messageType = 'Success';
       break;
     case 'Warning':
-      icon = <WarningIcon color={colors.orange}/>;
+      icon = <WarningIcon color={colors.yellow}/>;
       color = colors.orange;
       messageType = 'Warning';
       break;
@@ -111,22 +126,22 @@ export default function MySnackbar(props) {
       messageType = 'Info';
       break;
     case 'Hash':
-      icon = <SuccessIcon color={colors.blue}/>;
+      icon = <HashIcon color={colors.blue}/>;
       color = colors.blue;
       messageType = 'Hash';
 
-      let snackbarMessage = ETHERSCAN_URL + 'tx/' + message;
-      actions = [
-        <Button variant="text" size="small" onClick={() => window.open(snackbarMessage, '_blank')}>
-          View
-        </Button>,
-        <IconButton key="close" aria-label="Close" onClick={handleClose}>
-          <CloseIcon/>
-        </IconButton>,
-      ];
+      // let snackbarMessage = ETHERSCAN_URL + 'tx/' + message;
+      // actions = [
+      //   <Button variant="text" size="small" onClick={() => window.open(snackbarMessage, '_blank')}>
+      //     View
+      //   </Button>,
+      //   <IconButton key="close" aria-label="Close" onClick={handleClose}>
+      //     <CloseIcon/>
+      //   </IconButton>,
+      // ];
       break;
     default:
-      icon = <SuccessIcon color={colors.blue}/>;
+      icon = <SuccessIcon color={colors.green}/>;
       color = colors.blue;
       messageType = 'Success';
       break;
@@ -172,32 +187,33 @@ export default function MySnackbar(props) {
     <>
       {open &&
         <div className={classes.transaction}>
-          <div className={[classes.transactionTopBg, classes[`transactionTopBg--${type}`]].join(' ')}>
-          </div>
+          {/* <div className={[classes.transactionTopBg, classes[`transactionTopBg--${type}`]].join(' ')}>
+          </div> */}
 
           <div
             className={[classes.transactionInfo, classes[`transactionInfo--${type}`], classes[`transactionInfo--${appTheme}`]].join(' ')}
             style={{
               display: 'flex',
-              padding: 20,
-              paddingRight: 10,
+              padding: 26,
             }}>
             <div
               style={{
-                width: 80,
-                paddingRight: 10,
-                borderRight: `1px solid ${appTheme === 'dark' ? '#5F7285' : '#86B9D6'}`,
+                width: 20,
+                marginTop: 8,
+                // paddingRight: 10,
+                // borderRight: `1px solid ${appTheme === 'dark' ? '#5F7285' : '#86B9D6'}`,
               }}>
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: 50,
-                  height: 50,
-                  margin: '10px',
-                  background: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
-                  borderRadius: '100px',
+
+                  width: 20,
+                  height: 20,
+                  marginRight: 18,
+                  // background: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                  // borderRadius: '100px',
                 }}>
                 {icon}
               </div>
@@ -211,8 +227,9 @@ export default function MySnackbar(props) {
               <div
                 style={{
                   width: '100%',
-                  borderBottom: `1px solid ${appTheme === 'dark' ? '#5F7285' : '#86B9D6'}`,
-                  paddingBottom: 10,
+                  marginBottom: 16,
+                  // borderBottom: `1px solid ${appTheme === 'dark' ? '#5F7285' : '#86B9D6'}`,
+                  // paddingBottom: 10,
                 }}
                 className={['g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
                 <Typography
@@ -220,14 +237,26 @@ export default function MySnackbar(props) {
                   General page error
                 </Typography>
 
-                <IconButton
-                  onClick={handleClose}>
-                  <Close
+                <IconButton onClick={handleClose}>
+                  <div
                     style={{
-                      fontSize: 16,
-                      cursor: 'pointer',
-                      color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-                    }}/>
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      width: 20,
+                      height: 20,
+                      backgroundColor: '#586586',
+                      borderRadius: 5,
+                    }}
+                  >
+                    <Close
+                      style={{
+                        cursor: 'pointer',
+                        color: '#1e2c48',
+                        fontSize: 14,
+                      }}
+                    />
+                  </div>
                 </IconButton>
               </div>
 
