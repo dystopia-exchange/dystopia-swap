@@ -496,6 +496,17 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: 45,
   },
+  ["@media (max-width: 660px)"]: {
+    toolbar:{
+      display: 'flex',
+      paddingLeft:"10px",
+      paddingRight:"10px",
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }
+  },
+  
   cellPaddings: {
     padding: '11px 20px',
     ["@media (max-width:530px)"]: {
@@ -534,7 +545,9 @@ const EnhancedTableToolbar = (props) => {
   const onSearchChanged = (event) => {
     setSearch(event.target.value);
   };
-
+  const onMerge = () => {
+    router.push('/vest/merge');
+  };
   const onCreate = () => {
     router.push('/vest/create');
   };
@@ -570,7 +583,18 @@ const EnhancedTableToolbar = (props) => {
           Create Lock
         </Typography>
       </div>
+      <div
+        className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
+        onClick={onMerge}
+        style={{ marginLeft: 20 }}
+      >
 
+        <Typography
+          className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
+        >
+          {windowWidth <= 660 ? 'Merge' : 'Merge NFTs'}
+        </Typography>
+      </div>
       {windowWidth <= 660 && (
         <div className={[classes.sortSelect, css.sortSelect].join(' ')}>
           {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}

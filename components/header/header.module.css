@@ -1,3 +1,13 @@
+.headerPageInfo {
+  border: 2px solid #15B525;
+  padding: 0px 8px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  line-height: 0;
+  margin-left: 10px;
+}
+
 .headerContainer {
   display: flex;
   justify-content: space-between;
@@ -23,7 +33,7 @@
   z-index: 10030 !important;
 }
 
-.userMenuText > span {
+.userMenuText>span {
   font-weight: 500;
   font-size: 14px;
 }
@@ -323,9 +333,11 @@
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -411,8 +423,7 @@
   z-index: 1100 !important;
 }
 
-.ErrorContent {
-}
+.ErrorContent {}
 
 .ErrorTxt {
   color: #fff;
