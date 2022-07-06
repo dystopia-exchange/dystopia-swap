@@ -24,7 +24,7 @@ export const WalletConnect = (props) => {
           package: CoinbaseWalletSDK,
           options: {
             appName: 'Dystopia app',
-            infuraId: `3281dcb8100f405786ce1d6ef3e57c50`,
+            infuraId: `${process.env.NEXT_PUBLIC_INFURA_KEY}`,
             rpc: {
               137: `https://polygon-rpc.com/`,
             },
@@ -34,7 +34,7 @@ export const WalletConnect = (props) => {
         walletconnect: {
           package: WalletConnectProvider,
           options: {
-            infuraId: `${process.env.REACT_APP_INFURA_KEY}`,
+            infuraId: `${process.env.NEXT_PUBLIC_INFURA_KEY}`,
             rpc: {
               137: `https://polygon-rpc.com/`,
             },
