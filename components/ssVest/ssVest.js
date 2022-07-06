@@ -7,7 +7,7 @@ import moment from "moment";
 import ExistingLock from "./existingLock";
 import Unlock from "./unlock";
 import Lock from "./lock";
-import { MergeLock } from "./MergeLock";
+import { MergeLock } from "./mergeLock";
 import { WithdrawLock } from "./withdrawLock";
 
 export default function ssVest() {
@@ -47,8 +47,8 @@ export default function ssVest() {
       {router.query.id === "create" && (
         <Lock nft={nft} govToken={govToken} veToken={veToken} />
       )}
-      {router.query.id === "withdraw" && <WithdrawLock  nft={nft} govToken={govToken} veToken={veToken} />}
-      {router.query.id === "merge" && <MergeLock  nft={nft} govToken={govToken} veToken={veToken} />}
+      {router.query.id === "withdraw" && <WithdrawLock nft={nft} govToken={govToken} veToken={veToken} />}
+      {router.query.id === "merge" && <MergeLock nft={nft} govToken={govToken} veToken={veToken} />}
       {router.query.id !== "create" &&
         nft &&
         BigNumber(nft.lockEnds).gte(moment().unix()) &&
