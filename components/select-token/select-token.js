@@ -12,24 +12,9 @@ function TokenSelect(props) {
 
   const arrowIcon = () => {
     return (
-      <svg
-        style={{marginRight: 10}}
-        width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M1,16 C1,7.7157 7.716,1 16,1 L16,1 C24.284,1 31,7.7157 31,16 L31,16 C31,24.2843 24.284,31 16,31 L16,31 C7.716,31 1,24.2843 1,16 L1,16 Z"
-          fill={appTheme === 'dark' ? '#24292D' : '#CFE5F2'}>
-        </path>
-
-        <polygon
-          fill={appTheme === 'dark' ? '#5F7285' : '#86B9D6'}
-          points="16 16.9768 20.125 12.8518 21.303 14.0302 16 19.3335 10.697 14.0302 11.875 12.8518">
-        </polygon>
-
-        <path
-          d="M16,30 C8.268,30 2,23.732 2,16 L0,16 C0,24.8366 7.163,32 16,32 L16,30 Z M30,16 C30,23.732 23.732,30 16,30 L16,32 C24.837,32 32,24.8366 32,16 L30,16 Z M16,2 C23.732,2 30,8.268 30,16 L32,16 C32,7.1634 24.837,0 16,0 L16,2 Z M16,0 C7.163,0 0,7.1634 0,16 L2,16 C2,8.268 8.268,2 16,2 L16,0 Z"
-          fill={appTheme === 'dark' ? '#5F7285' : '#86B9D6'}>
-        </path>
-      </svg>
+        <svg style={{pointerEvents: 'none', position: 'absolute', right: 16,}} width="18" height="9" viewBox="0 0 18 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16.9201 0.949951L10.4001 7.46995C9.63008 8.23995 8.37008 8.23995 7.60008 7.46995L1.08008 0.949951" stroke="#D3F85A" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
     );
   };
 
@@ -77,8 +62,8 @@ function TokenSelect(props) {
               <Typography
                 style={{
                   fontWeight: 500,
-                  fontSize: 24,
-                  color: appTheme === 'dark' ? '#ffffff' : '#0B5E8E',
+                  fontSize: 16,
+                  color: '#D3F85A',
                 }}>
                 #{option.id}
               </Typography>
@@ -86,25 +71,14 @@ function TokenSelect(props) {
               <div className={[classes.menuOptionSec, 'g-flex-column'].join(' ')}>
                 <Typography
                   style={{
-                    fontWeight: 500,
-                    fontSize: 12,
-                    color: appTheme === 'dark' ? '#ffffff' : '#0B5E8E',
-                    textAlign: 'right',
+                    fontWeight: 400,
+                    fontSize: 16,
+                    color: '#8191B9',
                   }}>
-                  {formatCurrency(option.lockValue)}
+                    {formatCurrency(option.lockValue)}
+                    {symbol ? ' ' + symbol : ''}
                 </Typography>
 
-                {symbol &&
-                  <Typography
-                    style={{
-                      fontWeight: 500,
-                      fontSize: 12,
-                      color: appTheme === 'dark' ? '#7C838A' : '#86B9D6',
-                      textAlign: 'right',
-                    }}>
-                    {symbol}
-                  </Typography>
-                }
               </div>
             </div>
           </MenuItem>

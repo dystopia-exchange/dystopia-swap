@@ -1,18 +1,23 @@
 .tokenSelect {
   display: flex;
   align-items: center;
-  height: 50px;
-  width: auto !important;
-  margin-left: 20px;
-  background: #DBE6EC !important;
-  border: 1px solid #86B9D6 !important;
-  border-radius: 100px !important;
+  height: 72px;
+  width: 100%;
+  /* workspace */
+
+  background: #171D2D;
+  /* brand */
+
+  border: 1px solid #D3F85A;
+  border-radius: 12px !important;
+
+  /*padding: 24px;*/
 }
 
-.tokenSelect--dark {
+/*.tokenSelect--dark {
   background: #151718 !important;
   border: 1px solid #5F7285 !important;
-}
+}*/
 
 .tokenSelect > svg,
 .tokenSelect--dark > svg {
@@ -31,18 +36,18 @@
 }
 
 .tokenSelectInput--dark {
-  padding: 3px !important;
+  padding: 20px 34px 20px 20px !important;
   border: none !important;
   border-radius: 0 !important;
 }
 
 .menuOption {
-  padding-left: 30px;
+  /*padding-left: 30px;*/
 }
 
 .menuOptionSec {
   margin-left: 15px;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 .list,
@@ -63,7 +68,7 @@
 .list > li > .menuOption,
 .list--dark > li > .menuOption {
   width: 100%;
-  padding: 10px 20px !important;
+  padding: 20px !important;
   border: 1px solid #0B5E8E !important;
 }
 
