@@ -7,7 +7,9 @@
     "build": "next build",
     "export": "next export",
     "build2": "next build && next export",
-    "start": "next start"
+    "start": "next start",
+    "analyze": "source-map-explorer .next/static/**/*.js",
+    "build:analyze": "npm run build && npm run analyze"
   },
   "dependencies": {
     "@coinbase/wallet-sdk": "^3.3.0",
@@ -51,5 +53,8 @@
     "wagmi": "^0.5.4",
     "web3": "^1.7.3",
     "web3modal": "^1.9.8"
+  },
+  "devDependencies": {
+    "source-map-explorer": "^2.5.2"
   }
 }
