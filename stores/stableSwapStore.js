@@ -1373,6 +1373,7 @@ class Store {
       return [];
     }
   };
+
   _getUSDPRouteAssets = async () => {
     try {
       const USDPlus = {
@@ -1434,6 +1435,7 @@ class Store {
       return [];
     }
   };
+
   _getGovTokenBase = () => {
     return {
       address: CONTRACTS.GOV_TOKEN_ADDRESS,
@@ -1634,14 +1636,14 @@ class Store {
             pair.claimable0 =
               claimable0 != 0
                 ? BigNumber(claimable0)
-                    .div(10 ** parseInt(pair.token0.decimals))
-                    .toFixed(parseInt(pair.token0.decimals))
+                  .div(10 ** parseInt(pair.token0.decimals))
+                  .toFixed(parseInt(pair.token0.decimals))
                 : 0;
             pair.claimable1 =
               claimable1 != 0
                 ? BigNumber(claimable1)
-                    .div(10 ** parseInt(pair.token1.decimals))
-                    .toFixed(parseInt(pair.token1.decimals))
+                  .div(10 ** parseInt(pair.token1.decimals))
+                  .toFixed(parseInt(pair.token1.decimals))
                 : 0;
 
             const totalVolumeInUsdInReserve0 = BigNumber(
@@ -1755,45 +1757,45 @@ class Store {
               pair.gauge.balance =
                 parseInt(gaugeBalance) != 0
                   ? BigNumber(parseInt(gaugeBalance))
-                      .div(10 ** 18)
-                      .toFixed(18)
+                    .div(10 ** 18)
+                    .toFixed(18)
                   : 0;
               pair.gauge.totalSupply =
                 parseInt(totalSupply) != 0
                   ? BigNumber(parseInt(totalSupply))
-                      .div(10 ** 18)
-                      .toFixed(18)
+                    .div(10 ** 18)
+                    .toFixed(18)
                   : 0;
 
               pair.gauge.reserve0 =
                 parseFloat(pair.totalSupply) > 0
                   ? parseFloat(
-                      BigNumber(parseFloat(pair.reserve0))
-                        .times(parseFloat(pair.gauge.totalSupply))
-                        .div(parseFloat(pair.totalSupply))
-                    ).toFixed(parseInt(pair.token0.decimals))
+                    BigNumber(parseFloat(pair.reserve0))
+                      .times(parseFloat(pair.gauge.totalSupply))
+                      .div(parseFloat(pair.totalSupply))
+                  ).toFixed(parseInt(pair.token0.decimals))
                   : "0";
               pair.gauge.reserve1 =
                 parseFloat(pair.totalSupply) > 0
                   ? parseFloat(
-                      BigNumber(parseFloat(pair.reserve1))
-                        .times(parseFloat(pair.gauge.totalSupply))
-                        .div(parseFloat(pair.totalSupply))
-                    ).toFixed(parseInt(pair.token1.decimals))
+                    BigNumber(parseFloat(pair.reserve1))
+                      .times(parseFloat(pair.gauge.totalSupply))
+                      .div(parseFloat(pair.totalSupply))
+                  ).toFixed(parseInt(pair.token1.decimals))
                   : "0";
 
               pair.gauge.weight =
                 parseInt(gaugeWeight) != 0
                   ? BigNumber(parseInt(gaugeWeight))
-                      .div(10 ** 18)
-                      .toFixed(18)
+                    .div(10 ** 18)
+                    .toFixed(18)
                   : 0;
               pair.gauge.weightPercent =
                 parseInt(totalWeight) != 0
                   ? BigNumber(parseInt(gaugeWeight))
-                      .times(100)
-                      .div(parseInt(totalWeight))
-                      .toFixed(2)
+                    .times(100)
+                    .div(parseInt(totalWeight))
+                    .toFixed(2)
                   : 0;
 
               let totalVolumeInUsdInReserve0 = BigNumber(
@@ -3924,8 +3926,8 @@ class Store {
       if (pair.gauge) {
         returnVal.gauge = gaugeBalance
           ? BigNumber(gaugeBalance)
-              .div(10 ** 18)
-              .toFixed(18)
+            .div(10 ** 18)
+            .toFixed(18)
           : null;
         // returnVal.earned = BigNumber(earned).div(10**incentiveAsset.decimals).toFixed(incentiveAsset.decimals),
       }
@@ -4540,7 +4542,7 @@ class Store {
       let newRouteAssets = null;
       if (
         fromAsset.address.toLowerCase() ===
-          CONTRACTS.SPHERE_ADDRESS.toLowerCase() ||
+        CONTRACTS.SPHERE_ADDRESS.toLowerCase() ||
         toAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase()
       ) {
         newRouteAssets = await this._getUSDPRouteAssets();
@@ -4799,9 +4801,8 @@ class Store {
           },
           {
             uuid: swapTXID,
-            description: `Swap ${formatCurrency(fromAmount)} ${
-              fromAsset.symbol
-            } for ${toAsset.symbol}`,
+            description: `Swap ${formatCurrency(fromAmount)} ${fromAsset.symbol
+              } for ${toAsset.symbol}`,
             status: "WAITING",
           },
         ],
@@ -4876,7 +4877,7 @@ class Store {
       let _slippage = slippage;
       if (
         fromAsset.address.toLowerCase() ===
-          CONTRACTS.SPHERE_ADDRESS.toLowerCase() &&
+        CONTRACTS.SPHERE_ADDRESS.toLowerCase() &&
         Number(slippage) <= 22
       ) {
         _slippage = (30 + Number(slippage)).toString();
@@ -4964,6 +4965,7 @@ class Store {
       this.emitter.emit(ACTIONS.ERROR, ex);
     }
   };
+
   wrap = async (payload) => {
     try {
       const allowanceCallsPromises = [];
@@ -5001,9 +5003,8 @@ class Store {
 
           {
             uuid: wrapTXID,
-            description: `Wrap ${formatCurrency(fromAmount)} ${
-              fromAsset.symbol
-            } for ${toAsset.symbol}`,
+            description: `Wrap ${formatCurrency(fromAmount)} ${fromAsset.symbol
+              } for ${toAsset.symbol}`,
             status: "WAITING",
           },
         ],
@@ -5041,6 +5042,7 @@ class Store {
       this.emitter.emit(ACTIONS.ERROR, e);
     }
   };
+
   unwrap = async (payload) => {
     try {
       const allowanceCallsPromises = [];
@@ -5077,13 +5079,13 @@ class Store {
 
           {
             uuid: unwrapTXID,
-            description: `Unwrap ${formatCurrency(fromAmount)} ${
-              fromAsset.symbol
-            } for ${toAsset.symbol}`,
+            description: `Unwrap ${formatCurrency(fromAmount)} ${fromAsset.symbol
+              } for ${toAsset.symbol}`,
             status: "WAITING",
           },
         ],
       });
+
       const withdrawPromise = new Promise((resolve, reject) => {
         this._callContractWait(
           web3,
@@ -5100,6 +5102,20 @@ class Store {
               reject(err);
               return;
             }
+
+            resolve();
+          }
+        );
+      });
+
+      allowanceCallsPromises.push(withdrawPromise);
+      const done = await Promise.all(allowanceCallsPromises);
+      this.emitter.emit(ACTIONS.UNWRAP_RETURNED);
+    } catch (e) {
+      console.log(e);
+      this.emitter.emit(ACTIONS.ERROR, e);
+    }
+  };
 
   _getSpecificAssetInfo = async (web3, account, assetAddress) => {
     try {
