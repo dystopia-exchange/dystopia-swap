@@ -1,18 +1,25 @@
 .opts {
   position: absolute;
-  min-width: calc(100vw - 60px);
+  width: calc(100vw - 60px);
   max-width: 600px;
-  right: -60px;
-  top: 66px;
+  right: 0px;
+  /* right: -60px; */
+  top: 58px;
   z-index: 1;
   background-color: #171D2D;
   border-radius: 12px;
   border: 1px solid #779BF4;
 }
 
+@media (max-width: 575px) {
+  .opts {
+    width: calc(100vw - 24px);
+  }
+}
+
 @media (min-width: 680px) {
   .opts {
-    min-width: calc(100vw - 120px);
+    width: calc(100vw - 120px);
   }
 }
 
@@ -25,7 +32,7 @@
   font-weight: 500;
   font-size: 40px;
   color: #E4E9F4;
-  padding: 16px 20px;
+  padding: 10px 20px;
 }
 
 .sortSelect > svg,
@@ -90,7 +97,7 @@
 }
 
 .sortSelect {
-  position: relative;
+  /* position: relative; */
   cursor: pointer;
 }
 
@@ -127,7 +134,7 @@
 }
 
 .selectedOption {
-  position: relative;
+  /* position: relative; */
   height: 50px;
   width: 48px;
   border-radius: 12px;

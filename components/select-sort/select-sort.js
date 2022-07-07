@@ -6,7 +6,7 @@ import {Close} from "@mui/icons-material";
 
 const SortSelect = (props) => {
   const {appTheme} = useAppThemeContext();
-  const {value, options, handleChange, sortDirection} = props;
+  const {value, options, handleChange, sortDirection, className} = props;
   const [open, setOpen] = useState(false);
 
   const changeState = () => {
@@ -16,7 +16,7 @@ const SortSelect = (props) => {
   return (
     <ClickAwayListener onClickAway={() => setOpen(false)}>
       <div
-        className={[classes.sortSelect, classes[`sortSelect--${appTheme}`], open ? classes.sortSelectOpened : ''].join(' ')}>
+        className={[classes.sortSelect, open ? classes.sortSelectOpened : ''].join(' ')}>
         <div>
           <div
             className={[classes.selectedOption, classes[`selectedOption--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}
@@ -39,7 +39,7 @@ const SortSelect = (props) => {
         </div>
 
         {open &&
-          <div className={classes.opts}>
+          <div className={[classes.opts, className ? className : ''].join(" ")}>
             <div className={classes.optsHead}>
               <div className={classes.optsHeadTitle}>
                 Sort
@@ -79,11 +79,11 @@ const SortSelect = (props) => {
                   }}>
                   <div
                     style={{
-                      padding: '13px 0',
+                      padding: '16px 0',
                       fontWeight: 400,
-                      fontSize: 14,
-                      lineHeight: '120%',
-                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                      fontSize: 16,
+                      lineHeight: '24px',
+                      color: '#E4E9F4',
                       height: '100%',
                       alignItems: 'center',
                       display: 'flex',
