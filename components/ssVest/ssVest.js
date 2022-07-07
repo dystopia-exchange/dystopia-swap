@@ -12,7 +12,6 @@ import { WithdrawLock } from "./withdrawLock";
 
 export default function ssVest() {
   const router = useRouter();
-
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
 
@@ -47,8 +46,8 @@ export default function ssVest() {
       {router.query.id === "create" && (
         <Lock nft={nft} govToken={govToken} veToken={veToken} />
       )}
-      {router.query.id === "withdraw" && <WithdrawLock  nft={nft} govToken={govToken} veToken={veToken} />}
-      {router.query.id === "merge" && <MergeLock  nft={nft} govToken={govToken} veToken={veToken} />}
+      {router.query.id === "withdraw" && <WithdrawLock nft={nft} govToken={govToken} veToken={veToken} />}
+      {router.query.id === "merge" && <MergeLock nft={nft} govToken={govToken} veToken={veToken} />}
       {router.query.id !== "create" &&
         nft &&
         BigNumber(nft.lockEnds).gte(moment().unix()) &&
