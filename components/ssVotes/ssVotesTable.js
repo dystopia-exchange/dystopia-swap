@@ -21,6 +21,9 @@ import {
   DialogContent,
   Dialog,
   Hidden,
+  Input,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import QuizIcon from "@mui/icons-material/Quiz";
@@ -684,6 +687,20 @@ const useStyles = makeStyles((theme) => {
         padding: "5px 10px",
       },
     },
+    input: {
+      "& input[type=number]": {
+        color: "#555C61",
+        "-moz-appearance": "textfield",
+      },
+      "& input[type=number]::-webkit-outer-spin-button": {
+        "-webkit-appearance": "none",
+        margin: 0,
+      },
+      "& input[type=number]::-webkit-inner-spin-button": {
+        "-webkit-appearance": "none",
+        margin: 0,
+      },
+    },
   };
 });
 
@@ -732,6 +749,7 @@ export default function EnhancedTable({
   }, [defaultVotes]);
 
   const onSliderChange = (event, value, asset) => {
+    console.log(value, "vvalue");
     let newSliderValues = [...sliderValues];
 
     newSliderValues = newSliderValues.map((val) => {
@@ -913,16 +931,25 @@ export default function EnhancedTable({
 
   const closeModal = () => {
     setVoteDialogOpen(false);
+    setNewSlider(0);
   };
 
   const openVoteDialog = () => {
+    // console.log(row)
     setVoteDialogOpen(true);
   };
+
+  const [new_index, setNewIndex] = useState();
+  const [newSlider, setNewSlider] = useState(0);
+  const [newRow, setNewRow] = useState();
 
   window.addEventListener("resize", () => {
     setTableHeight(window.innerHeight - 50 - 64 - 30 - 60 - 54 - 20 - 30);
     setWindowWidth(window.innerWidth);
   });
+
+  const min = -100;
+  const max = 100;
 
   return (
     <>
@@ -1439,122 +1466,13 @@ export default function EnhancedTable({
                 } else {
                   sliderValue = 0;
                 }
+                {
+                  /* setNewSlider(sliderValue) */
+                }
 
                 return (
                   <>
-                    <Dialog
-                      open={voteDialogOpen}
-                      onClose={closeModal}
-                      onClick={(e) => {
-                        if (
-                          e.target.classList.contains("MuiDialog-container")
-                        ) {
-                          closeModal();
-                        }
-                      }}
-                      fullWidth={false}
-                      maxWidth="false"
-                      fullScreen={false}
-                      BackdropProps={{
-                        style: { backgroundColor: "transparent" },
-                      }}
-                      classes={{
-                        paper: classes.dialogPaper,
-                        scrollPaper: classes.dialogBody,
-                      }}
-                    >
-                      <div
-                        style={{
-                          background:
-                            appTheme === "dark" ? "#151718" : "#DBE6EC",
-                          border:
-                            appTheme === "dark"
-                              ? "1px solid #5F7285"
-                              : "1px solid #86B9D6",
-                          borderRadius: 0,
-                        }}
-                      >
-                        <DialogTitle
-                          style={{
-                            padding: 30,
-                            paddingBottom: 16,
-                            fontWeight: 500,
-                            fontSize: 18,
-                            lineHeight: "140%",
-                            color: "#0A2C40",
-                            background:
-                              appTheme === "dark" ? "#151718" : "#CFE5F2",
-                          }}
-                        >
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                            }}
-                          >
-                            <div
-                              style={{
-                                color:
-                                  appTheme === "dark" ? "#ffffff" : "#0A2C40",
-                              }}
-                            >
-                              My Vote %
-                            </div>
-
-                            {/*<Close
-                            style={{
-                              cursor: 'pointer',
-                              color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-                            }}
-                            onClick={closeModal}/>*/}
-                          </div>
-                        </DialogTitle>
-
-                        <DialogContent
-                          style={{
-                            padding: 30,
-                            paddingBottom: 20,
-                            background:
-                              appTheme === "dark" ? "#24292D" : "#DBE6EC",
-                          }}
-                        >
-                          <CustomSlider
-                            appTheme={appTheme}
-                            valueLabelDisplay="auto"
-                            value={sliderValue}
-                            onChange={(event, value) => {
-                              onSliderChange(event, value, row);
-                            }}
-                            min={-100}
-                            max={100}
-                            marks
-                            step={1}
-                          />
-
-                          <Button
-                            variant="outlined"
-                            color="primary"
-                            style={{
-                              width: 199,
-                              height: 50,
-                              marginTop: 20,
-                              backgroundImage:
-                                'url("/images/ui/btn-simple.svg")',
-                              border: "none",
-                              borderRadius: 0,
-                              fontWeight: 700,
-                              fontSize: 16,
-                              color:
-                                appTheme === "dark" ? "#7F828B" : "#8F5AE8",
-                            }}
-                            onClick={closeModal}
-                          >
-                            Save & Close
-                          </Button>
-                        </DialogContent>
-                      </div>
-                    </Dialog>
+                    {/* <VoteModal index={index} sliderValue={sliderValue} /> */}
 
                     <Accordion
                       key={labelId}
@@ -1716,7 +1634,11 @@ export default function EnhancedTable({
                                         : "#5688A5"
                                     }`,
                                     borderColor:
-                                      appTheme === "dark"
+                                      sliderValue > 0
+                                        ? "green"
+                                        : sliderValue < 0
+                                        ? "red"
+                                        : appTheme === "dark"
                                         ? "#C6CDD2"
                                         : "#5688A5",
                                     borderRadius: 100,
@@ -1724,7 +1646,11 @@ export default function EnhancedTable({
                                     fontSize: 14,
                                     lineHeight: "120%",
                                     color:
-                                      appTheme === "dark"
+                                      sliderValue > 0
+                                        ? "green"
+                                        : sliderValue < 0
+                                        ? "red"
+                                        : appTheme === "dark"
                                         ? "#C6CDD2"
                                         : "#5688A5",
                                   }}
@@ -1732,10 +1658,15 @@ export default function EnhancedTable({
                                     event.stopPropagation();
                                     event.preventDefault();
 
-                                    openVoteDialog(row);
+                                    // openVoteDialog(row, index);
+                                    openVoteDialog();
+                                    setNewIndex(index);
+                                    setNewRow(row);
                                   }}
                                 >
-                                  Vote
+                                  {sliderValue !== 0
+                                    ? sliderValue.toFixed(2)
+                                    : "Vote"}
                                 </Button>
                               </div>
                             </div>
@@ -2098,7 +2029,203 @@ export default function EnhancedTable({
                   </>
                 );
               })}
+            <div>
+              <Dialog
+                open={voteDialogOpen}
+                onClose={closeModal}
+                onClick={(e) => {
+                  if (e.target.classList.contains("MuiDialog-container")) {
+                    closeModal();
+                  }
+                }}
+                fullWidth={false}
+                maxWidth="false"
+                fullScreen={false}
+                BackdropProps={{
+                  style: { backgroundColor: "transparent" },
+                }}
+                classes={{
+                  paper: classes.dialogPaper,
+                  scrollPaper: classes.dialogBody,
+                }}
+              >
+                <div
+                  style={{
+                    background: appTheme === "dark" ? "#151718" : "#DBE6EC",
+                    border:
+                      appTheme === "dark"
+                        ? "1px solid #5F7285"
+                        : "1px solid #86B9D6",
+                    borderRadius: 0,
+                  }}
+                >
+                  <DialogTitle
+                    style={{
+                      padding: 15,
+                      paddingBottom: 16,
+                      fontWeight: 500,
+                      fontSize: 18,
+                      lineHeight: "140%",
+                      color: "#0A2C40",
+                      background: appTheme === "dark" ? "#151718" : "#CFE5F2",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div
+                        style={{
+                          color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+                        }}
+                      >
+                        My Votes{new_index}
+                      </div>
+                      <div
+                        style={{
+                          color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+                        }}
+                      >
+                        My Vote %
+                      </div>
+
+                      {/*<Close
+                            style={{
+                              cursor: 'pointer',
+                              color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                            }}
+                            onClick={closeModal}/>*/}
+                    </div>
+                  </DialogTitle>
+
+                  <DialogContent
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: 25,
+                      paddingBottom: 20,
+                      background: appTheme === "dark" ? "#151718" : "#DBE6EC",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        width: "5em",
+                        marginRight: "0.5em",
+                      }}
+                    >
+                      <div>
+                        <Typography
+                          variant="h6"
+                          style={{
+                            color: appTheme === "dark" ? "#FFF" : "#000",
+                          }}
+                        >
+                          0
+                        </Typography>
+                        <Typography variant="subtitle1">0.00%</Typography>
+                      </div>
+                      <div
+                        style={{
+                          width: "100%",
+                          height: 50,
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          border:
+                            appTheme === "dark"
+                              ? "1px solid #43505C"
+                              : "1px solid #91c1dd",
+                          backgroundColor:
+                            appTheme === "dark" ? "#24292D" : "#b9dff5",
+                        }}
+                      >
+                        <TextField
+                          variant="standard"
+                          className={classes.input}
+                          label=""
+                          type="number"
+                          max={100}
+                          min={-100}
+                          value={newSlider}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment
+                                position="end"
+                                style={{
+                                  color:
+                                    appTheme === "dark" ? "#555C61" : "#88bbd7",
+                                }}
+                              >
+                                %
+                              </InputAdornment>
+                            ),
+                            inputProps: { min, max },
+                            disableUnderline: true,
+                          }}
+                          onChange={(event) => {
+                            if (event.target.value === "") {
+                              setNewSlider(0);
+                            }
+                            const evalue = event.target.value;
+                            if (evalue > max) {
+                              setNewSlider(max);
+                            } else if (evalue < min) {
+                              setNewSlider(min);
+                            } else {
+                              setNewSlider(event.target.value);
+                            }
+                            onSliderChange(event, evalue, newRow);
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <CustomSlider
+                        appTheme={appTheme}
+                        valueLabelDisplay="auto"
+                        value={newSlider}
+                        onChange={(event, value) => {
+                          onSliderChange(event, value, newRow);
+                          setNewSlider(value);
+                        }}
+                        min={-100}
+                        max={100}
+                        marks
+                        step={1}
+                      />
+
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        style={{
+                          width: 199,
+                          height: 50,
+                          marginTop: 20,
+                          backgroundImage: 'url("/images/ui/btn-simple.svg")',
+                          border: "none",
+                          borderRadius: 0,
+                          fontWeight: 700,
+                          fontSize: 16,
+                          color: appTheme === "dark" ? "#7F828B" : "#8F5AE8",
+                        }}
+                        onClick={closeModal}
+                      >
+                        Save & Close
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </div>
+              </Dialog>
+            </div>
           </div>
+
           <TablePagination
             className={"g-flex-column__item-fixed"}
             style={{

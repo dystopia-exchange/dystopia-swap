@@ -108,6 +108,8 @@ export const MERGE_NFT = "MERGE_NFT";
 export const VOTE = "VOTE";
 export const VOTE_RETURNED = "VOTE_RETURNED";
 
+export const RESET_VOTE = "RESET_VOTE";
+
 export const GET_VEST_VOTES = "GET_VEST_VOTES";
 export const VEST_VOTES_RETURNED = "VEST_VOTES_RETURNED";
 
