@@ -2127,9 +2127,12 @@ export default function EnhancedTable({
                             color: appTheme === "dark" ? "#FFF" : "#000",
                           }}
                         >
-                          0
+                          {formatCurrency(
+                            BigNumber(newSlider)
+                              .div(100)
+                              .times(token?.lockValue)
+                          )}
                         </Typography>
-                        <Typography variant="subtitle1">0.00%</Typography>
                       </div>
                       <div
                         style={{
