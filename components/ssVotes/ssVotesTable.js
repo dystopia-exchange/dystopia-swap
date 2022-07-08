@@ -2134,6 +2134,7 @@ export default function EnhancedTable({
                           )}
                         </Typography>
                       </div>
+                      &nbsp;
                       <div
                         style={{
                           width: "100%",
