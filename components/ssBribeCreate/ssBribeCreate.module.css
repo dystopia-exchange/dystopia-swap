@@ -60,31 +60,33 @@ input[type=number].massiveInputAmount {
 
 .textField,
 .textFieldTop {
-  /*width: 400px;*/
+  width: 782px;
   margin-top: 2px;
   margin-bottom: 2px;
   position: relative;
+  background: #060B17;
+  border-radius: 12px;
+  padding: 48px 24px 24px 24px;
 }
 
 .textField--dark {
-  width: 400px;
-  height: 172px;
-  background-image: url("/images/ui/swap-coin-bottom--dark.svg");
-  background-repeat: no-repeat;
+
+  /*height: 172px;*/
+  /*background-image: url("/images/ui/swap-coin-bottom--dark.svg");*/
+  /*background-repeat: no-repeat;*/
 }
 
-.textField--light {
-  margin-top: 20px;
-  width: 400px;
-  height: 172px;
-  background-image: url("/images/ui/swap-coin-bottom--light.svg");
-  background-repeat: no-repeat;
+.textFieldTop {
+  /*width: 782px;*/
+  height: auto;
+  /*background: #060B17;*/
+  /*border-radius: 12px;*/
+
 }
 
 .textFieldTop--dark {
-  height: 172px;
-  background-image: url("/images/ui/swap-coin-top--dark.svg");
-  background-repeat: no-repeat;
+  /*background-image: url("/images/ui/swap-coin-top--dark.svg");*/
+  /*background-repeat: no-repeat;*/
 }
 
 .textFieldTop--light {
@@ -100,12 +102,14 @@ input[type=number].massiveInputAmount {
 }
 
 .searchInput {
-  height: 40px;
-  background: #DBE6EC !important;
-  border: 1px solid #86B9D6 !important;
-  border-radius: 0 !important;
+  height: 72px;
+  background: #171D2D !important;
+  border-radius: 12px !important;
+  border: 1px solid #779BF4 !important;
+  padding-right: 24px !important;
 }
 
+/*
 .searchInput:hover {
   background: #B9DFF5 !important;
   border: 1px solid #86B9D6 !important;
@@ -140,17 +144,18 @@ input[type=number].massiveInputAmount {
   background: #24292D !important;
   border: 1px solid #FFFFFF !important;
 }
+*/
 
 .searchInput > fieldset {
   border: none;
 }
 
 .searchInputText {
-  padding: 10px !important;
+  padding: 16px 24px !important;
   border-radius: 0 !important;
   border: none !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
+  font-size: 16px !important;
+  /*line-height: 120% !important;*/
   color: #325569 !important;
 }
 
@@ -161,34 +166,42 @@ input[type=number].massiveInputAmount {
 .inputBalanceText,
 .inputTitleText {
   position: absolute;
-  top: 12px;
+  top: 22px;
   font-style: normal !important;
-  font-weight: 500 !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
-  color: #ffffff;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  /*line-height: 16px !important;*/
+  color: #8191B9;
 }
 
 .inputBalanceText {
-  left: 151px;
+  left: 324px;
 }
 
 .inputTitleText {
-  left: 20px;
+  left: 26px;
+}
+
+.inputBalanceMax {
+  position: absolute;
+  /* brand-add */
+
+  color: #779BF4;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  right: 26px;
+  top: 22px;
+  cursor: pointer;
 }
 
 .largeInput {
-  padding: 0 !important;
+  padding: 0 0 0 20px !important;
   font-weight: 400 !important;
   font-size: 30px !important;
   line-height: 100% !important;
   border: none !important;
   outline: none !important;
-}
-
-.largeInput--light {
-  color: #325569 !important;
-  -webkit-text-fill-color: #325569 !important;
 }
 
 .largeInput--dark {
@@ -217,7 +230,7 @@ input[type=number].massiveInputAmount {
 
 .assetSearchResults {
   width: 100%;
-  max-height: 490px;
+  max-height: 482px;
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -225,14 +238,9 @@ input[type=number].massiveInputAmount {
   min-width: 390px;
 }
 
-.assetSearchResults--light {
-  background: #9BC9E4;
-  border: 1px solid #86B9D6;
-}
-
 .assetSearchResults--dark {
-  background: #2D3741;
-  border: 1px solid #5F7285;
+  /*background: #2D3741;*/
+  /*border: 1px solid #5F7285;*/
 }
 
 @keyframes gradient {
@@ -310,8 +318,10 @@ input[type=number].massiveInputAmount {
 }
 
 .actionButtonText {
-  text-transform: capitalize !important;
-  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  font-weight: 600 !important;
+  font-size: 32px !important;
+  line-height: 48px !important;
 }
 
 .autocompleteContainer {
@@ -323,37 +333,25 @@ input[type=number].massiveInputAmount {
 
 .container {
   align-self: center;
-  width: 460px;
+  width: 782px;
   background: transparent !important;
 }
 
 .reAddPadding {
-  width: 462px;
-  padding: 12px 30px 30px;
-  background: #DBE6EC !important;
-  border: 1px solid #86B9D6 !important;
-  border-top: none !important;
-}
-
-.reAddPadding--dark {
-  background: #151718 !important;
-  border: 1px solid #5F7285 !important;
-  border-top: none !important;
+  max-width: 782px;
 }
 
 .top {
+  display: flex;
+  align-items: center;
+  color: #E4E9F4;
+  font-weight: 500;
+  font-size: 60px;
+  line-height: 72px;
   top: 1px;
-  width: 464px;
-  height: 18px;
-  margin-bottom: -1px;
-  margin-left: -2px;
-  background-image: url("/images/ui/swap-popup-top-slice.svg");
-  background-repeat: no-repeat;
-}
-
-.top--dark {
-  background-image: url("/images/ui/swap-popup-top-slice--dark.svg");
-  background-repeat: no-repeat;
+  width: 700px;
+  /*height: 60px;*/
+  margin: 0 0 20px 0;
 }
 
 .loadingCircle {
@@ -410,33 +408,35 @@ input[type=number].massiveInputAmount {
 
 .buttonOverride {
   width: 460px;
-  height: 65px;
+  height: 96px;
   margin-left: 1px;
   margin-top: 20px !important;
-  background: transparent url("/images/ui/liquidity-add-button-deposit--light.svg") !important;
-  font-weight: 700 !important;
-  font-size: 16px !important;
-  line-height: 120% !important;
+  font-weight: 600 !important;
+  font-size: 32px !important;
+  line-height: 48px !important;
   text-align: center !important;
-  color: #8F5AE8 !important;
+  color: #060B17 !important;
   box-shadow: none !important;
-  border-radius: 0 !important;
+
+  background-color: #D3F85A !important;
+  border-radius: 12px !important;
 }
 
 .buttonOverride[disabled] {
-  filter: grayscale(1);
+  background-color: #586586 !important;
+  color: #1F2B49 !important;
 }
 
 .buttonOverride:hover {
-  background: transparent url("/images/ui/liquidity-add-button-deposit--light.svg") !important;
+  /*background: transparent url("/images/ui/liquidity-add-button-deposit--light.svg") !important;*/
 }
 
 .buttonOverride--dark {
-  background: transparent url("/images/ui/liquidity-add-button-deposit--dark.svg") !important;
+  /*background: transparent url("/images/ui/liquidity-add-button-deposit--dark.svg") !important;*/
 }
 
 .buttonOverride--dark:hover {
-  background: transparent url("/images/ui/liquidity-add-button-deposit--dark.svg") !important;
+  /*background: transparent url("/images/ui/liquidity-add-button-deposit--dark.svg") !important;*/
 }
 
 .swapIconContainer {
@@ -572,7 +572,14 @@ input[type=number].massiveInputAmount {
 .massiveInputContainer {
   display: flex;
   flex-wrap: wrap;
-  border-radius: 10px;
+  align-items: center;
+  background: #171D2D;
+  border-radius: 12px;
+}
+
+.massiveInputContainerTransparent {
+  display: flex;
+  /*flex-wrap: wrap;*/
   align-items: center;
 }
 
@@ -580,12 +587,22 @@ input[type=number].massiveInputAmount {
   height: 100%;
 }
 
+.massiveInputAssetSelectStandalone {
+  background: #171D2D;
+  width: 280px;
+  height: 100%;
+  border-radius: 12px;
+}
+
 .massiveInputAmount {
   position: absolute !important;
-  left: 151px;
-  top: 76px;
+  left: 322px;
+  top: 48px;
+  height: 90px;
   border: none !important;
-  margin-right: 20px !important;
+  background: #171D2D;
+  border-radius: 12px;
+  margin-right: 24px;
 }
 
 .massiveInputAddress {
@@ -601,7 +618,7 @@ input[type=number].massiveInputAmount {
 }
 
 .displaySelectContainer {
-  padding: 61px 20px 20px;
+  padding: 0 20px;
   cursor: pointer;
 }
 
@@ -612,7 +629,7 @@ input[type=number].massiveInputAmount {
   height: 90px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   transition: fill 0.16s ease;
   fill: #9BC9E4;
 }
@@ -644,6 +661,13 @@ input[type=number].massiveInputAmount {
 }
 
 .displayDualIconContainerSmall {
+  width: 82px;
+  height: 50px;
+  position: relative;
+  margin-right: 15px;
+}
+
+.displaySingleIconContainerSmall {
   width: 50px;
   height: 50px;
   position: relative;
@@ -655,21 +679,23 @@ input[type=number].massiveInputAmount {
   height: 50px;
   padding: 4px;
   border-radius: 100px;
-  border: 1px solid #9BC9E4;
-  background: #CFE5F2;
+  /*border: 1px solid #9BC9E4;*/
+  /*background: #CFE5F2;*/
 }
 
-.assetOptionIcon--light {
-  background: #CFE5F2;
-  border: 1px solid #86B9D6;
-}
 
 .assetOptionIcon--dark {
-  background: #304E61;
-  border: 1px solid #5F7285;
+  /*background: #304E61;*/
+  /*border: 1px solid #5F7285;*/
 }
 
 .displayAssetIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 100px;
+}
+
+.displayAssetIconSingle {
   width: 60px;
   height: 60px;
   border-radius: 100px;
@@ -762,13 +788,26 @@ input[type=number].massiveInputAmount {
 }
 
 .depositInfoContainer {
+  position: relative;
+  padding: 20px;
   margin-top: 12px;
-  padding: 12px;
   display: flex;
-  flex-wrap: wrap;
-  border-radius: 10px;
+  /*flex-wrap: wrap;*/
   width: 100%;
-  align-items: center;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(6, 11, 23, 0.5);
+  /* weak */
+
+  border: 1px solid #1F2B49;
+  border-radius: 12px;
+}
+
+.depositInfoContainerWarn {
+  color: #18202f;
+  position: absolute;
+  left: 27px;
+  top: 18px;
 }
 
 .withdrawInfoContainer {
@@ -782,19 +821,12 @@ input[type=number].massiveInputAmount {
 }
 
 .depositInfoHeading {
+  color: #E4E9F4;
   width: 100%;
-  padding-bottom: 12px !important;
-  font-size: 15px !important;
-  line-height: 23px !important;
-  font-weight: 500;
-}
-
-.depositInfoHeading--light {
-  color: #5688A5 !important;
-}
-
-.depositInfoHeading--dark {
-  color: #7C838A !important;
+  /*padding-bottom: 12px !important;*/
+  font-weight: 400;
+  font-size: 16px !important;
+  line-height: 24px !important;
 }
 
 .depositInfoHeading--light .highlight {
@@ -848,50 +880,54 @@ input[type=number].massiveInputAmount {
 }
 
 .assetSelectMenu {
-  padding: 10px !important;
+  padding: 16px 20px !important;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1px !important;
+  margin-bottom: 4px !important;
+  margin-right: 18px !important;
   transition: all ease 300ms;
-}
-
-.assetSelectMenu--light {
-  background: #B9DFF5 !important;
-  box-shadow: 0 1px 0 rgba(11, 94, 142, 0);
-}
-
-.assetSelectMenu--light:hover {
-  background: #CFE5F2 !important;
-  box-shadow: 0 1px 0 rgba(11, 94, 142, 0.5);
+  background-color: #171D2D !important;
+  border-radius: 12px !important;
 }
 
 .assetSelectMenu--dark {
-  background: #24292D !important;
-  box-shadow: 0 1px 0 rgba(76, 173, 229, 0);
+  /*background: #24292D !important;*/
+  /*box-shadow: 0 1px 0 rgba(76, 173, 229, 0);*/
 }
 
 .assetSelectMenu--dark:hover {
-  background: #2D3741 !important;
-  box-shadow: 0 1px 0 rgba(76, 173, 229, 0.5);
+  /*background: #2D3741 !important;*/
+  /*box-shadow: 0 1px 0 rgba(76, 173, 229, 0.5);*/
 }
 
 .titleSection {
+  cursor: pointer;
   position: absolute;
+  left: 26px;
+  width: 340px;
+  height: 60px;
+  padding: 0 20px;
+  background: transparent !important;
+  border: 1px solid #C6CDD2;
+  border-radius: 14px;
+  color: #E4E9F4;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 58px;
-  height: 58px;
-  margin-left: -95px;
-  background: #DBE6EC;
-  border: 1px solid #86B9D6;
 }
 
-.titleSection--dark {
+.titleBackText {
+  margin-left: 10px;
+}
+
+@media (max-width:1200px) {
+
+}
+
+/*.titleSection--dark {
   background: #151718;
   border: 1px solid #5F7285;
-}
+}*/
 
 .backButton {
   position: absolute !important;
@@ -1006,14 +1042,15 @@ input[type=number].massiveInputAmount {
 }
 
 .smallerText {
+  pointer-events: none;
   position: absolute !important;
-  left: 151px;
-  top: 118px;
+  left: 120px;
+  top: 76px;
   font-style: normal;
   font-weight: 500 !important;
-  font-size: 18px !important;
-  line-height: 140% !important;
-  color: #0A2C40 !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  color: #E4E9F4 !important;
   text-transform: uppercase;
 }
 
@@ -1026,19 +1063,23 @@ input[type=number].massiveInputAmount {
 }
 
 .assetSelectIconName {
-  margin-left: 32px;
+  /*margin-left: 32px;*/
 }
 
 .assetSymbolName {
   font-weight: 500 !important;
-  font-size: 18px !important;
-  line-height: 120% !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  color: #E4E9F4;
 }
 
 .assetSymbolName2 {
-  font-weight: 400 !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  /* light */
+
+  color: #8191B9 !important;
 }
 
 .manageLocalContainer {
@@ -1052,15 +1093,15 @@ input[type=number].massiveInputAmount {
 
 .manageLocalBtn {
   padding: 0 !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
   font-size: 14px !important;
-  line-height: 120% !important;
-  color: #0B5E8E !important;
+  line-height: 16px !important;
+  color: #779BF4 !important;
 }
 
-.manageLocalBtn--dark {
+/*.manageLocalBtn--dark {
   color: #4CADE6 !important;
-}
+}*/
 
 .assetSelectActions {
   flex: 1;

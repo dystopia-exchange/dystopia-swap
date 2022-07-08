@@ -25,8 +25,6 @@ import {
   ETHERSCAN_URL,
 } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
-import SwapIconBg from '../../ui/SwapIconBg';
-import Borders from '../../ui/Borders';
 
 export default function ssBribeCreate() {
 
@@ -97,10 +95,10 @@ export default function ssBribeCreate() {
     };
   }, []);
 
-  const setAmountPercent = (input, percent) => {
+  const setAmountMax = (input) => {
     setAmountError(false);
     if (input === 'amount') {
-      let am = BigNumber(asset.balance).times(percent).div(100).toFixed(asset.decimals);
+      let am = BigNumber(asset.balance).toFixed();
       setAmount(am);
     }
   };
@@ -162,7 +160,7 @@ export default function ssBribeCreate() {
     return (
       <div className={[classes.textFieldTop, classes[`textFieldTop--${appTheme}`]].join(' ')}>
         <Typography className={classes.inputTitleText} noWrap>
-          Bribe for
+          Bribe for LP
         </Typography>
 
         <div className={`${classes.massiveInputContainer} ${error && classes.error}`}>
@@ -202,18 +200,24 @@ export default function ssBribeCreate() {
           Bribe with
         </Typography>
 
-        <Typography className={classes.inputBalanceText} noWrap onClick={() => {
-          setAmountPercent(type, 100);
-        }}>
-          Balance:
+        <Typography className={classes.inputBalanceText} noWrap >
+          <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.653 6.03324C11.373 6.30658 11.213 6.69991 11.253 7.11991C11.313 7.83991 11.973 8.36658 12.693 8.36658H13.9997V9.33325C13.9997 11.3333 12.6663 12.6666 10.6663 12.6666H4.66634C2.66634 12.6666 1.33301 11.3333 1.33301 9.33325V4.66659C1.33301 2.85325 2.42634 1.58658 4.12634 1.37325C4.29968 1.34658 4.47967 1.33325 4.66634 1.33325H10.6663C10.8397 1.33325 11.0063 1.33991 11.1663 1.36658C12.8863 1.56658 13.9997 2.83992 13.9997 4.66659V5.63326H12.613C12.2397 5.63326 11.8997 5.77991 11.653 6.03324Z" stroke="#8191B9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
           {(assetValue && assetValue.balance) ?
             ' ' + formatCurrency(assetValue.balance) :
             ''
           }
         </Typography>
 
-        <div className={`${classes.massiveInputContainer} ${(amountError || assetError) && classes.error}`}>
-          <div className={classes.massiveInputAssetSelect}>
+        <Typography className={classes.inputBalanceMax} onClick={() => {
+          setAmountMax(type);
+        }}>
+          MAX
+        </Typography>
+
+        <div className={`${classes.massiveInputContainerTransparent} ${(amountError || assetError) && classes.error}`}>
+          <div className={classes.massiveInputAssetSelectStandalone}>
             <AssetSelectManage type={type} value={assetValue} assetOptions={assetOptions} onSelect={onAssetSelect}
                                manageLocal={true}/>
           </div>
@@ -251,6 +255,11 @@ export default function ssBribeCreate() {
   const renderCreateInfo = () => {
     return (
       <div className={classes.depositInfoContainer}>
+        <span className={classes.depositInfoContainerWarn}>!</span>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#779BF4"/>
+        </svg>
+
         <Typography className={[classes.depositInfoHeading, classes[`depositInfoHeading--${appTheme}`]].join(' ')}>You
           are creating a bribe of <span
             className={classes.highlight}>{formatCurrency(amount)} {formatSymbol(asset?.symbol)}</span> to incentivize
@@ -263,20 +272,36 @@ export default function ssBribeCreate() {
 
   const {appTheme} = useAppThemeContext();
 
+  let actionButtonText = createLoading ? `Creating` : `Create Bribe`
+  if (gauge == null && asset === null) {
+    actionButtonText = 'Choose LP & token'
+  } else if (asset === null) {
+    actionButtonText = 'Choose token'
+  } else if (!amount || parseFloat(amount) == 0) {
+    actionButtonText = 'Enter amount'
+  }
+
   return (
     <Paper
       elevation={0}
       className={[classes.container, classes[`container--${appTheme}`, 'g-flex-column']].join(' ')}>
       <div
-        className={[classes.titleSection, classes[`titleSection--${appTheme}`]].join(' ')}>
+        className={[classes.titleSection, classes[`titleSection--${appTheme}`]].join(' ')}
+        onClick={onBack}
+      >
         <Tooltip title="Back to Vote" placement="top">
-          <IconButton onClick={onBack}>
-            <ArrowBackIosNew className={[classes.backIcon, classes[`backIcon--${appTheme}`]].join(' ')}/>
+          <IconButton >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 0C4.49 0 0 4.49 0 10C0 15.51 4.49 20 10 20C15.51 20 20 15.51 20 10C20 4.49 15.51 0 10 0ZM11.79 13C12.08 13.29 12.08 13.77 11.79 14.06C11.64 14.21 11.45 14.28 11.26 14.28C11.07 14.28 10.88 14.21 10.73 14.06L7.2 10.53C6.91 10.24 6.91 9.76 7.2 9.47L10.73 5.94C11.02 5.65 11.5 5.65 11.79 5.94C12.08 6.23 12.08 6.71 11.79 7L8.79 10L11.79 13Z" fill="#E4E9F4"/>
+            </svg>
+            {/*<ArrowBackIosNew className={[classes.backIcon, classes[`backIcon--${appTheme}`]].join(' ')}/>*/}
           </IconButton>
         </Tooltip>
+        <span className={classes.titleBackText}>Back to Vote</span>
       </div>
 
       <div className={[classes[`top`], classes[`top--${appTheme}`]].join(' ')}>
+        Create Bribe
       </div>
 
       <div className={[classes.reAddPadding, classes[`reAddPadding--${appTheme}`]].join(' ')}>
@@ -311,7 +336,7 @@ export default function ssBribeCreate() {
         disabled={createLoading || amount === '' || parseFloat(amount) === 0}
         onClick={onCreate}>
         <Typography className={classes.actionButtonText}>
-          {createLoading ? `Creating` : `Create Bribe`}
+          {actionButtonText}
         </Typography>
 
         {createLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
@@ -431,7 +456,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
           onLocalSelect(type, asset);
         }}>
         <div className={classes.assetSelectMenuItem}>
-          <div className={classes.displayDualIconContainerSmall}>
+          <div className={classes.displaySingleIconContainerSmall}>
             <img
               className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
               alt=""
@@ -449,11 +474,18 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
             variant="h5"
             style={{
               fontWeight: 500,
-              fontSize: 18,
-              lineHeight: '120%',
-              color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+              fontSize: 24,
+              lineHeight: '32px',
+              color: '#E4E9F4',
             }}>
             {asset ? formatSymbol(asset.symbol) : ''}
+          </Typography>
+
+          <Typography
+              variant="subtitle1"
+              className={classes.assetSymbolName2}
+          >
+            {asset ? asset.name : ''}
           </Typography>
         </div>
 
@@ -462,9 +494,9 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
             variant="h5"
             style={{
               fontWeight: 500,
-              fontSize: 14,
-              lineHeight: '120%',
-              color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+              fontSize: 24,
+              lineHeight: '32px',
+              color: '#E4E9F4',
             }}>
             {(asset && asset.balance) ? formatCurrency(asset.balance) : '0.00'}
           </Typography>
@@ -472,10 +504,10 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
           <Typography
             variant="subtitle1"
             style={{
-              fontWeight: 400,
-              fontSize: 14,
-              lineHeight: '120%',
-              color: appTheme === "dark" ? '#7C838A' : '#5688A5',
+              fontWeight: 500,
+              fontSize: 16,
+              color: '#8191B9',
+              lineHeight: '24px',
             }}>
             {'Balance'}
           </Typography>
@@ -492,7 +524,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
             autoFocus
             variant="outlined"
             fullWidth
-            placeholder="Search by name or paste address"
+            placeholder="Type or paste the address"
             value={search}
             onChange={onSearchChanged}
             InputProps={{
@@ -506,10 +538,15 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
                 root: classes.searchInput,
               },
               endAdornment: <InputAdornment position="end">
-                <Search style={{
-                  color: '#779BF4',
-                  // color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                }}/>
+                {/*Search icon*/}
+                <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.5 20C15.7467 20 20 15.7467 20 10.5C20 5.25329 15.7467 1 10.5 1C5.25329 1 1 5.25329 1 10.5C1 15.7467 5.25329 20 10.5 20Z" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div style={{position: 'relative'}}>
+                  <svg style={{position: 'absolute', top: 8, right: 0,}} width="4" height="4" viewBox="0 0 4 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 3L1 1" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
               </InputAdornment>,
             }}
             inputProps={{
@@ -550,32 +587,35 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
     return (
       <>
         <div className={classes.searchInline}>
-          {/* <Borders/> */}
-
           <TextField
             autoFocus
             variant="outlined"
             fullWidth
-            placeholder="Search by name or paste address"
+            placeholder="Type or paste the address"
             value={search}
             onChange={onSearchChanged}
             InputProps={{
               classes: {
                 root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
-                inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
+                inputAdornedEnd: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
               },
               endAdornment: <InputAdornment position="end">
-                <Search style={{
-                  color: '#779BF4',
-                  // color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                }}/>
+                {/*Search icon*/}
+                <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.5 20C15.7467 20 20 15.7467 20 10.5C20 5.25329 15.7467 1 10.5 1C5.25329 1 1 5.25329 1 10.5C1 15.7467 5.25329 20 10.5 20Z" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div style={{position: 'relative'}}>
+                  <svg style={{position: 'absolute', top: 8, right: 0,}} width="4" height="4" viewBox="0 0 4 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 3L1 1" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
               </InputAdornment>,
             }}
           />
         </div>
 
         <div style={{position: 'relative'}}>
-          <Borders/>
+          {/*<Borders/>*/}
           <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
             {
               filteredAssetOptions ? filteredAssetOptions.sort((a, b) => {
@@ -610,9 +650,8 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
         <div className={classes.assetSelectMenuItem}>
           <div
             className={[classes.displayDualIconContainer, classes[`displayDualIconContainerSec--${appTheme}`]].join(' ')}>
-            <SwapIconBg/>
             <img
-              className={classes.displayAssetIcon}
+              className={classes.displayAssetIconSingle}
               alt=""
               src={value ? `${value.logoURI}` : ''}
               height="100px"
@@ -626,9 +665,13 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
       </div>
 
       <Dialog
+          PaperProps={{style: {
+              borderRadius: 12,
+                  backgroundColor: 'transparent',
+              maxWidth: 800,
+          }}}
         aria-labelledby="simple-dialog-title"
         open={open}
-        style={{borderRadius: 0}}
         onClick={(e) => {
           if (e.target.classList.contains('MuiDialog-container')) {
             onClose();
@@ -636,14 +679,14 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
         }}
       >
         <div style={{
-          width: 460,
-          height: 710,
-          background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-          border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
-          borderRadius: 0,
+          width: 782,
+          height: 780,
+          background: '#1F2B49',
+          borderRadius: 12,
         }}>
           <DialogTitle style={{
             padding: 30,
+            paddingTop: 24,
             paddingBottom: 0,
             fontWeight: 500,
             fontSize: 18,
@@ -652,13 +695,16 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
           }}>
             <div style={{
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               justifyContent: 'space-between',
             }}>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                color: '#E4E9F4',
+                fontSize: 60,
+                fontWeight: 500,
+                lineHeight: '72px',
               }}>
                 {manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
                   marginRight: 10,
@@ -666,14 +712,11 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
                   height: 18,
                   cursor: 'pointer',
                 }}/>}
-                {'Manage local assets'}
+                {'Select a Token'}
               </div>
-              <Close
-                style={{
-                  cursor: 'pointer',
-                  color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-                }}
-                onClick={onClose}/>
+              <svg style={{marginTop: 12,cursor: 'pointer',}} onClick={onClose} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.19 0H5.81C2.17 0 0 2.17 0 5.81V14.18C0 17.83 2.17 20 5.81 20H14.18C17.82 20 19.99 17.83 19.99 14.19V5.81C20 2.17 17.83 0 14.19 0ZM13.36 12.3C13.65 12.59 13.65 13.07 13.36 13.36C13.21 13.51 13.02 13.58 12.83 13.58C12.64 13.58 12.45 13.51 12.3 13.36L10 11.06L7.7 13.36C7.55 13.51 7.36 13.58 7.17 13.58C6.98 13.58 6.79 13.51 6.64 13.36C6.35 13.07 6.35 12.59 6.64 12.3L8.94 10L6.64 7.7C6.35 7.41 6.35 6.93 6.64 6.64C6.93 6.35 7.41 6.35 7.7 6.64L10 8.94L12.3 6.64C12.59 6.35 13.07 6.35 13.36 6.64C13.65 6.93 13.65 7.41 13.36 7.7L11.06 10L13.36 12.3Z" fill="#8191B9"/>
+              </svg>
             </div>
           </DialogTitle>
           <DialogContent style={{
@@ -848,21 +891,21 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
             variant="h5"
             style={{
               fontWeight: 500,
-              fontSize: 14,
-              lineHeight: '120%',
-              color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+              fontSize: 24,
+              // lineHeight: '32px',
+              color: '#E4E9F4',
             }}>
             {(asset && asset.balance) ? formatCurrency(asset.balance) : '0.00'}
           </Typography>
 
           <Typography
-            variant="subtitle1"
-            style={{
-              fontWeight: 400,
-              fontSize: 14,
-              lineHeight: '120%',
-              color: appTheme === "dark" ? '#7C838A' : '#5688A5',
-            }}>
+              variant="subtitle1"
+              style={{
+                fontWeight: 500,
+                fontSize: 16,
+                lineHeight: '24px',
+                color: '#8191B9',
+              }}>
             {'Balance'}
           </Typography>
         </div>
@@ -880,7 +923,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
             autoFocus
             variant="outlined"
             fullWidth
-            placeholder="Search by name or paste address"
+            placeholder="Type or paste the address"
             value={search}
             onChange={onSearchChanged}
             InputProps={{
@@ -894,10 +937,15 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
                 root: classes.searchInput,
               },
               endAdornment: <InputAdornment position="end">
-                <Search style={{
-                  color: '#779BF4',
-                  // color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                }}/>
+                  {/*Search icon*/}
+                  <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10.5 20C15.7467 20 20 15.7467 20 10.5C20 5.25329 15.7467 1 10.5 1C5.25329 1 1 5.25329 1 10.5C1 15.7467 5.25329 20 10.5 20Z" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <div style={{position: 'relative'}}>
+                      <svg style={{position: 'absolute', top: 8, right: 0,}} width="4" height="4" viewBox="0 0 4 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3 3L1 1" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                  </div>
               </InputAdornment>,
             }}
             inputProps={{
@@ -937,32 +985,37 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
     return (
       <>
         <div className={classes.searchInline}>
-          <Borders/>
+          {/*<Borders/>*/}
 
           <TextField
             autoFocus
             variant="outlined"
             fullWidth
-            placeholder="Search by name or paste address"
+            placeholder="Type or paste the address"
             value={search}
             onChange={onSearchChanged}
             InputProps={{
               classes: {
                 root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
-                inputAdornedStart: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
+                inputAdornedEnd: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
               },
               endAdornment: <InputAdornment position="end">
-                <Search style={{
-                  color: '#779BF4',
-                  // color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                }}/>
+                  {/*Search icon*/}
+                  <svg width="19" height="19" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10.5 20C15.7467 20 20 15.7467 20 10.5C20 5.25329 15.7467 1 10.5 1C5.25329 1 1 5.25329 1 10.5C1 15.7467 5.25329 20 10.5 20Z" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <div style={{position: 'relative'}}>
+                      <svg style={{position: 'absolute', top: 8, right: 0,}} width="4" height="4" viewBox="0 0 4 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3 3L1 1" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                  </div>
               </InputAdornment>,
             }}
           />
         </div>
 
         <div style={{position: 'relative'}}>
-          <Borders/>
+          {/*<Borders/>*/}
 
           <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
             {
@@ -1034,9 +1087,13 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
       </div>
 
       <Dialog
+          PaperProps={{style: {
+                  borderRadius: 12,
+                  backgroundColor: 'transparent',
+              maxWidth: 800,
+              }}}
         aria-labelledby="simple-dialog-title"
         open={open}
-        style={{borderRadius: 0}}
         onClick={(e) => {
           if (e.target.classList.contains('MuiDialog-container')) {
             onClose();
@@ -1046,32 +1103,32 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
         <div
           className={classes.dialogContainer}
           style={{
-            width: 460,
-            height: 710,
-            background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-            border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
-            borderRadius: 0,
+            width: 782,
+            height: 750,
+            background: '#1F2B49',
+            borderRadius: 12,
           }}>
           <DialogTitle
             className={classes.dialogTitle}
             style={{
               padding: 30,
+              paddingTop: 24,
               paddingBottom: 0,
               fontWeight: 500,
               fontSize: 18,
-              lineHeight: '140%',
               color: '#0A2C40',
             }}>
             <div style={{
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               justifyContent: 'space-between',
             }}>
               <div style={{
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
                 paddingBottom: 8,
+                  fontSize: 60,
               }}>
                 {manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
                   marginRight: 10,
@@ -1079,14 +1136,11 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
                   height: 18,
                   cursor: 'pointer',
                 }}/>}
-                {manageLocalAssets && manageLocal ? 'Manage local assets' : 'Select a liquidity pool'}
+                {manageLocalAssets && manageLocal ? 'Manage local assets' : 'Select LP'}
               </div>
-              <Close
-                style={{
-                  cursor: 'pointer',
-                  color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-                }}
-                onClick={onClose}/>
+              <svg style={{marginTop: 12,cursor: 'pointer',}} onClick={onClose} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.19 0H5.81C2.17 0 0 2.17 0 5.81V14.18C0 17.83 2.17 20 5.81 20H14.18C17.82 20 19.99 17.83 19.99 14.19V5.81C20 2.17 17.83 0 14.19 0ZM13.36 12.3C13.65 12.59 13.65 13.07 13.36 13.36C13.21 13.51 13.02 13.58 12.83 13.58C12.64 13.58 12.45 13.51 12.3 13.36L10 11.06L7.7 13.36C7.55 13.51 7.36 13.58 7.17 13.58C6.98 13.58 6.79 13.51 6.64 13.36C6.35 13.07 6.35 12.59 6.64 12.3L8.94 10L6.64 7.7C6.35 7.41 6.35 6.93 6.64 6.64C6.93 6.35 7.41 6.35 7.7 6.64L10 8.94L12.3 6.64C12.59 6.35 13.07 6.35 13.36 6.64C13.65 6.93 13.65 7.41 13.36 7.7L11.06 10L13.36 12.3Z" fill="#8191B9"/>
+              </svg>
             </div>
           </DialogTitle>
 
