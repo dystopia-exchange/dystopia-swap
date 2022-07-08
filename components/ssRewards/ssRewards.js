@@ -22,32 +22,25 @@ export default function ssRewards() {
   const [loading, setLoading] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const {appTheme} = useAppThemeContext();
+  const { appTheme } = useAppThemeContext();
 
   const stableSwapUpdated = (rew) => {
-     const nfts = stores.stableSwapStore.getStore('vestNFTs');
-     setVestNFTs(nfts);
-     setVeToken(stores.stableSwapStore.getStore('veToken'));
+    const nfts = stores.stableSwapStore.getStore('vestNFTs');
+    setVestNFTs(nfts);
+    setVeToken(stores.stableSwapStore.getStore('veToken'));
 
-      if (nfts?.length > 0) {
-       nfts.sort((a, b) => (+a.id) - (+b.id));
+    if (nfts?.length > 0) {
+      nfts.sort((a, b) => (+a.id) - (+b.id));
 
-       if (!token) {
-         setToken(nfts[0]);
-        window.setTimeout(() => {
-          stores.dispatcher.dispatch({type: ACTIONS.GET_REWARD_BALANCES, content: {tokenID: nfts[0].id}});
-        });
-       } 
-     else {
-        window.setTimeout(() => {
-          stores.dispatcher.dispatch({type: ACTIONS.GET_REWARD_BALANCES, content: {tokenID: token.id}});
-        });
+      if (!token) {
+        setToken(nfts[0]);
+        stores.dispatcher.dispatch({ type: ACTIONS.GET_REWARD_BALANCES, content: { tokenID: nfts[0].id } });
+      } else {
+        stores.dispatcher.dispatch({ type: ACTIONS.GET_REWARD_BALANCES, content: { tokenID: token.id } });
       }
     } else {
-      window.setTimeout(() => {
-        stores.dispatcher.dispatch({type: ACTIONS.GET_REWARD_BALANCES, content: {tokenID: 0}});
-      });
-     }
+      stores.dispatcher.dispatch({ type: ACTIONS.GET_REWARD_BALANCES, content: { tokenID: 0 } });
+    }
 
     forceUpdate();
   };
@@ -65,17 +58,17 @@ export default function ssRewards() {
     }
   };
 
-   useEffect(() => {
-      rewardBalancesReturned();
-      stableSwapUpdated();
+  useEffect(() => {
+    rewardBalancesReturned();
+    stableSwapUpdated();
 
-     stores.emitter.on(ACTIONS.UPDATED, stableSwapUpdated);
-     stores.emitter.on(ACTIONS.REWARD_BALANCES_RETURNED, rewardBalancesReturned);
-      return () => {
-       stores.emitter.removeListener(ACTIONS.UPDATED, stableSwapUpdated);
-       stores.emitter.removeListener(ACTIONS.REWARD_BALANCES_RETURNED, rewardBalancesReturned);
-       };
-   }, [token]);
+    stores.emitter.on(ACTIONS.UPDATED, stableSwapUpdated);
+    stores.emitter.on(ACTIONS.REWARD_BALANCES_RETURNED, rewardBalancesReturned);
+    return () => {
+      stores.emitter.removeListener(ACTIONS.UPDATED, stableSwapUpdated);
+      stores.emitter.removeListener(ACTIONS.REWARD_BALANCES_RETURNED, rewardBalancesReturned);
+    };
+  }, [token]);
 
   useEffect(() => {
 
@@ -113,7 +106,7 @@ export default function ssRewards() {
     if (token && token.id) {
       sendTokenID = token.id;
     }
-    stores.dispatcher.dispatch({type: ACTIONS.CLAIM_ALL_REWARDS, content: {pairs: rewards, tokenID: sendTokenID}});
+    stores.dispatcher.dispatch({ type: ACTIONS.CLAIM_ALL_REWARDS, content: { pairs: rewards, tokenID: sendTokenID } });
   };
 
   const handleClick = (event) => {
@@ -122,7 +115,7 @@ export default function ssRewards() {
 
   const handleChange = (event) => {
     setToken(event.target.value);
-    stores.dispatcher.dispatch({type: ACTIONS.GET_REWARD_BALANCES, content: {tokenID: event.target.value.id}});
+    stores.dispatcher.dispatch({ type: ACTIONS.GET_REWARD_BALANCES, content: { tokenID: event.target.value.id } });
   };
 
   const open = Boolean(anchorEl);
@@ -141,7 +134,7 @@ export default function ssRewards() {
           onClick={onClaimAll}>
           <div
             className={[classes.addButtonIcon, 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}>
-            <Add style={{width: 20, color: '#fff'}}/>
+            <Add style={{ width: 20, color: '#fff' }} />
           </div>
 
           <Typography
@@ -161,13 +154,13 @@ export default function ssRewards() {
 
             {windowWidth > 1100 &&
               <Typography className={[classes.disclaimer, classes[`disclaimer--${appTheme}`]].join(' ')}>
-                Rewards are an estimation that aren’t exact till the<br/>supply → rewardPerToken calculations have run
+                Rewards are an estimation that aren’t exact till the<br />supply → rewardPerToken calculations have run
               </Typography>
             }
 
             {windowWidth <= 1100 && windowWidth > 1005 &&
               <Typography className={[classes.disclaimer, classes[`disclaimer--${appTheme}`]].join(' ')}>
-                Rewards are an estimation that aren’t<br/>exact till the supply → rewardPerToken<br/>calculations have run
+                Rewards are an estimation that aren’t<br />exact till the supply → rewardPerToken<br />calculations have run
               </Typography>
             }
 
@@ -178,11 +171,11 @@ export default function ssRewards() {
             }
           </div>
 
-          {TokenSelect({value: token, options: vestNFTs, symbol: veToken?.symbol, handleChange})}
+          {TokenSelect({ value: token, options: vestNFTs, symbol: veToken?.symbol, handleChange })}
         </div>
       </div>
 
-      <RewardsTable rewards={rewards} vestNFTs={vestNFTs} tokenID={token?.id}/>
+      <RewardsTable rewards={rewards} vestNFTs={vestNFTs} tokenID={token?.id} />
     </>
   );
 }
