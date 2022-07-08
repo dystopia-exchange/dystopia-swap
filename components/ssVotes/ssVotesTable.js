@@ -2082,7 +2082,7 @@ export default function EnhancedTable({
                           color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
                         }}
                       >
-                        My Votes{new_index}
+                        My Votes
                       </div>
                       <div
                         style={{
