@@ -19,6 +19,7 @@ export const WalletConnect = (props) => {
   const connect = async function web3Init() {
     const web3modal = new Web3Modal({
       cacheProvider: true,
+      network: "matic",
       providerOptions: {
         walletlink: {
           package: CoinbaseWalletSDK,
@@ -29,6 +30,7 @@ export const WalletConnect = (props) => {
               137: `https://polygon-rpc.com/`,
             },
             supportedChainIds: [137],
+            network: "matic",
           },
         },
         walletconnect: {
@@ -38,6 +40,7 @@ export const WalletConnect = (props) => {
             rpc: {
               137: `https://polygon-rpc.com/`,
             },
+            network: "matic",
             supportedChainIds: [137],
           },
         },
