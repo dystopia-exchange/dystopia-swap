@@ -659,16 +659,7 @@ const EnhancedTableToolbar = (props) => {
     setWindowWidth(window.innerWidth);
   }
 
-  // useEffect(() => {
-    window.addEventListener('resize', handleResize);
-
-    // return () => {
-      // window.removeEventListener('resize', handleResize);
-    // }
-  // }, [])
-  
-
-  const {appTheme} = useAppThemeContext();
+  window.addEventListener('resize', handleResize);
 
   return (
     <Toolbar className={classes.toolbar} style={{ marginBottom: 20 }}>

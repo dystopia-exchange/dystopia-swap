@@ -37,6 +37,7 @@ import Logo from "../../ui/Logo";
 import ThemeSwitcher from "../../ui/ThemeSwitcher";
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import SSWarning from "../ssWarning";
+import { WrongNetwork } from '../ssWrongNetwork/ssWrongNetwork';
 
 const {
   CONNECT_WALLET,
@@ -289,6 +290,11 @@ function Header(props) {
     setAnchorEl(!anchorEl);
   };
 
+  const [_visible, _setVisible] = useState(true);
+  const _onModalClose = () => {
+    _setVisible(false);
+  }
+
   const {appTheme} = useAppThemeContext();
 
   return (
@@ -492,15 +498,17 @@ function Header(props) {
       </div>
 
       {warningOpen &&
-        <SSWarning
-          close={switchChain}
-          title={'Wrong Network:'}
-          subTitle={'The chain you are connected is not supported!'}
-          icon={'icon-network'}
-          description={'Please check that your wallet is connected to Polygon Mainnet, only after you can proceed.'}
-          btnLabel1={'Switch to Polygon Mainnet'}
-          btnLabel2={'Switch Wallet Provider'}
-          action2={onAddressClicked}/>
+        <WrongNetwork visible={_visible} onClose={_onModalClose} />
+
+        // <SSWarning
+        //   close={switchChain}
+        //   title={'Wrong Network:'}
+        //   subTitle={'The chain you are connected is not supported!'}
+        //   icon={'icon-network'}
+        //   description={'Please check that your wallet is connected to Polygon Mainnet, only after you can proceed.'}
+        //   btnLabel1={'Switch to Polygon Mainnet'}
+        //   btnLabel2={'Switch Wallet Provider'}
+        //   action2={onAddressClicked}/>
       }
     </TopHeader>
   );
