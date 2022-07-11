@@ -24,7 +24,7 @@
     "@mui/styles": "^5.5.0",
     "@rainbow-me/rainbowkit": "^0.3.6",
     "@trustwallet/wallet-core": "^2.9.5",
-    "@usedapp/core": "^1.0.10",
+    "@usedapp/core": "^1.1.0",
     "@walletconnect/web3-provider": "^1.7.8",
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",

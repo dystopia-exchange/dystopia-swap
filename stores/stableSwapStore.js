@@ -113,6 +113,15 @@ const queryv2 = `
     }
   }
 `;
+
+const removeDuplicate = (arr) => {
+  const assets = arr.reduce((acc, item) => {
+    acc[item.symbol] = item
+    return acc
+  }, {})
+  return Object.values(assets)
+}
+
 const client = createClient({ url: process.env.NEXT_PUBLIC_API });
 const clientV = createClient({ url: process.env.NEXT_PUBLIC_APIV2 });
 
