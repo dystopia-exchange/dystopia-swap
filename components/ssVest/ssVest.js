@@ -7,7 +7,7 @@ import moment from "moment";
 import ExistingLock from "./existingLock";
 import Unlock from "./unlock";
 import Lock from "./lock";
-import { MergeLock } from "./MergeLock";
+import { MergeLock } from "./mergeLock";
 import { WithdrawLock } from "./withdrawLock";
 
 export default function ssVest() {

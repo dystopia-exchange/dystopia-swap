@@ -1,3 +1,46 @@
+.pageTitle {
+  /* white */
+  color: #E4E9F4;
+  font-weight: 500;
+  font-size: 60px;
+  line-height: 72px;
+  width: 100%;
+  padding-left: 370px;
+}
+
+.disclaimerContainerWrapper {
+  justify-content: right;
+  top: 0;
+  position: absolute;
+  right: 0;
+}
+
+.tableWrapper {
+  display: flex;
+  padding-left: 370px;
+  width: 100%;
+}
+
+.tableWrapper > div {
+  width: 100%;
+  /* black */
+
+  /*margin-top: 20px;*/
+
+  background: #060B17;
+  /* brand */
+
+  border: 1px solid #D3F85A;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.nftSelect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 340px;
+}
 
 .container {
   max-width: 1400px;
@@ -31,7 +74,9 @@
 }
 
 .toolbarContainer {
-  margin-bottom: 10px;
+  /*margin-bottom: 10px;*/
+  position: relative;
+  height: 100px;
 }
 
 .searchContainer {
@@ -111,28 +156,43 @@
 }
 
 .disclaimer {
-  padding: 20px 16px !important;
-  background: #CFE5F2 !important;
-  border: 2px solid #0B5E8E !important;
+  align-items: center;
+  display: flex;
+  gap: 20px;
+  padding: 12px 24px !important;;
   font-weight: 400 !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
-  color: #325569 !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  /* or 150% */
+
+  /* white */
+
+  color: #E4E9F4 !important;
+
+  /* brand-add15 */
+
+  background: rgba(119, 155, 244, 0.15) !important;
+  /* brand-add */
+
+  border: 1px solid #779BF4 !important;
+  border-radius: 12px !important;
 }
 
-.disclaimer--dark {
+/*.disclaimer--dark {
   background: #2D3741 !important;
   border: 2px solid #4CADE6 !important;
   color: #C6CDD2 !important;
-}
+}*/
 
 .addButton {
-  width: 215px;
-  height: 50px;
+  width: 340px;
+  height: 96px;
   cursor: pointer;
+  position: absolute;
+  top: 100px;
 }
 
-.addButton--light:hover > p {
+/*.addButton--light:hover > p {
   background: #C6BAF0;
 }
 
@@ -146,7 +206,7 @@
 
 .addButton--dark:active > p {
   background: #523880;
-}
+}*/
 
 .addButtonIcon {
   width: 50px;
@@ -155,22 +215,21 @@
 }
 
 .actionButtonText {
-  width: 200px;
+  width: 100%;
   height: 100%;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 120%;
-  background: #D2D0F2;
-  color: #8F5AE8;
+  font-weight: 600 !important;
+  font-size: 32px !important;
+  line-height: 48px;
+  background: #D3F85A;
+  border-radius: 12px;
+  color: #060B17;
   transition: all ease 300ms;
 }
 
-.actionButtonText--light {
-  background: #D2D0F2;
-}
+
 
 .actionButtonText--dark {
-  background: #33284C;
+  /*background: #33284C;*/
 }
 
 .divider {
