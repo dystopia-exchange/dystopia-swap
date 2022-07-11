@@ -42,3 +42,21 @@
   background: rgba(119, 155, 244, 0.25);
   border: 1px solid #8191B9;
 }
+
+@media (min-width: 1920px) {
+  .track {
+    width: 72px;
+    height: 40px;
+  }
+  .toggle {
+    width: 32px;
+    height: 32px;
+    left: 4px;
+    top: 4px;
+  }
+
+  .switch--active .toggle,
+  .switch--active:hover .toggle {
+    transform: translateX(32px);
+  }
+}
