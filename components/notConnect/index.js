@@ -48,7 +48,6 @@ export const NotConnect = (props) => {
             <p className={classes.title}>
               {description}
             </p>
-
             <WalletConnect>
               {({ connect }) => {
                 return (
@@ -59,12 +58,10 @@ export const NotConnect = (props) => {
                     />
                   </div>
                 )}}
-              </WalletConnect>
+              </ WalletConnect>
           </div>
         </Paper>
       )}
-
-      {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
     </>
   );
 };
