@@ -34,6 +34,7 @@ export const NotConnect = (props) => {
     };
   }, []);
 
+
   return (
     <>
       {account && account.address ? (
