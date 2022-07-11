@@ -12,14 +12,13 @@ import {
 import classes from "./ssVest.module.css";
 import { formatCurrency } from "../../utils";
 
-import { ArrowBack, ArrowBackIosNew } from "@mui/icons-material";
+import { ArrowBackIosNew } from "@mui/icons-material";
 import VestingInfo from "./vestingInfo";
 import stores from "../../stores";
 import { ACTIONS } from "../../stores/constants";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import Form from "../../ui/MigratorForm";
 import SwapIconBg from "../../ui/SwapIconBg";
-import AssetSelect from "../../ui/AssetSelect";
 
 export default function Unlock({ nft, govToken, veToken }) {
   const router = useRouter();
@@ -68,84 +67,70 @@ export default function Unlock({ nft, govToken, veToken }) {
 
   const renderMassiveInput = (token) => {
     return (
-      <div
-        className={[classes.textField, classes[`textField--${appTheme}`]].join(
-          " "
-        )}
-      >
-        <Typography className={classes.inputTitleText} noWrap>
-          LOCK
-        </Typography>
-
-        <Typography className={classes.inputBalanceText} noWrap>
-          Balance:{" "}
-          {token && token.balance ? " " + formatCurrency(token.balance) : ""}
-        </Typography>
-
+      <div className={classes.textField}>
         <div className={`${classes.massiveInputContainer} ${classes.error}`}>
-          <div className={classes.massiveInputAssetSelect}>
-            <div className={classes.displaySelectContainer}>
-              <div
-                className={[
-                  classes.displayDualIconContainer,
-                  classes[`displayDualIconContainer--${appTheme}`],
-                ].join(" ")}
-              >
-                <SwapIconBg />
-                {token && token.logoURI && (
-                  <img
-                    className={classes.displayAssetIcon}
-                    alt=""
-                    src={token.logoURI}
-                    height="100px"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                    }}
-                  />
-                )}
-                {!(token && token.logoURI) && (
-                  <img
-                    className={classes.displayAssetIcon}
-                    alt=""
-                    src={`/tokens/unknown-logo--${appTheme}.svg`}
-                    height="100px"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                    }}
-                  />
-                )}
+          <div className={classes.inputRow}>
+            <div className={classes.inputColumn}>
+              <Typography className={classes.inputTitleText} noWrap>Lock</Typography>
+
+              <div className={classes.massiveInputAssetSelect}>
+                <div className={classes.displaySelectContainer}>
+                  <div className={classes.displayDualIconContainer}>
+                    {token && token.logoURI && (
+                      <img
+                        className={classes.displayAssetIcon}
+                        alt=""
+                        src={token.logoURI}
+                        width="60px"
+                        height="60px"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                        }}
+                      />
+                    )}
+                    {!(token && token.logoURI) && (
+                      <img
+                        className={classes.displayAssetIcon}
+                        alt=""
+                        src={`/tokens/unknown-logo--${appTheme}.svg`}
+                        width="60px"
+                        height="60px"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                        }}
+                     />
+                    )}
+
+                    <Typography className={classes.smallerText}>
+                      {token?.symbol}
+                    </Typography>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <InputBase
-            className={classes.massiveInputAmount}
-            placeholder="0.00"
-            // error={amountError}
-            // helperText={amountError}
-            value={parseInt(nft.lockAmount).toFixed(2)}
-            // onChange={amountChanged}
-            disabled={true}
-            inputProps={{
-              className: [
-                classes.largeInput,
-                classes[`largeInput--${appTheme}`],
-              ].join(" "),
-            }}
-            InputProps={{
-              disableUnderline: true,
-            }}
-          />
 
-          <Typography
-            className={[
-              classes.smallerText,
-              classes[`smallerText--${appTheme}`],
-            ].join(" ")}
-          >
-            {token?.symbol}
-          </Typography>
+            <div className={classes.inputColumn}>
+              <Typography className={classes.inputBalanceText} noWrap>
+                Balance:{" "}
+                {token && token.balance ? " " + formatCurrency(token.balance) : ""}
+              </Typography>
+
+              <InputBase
+                className={classes.massiveInputAmount}
+                placeholder="0.00"
+                value={parseInt(nft.lockAmount).toFixed(2)}
+                disabled={true}
+                inputProps={{
+                  className: classes.largeInput,
+                }}
+                InputProps={{
+                  disableUnderline: true,
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -154,62 +139,32 @@ export default function Unlock({ nft, govToken, veToken }) {
   return (
     <Paper
       elevation={0}
-      className={[
-        classes.container3,
-        classes[(`container3--${appTheme}`, "g-flex-column")],
-      ].join(" ")}
+      className={[classes.container3, classes["g-flex-column"]].join(" ")}
     >
-      {/*<div className={ classes.titleSection }>
-        <IconButton className={ classes.backButton } onClick={ onBack }>
-          <ArrowBack className={ classes.backIcon } />
-        </IconButton>
-        <Typography className={ classes.titleText }>Manage Existing Lock</Typography>
-      </div>*/}
+      <p className={classes.pageTitle}>
+        <div className={classes.titleSection}>
+          <Tooltip title="Manage Existing Lock" placement="top">
+            <IconButton onClick={onBack}>
+              <div className={classes.backIconWrap}>
+                <ArrowBackIosNew className={classes.backIcon} />
+              </div>
+            </IconButton>
+          </Tooltip>
+          <p>Back to Vest</p>
+        </div>
 
-      <div
-        className={[
-          classes.titleSection,
-          classes[`titleSection--${appTheme}`],
-        ].join(" ")}
-      >
-        <Tooltip title="Manage Existing Lock" placement="top">
-          <IconButton onClick={onBack}>
-            <ArrowBackIosNew
-              className={[
-                classes.backIcon,
-                classes[`backIcon--${appTheme}`],
-              ].join(" ")}
-            />
-          </IconButton>
-        </Tooltip>
-      </div>
+        <span>Withdraw Lock</span>
+      </p>
 
       <Form>
-        {/* <div
-          className={[
-            classes.textField,
-            classes[`textField--${appTheme}`],
-          ].join(" ")}
-        >
-          <div className={classes.massiveInputContainer}>
-            <div className={classes.massiveInputAssetSelect}>
+        <div className={classes.reAddPadding3}>
+          {renderMassiveInput(govToken)}
 
-            </div>
-          </div>
-        </div> */}
-        {renderMassiveInput(govToken)}
-        <VestingInfo currentNFT={nft} veToken={veToken} />
-        {/* <div className={classes.contentBox}> */}
-        <div
-          className={[
-            classes.disclaimerContainer,
-            classes.disclaimerContainerWarning,
-            classes[`disclaimerContainerWarning--${appTheme}`],
-          ].join(" ")}
-        >
-          <Typography className={classes.para}>
-            Your lock has expired. Please withdraw your lock before you can
-            re-lock.
+          <VestingInfo currentNFT={nft} veToken={veToken} />
+
+          <Typography className={[classes.info, classes.infoWarning].join(" ")} color="textSecondary">
+            <img src="/images/ui/info-circle-yellow.svg" />
+            <span>Your lock has expired. Please withdraw your lock before you can re-lock.</span>
           </Typography>
         </div>
       </Form>
@@ -227,6 +182,7 @@ export default function Unlock({ nft, govToken, veToken }) {
           <Typography className={classes.actionButtonText}>
             {lockLoading ? `Withrawing` : `Withdraw`}
           </Typography>
+
           {lockLoading && (
             <CircularProgress size={10} className={classes.loadingCircle} />
           )}
