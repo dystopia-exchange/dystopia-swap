@@ -12,7 +12,6 @@ import { WithdrawLock } from "./withdrawLock";
 
 export default function ssVest() {
   const router = useRouter();
-
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
 

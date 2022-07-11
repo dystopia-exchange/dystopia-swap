@@ -1,3 +1,59 @@
+.title {
+  font-weight: 500;
+  font-size: 40px;
+  /* identical to box height, or 120% */
+
+  /* white */
+  color: #E4E9F4;
+}
+
+.topBarContainer {
+  position: relative;
+  padding: 0 0 30px 0;
+  width: 100%;
+}
+
+@media (min-width: 1200px) {
+  .title {
+    font-size: 60px;
+  }
+
+  .topBarContainer {
+    padding-left: 370px;
+  }
+
+  .tokenSelect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 340px;
+    height: 80px;
+  }
+
+  .yourVotes {
+    position: absolute;
+    left: 0;
+    top: 96px;
+    /* workspace */
+
+    background: #171D2D;
+    /* brand */
+
+    border: 1px solid #171D2D;
+    border-radius: 12px;
+    height: 72px;
+    width: 340px;
+    justify-content: space-between;
+    padding: 24px;
+  }
+}
+
+/*.sidebar {
+  display: flex;
+  flex-direction: column;
+}*/
+
+
 .container {
   max-width: 1400px;
   width: calc(100% - 180px);
@@ -56,10 +112,9 @@
 }
 
 .helpText {
-  font-weight: 500 !important;
+  font-weight: 400 !important;
   font-size: 18px !important;
-  line-height: 140% !important;
-  color: #15B525 !important;
+  color: #5EE852 !important;
   white-space: nowrap !important;
 }
 
@@ -88,6 +143,34 @@
   background: rgb(19, 44, 60) !important;
 }
 
+
+.buttonOverrideFixedCast {
+  background-color: #D3F85A !important;
+  border-radius: 12px !important;
+  height: 96px;
+  width: 340px;
+  position: absolute !important;
+  top: 186px;
+  left: 0;
+  cursor: pointer;
+}
+
+.buttonOverrideFixedReset {
+  height: 72px;
+
+  /* brand-add15 */
+
+  background-color: rgba(119, 155, 244, 0.15) !important;
+  /* brand-add */
+
+  border: 1px solid #779BF4 !important;
+  border-radius: 12px !important;
+  width: 340px;
+  position: absolute !important;
+  top: 302px;
+  left: 0;
+  cursor: pointer;
+}
 
 .buttonOverrideFixed {
   padding: 12px 20px !important;
@@ -137,12 +220,6 @@
   padding: 0px 24px !important;
 }
 
-.topBarContainer {
-  position: relative;
-  padding: 30px 0px;
-  padding-top: 0px;
-  width: 100%;
-}
 
 .textField {
   margin-bottom: 4px;
@@ -179,7 +256,10 @@
 }
 
 .searchInput {
-  width: 430px !important;
+  width: 630px !important;
+  height: 72px;
+  position: absolute !important;
+  right: 94px;
 }
 
 .searchInput > fieldset {
@@ -193,10 +273,12 @@
 }
 
 .addButton {
-  width: 215px;
-  height: 50px;
+  width: 170px;
+  height: 72px;
   margin-left: 20px;
   cursor: pointer;
+  position: absolute;
+  right: 0;
 }
 
 .addButton--light:hover > p {
@@ -222,23 +304,20 @@
 }
 
 .actionButtonText {
+  text-transform: uppercase;
   width: 200px;
   height: 100%;
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 600;
+  font-size: 24px;
   line-height: 120%;
-  background: #D2D0F2;
-  color: #8F5AE8;
+  background: rgba(119, 155, 244, 0.15);
+  border: 1px solid #779BF4;
+  border-radius: 12px;
+  /* brand-add */
+  color: #779BF4;
   transition: all ease 300ms;
 }
 
-.actionButtonText--light {
-  background: #D2D0F2;
-}
-
-.actionButtonText--dark {
-  background: #33284C;
-}
 
 .searchButton {
   width: 50px !important;

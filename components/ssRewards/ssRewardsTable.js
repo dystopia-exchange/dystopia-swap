@@ -150,7 +150,7 @@ const StickyTableCell = styled(TableCell)(({ theme, appTheme }) => ({
   width: 310,
   left: 0,
   position: "sticky",
-  zIndex: 5,
+  // zIndex: 5,
   whiteSpace: "nowrap",
   padding: "20px 25px 15px",
 }));
@@ -189,10 +189,9 @@ function EnhancedTableHead(props) {
                 padding={"normal"}
                 sortDirection={orderBy === headCell.id ? order : false}
                 style={{
-                  background: appTheme === "dark" ? "#24292D" : "#CFE5F2",
-                  borderBottom: "1px solid #9BC9E4",
-                  borderColor: appTheme === "dark" ? "#5F7285" : "#9BC9E4",
-                  zIndex: 10,
+                  background: '#060B17',
+                  borderBottom: "1px solid #D3F85A",
+                  // zIndex: 10,
                 }}
               >
                 <TableSortLabel
@@ -203,9 +202,10 @@ function EnhancedTableHead(props) {
                   <Typography
                     className={classes.headerText}
                     style={{
-                      fontWeight: 600,
-                      fontSize: 12,
-                      lineHeight: "120%",
+                      fontWeight: 500,
+                      fontSize: 14,
+                      lineHeight: "16px",
+                      color: '#8191B9'
                     }}
                   >
                     {headCell.label}
@@ -221,10 +221,9 @@ function EnhancedTableHead(props) {
             ) : (
               <StyledTableCell
                 style={{
-                  background: appTheme === "dark" ? "#24292D" : "#CFE5F2",
-                  borderBottom: "1px solid #9BC9E4",
-                  borderColor: appTheme === "dark" ? "#5F7285" : "#9BC9E4",
-                  color: appTheme === "dark" ? "#C6CDD2" : "#325569",
+                  background: '#060B17',
+                  borderBottom: "1px solid #D3F85A",
+                  color: '#8191B9',
                 }}
                 key={headCell.id}
                 align={headCell.numeric ? "right" : "left"}
@@ -236,16 +235,16 @@ function EnhancedTableHead(props) {
                   direction={orderBy === headCell.id ? order : "asc"}
                   IconComponent={ArrowDropDown}
                   style={{
-                    color: appTheme === "dark" ? "#C6CDD2" : "#325569",
+                    color: '#8191B9',
                   }}
                   onClick={createSortHandler(headCell.id)}
                 >
                   <Typography
                     className={classes.headerText}
                     style={{
-                      fontWeight: 600,
-                      fontSize: 12,
-                      lineHeight: "120%",
+                      fontWeight: 500,
+                      fontSize: 14,
+                      lineHeight: "16px",
                       width: headCell.width || "auto",
                     }}
                   >
@@ -317,6 +316,7 @@ const useStyles = makeStyles((theme) => {
       lineHeight: "1.5",
       fontWeight: "200",
       fontSize: "12px",
+
     },
     textSpacedPadded: {
       paddingLeft: "10px",
@@ -409,8 +409,8 @@ const useStyles = makeStyles((theme) => {
       position: "absolute",
       left: "0px",
       top: "0px",
-      outline: "2px solid #DBE6EC",
-      background: "#13B5EC",
+      // outline: "2px solid #DBE6EC",
+      // background: "#13B5EC",
       borderRadius: "30px",
     },
     img2Logo: {
@@ -418,8 +418,8 @@ const useStyles = makeStyles((theme) => {
       left: "28px",
       zIndex: "1",
       top: "0px",
-      outline: "2px solid #DBE6EC",
-      background: "#13B5EC",
+      // outline: "2px solid #DBE6EC",
+      // background: "#13B5EC",
       borderRadius: "30px",
     },
     overrideTableHead: {
@@ -659,10 +659,10 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
             <Typography
               className={classes.textSpaced}
               style={{
-                fontWeight: 500,
+                fontWeight: 400,
                 fontSize: 14,
-                lineHeight: "120%",
-                color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+                lineHeight: "16px",
+                color: '#E4E9F4',
               }}
             >
               {data1}
@@ -672,10 +672,10 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
           <Typography
             className={classes.textSpaced}
             style={{
-              fontWeight: 500,
+              fontWeight: 400,
               fontSize: 14,
-              lineHeight: "120%",
-              color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+              lineHeight: "16px",
+              color: '#E4E9F4',
             }}
           >
             {data2}
@@ -697,8 +697,8 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
               style={{
                 fontWeight: 400,
                 fontSize: 14,
-                lineHeight: "120%",
-                color: appTheme === "dark" ? "#7C838A" : "#5688A5",
+                lineHeight: "16px",
+                color: '#8191B9',
               }}
             >
               {symbol1}
@@ -709,8 +709,8 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
               style={{
                 fontWeight: 400,
                 fontSize: 14,
-                lineHeight: "120%",
-                color: appTheme === "dark" ? "#7C838A" : "#5688A5",
+                lineHeight: "16px",
+                color: '#8191B9',
               }}
             >
               {symbol2}
@@ -740,7 +740,7 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
             className={"g-flex-column__item-fixed"}
             style={{
               overflow: "auto",
-              maxHeight: tableHeight,
+              // maxHeight: tableHeight,
               height: "auto",
               background: appTheme === "dark" ? "#24292D" : "#dbe6ec",
             }}
@@ -782,11 +782,8 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                           >
                             <StickyTableCell
                               style={{
-                                background:
-                                  appTheme === "dark" ? "#151718" : "#DBE6EC",
-                                border: "1px dashed #CFE5F2",
-                                borderColor:
-                                  appTheme === "dark" ? "#2D3741" : "#CFE5F2",
+                                background: '#171D2D',
+                                borderBottom: '1px dashed #323B54',
                               }}
                               className={classes.cell}
                             >
@@ -832,12 +829,9 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                                       className={classes.textSpaced}
                                       style={{
                                         fontWeight: 500,
-                                        fontSize: 14,
-                                        lineHeight: "120%",
-                                        color:
-                                          appTheme === "dark"
-                                            ? "#ffffff"
-                                            : "#0A2C40",
+                                        fontSize: 16,
+                                        lineHeight: "20px",
+                                        color: '#E4E9F4',
                                       }}
                                       noWrap
                                     >
@@ -848,11 +842,8 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                                       style={{
                                         fontWeight: 400,
                                         fontSize: 14,
-                                        lineHeight: "120%",
-                                        color:
-                                          appTheme === "dark"
-                                            ? "#7C838A"
-                                            : "#5688A5",
+                                        lineHeight: "16px",
+                                        color: '#8191B9',
                                       }}
                                       noWrap
                                     >
@@ -923,11 +914,8 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                               className={classes.cell}
                               align="right"
                               style={{
-                                background:
-                                  appTheme === "dark" ? "#151718" : "#DBE6EC",
-                                border: "1px dashed #CFE5F2",
-                                borderColor:
-                                  appTheme === "dark" ? "#2D3741" : "#CFE5F2",
+                                background: '#171D2D',
+                                borderBottom: '1px dashed #323B54',
                                 overflow: "hidden",
                               }}
                             >
@@ -1004,11 +992,8 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                               className={classes.cell}
                               align="right"
                               style={{
-                                background:
-                                  appTheme === "dark" ? "#151718" : "#DBE6EC",
-                                border: "1px dashed #CFE5F2",
-                                borderColor:
-                                  appTheme === "dark" ? "#2D3741" : "#CFE5F2",
+                                background: '#171D2D',
+                                borderBottom: '1px dashed #323B54',
                                 overflow: "hidden",
                               }}
                             >
@@ -1066,11 +1051,8 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                               className={classes.cell}
                               align="right"
                               style={{
-                                background:
-                                  appTheme === "dark" ? "#151718" : "#DBE6EC",
-                                border: "1px dashed #CFE5F2",
-                                borderColor:
-                                  appTheme === "dark" ? "#2D3741" : "#CFE5F2",
+                                background: '#171D2D',
+                                borderBottom: '1px dashed #323B54',
                                 overflow: "hidden",
                               }}
                             >
@@ -1078,28 +1060,38 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                                 variant="outlined"
                                 color="primary"
                                 style={{
-                                  padding: "7px 14px",
-                                  border: "1px solid #5688A5",
-                                  borderColor:
-                                    appTheme === "dark" ? "#C6CDD2" : "#5688A5",
-                                  borderRadius: 100,
-                                  fontWeight: 500,
+                                  padding: "12px 12px",
+                                  border: "1px solid #D3F85A",
+                                  // borderColor:
+                                  //   appTheme === "dark" ? "#C6CDD2" : "#5688A5",
+                                  borderRadius: 12,
+                                  fontWeight: 600,
                                   fontSize: 14,
-                                  lineHeight: "120%",
-                                  color:
-                                    appTheme === "dark" ? "#C6CDD2" : "#5688A5",
+                                  lineHeight: "16px",
+                                  color: '#D3F85A',
+                                  textTransform: 'uppercase',
                                 }}
                                 onClick={() => {
                                   onClaim(row);
                                 }}
                               >
-                                Claim
+                                CLAIM
                               </Button>
                             </TableCell>
                           </TableRow>
                         );
                       })
-                  : null}
+                  : (
+                      <TableRow>
+                        <td style={{
+                          color: '#E4E9F4',
+                          fontSize: 20,
+                          fontWeight: 500,
+                          padding: 24,
+                          background: '#171D2D',
+                        }} colSpan={4}>You don't have any Rewards yet</td>
+                      </TableRow>
+                    )}
               </TableBody>
             </Table>
           </TableContainer>
@@ -1108,12 +1100,17 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
             className={"g-flex-column__item-fixed"}
             style={{
               width: "100%",
-              marginTop: 20,
+              // marginTop: 20,
               padding: "0 30px",
-              background: appTheme === "dark" ? "#24292D" : "#dbe6ec",
-              border: "1px solid #86B9D6",
-              borderColor: appTheme === "dark" ? "#5F7285" : "#86B9D6",
-              borderRadius: 100,
+              borderTop: '1px solid #D3F85A',
+              height: 70,
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              // background: appTheme === "dark" ? "#24292D" : "#dbe6ec",
+              // border: "1px solid #86B9D6",
+              // borderColor: appTheme === "dark" ? "#5F7285" : "#86B9D6",
+              // borderRadius: 100,
               color: appTheme === "dark" ? "#7C838A" : "#5688A5",
             }}
             ActionsComponent={TablePaginationActions}
@@ -1360,23 +1357,17 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                                     color="primary"
                                     style={{
                                       padding: "7px 14px",
-                                      border: `1px solid ${
-                                        appTheme === "dark"
-                                          ? "#C6CDD2"
-                                          : "#5688A5"
-                                      }`,
+                                      border: `1px solid #D3F85A`,
                                       borderColor:
                                         appTheme === "dark"
                                           ? "#C6CDD2"
                                           : "#5688A5",
                                       borderRadius: 100,
-                                      fontWeight: 500,
+                                      fontWeight: 600,
                                       fontSize: 14,
                                       lineHeight: "120%",
                                       color:
-                                        appTheme === "dark"
-                                          ? "#C6CDD2"
-                                          : "#5688A5",
+                                        '#D3F85A',
                                     }}
                                     onClick={(event) => {
                                       event.stopPropagation();

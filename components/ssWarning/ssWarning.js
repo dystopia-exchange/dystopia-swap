@@ -27,55 +27,6 @@ export default function ffWarning({close, title, subTitle, icon, description, bt
         <div className={[classes.warningContainer, classes[`warningContainer--${appTheme}`]].join(' ')}>
           <div
             style={{
-              position: 'absolute',
-              top: -30,
-              left: -1,
-              display: 'flex',
-              width: '100%',
-            }}>
-            <div
-              style={{
-                background: 'transparent',
-                width: 0,
-                height: 0,
-                top: 4,
-                left: -2,
-                transform: 'rotate(360deg)',
-                borderStyle: 'solid',
-                borderWidth: '0px 0px 30px 30px',
-                borderColor: `transparent transparent ${appTheme === "dark" ? '#5F7285' : '#86B9D6'}`,
-              }}>
-              <div
-                style={{
-                  position: 'relative',
-                  top: 3,
-                  left: -28,
-                  width: 0,
-                  height: 0,
-                  borderStyle: 'solid',
-                  borderWidth: '0px 0px 27px 28px',
-                  borderColor: `transparent transparent ${appTheme === "dark" ? '#151718' : '#DBE6EC'}`,
-                }}>
-              </div>
-            </div>
-
-            <div
-              style={{
-                background: appTheme === "dark" ? '#151718' : '#DBE6EC',
-                width: 'calc(100% - 28px)',
-                height: 30,
-                borderTop: `1px solid ${appTheme === "dark" ? '#5F7285' : '#DBE6EC'}`,
-                borderRight: `1px solid ${appTheme === "dark" ? '#5F7285' : '#DBE6EC'}`,
-                marginLeft: 0,
-                zIndex: 2,
-                position: 'absolute',
-                left: 30,
-              }}>
-            </div>
-          </div>
-
-          <div
-            style={{
               display: 'flex',
               alignItems: 'center',
             }}>

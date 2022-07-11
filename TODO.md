@@ -6,8 +6,7 @@ SWAP PAGE
 4. search modal item
 5. copy address modal select
 
-
 VEST PAGE
 
-withdraw messages
-merge lock filled state
+1. withdraw
+2. merge lock
