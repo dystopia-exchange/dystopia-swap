@@ -20,12 +20,10 @@ import {
 } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import QuizIcon from '@mui/icons-material/Quiz';
-import Icon from '@mui/material/Icon';
 import numeral from "numeral";
 import BigNumber from 'bignumber.js';
 
 import { formatCurrency } from '../../utils';
-import { ArrowDropDown, Close, ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import TablePaginationActions from '../table-pagination/table-pagination';
 import SortSelect from '../select-sort/select-sort';
@@ -231,12 +229,14 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'TVL',
+    isHideInDetails: true,
   },
   {
     id: 'apr',
     numeric: true,
     disablePadding: false,
     label: 'APR %',
+    isHideInDetails: true,
   },
   {
     id: 'balance',
@@ -429,9 +429,10 @@ const useStyles = makeStyles((theme) => {
 
   return ({
     cont: {
-      ["@media (min-width:1200px)"]: {
-        marginLeft: 370,
+      ["@media (min-width:1920px)"]: {
+        marginLeft: 433,
       },
+
     },
     root: {
       width: '100%',
@@ -588,7 +589,7 @@ const useStyles = makeStyles((theme) => {
     img2Logo: {
       position: 'absolute',
       left: '28px',
-      zIndex: '1',
+      // zIndex: '1',
       top: '0px',
       outline: '2px solid #DBE6EC',
       background: '#13B5EC',
@@ -619,10 +620,11 @@ const useStyles = makeStyles((theme) => {
     },
     sortSelect: {
       position: 'absolute',
-      top: 125,
-      ["@media (max-width:660px)"]: {
-        // eslint-disable-line no-useless-computed-key
-        top: 145,
+      top: 65,
+      right: 48,
+      ["@media (max-width:680px)"]: {
+        top: 53,
+        right: 12,
       },
     },
     accordionSummaryContent: {
@@ -640,14 +642,14 @@ const useStyles = makeStyles((theme) => {
       padding: '11px 20px',
       ["@media (max-width:530px)"]: {
         // eslint-disable-line no-useless-computed-key
-        padding: 10,
+        // padding: 10,
       },
     },
     cellHeadPaddings: {
-      padding: '5px 20px',
+      padding: '16px 20px',
       ["@media (max-width:530px)"]: {
         // eslint-disable-line no-useless-computed-key
-        padding: '5px 10px',
+        // padding: '8px 10px',
       },
     },
   });
@@ -849,10 +851,10 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
 
   return (
     <>
-      {windowWidth > 660 &&
+      {windowWidth >= 806 &&
         <div
           style={{
-            marginTop: ((windowWidth <= 1360 && showSearch) || windowWidth <= 1210) ? 45 : 0,
+            marginTop: 0, /*((windowWidth <= 1360 && showSearch) || windowWidth <= 1210) ? 45 : 0,*/
             border: '1px solid #D3F85A',
             borderRadius: 12,
             overflow: 'hidden',
@@ -1191,20 +1193,21 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
             ActionsComponent={TablePaginationActions}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+
           />
         </div>
       }
 
 
-      <div className={classes.sortSelect} style={{display: windowWidth < 1200 ? 'flex' : 'none'}}>
+      <div className={classes.sortSelect} style={{display: windowWidth < 806 ? 'flex' : 'none'}}>
         {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
       </div>
 
-      {windowWidth <= 660 && (
+      {windowWidth < 806 && (
         <>
           <div style={{
             overflow: 'auto',
-            marginTop: 100,
+            marginTop: 136,
           }}>
             {stableSort(gauges, getComparator(order, orderBy, sliderValues))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -1240,9 +1243,9 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               scrollPaper: classes.dialogBody,
                             }}>
                           <div style={{
-                            background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+                            background: '#060B17',
                             border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
-                            borderRadius: 0,
+                            borderRadius: 12,
                           }}>
                             <DialogTitle style={{
                               padding: 30,
@@ -1263,6 +1266,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                 }}>
                                   My Vote %
                                 </div>
+
 
                                 {/*<Close
                             style={{
@@ -1317,8 +1321,9 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                             style={{
                               margin: 0,
                               marginBottom: 20,
-                              background: appTheme === 'dark' ? '#24292D' : '#DBE6EC',
-                              border: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              background: '#171D2D',
+                              borderRadius: 12,
+                              // border: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
                             }}
                             disableGutters={true}
                             expanded={expanded === labelId}
@@ -1364,9 +1369,9 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       className={classes.textSpaced}
                                       style={{
                                         fontWeight: 500,
-                                        fontSize: 14,
-                                        lineHeight: '120%',
-                                        color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                        fontSize: 16,
+                                        lineHeight: '20px',
+                                        color: '#E4E9F4',
                                       }}
                                       noWrap>
                                     {row?.symbol}
@@ -1376,8 +1381,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       style={{
                                         fontWeight: 400,
                                         fontSize: 14,
-                                        lineHeight: '120%',
-                                        color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                        lineHeight: '16px',
+                                        color: '#8191B9',
                                       }}
                                       noWrap>
                                     {row?.isStable ? 'Stable Pool' : 'Volatile Pool'}
@@ -1387,51 +1392,87 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
 
                               <div
                                   style={{
-                                    borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
-                                    borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                                    // borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                                    // borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
                                   }}
                                   className={['g-flex', 'g-flex--align-center'].join(' ')}>
                                 <div
                                     style={{
                                       width: '50%',
-                                      borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                                      // borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
                                     }}>
                                   <Typography
                                       className={classes.cellHeadPaddings}
                                       style={{
-                                        background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
+                                        background: '#060B17',
                                         fontWeight: 500,
-                                        fontSize: 12,
+                                        fontSize: 14,
                                         lineHeight: '120%',
-                                        borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
-                                        color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                                        // borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                                        color: '#8191B9',
                                       }}
                                       noWrap>
-                                    Action
+                                    My Votes
                                   </Typography>
 
                                   <div className={classes.cellPaddings}>
-                                    <Button
-                                        variant="outlined"
-                                        color="primary"
-                                        style={{
-                                          padding: '7px 14px',
-                                          border: `1px solid ${appTheme === 'dark' ? '#C6CDD2' : '#5688A5'}`,
-                                          borderColor: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
-                                          borderRadius: 100,
-                                          fontWeight: 500,
-                                          fontSize: 14,
-                                          lineHeight: '120%',
-                                          color: appTheme === 'dark' ? '#C6CDD2' : '#5688A5',
-                                        }}
-                                        onClick={(event) => {
-                                          event.stopPropagation();
-                                          event.preventDefault();
+                                    <div style={{display: 'flex',}}>
+                                      <div
+                                          // className={classes.inlineEnd}
+                                          style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            // alignItems: 'flex-end',
+                                          }}
+                                      >
+                                        <Typography
+                                            className={classes.textSpaced}
+                                            style={{
+                                              fontWeight: 400,
+                                              fontSize: 14,
+                                              lineHeight: '120%',
+                                              color: '#E4E9F4',
+                                              whiteSpace: 'nowrap',
+                                            }}>
+                                          {formatCurrency(BigNumber(sliderValue).div(100).times(token?.lockValue))}
+                                        </Typography>
 
-                                          openVoteDialog(row);
-                                        }}>
-                                      Vote
-                                    </Button>
+                                        <Typography
+                                            className={classes.textSpaced}
+                                            style={{
+                                              fontWeight: 400,
+                                              fontSize: 14,
+                                              lineHeight: '120%',
+                                              color: '#E4E9F4',
+                                              whiteSpace: 'nowrap',
+                                            }}>
+                                          {`${formatCurrency(sliderValue)} %`}
+                                        </Typography>
+                                      </div>
+
+                                      <Button
+                                          variant="outlined"
+                                          color="primary"
+                                          style={{
+                                            padding: '8px 14px',
+                                            border: `1px solid #D3F85A`,
+                                            borderRadius: 12,
+                                            fontWeight: 600,
+                                            fontSize: 14,
+                                            lineHeight: '120%',
+                                            color: '#D3F85A',
+                                            textTransform: 'uppercase',
+                                            marginLeft: 20,
+                                          }}
+                                          onClick={(event) => {
+                                            event.stopPropagation();
+                                            event.preventDefault();
+
+                                            openVoteDialog(row);
+                                          }}>
+                                        Vote
+                                      </Button>
+                                    </div>
                                   </div>
                                 </div>
 
@@ -1442,16 +1483,16 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                   <Typography
                                       className={classes.cellHeadPaddings}
                                       style={{
-                                        background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
+                                        background: '#060B17',
                                         fontWeight: 500,
-                                        fontSize: 12,
+                                        fontSize: 14,
                                         lineHeight: '120%',
-                                        borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
-                                        color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                                        // borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                                        color: '#8191B9',
                                         textAlign: 'right',
                                       }}
                                       noWrap>
-                                    Total Votes
+                                    TVL / APR
                                   </Typography>
 
                                   <div
@@ -1470,25 +1511,35 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       <Typography
                                           className={classes.textSpaced}
                                           style={{
-                                            fontWeight: 500,
+                                            fontWeight: 400,
                                             fontSize: 14,
                                             lineHeight: '120%',
-                                            color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                            color: '#E4E9F4',
                                             whiteSpace: 'nowrap',
                                           }}>
-                                        {formatCurrency(row?.gauge?.weight)}
+                                        {`${(numeral(BigNumber(row?.tvl).toLocaleString()).format('($ 0a)'))} `}
                                       </Typography>
 
                                       <Typography
                                           className={classes.textSpaced}
                                           style={{
-                                            fontWeight: 500,
+                                            fontWeight: 400,
                                             fontSize: 14,
                                             lineHeight: '120%',
-                                            color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                            color: '#E4E9F4',
                                             whiteSpace: 'nowrap',
                                           }}>
-                                        {formatCurrency(row?.gauge?.weight)} %
+                                        {`${
+                                            formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
+                                                BigNumber(row?.gauge?.boostedApr0),
+                                                BigNumber(row?.gauge?.boostedApr1)
+                                            ), 0)
+                                        }→${
+                                            formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
+                                                BigNumber(row?.gauge?.boostedApr0),
+                                                BigNumber(row?.gauge?.boostedApr1)
+                                            ),0)
+                                        } %`}
                                       </Typography>
                                     </div>
                                   </div>
@@ -1497,33 +1548,31 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
 
                               <div
                                   style={{
-                                    padding: '6px 20px',
-                                    background: appTheme === 'dark' ? '#151718' : '#9BC9E4',
+                                    padding: '10px 20px',
+                                    background: '#060B17',
                                   }}
                                   className={['g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
                                 <Typography
                                     style={{
                                       fontWeight: 500,
-                                      fontSize: 12,
+                                      fontSize: 14,
                                       lineHeight: '120%',
-                                      color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
+                                      color: '#779BF4',
                                     }}
                                     noWrap>
-                                  {expanded !== labelId ? 'Show' : 'Hide'} Details
+                                  {expanded !== labelId ? 'Show' : 'Hide'} details
                                 </Typography>
 
                                 {expanded !== labelId &&
-                                    <ExpandMore
-                                        style={{
-                                          color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
-                                        }}/>
+                                    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M25.5 13C25.5 6.1125 19.8875 0.5 13 0.499999C6.1125 0.499999 0.5 6.1125 0.499999 13C0.499999 19.8875 6.1125 25.5 13 25.5C19.8875 25.5 25.5 19.8875 25.5 13ZM12.3375 16.4875L7.925 12.075C7.7375 11.8875 7.65 11.65 7.65 11.4125C7.65 11.175 7.7375 10.9375 7.925 10.75C8.2875 10.3875 8.8875 10.3875 9.25 10.75L13 14.5L16.75 10.75C17.1125 10.3875 17.7125 10.3875 18.075 10.75C18.4375 11.1125 18.4375 11.7125 18.075 12.075L13.6625 16.4875C13.3 16.8625 12.7 16.8625 12.3375 16.4875Z" fill="#779BF4"/>
+                                    </svg>
                                 }
 
                                 {expanded === labelId &&
-                                    <ExpandLess
-                                        style={{
-                                          color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
-                                        }}/>
+                                    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M25.5 13C25.5 19.8875 19.8875 25.5 13 25.5C6.1125 25.5 0.5 19.8875 0.499999 13C0.499999 6.1125 6.1125 0.500001 13 0.500001C19.8875 0.5 25.5 6.1125 25.5 13ZM12.3375 9.5125L7.925 13.925C7.7375 14.1125 7.65 14.35 7.65 14.5875C7.65 14.825 7.7375 15.0625 7.925 15.25C8.2875 15.6125 8.8875 15.6125 9.25 15.25L13 11.5L16.75 15.25C17.1125 15.6125 17.7125 15.6125 18.075 15.25C18.4375 14.8875 18.4375 14.2875 18.075 13.925L13.6625 9.5125C13.3 9.1375 12.7 9.1375 12.3375 9.5125Z" fill="#779BF4"/>
+                                    </svg>
                                 }
                               </div>
                             </div>
@@ -1539,7 +1588,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       <div
                                           style={{
                                             height: 56,
-                                            borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                                            borderTop: `1px solid #060B17`,
                                           }}
                                           className={['g-flex', 'g-flex--align-center'].join(' ')}>
                                         <Typography
@@ -1550,12 +1599,13 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                               display: 'flex',
                                               alignItems: 'center',
                                               fontWeight: 500,
-                                              fontSize: 12,
+                                              fontSize: 14,
                                               lineHeight: '120%',
-                                              color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
-                                              borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                                              color: '#8191B9',
+                                              borderRight: `1px solid #060B17`,
                                             }}
-                                            noWrap>
+                                            noWrap
+                                        >
                                           {headCell.label}
                                         </Typography>
 
@@ -1576,10 +1626,10 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                             <Typography
                                                 className={classes.textSpaced}
                                                 style={{
-                                                  fontWeight: 500,
+                                                  fontWeight: 400,
                                                   fontSize: 14,
                                                   lineHeight: '120%',
-                                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                                  color: '#E4E9F4',
                                                   whiteSpace: 'nowrap',
                                                 }}>
                                               {headCell.id === 'tvl' && `${(numeral(BigNumber(row?.tvl).toLocaleString()).format('($ 0a)'))} `}
@@ -1615,10 +1665,10 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                             <Typography
                                                 className={classes.textSpaced}
                                                 style={{
-                                                  fontWeight: 500,
+                                                  fontWeight: 400,
                                                   fontSize: 14,
                                                   lineHeight: '120%',
-                                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                                  color: '#E4E9F4',
                                                   whiteSpace: 'nowrap',
                                                 }}>
 
@@ -1643,7 +1693,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                                   fontWeight: 400,
                                                   fontSize: 14,
                                                   lineHeight: '120%',
-                                                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                                  color: '#8191B9',
                                                 }}>
 
                                               {headCell.id === 'balance' && formatSymbol(row.token0.symbol)}
@@ -1669,9 +1719,9 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                                   fontWeight: 400,
                                                   fontSize: 14,
                                                   lineHeight: '120%',
-                                                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                                                }}>
-
+                                                  color: '#8191B9',
+                                                }}
+                                            >
                                               {headCell.id === 'balance' && formatSymbol(row.token1.symbol)}
                                               {headCell.id === 'liquidity' && formatSymbol(row.token1.symbol)}
                                               {headCell.id === 'apy' && ''}
@@ -1695,12 +1745,14 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
             style={{
               width: '100%',
               padding: '0 30px',
-              background: appTheme === 'dark' ? '#24292D' : '#dbe6ec',
-              border: '1px solid #86B9D6',
-              borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-              borderRadius: 100,
-              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+              background: '#060B17',
+              // border: '1px solid #86B9D6',
+              // borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
+              borderRadius: 12,
               marginBottom: 40,
+              color: '#8191B9',
+              fontSize: 14,
+              fontWeight: 500,
             }}
             component="div"
             count={gauges.length}
