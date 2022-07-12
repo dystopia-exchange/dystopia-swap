@@ -40,28 +40,30 @@ export const NotConnect = (props) => {
       {account && account.address ? (
         props.children
       ) : (
-        <Paper className={classes.notConnectedContent}>
-          <div className={classes.contentFloat}>
-            <Typography className={classes.contentFloatText}>
-              {title}
-            </Typography>
+        <>
+          <Paper className={classes.notConnectedContent}>
+            <div className={classes.contentFloat}>
+              <Typography className={classes.contentFloatText}>
+                {title}
+              </Typography>
 
-            <p className={classes.title}>
-              {description}
-            </p>
-            <WalletConnect>
-              {({ connect }) => {
-                return (
-                  <div className={classes.buttonConnect} onClick={connect}>
-                    <BtnEnterApp
-                      labelClassName={classes.buttonEnterLabel}
-                      label={buttonText}
-                    />
-                  </div>
-                )}}
+              <p className={classes.title}>
+                {description}
+              </p>
+              <WalletConnect>
+                {({ connect }) => {
+                  return (
+                      <div className={classes.buttonConnect} onClick={connect}>
+                        <BtnEnterApp
+                            labelClassName={classes.buttonEnterLabel}
+                            label={buttonText}
+                        />
+                      </div>
+                  )}}
               </ WalletConnect>
-          </div>
-        </Paper>
+            </div>
+          </Paper>
+        </>
       )}
     </>
   );
