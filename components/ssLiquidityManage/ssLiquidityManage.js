@@ -98,6 +98,8 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
   const [withdrawAction, setWithdrawAction] = useState("");
 
   const [createLP, setCreateLP] = useState(true);
@@ -165,6 +167,8 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
     }
   };
 
+  const openSlippage = Boolean(anchorEl);
+
   const ssUpdated = async () => {
     const storeAssetOptions = stores.stableSwapStore.getStore("baseAssets");
     const nfts = stores.stableSwapStore.getStore("vestNFTs");
@@ -179,7 +183,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
     });
 
     setWithdrawAssetOptions(onlyWithBalance);
-
+    setWithdrawAsset(onlyWithBalance[0]);
     setAssetOptions(storeAssetOptions);
     setVeToken(veTok);
     setVestNFTs(nfts);
@@ -220,7 +224,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
         aa1 = storeAssetOptions[1];
       }
       if (withdrawAassetOptions.length > 0 && withdrawAsset == null) {
-        setWithdrawAsset(withdrawAassetOptions[1]);
+        setWithdrawAsset(withdrawAassetOptions[0]);
       }
 
       if (aa0 && aa1) {
@@ -335,9 +339,9 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
     };
   }, []);
 
-  // useEffect(async () => {
-  //   ssUpdated();
-  // }, [router.query.address]);
+  useEffect(async () => {
+    ssUpdated();
+  }, [router.query.address]);
 
   const onBack = () => {
     router.push("/liquidity");
@@ -603,144 +607,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
           pair: pair,
           amount: (percent * balance) / 100,
           token: token,
-          slippage: (slippage && slippage) != "" ? slippage : "2",
-        },
-      });
-    }
-  };
-
-  const onDepositAndStake = () => {
-    setAmount0Error(false);
-    setAmount1Error(false);
-
-    let error = false;
-
-    if (!amount0 || amount0 === "" || isNaN(amount0)) {
-      setAmount0Error("Amount 0 is required");
-      error = true;
-    } else {
-      if (
-        !asset0.balance ||
-        isNaN(asset0.balance) ||
-        BigNumber(asset0.balance).lte(0)
-      ) {
-        setAmount0Error("Invalid balance");
-        error = true;
-      } else if (BigNumber(amount0).lte(0)) {
-        setAmount0Error("Invalid amount");
-        error = true;
-      } else if (asset0 && BigNumber(amount0).gt(asset0.balance)) {
-        setAmount0Error(`Greater than your available balance`);
-        error = true;
-      }
-    }
-
-    if (!amount1 || amount1 === "" || isNaN(amount1)) {
-      setAmount1Error("Amount 0 is required");
-      error = true;
-    } else {
-      if (
-        !asset1.balance ||
-        isNaN(asset1.balance) ||
-        BigNumber(asset1.balance).lte(0)
-      ) {
-        setAmount1Error("Invalid balance");
-        error = true;
-      } else if (BigNumber(amount1).lte(0)) {
-        setAmount1Error("Invalid amount");
-        error = true;
-      } else if (asset1 && BigNumber(amount1).gt(asset1.balance)) {
-        setAmount1Error(`Greater than your available balance`);
-        error = true;
-      }
-    }
-
-    if (!error) {
-      setDepositStakeLoading(true);
-
-      stores.dispatcher.dispatch({
-        type: ACTIONS.ADD_LIQUIDITY_AND_STAKE,
-        content: {
-          pair: pair,
-          token0: asset0,
-          token1: asset1,
-          amount0: amount0,
-          amount1: amount1,
-          minLiquidity: quote ? quote : "0",
-          token: token,
-          slippage: (slippage && slippage) != "" ? slippage : "2",
-        },
-      });
-    }
-  };
-
-  const onCreateAndStake = () => {
-    setAmount0Error(false);
-    setAmount1Error(false);
-
-    let error = false;
-
-    if (!amount0 || amount0 === "" || isNaN(amount0)) {
-      setAmount0Error("Amount 0 is required");
-      error = true;
-    } else {
-      if (
-        !asset0.balance ||
-        isNaN(asset0.balance) ||
-        BigNumber(asset0.balance).lte(0)
-      ) {
-        setAmount0Error("Invalid balance");
-        error = true;
-      } else if (BigNumber(amount0).lte(0)) {
-        setAmount0Error("Invalid amount");
-        error = true;
-      } else if (asset0 && BigNumber(amount0).gt(asset0.balance)) {
-        setAmount0Error(`Greater than your available balance`);
-        error = true;
-      }
-    }
-
-    if (!amount1 || amount1 === "" || isNaN(amount1)) {
-      setAmount1Error("Amount 0 is required");
-      error = true;
-    } else {
-      if (
-        !asset1.balance ||
-        isNaN(asset1.balance) ||
-        BigNumber(asset1.balance).lte(0)
-      ) {
-        setAmount1Error("Invalid balance");
-        error = true;
-      } else if (BigNumber(amount1).lte(0)) {
-        setAmount1Error("Invalid amount");
-        error = true;
-      } else if (asset1 && BigNumber(amount1).gt(asset1.balance)) {
-        setAmount1Error(`Greater than your available balance`);
-        error = true;
-      }
-    }
-
-    if (!asset0 || asset0 === null) {
-      setAmount0Error("Asset is required");
-      error = true;
-    }
-
-    if (!asset1 || asset1 === null) {
-      setAmount1Error("Asset is required");
-      error = true;
-    }
-
-    if (!error) {
-      setCreateLoading(true);
-      stores.dispatcher.dispatch({
-        type: ACTIONS.CREATE_PAIR_AND_STAKE,
-        content: {
-          token0: asset0,
-          token1: asset1,
-          amount0: amount0,
-          amount1: amount1,
-          isStable: stable,
-          token: token,
+          percent: percent,
           slippage: (slippage && slippage) != "" ? slippage : "2",
         },
       });
@@ -845,7 +712,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
           pair: withdrawAsset,
           token0: withdrawAsset.token0,
           token1: withdrawAsset.token1,
-          quote: (withdrawAmount * pair.balance) / 100,
+          percent: withdrawAmount,
           slippage: (slippage && slippage) != "" ? slippage : "2",
         },
       });
@@ -865,6 +732,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
         amount0: withdrawAmount0,
         amount1: withdrawAmount1,
         quote: withdrawQuote,
+        percent: withdrawAmount,
         slippage: (slippage && slippage) != "" ? slippage : "2",
         all: (withdrawAmount == 100)
       },
@@ -889,6 +757,14 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
         pair: pair,
       },
     });
+  };
+
+  const toggleDeposit = () => {
+    setActiveTab("deposit");
+  };
+
+  const toggleWithdraw = () => {
+    setActiveTab("withdraw");
   };
 
   const amount0Changed = (balance) => {
@@ -942,7 +818,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
   };
 
   const onAssetSelect = async (type, value) => {
-    if (type === "amount0") {
+    if (type === "amount0" && createLP) {
       setAsset0(value);
       const p = createLP
         ? await stores.stableSwapStore.getPair(
@@ -968,6 +844,15 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
           asset1
         );
       }
+    } else if (type === "amount0" && !createLP) {
+      setWithdrawAsset(value);
+      setAsset0(value);
+      const p = await stores.stableSwapStore.getPair(
+        value.token0.address,
+        value.token1.address,
+        value.isStable
+      );
+      setPair(p);
     } else if (type === "amount1") {
       setAsset1(value);
       const p = await stores.stableSwapStore.getPair(
@@ -1146,11 +1031,11 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
         <Typography className={classes.inputTitleText} noWrap>
           {type === "amount0"
             ? createLP
-              ? `1st token`
-              : "LP token"
+              ? `1st ${windowWidth > 530 ? "token" : ""}`
+              : "LP"
             : type !== "withdraw"
-            ? `2nd token`
-            : "LP token"}
+            ? `2nd ${windowWidth > 530 ? "token" : ""}`
+            : "LP"}
         </Typography>
 
         {type !== "withdraw" && (
@@ -1201,6 +1086,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
             )}
             {assetValue?.balance &&
               Number(assetValue?.balance) > 0 &&
+              type === "amount0" &&
               createLP && (
                 <div
                   style={{
@@ -1232,6 +1118,25 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   MAX
                 </div>
               )}
+          </div>
+        )}
+
+        {type === "withdraw" && (
+          <div
+            className={[
+              classes.inputBalanceTextContainer,
+              "g-flex",
+              "g-flex--align-center",
+            ].join(" ")}
+          >
+            <div
+              className={[
+                classes.tokenTextHeader,
+                classes[`tokenTextHeader--${appTheme}`],
+              ].join(" ")}
+            >
+              Liquidity pool
+            </div>
           </div>
         )}
 
@@ -1285,6 +1190,27 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
             </>
           )}
 
+          {type === "withdraw" && (
+            <>
+              <div
+                className={[
+                  classes.tokenText,
+                  classes[`tokenText--${appTheme}`],
+                ].join(" ")}
+              >
+                {formatSymbol(assetValue?.symbol)}
+              </div>
+
+              <div
+                className={[
+                  classes.tokenTextLabel,
+                  classes[`tokenTextLabel--${appTheme}`],
+                ].join(" ")}
+              >
+                Variable pool
+              </div>
+            </>
+          )}
         </div>
       </div>
     );
@@ -2227,6 +2153,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
   const switchToggleCreateLP = () => {
     const nextValue = !createLP;
     setAsset0(null);
+    setWithdrawAsset(null);
     setAmount0("");
     setAmount0Error(false);
     setAsset1(null);
@@ -2360,9 +2287,9 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                           amount0,
                           amount0Error,
                           amount0Changed,
-                          asset0,
+                          withdrawAsset,
                           null,
-                          createLP ? assetOptions : withdrawAassetOptions,
+                          withdrawAassetOptions,
                           onAssetSelect,
                           amount0Focused,
                           amount0Ref

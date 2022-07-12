@@ -18,6 +18,7 @@ import {
   USD_PLUS_ADDRESS,
   USD_PLUS_BOOSTED_DATA_URL,
 } from "./constants/contracts";
+import router from "next/router";
 
 const queryone = `
   query {
@@ -112,6 +113,15 @@ const queryv2 = `
     }
   }
 `;
+
+const removeDuplicate = (arr) => {
+  const assets = arr.reduce((acc, item) => {
+    acc[item.symbol] = item
+    return acc
+  }, {})
+  return Object.values(assets)
+}
+
 const client = createClient({ url: process.env.NEXT_PUBLIC_API });
 const clientV = createClient({ url: process.env.NEXT_PUBLIC_APIV2 });
 
@@ -195,6 +205,12 @@ class Store {
           case ACTIONS.SWAP:
             this.swap(payload);
             break;
+          case ACTIONS.WRAP:
+            this.wrap(payload);
+            break;
+          case ACTIONS.UNWRAP:
+            this.unwrap(payload);
+            break;
 
           // VESTING
           case ACTIONS.GET_VEST_NFTS:
@@ -208,6 +224,9 @@ class Store {
             break;
           case ACTIONS.INCREASE_VEST_DURATION:
             this.increaseVestDuration(payload);
+            break;
+          case ACTIONS.MERGE_NFT:
+            this.merge(payload);
             break;
           case ACTIONS.WITHDRAW_VEST:
             this.withdrawVest(payload);
@@ -934,8 +953,8 @@ class Store {
           );
         });
 
-        this.setStore({ baseAssets: baseAssets });
-        this.emitter.emit(ACTIONS.BASE_ASSETS_UPDATED, baseAssets);
+        this.setStore({ baseAssets: removeDuplicate(baseAssets) });
+        this.emitter.emit(ACTIONS.BASE_ASSETS_UPDATED, removeDuplicate(baseAssets));
       }
     } catch (ex) {
       console.log(ex);
@@ -1019,7 +1038,7 @@ class Store {
         );
 
         const baseAssets = this.getStore("baseAssets");
-        const storeBaseAssets = [...baseAssets, newBaseAsset];
+        const storeBaseAssets = removeDuplicate([...baseAssets, newBaseAsset]);
 
         this.setStore({ baseAssets: storeBaseAssets });
         this.emitter.emit(ACTIONS.BASE_ASSETS_UPDATED, storeBaseAssets);
@@ -1056,6 +1075,164 @@ class Store {
 
   _getBaseAssets = async () => {
     try {
+      const whitelist = [
+        {
+          id: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+          address: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+          chainId: "137",
+          symbol: "WMATIC",
+        },
+        {
+          id: "0x13748d548d95d78a3c83fe3f32604b4796cffa23",
+          address: "0x13748d548d95d78a3c83fe3f32604b4796cffa23",
+          chainId: "137",
+          symbol: "KOGECOIN",
+        },
+        {
+          id: "0x62f594339830b90ae4c084ae7d223ffafd9658a7",
+          address: "0x62f594339830b90ae4c084ae7d223ffafd9658a7",
+          chainId: "137",
+          symbol: "SPHERE",
+        },
+        {
+          id: "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
+          address: "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
+          chainId: "137",
+          symbol: "WBTC",
+        },
+        {
+          id: "0x236eec6359fb44cce8f97e99387aa7f8cd5cde1f",
+          address: "0x236eec6359fb44cce8f97e99387aa7f8cd5cde1f",
+          chainId: "137",
+          symbol: "USD+",
+        },
+        {
+          id: "0x255707b70bf90aa112006e1b07b9aea6de021424",
+          address: "0x255707b70bf90aa112006e1b07b9aea6de021424",
+          chainId: "137",
+          symbol: "TETU",
+        },
+        {
+          id: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+          address: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+          chainId: "137",
+          symbol: "USDC",
+        },
+        {
+          id: "0x39ab6574c289c3ae4d88500eec792ab5b947a5eb",
+          address: "0x39ab6574c289c3ae4d88500eec792ab5b947a5eb",
+          chainId: "137",
+          symbol: "DYST",
+        },
+        {
+          id: "0x3a58a54c066fdc0f2d55fc9c89f0415c92ebf3c4",
+          address: "0x3a58a54c066fdc0f2d55fc9c89f0415c92ebf3c4",
+          chainId: "137",
+          symbol: "stMATIC",
+        },
+        {
+          id: "0x3e121107f6f22da4911079845a470757af4e1a1b",
+          address: "0x3e121107f6f22da4911079845a470757af4e1a1b",
+          chainId: "137",
+          symbol: "FXS",
+        },
+        {
+          id: "0x45c32fa6df82ead1e2ef74d17b76547eddfaff89",
+          address: "0x45c32fa6df82ead1e2ef74d17b76547eddfaff89",
+          chainId: "137",
+          symbol: "FRAX",
+        },
+        {
+          id: "0x4cd44ced63d9a6fef595f6ad3f7ced13fceac768",
+          address: "0x4cd44ced63d9a6fef595f6ad3f7ced13fceac768",
+          chainId: "137",
+          symbol: "tetuQi",
+        },
+        {
+          id: "0x580a84c73811e1839f75d86d75d88cca0c241ff4",
+          address: "0x580a84c73811e1839f75d86d75d88cca0c241ff4",
+          chainId: "137",
+          symbol: "QI",
+        },
+        {
+          id: "0x5b0522391d0a5a37fd117fe4c43e8876fb4e91e6",
+          address: "0x5b0522391d0a5a37fd117fe4c43e8876fb4e91e6",
+          chainId: "137",
+          symbol: "penDYST",
+        },
+        {
+          id: "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+          address: "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+          chainId: "137",
+          symbol: "WETH",
+        },
+        {
+          id: "0x8a0e8b4b0903929f47c3ea30973940d4a9702067",
+          address: "0x8a0e8b4b0903929f47c3ea30973940d4a9702067",
+          chainId: "137",
+          symbol: "INSUR",
+        },
+        {
+          id: "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
+          address: "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
+          chainId: "137",
+          symbol: "DAI",
+        },
+        {
+          id: "0x9008d70a5282a936552593f410abcbce2f891a97",
+          address: "0x9008d70a5282a936552593f410abcbce2f891a97",
+          chainId: "137",
+          symbol: "PEN",
+        },
+        {
+          id: "0xa3c322ad15218fbfaed26ba7f616249f7705d945",
+          address: "0xa3c322ad15218fbfaed26ba7f616249f7705d945",
+          chainId: "137",
+          symbol: "MV",
+        },
+        {
+          id: "0xa3fa99a148fa48d14ed51d610c367c61876997f1",
+          address: "0xa3fa99a148fa48d14ed51d610c367c61876997f1",
+          chainId: "137",
+          symbol: "MAI",
+        },
+        {
+          id: "0xb424dfdf817faf38ff7acf6f2efd2f2a843d1aca",
+          address: "0xb424dfdf817faf38ff7acf6f2efd2f2a843d1aca",
+          chainId: "137",
+          symbol: "vQi",
+        },
+        {
+          id: "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+          address: "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+          chainId: "137",
+          symbol: "USDT",
+        },
+        {
+          id: "0xc250e9987a032acac293d838726c511e6e1c029d",
+          address: "0xc250e9987a032acac293d838726c511e6e1c029d",
+          chainId: "137",
+          symbol: "CLAM",
+        },
+        {
+          id: "0xe2fb42f495725c4ee50ce6e29dead57c14e0f2fd",
+          address: "0xe2fb42f495725c4ee50ce6e29dead57c14e0f2fd",
+          chainId: "137",
+          symbol: "bePEN",
+        },
+        {
+          id: "0xecdcb5b88f8e3c15f95c720c51c71c9e2080525d",
+          address: "0xecdcb5b88f8e3c15f95c720c51c71c9e2080525d",
+          chainId: "137",
+          symbol: "WBNB",
+        },
+        {
+          id: "0xf8f9efc0db77d8881500bb06ff5d6abc3070e695",
+          address: "0xf8f9efc0db77d8881500bb06ff5d6abc3070e695",
+          chainId: "137",
+          symbol: "SYN",
+        },
+      ];
       const response = await client.query(querytwo).toPromise();
       const responsev2 = await clientV.query(queryv2).toPromise();
       const baseAssetsCall = response;
@@ -1064,7 +1241,8 @@ class Store {
       for (let i = 0; i < baseAssets.length; i++) {
         for (let j = 0; j < baseAssetsv2.length; j++) {
           if (
-            baseAssetsv2[j].id.toLowerCase() == baseAssets[i].id.toLowerCase()
+            baseAssetsv2[j]?.id?.toLowerCase() !== undefined &&
+            baseAssetsv2[j]?.id?.toLowerCase() == baseAssets[i]?.id?.toLowerCase()
           ) {
             baseAssets[i].derivedETH = baseAssetsv2[j].derivedETH;
           }
@@ -1073,11 +1251,11 @@ class Store {
       const response2 =
         process.env.NEXT_PUBLIC_CHAINID == 80001
           ? await axios.get(
-              `https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`
-            )
+            `https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`
+          )
           : await axios.get(
-              `https://raw.githubusercontent.com/dystopia-exchange/default-token-list/master/tokens/matic.json`
-            );
+            `https://raw.githubusercontent.com/dystopia-exchange/default-token-list/master/tokens/matic.json`
+          );
 
       const nativeFTM = {
         address: CONTRACTS.FTM_ADDRESS,
@@ -1112,7 +1290,21 @@ class Store {
       }
       let localBaseAssets = this.getLocalAssets();
 
-      return [...baseAssets, ...localBaseAssets];
+      baseAssets = baseAssets.filter(token => {
+        return token?.id != "0x104592a158490a9228070e0a8e5343b499e125d0";
+      });
+      let dupAssets = [];
+      baseAssets.filter((token, id) => {
+        whitelist.filter((wl) => {
+          if (token.id != wl.id && wl.symbol == token.symbol) {
+            dupAssets.push(id);
+          }
+        });
+      });
+      for (var i = dupAssets.length - 1; i >= 0; i--)
+        baseAssets.splice(dupAssets[i], 1);
+
+      return removeDuplicate([...baseAssets, ...localBaseAssets])
     } catch (ex) {
       console.log(ex);
       return [];
@@ -1128,7 +1320,79 @@ class Store {
         name: CONTRACTS.WFTM_NAME,
         symbol: CONTRACTS.WFTM_SYMBOL,
       };
-      return [nativeFTM];
+      const USDC = {
+        address: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+        decimals: 6,
+        logoURI:
+          "https://raw.githubusercontent.com/sushiswap/icons/master/token/usdc.jpg",
+        name: "USDC",
+        symbol: "USDC",
+      };
+      const USDT = {
+        address: "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+        decimals: 6,
+        logoURI:
+          "https://raw.githubusercontent.com/sushiswap/icons/master/token/usdt.jpg",
+        name: "(PoS) Tether USD",
+        symbol: "USDT",
+      };
+      const USDPLUS = {
+        address: "0x236eec6359fb44cce8f97e99387aa7f8cd5cde1f",
+        decimals: 6,
+        logoURI:
+          "https://2173993027-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F9HhCCgYexXiRot0OWAJY%2Fuploads%2FQ41zhb0z0oV5WI1zpKEg%2FUSD%2B%20logo.png?alt=media&token=533d9ed9-6904-4f45-82a3-2c9e1060a3b5",
+        name: "USD+",
+        symbol: "USD+",
+      };
+      const FRAX = {
+        address: "0x45c32fa6df82ead1e2ef74d17b76547eddfaff89",
+        decimals: 18,
+        logoURI:
+          "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/polygon/assets/0x45c32fA6DF82ead1e2EF74d17b76547EDdFaFF89/logo.png",
+        name: "FRAX",
+        symbol: "FRAX",
+      };
+      const DAI = {
+        address: "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
+        decimals: 18,
+        logoURI:
+          "https://raw.githubusercontent.com/sushiswap/icons/master/token/dai.jpg",
+        name: "(PoS) Dai Stablecoin",
+        symbol: "DAI",
+      };
+      const WETH = {
+        address: "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+        decimals: 18,
+        logoURI:
+          "https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg",
+        name: "Wrapped Ether",
+        symbol: "WETH",
+      };
+      const MAI = {
+        address: "0xa3fa99a148fa48d14ed51d610c367c61876997f1",
+        decimals: 18,
+        logoURI:
+          "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/polygon/assets/0xa3Fa99A148fA48D14Ed51d610c367C61876997F1/logo.png",
+        name: "MAI",
+        symbol: "MAI",
+      };
+      return [nativeFTM, USDC, USDPLUS, USDT, MAI, WETH, DAI, FRAX];
+    } catch (ex) {
+      console.log(ex);
+      return [];
+    }
+  };
+
+  _getUSDPRouteAssets = async () => {
+    try {
+      const USDPlus = {
+        address: CONTRACTS.USDP_ADDRESS,
+        decimals: CONTRACTS.USDP_DECIMALS,
+        logoURI: CONTRACTS.USDP_LOGO,
+        name: CONTRACTS.USDP_NAME,
+        symbol: CONTRACTS.USDP_SYMBOL,
+      };
+      return [USDPlus];
     } catch (ex) {
       console.log(ex);
       return [];
@@ -1139,18 +1403,7 @@ class Store {
     try {
       const response = await client.query(queryone).toPromise();
       const pairsCall = response;
-      for (let i = 0; i < pairsCall.data.pairs.length; i++) {
-        if (
-          pairsCall.data.pairs[i].address ==
-            "0x0dabcde647ba8d912ce173ce8687b3076a66b0b2" ||
-          pairsCall.data.pairs[i].address ==
-            "0xde251792215fee62f458141db2944283740039ec" ||
-          pairsCall.data.pairs[i].address ==
-            "0xf2f2a88bcf47d1a86ae15fd17098f93152606c3d"
-        ) {
-          pairsCall.data.pairs[i] == null;
-        }
-      }
+
       const find = "miMATIC";
       const regex = new RegExp(find, "g");
       const regex1 = new RegExp("miMATIC", "g");
@@ -1173,12 +1426,25 @@ class Store {
       } catch (e) {
         console.log(e, "error");
       }
+      pairsCall2 = pairsCall2.filter((pair) => {
+        return (
+          pair.token0.address.toString() !=
+          "0x104592a158490a9228070e0a8e5343b499e125d0"
+        );
+      });
+      pairsCall2 = pairsCall2.filter((pair) => {
+        return (
+          pair.token1.address.toString() !=
+          "0x104592a158490a9228070e0a8e5343b499e125d0"
+        );
+      });
       return pairsCall2;
     } catch (ex) {
       console.log(ex);
       return [];
     }
   };
+
   _getGovTokenBase = () => {
     return {
       address: CONTRACTS.GOV_TOKEN_ADDRESS,
@@ -1379,14 +1645,14 @@ class Store {
             pair.claimable0 =
               claimable0 != 0
                 ? BigNumber(claimable0)
-                    .div(10 ** parseInt(pair.token0.decimals))
-                    .toFixed(parseInt(pair.token0.decimals))
+                  .div(10 ** parseInt(pair.token0.decimals))
+                  .toFixed(parseInt(pair.token0.decimals))
                 : 0;
             pair.claimable1 =
               claimable1 != 0
                 ? BigNumber(claimable1)
-                    .div(10 ** parseInt(pair.token1.decimals))
-                    .toFixed(parseInt(pair.token1.decimals))
+                  .div(10 ** parseInt(pair.token1.decimals))
+                  .toFixed(parseInt(pair.token1.decimals))
                 : 0;
 
             const totalVolumeInUsdInReserve0 = BigNumber(
@@ -1500,45 +1766,45 @@ class Store {
               pair.gauge.balance =
                 parseInt(gaugeBalance) != 0
                   ? BigNumber(parseInt(gaugeBalance))
-                      .div(10 ** 18)
-                      .toFixed(18)
+                    .div(10 ** 18)
+                    .toFixed(18)
                   : 0;
               pair.gauge.totalSupply =
                 parseInt(totalSupply) != 0
                   ? BigNumber(parseInt(totalSupply))
-                      .div(10 ** 18)
-                      .toFixed(18)
+                    .div(10 ** 18)
+                    .toFixed(18)
                   : 0;
 
               pair.gauge.reserve0 =
                 parseFloat(pair.totalSupply) > 0
                   ? parseFloat(
-                      BigNumber(parseFloat(pair.reserve0))
-                        .times(parseFloat(pair.gauge.totalSupply))
-                        .div(parseFloat(pair.totalSupply))
-                    ).toFixed(parseInt(pair.token0.decimals))
+                    BigNumber(parseFloat(pair.reserve0))
+                      .times(parseFloat(pair.gauge.totalSupply))
+                      .div(parseFloat(pair.totalSupply))
+                  ).toFixed(parseInt(pair.token0.decimals))
                   : "0";
               pair.gauge.reserve1 =
                 parseFloat(pair.totalSupply) > 0
                   ? parseFloat(
-                      BigNumber(parseFloat(pair.reserve1))
-                        .times(parseFloat(pair.gauge.totalSupply))
-                        .div(parseFloat(pair.totalSupply))
-                    ).toFixed(parseInt(pair.token1.decimals))
+                    BigNumber(parseFloat(pair.reserve1))
+                      .times(parseFloat(pair.gauge.totalSupply))
+                      .div(parseFloat(pair.totalSupply))
+                  ).toFixed(parseInt(pair.token1.decimals))
                   : "0";
 
               pair.gauge.weight =
                 parseInt(gaugeWeight) != 0
                   ? BigNumber(parseInt(gaugeWeight))
-                      .div(10 ** 18)
-                      .toFixed(18)
+                    .div(10 ** 18)
+                    .toFixed(18)
                   : 0;
               pair.gauge.weightPercent =
                 parseInt(totalWeight) != 0
                   ? BigNumber(parseInt(gaugeWeight))
-                      .times(100)
-                      .div(parseInt(totalWeight))
-                      .toFixed(2)
+                    .times(100)
+                    .div(parseInt(totalWeight))
+                    .toFixed(2)
                   : 0;
 
               let totalVolumeInUsdInReserve0 = BigNumber(
@@ -2962,7 +3228,7 @@ class Store {
         return null;
       }
 
-      const { pair, token, amount } = payload.content;
+      const { pair, token, amount, percent } = payload.content;
 
       let stakeAllowanceTXID = this.getTXUUID();
       let stakeTXID = this.getTXUUID();
@@ -3064,26 +3330,50 @@ class Store {
       let am = BigNumber(amount)
         .times(10 ** pair.decimals)
         .toFixed(0);
-      this._callContractWait(
-        web3,
-        gaugeContract,
-        "deposit",
-        [am, sendTok],
-        account,
-        gasPrice,
-        null,
-        null,
-        stakeTXID,
-        (err) => {
-          if (err) {
-            return this.emitter.emit(ACTIONS.ERROR, err);
+
+      if (percent == 100) {
+        this._callContractWait(
+          web3,
+          gaugeContract,
+          "depositAll",
+          [sendTok],
+          account,
+          gasPrice,
+          null,
+          null,
+          stakeTXID,
+          (err) => {
+            if (err) {
+              return this.emitter.emit(ACTIONS.ERROR, err);
+            }
+
+            this._getPairInfo(web3, account);
+
+            this.emitter.emit(ACTIONS.LIQUIDITY_STAKED);
           }
+        );
+      } else {
+        this._callContractWait(
+          web3,
+          gaugeContract,
+          "deposit",
+          [am, sendTok],
+          account,
+          gasPrice,
+          null,
+          null,
+          stakeTXID,
+          (err) => {
+            if (err) {
+              return this.emitter.emit(ACTIONS.ERROR, err);
+            }
 
-          this._getPairInfo(web3, account);
+            this._getPairInfo(web3, account);
 
-          this.emitter.emit(ACTIONS.LIQUIDITY_STAKED);
-        }
-      );
+            this.emitter.emit(ACTIONS.LIQUIDITY_STAKED);
+          }
+        );
+      }
     } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);
@@ -3645,8 +3935,8 @@ class Store {
       if (pair.gauge) {
         returnVal.gauge = gaugeBalance
           ? BigNumber(gaugeBalance)
-              .div(10 ** 18)
-              .toFixed(18)
+            .div(10 ** 18)
+            .toFixed(18)
           : null;
         // returnVal.earned = BigNumber(earned).div(10**incentiveAsset.decimals).toFixed(incentiveAsset.decimals),
       }
@@ -3674,7 +3964,7 @@ class Store {
         return null;
       }
 
-      const { token0, token1, pair, slippage } = payload.content;
+      const { token0, token1, pair, percent, slippage } = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let allowanceTXID = this.getTXUUID();
@@ -3755,6 +4045,8 @@ class Store {
 
       // SUBMIT WITHDRAW TRANSACTION
       const sendAmount = BigNumber(pair.balance)
+        .times(percent)
+        .div(100)
         .times(10 ** pair.decimals)
         .toFixed(0);
 
@@ -4017,7 +4309,7 @@ class Store {
         return null;
       }
 
-      const { token0, token1, amount, amount0, amount1, pair, all } =
+      const { token0, token1, amount, percent, amount0, amount1, pair, all } =
         payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
@@ -4048,26 +4340,49 @@ class Store {
         pair.gauge.address
       );
 
-      this._callContractWait(
-        web3,
-        gaugeContract,
-        all ? "withdrawAll" : "withdraw",
-          all ? [] : [sendAmount],
-        account,
-        gasPrice,
-        null,
-        null,
-        unstakeTXID,
-        async (err) => {
-          if (err) {
-            return this.emitter.emit(ACTIONS.ERROR, err);
+      if (percent == 100) {
+        this._callContractWait(
+          web3,
+          gaugeContract,
+          "withdrawAll",
+          [],
+          account,
+          gasPrice,
+          null,
+          null,
+          unstakeTXID,
+          async (err) => {
+            if (err) {
+              return this.emitter.emit(ACTIONS.ERROR, err);
+            }
+
+            this._getPairInfo(web3, account);
+
+            this.emitter.emit(ACTIONS.LIQUIDITY_UNSTAKED);
           }
+        );
+      } else {
+        this._callContractWait(
+          web3,
+          gaugeContract,
+          "withdraw",
+          [sendAmount],
+          account,
+          gasPrice,
+          null,
+          null,
+          unstakeTXID,
+          async (err) => {
+            if (err) {
+              return this.emitter.emit(ACTIONS.ERROR, err);
+            }
 
-          this._getPairInfo(web3, account);
+            this._getPairInfo(web3, account);
 
-          this.emitter.emit(ACTIONS.LIQUIDITY_UNSTAKED);
-        }
-      );
+            this.emitter.emit(ACTIONS.LIQUIDITY_UNSTAKED);
+          }
+        );
+      }
     } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);
@@ -4210,7 +4525,7 @@ class Store {
       }
 
       // some path logic. Have a base asset (FTM) swap from start asset to FTM, swap from FTM back to out asset. Don't know.
-      const routeAssets = this.getStore("routeAssets");
+      const _routeAssets = this.getStore("routeAssets");
 
       const { fromAsset, toAsset, fromAmount } = payload.content;
 
@@ -4232,6 +4547,16 @@ class Store {
       ) {
         return null;
       }
+      // override the routeAsset
+      let newRouteAssets = null;
+      if (
+        fromAsset.address.toLowerCase() ===
+        CONTRACTS.SPHERE_ADDRESS.toLowerCase() ||
+        toAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase()
+      ) {
+        newRouteAssets = await this._getUSDPRouteAssets();
+      }
+      const routeAssets = _routeAssets;
 
       let addy0 = fromAsset.address;
       let addy1 = toAsset.address;
@@ -4252,74 +4577,73 @@ class Store {
 
       let amountOuts = [];
 
-      if (includesRouteAddress.length === 0) {
-        amountOuts = routeAssets
-          .map((routeAsset) => {
-            return [
-              {
-                routes: [
-                  {
-                    from: addy0,
-                    to: routeAsset.address,
-                    stable: true,
-                  },
-                  {
-                    from: routeAsset.address,
-                    to: addy1,
-                    stable: true,
-                  },
-                ],
-                routeAsset: routeAsset,
-              },
-              {
-                routes: [
-                  {
-                    from: addy0,
-                    to: routeAsset.address,
-                    stable: false,
-                  },
-                  {
-                    from: routeAsset.address,
-                    to: addy1,
-                    stable: false,
-                  },
-                ],
-                routeAsset: routeAsset,
-              },
-              {
-                routes: [
-                  {
-                    from: addy0,
-                    to: routeAsset.address,
-                    stable: true,
-                  },
-                  {
-                    from: routeAsset.address,
-                    to: addy1,
-                    stable: false,
-                  },
-                ],
-                routeAsset: routeAsset,
-              },
-              {
-                routes: [
-                  {
-                    from: addy0,
-                    to: routeAsset.address,
-                    stable: false,
-                  },
-                  {
-                    from: routeAsset.address,
-                    to: addy1,
-                    stable: true,
-                  },
-                ],
-                routeAsset: routeAsset,
-              },
-            ];
-          })
-          .flat();
-      }
+      // if (includesRouteAddress.length === 0) {
+      amountOuts = routeAssets
+        .map((routeAsset) => {
+          return [
+            {
+              routes: [
+                {
+                  from: addy0,
+                  to: routeAsset.address,
+                  stable: true,
+                },
+                {
+                  from: routeAsset.address,
+                  to: addy1,
+                  stable: true,
+                },
+              ],
+              routeAsset: routeAsset,
+            },
+            {
+              routes: [
+                {
+                  from: addy0,
+                  to: routeAsset.address,
+                  stable: false,
+                },
+                {
+                  from: routeAsset.address,
+                  to: addy1,
+                  stable: false,
+                },
+              ],
+              routeAsset: routeAsset,
+            },
+            {
+              routes: [
+                {
+                  from: addy0,
+                  to: routeAsset.address,
+                  stable: true,
+                },
+                {
+                  from: routeAsset.address,
+                  to: addy1,
+                  stable: false,
+                },
+              ],
+              routeAsset: routeAsset,
+            },
+            {
+              routes: [
+                {
+                  from: addy0,
+                  to: routeAsset.address,
+                  stable: false,
+                },
+                {
+                  from: routeAsset.address,
+                  to: addy1,
+                  stable: true,
+                },
+              ],
+              routeAsset: routeAsset,
+            },
+          ];
+        })
+        .flat();
 
       amountOuts.push({
         routes: [
@@ -4486,9 +4810,8 @@ class Store {
           },
           {
             uuid: swapTXID,
-            description: `Swap ${formatCurrency(fromAmount)} ${
-              fromAsset.symbol
-            } for ${toAsset.symbol}`,
+            description: `Swap ${formatCurrency(fromAmount)} ${fromAsset.symbol
+              } for ${toAsset.symbol}`,
             status: "WAITING",
           },
         ],
@@ -4559,11 +4882,13 @@ class Store {
 
       const done = await Promise.all(allowanceCallsPromises);
 
-      const SPHERE_ADDRESS = "0x17e9c5b37283ac5fbe527011cec257b832f03eb3";
-
       // SUBMIT SWAP TRANSACTION
       let _slippage = slippage;
-      if (fromAsset.address === SPHERE_ADDRESS && Number(slippage) <= 22) {
+      if (
+        fromAsset.address.toLowerCase() ===
+        CONTRACTS.SPHERE_ADDRESS.toLowerCase() &&
+        Number(slippage) <= 22
+      ) {
         _slippage = (30 + Number(slippage)).toString();
       }
       const sendSlippage = BigNumber(100).minus(_slippage).div(100);
@@ -4592,7 +4917,10 @@ class Store {
       ];
       let sendValue = null;
 
-      if (fromAsset.address === SPHERE_ADDRESS) {
+      if (
+        fromAsset.address.toLowerCase() ===
+        CONTRACTS.SPHERE_ADDRESS.toLowerCase()
+      ) {
         // SPHERE token address
         func = "swapExactTokensForTokensSupportingFeeOnTransferTokens";
       }
@@ -4609,7 +4937,10 @@ class Store {
       }
       if (toAsset.address === "MATIC") {
         func = "swapExactTokensForMATIC";
-        if (fromAsset.address === SPHERE_ADDRESS) {
+        if (
+          fromAsset.address.toLowerCase() ===
+          CONTRACTS.SPHERE_ADDRESS.toLowerCase()
+        ) {
           func = "swapExactTokensForMATICSupportingFeeOnTransferTokens";
         }
       }
@@ -4641,6 +4972,157 @@ class Store {
     } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);
+    }
+  };
+
+  wrap = async (payload) => {
+    try {
+      const allowanceCallsPromises = [];
+
+      const account = stores.accountStore.getStore("account");
+      if (!account) {
+        console.warn("account not found");
+        return null;
+      }
+
+      const web3 = await stores.accountStore.getWeb3Provider();
+      if (!web3) {
+        console.warn("web3 not found");
+        return null;
+      }
+
+      const { fromAsset, toAsset, fromAmount, toAmount } = payload.content;
+
+      const gasPrice = await stores.accountStore.getGasPrice();
+      let wrapTXID = this.getTXUUID();
+
+      const sendFromAmount = BigNumber(fromAmount)
+        .times(10 ** fromAsset.decimals)
+        .toFixed(0);
+      const sendValue = sendFromAmount;
+      const wmaticContract = new web3.eth.Contract(
+        CONTRACTS.WFTM_ABI,
+        CONTRACTS.WFTM_ADDRESS
+      );
+      this.emitter.emit(ACTIONS.TX_ADDED, {
+        title: `Wrap ${fromAsset.symbol} for ${toAsset.symbol}`,
+        type: "Warp",
+        verb: "Wrap Successful",
+        transactions: [
+
+          {
+            uuid: wrapTXID,
+            description: `Wrap ${formatCurrency(fromAmount)} ${fromAsset.symbol
+              } for ${toAsset.symbol}`,
+            status: "WAITING",
+          },
+        ],
+      });
+
+      const depositPromise = new Promise((resolve, reject) => {
+        this._callContractWait(
+          web3,
+          wmaticContract,
+          "deposit",
+          [],
+          account,
+          gasPrice,
+          null,
+          null,
+          wrapTXID,
+          (err) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            resolve();
+          },
+          null,
+          sendValue
+        );
+      });
+
+      allowanceCallsPromises.push(depositPromise);
+      const done = await Promise.all(allowanceCallsPromises);
+      this.emitter.emit(ACTIONS.WRAP_RETURNED);
+    } catch (e) {
+      console.log(e);
+      this.emitter.emit(ACTIONS.ERROR, e);
+    }
+  };
+
+  unwrap = async (payload) => {
+    try {
+      const allowanceCallsPromises = [];
+
+      const account = stores.accountStore.getStore("account");
+      if (!account) {
+        console.warn("account not found");
+        return null;
+      }
+
+      const web3 = await stores.accountStore.getWeb3Provider();
+      if (!web3) {
+        console.warn("web3 not found");
+        return null;
+      }
+
+      const { fromAsset, toAsset, fromAmount, toAmount } = payload.content;
+
+      let unwrapTXID = this.getTXUUID();
+      const gasPrice = await stores.accountStore.getGasPrice();
+
+      const sendFromAmount = BigNumber(fromAmount)
+        .times(10 ** fromAsset.decimals)
+        .toFixed(0);
+      const wmaticContract = new web3.eth.Contract(
+        CONTRACTS.WFTM_ABI,
+        CONTRACTS.WFTM_ADDRESS
+      );
+      this.emitter.emit(ACTIONS.TX_ADDED, {
+        title: `Unwrap ${fromAsset.symbol} for ${toAsset.symbol}`,
+        type: "Unwarp",
+        verb: "Unwrap Successful",
+        transactions: [
+
+          {
+            uuid: unwrapTXID,
+            description: `Unwrap ${formatCurrency(fromAmount)} ${fromAsset.symbol
+              } for ${toAsset.symbol}`,
+            status: "WAITING",
+          },
+        ],
+      });
+
+      const withdrawPromise = new Promise((resolve, reject) => {
+        this._callContractWait(
+          web3,
+          wmaticContract,
+          "withdraw",
+          [sendFromAmount],
+          account,
+          gasPrice,
+          null,
+          null,
+          unwrapTXID,
+          (err) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            resolve();
+          }
+        );
+      });
+
+      allowanceCallsPromises.push(withdrawPromise);
+      const done = await Promise.all(allowanceCallsPromises);
+      this.emitter.emit(ACTIONS.UNWRAP_RETURNED);
+    } catch (e) {
+      console.log(e);
+      this.emitter.emit(ACTIONS.ERROR, e);
     }
   };
 
@@ -4680,7 +5162,7 @@ class Store {
         })
       );
 
-      this.setStore({ baseAssets: ba });
+      this.setStore({ baseAssets: removeDuplicate(ba) });
       this.emitter.emit(ACTIONS.UPDATED);
     } catch (ex) {
       console.log(ex);
@@ -5281,6 +5763,242 @@ class Store {
           }
         );
       });
+    } catch (ex) {
+      console.error(ex);
+      this.emitter.emit(ACTIONS.ERROR, ex);
+    }
+  };
+  merge = async (payload) => {
+    try {
+      const { tokenIDOne, tokenIDTwo } = payload.content;
+      const queryVestWithdraw = `
+     query {
+         veDysts(where :{id:${tokenIDOne.id.toString()}})  {
+            id
+            addresses
+      }
+    }`;
+
+      const response = await client.query(queryVestWithdraw).toPromise();
+      let res;
+      let allowanceCallsPromise = [];
+      let voteTXID = this.getTXUUID();
+      let allowanceTXID = this.getTXUUID();
+      let mergeTXID = this.getTXUUID();
+
+      if (response.data.veDysts != "") {
+        res = response.data.veDysts[0].addresses.length;
+      } else {
+        res = 0;
+      }
+      const account = stores.accountStore.getStore("account");
+      if (!account) {
+        console.warn("account not found");
+        return null;
+      }
+
+      const web3 = await stores.accountStore.getWeb3Provider();
+      if (!web3) {
+        console.warn("web3 not found");
+        return null;
+      }
+
+      const vedystcontract = new web3.eth.Contract(
+        CONTRACTS.VE_TOKEN_ABI,
+        CONTRACTS.VE_TOKEN_ADDRESS
+      );
+
+      let withdrawAllTXID = [];
+      let arrTx = [];
+      let c = {
+        uuid: allowanceTXID,
+        description: `Checking Allowance for veDYST to Merge`,
+        status: "WAITING",
+      };
+      arrTx.push(c);
+
+      if (res != 0 || res != null || res != "") {
+        for (var i = 0; i < res; i++) {
+          withdrawAllTXID[i] = this.getTXUUID();
+          let a = {
+            uuid: withdrawAllTXID[i],
+            description: `Withdrawing your tokens for gauge `,
+            status: "WAITING",
+          };
+          arrTx.push(a);
+        }
+      }
+
+      let b = {
+        uuid: voteTXID,
+        description: `Reset votes`,
+        status: "WAITING",
+      };
+
+      arrTx.push(b);
+
+      let d = {
+        uuid: mergeTXID,
+        description: `Merge veDYST`,
+        status: "WAITING",
+      };
+
+      arrTx.push(d);
+
+      this.emitter.emit(ACTIONS.TX_ADDED, {
+        title: `Withdraw vest amount on token #${tokenIDOne.id}`,
+        type: "Vest",
+        verb: "Vest Withdrawn",
+        transactions: arrTx,
+      });
+
+      let isApproved = await vedystcontract.methods
+        .isApprovedForAll(account.address, CONTRACTS.VE_TOKEN_ADDRESS)
+        .call();
+      let isvoted = await vedystcontract.methods.voted(tokenIDOne.id).call();
+
+      if (!isApproved) {
+        this.emitter.emit(ACTIONS.TX_STATUS, {
+          uuid: allowanceTXID,
+          description: `Allow the veDYST For Merge`,
+        });
+      } else {
+        this.emitter.emit(ACTIONS.TX_STATUS, {
+          uuid: allowanceTXID,
+          description: `Allowance on veDYST sufficient`,
+          status: "DONE",
+        });
+      }
+      if (isvoted) {
+        this.emitter.emit(ACTIONS.TX_STATUS, {
+          uuid: voteTXID,
+          description: `Reset the veDYST Votes`,
+        });
+      } else {
+        this.emitter.emit(ACTIONS.TX_STATUS, {
+          uuid: voteTXID,
+          description: `Votes Reseted`,
+          status: "DONE",
+        });
+      }
+
+      const gasPrice = await stores.accountStore.getGasPrice();
+      if (!isApproved) {
+        const approve = new Promise((resolve, reject) => {
+          this._callContractWait(
+            web3,
+            vedystcontract,
+            "setApprovalForAll",
+            [CONTRACTS.VE_TOKEN_ADDRESS, "true"],
+            account,
+            gasPrice,
+            null,
+            null,
+            allowanceTXID,
+            (err) => {
+              if (err) {
+                reject(err);
+                return;
+              }
+
+              resolve();
+            }
+          );
+        });
+
+        allowanceCallsPromise.push(approve);
+        await Promise.all(allowanceCallsPromise);
+      }
+      if (res != 0 || res != null || res != "") {
+        for (var i = 0; i < res; i++) {
+          let gaugeContract = new web3.eth.Contract(
+            CONTRACTS.GAUGE_ABI,
+            response.data.veDysts[0].addresses[i]
+          );
+          const withdrawAll = new Promise((resolve, reject) => {
+            this._callContractWait(
+              web3,
+              gaugeContract,
+              "withdrawAll",
+              [],
+              account,
+              gasPrice,
+              null,
+              null,
+              withdrawAllTXID[i],
+              (err) => {
+                if (err) {
+                  reject(err);
+                  return;
+                }
+
+                resolve();
+              }
+            );
+          });
+
+          allowanceCallsPromise.push(withdrawAll);
+
+          const done = await Promise.all(allowanceCallsPromise);
+        }
+      }
+      // SUBMIT INCREASE TRANSACTION
+      const gaugesContract = new web3.eth.Contract(
+        CONTRACTS.VOTER_ABI,
+        CONTRACTS.VOTER_ADDRESS
+      );
+
+      if (isvoted) {
+        const reset = new Promise((resolve, reject) => {
+          this._callContractWait(
+            web3,
+            gaugesContract,
+            "reset",
+            [tokenIDOne.id],
+            account,
+            gasPrice,
+            null,
+            null,
+            voteTXID,
+            (err) => {
+              if (err) {
+                reject(err);
+                return;
+              }
+
+              resolve();
+            }
+          );
+        });
+
+        allowanceCallsPromise.push(reset);
+        await Promise.all(allowanceCallsPromise);
+      }
+      const merge = new Promise((resolve, reject) => {
+        this._callContractWait(
+          web3,
+          vedystcontract,
+          "merge",
+          [tokenIDOne.id, tokenIDTwo.id],
+          account,
+          gasPrice,
+          null,
+          null,
+          mergeTXID,
+          (err) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            resolve();
+          }
+        );
+      });
+
+      allowanceCallsPromise.push(merge);
+      await Promise.all(allowanceCallsPromise);
+      router.push("/vest");
     } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);

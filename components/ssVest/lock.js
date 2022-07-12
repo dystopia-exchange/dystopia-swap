@@ -180,7 +180,7 @@ export default function ssLock({govToken, veToken}) {
 
   const renderMassiveInput = (type, amountValue, amountError, amountChanged, token) => {
     return (
-      <div className={[classes.textField].join(' ')}>
+      <div className={classes.textField}>
         <div className={`${classes.massiveInputContainer} ${(amountError) && classes.error}`}>
           <div className={classes.inputRow}>
             <div className={classes.inputColumn}>
@@ -191,8 +191,7 @@ export default function ssLock({govToken, veToken}) {
               <div className={classes.massiveInputAssetSelect}>
                 <div className={classes.displaySelectContainer}>
                   <div className={classes.displayDualIconContainer}>
-                    {
-                      token && token.logoURI &&
+                    {token && token.logoURI &&
                       <img
                         className={classes.displayAssetIcon}
                         alt=""
@@ -205,8 +204,7 @@ export default function ssLock({govToken, veToken}) {
                         }}
                       />
                     }
-                    {
-                      !(token && token.logoURI) &&
+                    {!(token && token.logoURI) &&
                       <img
                         className={classes.displayAssetIcon}
                         alt=""
@@ -282,7 +280,8 @@ export default function ssLock({govToken, veToken}) {
     <>
       <Paper
         elevation={0}
-        className={[classes.container3, classes['g-flex-column']].join(' ')}>
+        className={[classes.container3, classes['g-flex-column']].join(' ')}
+      >
         <p className={classes.pageTitle}>
           <div className={classes.titleSection} onClick={onBack}>
             <Tooltip title="Back to Vest" placement="top">
@@ -352,16 +351,15 @@ export default function ssLock({govToken, veToken}) {
               style={{ marginTop: 20 }}
               className={[
                 classes.warningContainer,
-                classes[`warningContainer--${appTheme}`],
                 classes.warningContainerError].join(" ")}>
               <div className={[
                 classes.warningDivider,
                 classes.warningDividerError
               ].join(" ")}>
               </div>
-              <Typography
-                className={[classes.warningError, classes[`warningText--${appTheme}`]].join(" ")}
-                align="center">{selectedDateError}</Typography>
+              <Typography className={classes.warningError} align="center">
+                {selectedDateError}
+              </Typography>
             </div>}
           </div>
 

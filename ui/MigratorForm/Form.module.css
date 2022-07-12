@@ -1,13 +1,7 @@
 .form {
   position: relative;
-  width: 463px;
   height: auto;
-  margin-left: 1px;
-  background: var(--background-dark);
   padding: 13px 30px;
-  border: 1px solid var(--border-dark);
-  border-top: none;
-  border-bottom: none;
   z-index: 2;
 }
 
@@ -38,14 +32,6 @@
   clip-path: polygon(4% 0, 100% 0%, 100% 100%, 0 100%);
 }
 
-.top--dark {
-  background: var(--border-dark);
-}
-
-.top--inside--dark {
-  background: var(--background-dark);
-}
-
 .bottom {
   top: 0;
   left: 0.5px;
@@ -62,24 +48,6 @@
   height: 16px;
   background: var(--background-light);
   clip-path: polygon(0% 0, 99.7% 0%, 94.9% 100%, 0 100%);
-}
-
-.bottom--dark {
-  background: var(--border-dark);
-}
-
-.bottom--inside--dark {
-  background: var(--background-dark);
-}
-
-.form--dark {
-  background: var(--background-dark);
-  border-color: var(--border-dark);
-}
-
-.form--light {
-  background: var(--background-light);
-  border-color: var(--border-light);
 }
 
 @media (max-width: 470px) {

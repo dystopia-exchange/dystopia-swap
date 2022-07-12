@@ -432,7 +432,6 @@ const useStyles = makeStyles((theme) => {
       ["@media (min-width:1920px)"]: {
         marginLeft: 433,
       },
-
     },
     root: {
       width: '100%',
@@ -727,7 +726,6 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
     setPage(0);
   };
 
-  console.debug('ssVotesTable gauges:', gauges)
   if (!gauges) {
     return (
       <div className={classes.root}>
@@ -1193,7 +1191,6 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
             ActionsComponent={TablePaginationActions}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-
           />
         </div>
       }
@@ -1217,12 +1214,12 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                   }
                   const labelId = `accordion-${index}`;
 
-                  let sliderValue = sliderValues.find((el) => el.address === row?.address)?.value;
-                  if (sliderValue) {
-                    sliderValue = BigNumber(sliderValue).toNumber(0);
-                  } else {
-                    sliderValue = 0;
-                  }
+              let sliderValue = sliderValues.find((el) => el.address === row?.address)?.value;
+              if (sliderValue) {
+                sliderValue = BigNumber(sliderValue).toNumber(0);
+              } else {
+                sliderValue = 0;
+              }
 
                   return (
                       <>
@@ -1267,54 +1264,53 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                   My Vote %
                                 </div>
 
-
                                 {/*<Close
                             style={{
                               cursor: 'pointer',
                               color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
                             }}
                             onClick={closeModal}/>*/}
-                              </div>
-                            </DialogTitle>
+                        </div>
+                      </DialogTitle>
 
-                            <DialogContent style={{
-                              padding: 30,
-                              paddingBottom: 20,
-                              background: appTheme === 'dark' ? '#24292D' : '#DBE6EC',
-                            }}>
-                              <CustomSlider
-                                  appTheme={appTheme}
-                                  valueLabelDisplay="auto"
-                                  value={sliderValue}
-                                  onChange={(event, value) => {
-                                    onSliderChange(event, value, row);
-                                  }}
-                                  min={-100}
-                                  max={100}
-                                  marks
-                                  step={1}
-                              />
+                      <DialogContent style={{
+                        padding: 30,
+                        paddingBottom: 20,
+                        background: appTheme === 'dark' ? '#24292D' : '#DBE6EC',
+                      }}>
+                        <CustomSlider
+                          appTheme={appTheme}
+                          valueLabelDisplay="auto"
+                          value={sliderValue}
+                          onChange={(event, value) => {
+                            onSliderChange(event, value, row);
+                          }}
+                          min={-100}
+                          max={100}
+                          marks
+                          step={1}
+                        />
 
-                              <Button
-                                  variant="outlined"
-                                  color="primary"
-                                  style={{
-                                    width: 199,
-                                    height: 50,
-                                    marginTop: 20,
-                                    backgroundImage: 'url("/images/ui/btn-simple.svg")',
-                                    border: 'none',
-                                    borderRadius: 0,
-                                    fontWeight: 700,
-                                    fontSize: 16,
-                                    color: appTheme === 'dark' ? '#7F828B' : '#8F5AE8',
-                                  }}
-                                  onClick={closeModal}>
-                                Save & Close
-                              </Button>
-                            </DialogContent>
-                          </div>
-                        </Dialog>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          style={{
+                            width: 199,
+                            height: 50,
+                            marginTop: 20,
+                            backgroundImage: 'url("/images/ui/btn-simple.svg")',
+                            border: 'none',
+                            borderRadius: 0,
+                            fontWeight: 700,
+                            fontSize: 16,
+                            color: appTheme === 'dark' ? '#7F828B' : '#8F5AE8',
+                          }}
+                          onClick={closeModal}>
+                          Save & Close
+                        </Button>
+                      </DialogContent>
+                    </div>
+                  </Dialog>
 
                         <Accordion
                             key={labelId}
@@ -1659,8 +1655,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                                   )
                                                   : null}
 
-                                              {headCell.id === 'myVotes' && formatCurrency(BigNumber(sliderValue).div(100).times(token?.lockValue))}
-                                            </Typography>
+                                    {headCell.id === 'myVotes' && formatCurrency(BigNumber(sliderValue).div(100).times(token?.lockValue))}
+                                  </Typography>
 
                                             <Typography
                                                 className={classes.textSpaced}
@@ -1672,12 +1668,12 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                                   whiteSpace: 'nowrap',
                                                 }}>
 
-                                              {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.gauge?.reserve1))}
-                                              {headCell.id === 'liquidity' && formatCurrency(BigNumber(row?.reserve1))}
-                                              {headCell.id === 'apy' && ''}
-                                              {headCell.id === 'myVotes' && `${formatCurrency(sliderValue)} %`}
-                                            </Typography>
-                                          </div>
+                                    {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.gauge?.reserve1))}
+                                    {headCell.id === 'liquidity' && formatCurrency(BigNumber(row?.reserve1))}
+                                    {headCell.id === 'apy' && ''}
+                                    {headCell.id === 'myVotes' && `${formatCurrency(sliderValue)} %`}
+                                  </Typography>
+                                </div>
 
                                           <div
                                               className={classes.inlineEnd}

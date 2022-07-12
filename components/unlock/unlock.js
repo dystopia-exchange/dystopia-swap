@@ -125,9 +125,9 @@ class Unlock extends Component {
     return (
       <div className={classes.root}>
         <div className={classes.contentContainer}>
-          <Web3ReactProvider getLibrary={getLibrary}>
-            <MyComponent closeModal={closeModal} />
-          </Web3ReactProvider>
+          {/* <Web3ReactProvider getLibrary={getLibrary}> */}
+            {/* <MyComponent closeModal={closeModal}/> */}
+          {/* </Web3ReactProvider> */}
         </div>
       </div>
     );
@@ -221,9 +221,8 @@ function MyComponent(props) {
       style={{
         display: "flex",
         flexWrap: "wrap",
-        justifyContent: "space-between",
+        justifyContent: windowWidth > 530 ? "space-between" : "center",
         alignItems: "center",
-        // justifyContent: windowWidth > 530 ? "space-between" : "center",
       }}
     >
       {Object.keys(connectorsByName).map((name) => {

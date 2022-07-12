@@ -1,3 +1,13 @@
+.headerPageInfo {
+  border: 2px solid #15B525;
+  padding: 0px 8px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  line-height: 0;
+  margin-left: 10px;
+}
+
 .headerContainer {
   z-index: 9 !important;
 
@@ -413,7 +423,7 @@
 
   font-size: 14px !important;
   line-height: 120% !important;
-  font-weight: 400 !important; 
+  font-weight: 400 !important;
 
   color: #E4E9F4 !important;
 }

@@ -542,7 +542,7 @@ const AssetSelect = (
                   onClick={onClose}
                 />
               </div>
-              
+
             </div>
           </DialogTitle>
 
