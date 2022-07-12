@@ -5,7 +5,7 @@
   font-size: 60px;
   line-height: 72px;
   width: 100%;
-  padding-left: 370px;
+  /*padding-left: 370px;*/
 }
 
 .disclaimerContainerWrapper {
@@ -17,29 +17,25 @@
 
 .tableWrapper {
   display: flex;
-  padding-left: 370px;
+  /*padding-left: 370px;*/
   width: 100%;
+  flex-direction: column;
 }
 
 .tableWrapper > div {
   width: 100%;
-  /* black */
-
-  /*margin-top: 20px;*/
-
-  background: #060B17;
-  /* brand */
-
-  border: 1px solid #D3F85A;
-  border-radius: 12px;
+  /*background: #060B17;*/
+  /*border: 1px solid #D3F85A;*/
+  /*border-radius: 12px;*/
   overflow: hidden;
 }
 
 .nftSelect {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 340px;
+  margin-top: 20px;
+  /*position: absolute;*/
+  /*top: 0;*/
+  /*left: 0;*/
+  width: 100%;
 }
 
 .container {
@@ -75,8 +71,8 @@
 
 .toolbarContainer {
   /*margin-bottom: 10px;*/
+  flex-direction: column;
   position: relative;
-  height: 100px;
 }
 
 .searchContainer {
@@ -185,11 +181,12 @@
 }*/
 
 .addButton {
-  width: 340px;
-  height: 96px;
+  margin: 24px 0;
+  width: 100%;
+  height: 72px;
   cursor: pointer;
-  position: absolute;
-  top: 100px;
+  position: relative;
+  /*top: 100px;*/
 }
 
 /*.addButton--light:hover > p {
@@ -226,7 +223,62 @@
   transition: all ease 300ms;
 }
 
+@media (min-width: 806px) {
+  .tableWrapper {
+    flex-direction: row;
+  }
+  .tableWrapper > div {
+    /*width: 100%;*/
+    background: #060B17;
+    border: 1px solid #D3F85A;
+    border-radius: 12px;
+    /*overflow: hidden;*/
+  }
+  .toolbarContainer {
+    height: 100px;
+    flex-direction: row;
+    margin-bottom: 82px;
+  }
+  .nftSelect {
+    margin-top: 0;
+    position: absolute;
+    top: 90px;
+    left: 0;
+    width: 300px;
+  }
+  .addButton {
+    margin: 0;
+    width: 300px;
+    height: 72px;
+    position: absolute;
+    top: 90px;
+    left: 322px;
+  }
+}
 
+@media (min-width: 1920px) {
+  .tableWrapper {
+    padding-left: 433px;
+  }
+  .pageTitle {
+    padding-left: 433px;
+  }
+  .toolbarContainer {
+    margin-bottom: 0;
+  }
+  .nftSelect {
+    top: 0;
+    left: 0;
+    width: 377px;
+  }
+  .addButton {
+    width: 377px;
+    height: 96px;
+    position: absolute;
+    top: 100px;
+    left: 0;
+  }
+}
 
 .actionButtonText--dark {
   /*background: #33284C;*/
@@ -251,9 +303,9 @@
     width: calc(100% - 180px);
   }
 
-  .toolbarContainer {
+/*  .toolbarContainer {
     margin-top: 68px;
-  }
+  }*/
 }
 
 @media (max-width:660px) {

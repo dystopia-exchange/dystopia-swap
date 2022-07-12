@@ -137,22 +137,23 @@ export default function ssRewards() {
       <div
         className={[classes.toolbarContainer, 'g-flex', 'g-flex--align-baseline', 'g-flex--space-between'].join(' ')}
       >
-        <div
-          className={[classes.addButton, classes[`addButton--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}
-          onClick={onClaimAll}
-        >
-          <Typography
-            className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}>
-            Claim All
-          </Typography>
-        </div>
+          <div className={classes.pageTitle}>
+              Rewards
+          </div>
+
+
 
           <div className={classes.nftSelect}>
               {TokenSelect({value: token, options: vestNFTs, symbol: veToken?.symbol, handleChange})}
           </div>
-
-          <div className={classes.pageTitle}>
-              Rewards
+          <div
+              className={[classes.addButton, classes[`addButton--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}
+              onClick={onClaimAll}
+          >
+              <Typography
+                  className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}>
+                  Claim All
+              </Typography>
           </div>
 
         <div className={[classes.disclaimerContainerWrapper, 'g-flex', 'g-flex--align-baseline'].join(' ')}>

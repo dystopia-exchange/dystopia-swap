@@ -248,17 +248,7 @@ export default function ssVotes() {
               }
               onClick={onVote}
             >
-              <Typography
-                style={{
-                  fontWeight: 600,
-                  fontSize: windowWidth < 660 ? 14 : 32,
-                  color: '#060B17',
-                  whiteSpace: "nowrap",
-                    textTransform: 'uppercase',
-                }}
-              >
                 {voteLoading ? `Casting Votes` : `Cast Votes`}
-              </Typography>
               {voteLoading && (
                 <CircularProgress size={10} className={classes.loadingCircle} />
               )}
@@ -284,7 +274,7 @@ export default function ssVotes() {
                   whiteSpace: "nowrap",
                 }}
               >
-                {voteLoading ? `Reseting Votes` : `Reset Votes`}
+                {voteLoading ? (windowWidth >= 806 ? `Reseting Votes` : 'Reseting') : (windowWidth >= 806 ? `Reset Votes` : 'Reset')}
               </Typography>
               {voteLoading && (
                 <CircularProgress size={10} className={classes.loadingCircle} />
@@ -321,9 +311,9 @@ export default function ssVotes() {
             " "
           )}
         >
-          {(windowWidth > 1200 || showSearch) && (
+          {1/*(windowWidth > 1200 || showSearch)*/ && (
             <TextField
-              className={classes.searchInput}
+              className={classes.searchInputRoot}
               variant="outlined"
               fullWidth
               placeholder="Type or paste the address"
@@ -376,7 +366,7 @@ export default function ssVotes() {
             })}
           </div>
 
-          {windowWidth <= 1360 && (
+          {/*{windowWidth <= 1360 && (
             <IconButton
               className={[
                 classes.searchButton,
@@ -387,7 +377,7 @@ export default function ssVotes() {
             >
               <Search />
             </IconButton>
-          )}
+          )}*/}
         </div>
       </div>
 

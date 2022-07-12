@@ -13,7 +13,7 @@
 
 @media (max-width: 575px) {
   .opts {
-    width: calc(100vw - 24px);
+    width: calc(100vw - 40px);
   }
 }
 
