@@ -1121,25 +1121,6 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
           </div>
         )}
 
-        {type === "withdraw" && (
-          <div
-            className={[
-              classes.inputBalanceTextContainer,
-              "g-flex",
-              "g-flex--align-center",
-            ].join(" ")}
-          >
-            <div
-              className={[
-                classes.tokenTextHeader,
-                classes[`tokenTextHeader--${appTheme}`],
-              ].join(" ")}
-            >
-              Liquidity pool
-            </div>
-          </div>
-        )}
-
         <div
           className={`${classes.massiveInputContainer} ${
             (amountError || assetError) && classes.error
@@ -1190,7 +1171,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
             </>
           )}
 
-          {type === "withdraw" && (
+          {/*{type === "withdraw" && (
             <>
               <div
                 className={[
@@ -1210,7 +1191,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                 Variable pool
               </div>
             </>
-          )}
+          )}*/}
         </div>
       </div>
     );
@@ -1499,8 +1480,17 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   classes[`toggleOptionText--${appTheme}`],
                 ].join(" ")}
               >
-                Unstake LP
+                I want to unstake LP
               </Typography>
+
+              <Tooltip title='Select "I want to unstake LP" if you have staked LP in the gauge.'>
+                <div className={classes.tooltipCircle}>
+                  <svg width="10" height="10" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.23914 0.95C2.91914 0.95 3.46247 1.13667 3.86914 1.51C4.28247 1.88333 4.48914 2.39333 4.48914 3.04C4.48914 3.71333 4.27581 4.22 3.84914 4.56C3.42247 4.9 2.85581 5.07 2.14914 5.07L2.10914 5.86H1.11914L1.06914 4.29H1.39914C2.04581 4.29 2.53914 4.20333 2.87914 4.03C3.22581 3.85667 3.39914 3.52667 3.39914 3.04C3.39914 2.68667 3.29581 2.41 3.08914 2.21C2.88914 2.01 2.60914 1.91 2.24914 1.91C1.88914 1.91 1.60581 2.00667 1.39914 2.2C1.19247 2.39333 1.08914 2.66333 1.08914 3.01H0.0191407C0.0191407 2.61 0.109141 2.25333 0.289141 1.94C0.469141 1.62667 0.725807 1.38333 1.05914 1.21C1.39914 1.03667 1.79247 0.95 2.23914 0.95ZM1.59914 8.07C1.39247 8.07 1.21914 8 1.07914 7.86C0.939141 7.72 0.869141 7.54667 0.869141 7.34C0.869141 7.13333 0.939141 6.96 1.07914 6.82C1.21914 6.68 1.39247 6.61 1.59914 6.61C1.79914 6.61 1.96914 6.68 2.10914 6.82C2.24914 6.96 2.31914 7.13333 2.31914 7.34C2.31914 7.54667 2.24914 7.72 2.10914 7.86C1.96914 8 1.79914 8.07 1.59914 8.07Z" fill="#586586"/>
+                  </svg>
+                </div>
+              </Tooltip>
+
             </div>
 
             <div
@@ -1521,11 +1511,29 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   classes[`toggleOptionText--${appTheme}`],
                 ].join(" ")}
               >
-                Remove LP
+                I want to remove LP
               </Typography>
+
+              <Tooltip title='Select "I want to remove LP" if you have unstaked LP and want to remove liquidity.'>
+                <div className={classes.tooltipCircle}>
+                  <svg width="10" height="10" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.23914 0.95C2.91914 0.95 3.46247 1.13667 3.86914 1.51C4.28247 1.88333 4.48914 2.39333 4.48914 3.04C4.48914 3.71333 4.27581 4.22 3.84914 4.56C3.42247 4.9 2.85581 5.07 2.14914 5.07L2.10914 5.86H1.11914L1.06914 4.29H1.39914C2.04581 4.29 2.53914 4.20333 2.87914 4.03C3.22581 3.85667 3.39914 3.52667 3.39914 3.04C3.39914 2.68667 3.29581 2.41 3.08914 2.21C2.88914 2.01 2.60914 1.91 2.24914 1.91C1.88914 1.91 1.60581 2.00667 1.39914 2.2C1.19247 2.39333 1.08914 2.66333 1.08914 3.01H0.0191407C0.0191407 2.61 0.109141 2.25333 0.289141 1.94C0.469141 1.62667 0.725807 1.38333 1.05914 1.21C1.39914 1.03667 1.79247 0.95 2.23914 0.95ZM1.59914 8.07C1.39247 8.07 1.21914 8 1.07914 7.86C0.939141 7.72 0.869141 7.54667 0.869141 7.34C0.869141 7.13333 0.939141 6.96 1.07914 6.82C1.21914 6.68 1.39247 6.61 1.59914 6.61C1.79914 6.61 1.96914 6.68 2.10914 6.82C2.24914 6.96 2.31914 7.13333 2.31914 7.34C2.31914 7.54667 2.24914 7.72 2.10914 7.86C1.96914 8 1.79914 8.07 1.59914 8.07Z" fill="#586586"/>
+                  </svg>
+                </div>
+              </Tooltip>
             </div>
           </div>
         </div>
+
+        {!withdrawAction && (
+            <div className={classes.infoGreenContainer}>
+              <span className={classes.infoContainerWarnGreen}>!</span>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#AAED9F"/>
+              </svg>
+              <span className={classes.infoContainerWarnGreenText}>Please claim any rewards before withdrawing.</span>
+            </div>
+        )}
 
         {withdrawAsset !== null && withdrawAction !== null && (
           <div
@@ -1634,8 +1642,8 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                       ].join(" ")}
                       noWrap
                     >
-                      {parseFloat(withdrawAsset.balance) > 0
-                        ? parseFloat(withdrawAsset.balance).toFixed(10)
+                      {parseFloat(withdrawAsset?.balance) > 0
+                        ? parseFloat(withdrawAsset?.balance).toFixed(10)
                         : "0.00"}
                     </Typography>
                   </div>
@@ -2226,7 +2234,9 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                       classes[`depositHeader--${appTheme}`],
                     ].join(" ")}
                 >
-                  Withdraw LP
+                  {withdrawAction == 'unstake' && 'Unstake LP'}
+                  {withdrawAction == 'remove' && 'Remove LP'}
+                  {!withdrawAction && 'Withdraw LP'}
                 </div>
             )}
 
@@ -2801,7 +2811,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
             <span className={classes.actionButtonText}>
               {withdrawAsset !== null && (
                   <>
-                    {withdrawAction == "" && "Choose the action"}
+                    {withdrawAction == "" && "Select the action"}
 
                     {parseFloat(withdrawAmount) > 0 &&
                         withdrawAction === "unstake" &&
@@ -2811,12 +2821,12 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                         withdrawAction === "remove" &&
                         "Remove LP"}
 
-                    {(parseFloat(withdrawAmount) == 0 || withdrawAmount == "") &&
+                    {(withdrawAction != "" && (parseFloat(withdrawAmount) == 0 || withdrawAmount == "")) &&
                         "Enter Amount"}
                   </>
               )}
 
-              {withdrawAsset === null && "Choose the pair"}
+              {withdrawAsset === null && "Select LP & action"}
             </span>
                   {depositLoading && (
                       <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />

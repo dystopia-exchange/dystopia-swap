@@ -1,3 +1,13 @@
+.tooltipCircle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 100px;
+  border: 1px solid #586586;
+}
+
 .flyPercent {
   position: absolute;
   right: 28px;
@@ -175,6 +185,37 @@ input[type=number].mediumInputAmount {
   display: flex;
 }
 
+.infoGreenContainer {
+  display: flex;
+  width: 100%;
+  background: rgba(6, 11, 23, 0.5);
+  border: 1px solid #AAED9F;
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+  margin-top: 26px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #E4E9F4;
+}
+.infoGreenContainer > svg {
+  margin-top: 2px;
+  min-width: 20px;
+  height: 20px;
+}
+
+.infoContainerWarnGreen {
+  position: absolute;
+  left: 24px;
+  top: 16px;
+  color: #18202f;;
+}
+
+.infoContainerWarnGreenText {
+  padding-left: 18px;
+}
+
 .infoIcon {
   border: 1px solid rgba(128, 128, 128, 0.8);
   color: rgba(128, 128, 128, 0.8);
@@ -205,7 +246,7 @@ input[type=number].mediumInputAmount {
 }
 
 .actionButtonText {
-  text-transform: capitalize !important;
+  text-transform: uppercase !important;
   font-weight: 700 !important;
 }
 
@@ -1111,13 +1152,14 @@ input[type=number].mediumInputAmount {
 }
 
 .toggleOption {
+  height: 56px;
+  padding: 16px;
   display: flex;
   align-items: center;
   flex-basis: auto;
   flex-grow: 1;
   flex-shrink: 1;
   width: 1%;
-  padding: 9px;
   color: #FFFFFF;
   border: 1px solid #86B9D6;
   transition: all ease 300ms;
@@ -1150,8 +1192,8 @@ input[type=number].mediumInputAmount {
   width: 100%;
   text-align: center;
   font-weight: 500 !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
 }
 
 .toggleOption .toggleOptionText {
@@ -2036,11 +2078,20 @@ input[type=number].mediumInputAmount {
   }
 
   .toggleOptionText {
-    font-size: 12px !important;
+    /*font-size: 12px !important;*/
+  }
+
+  .togglesWithdraw > div{
+    flex-wrap: wrap;
+  }
+
+  .toggleOption {
+    width: 100%;
   }
 
   .toggleOption:first-child {
-    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-right: 0;
   }
 
   .tokenSelectInput {
