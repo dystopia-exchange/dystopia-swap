@@ -587,14 +587,15 @@ input[type=number].mediumInputAmount {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 320px;
+  /*margin-left: 320px;*/
   margin-top: -20px;
   z-index: 11;
 }
 
 .swapIconContainerWithdraw {
-  width: 60px;
   height: 60px;
+  width: 100%;
+  padding-left: 15px;
 }
 
 .swapIconContainer {
@@ -655,10 +656,6 @@ input[type=number].mediumInputAmount {
 
 .swapIconContainer--dark:active .swapIconContainerInside {
   background: #5F7285;
-}
-
-.swapIconContainerWithdraw {
-  margin-left: 366px;
 }
 
 .assetSelectMenu {
@@ -1524,7 +1521,7 @@ input[type=number].mediumInputAmount {
 .liqHeader {
   position: relative;
   height: 40px;
-  padding-left: 18px;
+  padding-left: 42px;
   font-weight: 500;
   font-size: 14px;
   line-height: 120%;
@@ -1875,14 +1872,15 @@ input[type=number].mediumInputAmount {
   .swapIconContainerWithdraw {
     position: static;
     background-repeat: no-repeat;
-    margin-left: -206px;
+    /*margin-left: -206px;*/
     margin-top: -16px;
   }
 
   .swapIconContainerWithdraw {
     position: absolute;
-    margin-left: 150px;
+    /*margin-left: 150px;*/
     margin-top: -20px;
+    padding-left: 10px;
   }
 
   .swapIconContainer {
