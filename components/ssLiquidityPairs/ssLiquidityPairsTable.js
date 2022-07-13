@@ -167,7 +167,7 @@ const headCells = [
     id: 'balance',
     numeric: true,
     disablePadding: false,
-    label: 'Wallet',
+    label: 'TVL / APR',
     isHideInDetails: true,
   },
   {
@@ -1002,8 +1002,8 @@ const EnhancedTableToolbar = (props) => {
   const localToggles = getLocalToggles();
 
   const options = [
-    {id: 'balance--asc', label: 'Wallet: high to low'},
-    {id: 'balance--desc', label: 'Wallet: low to high'},
+    {id: 'balance--asc', label: 'TVL: high to low'},
+    {id: 'balance--desc', label: 'TVL: low to high'},
     {id: 'poolBalance--asc', label: 'My Pool: high to low'},
     {id: 'poolBalance--desc', label: 'My Pool: low to high'},
     {id: 'stakedBalance--asc', label: 'My Stake: high to low'},
@@ -1650,7 +1650,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                 display: 'flex',
                                 justifyContent: 'flex-end',
                               }}>
-                              {(row && row.token0 && row.token0.balance) &&
+                              {(row && BigNumber(row.tvl).gt(0)) &&
                                 <div
                                   className={classes.inlineEnd}
                                   style={{
@@ -2484,7 +2484,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   whiteSpace: 'nowrap',
                                 }}>
-                                {BigNumber(row?.tvl).toFixed(2)}
+                                {BigNumber(row?.tvl).gt(0) ? BigNumber(row?.tvl).toFixed(2) : '-'}
                               </Typography>
 
                               <Typography
