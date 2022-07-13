@@ -2282,18 +2282,30 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   <>
                     <div className={classes.amountsContainer}>
 
-                      {renderMassiveInput(
-                          "amount0",
-                          amount0,
-                          amount0Error,
-                          amount0Changed,
-                          withdrawAsset,
-                          null,
-                          withdrawAassetOptions,
-                          onAssetSelect,
-                          amount0Focused,
-                          amount0Ref
-                      )}
+                      {createLP ?
+                          renderMassiveInput(
+                              "amount0",
+                              amount0,
+                              amount0Error,
+                              amount0Changed,
+                              asset0,
+                              null,
+                              assetOptions,
+                              onAssetSelect,
+                              amount0Focused,
+                              amount0Ref
+                          ) : renderMassiveInput(
+                              "amount0",
+                              amount0,
+                              amount0Error,
+                              amount0Changed,
+                              withdrawAsset,
+                              null,
+                              withdrawAassetOptions,
+                              onAssetSelect,
+                              amount0Focused,
+                              amount0Ref
+                          )}
 
                       {createLP && (
                           <>
