@@ -119,11 +119,11 @@ const clientV = createClient({ url: process.env.NEXT_PUBLIC_APIV2 });
 
 const removeDuplicate = (arr) => {
   const assets = arr.reduce((acc, item) => {
-    acc[item.symbol] = item
-    return acc
-  }, {})
-  return Object.values(assets)
-}
+    acc[item.symbol] = item;
+    return acc;
+  }, {});
+  return Object.values(assets);
+};
 
 class Store {
   constructor(dispatcher, emitter) {
@@ -954,7 +954,10 @@ class Store {
         });
 
         this.setStore({ baseAssets: removeDuplicate(baseAssets) });
-        this.emitter.emit(ACTIONS.BASE_ASSETS_UPDATED, removeDuplicate(baseAssets));
+        this.emitter.emit(
+          ACTIONS.BASE_ASSETS_UPDATED,
+          removeDuplicate(baseAssets)
+        );
       }
     } catch (ex) {
       console.log(ex);
@@ -1242,7 +1245,8 @@ class Store {
         for (let j = 0; j < baseAssetsv2.length; j++) {
           if (
             baseAssetsv2[j]?.id?.toLowerCase() !== undefined &&
-            baseAssetsv2[j]?.id?.toLowerCase() == baseAssets[i]?.id?.toLowerCase()
+            baseAssetsv2[j]?.id?.toLowerCase() ==
+              baseAssets[i]?.id?.toLowerCase()
           ) {
             baseAssets[i].derivedETH = baseAssetsv2[j].derivedETH;
           }
@@ -1251,11 +1255,11 @@ class Store {
       const response2 =
         process.env.NEXT_PUBLIC_CHAINID == 80001
           ? await axios.get(
-            `https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`
-          )
+              `https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`
+            )
           : await axios.get(
-            `https://raw.githubusercontent.com/dystopia-exchange/default-token-list/master/tokens/matic.json`
-          );
+              `https://raw.githubusercontent.com/dystopia-exchange/default-token-list/master/tokens/matic.json`
+            );
 
       const nativeFTM = {
         address: CONTRACTS.FTM_ADDRESS,
@@ -1284,7 +1288,7 @@ class Store {
       }
       let localBaseAssets = this.getLocalAssets();
 
-      baseAssets = baseAssets.filter(token => {
+      baseAssets = baseAssets.filter((token) => {
         return token?.id != "0x104592a158490a9228070e0a8e5343b499e125d0";
       });
       let dupAssets = [];
@@ -1298,7 +1302,7 @@ class Store {
       for (var i = dupAssets.length - 1; i >= 0; i--)
         baseAssets.splice(dupAssets[i], 1);
 
-      return removeDuplicate([...baseAssets, ...localBaseAssets])
+      return removeDuplicate([...baseAssets, ...localBaseAssets]);
     } catch (ex) {
       console.log(ex);
       return [];
@@ -5000,7 +5004,6 @@ class Store {
         type: "Warp",
         verb: "Wrap Successful",
         transactions: [
-
           {
             uuid: wrapTXID,
             description: `Wrap ${formatCurrency(fromAmount)} ${
@@ -5076,7 +5079,6 @@ class Store {
         type: "Unwarp",
         verb: "Unwrap Successful",
         transactions: [
-
           {
             uuid: unwrapTXID,
             description: `Unwrap ${formatCurrency(fromAmount)} ${
@@ -6503,7 +6505,7 @@ class Store {
             ]);
 
             const bribeTokens = [
-              { rewardRate: "", rewardAmount: "", address: "" },
+              { rewardRate: "", rewardAmount: "", address: "", symbol: "" },
             ];
             for (let i = 0; i < rewardsListLength; i++) {
               let [bribeTokenAddress] = await multicall.aggregate([
@@ -6514,6 +6516,7 @@ class Store {
                 address: bribeTokenAddress,
                 rewardAmount: 0,
                 rewardRate: 0,
+                symbol: null,
               });
             }
 
@@ -6535,13 +6538,15 @@ class Store {
                   CONTRACTS.ERC20_ABI,
                   bribe.address
                 );
-                const [decimals] = await multicall.aggregate([
+                const [decimals, symbol] = await multicall.aggregate([
                   tokenContract.methods.decimals(),
+                  tokenContract.methods.symbol(),
                 ]);
 
                 bribe.earned = BigNumber(earned)
                   .div(10 ** decimals)
                   .toFixed(parseInt(decimals));
+                bribe.symbol = symbol;
                 return bribe;
               })
             );
