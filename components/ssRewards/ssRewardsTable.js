@@ -1020,7 +1020,7 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                                   return tableCellContent(
                                     formatCurrency(bribe.earned),
                                     null,
-                                    bribe.token?.symbol,
+                                    bribe?.symbol,
                                     null,
                                     bribe && bribe.token && bribe.token.logoURI
                                       ? bribe.token.logoURI
@@ -1433,16 +1433,59 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                                     row.gauge &&
                                     row.gauge.bribesEarned &&
                                     row.gauge.bribesEarned.map((bribe) => {
-                                      return tableCellContent(
-                                        formatCurrency(bribe.earned),
-                                        null,
-                                        bribe.token?.symbol,
-                                        null,
-                                        bribe &&
-                                          bribe.token &&
-                                          bribe.token.logoURI
-                                          ? bribe.token.logoURI
-                                          : `/tokens/unknown-logo--${appTheme}.svg`
+                                      return (
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            justifyContent: "flex-end",
+                                          }}
+                                        >
+                                          <div
+                                            className={classes.inlineEnd}
+                                            style={{
+                                              display: "flex",
+                                              flexDirection: "column",
+                                              alignItems: "flex-end",
+                                            }}
+                                          >
+                                            <div
+                                              style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                              }}
+                                            >
+                                              <Typography
+                                                className={classes.textSpaced}
+                                                style={{
+                                                  fontWeight: 500,
+                                                  fontSize: 14,
+                                                  lineHeight: "120%",
+                                                  color:
+                                                    appTheme === "dark"
+                                                      ? "#ffffff"
+                                                      : "#0A2C40",
+                                                }}
+                                              >
+                                                {formatCurrency(bribe.earned)}
+                                              </Typography>
+                                              &nbsp;
+                                            </div>
+                                            <Typography
+                                              className={`${classes.textSpaced} ${classes.symbol}`}
+                                              style={{
+                                                fontWeight: 400,
+                                                fontSize: 14,
+                                                lineHeight: "120%",
+                                                color:
+                                                  appTheme === "dark"
+                                                    ? "#7C838A"
+                                                    : "#5688A5",
+                                              }}
+                                            >
+                                              {bribe?.symbol}
+                                            </Typography>
+                                          </div>
+                                        </div>
                                       );
                                     })}
 
@@ -1610,9 +1653,9 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                                       >
                                         {headCell.id === "balance" &&
                                           formatCurrency(
-                                            BigNumber(row.gauge.balance)
-                                              .div(row.gauge.totalSupply)
-                                              .times(row.gauge.reserve0)
+                                            BigNumber(row.gauge?.balance)
+                                              .div(row.gauge?.totalSupply)
+                                              .times(row.gauge?.reserve0)
                                           )}
                                       </Typography>
 
@@ -1631,9 +1674,9 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                                       >
                                         {headCell.id === "balance" &&
                                           formatCurrency(
-                                            BigNumber(row.gauge.balance)
-                                              .div(row.gauge.totalSupply)
-                                              .times(row.gauge.reserve1)
+                                            BigNumber(row.gauge?.balance)
+                                              .div(row.gauge?.totalSupply)
+                                              .times(row.gauge?.reserve1)
                                           )}
                                       </Typography>
                                     </div>
@@ -1659,7 +1702,7 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                                               : "#5688A5",
                                         }}
                                       >
-                                        {formatSymbol(row.token0.symbol)}
+                                        {formatSymbol(row.token0?.symbol)}
                                       </Typography>
 
                                       <Typography
@@ -1674,7 +1717,7 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                                               : "#5688A5",
                                         }}
                                       >
-                                        {formatSymbol(row.token1.symbol)}
+                                        {formatSymbol(row.token1?.symbol)}
                                       </Typography>
                                     </div>
                                   </div>
