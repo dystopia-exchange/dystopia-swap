@@ -568,7 +568,8 @@ function Setup() {
     }
 
     return (
-        <div className={classes.depositInfoContainer}>
+        <>
+          <div className={classes.depositInfoContainer}>
           {quote && (
               <div
                   style={{
@@ -808,6 +809,7 @@ function Setup() {
               </div>
           )}
         </div>
+        </>
     );
   };
 
@@ -1006,6 +1008,7 @@ function Setup() {
 
   return (
       <div className={classes.swapInputs}>
+        123
         {renderMassiveInput(
             "From",
             fromAmountValue,
