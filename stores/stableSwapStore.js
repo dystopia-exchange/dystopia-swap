@@ -1,5 +1,13 @@
 import async from "promise-async";
-import {MAX_UINT256, ZERO_ADDRESS, ACTIONS, CONTRACTS, BASE_ASSETS_WHITELIST, BLACK_LIST_TOKENS} from "./constants";
+import {
+  MAX_UINT256,
+  ZERO_ADDRESS,
+  ACTIONS,
+  CONTRACTS,
+  BASE_ASSETS_WHITELIST,
+  BLACK_LIST_TOKENS,
+  ROUTE_ASSETS
+} from "./constants";
 import { v4 as uuidv4 } from "uuid";
 
 import * as moment from "moment";
@@ -1026,7 +1034,7 @@ class Store {
       this.setStore({ veToken: this._getVeTokenBase() });
       this.setStore({ baseAssets: await this._getBaseAssets() });
       this.setStore({ pairs: await this._getPairs() });
-      this.setStore({ routeAssets: await this._getRouteAssets() });
+      this.setStore({ routeAssets: ROUTE_ASSETS });
 
       this.emitter.emit(ACTIONS.UPDATED);
       this.emitter.emit(ACTIONS.CONFIGURED_SS);
@@ -1066,6 +1074,8 @@ class Store {
       for (let i = 0; i < defaultTokenList.data.length; i++) {
         for (let j = 0; j < baseAssets.length; j++) {
           baseAssets[j].address = baseAssets[j].id
+          baseAssets[j].balance = 0
+          baseAssets[j].chainId = 0
 
           if (defaultTokenList.data[i].address.toLowerCase() === baseAssets[j].address.toLowerCase()) {
             baseAssets[j].logoURI = defaultTokenList.data[i].logoURI;
@@ -1105,77 +1115,6 @@ class Store {
     }
   };
 
-  _getRouteAssets = async () => {
-    try {
-      const nativeFTM = {
-        address: CONTRACTS.WFTM_ADDRESS,
-        decimals: CONTRACTS.WFTM_DECIMALS,
-        logoURI: CONTRACTS.WFTM_LOGO,
-        name: CONTRACTS.WFTM_NAME,
-        symbol: CONTRACTS.WFTM_SYMBOL,
-      };
-      const USDC = {
-        address: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
-        decimals: 6,
-        logoURI:
-          "https://raw.githubusercontent.com/sushiswap/icons/master/token/usdc.jpg",
-        name: "USDC",
-        symbol: "USDC",
-      };
-      const USDT = {
-        address: "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
-        decimals: 6,
-        logoURI:
-          "https://raw.githubusercontent.com/sushiswap/icons/master/token/usdt.jpg",
-        name: "(PoS) Tether USD",
-        symbol: "USDT",
-      };
-      const USDPLUS = {
-        address: "0x236eec6359fb44cce8f97e99387aa7f8cd5cde1f",
-        decimals: 6,
-        logoURI:
-          "https://2173993027-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F9HhCCgYexXiRot0OWAJY%2Fuploads%2FQ41zhb0z0oV5WI1zpKEg%2FUSD%2B%20logo.png?alt=media&token=533d9ed9-6904-4f45-82a3-2c9e1060a3b5",
-        name: "USD+",
-        symbol: "USD+",
-      };
-      const FRAX = {
-        address: "0x45c32fa6df82ead1e2ef74d17b76547eddfaff89",
-        decimals: 18,
-        logoURI:
-          "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/polygon/assets/0x45c32fA6DF82ead1e2EF74d17b76547EDdFaFF89/logo.png",
-        name: "FRAX",
-        symbol: "FRAX",
-      };
-      const DAI = {
-        address: "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
-        decimals: 18,
-        logoURI:
-          "https://raw.githubusercontent.com/sushiswap/icons/master/token/dai.jpg",
-        name: "(PoS) Dai Stablecoin",
-        symbol: "DAI",
-      };
-      const WETH = {
-        address: "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
-        decimals: 18,
-        logoURI:
-          "https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg",
-        name: "Wrapped Ether",
-        symbol: "WETH",
-      };
-      const MAI = {
-        address: "0xa3fa99a148fa48d14ed51d610c367c61876997f1",
-        decimals: 18,
-        logoURI:
-          "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/polygon/assets/0xa3Fa99A148fA48D14Ed51d610c367C61876997F1/logo.png",
-        name: "MAI",
-        symbol: "MAI",
-      };
-      return [nativeFTM, USDC, USDPLUS, USDT, MAI, WETH, DAI, FRAX];
-    } catch (ex) {
-      console.log(ex);
-      return [];
-    }
-  };
   _getUSDPRouteAssets = async () => {
     try {
       const USDPlus = {
