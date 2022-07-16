@@ -188,9 +188,7 @@ function Setup() {
         [fromAmountValue, fromAssetValue, toAssetValue]
     );
 
-    const onAssetSelect = (type, value, cb) => {
-        console.log('type, value', type, value)
-
+    const onAssetSelect = (type, value) => {
         if (type === "From") {
             if (value.address === toAssetValue.address) {
                 setToAssetValue(fromAssetValue);
@@ -255,10 +253,6 @@ function Setup() {
                     setToAmountValue(fromAmountValue);
                 }
             }
-        }
-
-        if (cb) {
-            cb()
         }
 
         forceUpdate();
@@ -1016,20 +1010,30 @@ function Setup() {
     return (
         <MultiSwap>
             {({
-                  tokenIn,
-                  setTokenIn,
-                  tokenOut,
-                  setTokenOut,
-                  swapAmount,
-                  setSwapAmount,
-                  slippage,
-                  setSlippage,
-                  allowed,
-                  swap,
-                  doApprove,
-                  doSwap,
-                  doReverseTokens,
+                  tokenIn, setTokenIn,
+                  tokenOut, setTokenOut,
+                  swapAmount, setSwapAmount,
+                  slippage, setSlippage,
+                  allowed, isFetchingAllowance,
+                  swap, isFetchingSwapQuery,
+                  doApprove, isFetchingApprove,
+                  doSwap, isFetchingSwap
             }) => {
+                let buttonLabel = 'Swap'
+                let handleClickButton = doSwap
+                let disableButton = isFetchingAllowance
+                    || isFetchingSwapQuery
+                    || isFetchingApprove
+                    || isFetchingSwap
+                    || !!swapAmount
+
+                if (allowed === false) {
+                    buttonLabel = 'Approve'
+                    handleClickButton = doApprove
+                }
+                if (!!swapAmount === false) {
+                    buttonLabel = 'Enter Amount'
+                }
 
                 return (
                     <>
@@ -1039,12 +1043,17 @@ function Setup() {
                 "From",
                 fromAmountValue,
                 fromAmountError,
-                fromAmountChanged,
+                (event) => {
+                    fromAmountChanged(event)
+                    const value = formatInputAmount(event.target.value.replace(",", "."));
+                    setSwapAmount(value)
+                },
                 fromAssetValue,
                 fromAssetError,
                 fromAssetOptions,
                 (type, value) => {
-                    onAssetSelect(type, value, () => setTokenIn(value.address))
+                    onAssetSelect(type, value)
+                    setTokenIn(value.address)
                 }
             )}
 
@@ -1206,7 +1215,8 @@ function Setup() {
                 toAssetError,
                 toAssetOptions,
                 (type, value) => {
-                    onAssetSelect(type, value, () => setTokenOut(value.address))
+                    onAssetSelect(type, value)
+                    setTokenOut(value.address)
                 }
             )}
 
@@ -1237,7 +1247,15 @@ function Setup() {
                 </div>
             )}
 
-            {renderSmallInput("slippage", slippage, slippageError, onSlippageChanged)}
+            {renderSmallInput(
+                "slippage",
+                slippage,
+                slippageError,
+                (event) => {
+                    console.log('event', event.target.value)
+                    onSlippageChanged(event)
+                }
+            )}
 
             {slippageError && (
                 <div
@@ -1275,17 +1293,15 @@ function Setup() {
             )}
 
             <BtnSwap
-                onClick={
-                    () => {}
-                }
+                onClick={handleClickButton}
                 className={classes.btnSwap}
                 labelClassName={
-                    false
+                    disableButton
                         ? classes["actionButtonText--disabled"]
                         : classes.actionButtonText
                 }
-                isDisabled={false}
-                label={''}
+                isDisabled={disableButton}
+                label={buttonLabel}
             ></BtnSwap>
         </div>
                     </>
