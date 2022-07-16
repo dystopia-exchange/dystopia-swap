@@ -177,18 +177,18 @@ function descendingComparator(a, b, orderBy, sliderValues) {
       return 0;
 
     case "apy":
-      let apyA = a?.gaugebribes.bribeTokens.length
-        ? a?.gaugebribes.bribeTokens
+      let apyA = a?.gaugebribes.length
+        ? a?.gaugebribes
             .map((bribe, idx) => {
-              return BigNumber(bribe.left).toNumber();
+              return BigNumber(bribe.rewardAmount).toNumber();
             })
             .reduce((partialSum, a) => partialSum + a, 0)
         : 0;
 
-      let apyB = b?.gaugebribes.bribeTokens.length
-        ? b?.gaugebribes.bribeTokens
+      let apyB = b?.gaugebribes.length
+        ? b?.gaugebribes
             .map((bribe, idx) => {
-              return BigNumber(bribe.left).toNumber();
+              return BigNumber(bribe.rewardAmount).toNumber();
             })
             .reduce((partialSum, a) => partialSum + a, 0)
         : 0;
@@ -1328,14 +1328,14 @@ export default function EnhancedTable({
                             overflow: "hidden",
                           }}
                         >
-                          {row?.gaugebribes.bribeTokens.length
-                            ? row?.gaugebribes.bribeTokens.map((bribe, idx) => {
+                          {row?.gaugebribes.length
+                            ? row?.gaugebribes.map((bribe, idx) => {
                                 return (
                                   <>
                                     {tableCellContent(
-                                      formatCurrency(bribe.left),
+                                      formatCurrency(bribe.rewardAmount),
                                       null,
-                                      bribe.token.symbol + ` (${Number(bribe.apr).toFixed(1)}% APR)`,
+                                      bribe.symbol,
                                       null
                                     )}
                                   </>
@@ -1900,8 +1900,8 @@ export default function EnhancedTable({
                                           BigNumber(row?.reserve0)
                                         )}
                                       {headCell.id === "apy" &&
-                                      row?.gaugebribes.bribeTokens.length
-                                        ? row?.gaugebribes.bribeTokens.map((bribe, idx) => {
+                                      row?.gaugebribes.length
+                                        ? row?.gaugebribes.map((bribe, idx) => {
                                             return (
                                               <div
                                                 className={[
@@ -1909,7 +1909,9 @@ export default function EnhancedTable({
                                                   "g-flex--align-end",
                                                 ].join(" ")}
                                               >
-                                                {formatCurrency(bribe.left)}
+                                                {formatCurrency(
+                                                  bribe.rewardAmount
+                                                )}
                                               </div>
                                             );
                                           })
@@ -1978,8 +1980,8 @@ export default function EnhancedTable({
                                       {headCell.id === "liquidity" &&
                                         formatSymbol(row.token0.symbol)}
                                       {headCell.id === "apy" &&
-                                      row?.gaugebribes.bribeTokens.length
-                                        ? row?.gaugebribes.bribeTokens.map((bribe, idx) => {
+                                      row?.gaugebribes.length
+                                        ? row?.gaugebribes.map((bribe, idx) => {
                                             return (
                                               <div
                                                 className={[
@@ -1987,7 +1989,7 @@ export default function EnhancedTable({
                                                   "g-flex--align-end",
                                                 ].join(" ")}
                                               >
-                                                {formatSymbol(bribe.token.symbol) + ` (${Number(bribe.apr).toFixed(1)}% APR)`}
+                                                {formatSymbol(bribe.symbol)}
                                               </div>
                                             );
                                           })
