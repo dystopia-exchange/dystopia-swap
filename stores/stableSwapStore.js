@@ -35,34 +35,54 @@ const queryone = `
      name
      symbol
      isStable 
+     reserve0
+     reserve1
+     token0Price
+     token1Price
+     totalSupply
+     
     token0{
      id
       symbol
       name
       decimals
       isWhitelisted
+      derivedETH
     }
+    
     token1{
      id
       symbol
       name
       decimals
       isWhitelisted
+      derivedETH
    }
-   reserve0
-   reserve1
-   token0Price
-   token1Price
-   totalSupply
+   
     gauge{
       id
       totalSupply
+       totalSupplyETH
+       expectAPR
+       voteWeight
+       totalWeight
       bribe{
-        id
+        id     
+      }
+      rewardTokens {
+        apr
       }
     }
+    
     gaugebribes{
       id
+      bribeTokens {
+        apr
+        left
+        token {
+          symbol
+        }        
+      }         
     }
   } 
 }`;
@@ -1138,7 +1158,7 @@ class Store {
 
       // for compatability fill some fields
       for(let i = 0; i < pairsCall.data.pairs.length; i++) {
-        pairsCall.data.pairs[i].address = pairsCall.data.pairs.id;
+        pairsCall.data.pairs[i].address = pairsCall.data.pairs[i].id;
         pairsCall.data.pairs[i].decimals = 18;
         pairsCall.data.pairs[i].rewardType = null;
         if(!!pairsCall.data.pairs[i].gauge) {
@@ -1159,8 +1179,6 @@ class Store {
           pairsCall.data.pairs[i].gauge.bribe.rewardAmount = 0;
 
           pairsCall.data.pairs[i].gaugebribes.address = pairsCall.data.pairs[i].gaugebribes.id;
-          pairsCall.data.pairs[i].gaugebribes.rewardRate = 0;
-          pairsCall.data.pairs[i].gaugebribes.rewardAmount = 0;
         }
         pairsCall.data.pairs[i].token0.address = pairsCall.data.pairs[i].token0.id;
         pairsCall.data.pairs[i].token0.chainId = null;
@@ -1342,20 +1360,9 @@ class Store {
       } else {
         pairs = this.getStore("pairs");
       }
-      const factoryContract = new web3.eth.Contract(
-        CONTRACTS.FACTORY_ABI,
-        CONTRACTS.FACTORY_ADDRESS
-      );
-      const gaugesContract = new web3.eth.Contract(
-        CONTRACTS.VOTER_ABI,
-        CONTRACTS.VOTER_ADDRESS
-      );
 
-      const [allPairsLength, totalWeight] = await Promise.all([
-        factoryContract.methods.allPairsLength().call(),
-        gaugesContract.methods.totalWeight().call(),
-      ]);
-      const responsev2 = await client.query(bundleQuery).toPromise();
+      const ethPrice = parseFloat((await client.query(bundleQuery).toPromise()).data.bundle.ethPrice);
+
       const ps = await Promise.all(
         pairs.map(async (pair) => {
           try {
@@ -1419,20 +1426,11 @@ class Store {
                     .toFixed(parseInt(pair.token1.decimals))
                 : 0;
 
-            const totalVolumeInUsdInReserve0 = BigNumber(
-              pair.reserve0
-            ).multipliedBy(BigNumber(pair.token0.derivedETH));
+            const tvlUsdReserve0 = BigNumber(pair.reserve0).multipliedBy(BigNumber(pair.token0.derivedETH));
+            const tvlUsdReserve1 = BigNumber(pair.reserve1).multipliedBy(BigNumber(pair.token1.derivedETH));
 
-            const totalVolumeInUsdInReserve1 = BigNumber(
-              pair.reserve1
-            ).multipliedBy(BigNumber(pair.token1.derivedETH));
-
-            const totalVolumeInUsd =
-              Number(totalVolumeInUsdInReserve0) +
-              Number(totalVolumeInUsdInReserve1);
-            pair.tvl = BigNumber(totalVolumeInUsd).multipliedBy(
-              parseInt(responsev2.data.bundle.ethPrice)
-            );
+            const totalVolumeInUsd = Number(tvlUsdReserve0) + Number(tvlUsdReserve1);
+            pair.tvl = BigNumber(totalVolumeInUsd).multipliedBy(ethPrice);
             return pair;
           } catch (ex) {
             return pair;
@@ -1441,10 +1439,7 @@ class Store {
       );
       this.setStore({ pairs: ps });
       this.emitter.emit(ACTIONS.UPDATED);
-      let b = await axios.get(
-        "https://api.dexscreener.io/latest/dex/pairs/polygon/0x1e08a5b6a1694bc1a65395db6f4c506498daa349"
-      );
-      let dystprice = BigNumber(b.data.pair.priceUsd);
+
       const ps1 = await Promise.all(
         ps.map(async (pair) => {
           try {
@@ -1454,91 +1449,19 @@ class Store {
                 pair.gauge.address
               );
 
-              const [totalSupply, gaugeBalance, gaugeWeight, rewardRate] =
+              const [gaugeBalance] =
                 await multicall.aggregate([
-                  gaugeContract.methods.totalSupply(),
                   gaugeContract.methods.balanceOf(account.address),
-                  gaugesContract.methods.weights(pair.address),
-                  gaugeContract.methods.rewardRate(CONTRACTS.REWARD_ADDRESS),
                 ]);
 
-              const bribeContract = new web3.eth.Contract(
-                CONTRACTS.BRIBE_ABI,
-                pair.gauge.bribeAddress
-              );
-              const [rewardsListLength] = await multicall.aggregate([
-                bribeContract.methods.rewardTokensLength(),
-              ]);
-
-              if (rewardsListLength > 0) {
-                const bribeTokens = [
-                  { rewardRate: "", rewardAmount: "", address: "" },
-                ];
-                for (let i = 0; i < rewardsListLength; i++) {
-                  let [bribeTokenAddress] = await multicall.aggregate([
-                    bribeContract.methods.rewardTokens(i),
-                  ]);
-
-                  bribeTokens.push({
-                    address: bribeTokenAddress,
-                    rewardAmount: 0,
-                    rewardRate: 0,
-                  });
-                }
-
-                bribeTokens.shift();
-
-                const bribes = await Promise.all(
-                  bribeTokens.map(async (bribe, idx) => {
-                    const [rewardRate] = await Promise.all([
-                      bribeContract.methods.rewardRate(bribe.address).call(),
-                    ]);
-
-                    const tokenContract = new web3.eth.Contract(
-                      CONTRACTS.ERC20_ABI,
-                      bribe.address
-                    );
-
-                    const [decimals, symbol] = await multicall.aggregate([
-                      tokenContract.methods.decimals(),
-                      tokenContract.methods.symbol(),
-                    ]);
-
-                    bribe = { ...bribe, symbol: symbol };
-                    bribe = { ...bribe, decimals: parseInt(decimals) };
-                    bribe = {
-                      ...bribe,
-                      rewardRate: BigNumber(rewardRate)
-                        .div(10 ** 18)
-                        .div(10 ** parseInt(decimals))
-                        .toFixed(parseInt(decimals)),
-                    };
-                    bribe = {
-                      ...bribe,
-                      rewardAmount: BigNumber(rewardRate)
-                        .times(604800)
-                        .div(10 ** 18)
-                        .div(10 ** parseInt(decimals))
-                        .toFixed(parseInt(decimals)),
-                    };
-
-                    return bribe;
-                  })
-                );
-                pair.gaugebribes = bribes;
-              }
               pair.gauge.balance =
-                parseInt(gaugeBalance) != 0
+                parseInt(gaugeBalance) !== 0
                   ? BigNumber(parseInt(gaugeBalance))
                       .div(10 ** 18)
                       .toFixed(18)
                   : 0;
-              pair.gauge.totalSupply =
-                parseInt(totalSupply) != 0
-                  ? BigNumber(parseInt(totalSupply))
-                      .div(10 ** 18)
-                      .toFixed(18)
-                  : 0;
+
+              pair.gauge.totalSupplyUSD = parseFloat(pair.gauge.totalSupply) / ethPrice;
 
               pair.gauge.reserve0 =
                 parseFloat(pair.totalSupply) > 0
@@ -1557,50 +1480,27 @@ class Store {
                     ).toFixed(parseInt(pair.token1.decimals))
                   : "0";
 
-              pair.gauge.weight =
-                parseInt(gaugeWeight) != 0
-                  ? BigNumber(parseInt(gaugeWeight))
-                      .div(10 ** 18)
-                      .toFixed(18)
-                  : 0;
+              pair.gauge.weight = pair.gauge.voteWeight;
               pair.gauge.weightPercent =
-                parseInt(totalWeight) != 0
-                  ? BigNumber(parseInt(gaugeWeight))
+                parseInt(pair.gauge.totalWeight) !== 0
+                  ? BigNumber(parseFloat(pair.gauge.voteWeight))
                       .times(100)
-                      .div(parseInt(totalWeight))
+                      .div(parseFloat(pair.gauge.totalWeight))
                       .toFixed(2)
                   : 0;
 
-              let totalVolumeInUsdInReserve0 = BigNumber(
-                pair.gauge.reserve0
-              ).multipliedBy(BigNumber(pair.token0.derivedETH));
-
-              let totalVolumeInUsdInReserve1 = BigNumber(
-                pair.gauge.reserve1
-              ).multipliedBy(BigNumber(pair.token1.derivedETH));
-              let totalVolumeInUsd =
-                Number(totalVolumeInUsdInReserve0) +
-                Number(totalVolumeInUsdInReserve1);
-
-              totalVolumeInUsd = BigNumber(totalVolumeInUsd).multipliedBy(
-                parseInt(responsev2.data.bundle.ethPrice)
-              );
-
-              const secondsPerYear = 31622400;
-              const valuePerYear = new BigNumber(secondsPerYear)
-                .times(rewardRate)
-                .div(10 ** 18);
-
-              const apr = new BigNumber(valuePerYear)
-                .times(dystprice)
-                .div(totalVolumeInUsd)
-                .div(10 ** 18)
-                .times(100)
-                .toFixed(4);
+              let apr = new BigNumber(0);
+              const rts = pair.gauge.rewardTokens;
+              for(let i = 0; i < rts.length; i++) {
+                apr = apr.plus(BigNumber(parseFloat(rts[i].apr)))
+              }
 
               pair.gauge.apr = apr;
               pair.gauge.boostedApr0 = new BigNumber(0);
               pair.gauge.boostedApr1 = new BigNumber(0);
+
+              const reserve0ETH = BigNumber(parseFloat(pair.reserve0)).times(pair.token0.derivedETH)
+              const reserve1ETH = BigNumber(parseFloat(pair.reserve1)).times(pair.token1.derivedETH)
 
               if (
                 pair.token0.address.toLowerCase() ===
@@ -1613,7 +1513,8 @@ class Store {
                 if (boostedApr0Response.data) {
                   pair.gauge.boostedApr0 = new BigNumber(
                     boostedApr0Response.data
-                  ).times(100);
+                  ).times(100)
+                    .times(reserve0ETH).div(reserve0ETH.plus(reserve1ETH));
                 }
               }
 
@@ -1628,7 +1529,8 @@ class Store {
                 if (boostedApr1Response.data) {
                   pair.gauge.boostedApr1 = new BigNumber(
                     boostedApr1Response.data
-                  ).times(100);
+                  ).times(100)
+                    .times(reserve1ETH).div(reserve0ETH.plus(reserve1ETH));
                 }
               }
 
