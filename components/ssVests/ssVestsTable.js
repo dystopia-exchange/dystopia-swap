@@ -600,6 +600,18 @@ const EnhancedTableToolbar = (props) => {
           {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
         </div>
       )}
+
+      <div
+        className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
+        style={{ marginLeft: 20 }}
+      >
+        <Typography
+          className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
+        >
+          ve APR: {parseInt(props.veToken?.veDistApr)}%
+        </Typography>
+      </div>
+
     </Toolbar>
   );
 };
@@ -675,6 +687,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
     <>
       <EnhancedTableToolbar
         handleRequestSort={handleRequestSort}
+        veToken={veToken}
         setSortDirection={setSortDirection}/>
 
       {windowWidth > 660 &&
