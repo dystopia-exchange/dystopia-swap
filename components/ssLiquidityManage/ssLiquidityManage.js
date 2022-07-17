@@ -1138,6 +1138,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   ? "double"
                   : "single"
               }
+              isManageLocal={type !== "withdraw" && createLP}
             />
           </div>
 
