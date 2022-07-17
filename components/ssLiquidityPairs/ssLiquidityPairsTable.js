@@ -1330,7 +1330,7 @@ export default function EnhancedTable({ pairs, isLoading }) {
   const router = useRouter();
 
   const [order, setOrder] = useState("desc");
-  const [orderBy, setOrderBy] = useState("stakedBalance");
+  const [orderBy, setOrderBy] = useState("tvl");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);

@@ -29,63 +29,60 @@ import {
 import router from "next/router";
 
 const queryone = `
-  query {
-    pairs(first:1000) {
-     id
-     name
-     symbol
-     isStable 
-     reserve0
-     reserve1
-     token0Price
-     token1Price
-     totalSupply
-     
-    token0{
-     id
+{
+  pairs(first: 1000) {
+    id
+    name
+    symbol
+    isStable
+    reserve0
+    reserve1
+    token0Price
+    token1Price
+    totalSupply
+    token0 {
+      id
       symbol
       name
       decimals
       isWhitelisted
       derivedETH
     }
-    
-    token1{
-     id
+    token1 {
+      id
       symbol
       name
       decimals
       isWhitelisted
       derivedETH
-   }
-   
-    gauge{
+    }
+    gauge {
       id
       totalSupply
-       totalSupplyETH
-       expectAPR
-       voteWeight
-       totalWeight
-      bribe{
-        id     
+      totalSupplyETH
+      expectAPR
+      voteWeight
+      totalWeight
+      bribe {
+        id
       }
       rewardTokens {
         apr
       }
     }
-    
-    gaugebribes{
+    gaugebribes {
       id
       bribeTokens {
         apr
         left
         token {
           symbol
-        }        
-      }         
+        }
+      }
     }
-  } 
-}`;
+  }
+}
+`;
 
 const tokensQuery = `
   query {
@@ -105,6 +102,14 @@ const bundleQuery = `
       ethPrice
     }
   }
+`;
+
+const veDistQuery = `
+{
+  veDistEntities {
+    apr
+  }
+}
 `;
 
 const client = createClient({ url: process.env.NEXT_PUBLIC_API });
@@ -364,8 +369,8 @@ class Store {
               .div(10 ** parseInt(govToken.decimals))
               .toFixed(parseInt(govToken.decimals)),
             lockValue: BigNumber(lockValue)
-              .div(10 ** parseInt(veToken.decimals))
-              .toFixed(parseInt(veToken.decimals)),
+              .div(10 ** 18)
+              .toFixed(18),
           };
         })
       );
@@ -429,8 +434,8 @@ class Store {
               .div(10 ** parseInt(govToken.decimals))
               .toFixed(parseInt(govToken.decimals)),
             lockValue: BigNumber(lockValue)
-              .div(10 ** parseInt(veToken.decimals))
-              .toFixed(parseInt(veToken.decimals)),
+              .div(10 ** 18)
+              .toFixed(18),
           };
         }
 
@@ -1051,7 +1056,7 @@ class Store {
   configure = async (payload) => {
     try {
       this.setStore({ govToken: this._getGovTokenBase() });
-      this.setStore({ veToken: this._getVeTokenBase() });
+      this.setStore({ veToken: await this._getVeTokenBase() });
       this.setStore({ baseAssets: await this._getBaseAssets() });
       this.setStore({ pairs: await this._getPairs() });
       this.setStore({ routeAssets: ROUTE_ASSETS });
@@ -1154,7 +1159,10 @@ class Store {
   _getPairs = async () => {
     try {
       const pairsCall = await client.query(queryone).toPromise();
-      // console.log('QUERY ONE RESPONSE', pairsCall);
+      // console.log('QUERY PAIRS ERROR', pairsCall);
+      if(!!pairsCall.error) {
+        console.log('QUERY PAIRS ERROR', pairsCall.error);
+      }
 
       // for compatability fill some fields
       for(let i = 0; i < pairsCall.data.pairs.length; i++) {
@@ -1237,13 +1245,23 @@ class Store {
     };
   };
 
-  _getVeTokenBase = () => {
+  _getVeTokenBase = async () => {
+    let apr = 0;
+    try {
+      const veDistResponse = await client.query(veDistQuery).toPromise();
+      if (!veDistResponse.error && veDistResponse.data.veDistEntities.length !== 0) {
+        apr = veDistResponse.data.veDistEntities[0].apr;
+      }
+    } catch (e) {
+      console.log(e);
+    }
     return {
       address: CONTRACTS.VE_TOKEN_ADDRESS,
       name: CONTRACTS.VE_TOKEN_NAME,
       symbol: CONTRACTS.VE_TOKEN_SYMBOL,
       decimals: CONTRACTS.VE_TOKEN_DECIMALS,
       logoURI: CONTRACTS.VE_TOKEN_LOGO,
+      veDistApr: apr,
     };
   };
 
@@ -1304,8 +1322,8 @@ class Store {
               .div(10 ** govToken.decimals)
               .toFixed(govToken.decimals),
             lockValue: BigNumber(lockValue)
-              .div(10 ** veToken.decimals)
-              .toFixed(veToken.decimals),
+              .div(10 ** 18)
+              .toFixed(18),
           };
         })
       );
@@ -1480,7 +1498,7 @@ class Store {
                     ).toFixed(parseInt(pair.token1.decimals))
                   : "0";
 
-              pair.gauge.weight = pair.gauge.voteWeight;
+              pair.gauge.weight = BigNumber(parseFloat(pair.gauge.voteWeight)).div(10 ** 18);
               pair.gauge.weightPercent =
                 parseInt(pair.gauge.totalWeight) !== 0
                   ? BigNumber(parseFloat(pair.gauge.voteWeight))
@@ -4896,8 +4914,8 @@ class Store {
               .div(10 ** parseInt(govToken.decimals))
               .toFixed(parseInt(govToken.decimals)),
             lockValue: BigNumber(lockValue)
-              .div(10 ** parseInt(veToken.decimals))
-              .toFixed(parseInt(veToken.decimals)),
+              .div(10 ** 18)
+              .toFixed(18),
           };
         })
       );
@@ -6887,8 +6905,8 @@ class Store {
       const token = await this.getBaseAsset(search);
       token.isWhitelisted = isWhitelisted;
       token.listingFee = BigNumber(listingFee)
-        .div(10 ** parseInt(veToken.decimals))
-        .toFixed(parseInt(veToken.decimals));
+        .div(10 ** 18)
+        .toFixed(18);
 
       this.emitter.emit(ACTIONS.SEARCH_WHITELIST_RETURNED, token);
     } catch (ex) {

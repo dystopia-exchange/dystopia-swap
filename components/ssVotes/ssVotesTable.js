@@ -1121,130 +1121,10 @@ export default function EnhancedTable({
                           }}
                         >
                           {tableCellContent(
-                            `${formatCurrency(
-                              BigNumber.sum(
-                                BigNumber(row?.gauge?.apr).div(100).times(40),
-                                BigNumber(row?.gauge?.boostedApr0),
-                                BigNumber(row?.gauge?.boostedApr1)
-                              ),
-                              0
-                            )}→${formatCurrency(
-                              BigNumber.sum(
-                                BigNumber(row?.gauge?.apr),
-                                BigNumber(row?.gauge?.boostedApr0),
-                                BigNumber(row?.gauge?.boostedApr1)
-                              ),
-                              0
-                            )}%`,
-                            null,
-                            <Tooltip
-                              title={
-                                <React.Fragment>
-                                  {
-                                    "APR based on current prices of tokens, token boosted APR and your locked DYST amount."
-                                  }
-                                  <br />
-                                  <br />
-                                  {"Total APR"}
-                                  <br />
-                                  <b>
-                                    {formatCurrency(
-                                      BigNumber.sum(
-                                        BigNumber(row?.gauge?.apr)
-                                          .div(100)
-                                          .times(40),
-                                        BigNumber(row?.gauge?.boostedApr0),
-                                        BigNumber(row?.gauge?.boostedApr1)
-                                      ),
-                                      2
-                                    )}
-                                    %{" - "}
-                                    {formatCurrency(
-                                      BigNumber.sum(
-                                        BigNumber(row?.gauge?.apr),
-                                        BigNumber(row?.gauge?.boostedApr0),
-                                        BigNumber(row?.gauge?.boostedApr1)
-                                      ),
-                                      2
-                                    )}
-                                    %
-                                  </b>
-                                  <br />
-                                  <dl>
-                                    <dt>
-                                      <b>
-                                        {formatCurrency(
-                                          BigNumber.sum(
-                                            BigNumber(row?.gauge?.boostedApr0),
-                                            BigNumber(row?.gauge?.boostedApr1)
-                                          ),
-                                          2
-                                        )}
-                                        %
-                                      </b>{" "}
-                                      Boosted APR
-                                    </dt>
-                                    <dd>
-                                      <b>
-                                        {formatCurrency(
-                                          BigNumber(row?.gauge?.boostedApr0),
-                                          2
-                                        )}
-                                        %
-                                      </b>{" "}
-                                      {row.token0.symbol} APR
-                                    </dd>
-                                    <dd>
-                                      <b>
-                                        {formatCurrency(
-                                          BigNumber(row?.gauge?.boostedApr1),
-                                          2
-                                        )}
-                                        %
-                                      </b>{" "}
-                                      {row.token1.symbol} APR
-                                    </dd>
-                                    <dt>
-                                      <b>
-                                        {formatCurrency(
-                                          BigNumber(row?.gauge?.apr)
-                                            .div(100)
-                                            .times(40),
-                                          2
-                                        )}
-                                        %
-                                      </b>{" "}
-                                      Min staking APR
-                                    </dt>
-                                    <dd>
-                                      <b>
-                                        {formatCurrency(
-                                          BigNumber(row?.gauge?.apr)
-                                            .div(100)
-                                            .times(40),
-                                          2
-                                        )}
-                                        %
-                                      </b>{" "}
-                                      Min APR
-                                    </dd>
-                                    <dd>
-                                      <b>
-                                        {formatCurrency(
-                                          BigNumber(row?.gauge?.apr),
-                                          2
-                                        )}
-                                        %
-                                      </b>{" "}
-                                      Max APR
-                                    </dd>
-                                  </dl>
-                                </React.Fragment>
-                              }
-                            >
-                              <QuizIcon fontSize="small" />
-                            </Tooltip>,
-                            null
+                            `${formatCurrency(BigNumber(row?.gauge?.apr), 0)}%`,
+                            `${formatCurrency(BigNumber(row?.gauge?.expectAPR), 0)}%`,
+                            'Current',
+                            'Expected'
                           )}
                         </TableCell>
 
@@ -1740,7 +1620,7 @@ export default function EnhancedTable({
                                       whiteSpace: "nowrap",
                                     }}
                                   >
-                                    {formatCurrency(row?.gauge?.weight)} %
+                                    {formatCurrency(row?.gauge?.weightPercent)} %
                                   </Typography>
                                 </div>
                               </div>
@@ -1872,23 +1752,7 @@ export default function EnhancedTable({
                                           "($ 0a)"
                                         )} `}
                                       {headCell.id === "apr" &&
-                                        `${formatCurrency(
-                                          BigNumber.sum(
-                                            BigNumber(row?.gauge?.apr)
-                                              .div(100)
-                                              .times(40),
-                                            BigNumber(row?.gauge?.boostedApr0),
-                                            BigNumber(row?.gauge?.boostedApr1)
-                                          ),
-                                          0
-                                        )}→${formatCurrency(
-                                          BigNumber.sum(
-                                            BigNumber(row?.gauge?.apr),
-                                            BigNumber(row?.gauge?.boostedApr0),
-                                            BigNumber(row?.gauge?.boostedApr1)
-                                          ),
-                                          0
-                                        )} %`}
+                                        `${formatCurrency(BigNumber(row?.gauge?.apr), 0)}%`}
                                       {headCell.id === "balance" &&
                                         formatCurrency(
                                           BigNumber(row?.gauge?.balance)
@@ -1909,7 +1773,7 @@ export default function EnhancedTable({
                                                   "g-flex--align-end",
                                                 ].join(" ")}
                                               >
-                                                {formatCurrency(bribe.left)}
+                                                {`${Number(bribe.apr).toFixed(1)}% APR`}
                                               </div>
                                             );
                                           })
@@ -1987,7 +1851,7 @@ export default function EnhancedTable({
                                                   "g-flex--align-end",
                                                 ].join(" ")}
                                               >
-                                                {formatSymbol(bribe.token.symbol) + ` (${Number(bribe.apr).toFixed(1)}% APR)`}
+                                                {formatSymbol(bribe.token.symbol)}
                                               </div>
                                             );
                                           })
