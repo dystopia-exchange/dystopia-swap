@@ -40,6 +40,7 @@ const queryone = `
     token0Price
     token1Price
     totalSupply
+    reserveUSD
     token0 {
       id
       symbol
@@ -1408,10 +1409,10 @@ class Store {
               true
             );
 
-            const [totalSupply, reserves, balanceOf, claimable0, claimable1] =
+            const [balanceOf, claimable0, claimable1] =
               await multicall.aggregate([
-                pairContract.methods.totalSupply(),
-                pairContract.methods.getReserves(),
+                // pairContract.methods.totalSupply(),
+                // pairContract.methods.getReserves(),
                 pairContract.methods.balanceOf(account.address),
                 pairContract.methods.claimable0(account.address),
                 pairContract.methods.claimable1(account.address),
@@ -1422,33 +1423,14 @@ class Store {
             pair.balance = BigNumber(balanceOf)
               .div(10 ** pair.decimals)
               .toFixed(parseInt(pair.decimals));
-            pair.totalSupply = BigNumber(totalSupply)
-              .div(10 ** pair.decimals)
-              .toFixed(parseInt(pair.decimals));
-            pair.reserve0 = BigNumber(reserves[0])
+            pair.claimable0 = BigNumber(claimable0)
               .div(10 ** parseInt(pair.token0.decimals))
               .toFixed(parseInt(pair.token0.decimals));
-            pair.reserve1 = BigNumber(reserves[1])
+            pair.claimable1 = BigNumber(claimable1)
               .div(10 ** parseInt(pair.token1.decimals))
               .toFixed(parseInt(pair.token1.decimals));
-            pair.claimable0 =
-              claimable0 != 0
-                ? BigNumber(claimable0)
-                    .div(10 ** parseInt(pair.token0.decimals))
-                    .toFixed(parseInt(pair.token0.decimals))
-                : 0;
-            pair.claimable1 =
-              claimable1 != 0
-                ? BigNumber(claimable1)
-                    .div(10 ** parseInt(pair.token1.decimals))
-                    .toFixed(parseInt(pair.token1.decimals))
-                : 0;
 
-            const tvlUsdReserve0 = BigNumber(pair.reserve0).multipliedBy(BigNumber(pair.token0.derivedETH));
-            const tvlUsdReserve1 = BigNumber(pair.reserve1).multipliedBy(BigNumber(pair.token1.derivedETH));
-
-            const totalVolumeInUsd = Number(tvlUsdReserve0) + Number(tvlUsdReserve1);
-            pair.tvl = BigNumber(totalVolumeInUsd).multipliedBy(ethPrice);
+            pair.tvl = pair.reserveUSD;
             return pair;
           } catch (ex) {
             return pair;
