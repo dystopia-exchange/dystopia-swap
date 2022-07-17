@@ -1382,6 +1382,14 @@ class Store {
 
       const ethPrice = parseFloat((await client.query(bundleQuery).toPromise()).data.bundle.ethPrice);
 
+      const voterContract = new web3.eth.Contract(
+        CONTRACTS.VOTER_ABI,
+        CONTRACTS.VOTER_ADDRESS
+      );
+      const totalWeight = BigNumber(await voterContract.methods.totalWeight().call())
+        // todo cahnge later
+        // .div(10 ** 18)
+
       const ps = await Promise.all(
         pairs.map(async (pair) => {
           try {
@@ -1485,7 +1493,7 @@ class Store {
                 parseInt(pair.gauge.totalWeight) !== 0
                   ? BigNumber(parseFloat(pair.gauge.voteWeight))
                       .times(100)
-                      .div(parseFloat(pair.gauge.totalWeight))
+                      .div(totalWeight)
                       .toFixed(2)
                   : 0;
 
