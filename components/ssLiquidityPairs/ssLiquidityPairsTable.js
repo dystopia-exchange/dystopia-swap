@@ -234,12 +234,12 @@ const headCells = [
     label: "Total Pool Amount",
     isHideInDetails: true,
   },
-  {
-    id: "stakedAmount",
-    numeric: true,
-    disablePadding: false,
-    label: "Total Pool Staked",
-  },
+  // {
+  //   id: "stakedAmount",
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: "Total Pool Staked",
+  // },
   // {
   //   id: 'apy',
   //   numeric: true,
@@ -2393,7 +2393,7 @@ export default function EnhancedTable({ pairs, isLoading }) {
                                   whiteSpace: "nowrap",
                                 }}
                               >
-                                Gauge not available
+                                No gauge
                               </Typography>
                             </TableCell>
                           )}
@@ -2546,202 +2546,202 @@ export default function EnhancedTable({ pairs, isLoading }) {
                             </div>
                           </TableCell>
 
-                          {row?.gauge?.address && (
-                            <TableCell
-                              className={[
-                                classes.cell,
-                                classes.hiddenMobile,
-                              ].join(" ")}
-                              style={{
-                                background:
-                                  appTheme === "dark" ? "#151718" : "#DBE6EC",
-                                borderBottom: `1px solid ${
-                                  appTheme === "dark" ? "#2D3741" : "#CFE5F2"
-                                }`,
-                              }}
-                              align="right"
-                            >
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "flex-end",
-                                }}
-                              >
-                                {row &&
-                                  row.gauge &&
-                                  row.gauge.reserve0 &&
-                                  row.token0 && (
-                                    <div
-                                      className={classes.inlineEnd}
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        alignItems: "flex-end",
-                                      }}
-                                    >
-                                      <Typography
-                                        className={classes.textSpaced}
-                                        style={{
-                                          fontWeight: 500,
-                                          fontSize: 14,
-                                          lineHeight: "120%",
-                                          color:
-                                            appTheme === "dark"
-                                              ? "#ffffff"
-                                              : "#0A2C40",
-                                          whiteSpace: "nowrap",
-                                        }}
-                                      >
-                                        {formatCurrency(row.gauge.reserve0)}
-                                      </Typography>
+                          {/*{row?.gauge?.address && (*/}
+                          {/*  <TableCell*/}
+                          {/*    className={[*/}
+                          {/*      classes.cell,*/}
+                          {/*      classes.hiddenMobile,*/}
+                          {/*    ].join(" ")}*/}
+                          {/*    style={{*/}
+                          {/*      background:*/}
+                          {/*        appTheme === "dark" ? "#151718" : "#DBE6EC",*/}
+                          {/*      borderBottom: `1px solid ${*/}
+                          {/*        appTheme === "dark" ? "#2D3741" : "#CFE5F2"*/}
+                          {/*      }`,*/}
+                          {/*    }}*/}
+                          {/*    align="right"*/}
+                          {/*  >*/}
+                              {/*<div*/}
+                              {/*  style={{*/}
+                              {/*    display: "flex",*/}
+                              {/*    justifyContent: "flex-end",*/}
+                              {/*  }}*/}
+                              {/*>*/}
+                              {/*  {row &&*/}
+                              {/*    row.gauge &&*/}
+                              {/*    row.gauge.reserve0 &&*/}
+                              {/*    row.token0 && (*/}
+                              {/*      <div*/}
+                              {/*        className={classes.inlineEnd}*/}
+                              {/*        style={{*/}
+                              {/*          display: "flex",*/}
+                              {/*          flexDirection: "column",*/}
+                              {/*          alignItems: "flex-end",*/}
+                              {/*        }}*/}
+                              {/*      >*/}
+                              {/*        <Typography*/}
+                              {/*          className={classes.textSpaced}*/}
+                              {/*          style={{*/}
+                              {/*            fontWeight: 500,*/}
+                              {/*            fontSize: 14,*/}
+                              {/*            lineHeight: "120%",*/}
+                              {/*            color:*/}
+                              {/*              appTheme === "dark"*/}
+                              {/*                ? "#ffffff"*/}
+                              {/*                : "#0A2C40",*/}
+                              {/*            whiteSpace: "nowrap",*/}
+                              {/*          }}*/}
+                              {/*        >*/}
+                              {/*          {formatCurrency(row.gauge.reserve0)}*/}
+                              {/*        </Typography>*/}
 
-                                      <Typography
-                                        className={classes.textSpaced}
-                                        style={{
-                                          fontWeight: 500,
-                                          fontSize: 14,
-                                          lineHeight: "120%",
-                                          color:
-                                            appTheme === "dark"
-                                              ? "#ffffff"
-                                              : "#0A2C40",
-                                          whiteSpace: "nowrap",
-                                        }}
-                                      >
-                                        {formatCurrency(row.gauge.reserve1)}
-                                      </Typography>
-                                    </div>
-                                  )}
-                                {!(
-                                  row &&
-                                  row.gauge &&
-                                  row.gauge.reserve0 &&
-                                  row.token0
-                                ) && (
-                                  <div
-                                    className={classes.inlineEnd}
-                                    style={{
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      alignItems: "flex-end",
-                                      paddingLeft: 10,
-                                    }}
-                                  >
-                                    <Skeleton
-                                      variant="rect"
-                                      width={120}
-                                      height={16}
-                                      style={{
-                                        marginTop: "1px",
-                                        marginBottom: "1px",
-                                      }}
-                                    />
-                                  </div>
-                                )}
-                                {row &&
-                                  row.gauge &&
-                                  row.gauge.reserve1 &&
-                                  row.token1 && (
-                                    <div
-                                      className={classes.inlineEnd}
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        alignItems: "flex-end",
-                                        paddingLeft: 10,
-                                      }}
-                                    >
-                                      <Typography
-                                        className={`${classes.textSpaced} ${classes.symbol}`}
-                                        style={{
-                                          fontWeight: 400,
-                                          fontSize: 14,
-                                          lineHeight: "120%",
-                                          color:
-                                            appTheme === "dark"
-                                              ? "#7C838A"
-                                              : "#5688A5",
-                                        }}
-                                      >
-                                        {formatSymbol(row.token0.symbol)}
-                                      </Typography>
+                              {/*        <Typography*/}
+                              {/*          className={classes.textSpaced}*/}
+                              {/*          style={{*/}
+                              {/*            fontWeight: 500,*/}
+                              {/*            fontSize: 14,*/}
+                              {/*            lineHeight: "120%",*/}
+                              {/*            color:*/}
+                              {/*              appTheme === "dark"*/}
+                              {/*                ? "#ffffff"*/}
+                              {/*                : "#0A2C40",*/}
+                              {/*            whiteSpace: "nowrap",*/}
+                              {/*          }}*/}
+                              {/*        >*/}
+                              {/*          {formatCurrency(row.gauge.reserve1)}*/}
+                              {/*        </Typography>*/}
+                              {/*      </div>*/}
+                              {/*    )}*/}
+                              {/*  {!(*/}
+                              {/*    row &&*/}
+                              {/*    row.gauge &&*/}
+                              {/*    row.gauge.reserve0 &&*/}
+                              {/*    row.token0*/}
+                              {/*  ) && (*/}
+                              {/*    <div*/}
+                              {/*      className={classes.inlineEnd}*/}
+                              {/*      style={{*/}
+                              {/*        display: "flex",*/}
+                              {/*        flexDirection: "column",*/}
+                              {/*        alignItems: "flex-end",*/}
+                              {/*        paddingLeft: 10,*/}
+                              {/*      }}*/}
+                              {/*    >*/}
+                              {/*      <Skeleton*/}
+                              {/*        variant="rect"*/}
+                              {/*        width={120}*/}
+                              {/*        height={16}*/}
+                              {/*        style={{*/}
+                              {/*          marginTop: "1px",*/}
+                              {/*          marginBottom: "1px",*/}
+                              {/*        }}*/}
+                              {/*      />*/}
+                              {/*    </div>*/}
+                              {/*  )}*/}
+                              {/*  {row &&*/}
+                              {/*    row.gauge &&*/}
+                              {/*    row.gauge.reserve1 &&*/}
+                              {/*    row.token1 && (*/}
+                              {/*      <div*/}
+                              {/*        className={classes.inlineEnd}*/}
+                              {/*        style={{*/}
+                              {/*          display: "flex",*/}
+                              {/*          flexDirection: "column",*/}
+                              {/*          alignItems: "flex-end",*/}
+                              {/*          paddingLeft: 10,*/}
+                              {/*        }}*/}
+                              {/*      >*/}
+                              {/*        <Typography*/}
+                              {/*          className={`${classes.textSpaced} ${classes.symbol}`}*/}
+                              {/*          style={{*/}
+                              {/*            fontWeight: 400,*/}
+                              {/*            fontSize: 14,*/}
+                              {/*            lineHeight: "120%",*/}
+                              {/*            color:*/}
+                              {/*              appTheme === "dark"*/}
+                              {/*                ? "#7C838A"*/}
+                              {/*                : "#5688A5",*/}
+                              {/*          }}*/}
+                              {/*        >*/}
+                              {/*          {formatSymbol(row.token0.symbol)}*/}
+                              {/*        </Typography>*/}
 
-                                      <Typography
-                                        className={`${classes.textSpaced} ${classes.symbol}`}
-                                        style={{
-                                          fontWeight: 400,
-                                          fontSize: 14,
-                                          lineHeight: "120%",
-                                          color:
-                                            appTheme === "dark"
-                                              ? "#7C838A"
-                                              : "#5688A5",
-                                        }}
-                                      >
-                                        {formatSymbol(row.token1.symbol)}
-                                      </Typography>
-                                    </div>
-                                  )}
-                                {!(
-                                  row &&
-                                  row.gauge &&
-                                  row.gauge.reserve1 &&
-                                  row.token1
-                                ) && (
-                                  <div
-                                    className={classes.inlineEnd}
-                                    style={{
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      alignItems: "flex-end",
-                                      paddingLeft: 10,
-                                    }}
-                                  >
-                                    <Skeleton
-                                      variant="rect"
-                                      width={120}
-                                      height={16}
-                                      style={{
-                                        marginTop: "1px",
-                                        marginBottom: "1px",
-                                      }}
-                                    />
-                                  </div>
-                                )}
-                              </div>
-                            </TableCell>
-                          )}
+                              {/*        <Typography*/}
+                              {/*          className={`${classes.textSpaced} ${classes.symbol}`}*/}
+                              {/*          style={{*/}
+                              {/*            fontWeight: 400,*/}
+                              {/*            fontSize: 14,*/}
+                              {/*            lineHeight: "120%",*/}
+                              {/*            color:*/}
+                              {/*              appTheme === "dark"*/}
+                              {/*                ? "#7C838A"*/}
+                              {/*                : "#5688A5",*/}
+                              {/*          }}*/}
+                              {/*        >*/}
+                              {/*          {formatSymbol(row.token1.symbol)}*/}
+                              {/*        </Typography>*/}
+                              {/*      </div>*/}
+                              {/*    )}*/}
+                              {/*  {!(*/}
+                              {/*    row &&*/}
+                              {/*    row.gauge &&*/}
+                              {/*    row.gauge.reserve1 &&*/}
+                              {/*    row.token1*/}
+                              {/*  ) && (*/}
+                              {/*    <div*/}
+                              {/*      className={classes.inlineEnd}*/}
+                              {/*      style={{*/}
+                              {/*        display: "flex",*/}
+                              {/*        flexDirection: "column",*/}
+                              {/*        alignItems: "flex-end",*/}
+                              {/*        paddingLeft: 10,*/}
+                              {/*      }}*/}
+                              {/*    >*/}
+                              {/*      <Skeleton*/}
+                              {/*        variant="rect"*/}
+                              {/*        width={120}*/}
+                              {/*        height={16}*/}
+                              {/*        style={{*/}
+                              {/*          marginTop: "1px",*/}
+                              {/*          marginBottom: "1px",*/}
+                              {/*        }}*/}
+                              {/*      />*/}
+                              {/*    </div>*/}
+                              {/*  )}*/}
+                              {/*</div>*/}
+                          {/*  </TableCell>*/}
+                          {/*)}*/}
 
-                          {!row?.gauge?.address && (
-                            <TableCell
-                              className={[
-                                classes.cell,
-                                classes.hiddenMobile,
-                              ].join(" ")}
-                              style={{
-                                background:
-                                  appTheme === "dark" ? "#151718" : "#DBE6EC",
-                                borderBottom: `1px solid ${
-                                  appTheme === "dark" ? "#2D3741" : "#CFE5F2"
-                                }`,
-                              }}
-                              align="right"
-                            >
-                              <Typography
-                                className={classes.textSpaced}
-                                style={{
-                                  fontWeight: 500,
-                                  fontSize: 14,
-                                  lineHeight: "120%",
-                                  color:
-                                    appTheme === "dark" ? "#ffffff" : "#0A2C40",
-                                  whiteSpace: "nowrap",
-                                }}
-                              >
-                                Gauge not available
-                              </Typography>
-                            </TableCell>
-                          )}
+                          {/*{!row?.gauge?.address && (*/}
+                          {/*  <TableCell*/}
+                          {/*    className={[*/}
+                          {/*      classes.cell,*/}
+                          {/*      classes.hiddenMobile,*/}
+                          {/*    ].join(" ")}*/}
+                          {/*    style={{*/}
+                          {/*      background:*/}
+                          {/*        appTheme === "dark" ? "#151718" : "#DBE6EC",*/}
+                          {/*      borderBottom: `1px solid ${*/}
+                          {/*        appTheme === "dark" ? "#2D3741" : "#CFE5F2"*/}
+                          {/*      }`,*/}
+                          {/*    }}*/}
+                          {/*    align="right"*/}
+                          {/*  >*/}
+                          {/*    <Typography*/}
+                          {/*      className={classes.textSpaced}*/}
+                          {/*      style={{*/}
+                          {/*        fontWeight: 500,*/}
+                          {/*        fontSize: 14,*/}
+                          {/*        lineHeight: "120%",*/}
+                          {/*        color:*/}
+                          {/*          appTheme === "dark" ? "#ffffff" : "#0A2C40",*/}
+                          {/*        whiteSpace: "nowrap",*/}
+                          {/*      }}*/}
+                          {/*    >*/}
+                          {/*      No gauge*/}
+                          {/*    </Typography>*/}
+                          {/*  </TableCell>*/}
+                          {/*)}*/}
 
                           <TableCell
                             className={classes.cell}
@@ -3401,13 +3401,13 @@ export default function EnhancedTable({ pairs, isLoading }) {
                                     )}
                                   {headCell.id === "stakedBalance" &&
                                     !row?.gauge?.address &&
-                                    "Gauge not available"}
+                                    "No gauge"}
                                   {headCell.id === "stakedAmount" &&
                                     row?.gauge?.address &&
                                     formatCurrency(row.gauge.reserve0)}
-                                  {headCell.id === "stakedAmount" &&
-                                    !row?.gauge?.address &&
-                                    "Gauge not available"}
+                                  {/*{headCell.id === "stakedAmount" &&*/}
+                                  {/*  !row?.gauge?.address &&*/}
+                                  {/*  "No gauge"}*/}
                                 </Typography>
 
                                 <Typography
@@ -3441,13 +3441,13 @@ export default function EnhancedTable({ pairs, isLoading }) {
                                     )}
                                   {headCell.id === "stakedBalance" &&
                                     !row?.gauge?.address &&
-                                    "Gauge not available"}
+                                    "No gauge"}
                                   {headCell.id === "stakedAmount" &&
                                     row?.gauge?.address &&
                                     formatCurrency(row.gauge.reserve1)}
-                                  {headCell.id === "stakedAmount" &&
-                                    !row?.gauge?.address &&
-                                    "Gauge not available"}
+                                  {/*{headCell.id === "stakedAmount" &&*/}
+                                  {/*  !row?.gauge?.address &&*/}
+                                  {/*  "No gauge"}*/}
                                 </Typography>
                               </div>
 
