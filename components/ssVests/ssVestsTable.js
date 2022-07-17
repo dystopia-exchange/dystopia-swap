@@ -608,7 +608,7 @@ const EnhancedTableToolbar = (props) => {
         <Typography
           className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
         >
-          ve APR: {parseInt(props.veToken?.veDistApr)}%
+          NFT APR: {parseInt(props.veToken?.veDistApr)}%
         </Typography>
       </div>
 
