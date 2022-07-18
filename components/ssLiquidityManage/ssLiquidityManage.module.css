@@ -1010,7 +1010,7 @@ input[type=number].mediumInputAmount {
   /*position: absolute;*/
   display: none;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   width: 152px;
   height: 52px;
   margin-left: -95px;
@@ -1415,7 +1415,7 @@ input[type=number].mediumInputAmount {
   color: #E4E9F4;
   position: relative;
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
   padding: 16px 18px 12px;
