@@ -14,14 +14,36 @@
   /*padding: 24px;*/
 }
 
-/*.tokenSelect--dark {
-  background: #151718 !important;
-  border: 1px solid #5F7285 !important;
-}*/
+@media (max-width: 767px) {
+  .tokenSelect {
+    height: 48px;
+  }
+}
+
+.placeholder {
+  padding: 10px;
+  padding-right: 30px;
+  font-weight: 500;
+  font-size: 18px;
+  color: #5F7285;
+}
+
+@media (max-width: 767px) {
+  .placeholder {
+    padding: 0;
+    font-size: 14px;
+  }
+}
 
 .tokenSelect > svg,
 .tokenSelect--dark > svg {
   color: #5F7285 !important;
+}
+
+@media (max-width: 767px) {
+  .tokenSelect > svg {
+    font-size: 15px;
+  }
 }
 
 .tokenSelect > fieldset,
@@ -30,15 +52,15 @@
 }
 
 .tokenSelectInput {
-  padding: 3px !important;
+  padding: 20px 34px 20px 20px !important;
   border: none !important;
   border-radius: 0 !important;
 }
 
-.tokenSelectInput--dark {
-  padding: 20px 34px 20px 20px !important;
-  border: none !important;
-  border-radius: 0 !important;
+@media (max-width: 767px) {
+  .tokenSelectInput {
+    padding: 16px !important;
+  }
 }
 
 .menuOption {
