@@ -237,7 +237,7 @@ const merge = () => {
                     </div>
                     <div className={classes.newNftValue}>
                       <p className={classes.expiry}>
-                        {Number(option.lockValue).toFixed(2)} veNFT
+                        {Number(option.lockAmount).toFixed(2)} DYST
                       </p>
                       <p className={classes.expiry}>
                         {moment.unix(option.lockEnds).format("YYYY-MM-DD")}
@@ -316,7 +316,7 @@ const merge = () => {
                     </div>
                     <div className={classes.newNftValue}>
                       <p className={classes.expiry}>
-                        {Number(option.lockValue).toFixed(2)} veNFT
+                        {Number(option.lockAmount).toFixed(2)} DYST
                       </p>
                       <p className={classes.expiry}>
                         {moment.unix(option.lockEnds).format("YYYY-MM-DD")}
@@ -396,8 +396,8 @@ const merge = () => {
                   <div className={classes.newNftValue}>
                     <p className={classes.expiry}>
                       {(
-                        Number(firstSelectedNft.lockValue) +
-                        Number(secondSelectedNft.lockValue)
+                        Number(firstSelectedNft.lockAmount) +
+                        Number(secondSelectedNft.lockAmount)
                       ).toFixed(2)}
                     </p>
                     <p className={classes.expiry}>
@@ -418,8 +418,8 @@ const merge = () => {
                   <div className={classes.newNftValue}>
                     <p className={classes.expiry}>
                       {(
-                        Number(firstSelectedNft.lockValue) +
-                        Number(secondSelectedNft.lockValue)
+                        Number(firstSelectedNft.lockAmount) +
+                        Number(secondSelectedNft.lockAmount)
                       ).toFixed(2)}
                     </p>
                     <p className={classes.expiry}>

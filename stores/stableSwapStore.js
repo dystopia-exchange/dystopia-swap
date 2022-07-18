@@ -28,7 +28,7 @@ import {
 } from "./constants/contracts";
 import router from "next/router";
 
-const queryone = `
+const pairsQuery = `
 {
   pairs(first: 1000) {
     id
@@ -109,6 +109,21 @@ const veDistQuery = `
 {
   veDistEntities {
     apr
+  }
+}
+`;
+
+const veQuery = `
+query ve($id: ID!) {
+  veNFTEntities(where: {id: $id}) {
+    gauges {
+      gauge {
+        id
+      }
+    }
+    bribes {
+      id
+    }    
   }
 }
 `;
@@ -1159,7 +1174,7 @@ class Store {
 
   _getPairs = async () => {
     try {
-      const pairsCall = await client.query(queryone).toPromise();
+      const pairsCall = await client.query(pairsQuery).toPromise();
       // console.log('QUERY PAIRS ERROR', pairsCall);
       if(!!pairsCall.error) {
         console.log('QUERY PAIRS ERROR', pairsCall.error);
@@ -2607,7 +2622,7 @@ class Store {
 
   updatePairsCall = async (web3, account) => {
     try {
-      const response = await client.query(queryone).toPromise();
+      const response = await client.query(pairsQuery).toPromise();
       const pairsCall = response;
       this.setStore({ pairs: pairsCall.data.pairs });
 
@@ -5269,22 +5284,18 @@ class Store {
   withdrawVest = async (payload) => {
     try {
       const { tokenID } = payload.content;
-      const queryVestWithdraw = `
-     query {
-         veDysts(where :{id:${tokenID.toString()}})  {
-            id
-            addresses
-      }
-    }`;
 
-      const response = await client.query(queryVestWithdraw).toPromise();
-      let res;
-
-      if (response.data.veDysts != "") {
-        res = response.data.veDysts[0].addresses.length;
-      } else {
-        res = 0;
+      const veGaugesQueryResponse = (await client.query(veQuery, {id: tokenID}).toPromise());
+      // console.log('VE GAUGES', veGaugesQueryResponse)
+      if(!!veGaugesQueryResponse.error) {
+        console.log("VE GAUGES QUERY ERROR", veGaugesQueryResponse.error);
       }
+
+      const gauges = veGaugesQueryResponse.data.veNFTEntities[0].gauges;
+      const bribes = veGaugesQueryResponse.data.veNFTEntities[0].bribes;
+      let gaugesLength = gauges.length;
+      let bribesLength = bribes.length;
+
       const account = stores.accountStore.getStore("account");
       if (!account) {
         console.warn("account not found");
@@ -5303,8 +5314,8 @@ class Store {
 
       let withdrawAllTXID = [];
       let arrTx = [];
-      if (res != 0 || res != null || res != "") {
-        for (var i = 0; i < res; i++) {
+      if (gaugesLength != 0 || gaugesLength != null || gaugesLength != "") {
+        for (var i = 0; i < gaugesLength; i++) {
           withdrawAllTXID[i] = this.getTXUUID();
           let a = {
             uuid: withdrawAllTXID[i],
@@ -5316,18 +5327,11 @@ class Store {
       }
       let voteTXID = this.getTXUUID();
 
-      let b = {
-        uuid: voteTXID,
-        description: `Reset votes`,
-        status: "WAITING",
-      };
-
       let c = {
         uuid: vestTXID,
         description: `Withdrawing your expired tokens`,
         status: "WAITING",
       };
-      arrTx.push(b);
       arrTx.push(c);
 
       this.emitter.emit(ACTIONS.TX_ADDED, {
@@ -5345,11 +5349,11 @@ class Store {
         CONTRACTS.VE_TOKEN_ADDRESS
       );
       let allowanceCallsPromise = [];
-      if (res != 0 || res != null || res != "") {
-        for (var i = 0; i < res; i++) {
+      if (gaugesLength !== 0) {
+        for (var i = 0; i < gaugesLength; i++) {
           let gaugeContract = new web3.eth.Contract(
             CONTRACTS.GAUGE_ABI,
-            response.data.veDysts[0].addresses[i]
+            gauges[i].gauge.id
           );
           const withdrawAll = new Promise((resolve, reject) => {
             this._callContractWait(
@@ -5378,36 +5382,47 @@ class Store {
           const done = await Promise.all(allowanceCallsPromise);
         }
       }
+
+
       // SUBMIT INCREASE TRANSACTION
-      const gaugesContract = new web3.eth.Contract(
-        CONTRACTS.VOTER_ABI,
-        CONTRACTS.VOTER_ADDRESS
-      );
+      if (bribesLength !== 0) {
+        let b = {
+          uuid: voteTXID,
+          description: `Reset votes`,
+          status: "WAITING",
+        };
+        arrTx.push(b);
 
-      const reset = new Promise((resolve, reject) => {
-        this._callContractWait(
-          web3,
-          gaugesContract,
-          "reset",
-          [tokenID],
-          account,
-          gasPrice,
-          null,
-          null,
-          voteTXID,
-          (err) => {
-            if (err) {
-              reject(err);
-              return;
-            }
-
-            resolve();
-          }
+        const voterContract = new web3.eth.Contract(
+          CONTRACTS.VOTER_ABI,
+          CONTRACTS.VOTER_ADDRESS
         );
-      });
 
-      allowanceCallsPromise.push(reset);
-      await Promise.all(allowanceCallsPromise);
+        const reset = new Promise((resolve, reject) => {
+          this._callContractWait(
+            web3,
+            voterContract,
+            "reset",
+            [tokenID],
+            account,
+            gasPrice,
+            null,
+            null,
+            voteTXID,
+            (err) => {
+              if (err) {
+                reject(err);
+                return;
+              }
+
+              resolve();
+            }
+          );
+        });
+
+        allowanceCallsPromise.push(reset);
+        await Promise.all(allowanceCallsPromise);
+      }
 
       const withdraw = new Promise((resolve, reject) => {
         this._callContractWait(
@@ -5440,26 +5455,24 @@ class Store {
   merge = async (payload) => {
     try {
       const { tokenIDOne, tokenIDTwo } = payload.content;
-      const queryVestWithdraw = `
-     query {
-         veDysts(where :{id:${tokenIDOne.id.toString()}})  {
-            id
-            addresses
-      }
-    }`;
 
-      const response = await client.query(queryVestWithdraw).toPromise();
-      let res;
+      const veGaugesQueryResponse = (await client.query(veQuery, {id: tokenIDOne.id}).toPromise());
+      // console.log('VE GAUGES', veGaugesQueryResponse)
+      if(!!veGaugesQueryResponse.error) {
+        console.log("VE GAUGES QUERY ERROR", veGaugesQueryResponse.error);
+      }
+
+      const gauges = veGaugesQueryResponse.data.veNFTEntities[0].gauges;
+      const bribes = veGaugesQueryResponse.data.veNFTEntities[0].bribes;
+      let gaugesLength = gauges.length;
+      let bribesLength = bribes.length;
+
+
       let allowanceCallsPromise = [];
-      let voteTXID = this.getTXUUID();
+      let voteResetTXID = this.getTXUUID();
       let allowanceTXID = this.getTXUUID();
       let mergeTXID = this.getTXUUID();
 
-      if (response.data.veDysts != "") {
-        res = response.data.veDysts[0].addresses.length;
-      } else {
-        res = 0;
-      }
       const account = stores.accountStore.getStore("account");
       if (!account) {
         console.warn("account not found");
@@ -5486,8 +5499,8 @@ class Store {
       };
       arrTx.push(c);
 
-      if (res != 0 || res != null || res != "") {
-        for (var i = 0; i < res; i++) {
+      if (gaugesLength !== 0) {
+        for (var i = 0; i < gaugesLength; i++) {
           withdrawAllTXID[i] = this.getTXUUID();
           let a = {
             uuid: withdrawAllTXID[i],
@@ -5498,20 +5511,20 @@ class Store {
         }
       }
 
-      let b = {
-        uuid: voteTXID,
-        description: `Reset votes`,
-        status: "WAITING",
-      };
-
-      arrTx.push(b);
+      if(bribesLength !== 0) {
+        let b = {
+          uuid: voteResetTXID,
+          description: `Reset votes`,
+          status: "WAITING",
+        };
+        arrTx.push(b);
+      }
 
       let d = {
         uuid: mergeTXID,
         description: `Merge veDYST`,
         status: "WAITING",
       };
-
       arrTx.push(d);
 
       this.emitter.emit(ACTIONS.TX_ADDED, {
@@ -5524,7 +5537,6 @@ class Store {
       let isApproved = await vedystcontract.methods
         .isApprovedForAll(account.address, CONTRACTS.VE_TOKEN_ADDRESS)
         .call();
-      let isvoted = await vedystcontract.methods.voted(tokenIDOne.id).call();
 
       if (!isApproved) {
         this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -5538,14 +5550,14 @@ class Store {
           status: "DONE",
         });
       }
-      if (isvoted) {
+      if (bribesLength !== 0) {
         this.emitter.emit(ACTIONS.TX_STATUS, {
-          uuid: voteTXID,
+          uuid: voteResetTXID,
           description: `Reset the veDYST Votes`,
         });
       } else {
         this.emitter.emit(ACTIONS.TX_STATUS, {
-          uuid: voteTXID,
+          uuid: voteResetTXID,
           description: `Votes Reseted`,
           status: "DONE",
         });
@@ -5578,11 +5590,11 @@ class Store {
         allowanceCallsPromise.push(approve);
         await Promise.all(allowanceCallsPromise);
       }
-      if (res != 0 || res != null || res != "") {
-        for (var i = 0; i < res; i++) {
+      if (gaugesLength !== 0) {
+        for (var i = 0; i < gaugesLength; i++) {
           let gaugeContract = new web3.eth.Contract(
             CONTRACTS.GAUGE_ABI,
-            response.data.veDysts[0].addresses[i]
+            gauges[i].gauge.id
           );
           const withdrawAll = new Promise((resolve, reject) => {
             this._callContractWait(
@@ -5611,24 +5623,25 @@ class Store {
           const done = await Promise.all(allowanceCallsPromise);
         }
       }
+
       // SUBMIT INCREASE TRANSACTION
-      const gaugesContract = new web3.eth.Contract(
+      const voterContract = new web3.eth.Contract(
         CONTRACTS.VOTER_ABI,
         CONTRACTS.VOTER_ADDRESS
       );
 
-      if (isvoted) {
+      if (bribesLength > 0) {
         const reset = new Promise((resolve, reject) => {
           this._callContractWait(
             web3,
-            gaugesContract,
+            voterContract,
             "reset",
             [tokenIDOne.id],
             account,
             gasPrice,
             null,
             null,
-            voteTXID,
+            voteResetTXID,
             (err) => {
               if (err) {
                 reject(err);
