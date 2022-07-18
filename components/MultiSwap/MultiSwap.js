@@ -1,23 +1,29 @@
-import React, { useState } from 'react'
-import { useAllowed, useApprove, useSwapQuery, useSwap, useReverseTokens } from "./hooks";
+import React  from 'react'
+import { observer } from 'mobx-react'
+import { multiSwapStore } from './store'
+import {useProvider} from "./hooks";
 
-export const MultiSwap = (props) => {
-    const [tokenIn, setTokenIn] = useState(null)
-    const [tokenOut, setTokenOut] = useState(null)
-    const [swapAmount, setSwapAmount] = useState(null)
-    const [slippage, setSlippage] = useState(null)
+export const MultiSwap = observer((props) => {
+    const [provider] = useProvider()
 
-    const [swap, isFetchingSwapQuery] = useSwapQuery(tokenIn, tokenOut, swapAmount)
-    const [allowed, isFetchingAllowance] = useAllowed(tokenIn, tokenOut, swapAmount)
+    const {
+        tokenIn, setTokenIn,
+        tokenOut, setTokenOut,
+        swapAmount, setSwapAmount,
+        slippage, setSlippage,
+        swap, isFetchingSwapQuery,
+        allowed, isFetchingAllowance,
+        reverseTokens: doReverseTokens,
+        approve: doApprove, isFetchingApprove,
+        doSwap, isFetchingSwap,
+        tokensMap,
+    } = multiSwapStore
 
-    const [doReverseTokens] = useReverseTokens({
-        tokenIn,
-        setTokenIn,
-        tokenOut,
-        setTokenOut,
-    })
-    const [doApprove, isFetchingApprove] = useApprove()
-    const [doSwap, isFetchingSwap] = useSwap(swap, slippage)
+    if (multiSwapStore.provider === null && provider) {
+        multiSwapStore.setProvider(provider)
+    }
+
+    console.log('swap', swap)
 
     return (
         <div style={{ color: '#fff' }}>
@@ -31,7 +37,8 @@ export const MultiSwap = (props) => {
                 doApprove, isFetchingApprove,
                 doSwap, isFetchingSwap,
                 doReverseTokens,
+                tokensMap,
             })}
         </div>
     )
-}
+})

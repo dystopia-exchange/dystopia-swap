@@ -7,10 +7,10 @@ export const useMultiswapContract = () => {
     const [provider] = useProvider()
 
     useEffect(() => {
-        if (provider && !multiswapContract) {
+        if (provider && multiswapContract === null) {
             setMultiswapContract(getSwapContract(provider.getSigner()))
         }
-    }, [provider, multiswapContract])
+    }, [provider])
 
     return multiswapContract
 }

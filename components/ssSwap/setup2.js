@@ -24,6 +24,7 @@ import Hint from "../hint/hint";
 import Loader from "../../ui/Loader";
 import AssetSelect from "../../ui/AssetSelect";
 import {MultiSwap} from "../MultiSwap";
+import * as ethers from 'ethers'
 
 function Setup() {
     const [, updateState] = React.useState();
@@ -1009,16 +1010,18 @@ function Setup() {
 
     return (
         <MultiSwap>
-            {({
-                  tokenIn, setTokenIn,
-                  tokenOut, setTokenOut,
-                  swapAmount, setSwapAmount,
-                  slippage, setSlippage,
-                  allowed, isFetchingAllowance,
-                  swap, isFetchingSwapQuery,
-                  doApprove, isFetchingApprove,
-                  doSwap, isFetchingSwap
-            }) => {
+            {(renderProps) => {
+                const {
+                    tokenIn, setTokenIn,
+                    tokenOut, setTokenOut,
+                    swapAmount, setSwapAmount,
+                    slippage, setSlippage,
+                    allowed, isFetchingAllowance,
+                    swap, isFetchingSwapQuery,
+                    doApprove, isFetchingApprove,
+                    doSwap, isFetchingSwap
+                } = renderProps
+
                 let buttonLabel = 'Swap'
                 let handleClickButton = doSwap
                 let disableButton = isFetchingAllowance
@@ -1035,10 +1038,43 @@ function Setup() {
                     buttonLabel = 'Enter Amount'
                 }
 
+                function tokenByIndex(i) {
+                    const address = swap.tokenAddresses[i];
+                    return address
+                }
+
+                const renderRoutes = () => {
+                    for (const s of swap.swaps) {
+                        if (s.amount > 0) {
+                            const percentage = ethers.BigNumber.from(s.amount)
+                                .add(1)
+                                .mul(100)
+                                .div(swap.swapAmount)
+                                .toString();
+
+                        }
+                        const tokenIn = tokenByIndex(s.assetInIndex);
+                        const tokenOut = tokenByIndex(s.assetOutIndex);
+
+                         `
+                            <li>
+                                <b>${tokenIn.symbol}</b>
+                                <small>${dex.name}
+                                <a
+                                    href='#'
+                                    onClick="excludePlatform('${dex.name}')"
+                                    title='Click to exclude'
+                                    class='text-danger' style='text-decoration: none'>🗙</a>
+                                </small>
+                                <b>${tokenOut.symbol}</b>
+                            </li>
+                         `;
+                    }
+                }
+
                 return (
                     <>
         <div className={classes.swapInputs}>
-            123
             {renderMassiveInput(
                 "From",
                 fromAmountValue,
@@ -1052,6 +1088,7 @@ function Setup() {
                 fromAssetError,
                 fromAssetOptions,
                 (type, value) => {
+                    console.log('setTokenIn', value.address)
                     onAssetSelect(type, value)
                     setTokenIn(value.address)
                 }

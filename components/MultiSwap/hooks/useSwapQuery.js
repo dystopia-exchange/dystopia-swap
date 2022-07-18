@@ -18,5 +18,5 @@ export const useSwapQuery = (tokenIn, tokenOut, swapAmount) => {
         }
     }, [tokenIn, tokenOut, swapAmount])
 
-    return [swap]
+    return [swap, isFetching]
 }

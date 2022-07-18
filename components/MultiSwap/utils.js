@@ -94,6 +94,8 @@ async function api(func = '', query = undefined) {
         ? 'http://localhost:8080/'
         : window.location.origin + '/';
     const url = apiUrl + func + '?' + new URLSearchParams(query);
+    console.log('---- query', query)
+    console.log('--- --- url', url)
     return await (await fetch(url)).json();
 }
 
