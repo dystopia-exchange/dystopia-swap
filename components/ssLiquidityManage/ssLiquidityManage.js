@@ -1086,38 +1086,38 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
             )}
             {assetValue?.balance &&
               Number(assetValue?.balance) > 0 &&
-              type === "amount0" &&
-              createLP && (
-                <div
-                  style={{
-                    cursor: "pointer",
-                    fontWeight: 500,
-                    fontSize: 14,
-                    lineHeight: "120%",
-                    color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
-                  }}
-                  onClick={() => setAmountPercent(assetValue, type)}
-                >
-                  MAX
-                </div>
+                (type === "amount0" || type === "amount1") &&
+                createLP && (
+                    <div
+                        style={{
+                          cursor: "pointer",
+                          fontWeight: 500,
+                          fontSize: 14,
+                          lineHeight: "120%",
+                          color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
+                        }}
+                        onClick={() => setAmountPercent(assetValue, type)}
+                    >
+                      MAX
+                    </div>
               )}
             {assetValue?.balance &&
               Number(assetValue?.balance) > 0 &&
-              type === "amount0" &&
-              !createLP && (
-                <div
-                  style={{
-                    cursor: "pointer",
-                    fontWeight: 500,
-                    fontSize: 14,
-                    lineHeight: "120%",
-                    color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
-                  }}
-                  onClick={() => setAmountPercent(assetValue, "stake")}
-                >
-                  MAX
-                </div>
-              )}
+                type === "amount0" &&
+                !createLP && (
+                    <div
+                        style={{
+                          cursor: "pointer",
+                          fontWeight: 500,
+                          fontSize: 14,
+                          lineHeight: "120%",
+                          color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
+                        }}
+                        onClick={() => setAmountPercent(assetValue, "stake")}
+                    >
+                      MAX
+                    </div>
+                )}
           </div>
         )}
 
