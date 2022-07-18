@@ -2670,7 +2670,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                         ].join(" ")}
                     >
               <span className={classes.actionButtonText}>
-                Create LP & Deposit
+                Create LP
               </span>
                       {depositLoading && (
                           <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
