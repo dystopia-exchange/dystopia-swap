@@ -907,6 +907,11 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
   const swapAssets = async () => {
     const fa = asset0;
     const ta = asset1;
+    const fam = amount0
+    const tam = amount1
+    setPriorityAsset(!priorityAsset)
+    setAmount0(tam)
+    setAmount1(fam)
     setAsset0(ta);
     setAsset1(fa);
     let pair = await stores.stableSwapStore.getPair(
@@ -915,8 +920,8 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
       stable
     );
     callQuoteAddLiquidity(
-      amount0,
       amount1,
+      amount0,
       priorityAsset,
       stable,
       pair,
@@ -1086,38 +1091,38 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
             )}
             {assetValue?.balance &&
               Number(assetValue?.balance) > 0 &&
-              type === "amount0" &&
-              createLP && (
-                <div
-                  style={{
-                    cursor: "pointer",
-                    fontWeight: 500,
-                    fontSize: 14,
-                    lineHeight: "120%",
-                    color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
-                  }}
-                  onClick={() => setAmountPercent(assetValue, type)}
-                >
-                  MAX
-                </div>
+                (type === "amount0" || type === "amount1") &&
+                createLP && (
+                    <div
+                        style={{
+                          cursor: "pointer",
+                          fontWeight: 500,
+                          fontSize: 14,
+                          lineHeight: "120%",
+                          color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
+                        }}
+                        onClick={() => setAmountPercent(assetValue, type)}
+                    >
+                      MAX
+                    </div>
               )}
             {assetValue?.balance &&
               Number(assetValue?.balance) > 0 &&
-              type === "amount0" &&
-              !createLP && (
-                <div
-                  style={{
-                    cursor: "pointer",
-                    fontWeight: 500,
-                    fontSize: 14,
-                    lineHeight: "120%",
-                    color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
-                  }}
-                  onClick={() => setAmountPercent(assetValue, "stake")}
-                >
-                  MAX
-                </div>
-              )}
+                type === "amount0" &&
+                !createLP && (
+                    <div
+                        style={{
+                          cursor: "pointer",
+                          fontWeight: 500,
+                          fontSize: 14,
+                          lineHeight: "120%",
+                          color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
+                        }}
+                        onClick={() => setAmountPercent(assetValue, "stake")}
+                    >
+                      MAX
+                    </div>
+                )}
           </div>
         )}
 
@@ -1138,6 +1143,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   ? "double"
                   : "single"
               }
+              isManageLocal={type !== "withdraw" && createLP}
             />
           </div>
 
@@ -1529,7 +1535,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
             <div className={classes.infoGreenContainer}>
               <span className={classes.infoContainerWarnGreen}>!</span>
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#AAED9F"/>
+                <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#4FC83A"/>
               </svg>
               <span className={classes.infoContainerWarnGreenText}>Please claim any rewards before withdrawing.</span>
             </div>
@@ -1786,17 +1792,6 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
               </div>
             </div>
           )}
-
-        {withdrawAction === null && (
-          <div
-            className={[
-              classes.disclaimerContainer,
-              classes[`disclaimerContainer--${appTheme}`],
-            ].join(" ")}
-          >
-            Please claim any rewards before withdrawing
-          </div>
-        )}
       </div>
     );
   };
@@ -2669,7 +2664,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                         ].join(" ")}
                     >
               <span className={classes.actionButtonText}>
-                Create LP & Deposit
+                Create LP
               </span>
                       {depositLoading && (
                           <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />

@@ -1010,7 +1010,7 @@ input[type=number].mediumInputAmount {
   /*position: absolute;*/
   display: none;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   width: 152px;
   height: 52px;
   margin-left: -95px;
@@ -1415,7 +1415,7 @@ input[type=number].mediumInputAmount {
   color: #E4E9F4;
   position: relative;
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
   padding: 16px 18px 12px;
@@ -1447,6 +1447,13 @@ input[type=number].mediumInputAmount {
 .disclaimerContainerError {
   border: 1px solid #DB3434;
   color: #631515;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.disclaimerContainerError > .disclaimerContainerWarnSymbol {
+  background-color: #DB3434;
 }
 
 .disclaimerContainerError--dark {
@@ -2089,7 +2096,7 @@ input[type=number].mediumInputAmount {
 
   .toggleOption:first-child {
     margin-bottom: 10px;
-    margin-right: 0;
+    margin-right: 0 !important;
   }
 
   .tokenSelectInput {
@@ -2231,6 +2238,8 @@ input[type=number].mediumInputAmount {
     width: 100%;
     margin-top: 20px;
     padding-left: 0;
+    display: flex;
+    flex-wrap: wrap;
   }
 }
 

@@ -2253,7 +2253,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                               onClick={() => {
                                 onView(row);
                               }}>
-                              EDIT
+                              {BigNumber(row?.balance).gt(0) || BigNumber(row?.gauge?.balance).gt(0) ? 'EDIT' : 'ADD'}
                             </Button>
                           </TableCell>
                         </TableRow>
@@ -2438,7 +2438,7 @@ export default function EnhancedTable({pairs, isLoading}) {
 
                                 onView(row);
                               }}>
-                              EDIT
+                              {BigNumber(row?.balance).gt(0) || BigNumber(row?.gauge?.balance).gt(0) ? 'EDIT' : 'ADD'}
                             </Button>
                           </div>
                         </div>
