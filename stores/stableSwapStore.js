@@ -1387,8 +1387,7 @@ class Store {
         CONTRACTS.VOTER_ADDRESS
       );
       const totalWeight = BigNumber(await voterContract.methods.totalWeight().call())
-        // todo cahnge later
-        // .div(10 ** 18)
+        .div(10 ** 18)
 
       const ps = await Promise.all(
         pairs.map(async (pair) => {
@@ -1488,7 +1487,7 @@ class Store {
                     ).toFixed(parseInt(pair.token1.decimals))
                   : "0";
 
-              pair.gauge.weight = BigNumber(parseFloat(pair.gauge.voteWeight)).div(10 ** 18);
+              pair.gauge.weight = BigNumber(parseFloat(pair.gauge.voteWeight));
               pair.gauge.weightPercent =
                 parseInt(pair.gauge.totalWeight) !== 0
                   ? BigNumber(parseFloat(pair.gauge.voteWeight))
