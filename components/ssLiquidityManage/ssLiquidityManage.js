@@ -907,6 +907,11 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
   const swapAssets = async () => {
     const fa = asset0;
     const ta = asset1;
+    const fam = amount0
+    const tam = amount1
+    setPriorityAsset(!priorityAsset)
+    setAmount0(tam)
+    setAmount1(fam)
     setAsset0(ta);
     setAsset1(fa);
     let pair = await stores.stableSwapStore.getPair(
@@ -915,8 +920,8 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
       stable
     );
     callQuoteAddLiquidity(
-      amount0,
       amount1,
+      amount0,
       priorityAsset,
       stable,
       pair,
