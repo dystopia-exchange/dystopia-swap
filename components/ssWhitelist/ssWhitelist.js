@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  Paper,
   TextField,
   InputAdornment,
   CircularProgress,
   Typography,
   Tooltip,
-  Button, Popover,
 } from '@mui/material';
 import BigNumber from 'bignumber.js';
 import TokenSelect from '../select-token/select-token';
@@ -133,9 +131,8 @@ export default function ssWhitelist() {
     return (
       <>
         {windowWidth > 820 &&
-          <div className={[classes.results, classes[`results--${appTheme}`]].join(' ')}>
-            <div
-              className={[classes.tokenHeader, classes[`tokenHeader--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
+          <div className={classes.results}>
+            <div className={[classes.tokenHeader, 'g-flex', 'g-flex--align-center'].join(' ')}>
               <div className={[classes.tokenHeaderLabel, classes.tokenCellName, 'g-flex__item'].join(' ')}>
                 Asset to Whitelist
               </div>
@@ -144,22 +141,18 @@ export default function ssWhitelist() {
                 Whitelist Status
               </div>
 
-              <div
-                className={[classes.tokenHeaderLabel, classes.cellFee, 'g-flex', 'g-flex--align-center', 'g-flex--justify-end'].join(' ')}>
+              <div className={[classes.tokenHeaderLabel, classes.cellFee, 'g-flex', 'g-flex--align-center', 'g-flex--justify-end'].join(' ')}>
+                <div style={{ marginRight: 9 }}>Listing Fee</div>
+
                 <Hint
                   hintText={'Listing fee either needs to be locked in your veDYST NFT or be paid and burnt on the list.'}
                   open={openFeeHint}
                   anchor={feeHintAnchor}
                   handleClick={handleClickFeePopover}
-                  handleClose={handleCloseFeePopover}>
+                  handleClose={handleCloseFeePopover}
+                  fill="#586586"
+                >
                 </Hint>
-
-                <div
-                  style={{
-                    marginLeft: 10,
-                  }}>
-                  Listing Fee
-                </div>
               </div>
 
               <div className={[classes.tokenHeaderLabel, classes.cellAction].join(' ')}>
@@ -167,15 +160,11 @@ export default function ssWhitelist() {
               </div>
             </div>
 
-            <div
-              className={[classes.tokenBody, classes[`tokenBody--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
-              <div
-                className={[classes.tokenBodyCell, classes.tokenCellName, 'g-flex', 'g-flex--align-center', 'g-flex__item'].join(' ')}>
+            <div className={[classes.tokenBody, 'g-flex', 'g-flex--align-center'].join(' ')}>
+              <div className={[classes.tokenBodyCell, classes.tokenCellName, 'g-flex', 'g-flex--align-center', 'g-flex__item'].join(' ')}>
                 <img
                   src={token.logoURI || ''}
                   alt=""
-                  width="70"
-                  height="70"
                   className={classes.tokenLogo}
                   onError={(e) => {
                     e.target.onerror = null;
@@ -183,57 +172,54 @@ export default function ssWhitelist() {
                   }}/>
 
                 <div>
-                  <Typography
-                    className={[classes.tokenName, classes[`tokenName--${appTheme}`]].join(' ')}>
+                  <Typography className={classes.tokenName}>
                     {token.name}
                   </Typography>
 
                   <Tooltip title="View in explorer">
                     <Typography
-                      className={[classes.tokenAddress, classes[`tokenAddress--${appTheme}`]].join(' ')}
+                      className={classes.tokenAddress}
                       onClick={() => {
                         onAddressClick(token.address);
-                      }}>
+                      }}
+                    >
                       {formatAddress(token.address)}
                     </Typography>
                   </Tooltip>
                 </div>
               </div>
 
-              <div
-                className={[classes.tokenBodyCell, classes.cellStatus, 'g-flex', 'g-flex--align-center', 'g-flex--justify-end'].join(' ')}>
+              <div className={[classes.tokenBodyCell, classes.cellStatus, 'g-flex', 'g-flex--align-center', 'g-flex--justify-end'].join(' ')}>
                 {token.isWhitelisted &&
-                  <Typography className={[classes.isWhitelist, classes[`isWhitelist--${appTheme}`]].join(' ')}>
+                  <Typography className={classes.isWhitelist}>
                     Already Whitelisted
                   </Typography>
                 }
 
                 {!token.isWhitelisted &&
-                  <Typography className={[classes.notWhitelist, classes[`notWhitelist--${appTheme}`]].join(' ')}>
+                  <Typography className={classes.notWhitelist}>
                     Not Whitelisted
                   </Typography>
                 }
               </div>
 
-              <div
-                className={[classes.tokenBodyCell, classes.cellFee, 'g-flex', 'g-flex--align-center', 'g-flex--justify-end'].join(' ')}>
-                <Typography
-                  className={[classes.listingFee, classes[`listingFee--${appTheme}`]].join(' ')}>
-                  {formatCurrency(token.listingFee)}
-                </Typography>
+              <div className={[classes.tokenBodyCell, classes.cellFee, 'g-flex', 'g-flex--align-center', 'g-flex--justify-end'].join(' ')}>
+                <div className={classes.cellFeeContent}>
+                  <Typography className={classes.listingFee}>
+                    {formatCurrency(token.listingFee)}
+                  </Typography>
 
-                <Typography
-                  className={[classes.listingFeeSymbol, classes[`listingFeeSymbol--${appTheme}`]].join(' ')}>
-                  {formatSymbol(veToken?.symbol)}
-                </Typography>
+                  <Typography className={classes.listingFeeSymbol}>
+                    {formatSymbol(veToken?.symbol)}
+                  </Typography>
+                </div>
               </div>
 
-              <div
-                className={[classes.tokenBodyCell, classes.cellAction, 'g-flex', 'g-flex--align-center', 'g-flex--justify-end'].join(' ')}>
+              <div className={[classes.tokenBodyCell, classes.cellAction, 'g-flex', 'g-flex--align-center', 'g-flex--justify-end'].join(' ')}>
                 {!token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee) &&
                   <div
                     onClick={onWhitelist}
-                    className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}>
+                    className={[classes.buttonOverride, 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}>
                     <Typography
                       className={classes.actionButtonText}>
                       {whitelistLoading ? `Whitelisting` : `Whitelist`}
@@ -249,13 +235,13 @@ export default function ssWhitelist() {
                         open={openActionHint}
                         anchor={actionHintAnchor}
                         handleClick={handleClickActionPopover}
-                        handleClose={handleCloseActionPopover}>
+                        handleClose={handleCloseActionPopover}
+                        fill="#586586"
+                      >
                       </Hint>
                     }
 
-                    <div
-                      color="primary"
-                      className={[classes.buttonOverrideDisabled, classes[`buttonOverrideDisabled--${appTheme}`]].join(' ')}>
+                    <div color="primary" className={classes.buttonOverrideDisabled}>
                       {token.isWhitelisted ? 'Nothing to do' : 'Vest value < Fee'}
                     </div>
                   </>
@@ -266,30 +252,27 @@ export default function ssWhitelist() {
         }
 
         {windowWidth <= 820 &&
-          <div
-            className={[classes.adaptiveContainer, classes[`adaptiveContainer--${appTheme}`], 'g-flex--column'].join(' ')}>
-            <div className={[classes.adaptiveHeader, classes[`adaptiveHeader--${appTheme}`], 'g-flex'].join(' ')}>
-              <div className={['g-flex', 'g-flex--align-center', 'g-flex__item'].join(' ')}>
+          <div className={classes.adaptiveContainer}>
+            <div className={classes.adaptiveHeader}>
+              <div className={['g-flex', 'g-flex--align-center'].join(' ')}>
                 <img
                   src={token.logoURI || ''}
                   alt=""
-                  width="70"
-                  height="70"
                   className={classes.tokenLogo}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                  }}/>
+                  }}
+                />
 
                 <div>
-                  <Typography
-                    className={[classes.tokenName, classes[`tokenName--${appTheme}`]].join(' ')}>
+                  <Typography className={classes.tokenName}>
                     {token.name}
                   </Typography>
 
                   <Tooltip title="View in explorer">
                     <Typography
-                      className={[classes.tokenAddress, classes[`tokenAddress--${appTheme}`]].join(' ')}
+                      className={classes.tokenAddress}
                       onClick={() => {
                         onAddressClick(token.address);
                       }}>
@@ -298,35 +281,70 @@ export default function ssWhitelist() {
                   </Tooltip>
                 </div>
               </div>
-
-              <div className={[classes.adaptiveHeaderStatus, 'g-flex', 'g-flex--align-center', 'g-flex--justify-end'].join(' ')}>
-                {token.isWhitelisted &&
-                  <Typography className={[classes.isWhitelist, classes[`isWhitelist--${appTheme}`]].join(' ')}>
-                    Already Whitelisted
-                  </Typography>
-                }
-
-                {!token.isWhitelisted &&
-                  <Typography className={[classes.notWhitelist, classes[`notWhitelist--${appTheme}`]].join(' ')}>
-                    Not Whitelisted
-                  </Typography>
-                }
-              </div>
             </div>
 
-            <div className={[classes.adaptiveTable, 'g-flex'].join(' ')}>
-              <div className={[classes.adaptive, 'g-flex-column'].join(' ')}>
-                <div className={[classes.adaptiveActionLabel, classes[`adaptiveActionLabel--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex__item'].join(' ')}>
+            <div className={classes.adaptiveTable}>
+              <div className={classes.adaptive}>
+                <div className={classes.adaptiveActionLabel}>
+                  Whitelist <br />Status
+                </div>
+
+                <div className={classes.adaptiveActionItem}>
+                  {token.isWhitelisted &&
+                    <Typography className={classes.isWhitelist}>
+                      Already Whitelisted
+                    </Typography>
+                  }
+
+                  {!token.isWhitelisted &&
+                    <Typography className={classes.notWhitelist}>
+                      Not Whitelisted
+                    </Typography>
+                  }
+                </div>
+              </div>
+
+              <div className={classes.adaptive}>
+                <div className={classes.adaptiveActionLabel}>
+                  <div style={{ marginRight: 9 }}>
+                    Listing Fee
+                  </div>
+
+                  <Hint
+                    hintText={'Listing fee either needs to be locked in your veDYST NFT or be paid and burnt on the list.'}
+                    open={openFeeHint}
+                    anchor={feeHintAnchor}
+                    handleClick={handleClickFeePopover}
+                    handleClose={handleCloseFeePopover}
+                    fill="#586586"
+                  >
+                  </Hint>
+                </div>
+
+                <div className={classes.adaptiveActionItem}>
+                  <div className={classes.cellFeeContent}>
+                    <Typography className={classes.listingFee}>
+                      {formatCurrency(token.listingFee)}
+                    </Typography>
+
+                    <Typography className={classes.listingFeeSymbol}>
+                      {formatSymbol(veToken?.symbol)}
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+
+              <div className={classes.adaptive}>
+                <div className={classes.adaptiveActionLabel}>
                   Action
                 </div>
 
-                <div className={[classes.adaptiveActionItem, classes[`adaptiveActionItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex__item'].join(' ')}>
+                <div className={classes.adaptiveActionItem}>
                   {!token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee) &&
                     <div
                       onClick={onWhitelist}
-                      className={[classes.buttonOverride, classes[`buttonOverride--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}>
-                      <Typography
-                        className={classes.actionButtonText}>
+                      className={[classes.buttonOverride, 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}>
+                      <Typography className={classes.actionButtonText}>
                         {whitelistLoading ? `Whitelisting` : `Whitelist`}
                       </Typography>
                     </div>
@@ -340,45 +358,17 @@ export default function ssWhitelist() {
                           open={openActionHint}
                           anchor={actionHintAnchor}
                           handleClick={handleClickActionPopover}
-                          handleClose={handleCloseActionPopover}>
+                          handleClose={handleCloseActionPopover}
+                          fill="#586586"
+                        >
                         </Hint>
                       }
 
-                      <div
-                        color="primary"
-                        className={[classes.buttonOverrideDisabled, classes[`buttonOverrideDisabled--${appTheme}`]].join(' ')}>
+                      <div color="primary" className={classes.buttonOverrideDisabled}>
                         {token.isWhitelisted ? 'Nothing to do' : 'Vest value < Fee'}
                       </div>
                     </>
                   }
-                </div>
-              </div>
-
-              <div className={[classes.adaptive, 'g-flex-column'].join(' ')}>
-                <div className={[classes.adaptiveActionLabel, classes[`adaptiveActionLabel--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-end', 'g-flex__item'].join(' ')}>
-                  <Hint
-                    hintText={'Listing fee either needs to be locked in your veDYST NFT or be paid and burnt on the list.'}
-                    open={openFeeHint}
-                    anchor={feeHintAnchor}
-                    handleClick={handleClickFeePopover}
-                    handleClose={handleCloseFeePopover}>
-                  </Hint>
-
-                  <div style={{marginLeft: 10}}>
-                    Listing Fee
-                  </div>
-                </div>
-
-                <div className={[classes.adaptiveActionItem, classes[`adaptiveActionItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-end', 'g-flex__item'].join(' ')}>
-                  <Typography
-                    className={[classes.listingFee, classes[`listingFee--${appTheme}`]].join(' ')}>
-                    {formatCurrency(token.listingFee)}
-                  </Typography>
-
-                  <Typography
-                    className={[classes.listingFeeSymbol, classes[`listingFeeSymbol--${appTheme}`]].join(' ')}>
-                    {formatSymbol(veToken?.symbol)}
-                  </Typography>
                 </div>
               </div>
             </div>
@@ -391,40 +381,7 @@ export default function ssWhitelist() {
   return (
     <>
       <div className={[classes.controls, 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
-        <TextField
-          autoFocus
-          fullWidth
-          placeholder={windowWidth > 540 ? "Paste the token address you want to whitelist: 0x..." : 'Token to whitelist: 0x'}
-          value={search}
-          onChange={onSearchChanged}
-          autoComplete={'off'}
-          InputProps={{
-            style: {
-              background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-              border: '1px solid',
-              borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-              borderRadius: 0,
-              maxWidth: 700,
-              height: 50,
-            },
-            classes: {
-              root: classes.searchInput,
-            },
-            startAdornment: <InputAdornment position="start">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M10.518 9.69309L13.0165 12.1909L12.191 13.0163L9.69321 10.5179C8.76381 11.263 7.60779 11.6682 6.41663 11.6665C3.51863 11.6665 1.16663 9.3145 1.16663 6.4165C1.16663 3.5185 3.51863 1.1665 6.41663 1.1665C9.31463 1.1665 11.6666 3.5185 11.6666 6.4165C11.6683 7.60767 11.2631 8.76368 10.518 9.69309ZM9.34788 9.26025C10.0882 8.49894 10.5016 7.47842 10.5 6.4165C10.5 4.16017 8.67238 2.33317 6.41663 2.33317C4.16029 2.33317 2.33329 4.16017 2.33329 6.4165C2.33329 8.67225 4.16029 10.4998 6.41663 10.4998C7.47854 10.5015 8.49906 10.0881 9.26038 9.34775L9.34788 9.26025Z"
-                  fill={appTheme === "dark" ? '#4CADE6' : '#0B5E8E'}
-                />
-              </svg>
-            </InputAdornment>,
-          }}
-          inputProps={{
-            className: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
-          }}
-        />
-
-        <div style={{maxWidth: 300}}>
+        <div className={classes.select}>
           {TokenSelect({
             value: nft,
             options: nfts,
@@ -433,17 +390,51 @@ export default function ssWhitelist() {
             placeholder: 'Click to select veDYST',
           })}
         </div>
+
+        <div className={classes.title}>Whitelist</div>
+
+        <div className={classes.field}>
+          <TextField
+            autoFocus
+            fullWidth
+            placeholder={windowWidth > 540 ? "Type or paste the address" : 'Token to whitelist: 0x'}
+            value={search}
+            onChange={onSearchChanged}
+            autoComplete={'off'}
+            InputProps={{
+              classes: {
+                root: classes.searchInput,
+              },
+              endAdornment: <InputAdornment position="end">
+                <div className={classes.searchInputIcon}>
+                  <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10.5 20C15.7467 20 20 15.7467 20 10.5C20 5.25329 15.7467 1 10.5 1C5.25329 1 1 5.25329 1 10.5C1 15.7467 5.25329 20 10.5 20Z" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <div style={{position: 'relative'}}>
+                    <svg style={{position: 'absolute', top: 8, right: 0,}} width="4" height="4" viewBox="0 0 4 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3 3L1 1" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+              </InputAdornment>,
+            }}
+            inputProps={{
+              className: classes.searchInputText,
+            }}
+          />
+        </div>
       </div>
 
       {(loading || token?.address) &&
-        <div className={['g-flex-column'].join(' ')}>
+        <div className={['g-flex-column', classes.tokenLoader].join(' ')}>
           {loading && <CircularProgress style={{
             position: 'absolute',
             top: 200,
             left: '50%',
             color: '#ffffff',
-          }}/>}
-          {token?.address && renderToken()}
+          }}
+        />}
+        {token?.address && renderToken()}
         </div>
       }
     </>

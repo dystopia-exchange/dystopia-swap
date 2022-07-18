@@ -1,383 +1,222 @@
-.homePage {
-    padding-top: 50px;
-    color: #0A2C40 !important;
+.wrapper {
+  margin-left: calc(50% - 390px);
 }
 
-.homePage--dark {
-    color: #ffffff !important;
+@media (max-width: 1800px) {
+  .wrapper {
+    margin: 0;
+    transform: none;
+  }
 }
 
-.homePage--dark .layoutPromoSocialsLink a {
-    background: #5F7285;
+.row {
+  display: flex;
+  justify-content: space-between;
 }
 
-.homePage--dark .layoutPromoDescriptionItem {
-    color: #4CADE6;
+@media (max-width: 1250px) {
+  .row {
+    flex-direction: column;
+  }
 }
 
-.container {
-    max-width: 960px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
+.column {
+  width: calc(50% -  70px);
 }
 
-
-
-.center {
-    display: flex;
-    justify-content: center;
+@media (max-width: 1450px) {
+  .column {
+    width: calc(50% - 20px)
+  }
 }
 
-.bigLogo {
-
+@media (max-width: 1250px) {
+  .column {
+    width: calc(100%);
+  }
 }
 
-.buttonEnter,
-.buttonEnterSec {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 292px;
-    height: 65px;
-    margin: auto;
-    margin-top: 130px !important;
-    padding: 0 !important;
-    border: none !important;
-    background-color: transparent !important;
-    font-weight: 700 !important;
-    font-size: 16px !important;
-    line-height: 120% !important;
-    color: #8F5AE8 !important;
-    cursor: pointer;
+.title {
+  max-width: 676px;
+
+  margin-top: 0;
+  margin-bottom: 40px;
+
+  font-family: "Poppins";
+  font-size: 96px;
+  font-weight: 500;
+  line-height: 112px;
+  color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 48px;
+    line-height: 52px;
+  }
+}
+
+.subtitle {
+  max-width: 676px;
+
+  margin-top: 0;
+  margin-bottom: 40px;
+
+  font-family: "Poppins";
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
+
+  color: #ffffff;
+}
+
+.buttonEnter {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 377px;
+  height: 96px;
+  max-width: 100%;
+
+  border-radius: 12px;
+
+  background: #d3f85a;
+
+  padding: 0 !important;
+
+  border: none !important;
+  background-color: #d3f85a !important;
+
+  cursor: pointer;
+}
+
+@media (max-width: 1250px) {
+  .buttonEnter {
+    margin-bottom: 40px;
+  }
 }
 
 .buttonEnterLabel {
-    font-weight: 700 !important;
-    font-size: 16px !important;
-    line-height: 120% !important;
-    color: #8F5AE8 !important;
-    text-transform: uppercase;
+  font-family: "Poppins";
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  line-height: 48px !important;
+
+  color: #171d2d !important;
+
+  white-space: pre-line;
 }
 
-.homePageLeftImage {
-    position: absolute;
-    left: -500px;
-    top: -80px;
-    width: 620px;
-    height: 850px;
-    background-repeat: no-repeat;
-    background-size: cover;
+.title2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+
+  font-size: 48px;
+  font-weight: 500;
+  font-family: "Poppins";
+  line-height: 52px;
+
+  color: #779bf4;
 }
 
-.homePageLeftImage--light {
-    background-image: url('../../images/main-page/left-illustration-light.png');
-}
-
-.homePageLeftImage--dark {
-    background-image: url('../../images/main-page/left-illustration-dark.png');
-}
-
-.homePageRightImage {
-    position: absolute;
-    top: -80px;
-    right: -460px;
-    width: 560px;
-    height: 850px;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.homePageRightImage--light {
-    background-image: url('../../images/main-page/right-illustration-light.png');
-}
-
-.homePageRightImage--dark {
-    background-image: url('../../images/main-page/right-illustration-dark.png');
-}
-
-
-.layoutPromo {
-    height: 850px;
-}
-
-.layoutPromoTitle {
-    text-align: center;
-    font-family: 'PPNeueMachina', serif !important;
-    font-weight: 800 !important;
-    font-size: 40px !important;
-    line-height: 100% !important;
-    text-align: center !important;
-    margin-bottom: 26px;
-    margin-top: 40px;
-}
-
-.layoutPromoSubTitle {
-    text-align: center;
-    font-family: 'PPNeueMachina', serif !important;
-    font-weight: 800 !important;
-    font-size: 72px !important;
-    line-height: 100% !important;
-    text-align: center !important;
-    margin-bottom: 34px;
-}
-
-.layoutPromoDescription {
-    font-family: 'Roboto Mono';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 120%;    
-    display: flex;
-    align-items: center;
-    color: #0B5E8E;
-    display: flex;
-    justify-content: center;
-}
-
-.layoutPromoDescriptionItem {
-    margin-left: 20px;
-    margin-right: 20px;
-    position: relative;
-}
-
-.layoutPromoDescriptionItem:after {
-    content: "";
-    position: absolute;
-    top: 7px;
-    right: -22px;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background-color: #0B5E8E;
-}
-
-.layoutPromoDescriptionItem:last-child:after {
-    display: none;
-}
-
-.layoutPromoButton {
-    margin-top: -30px;
+@media (max-width: 600px) {
+  .title2 {
+    font-size: 28px;
+    line-height: 36px;
+  }
 }
 
 .layoutPromoSocials {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 40px;
-    margin-bottom: 110px;
+  display: flex;
+  margin-top: 56px;
 }
 
 .layoutPromoSocialsLink {
-    margin-right: 10px;
-    margin-left: 10px;
-    position: relative;
+  flex-shrink: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 52px;
+  height: 52px;
+
+  margin-right: 16px;
+
+  padding-top: 5px;
+
+  border: 1px solid #779bf4;
+  border-radius: 30px;
+
+  background: rgba(119, 155, 244, 0.15);
 }
 
-.layoutPromoSocialsSeparator {
-    display: flex;
-    align-items: center;
+.layoutPromoSocialsLink:last-child {
+  margin-right: 0;
 }
 
-.layoutPromoSocialsLink svg {
-    width: 24px;
-    height: 24px;
+.divider {
+  height: 1px;
+  margin: 60px 0;
+  background-color: #E4E9F4;
 }
 
-.layoutPromoSocialsLink a {
-    width: 40px;
-    height: 40px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    background: #86B9D6;
-    border-radius: 40px;
+.text {
+  font-family: 'Poppins';
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+
+  color: #E4E9F4;
 }
 
-.layoutPromoSocialsLink a:hover {
-    background: #6492ac;
-}
-
-.layoutPromoMoreWrapper {
-    display: flex;
-    justify-content: center;
-}
-
-.layoutPromoMore {
-    text-align: center;
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 120%;
-    color: #5688A5;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-
-.layoutPromoMore i {
-    text-decoration: underline;
-    font-style: normal;
-}
-
-.layoutPromoMore:hover i {
-    text-decoration: none;
-}
-
-.layoutPromoMore span {
-    margin-top: 5px;
-}
-
-.layoutDescription {
-    margin-top: 80px;
-    margin-bottom: 80px;
-}
-
-.layoutDescriptionLogo {
-    text-align: center;
-    margin-bottom: 60px;
-}
-
-.layoutDescriptionText {
-    font-family: 'Roboto Mono';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 28px;
-    line-height: 130%;    
-    text-align: center;
+@media (max-width: 1250px) {
+  .text {
     margin-bottom: 40px;
-    max-width: 960px;
+  }
 }
 
-.layoutDescriptionSmallText {
-    font-family: 'Roboto Mono';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 130%;
-    text-align: center;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: -50px;
+.text p {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-.layoutDescriptionButton {
-    margin-bottom: 60px;
+.infoButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 513px;
+  height: 72px;
+  max-width: 100%;
+
+  margin-top: 40px;
+  padding: 0 32px;
+
+  font-family: 'Poppins';
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  text-transform: uppercase;
+
+  border: 1px solid #779BF4;
+  border-radius: 12px;
+
+  background: rgba(119, 155, 244, 0.15);
+  color: #779BF4;
+
+  cursor: pointer;
 }
 
-@media screen and (max-width: 990px) {
-    .homePage {
-        padding-top: 15px;
-    }
-
-    .layoutPromoTitle {
-        font-size: 28px !important; 
-    }
-
-    .layoutPromoSubTitle {
-        font-size: 38px !important;
-    }
-
-    .layoutPromo {
-        height: auto;
-        min-height: 88vh;
-    }
-
-    .layoutDescriptionLogo {
-        margin-bottom: 40px;
-    }
-
-    .layoutDescriptionLogo svg {
-        width: 240px;
-    }
-
-    .layoutDescriptionText {
-        font-size: 20px;
-    }
-
-    .layoutDescriptionSmallText {
-        font-size: 16px;
-    }
+@media (max-width: 1250px) {
+  .infoButton {
+    margin-top: 0;
+  }
 }
 
-@media screen and (max-width: 720px) {
-    .homePageLeftImage {
-        display: none;
-    }
-
-    .homePageRightImage {
-        display: none;
-    }
-}
-
-@media screen and (max-width: 600px) {
-    .layoutPromoDescription {
-        flex-direction: column;
-    }
-
-    .layoutPromoDescriptionItem {
-        margin-bottom: 15px;
-    }
-
-    .layoutPromoDescriptionItem:after {
-        left: -22px;
-        right: auto;
-    }
-
-    .layoutPromoDescriptionItem:last-child:after {
-        display: block;
-    }
-
-    .layoutPromoSocials {
-        margin-bottom: 50px;
-    }
-
-    .layoutDescriptionLogo svg {
-        width: 180px;
-    }
-    
-    .layoutDescriptionText {
-        font-size: 16px;
-    }
-    
-    .layoutDescriptionSmallText {
-        font-size: 14px;
-        margin-bottom: -100px;
-    }
-
-    .layoutDescription {
-        margin-top: 50px;
-        margin-bottom: 50px;
-    }
-
-    .layoutPromoTitle {
-        margin-top: 0;
-    }
-
-    .layoutPromoButton {
-        margin-top: -100px;
-    }
-
-    .layoutPromoTitle {
-        font-size: 26px !important;
-    }
-    
-    .layoutPromoSubTitle {
-        font-size: 36px !important;
-    }
-
-    .layoutDescriptionLogo {
-        margin-bottom: -10px;
-    }
-
-    .layoutDescriptionButton {
-        margin-bottom: 0px;
-    }
-    
-    .layoutDescription {
-        margin-bottom: 20px;
-    }
+.infoButton span {
+  margin-right: 18px;
 }

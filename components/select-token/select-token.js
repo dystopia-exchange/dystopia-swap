@@ -33,14 +33,7 @@ function TokenSelect(props) {
         renderValue: noValue ? (selected) => {
           if (selected === null) {
             return (
-              <div
-                style={{
-                  padding: 10,
-                  paddingRight: 30,
-                  fontWeight: 500,
-                  fontSize: 18,
-                  color: appTheme === 'dark' ? '#5F7285' : '#0B5E8E',
-                }}>
+              <div className={classes.placeholder}>
                 {placeholder}
               </div>
             );
