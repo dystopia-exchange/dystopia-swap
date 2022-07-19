@@ -55,10 +55,33 @@ function descendingComparator(a, b, orderBy) {
   switch (orderBy) {
     case 'pair':
       return formatSymbol(a.symbol).localeCompare(formatSymbol(b.symbol));
-
-    case 'balance':
-      let balanceA = BigNumber(a?.token0?.balance).plus(a?.token1?.balance).toNumber();
-      let balanceB = BigNumber(b?.token0?.balance).plus(b?.token1?.balance).toNumber();
+    case "tvl":
+      if (BigNumber(b?.tvl).lt(a?.tvl)) {
+        return -1;
+      }
+      if (BigNumber(b?.tvl).gt(a?.tvl)) {
+        return 1;
+      }
+      return 0;
+    case "apr":
+      if (BigNumber(b?.gauge?.apr).lt(BigNumber(a?.gauge?.apr))) {
+        console.log(BigNumber(b?.gauge?.apr), BigNumber(a?.gauge?.apr), "1");
+        return -1;
+      }
+      if (
+        BigNumber(b?.gauge?.apr).div(100).times(40).gt(BigNumber(a?.gauge?.apr))
+      ) {
+        console.log(BigNumber(b?.gauge?.apr), BigNumber(a?.gauge?.apr), "2");
+        return 1;
+      }
+      return 0;
+    case "balance":
+      let balanceA = BigNumber(a?.token0?.balance)
+        .plus(a?.token1?.balance)
+        .toNumber();
+      let balanceB = BigNumber(b?.token0?.balance)
+        .plus(b?.token1?.balance)
+        .toNumber();
 
       if (BigNumber(balanceB).lt(balanceA)) {
         return -1;
@@ -1376,7 +1399,7 @@ export default function EnhancedTable({pairs, isLoading}) {
   const router = useRouter();
 
   const [order, setOrder] = useState('desc');
-  const [orderBy, setOrderBy] = useState('stakedBalance');
+  const [orderBy, setOrderBy] = useState('tvl');
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -1976,7 +1999,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   whiteSpace: 'nowrap',
                                 }}>
-                                Gauge not available
+                                No gauge
                               </Typography>
                             </TableCell>
                           }
@@ -2226,7 +2249,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                   whiteSpace: 'nowrap',
                                 }}>
-                                Gauge not available
+                                No gauge
                               </Typography>
                             </TableCell>
                           }
@@ -2633,9 +2656,9 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   {headCell.id === 'poolAmount' && formatCurrency(row.reserve0)}
                                   {headCell.id === 'poolBalance' && formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve0))}
                                   {headCell.id === 'stakedBalance' && row?.gauge?.address && formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve0))}
-                                  {headCell.id === 'stakedBalance' && !row?.gauge?.address && 'Gauge not available'}
+                                  {headCell.id === 'stakedBalance' && !row?.gauge?.address && 'No gauge'}
                                   {headCell.id === 'stakedAmount' && row?.gauge?.address && formatCurrency(row.gauge.reserve0)}
-                                  {headCell.id === 'stakedAmount' && !row?.gauge?.address && 'Gauge not available'}
+                                  {headCell.id === 'stakedAmount' && !row?.gauge?.address && 'No gauge'}
                                 </Typography>
 
                                 <Typography
@@ -2650,9 +2673,9 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   {headCell.id === 'poolAmount' && formatCurrency(row.reserve1)}
                                   {headCell.id === 'poolBalance' && formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve1))}
                                   {headCell.id === 'stakedBalance' && row?.gauge?.address && formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve1))}
-                                  {headCell.id === 'stakedBalance' && !row?.gauge?.address && 'Gauge not available'}
+                                  {headCell.id === 'stakedBalance' && !row?.gauge?.address && 'No gauge'}
                                   {headCell.id === 'stakedAmount' && row?.gauge?.address && formatCurrency(row.gauge.reserve1)}
-                                  {headCell.id === 'stakedAmount' && !row?.gauge?.address && 'Gauge not available'}
+                                  {headCell.id === 'stakedAmount' && !row?.gauge?.address && 'No gauge'}
                                 </Typography>
                               </div>
 

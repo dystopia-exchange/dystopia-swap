@@ -686,6 +686,11 @@ const EnhancedTableToolbar = (props) => {
         </div>
 
         <div className={classes.sidebar}>
+
+          <div className={classes.addButton}>
+            NFT APR: {parseInt(props.veToken?.veDistApr)}%
+          </div>
+
           <div className={classes.addButton} onClick={onCreate}>
             Create Lock
           </div>
@@ -770,6 +775,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
         <EnhancedTableToolbar
             handleRequestSort={handleRequestSort}
             setSortDirection={setSortDirection}
+            veToken={veToken}
         />
 
         {windowWidth > 660 &&
