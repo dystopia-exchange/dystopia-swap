@@ -1,7 +1,14 @@
+.logoIconImg {
+    display: none;
+}
 @media (max-width: 850px) {
     .logoImg {
-        width: 32px;
-        height: 32px;
+        display: none;
+    }
+    .logoIconImg {
+        display: inline;
+        /*width: 32px;*/
+        height: 40px;
     }
 }
 

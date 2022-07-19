@@ -4,14 +4,14 @@ export const GOV_TOKEN_ADDRESS = '0x39aB6574c289c3Ae4d88500eEc792AB5B947A5Eb'
 export const GOV_TOKEN_NAME = 'Cone'
 export const GOV_TOKEN_SYMBOL = 'CONE'
 export const GOV_TOKEN_DECIMALS = 18
-export const GOV_TOKEN_LOGO = 'https://dystopia-swap-seven.vercel.app/logo.svg'
+export const GOV_TOKEN_LOGO = '/logo.svg'
 export const GOV_TOKEN_ABI = abis.tokenABI
 
 export const VE_TOKEN_ADDRESS = '0x060fa7aD32C510F12550c7a967999810dafC5697'
 export const VE_TOKEN_NAME = 'veCONE'
 export const VE_TOKEN_SYMBOL = 'veCONE'
 export const VE_TOKEN_DECIMALS = 18
-export const VE_TOKEN_LOGO = 'https://dystopia-swap-seven.vercel.app/logo.svg'
+export const VE_TOKEN_LOGO = '/logo.svg'
 export const VE_TOKEN_ABI = abis.veTokenABI
 
 export const WFTM_ADDRESS = '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270'
