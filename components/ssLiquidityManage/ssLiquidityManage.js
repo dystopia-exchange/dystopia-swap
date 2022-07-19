@@ -1131,7 +1131,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
             (amountError || assetError) && classes.error
           }`}
         >
-          <div className={classes.massiveInputAssetSelect}>
+          <div className={type !== "withdraw" && createLP ? classes.massiveInputAssetSelectSingle : classes.massiveInputAssetSelect}>
             <AssetSelect
               type={type}
               value={assetValue}
@@ -2749,7 +2749,8 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                           ].join(" ")}
                       >
               <span className={classes.actionButtonText}>
-                {(amount0 === "" || amount1 === "") && "Enter Amount"}
+                {asset0 && asset1 && (amount0 === "" || amount1 === "") && "Enter Amount"}
+                {!asset0 && !asset1 && (amount0 === "" || amount1 === "") && "Select tokens & Enter Amount"}
               </span>
                         {depositLoading && (
                             <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />

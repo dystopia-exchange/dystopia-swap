@@ -82,7 +82,7 @@ input[type=number].mediumInputAmount {
 
 .container {
   align-self: center;
-  width: 782px;
+  width: 788px;
   background: transparent !important;
 }
 
@@ -248,6 +248,7 @@ input[type=number].mediumInputAmount {
 .actionButtonText {
   text-transform: uppercase !important;
   font-weight: 700 !important;
+  letter-spacing: 0;
 }
 
 .autocompleteContainer {
@@ -259,7 +260,7 @@ input[type=number].mediumInputAmount {
 
 .reAddPadding {
   position: relative;
-  padding: 24px 0 0 0;
+  padding: 18px 0 0 0;
   /*background: #DBE6EC !important;*/
 }
 
@@ -385,6 +386,8 @@ input[type=number].mediumInputAmount {
   padding: 11px 0 11px 20px;
   border: 1px solid #86b9d6;
   border-right: none;
+  font-weight: 500;
+  font-size: 16px;
 }
 
 .slippageTextContainer--dark {
@@ -433,16 +436,16 @@ input[type=number].mediumInputAmount {
 }
 
 .textField--amount0-dark {
-  padding: 16px;
-  border-radius: 14px;
+  padding: 16px 16px 22px 22px;
+  border-radius: 12px;
   /*height: 172px;*/
   /*background-image: url("/images/ui/swap-coin-top--dark.svg");*/
 }
 
 .textField--amount1-dark {
   margin-top: 32px;
-  padding: 16px;
-  border-radius: 14px;
+  padding: 16px 16px 22px 22px;
+  border-radius: 12px;
 }
 
 .textField--withdraw-dark {
@@ -454,8 +457,8 @@ input[type=number].mediumInputAmount {
 
 .inputBalanceTextContainer {
   position: absolute;
-  left: 434px;
-  top: 14px;
+  left: 321px;
+  top: 23px;
   width: 320px;
 }
 
@@ -476,7 +479,7 @@ input[type=number].mediumInputAmount {
 
 .inputTitleText {
   display: flex;
-  margin: 0 0 8px 0 !important;
+  margin: 8px 0 4px 6px !important;
 
 }
 
@@ -500,9 +503,16 @@ input[type=number].mediumInputAmount {
   align-items: center;
 }
 
-.massiveInputAssetSelect {
-  width: 100%;
+.massiveInputAssetSelectSingle {
+  min-width: 280px;
+  margin-bottom: 4px;
 }
+.massiveInputAssetSelect {
+
+  width: 100%;
+  margin-bottom: 4px;
+}
+
 
 .largeInput {
   padding: 0 !important;
@@ -600,13 +610,13 @@ input[type=number].mediumInputAmount {
 
 .swapIconContainer {
   position: absolute;
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   background: #DBE6EC;
   /*border: 1px solid #86B9D6;*/
   border-radius: 100px;
   margin-top: -18px;
-  margin-left: 39px;
+  margin-left: 128px;
   cursor: pointer;
 }
 
@@ -996,8 +1006,8 @@ input[type=number].mediumInputAmount {
 
 .titleSectionBack {
   width: 100%;
-  height: 52px;
-  padding: 0 10px;
+  height: 68px;
+  padding: 0 20px;
   background: transparent;
   border: 1px solid #C6CDD2;
   border-radius: 14px;
@@ -1041,6 +1051,8 @@ input[type=number].mediumInputAmount {
 
   /* white */
   color: #E4E9F4;
+  margin-top: 0;
+  margin-bottom: 8px;
 }
 
 
@@ -1052,6 +1064,7 @@ input[type=number].mediumInputAmount {
   width: 20px !important;
   height: 20px !important;
   padding: 4px;
+  margin-right: 10px;
   color: #151718 !important;
   background-color: #C6CDD2;
   border-radius: 10px;
@@ -1099,10 +1112,12 @@ input[type=number].mediumInputAmount {
   display: flex;
   min-width: 540px;
   align-items: center;
-  font-size: 13px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
   color: #E4E9F4;
   padding: 0 10px;
-  height: 45px;
+  height: 56px;
 }
 
 .nftItems {
@@ -1138,7 +1153,7 @@ input[type=number].mediumInputAmount {
 }
 
 .toggles {
-  width: 67%;
+  width: 69%;
   padding-left: 16px;
   margin-top: 20px;
 }
@@ -1150,7 +1165,7 @@ input[type=number].mediumInputAmount {
 
 .toggleOption {
   height: 56px;
-  padding: 16px;
+  padding: 14px;
   display: flex;
   align-items: center;
   flex-basis: auto;
@@ -1308,11 +1323,12 @@ input[type=number].mediumInputAmount {
 }
 
 .slippageCont {
-  width: 33%;
+  width: 31%;
   background-color: #131314;
   border-radius: 14px;
   margin-top: 20px;
-  padding-left: 12px;
+  padding-left: 16px;
+  letter-spacing: 0.1em
 }
 
 .slippageRoot {
@@ -1470,7 +1486,7 @@ input[type=number].mediumInputAmount {
 .buttonOverride {
   position: relative;
   width: 100%;
-  height: 65px;
+  height: 96px;
   margin-top: 20px !important;
   border-radius: 12px !important;
   line-height: 120% !important;
@@ -1483,8 +1499,8 @@ input[type=number].mediumInputAmount {
 
   font-family: 'Poppins';
   font-style: normal;
-  font-weight: 600;
-  font-size: 24px !important;
+  font-weight: 600 !important;
+  font-size: 32px !important;
 }
 
 .buttonOverride--dark {
@@ -1610,8 +1626,9 @@ input[type=number].mediumInputAmount {
 .depositHeader {
   margin-left: 6px;
   font-weight: 500;
-  /*font-size: 18px;*/
-  line-height: 120%;
+  font-size: 60px;
+  letter-spacing: 0.04em;
+  line-height: 72px;
   color: #325569;
 }
 
@@ -1621,19 +1638,20 @@ input[type=number].mediumInputAmount {
 
 .depositSwitcherLabelCont {
   background-color: #131314;
-  padding: 8px 16px;
+  padding: 8px 22px;
   border-radius: 14px;
   position: absolute;
   right: 0;
-  top: 6px;
+  top: 0;
+  height: 72px;
 }
 
 
 .depositSwitcherLabel {
   width: 100%;
-  margin-right: 10px;
-  font-weight: 500;
-  font-size: 14px;
+  margin-right: 18px;
+  font-weight: 600;
+  font-size: 16px;
   line-height: 120%;
   color: #5688A5;
 }
@@ -1682,14 +1700,14 @@ input[type=number].mediumInputAmount {
 .bigscreenSidebar {
   display:flex;
   position: absolute;
-  left: 16px;
+  left: 34px;
   width: 377px;
   height: calc(100vh - 200px);
 }
 
 .myLiqCont {
   width: 100%;
-  padding: 0 4px;
+  padding: 0 0;
 }
 
 .myLiq {
@@ -1707,7 +1725,7 @@ input[type=number].mediumInputAmount {
   display: flex;
   justify-content: space-between;
   flex: 1 2;
-  padding: 6px 0;
+  padding: 8px 1px;
   border-top: 1px solid #8191B9;
 }
 
@@ -1723,7 +1741,7 @@ input[type=number].mediumInputAmount {
 
 .myLiqSpacer {
   display: inline-flex;
-  width: 24px;
+  width: 28px;
 }
 
 @media (max-width:1600px) {
@@ -1738,6 +1756,9 @@ input[type=number].mediumInputAmount {
 
 
 @media (max-width:1200px) {
+  .backIcon {
+    margin-right: 2px;
+  }
   .container {
     position: relative;
     /*margin-top: 60px;*/
@@ -1762,6 +1783,38 @@ input[type=number].mediumInputAmount {
 }
 
 @media (max-width: 860px) {
+  .displayAssetIcon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .massiveInputAssetSelectSingle {
+    min-width: 140px;
+
+    /*margin-bottom: 4px;*/
+  }
+
+  .massiveInputAssetSelectSingle > div > div > div {
+    height: 44px;
+  }
+
+  .massiveInputAssetSelectSingle > div > div > div > div:before {
+    width: 4px;
+    height: 4px;
+  }
+  .massiveInputAssetSelectSingle > div > div > div > div:after {
+    width: 4px;
+    height: 4px;
+  }
+  .massiveInputAssetSelectSingle > div > div > div > div {
+    width: 4px;
+    height: 4px;
+  }
+  .massiveInputAssetSelectSingle > div > div > div > img {
+    width: 20px;
+    height: 20px;
+  }
+
   .liqBodyIn {
     margin: 0 20px 0 36px;
   }
@@ -1951,11 +2004,11 @@ input[type=number].mediumInputAmount {
     font-size: 18px !important;
   }
 
-
   .massiveInputAmount,
   .massiveInputAmountDate {
-    height: 80px;
+    height: 44px;
   }
+
 
   .smallerText,
   .smallerTextDate {
@@ -2151,7 +2204,7 @@ input[type=number].mediumInputAmount {
 
   .buttonOverride {
     /*width: 100%;*/
-    height: 50px;
+    min-height: 68px;
   }
 
   .tokenText {
@@ -2216,7 +2269,9 @@ input[type=number].mediumInputAmount {
   }
 
   .depositHeader {
-    /*font-size: 14px;*/
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 48px;
     margin-left: 20px;
   }
 
