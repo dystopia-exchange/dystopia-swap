@@ -162,15 +162,15 @@ function descendingComparator(a, b, orderBy, sliderValues) {
       return 0;
 
     case 'apy':
-      let apyA = a?.gaugebribes.length ? (
-        a?.gaugebribes.map((bribe, idx) => {
-          return BigNumber(bribe.rewardAmount).toNumber()
+      let apyA = a?.gaugebribes.bribeTokens.length ? (
+        a?.gaugebribes.bribeTokens.map((bribe, idx) => {
+          return BigNumber(bribe.left).toNumber()
         }).reduce((partialSum, a) => partialSum + a, 0)
       ) : 0;
 
-      let apyB = b?.gaugebribes.length ? (
-        b?.gaugebribes.map((bribe, idx) => {
-          return BigNumber(bribe.rewardAmount).toNumber()
+      let apyB = b?.gaugebribes.bribeTokens.length ? (
+        b?.gaugebribes.bribeTokens.map((bribe, idx) => {
+          return BigNumber(bribe.left).toNumber()
         }).reduce((partialSum, a) => partialSum + a, 0)
       ) : 0;
 
@@ -982,53 +982,10 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           }}>
                           {
                             tableCellContent(
-                                `${
-                                    formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
-                                        BigNumber(row?.gauge?.boostedApr0),
-                                        BigNumber(row?.gauge?.boostedApr1)
-                                    ),0)
-                                }→${
-                                    formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
-                                        BigNumber(row?.gauge?.boostedApr0),
-                                        BigNumber(row?.gauge?.boostedApr1)
-                                    ),0)
-                                }%`,
-                                null,
-                                <Tooltip title={
-                                  <React.Fragment>
-                                    {"APR based on current prices of tokens, token boosted APR and your locked DYST amount."}
-                                    <br/><br/>
-                                    {"Total APR"}
-                                    <br/>
-                                    <b>
-                                      {
-                                        formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
-                                            BigNumber(row?.gauge?.boostedApr0),
-                                            BigNumber(row?.gauge?.boostedApr1)
-                                        ),2)
-                                      }%
-                                      {" - "}
-                                      {
-                                        formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
-                                            BigNumber(row?.gauge?.boostedApr0),
-                                            BigNumber(row?.gauge?.boostedApr1)
-                                        ),2)
-                                      }%
-                                    </b>
-                                    <br/>
-                                    <dl>
-                                      <dt><b>{formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.boostedApr0), BigNumber(row?.gauge?.boostedApr1)), 2)}%</b> Boosted APR</dt>
-                                      <dd><b>{formatCurrency(BigNumber(row?.gauge?.boostedApr0), 2)}%</b> {row.token0.symbol} APR</dd>
-                                      <dd><b>{formatCurrency(BigNumber(row?.gauge?.boostedApr1), 2)}%</b> {row.token1.symbol} APR</dd>
-                                      <dt><b>{formatCurrency(BigNumber(row?.gauge?.apr).div(100).times(40), 2)}%</b> Min staking APR</dt>
-                                      <dd><b>{formatCurrency(BigNumber(row?.gauge?.apr).div(100).times(40), 2)}%</b> Min APR</dd>
-                                      <dd><b>{formatCurrency(BigNumber(row?.gauge?.apr), 2)}%</b> Max APR</dd>
-                                    </dl>
-                                  </React.Fragment>
-                                }>
-                                  <QuizIcon fontSize='small'/>
-                                </Tooltip> ,
-                                null
+                              `${formatCurrency(BigNumber(row?.gauge?.apr), 0)}%`,
+                              `${formatCurrency(BigNumber(row?.gauge?.expectAPR), 0)}%`,
+                              'Current',
+                              'Expected'
                             )
                           }
                           
@@ -1097,15 +1054,15 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                             overflow: 'hidden',
                           }}>
                           {
-                            row?.gaugebribes.length ? (
-                                row?.gaugebribes.map((bribe, idx) => {
+                            row?.gaugebribes.bribeTokens.length ? (
+                                row?.gaugebribes.bribeTokens.map((bribe, idx) => {
                                   return (
                                     <>
                                       {
                                         tableCellContent(
-                                          formatCurrency(bribe.rewardAmount),
+                                          formatCurrency(bribe.left),
                                           null,
-                                          bribe.symbol,
+                                          bribe.token.symbol + ` (${Number(bribe.apr).toFixed(1)}% APR)`,
                                           null,
                                         )
                                       }
@@ -1642,13 +1599,11 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                               } %`}
                                               {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.gauge?.reserve0))}
                                               {headCell.id === 'liquidity' && formatCurrency(BigNumber(row?.reserve0))}
-                                              {headCell.id === 'apy' && row?.gaugebribes.length ? (
-                                                      row?.gaugebribes.map((bribe, idx) => {
+                                              {headCell.id === 'apy' && row?.gaugebribes.bribeTokens.length ? (
+                                                      row?.gaugebribes.bribeTokens.map((bribe, idx) => {
                                                         return (
                                                             <div className={['g-flex-column', 'g-flex--align-end'].join(' ')}>
-                                                              {
-                                                                formatCurrency(bribe.rewardAmount)
-                                                              }
+                                                              {`${Number(bribe.apr).toFixed(1)}% APR`}
                                                             </div>
                                                         );
                                                       })
@@ -1694,12 +1649,12 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
 
                                               {headCell.id === 'balance' && formatSymbol(row.token0.symbol)}
                                               {headCell.id === 'liquidity' && formatSymbol(row.token0.symbol)}
-                                              {headCell.id === 'apy' && row?.gaugebribes.length ? (
-                                                      row?.gaugebribes.map((bribe, idx) => {
+                                              {headCell.id === 'apy' && row?.gaugebribes.bribeTokens.length ? (
+                                                      row?.gaugebribes.bribeTokens.map((bribe, idx) => {
                                                         return (
                                                             <div className={['g-flex-column', 'g-flex--align-end'].join(' ')}>
                                                               {
-                                                                formatSymbol(bribe.symbol)
+                                                                formatSymbol(bribe.token.symbol)
                                                               }
                                                             </div>
                                                         );
