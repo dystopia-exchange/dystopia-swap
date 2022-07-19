@@ -1196,7 +1196,7 @@ export default function ssLiquidityManage() {
                   classes[`tokenTextLabel--${appTheme}`],
                 ].join(" ")}
               >
-                Variable pool
+                {assetValue?.name}
               </div>
             </>
           )}

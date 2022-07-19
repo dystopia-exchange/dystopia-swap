@@ -66,6 +66,10 @@ export default function ssWhitelist() {
   };
 
   useEffect(() => {
+    window.setTimeout(() => {
+      stores.dispatcher.dispatch({type: ACTIONS.GET_VEST_NFTS, content: {}});
+    }, 1);
+
     const searchReturned = async (res) => {
       setToken(res);
       setLoading(false);
