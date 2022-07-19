@@ -134,11 +134,11 @@ class Store {
 
     getGasPrices = async (payload) => {
         const gasPrices = await this._getGasPrices();
-        let gasSpeed = localStorage.getItem('dystopia.finance-gas-speed');
+        let gasSpeed = localStorage.getItem('cone.finance-gas-speed');
 
         if (!gasSpeed) {
             gasSpeed = 'fast';
-            localStorage.getItem('dystopia.finance-gas-speed', 'fast');
+            localStorage.getItem('cone.finance-gas-speed', 'fast');
         }
 
         this.setStore({ gasPrices: gasPrices, gasSpeed: gasSpeed });

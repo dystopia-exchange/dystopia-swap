@@ -31,7 +31,7 @@ function Vest() {
   return (
     <NotConnect
       title="Vest"
-      description="Swap between Tetraeder supported stable and volatile assets."
+      description="Swap between Cone supported stable and volatile assets."
       buttonText="LAUNCH APP"
     >
       <Vesting />

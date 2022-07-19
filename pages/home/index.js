@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import BtnEnterApp from "../../ui/BtnEnterApp";
 import classes from "./home.module.css";
+import {useRouter} from "next/router";
 
 const socialLinks = {
   twitter: "https://twitter.com/dystopiaswap",
@@ -11,6 +12,7 @@ const socialLinks = {
 };
 
 const HomePage = () => {
+  const router = useRouter();
   const layoutRef = useRef(null);
   const pageRef = useRef(null);
 
@@ -139,14 +141,14 @@ const HomePage = () => {
       <div className={classes.row}>
         <div className={classes.column}>
           <div className={classes.text}>
-            <p>Tetraeder officially launched in July 2022 with a collective goal of fair and balanced access to DeFi.</p>
-            <p>Tetraeder is a decentralized exchange on the CUBE network with low fees, near 0 slippage on correlated assets and a strong focus on secondary markets for tokenized locks as NFT's (veToken = lpNFTs).</p>
+            <p>Cone officially launched in aug 2022 with a collective goal of fair and balanced access to DeFi.</p>
+            <p>Cone is a decentralized exchange on the BSC network with low fees, near 0 slippage on correlated assets and a strong focus on secondary markets for tokenized locks as NFT's (veToken = lpNFTs).</p>
           </div>
         </div>
         <div className={classes.column}>
           <div className={classes.text}>
             <p>One segment of the cryptocurrency landscape that has shown incredible potential is the swapping of stablecoins and volatile assets.</p>
-            <p>Tetraeder Swap offers users quick, seamless and cheap transactions while utilizing strategies to maximize their yield.</p>
+            <p>Cone Swap offers users quick, seamless and cheap transactions while utilizing strategies to maximize their yield.</p>
           </div>
         </div>
       </div>
@@ -169,7 +171,7 @@ const HomePage = () => {
   //                     Enter the era of crypto
   //                 </div>
   //                 <div className={classes.layoutPromoSubTitle}>
-  //                     DYSTOPIA
+  //                     Cone
   //                 </div>
   //                 <div className={classes.layoutPromoDescription}>
   //                     <div className={classes.layoutPromoDescriptionItem}>
@@ -190,11 +192,11 @@ const HomePage = () => {
   //             </div>
   //             <div className={classes.layoutDescription} ref={layoutRef}>
   //                 <div className={classes.layoutDescriptionText}>
-  //                     <p>Dystopia officially launched in April 2022 with a collective goal of <b>fair and balanced access to DeFi</b>.</p>
-  //                     <p>Dystopia is a decentralized exchange that has launched on the Polygon network with low fees, near 0 slippage on correlated assets and a strong focus on secondary markets for tokenized locks as NFT’s (veToken = lpNFTs).</p>
+  //                     <p>Cone officially launched in April 2022 with a collective goal of <b>fair and balanced access to DeFi</b>.</p>
+  //                     <p>Cone is a decentralized exchange that has launched on the Polygon network with low fees, near 0 slippage on correlated assets and a strong focus on secondary markets for tokenized locks as NFT’s (veToken = lpNFTs).</p>
   //                 </div>
   //                 <div className={classes.layoutDescriptionSmallText}>
-  //                     <p>One segment of the cryptocurrency landscape that has shown incredible potential is the swapping of stablecoins and volatile assets. Dystopia Swap offers users quick, seamless and cheap transactions while utilizing strategies to maximize their yield.</p>
+  //                     <p>One segment of the cryptocurrency landscape that has shown incredible potential is the swapping of stablecoins and volatile assets. Cone Swap offers users quick, seamless and cheap transactions while utilizing strategies to maximize their yield.</p>
   //                 </div>
   //             </div>
   //         </div>

@@ -15,7 +15,7 @@ const Logo = (props) => {
   return (
     <>
       <img className={classes.logoImg} src="/images/ui/logo.svg" width="40" height="40" />
-      <span className={classes.logoText}>TETRAEDER</span>
+      <span className={classes.logoText}>CONE</span>
       {/* {windowWidth > 770 &&
         <svg
           width={width}

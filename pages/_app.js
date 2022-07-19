@@ -36,7 +36,7 @@ export default function MyApp({ Component, pageProps }) {
   const changeTheme = (dark) => {
     setAppTheme(dark ? "dark" : "light");
 
-    localStorage.setItem("dystopia.finance-dark-mode", dark ? "dark" : "light");
+    localStorage.setItem("cone.finance-dark-mode", dark ? "dark" : "light");
   };
 
   const accountConfigureReturned = () => {
@@ -49,7 +49,7 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(function () {
     const localStorageDarkMode = window.localStorage.getItem(
-      "dystopia.finance-dark-mode"
+      "cone.finance-dark-mode"
     );
     changeTheme(localStorageDarkMode ? localStorageDarkMode === "dark" : true);
   }, []);
@@ -93,7 +93,7 @@ export default function MyApp({ Component, pageProps }) {
     <ThemeProvider theme={theme}>
       <React.Fragment>
         <Head>
-          <title>Dystopia</title>
+          <title>Cone</title>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
         <AppThemeProvider value={{ appTheme, setAppTheme }}>

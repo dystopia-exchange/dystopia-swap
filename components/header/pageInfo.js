@@ -31,7 +31,7 @@ export const PageInfo = () => {
     const isDark = appTheme === 'dark'
     return (
         <a
-            href="https://docs.dystopia.exchange/dystopia-1/"
+            href="https://docs.cone.exchange"
             target="_blank"
             className={[classes.headerPageInfo].join(' ')}
         >

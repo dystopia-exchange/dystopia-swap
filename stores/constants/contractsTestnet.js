@@ -1,15 +1,15 @@
 import abis from "../abis";
 
 export const GOV_TOKEN_ADDRESS = '0x6E511b6fAce2c5094163A1F420135a4D70a5ecd7'
-export const GOV_TOKEN_NAME = 'DYSTOPIA'
-export const GOV_TOKEN_SYMBOL = 'DYST'
+export const GOV_TOKEN_NAME = 'Cone'
+export const GOV_TOKEN_SYMBOL = 'CONE'
 export const GOV_TOKEN_DECIMALS = 18
 export const GOV_TOKEN_LOGO = 'https://dystopia-swap-seven.vercel.app/logo.svg'
 export const GOV_TOKEN_ABI = abis.tokenABI
 
 export const VE_TOKEN_ADDRESS = '0x043074eaAf5DCca960601b7B464FCd2bEC34df1D'
-export const VE_TOKEN_NAME = 'veDYST'
-export const VE_TOKEN_SYMBOL = 'veDYST'
+export const VE_TOKEN_NAME = 'veCONE'
+export const VE_TOKEN_SYMBOL = 'veCONE'
 export const VE_TOKEN_DECIMALS = 18
 export const VE_TOKEN_LOGO = 'https://dystopia-swap-seven.vercel.app/logo.svg'
 export const VE_TOKEN_ABI = abis.veTokenABI

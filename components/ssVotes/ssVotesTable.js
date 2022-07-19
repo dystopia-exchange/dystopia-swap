@@ -996,7 +996,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                 null,
                                 <Tooltip title={
                                   <React.Fragment>
-                                    {"APR based on current prices of tokens, token boosted APR and your locked DYST amount."}
+                                    {"APR based on current prices of tokens, token boosted APR and your locked CONE amount."}
                                     <br/><br/>
                                     {"Total APR"}
                                     <br/>

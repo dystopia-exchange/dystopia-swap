@@ -45,16 +45,16 @@ export const WrongNetwork = (props) => {
           </Typography>
 
           <Typography className={classes.paragraph}>
-            Please check that your wallet is connected to CUBE Network, only
-            after you can proceed. If you do not have a CUBE Network in your
+            Please check that your wallet is connected to BSC Network, only
+            after you can proceed. If you do not have a BSC Network in your
             wallet, you can add it through the footer link on the
-            cubescan.network.
+            https://bscscan.com.
           </Typography>
 
           <div className={classes.buttonsContainer}>
             <div className={classes.primaryButton} onClick={onClose}>
               <Typography className={classes.buttonTextPrimary}>
-                cubescan.network
+                bscscan.com
               </Typography>
               <img src="/images/ui/explorer.svg" width="20px" />
             </div>
@@ -62,7 +62,7 @@ export const WrongNetwork = (props) => {
             <div className={classes.secondaryButton}>
               {/* <div className={classes.secondaryButton} onClick={action2 ? action2 : navigateToMedium}> */}
               <Typography className={classes.buttonTextSecondary}>
-                Switch to CUBE Mainnet
+                Switch to BSC Mainnet
               </Typography>
             </div>
           </div>

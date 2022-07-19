@@ -6,7 +6,7 @@ function Swap() {
   return (
     <NotConnect
       title="Swap"
-      description="Swap between Tetraeder supported stable and volatile assets."
+      description="Swap between Cone supported stable and volatile assets."
       buttonText="LAUNCH APP"
     >
       <SwapComponent />

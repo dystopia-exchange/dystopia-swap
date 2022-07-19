@@ -145,7 +145,7 @@ export default function ssWhitelist() {
                 <div style={{ marginRight: 9 }}>Listing Fee</div>
 
                 <Hint
-                  hintText={'Listing fee either needs to be locked in your veDYST NFT or be paid and burnt on the list.'}
+                  hintText={'Listing fee either needs to be locked in your veCONE NFT or be paid and burnt on the list.'}
                   open={openFeeHint}
                   anchor={feeHintAnchor}
                   handleClick={handleClickFeePopover}
@@ -231,7 +231,7 @@ export default function ssWhitelist() {
                   <>
                     {!token.isWhitelisted &&
                       <Hint
-                        hintText={'Vest Value < Fee means you cannot proceed with the whitelisting as there is not enough funds locked in the chosen veDYST.'}
+                        hintText={'Vest Value < Fee means you cannot proceed with the whitelisting as there is not enough funds locked in the chosen veCONE.'}
                         open={openActionHint}
                         anchor={actionHintAnchor}
                         handleClick={handleClickActionPopover}
@@ -311,7 +311,7 @@ export default function ssWhitelist() {
                   </div>
 
                   <Hint
-                    hintText={'Listing fee either needs to be locked in your veDYST NFT or be paid and burnt on the list.'}
+                    hintText={'Listing fee either needs to be locked in your veCONE NFT or be paid and burnt on the list.'}
                     open={openFeeHint}
                     anchor={feeHintAnchor}
                     handleClick={handleClickFeePopover}
@@ -354,7 +354,7 @@ export default function ssWhitelist() {
                     <>
                       {!token.isWhitelisted &&
                         <Hint
-                          hintText={'Vest Value < Fee means you cannot proceed with the whitelisting as there is not enough funds locked in the chosen veDYST.'}
+                          hintText={'Vest Value < Fee means you cannot proceed with the whitelisting as there is not enough funds locked in the chosen veCONE.'}
                           open={openActionHint}
                           anchor={actionHintAnchor}
                           handleClick={handleClickActionPopover}
@@ -387,7 +387,7 @@ export default function ssWhitelist() {
             options: nfts,
             symbol: veToken?.symbol,
             handleChange,
-            placeholder: 'Click to select veDYST',
+            placeholder: 'Click to select veCONE',
           })}
         </div>
 

@@ -6,7 +6,7 @@ function Vote() {
   return (
     <NotConnect
       title="Vote"
-      description="Use your veTET to vote for your selected liquidity pair's rewards distribution or create a bribe to encourage others to do the same."
+      description="Use your veCONE to vote for your selected liquidity pair's rewards distribution or create a bribe to encourage others to do the same."
       buttonText="LAUNCH APP"
     >
       <Gauges />
