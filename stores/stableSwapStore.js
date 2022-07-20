@@ -2223,7 +2223,7 @@ class Store {
           },
           {
             uuid: depositTXID,
-            description: `Migrating liquidity pool from ${migrator.label} to Dystopia Pool`,
+            description: `Migrating liquidity pool from ${migrator.label} to Cone Pool`,
             status: "WAITING",
           },
         ],

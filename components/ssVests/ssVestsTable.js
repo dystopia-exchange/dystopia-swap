@@ -505,7 +505,7 @@ const useStyles = makeStyles((theme) => ({
     // },
   },
   tableContainer: {
-    border: 'none',
+    // border: 'none',
     border: '1px solid #D3F85A',
     borderRadius: 12,
     width: '100%',
@@ -678,7 +678,7 @@ const EnhancedTableToolbar = (props) => {
 
 
           <div className={classes.toolbarInfo}>
-            Lock your DYST to earn rewards and governance rights. Each locked position is created and represented as an NFT, meaning you can hold multiple locked positions.
+            Lock your CONE to earn rewards and governance rights. Each locked position is created and represented as an NFT, meaning you can hold multiple locked positions.
             <span className={classes.toolbarInfoLink}>
             <img src="/images/ui/explorer.svg" />
           </span>

@@ -148,7 +148,7 @@ const StatButton = () => {
   return (
       <div
           className={[classes.statButton, classes[`statButton--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}
-          onClick={() => window.open("https://info.dystopia.exchange/home", "_blank")}
+          onClick={() => window.open("https://info.cone.exchange/home", "_blank")}
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M22 22H2C1.59 22 1.25 21.66 1.25 21.25C1.25 20.84 1.59 20.5 2 20.5H22C22.41 20.5 22.75 20.84 22.75 21.25C22.75 21.66 22.41 22 22 22Z" fill="#779BF4"/>
@@ -271,7 +271,7 @@ function Header(props) {
 
   useEffect(function () {
     const localStorageDarkMode = window.localStorage.getItem(
-        "dystopia.finance-dark-mode",
+        "cone.finance-dark-mode",
     );
     setDarkMode(localStorageDarkMode ? localStorageDarkMode === "dark" : true);
   }, []);

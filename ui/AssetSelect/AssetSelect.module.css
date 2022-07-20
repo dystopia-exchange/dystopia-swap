@@ -49,7 +49,8 @@
   display: flex;
   align-items: center;
   /* justify-content: space-between; */
-  padding: 18px 4px 16px 16px;
+  padding: 18px 4px 16px 8px;
+  /*padding: 18px 4px 16px 16px;*/
   transition: fill 0.16s ease;
   fill: #9BC9E4;
 }
@@ -503,10 +504,10 @@ p.labelSelectSecondary {
 }
 
 .displayAssetIconSecond {
-  width: 54px;
-  height: 54px;
+  width: 66px;
+  height: 66px;
   border: 2px solid #9BC9E4;
-  padding: 4px;
+  /*padding: 4px;*/
   background: #B9DFF5;
 }
 
@@ -523,7 +524,7 @@ p.labelSelectSecondary {
 }
 
 .displayAssetIconSec {
-  margin-left: -10px;
+  margin-left: -20px;
 }
 
 @media (max-width: 860px) {

@@ -380,7 +380,7 @@ export default function ssLock({govToken, veToken}) {
           <Typography className={classes.actionButtonText}>
             {lockLoading ? `Locking` :
               (lockLoading || amount === '' || Number(amount) === 0) ? 'Enter Lock Amount' :
-                `Lock Tokens & Get veDYST`
+                `Lock Tokens & Get veCONE`
             }
           </Typography>
 

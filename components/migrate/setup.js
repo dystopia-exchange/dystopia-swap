@@ -44,7 +44,7 @@ export default function Setup() {
   const [toAssetOptions, setToAssetOptions] = useState([]);
   const [selectedValue, setSelectedValue] = React.useState("a");
   const [checkpair, setcheckpair] = useState(false);
-  const [dystopiaPair, setdystopiaPair] = useState(null);
+  const [conePair, setconePair] = useState(null);
   const [quote, setQuote] = useState(null);
   const [amount0, setAmount0] = useState("");
   const [amount1, setAmount1] = useState("");
@@ -66,7 +66,7 @@ export default function Setup() {
           parseFloat(pair?.totalSupply.toString())) *
         parseFloat(pair?.reserve1.toString());
 
-      setdystopiaPair(pair);
+      setconePair(pair);
       let removedToken0 =
         (amount * pairDetails?.weiReserve1) / pairDetails?.totalSupply;
       let removedToken1 =
@@ -254,7 +254,7 @@ export default function Setup() {
     }
     setPairDetails(null);
     setcheckpair(false);
-    setdystopiaPair(false);
+    setconePair(false);
     setQuote(null);
     forceUpdate();
   };
@@ -326,9 +326,9 @@ export default function Setup() {
     }
 
     if (parseFloat(am) <= 0 || am == null || am == "" || isNaN(am)) {
-      setdystopiaPair(false);
+      setconePair(false);
     } else {
-      setdystopiaPair(true);
+      setconePair(true);
     }
 
     pairDetails.token0Bal =
@@ -380,7 +380,7 @@ export default function Setup() {
         pairDetails.token0,
         pairDetails.token1
       );
-      setdystopiaPair(true);
+      setconePair(true);
     }
   };
 
@@ -481,9 +481,9 @@ export default function Setup() {
           parseFloat(pair?.totalSupply.toString())) *
         parseFloat(pair?.reserve1.toString());
 
-      setdystopiaPair(pair);
+      setconePair(pair);
     } else {
-      setdystopiaPair(false);
+      setconePair(false);
     }
   };
 
@@ -1292,7 +1292,7 @@ export default function Setup() {
                 amount == "" ||
                 isNaN(amount)
               ) ? (
-                dystopiaPair ? (
+                conePair ? (
                   <div>
                     <div
                       className={[
@@ -1409,7 +1409,7 @@ export default function Setup() {
                                   classes[`pairPoolLabel--${appTheme}`],
                                 ].join(" ")}
                               >
-                                Dystopia Pool
+                                Cone Pool
                               </div>
                             </div>
                           </div>
