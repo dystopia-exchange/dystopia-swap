@@ -1798,7 +1798,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
     );
   };
 
-  const renderSmallInput = (type, amountValue, amountError, amountChanged) => {
+  /*const renderSmallInput = (type, amountValue, amountError, amountChanged) => {
     return (
       <div
         className={[
@@ -1864,7 +1864,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
         </div>
       </div>
     );
-  };
+  };*/
 
   const renderMediumInputToggle = (type, value) => {
     return (
@@ -2791,6 +2791,137 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
 
           {activeTab === "withdraw" && (
               <>
+                <div className="g-flex g-flex--wrap" style={{width: '100%'}}>
+                  {withdrawAction === "remove" &&
+                      <div
+                          className={["g-flex g-flex--align-center g-flex--space-between", classes.slippageCont].join(' ')}
+                      >
+                        <div
+                            style={{
+                              display: 'flex',
+                              fontWeight: 400,
+                              fontSize: 14,
+                              // marginBottom: 10,
+                              color: '#E4E9F4',
+                            }}
+                        >
+                          <span style={{marginRight: 10,}}>Slippage</span>
+                          <Hint
+                              fill="#586586"
+                              hintText={
+                                "Slippage is the difference between the price you expect to get on the crypto you have ordered and the price you actually get when the order executes."
+                              }
+                              open={openHint}
+                              anchor={hintAnchor}
+                              handleClick={handleClickPopover}
+                              handleClose={handleClosePopover}
+                              vertical={46}
+                          />
+                        </div>
+
+                        <div
+                            style={{
+                              position: "relative",
+                              // marginBottom: 20,
+                            }}
+                        >
+                          <TextField
+                              placeholder="0.00"
+                              fullWidth
+                              error={slippageError}
+                              helperText={slippageError}
+                              value={slippage}
+                              onChange={onSlippageChanged}
+                              disabled={
+                                  depositLoading ||
+                                  stakeLoading ||
+                                  depositStakeLoading ||
+                                  createLoading
+                              }
+                              classes={{
+                                root: [
+                                  classes.slippageRoot,
+                                  appTheme === "dark"
+                                      ? classes["slippageRoot--dark"]
+                                      : classes["slippageRoot--light"],
+                                ].join(" "),
+                              }}
+                              InputProps={{
+                                style: {
+                                  border: "none",
+                                  borderRadius: 0,
+                                },
+                                classes: {
+                                  root: classes.searchInput,
+                                },
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                            <span
+                                style={{
+                                  color:
+                                      appTheme === "dark" ? "#ffffff" : "#325569",
+                                }}
+                            >
+                              %
+                            </span>
+                                    </InputAdornment>
+                                ),
+                              }}
+                              inputProps={{
+                                className: [
+                                  classes.smallInput,
+                                  classes[`inputBalanceSlippageText--${appTheme}`],
+                                ].join(" "),
+                                style: {
+                                  padding: 0,
+                                  borderRadius: 0,
+                                  border: "none",
+                                  fontSize: 14,
+                                  fontWeight: 400,
+                                  lineHeight: "120%",
+                                  color: appTheme === "dark" ? "#C6CDD2" : "#325569",
+                                },
+                              }}
+                          />
+                        </div>
+                        {slippageError && (
+                            <div
+                                style={{ marginTop: 20 }}
+                                className={[
+                                  classes.warningContainer,
+                                  classes[`warningContainer--${appTheme}`],
+                                  classes.warningContainerError,
+                                ].join(" ")}
+                            >
+                              <div
+                                  className={[
+                                    classes.warningDivider,
+                                    classes.warningDividerError,
+                                  ].join(" ")}
+                              ></div>
+                              <Typography
+                                  className={[
+                                    classes.warningError,
+                                    classes[`warningText--${appTheme}`],
+                                  ].join(" ")}
+                                  align="center"
+                              >
+                                {slippageError}
+                              </Typography>
+                            </div>
+                        )}
+                      </div>
+                  }
+                  {withdrawAction === "remove" &&
+                      <div className={classes.refreshWarnBlock}>
+                        <span className={classes.refreshWarnSymbol}>!</span>
+                        <span>
+                          If you do not see your pool amount, refresh the page
+                        </span>
+                      </div>
+                  }
+
+                </div>
                 <Button
                     variant="contained"
                     size="large"
