@@ -1730,7 +1730,9 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                     depositLoading ||
                     stakeLoading ||
                     depositStakeLoading ||
-                    createLoading
+                    createLoading ||
+                      (withdrawAction !== "remove" && !withdrawAsset?.gauge?.balance) ||
+                      ((withdrawAction === "remove" || withdrawAction === "unstake-remove") && (!withdrawAsset?.balance || !BigNumber(withdrawAsset?.balance).gt(0)))
                   }
                   onFocus={amount1Focused ? amount1Focused : null}
                   inputProps={{
