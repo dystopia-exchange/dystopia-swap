@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import {
   Paper,
-  Grid,
   Typography,
   Button,
   TextField,
@@ -11,11 +10,7 @@ import {
   Tooltip,
   IconButton,
   MenuItem,
-  Dialog,
   InputBase,
-  DialogTitle,
-  DialogContent,
-  Popover,
   Select,
   ClickAwayListener,
 } from "@mui/material";
@@ -24,17 +19,12 @@ import { formatCurrency } from "../../utils";
 import classes from "./ssLiquidityManage.module.css";
 import stores from "../../stores";
 import { ACTIONS, CONTRACTS } from "../../stores/constants";
+import {VE_TOKEN_NAME} from '../../stores/constants/contracts'
 import {
-  Search,
-  DeleteOutline,
   ArrowBackIosNew,
-  Close,
-  Settings,
-  ArrowDropDownCircleOutlined,
 } from "@mui/icons-material";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import { formatSymbol, formatInputAmount } from "../../utils";
-import SwapIconBg from "../../ui/SwapIconBg";
 import AssetSelect from "../../ui/AssetSelect";
 import Borders from "../../ui/Borders";
 import Loader from "../../ui/Loader";
@@ -2369,7 +2359,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                     {!createLP &&
                         <div className={classes.nftRow} style={{width: '100%',}}>
                           <div className={classes.nftTitle}>
-                            Choose Locked NFT to connect with your Staking
+                            Attach {VE_TOKEN_NAME} to your LP to receive boosted rewards
                           </div>
                           <div className={classes.nftItems}>{renderTokenSelect()}</div>
                         </div>
