@@ -1150,7 +1150,8 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   depositLoading ||
                   stakeLoading ||
                   depositStakeLoading ||
-                  createLoading
+                  createLoading ||
+                    !BigNumber(assetValue?.balance).gt(0)
                 }
                 onFocus={onFocus ? onFocus : null}
                 inputProps={{
@@ -2507,7 +2508,6 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                           </div>
                       }
 
-
                       {createLP && renderMediumInputToggle("stable", stable)}
                     </div>
 
@@ -2618,6 +2618,23 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   />*/}
                     {/*</Popover>*/}
                     {/*</div>*/}
+
+                    {!createLP &&
+                        <div
+                            className={[
+                              classes.disclaimerContainer,
+                              classes.disclaimerContainerDefault,
+
+                            ].join(" ")}
+                        >
+                          <div className={classes.disclaimerContainerWarnSymbol}>
+                            !
+                          </div>
+                          <div>
+                            Select veTET NFT for your LP Stake to get an APR boost in proportion to Voting Power.
+                          </div>
+                        </div>
+                    }
                   </>
               )}
               {activeTab === "withdraw" && (
@@ -2760,15 +2777,16 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                               onStake(pair, amount0, pair.balance);
                             }
                           }}
-                          disabled={amount0 === "" || !pair?.gauge}
+                          disabled={amount0 === "" || !withdrawAsset}
                           className={[
                             classes.buttonOverride,
                             classes[`buttonOverride--${appTheme}`],
                           ].join(" ")}
                       >
               <span className={classes.actionButtonText}>
-                {amount0 !== "" && "Stake LP"}
-                {amount0 === "" && "Enter Amount"}
+                {!withdrawAsset && amount0 === "" && "Select LP & Enter Amount"}
+                {withdrawAsset && amount0 !== "" && "Stake LP"}
+                {withdrawAsset && amount0 === "" && "Enter Amount"}
               </span>
                         {depositLoading && (
                             <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />

@@ -1470,15 +1470,20 @@ input[type=number].mediumInputAmount {
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-  padding: 16px 18px 12px;
+  padding: 18px 18px 18px;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 120%;
+  font-size: 16px;
+  line-height: 24px;
+  min-height: 64px;
 }
 
 .disclaimerContainer--dark {
   background: #24292D;
   color: #A2E3A9;
+}
+
+.disclaimerContainerDefault {
+  border: 1px solid #1F2B49;
 }
 
 .disclaimerContainerWarnSymbol {
@@ -1494,6 +1499,10 @@ input[type=number].mediumInputAmount {
   font-size: 16px;
   font-weight: bold;
   margin-right: 10px;
+}
+
+.disclaimerContainerDefault .disclaimerContainerWarnSymbol {
+  background: #779BF4;
 }
 
 .disclaimerContainerError {
