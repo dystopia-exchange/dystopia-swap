@@ -1921,7 +1921,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
           <Hint
               fill="#586586"
               hintText={
-                "New curve: x3y+y3x, which allows efficient stable swaps"
+                "Stable pool provides correlated asset swaps with low slippage."
               }
               open={openStablePoolHint}
               anchor={stablePoolHntAnchor}
@@ -1989,7 +1989,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
           <Hint
               fill="#586586"
               hintText={
-                "Classic Uniswap V2 pool"
+                "Volatile pools are the most appropriate for uncorrelated assets, their structure provides greater flexibility for price fluctuation."
               }
               open={openVolatilePoolHint}
               anchor={volatilePoolHntAnchor}
