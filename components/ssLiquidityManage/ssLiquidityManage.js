@@ -2023,21 +2023,8 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
             classes[`slippageIconContainer--${appTheme}`],
           ].join(" ")}
         >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              className={[
-                classes.slippageIcon,
-                openSelectToken ? classes["slippageIcon--active"] : "",
-                classes[`slippageIcon--${appTheme}`],
-              ].join(" ")}
-              d="M9.99999 10.9766L14.125 6.85156L15.3033 8.0299L9.99999 13.3332L4.69666 8.0299L5.87499 6.85156L9.99999 10.9766Z"
-            />
+          <svg width="18" height="9" viewBox="0 0 18 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16.9201 0.950012L10.4001 7.47001C9.63008 8.24001 8.37008 8.24001 7.60008 7.47001L1.08008 0.950012" stroke="#D3F85A" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
       </ClickAwayListener>
@@ -2047,9 +2034,11 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
   const renderTokenSelect = () => {
     return (
       <Select
+          onClick={openSelect}
         className={[
           classes.tokenSelect,
           classes[`tokenSelect--${appTheme}`],
+            openSelectToken ? classes.tokenSelectOpen : '',
         ].join(" ")}
         fullWidth
         value={token}
@@ -2070,7 +2059,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                           color: appTheme === "dark" ? "#7C838A" : "#5688A5",
                         }}
                       >
-                        Select veTET
+                        Select {veToken?.symbol}
                       </div>
                     );
                   }
@@ -2080,6 +2069,8 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
         MenuProps={{
           classes: {
             list: appTheme === "dark" ? classes["list--dark"] : classes.list,
+            paper: classes.listPaper,
+            // root: '',
           },
         }}
         open={openSelectToken}
@@ -2107,13 +2098,13 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   <Typography
                     className={classes.menuOptionLabel}
                     style={{
-                      fontWeight: 500,
-                      fontSize: 12,
-                      marginRight: 30,
+                      // fontWeight: 500,
+                      // fontSize: 12,
+                      // marginRight: 30,
                       color: "#D3F85A",
                     }}
                   >
-                    #{option.id}
+                    <span className={classes.nftword}>NFT </span>#{option.id}
                   </Typography>
 
                   <div
@@ -2124,12 +2115,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                     ].join(" ")}
                   >
                     <Typography
-                      style={{
-                        fontWeight: 400,
-                        fontSize: 10,
-                        color: appTheme === "dark" ? "#7C838A" : "#5688A5",
-                        textAlign: "right",
-                      }}
+                        className={classes.menuOptionSecText}
                     >
                       {formatCurrency(option.lockValue)} {veToken?.symbol}
                     </Typography>

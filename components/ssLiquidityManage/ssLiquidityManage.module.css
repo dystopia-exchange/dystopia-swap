@@ -462,8 +462,10 @@ input[type=number].mediumInputAmount {
 }
 
 .slippageIconContainer {
+  position: absolute;
+  right: 0;
   display: flex;
-  padding: 11px;
+  padding: 12px 20px;
   background: transparent;
   /*border: 1px solid #86b9d6;*/
   cursor: pointer;
@@ -567,7 +569,7 @@ input[type=number].mediumInputAmount {
   position: absolute;
   left: 321px;
   top: 23px;
-  width: 320px;
+  width: 440px;
 }
 
 .inputBalanceTextContainerForPair {
@@ -1203,8 +1205,8 @@ input[type=number].mediumInputAmount {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  width: 100%;
-  padding: 6px 12px;
+  /*width: 100%;*/
+  padding: 6px 38px 6px 12px;
 }
 
 
@@ -1218,7 +1220,7 @@ input[type=number].mediumInputAmount {
 
 .nftTitle {
   display: flex;
-  min-width: 540px;
+  min-width: 440px;
   align-items: center;
   font-weight: 400;
   font-size: 16px;
@@ -1230,10 +1232,17 @@ input[type=number].mediumInputAmount {
 
 .nftItems {
   display: flex;
-  width: 100%;
+  width: 302px;
   background-color: #181d2d;
   border-radius: 12px;
   color: #D3F85A;
+}
+
+
+@media (max-width: 860px) {
+  .nftItems {
+    width: 100%;
+  }
 }
 
 .controls {
@@ -1336,6 +1345,10 @@ input[type=number].mediumInputAmount {
 .tokenSelect {
   border-radius: 0 !important;
 }
+.tokenSelect:hover, .tokenSelectOpen {
+  border: 1px solid #D3F85A;
+  border-radius: 12px !important;
+}
 
 .tokenSelect > svg {
   color: #5F7285 !important;
@@ -1363,34 +1376,58 @@ input[type=number].mediumInputAmount {
 .tokenSelectInput > .menuOption > .menuOptionSec,
 .tokenSelectInput--dark > .menuOption > .menuOptionSec {
   /*display: none !important;*/
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  color: #8191B9 !important;
 }
 
 .tokenSelectInput > .menuOption > .menuOptionLabel,
 .tokenSelectInput--dark > .menuOption > .menuOptionLabel {
   font-weight: 400 !important;
-  font-size: 14px !important;
+  font-size: 16px !important;
+  line-height: 24px;
+
+}
+
+.listPaper {
+  margin-top: 8px;
+  border: 1px solid #D3F85A;
+  border-radius: 12px !important;
+  background: #060B17 !important;
 }
 
 .list,
 .list--dark {
   padding: 0 !important;
-  background: #DBE6EC !important;
+  background: #060B17;
 }
 
-.list--dark {
-  background: #151718 !important;
-}
 
 .list > li,
 .list--dark > li {
   padding: 0 !important;
+  height: 48px;
+  border: none !important;
 }
 
 .list > li > .menuOption,
 .list--dark > li > .menuOption {
   width: 100%;
-  padding: 10px !important;
-  border: 1px solid #0B5E8E !important;
+  padding: 10px 16px !important;
+  /*border: 1px solid #0B5E8E !important;*/
+}
+
+@media (max-width: 860px) {
+
+}
+
+.nftword {
+  display: none;
+}
+.list--dark > li > .menuOption .nftword {
+  display: inline-flex;
+  margin-right: 4px;
 }
 
 .list > li:not(:last-of-type) > .menuOption,
@@ -1403,6 +1440,13 @@ input[type=number].mediumInputAmount {
   padding-right: 0 !important;
 }
 
+.menuOptionSecText {
+  text-align: right;
+  color: #8191B9;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+}
 
 .assetSelectBalance {
   flex: 1;
