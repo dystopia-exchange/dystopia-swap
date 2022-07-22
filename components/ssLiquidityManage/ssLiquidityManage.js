@@ -2162,6 +2162,16 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
     }
   };
 
+  const [lockedNft, setLockedNft] = useState()
+
+  useEffect(() => {
+    if (withdrawAsset?.gauge?.tokenId && vestNFTs.length > 0) {
+      setLockedNft(vestNFTs.filter(a => a.id == withdrawAsset?.gauge?.tokenId)[0])
+    } else {
+      setLockedNft(undefined)
+    }
+  }, [withdrawAsset?.gauge?.tokenId, vestNFTs.length]);
+
   return (
       <div className="g-flex g-flex--justify-center">
         <div className={classes.bigscreenSidebar}>
@@ -2926,6 +2936,22 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                         <span>
                           If you do not see your pool amount, refresh the page
                         </span>
+                      </div>
+                  }
+
+                  {withdrawAction === "unstake" && lockedNft &&
+                      <div className={classes.lockedNFT}>
+                        <div className={classes.lockedNFTTitle}>
+                          Connected Locked NFT to this LP Staking
+                        </div>
+                        <div className={classes.lockedNFTToken}>
+                          <div className={classes.lockedNFTID}>
+                            #{lockedNft.id}
+                          </div>
+                          <div className={classes.lockedNFTVe}>
+                            {formatCurrency(lockedNft.lockValue)} {veToken?.symbol}
+                          </div>
+                        </div>
                       </div>
                   }
 

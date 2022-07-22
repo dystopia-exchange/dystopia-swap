@@ -1,3 +1,75 @@
+.lockedNFT {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: #060B17;
+  border: 1px solid #060B17;
+  border-radius: 12px;
+  min-height: 56px;
+  padding: 0;
+  margin: 20px 0 0 0;
+}
+.lockedNFTTitle {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #E4E9F4;
+  padding-left: 16px;
+}
+.lockedNFTToken {
+  display: flex;
+  width: 50%;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+  background: #171D2D;
+  border-radius: 12px;
+  padding: 0 16px;
+}
+.lockedNFTID {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #E4E9F4;
+}
+.lockedNFTVe {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #8191B9;
+}
+@media (max-width: 860px) {
+  .lockedNFT {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 0;
+  }
+  .lockedNFTTitle {
+    display: flex;
+    width: 100%;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    height: 46px;
+    align-items: center;
+  }
+  .lockedNFTToken {
+    width: 100%;
+    height: 46px;
+  }
+  .lockedNFTID {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+  }
+  .lockedNFTVe {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+
 .refreshWarnBlock {
   height: 56px;
   padding: 16px;

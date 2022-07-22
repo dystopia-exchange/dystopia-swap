@@ -1471,9 +1471,10 @@ class Store {
                 pair.gauge.address
               );
 
-              const [gaugeBalance] =
+              const [gaugeBalance, tokenId] =
                 await multicall.aggregate([
                   gaugeContract.methods.balanceOf(account.address),
+                  gaugeContract.methods.tokenIds(account.address),
                 ]);
 
               pair.gauge.balance =
@@ -1483,6 +1484,7 @@ class Store {
                     .toFixed(18)
                   : 0;
 
+              pair.gauge.tokenId = tokenId
               pair.gauge.totalSupplyUSD = parseFloat(pair.gauge.totalSupply) / ethPrice;
 
               pair.gauge.reserve0 =
