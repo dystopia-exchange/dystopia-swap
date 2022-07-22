@@ -21,7 +21,7 @@ export default function ffWarning({close, title, subTitle, icon, description, bt
       }}
       className={classes.dialogWrapper}
       classes={{
-        paper: appTheme === "dark" ? classes['paperBody--dark'] : classes['paperBody--light'],
+        paper: classes.paperBody,
       }}>
       <div className={classes.dialogContainer}>
         <div className={classes.warningContainer}>
