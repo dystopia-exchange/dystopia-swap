@@ -3,6 +3,7 @@ import {_SLIPPAGE_PRECISION, multiSwapAddress} from './constants'
 //@ts-ignore
 import MultiSwap2Abi from './MultiSwap2.json'
 import BigNumber from "bignumber.js";
+require('url')
 
 const ERC20Abi = [
     'function approve(address _spender, uint256 _value) public returns (bool success)',
@@ -73,6 +74,8 @@ export async function doSwap(swap, slippage) {
                 { gasLimit: 3000000 }
             );
 
+        return tx
+
         console.log('tx', tx);
 
         // const tokenIn = tokens[swap.tokenIn].symbol;
@@ -88,14 +91,13 @@ export async function doSwap(swap, slippage) {
 }
 
 
-async function api(func = '', query = undefined) {
-    const dev = window.location.hostname === 'localhost';
+export async function api(func = '', query = undefined) {
+    const dev = globalThis.location?.hostname === 'localhost';
     const apiUrl = dev
         ? 'http://localhost:8080/'
-        : window.location.origin + '/';
-    const url = apiUrl + func + '?' + new URLSearchParams(query);
-    console.log('---- query', query)
-    console.log('--- --- url', url)
+        : globalThis.location?.origin + '/';
+    const url = apiUrl + func + '?' + new globalThis.URLSearchParams(query);
+    console.log('URLSearchParams', url)
     return await (await fetch(url)).json();
 }
 

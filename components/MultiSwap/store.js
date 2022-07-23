@@ -1,6 +1,7 @@
 import { makeAutoObservable, action } from 'mobx'
-import {allowance, approve, doSwap, getSwapContract, swapQuery} from "./utils";
+import {allowance, approve, doSwap, getSwapContract, swapQuery, api} from "./utils";
 import * as ethers from 'ethers'
+import { debounce } from "debounce"
 
 const erc20abi = [
     // Read-Only Functions
@@ -15,8 +16,35 @@ const erc20abi = [
     "event Transfer(address indexed from, address indexed to, uint amount)"
 ];
 
+function getPoolInfo(multiswapData, poolId) {
+    console.log('getPoolInfo poolId', poolId);
+    const dexId = parseInt(poolId.slice(-1), 16);
+    console.log('dexId', dexId);
+
+    for (const dex of multiswapData.dexes) {
+        if (
+            dex.mask &&
+            simpleAnd(poolId, dex.mask) === dex.mask &&
+            dex.dexId === dexId
+        ) {
+            return dex;
+        }
+    }
+    return multiswapData.dexes[0]; // first dex must be main Balancer dex
+}
+
+function simpleAnd(a, mask) {
+    const A = ethers.utils.arrayify(a, undefined);
+    const M = ethers.utils.arrayify(mask, undefined);
+    const C = [...A];
+    for (let i = 0; i < A.length; i++) C[i] = A[i] & M[i];
+    return ethers.utils.hexlify(C, {});
+}
+
+
 class MultiSwapStore {
     tokensMap = {}
+    data = {}
 
     provider = null
 
@@ -33,6 +61,8 @@ class MultiSwapStore {
     isFetchingApprove = false
     isFetchingSwap = false
 
+    debSwapQuery = null
+
     constructor() {
         makeAutoObservable(this, {
             setTokenIn: action.bound,
@@ -45,6 +75,8 @@ class MultiSwapStore {
             approve: action.bound,
             doSwap: action.bound,
         })
+
+        this.debSwapQuery = debounce(this._swapQuery.bind(this), 300)
     }
 
     setProvider(provider) {
@@ -60,16 +92,20 @@ class MultiSwapStore {
         this.swap = null
         this.allowed = false
         this._checkAllowance()
-        this._swapQuery()
+        this.debSwapQuery()
     }
+
     setTokenOut(value) {
         this.tokenOut = value
-        this._swapQuery()
+        this.swap = null
+        this.debSwapQuery()
     }
+
     setSwapAmount(value) {
         this.swapAmount = value
-        this._swapQuery()
+        this.debSwapQuery()
     }
+
     setSlippage(value) {
         this.slippage = value
     }
@@ -82,16 +118,20 @@ class MultiSwapStore {
     async approve() {
         if (this.provider && this.tokenIn) {
             this.isFetchingApprove = true
-            await approve(this.tokenIn, this.provider)
+            console.log('--- --- 1', this.isFetchingApprove)
+            const res = await approve(this.tokenIn, this.provider)
+            await res.wait()
             await this._checkAllowance()
             this.isFetchingApprove = false
+            console.log('--- --- 2', this.isFetchingApprove)
         }
     }
 
     async doSwap() {
         if (this.swap) {
             this.isFetchingSwap = true
-            await doSwap(this.swap, this.slippage)
+            const res = await doSwap(this.swap, this.slippage)
+            await res.wait()
             this.isFetchingSwap = false
         }
     }
@@ -113,25 +153,76 @@ class MultiSwapStore {
 
     async _swapQuery() {
         if (this.tokenIn && this.tokenOut && this.swapAmount && this.provider) {
-            const tokenIn = await this._getToken(this.tokenIn)
-            const tokenOut = await this._getToken(this.tokenOut)
-            const swapAmount = ethers.utils.parseUnits(this.swapAmount, tokenOut.decimals).toString();
+            const [tokenIn, tokenOut] = await Promise.all([
+              this._getToken(this.tokenIn),
+              this._getToken(this.tokenOut),
+            ])
+            const swapAmount = ethers.utils.parseUnits(this.swapAmount, tokenIn.decimals).toString();
             this.isFetchingSwapQuery = true
             const response = await swapQuery(tokenIn, tokenOut, swapAmount)
             this.swap = response
+            console.log(
+                'this.routes',
+                this.routes && JSON.parse(
+                    JSON.stringify(
+                        this.routes
+                    )
+                )
+            )
             this.isFetchingSwapQuery = false
         }
     }
 
     async _checkAllowance() {
+        console.log('_checkAllowance .provider', this.provider)
         if (this.provider) {
             this.isFetchingAllowance = true
             const response = await allowance(this.tokenIn, this.provider)
+            console.log('_checkAllowance response', response)
             this.allowed = response
             this.isFetchingAllowance = false
             return response
         }
         return false
+    }
+
+    async _fetchData() {
+        const requests = [api('info'), api('dexes'), api('tokens')];
+        const [service, dexes, tokens] = await Promise.all(requests);
+        this.data = { service, dexes, tokens }
+    }
+
+    get routes() {
+        function tokenByIndex(swap, i) {
+            const address = swap.tokenAddresses[i];
+            return address
+        }
+
+        if (this.swap === null) {
+            return null
+        } else {
+            return this.swap.swaps.map((s) => {
+                let percentage = null;
+
+                if (parseFloat(s.amount) > 0) {
+                    percentage = ethers.BigNumber.from(s.amount)
+                        .mul(100)
+                        .div(this.swap.swapAmount)
+                        .toString();
+                }
+
+                const tokenIn = tokenByIndex(this.swap, s.assetInIndex);
+                const tokenOut = tokenByIndex(this.swap, s.assetOutIndex);
+                const dex = getPoolInfo(this.data, s.poolId);
+
+                return {
+                    percentage,
+                    tokenIn,
+                    tokenOut,
+                    dex
+                }
+            })
+        }
     }
 }
 

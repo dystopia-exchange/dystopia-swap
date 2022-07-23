@@ -24,6 +24,8 @@ import Hint from "../hint/hint";
 import Loader from "../../ui/Loader";
 import AssetSelect from "../../ui/AssetSelect";
 import {MultiSwap} from "../MultiSwap";
+import { observer } from 'mobx-react'
+import { multiSwapStore } from '../MultiSwap/store'
 import * as ethers from 'ethers'
 
 function Setup() {
@@ -70,6 +72,10 @@ function Setup() {
     window.addEventListener("resize", () => {
         setWindowWidth(window.innerWidth);
     });
+
+    useEffect(() => {
+        multiSwapStore._fetchData()
+    }, [])
 
     useEffect(
         function () {
@@ -167,7 +173,8 @@ function Setup() {
             stores.emitter.on(ACTIONS.WRAP_RETURNED, wrapReturned);
             stores.emitter.on(ACTIONS.UNWRAP_RETURNED, wrapReturned);
             stores.emitter.on(ACTIONS.SWAP_RETURNED, swapReturned);
-            stores.emitter.on(ACTIONS.QUOTE_SWAP_RETURNED, quoteReturned);
+            // TODO: setQuote
+            // stores.emitter.on(ACTIONS.QUOTE_SWAP_RETURNED, quoteReturned);
             stores.emitter.on(ACTIONS.BASE_ASSETS_UPDATED, assetsUpdated);
 
             ssUpdated();
@@ -503,6 +510,9 @@ function Setup() {
 
     const setBalance100 = () => {
         setFromAmountValue(fromAssetValue.balance);
+        multiSwapStore.setSwapAmount(fromAssetValue.balance)
+        console.log('fromAssetValue.balance', fromAssetValue.balance)
+
         if (
             !(
                 (fromAssetValue?.symbol == "MATIC" ||
@@ -540,39 +550,115 @@ function Setup() {
         }
     };
 
-    const renderSwapInformation = () => {
-        if (quoteError) {
-            return (
-                <div
-                    className={[classes.quoteLoader, classes.quoteLoaderError].join(" ")}
-                >
-                    <div
-                        className={[
-                            classes.quoteLoaderDivider,
-                            classes.quoteLoaderDividerError,
-                        ].join(" ")}
-                    ></div>
-                    <Typography className={classes.quoteError}>{quoteError}</Typography>
-                </div>
-            );
-        }
+    const renderSwapInformation = (args) => {
+        const { routes } = args
 
-        if (quoteLoading) {
+        // if (quoteError) {
+        //     return (
+        //         <div
+        //             className={[classes.quoteLoader, classes.quoteLoaderError].join(" ")}
+        //         >
+        //             <div
+        //                 className={[
+        //                     classes.quoteLoaderDivider,
+        //                     classes.quoteLoaderDividerError,
+        //                 ].join(" ")}
+        //             ></div>
+        //             <Typography className={classes.quoteError}>{quoteError}</Typography>
+        //         </div>
+        //     );
+        // }
+
+        // if (quoteLoading) {
+        //     return (
+        //         <div
+        //             className={[classes.quoteLoader, classes.quoteLoaderLoading].join(
+        //                 " "
+        //             )}
+        //         >
+        //             <CircularProgress size={20} className={classes.loadingCircle} />
+        //         </div>
+        //     );
+        // }
+
+        const renderRoutes = (route) => {
+            const { percentage, dex } = route
+            let tokenIn = null
+            let tokenOut = null
+            const baseAsset = stores.stableSwapStore.getStore("baseAssets");
+
+            baseAsset.forEach((asset) => {
+                if (asset.address.toLowerCase() === route.tokenIn.toLowerCase()) {
+                    tokenIn = asset
+                }
+                if (asset.address.toLowerCase() === route.tokenOut.toLowerCase()) {
+                    tokenOut = asset
+                }
+            })
+
+            // if (percentage === null) {
+            //     return null
+            // }
+
             return (
                 <div
-                    className={[classes.quoteLoader, classes.quoteLoaderLoading].join(
+                    className={[classes.route, classes[`route--${appTheme}`]].join(
                         " "
                     )}
                 >
-                    <CircularProgress size={20} className={classes.loadingCircle} />
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            width: '100%',
+                        }}
+                    >
+                        <img
+                            className={[
+                                classes.routeIcon,
+                                classes[`routeIcon--${appTheme}`],
+                            ].join(" ")}
+                            alt=""
+                            src={tokenIn.logoURI}
+                            height="40px"
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                            }}
+                        />
+
+                        <div
+                            className={[
+                                classes.routeLinesLeftText,
+                                classes[`routeLinesLeftText--${appTheme}`],
+                            ].join(" ")}
+                            style={{ position: 'static' }}
+                        >
+                            {dex.name}{' '}{percentage}%
+                        </div>
+
+                        <img
+                             className={[
+                                 classes.routeIcon,
+                                 classes[`routeIcon--${appTheme}`],
+                             ].join(" ")}
+                             alt=""
+                             src={tokenOut.logoURI}
+                             height="40px"
+                             onError={(e) => {
+                                 e.target.onerror = null;
+                                 e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                             }}
+                        />
+                    </div>
                 </div>
-            );
+            )
         }
 
         return (
             <>
                 <div className={classes.depositInfoContainer}>
-                    {quote && (
                         <div
                             style={{
                                 display: "flex",
@@ -580,6 +666,7 @@ function Setup() {
                                 width: "100%",
                             }}
                         >
+                            {/*
                             {fromAmountValue <= Number(fromAssetValue.balance) && (
                                 <div
                                     className={[
@@ -611,6 +698,8 @@ function Setup() {
                                     </Typography>
                                 </div>
                             )}
+                            */}
+                            {/*
 
                             {fromAmountValue > Number(fromAssetValue.balance) && (
                                 <div
@@ -645,6 +734,10 @@ function Setup() {
                                 </div>
                             )}
 
+                            */}
+
+                            {/*
+
                             <Typography
                                 className={[
                                     classes.depositInfoHeading,
@@ -654,6 +747,7 @@ function Setup() {
                             >
                                 Price Info
                             </Typography>
+
 
                             <div
                                 className={[
@@ -699,117 +793,22 @@ function Setup() {
                                     </Typography>
                                 </div>
                             </div>
+                            */}
 
-                            <Typography
-                                className={[
-                                    classes.depositInfoHeading,
-                                    classes[`depositInfoHeading--${appTheme}`],
-                                ].join(" ")}
-                            >
-                                Route
-                            </Typography>
-
-                            <div
-                                className={[classes.route, classes[`route--${appTheme}`]].join(
-                                    " "
-                                )}
-                            >
-                                <img
-                                    className={[
-                                        classes.routeIcon,
-                                        classes[`routeIcon--${appTheme}`],
-                                    ].join(" ")}
-                                    alt=""
-                                    src={fromAssetValue ? `${fromAssetValue.logoURI}` : ""}
-                                    height="40px"
-                                    onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                                    }}
-                                />
-                                <div className={classes.line}>
-                                    <div
+                            {routes && Array.isArray(routes) && (
+                                <>
+                                    <Typography
                                         className={[
-                                            classes.routeLinesLeft,
-                                            classes[`routeLinesLeft--${appTheme}`],
+                                            classes.depositInfoHeading,
+                                            classes[`depositInfoHeading--${appTheme}`],
                                         ].join(" ")}
-                                    ></div>
-
-                                    {quote?.output?.routeAsset && (
-                                        <>
-                                            <div
-                                                className={[
-                                                    classes.routeLinesLeftText,
-                                                    classes[`routeLinesLeftText--${appTheme}`],
-                                                ].join(" ")}
-                                            >
-                                                {quote.output.routes[0].stable ? "Stable" : "Volatile"}
-                                            </div>
-
-                                            <img
-                                                className={[
-                                                    classes.routeIcon,
-                                                    classes[`routeIcon--${appTheme}`],
-                                                ].join(" ")}
-                                                alt=""
-                                                src={
-                                                    quote.output.routeAsset
-                                                        ? `${quote.output.routeAsset.logoURI}`
-                                                        : ""
-                                                }
-                                                height="40px"
-                                                onError={(e) => {
-                                                    e.target.onerror = null;
-                                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                                                }}
-                                            />
-
-                                            <div
-                                                className={[
-                                                    classes.routeLinesRightText,
-                                                    classes[`routeLinesRightText--${appTheme}`],
-                                                ].join(" ")}
-                                            >
-                                                {quote.output.routes[1].stable ? "Stable" : "Volatile"}
-                                            </div>
-                                        </>
-                                    )}
-
-                                    {!quote?.output?.routeAsset && (
-                                        <div
-                                            className={[
-                                                classes.routeArrow,
-                                                classes[`routeArrow--${appTheme}`],
-                                            ].join(" ")}
-                                        >
-                                            {quote.output.routes[0].stable ? "Stable" : "Volatile"}
-                                        </div>
-                                    )}
-
-                                    <div
-                                        className={[
-                                            classes.routeLinesRight,
-                                            classes[`routeLinesRight--${appTheme}`],
-                                        ].join(" ")}
-                                    ></div>
-                                </div>
-
-                                <img
-                                    className={[
-                                        classes.routeIcon,
-                                        classes[`routeIcon--${appTheme}`],
-                                    ].join(" ")}
-                                    alt=""
-                                    src={toAssetValue ? `${toAssetValue.logoURI}` : ""}
-                                    height="40px"
-                                    onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                                    }}
-                                />
-                            </div>
+                                    >
+                                        Routes:
+                                    </Typography>
+                                    {routes?.map(renderRoutes)}
+                                </>
+                            )}
                         </div>
-                    )}
                 </div>
             </>
         );
@@ -891,6 +890,9 @@ function Setup() {
         assetOptions,
         onAssetSelect
     ) => {
+
+        console.log('assetValue', assetValue, amountValue)
+
         return (
             <div
                 className={[
@@ -919,11 +921,11 @@ function Setup() {
                         noWrap
                         onClick={() => setBalance100()}
                     >
-            <span>
-              {assetValue && assetValue.balance
-                  ? " " + formatCurrency(assetValue.balance)
-                  : ""}
-            </span>
+                    <span>
+                      {assetValue && assetValue.balance
+                          ? " " + formatCurrency(assetValue.balance)
+                          : ""}
+                    </span>
                     </Typography>
 
                     {assetValue?.balance &&
@@ -1019,8 +1021,12 @@ function Setup() {
                     allowed, isFetchingAllowance,
                     swap, isFetchingSwapQuery,
                     doApprove, isFetchingApprove,
-                    doSwap, isFetchingSwap
+                    doSwap, isFetchingSwap,
+                    multiswapData,
+                    routes,
                 } = renderProps
+
+                console.log('swap', swap && JSON.parse(JSON.stringify(swap)))
 
                 let buttonLabel = 'Swap'
                 let handleClickButton = doSwap
@@ -1028,319 +1034,290 @@ function Setup() {
                     || isFetchingSwapQuery
                     || isFetchingApprove
                     || isFetchingSwap
-                    || !!swapAmount
+                    || !swapAmount
 
-                if (allowed === false) {
-                    buttonLabel = 'Approve'
-                    handleClickButton = doApprove
-                }
                 if (!!swapAmount === false) {
                     buttonLabel = 'Enter Amount'
                 }
 
-                function tokenByIndex(i) {
-                    const address = swap.tokenAddresses[i];
-                    return address
-                }
-
-                const renderRoutes = () => {
-                    for (const s of swap.swaps) {
-                        if (s.amount > 0) {
-                            const percentage = ethers.BigNumber.from(s.amount)
-                                .add(1)
-                                .mul(100)
-                                .div(swap.swapAmount)
-                                .toString();
-
-                        }
-                        const tokenIn = tokenByIndex(s.assetInIndex);
-                        const tokenOut = tokenByIndex(s.assetOutIndex);
-
-                         `
-                            <li>
-                                <b>${tokenIn.symbol}</b>
-                                <small>${dex.name}
-                                <a
-                                    href='#'
-                                    onClick="excludePlatform('${dex.name}')"
-                                    title='Click to exclude'
-                                    class='text-danger' style='text-decoration: none'>🗙</a>
-                                </small>
-                                <b>${tokenOut.symbol}</b>
-                            </li>
-                         `;
+                if (allowed === false) {
+                    buttonLabel = 'Approve'
+                    handleClickButton = doApprove
+                    if (!isFetchingApprove) {
+                        disableButton = false
                     }
                 }
 
                 return (
                     <>
-        <div className={classes.swapInputs}>
-            {renderMassiveInput(
-                "From",
-                fromAmountValue,
-                fromAmountError,
-                (event) => {
-                    fromAmountChanged(event)
-                    const value = formatInputAmount(event.target.value.replace(",", "."));
-                    setSwapAmount(value)
-                },
-                fromAssetValue,
-                fromAssetError,
-                fromAssetOptions,
-                (type, value) => {
-                    console.log('setTokenIn', value.address)
-                    onAssetSelect(type, value)
-                    setTokenIn(value.address)
-                }
-            )}
+                        <div className={classes.swapInputs}>
+                            {renderMassiveInput(
+                                "From",
+                                swapAmount,
+                                fromAmountError,
+                                (event) => {
+                                    fromAmountChanged(event)
+                                    const value = formatInputAmount(event.target.value.replace(",", "."));
+                                    setSwapAmount(value)
+                                },
+                                fromAssetValue,
+                                fromAssetError,
+                                fromAssetOptions,
+                                (type, value) => {
+                                    onAssetSelect(type, value)
+                                    setTokenIn(value.address)
+                                }
+                            )}
 
-            {fromAssetError && (
-                <div
-                    style={{ marginTop: 20 }}
-                    className={[
-                        classes.warningContainer,
-                        classes[`warningContainer--${appTheme}`],
-                        classes.warningContainerError,
-                    ].join(" ")}
-                >
-                    <div
-                        className={[
-                            classes.warningDivider,
-                            classes.warningDividerError,
-                        ].join(" ")}
-                    ></div>
-                    <Typography
-                        className={[
-                            classes.warningError,
-                            classes[`warningText--${appTheme}`],
-                        ].join(" ")}
-                        align="center"
-                    >
-                        {fromAssetError}
-                    </Typography>
-                </div>
-            )}
+                            {fromAssetError && (
+                                <div
+                                    style={{ marginTop: 20 }}
+                                    className={[
+                                        classes.warningContainer,
+                                        classes[`warningContainer--${appTheme}`],
+                                        classes.warningContainerError,
+                                    ].join(" ")}
+                                >
+                                    <div
+                                        className={[
+                                            classes.warningDivider,
+                                            classes.warningDividerError,
+                                        ].join(" ")}
+                                    ></div>
+                                    <Typography
+                                        className={[
+                                            classes.warningError,
+                                            classes[`warningText--${appTheme}`],
+                                        ].join(" ")}
+                                        align="center"
+                                    >
+                                        {fromAssetError}
+                                    </Typography>
+                                </div>
+                            )}
 
-            <div
-                className={[
-                    classes.swapIconContainer,
-                    classes[`swapIconContainer--${appTheme}`],
-                ].join(" ")}
-                onMouseOver={swapIconHover}
-                onMouseOut={swapIconDefault}
-                onMouseDown={swapIconClick}
-                onMouseUp={swapIconDefault}
-                onTouchStart={swapIconClick}
-                onTouchEnd={swapIconDefault}
-                onClick={swapAssets}
-            >
-                {windowWidth > 470 && (
-                    <svg
-                        width="80"
-                        height="80"
-                        viewBox="0 0 80 80"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <circle
-                            cx="40"
-                            cy="40"
-                            r="39.5"
-                            fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
-                            stroke={appTheme === "dark" ? "#5F7285" : "#86B9D6"}
-                        />
+                            <div
+                                className={[
+                                    classes.swapIconContainer,
+                                    classes[`swapIconContainer--${appTheme}`],
+                                ].join(" ")}
+                                onMouseOver={swapIconHover}
+                                onMouseOut={swapIconDefault}
+                                onMouseDown={swapIconClick}
+                                onMouseUp={swapIconDefault}
+                                onTouchStart={swapIconClick}
+                                onTouchEnd={swapIconDefault}
+                                onClick={swapAssets}
+                            >
+                                {windowWidth > 470 && (
+                                    <svg
+                                        width="80"
+                                        height="80"
+                                        viewBox="0 0 80 80"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <circle
+                                            cx="40"
+                                            cy="40"
+                                            r="39.5"
+                                            fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
+                                            stroke={appTheme === "dark" ? "#5F7285" : "#86B9D6"}
+                                        />
 
-                        <rect
-                            y="30"
-                            width="4"
-                            height="20"
-                            fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
-                        />
+                                        <rect
+                                            y="30"
+                                            width="4"
+                                            height="20"
+                                            fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
+                                        />
 
-                        <rect
-                            x="76"
-                            y="30"
-                            width="4"
-                            height="20"
-                            fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
-                        />
+                                        <rect
+                                            x="76"
+                                            y="30"
+                                            width="4"
+                                            height="20"
+                                            fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
+                                        />
 
-                        <circle
-                            cx="40"
-                            cy="40"
-                            r="29.5"
-                            fill={
-                                swapIconBgColor || (appTheme === "dark" ? "#24292D" : "#B9DFF5")
-                            }
-                            stroke={
-                                swapIconBorderColor ||
-                                (appTheme === "dark" ? "#5F7285" : "#86B9D6")
-                            }
-                        />
+                                        <circle
+                                            cx="40"
+                                            cy="40"
+                                            r="29.5"
+                                            fill={
+                                                swapIconBgColor || (appTheme === "dark" ? "#24292D" : "#B9DFF5")
+                                            }
+                                            stroke={
+                                                swapIconBorderColor ||
+                                                (appTheme === "dark" ? "#5F7285" : "#86B9D6")
+                                            }
+                                        />
 
-                        <path
-                            d="M41.0002 44.172L46.3642 38.808L47.7782 40.222L40.0002 48L32.2222 40.222L33.6362 38.808L39.0002 44.172V32H41.0002V44.172Z"
-                            fill={
-                                swapIconArrowColor ||
-                                (appTheme === "dark" ? "#4CADE6" : "#0B5E8E")
-                            }
-                        />
-                    </svg>
-                )}
+                                        <path
+                                            d="M41.0002 44.172L46.3642 38.808L47.7782 40.222L40.0002 48L32.2222 40.222L33.6362 38.808L39.0002 44.172V32H41.0002V44.172Z"
+                                            fill={
+                                                swapIconArrowColor ||
+                                                (appTheme === "dark" ? "#4CADE6" : "#0B5E8E")
+                                            }
+                                        />
+                                    </svg>
+                                )}
 
-                {windowWidth <= 470 && (
-                    <svg
-                        width="50"
-                        height="50"
-                        viewBox="0 0 50 50"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <circle
-                            cx="25"
-                            cy="25"
-                            r="24.5"
-                            fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
-                            stroke={appTheme === "dark" ? "#5F7285" : "#86B9D6"}
-                        />
+                                {windowWidth <= 470 && (
+                                    <svg
+                                        width="50"
+                                        height="50"
+                                        viewBox="0 0 50 50"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <circle
+                                            cx="25"
+                                            cy="25"
+                                            r="24.5"
+                                            fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
+                                            stroke={appTheme === "dark" ? "#5F7285" : "#86B9D6"}
+                                        />
 
-                        <rect
-                            y="20"
-                            width="3"
-                            height="10"
-                            fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
-                        />
+                                        <rect
+                                            y="20"
+                                            width="3"
+                                            height="10"
+                                            fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
+                                        />
 
-                        <rect
-                            x="48"
-                            y="20"
-                            width="2"
-                            height="10"
-                            fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
-                        />
+                                        <rect
+                                            x="48"
+                                            y="20"
+                                            width="2"
+                                            height="10"
+                                            fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
+                                        />
 
-                        <circle
-                            cx="25"
-                            cy="25"
-                            r="18.5"
-                            fill={
-                                swapIconBgColor || (appTheme === "dark" ? "#24292D" : "#B9DFF5")
-                            }
-                            stroke={
-                                swapIconBorderColor ||
-                                (appTheme === "dark" ? "#5F7285" : "#86B9D6")
-                            }
-                        />
+                                        <circle
+                                            cx="25"
+                                            cy="25"
+                                            r="18.5"
+                                            fill={
+                                                swapIconBgColor || (appTheme === "dark" ? "#24292D" : "#B9DFF5")
+                                            }
+                                            stroke={
+                                                swapIconBorderColor ||
+                                                (appTheme === "dark" ? "#5F7285" : "#86B9D6")
+                                            }
+                                        />
 
-                        <path
-                            d="M25.8336 28.4773L30.3036 24.0073L31.4819 25.1857L25.0002 31.6673L18.5186 25.1857L19.6969 24.0073L24.1669 28.4773V18.334H25.8336V28.4773Z"
-                            fill={
-                                swapIconArrowColor ||
-                                (appTheme === "dark" ? "#ffffff" : "#ffffff")
-                            }
-                        />
-                    </svg>
-                )}
-            </div>
+                                        <path
+                                            d="M25.8336 28.4773L30.3036 24.0073L31.4819 25.1857L25.0002 31.6673L18.5186 25.1857L19.6969 24.0073L24.1669 28.4773V18.334H25.8336V28.4773Z"
+                                            fill={
+                                                swapIconArrowColor ||
+                                                (appTheme === "dark" ? "#ffffff" : "#ffffff")
+                                            }
+                                        />
+                                    </svg>
+                                )}
+                            </div>
 
-            {renderMassiveInput(
-                "To",
-                toAmountValue,
-                toAmountError,
-                toAmountChanged,
-                toAssetValue,
-                toAssetError,
-                toAssetOptions,
-                (type, value) => {
-                    onAssetSelect(type, value)
-                    setTokenOut(value.address)
-                }
-            )}
+                            {renderMassiveInput(
+                                "To",
+                                swap?.returnAmount
+                                    ? ethers.utils.formatUnits(swap?.returnAmount, toAssetValue.decimals)
+                                    : swap?.returnAmount
+                                ,
+                                toAmountError,
+                                toAmountChanged,
+                                toAssetValue,
+                                toAssetError,
+                                toAssetOptions,
+                                (type, value) => {
+                                    onAssetSelect(type, value)
+                                    setTokenOut(value.address)
+                                }
+                            )}
 
-            {toAssetError && (
-                <div
-                    style={{ marginTop: 20 }}
-                    className={[
-                        classes.warningContainer,
-                        classes[`warningContainer--${appTheme}`],
-                        classes.warningContainerError,
-                    ].join(" ")}
-                >
-                    <div
-                        className={[
-                            classes.warningDivider,
-                            classes.warningDividerError,
-                        ].join(" ")}
-                    ></div>
-                    <Typography
-                        className={[
-                            classes.warningError,
-                            classes[`warningText--${appTheme}`],
-                        ].join(" ")}
-                        align="center"
-                    >
-                        {toAssetError}
-                    </Typography>
-                </div>
-            )}
+                            {toAssetError && (
+                                <div
+                                    style={{ marginTop: 20 }}
+                                    className={[
+                                        classes.warningContainer,
+                                        classes[`warningContainer--${appTheme}`],
+                                        classes.warningContainerError,
+                                    ].join(" ")}
+                                >
+                                    <div
+                                        className={[
+                                            classes.warningDivider,
+                                            classes.warningDividerError,
+                                        ].join(" ")}
+                                    ></div>
+                                    <Typography
+                                        className={[
+                                            classes.warningError,
+                                            classes[`warningText--${appTheme}`],
+                                        ].join(" ")}
+                                        align="center"
+                                    >
+                                        {toAssetError}
+                                    </Typography>
+                                </div>
+                            )}
 
-            {renderSmallInput(
-                "slippage",
-                slippage,
-                slippageError,
-                (event) => {
-                    console.log('event', event.target.value)
-                    onSlippageChanged(event)
-                }
-            )}
+                            {renderSmallInput(
+                                "slippage",
+                                slippage,
+                                slippageError,
+                                (event) => {
+                                    setSlippage(event.target.value)
+                                    // onSlippageChanged(event)
+                                }
+                            )}
+                            {slippageError && (
+                                <div
+                                    style={{ marginTop: 20 }}
+                                    className={[
+                                        classes.warningContainer,
+                                        classes[`warningContainer--${appTheme}`],
+                                        classes.warningContainerError,
+                                    ].join(" ")}
+                                >
+                                    <div
+                                        className={[
+                                            classes.warningDivider,
+                                            classes.warningDividerError,
+                                        ].join(" ")}
+                                    ></div>
+                                    <Typography
+                                        className={[
+                                            classes.warningError,
+                                            classes[`warningText--${appTheme}`],
+                                        ].join(" ")}
+                                        align="center"
+                                    >
+                                        {slippageError}
+                                    </Typography>
+                                </div>
+                            )}
 
-            {slippageError && (
-                <div
-                    style={{ marginTop: 20 }}
-                    className={[
-                        classes.warningContainer,
-                        classes[`warningContainer--${appTheme}`],
-                        classes.warningContainerError,
-                    ].join(" ")}
-                >
-                    <div
-                        className={[
-                            classes.warningDivider,
-                            classes.warningDividerError,
-                        ].join(" ")}
-                    ></div>
-                    <Typography
-                        className={[
-                            classes.warningError,
-                            classes[`warningText--${appTheme}`],
-                        ].join(" ")}
-                        align="center"
-                    >
-                        {slippageError}
-                    </Typography>
-                </div>
-            )}
+                            {!hidequote ? renderSwapInformation({ routes }) : null}
 
-            {!hidequote ? renderSwapInformation() : null}
+                            {loading && (
+                                <div className={classes.loader}>
+                                    <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
+                                </div>
+                            )}
 
-            {loading && (
-                <div className={classes.loader}>
-                    <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
-                </div>
-            )}
-
-            <BtnSwap
-                onClick={handleClickButton}
-                className={classes.btnSwap}
-                labelClassName={
-                    disableButton
-                        ? classes["actionButtonText--disabled"]
-                        : classes.actionButtonText
-                }
-                isDisabled={disableButton}
-                label={buttonLabel}
-            ></BtnSwap>
-        </div>
+                            <BtnSwap
+                                onClick={handleClickButton}
+                                className={classes.btnSwap}
+                                labelClassName={
+                                    disableButton
+                                        ? classes["actionButtonText--disabled"]
+                                        : classes.actionButtonText
+                                }
+                                isDisabled={disableButton}
+                                label={buttonLabel}
+                            ></BtnSwap>
+                        </div>
                     </>
                 )
             }}
@@ -1348,4 +1325,4 @@ function Setup() {
     );
 }
 
-export default withTheme(Setup);
+export default withTheme(observer(Setup));

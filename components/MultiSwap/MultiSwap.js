@@ -1,7 +1,8 @@
 import React  from 'react'
 import { observer } from 'mobx-react'
 import { multiSwapStore } from './store'
-import {useProvider} from "./hooks";
+import {useProvider} from "./hooks"
+import { debounce } from "debounce"
 
 export const MultiSwap = observer((props) => {
     const [provider] = useProvider()
@@ -16,14 +17,13 @@ export const MultiSwap = observer((props) => {
         reverseTokens: doReverseTokens,
         approve: doApprove, isFetchingApprove,
         doSwap, isFetchingSwap,
-        tokensMap,
+        tokensMap, data: multiswapData,
+        routes,
     } = multiSwapStore
 
     if (multiSwapStore.provider === null && provider) {
         multiSwapStore.setProvider(provider)
     }
-
-    console.log('swap', swap)
 
     return (
         <div style={{ color: '#fff' }}>
@@ -38,6 +38,8 @@ export const MultiSwap = observer((props) => {
                 doSwap, isFetchingSwap,
                 doReverseTokens,
                 tokensMap,
+                multiswapData,
+                routes,
             })}
         </div>
     )
