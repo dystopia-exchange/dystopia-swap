@@ -92,12 +92,8 @@ export async function doSwap(swap, slippage, provider) {
 
 
 export async function api(func = '', query = undefined) {
-    const dev = globalThis.location?.hostname === 'localhost';
-    const apiUrl = dev
-        ? 'http://localhost:8080/'
-        : globalThis.location?.origin + '/';
+    const apiUrl = 'https://dolphin-app-wp9hd.ondigitalocean.app/'
     const url = apiUrl + func + '?' + new globalThis.URLSearchParams(query);
-    console.log('URLSearchParams', url)
     return await (await fetch(url)).json();
 }
 
