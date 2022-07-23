@@ -2,6 +2,8 @@ import { makeAutoObservable, action } from 'mobx'
 import {allowance, approve, doSwap, getSwapContract, swapQuery, api} from "./utils";
 import * as ethers from 'ethers'
 import { debounce } from "debounce"
+import stores from "../../stores";
+import {ACTIONS} from "../../stores/constants";
 
 const erc20abi = [
     // Read-Only Functions
@@ -137,8 +139,11 @@ class MultiSwapStore {
         if (this.swap) {
             this.isFetchingSwap = true
                 try {
-                const res = await doSwap(this.swap, this.slippage)
+                const res = await doSwap(this.swap, this.slippage, this.provider)
                 await res.wait()
+                await stores.stableSwapStore.fetchBaseAssets(
+                    [this.tokenIn, this.tokenOut]
+                )
             } catch (e) {
                 this.error = 'Swap request error'
             } finally {

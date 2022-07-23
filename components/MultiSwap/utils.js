@@ -60,11 +60,11 @@ export function getDeadline() {
     return Math.floor(Date.now() / 1000) + 60 * 30;
 }
 
-export async function doSwap(swap, slippage) {
+export async function doSwap(swap, slippage, provider) {
     if (swap && swap.returnAmount) {
         // noinspection JSUnresolvedFunction
         const tx = await getSwapContract()
-            .connect(wallet.signer)
+            .connect(provider.getSigner())
             .multiSwap(
                 swap.swapData, // in/out tokens, amounts
                 swap.swaps, // array of swaps

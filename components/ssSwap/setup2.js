@@ -39,6 +39,7 @@ function Setup() {
     const [fromAmountValue, setFromAmountValue] = useState("");
     const [fromAmountError, setFromAmountError] = useState(false);
     const [fromAssetValue, setFromAssetValue] = useState(null);
+
     const [fromAssetError, setFromAssetError] = useState(false);
     const [fromAssetOptions, setFromAssetOptions] = useState([]);
 
