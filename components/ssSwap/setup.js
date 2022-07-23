@@ -1008,7 +1008,6 @@ function Setup() {
 
   return (
       <div className={classes.swapInputs}>
-        123
         {renderMassiveInput(
             "From",
             fromAmountValue,

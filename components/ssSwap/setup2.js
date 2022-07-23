@@ -119,6 +119,17 @@ function Setup() {
             const ssUpdated = () => {
                 const baseAsset = stores.stableSwapStore.getStore("baseAssets");
 
+                if (
+                    baseAsset.length > 0
+                    && multiSwapStore.tokenIn === null
+                    && multiSwapStore.tokenOut === null
+                ) {
+                    const WMATIC = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
+                    const DYST = '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb'
+                    multiSwapStore.setTokenIn(WMATIC)
+                    multiSwapStore.setTokenOut(DYST)
+                }
+
                 setToAssetOptions(baseAsset);
                 setFromAssetOptions(baseAsset);
 
@@ -315,199 +326,6 @@ function Setup() {
         }
     };
 
-    const onSwap = () => {
-        if (
-            !fromAmountValue ||
-            fromAmountValue > Number(fromAssetValue.balance) ||
-            Number(fromAmountValue) <= 0
-        ) {
-            return;
-        }
-
-        setFromAmountError(false);
-        setFromAssetError(false);
-        setToAssetError(false);
-
-        let error = false;
-
-        if (!fromAmountValue || fromAmountValue === "" || isNaN(fromAmountValue)) {
-            setFromAmountError("From amount is required");
-            error = true;
-        } else {
-            if (
-                !fromAssetValue.balance ||
-                isNaN(fromAssetValue.balance) ||
-                BigNumber(fromAssetValue.balance).lte(0)
-            ) {
-                setFromAmountError("Invalid balance");
-                error = true;
-            } else if (BigNumber(fromAmountValue).lt(0)) {
-                setFromAmountError("Invalid amount");
-                error = true;
-            } else if (
-                fromAssetValue &&
-                BigNumber(fromAmountValue).gt(fromAssetValue.balance)
-            ) {
-                setFromAmountError(`Greater than your available balance`);
-                error = true;
-            }
-        }
-
-        if (!fromAssetValue || fromAssetValue === null) {
-            setFromAssetError("From asset is required");
-            error = true;
-        }
-
-        if (!toAssetValue || toAssetValue === null) {
-            setFromAssetError("To asset is required");
-            error = true;
-        }
-
-        if (!error) {
-            setLoading(true);
-
-            stores.dispatcher.dispatch({
-                type: ACTIONS.SWAP,
-                content: {
-                    fromAsset: fromAssetValue,
-                    toAsset: toAssetValue,
-                    fromAmount: fromAmountValue,
-                    toAmount: toAmountValue,
-                    quote: quote,
-                    slippage: slippage,
-                },
-            });
-        }
-    };
-    const onWrap = () => {
-        if (
-            !fromAmountValue ||
-            fromAmountValue > Number(fromAssetValue.balance) ||
-            Number(fromAmountValue) <= 0
-        ) {
-            return;
-        }
-
-        setFromAmountError(false);
-        setFromAssetError(false);
-        setToAssetError(false);
-
-        let error = false;
-
-        if (!fromAmountValue || fromAmountValue === "" || isNaN(fromAmountValue)) {
-            setFromAmountError("From amount is required");
-            error = true;
-        } else {
-            if (
-                !fromAssetValue.balance ||
-                isNaN(fromAssetValue.balance) ||
-                BigNumber(fromAssetValue.balance).lte(0)
-            ) {
-                setFromAmountError("Invalid balance");
-                error = true;
-            } else if (BigNumber(fromAmountValue).lt(0)) {
-                setFromAmountError("Invalid amount");
-                error = true;
-            } else if (
-                fromAssetValue &&
-                BigNumber(fromAmountValue).gt(fromAssetValue.balance)
-            ) {
-                setFromAmountError(`Greater than your available balance`);
-                error = true;
-            }
-        }
-
-        if (!fromAssetValue || fromAssetValue === null) {
-            setFromAssetError("From asset is required");
-            error = true;
-        }
-
-        if (!toAssetValue || toAssetValue === null) {
-            setFromAssetError("To asset is required");
-            error = true;
-        }
-
-        if (!error) {
-            setLoading(true);
-
-            stores.dispatcher.dispatch({
-                type: ACTIONS.WRAP,
-                content: {
-                    fromAsset: fromAssetValue,
-                    toAsset: toAssetValue,
-                    fromAmount: fromAmountValue,
-                    toAmount: toAmountValue,
-                    quote: quote,
-                    slippage: slippage,
-                },
-            });
-        }
-    };
-    const onUnwrap = () => {
-        if (
-            !fromAmountValue ||
-            fromAmountValue > Number(fromAssetValue.balance) ||
-            Number(fromAmountValue) <= 0
-        ) {
-            return;
-        }
-
-        setFromAmountError(false);
-        setFromAssetError(false);
-        setToAssetError(false);
-
-        let error = false;
-
-        if (!fromAmountValue || fromAmountValue === "" || isNaN(fromAmountValue)) {
-            setFromAmountError("From amount is required");
-            error = true;
-        } else {
-            if (
-                !fromAssetValue.balance ||
-                isNaN(fromAssetValue.balance) ||
-                BigNumber(fromAssetValue.balance).lte(0)
-            ) {
-                setFromAmountError("Invalid balance");
-                error = true;
-            } else if (BigNumber(fromAmountValue).lt(0)) {
-                setFromAmountError("Invalid amount");
-                error = true;
-            } else if (
-                fromAssetValue &&
-                BigNumber(fromAmountValue).gt(fromAssetValue.balance)
-            ) {
-                setFromAmountError(`Greater than your available balance`);
-                error = true;
-            }
-        }
-
-        if (!fromAssetValue || fromAssetValue === null) {
-            setFromAssetError("From asset is required");
-            error = true;
-        }
-
-        if (!toAssetValue || toAssetValue === null) {
-            setFromAssetError("To asset is required");
-            error = true;
-        }
-
-        if (!error) {
-            setLoading(true);
-
-            stores.dispatcher.dispatch({
-                type: ACTIONS.UNWRAP,
-                content: {
-                    fromAsset: fromAssetValue,
-                    toAsset: toAssetValue,
-                    fromAmount: fromAmountValue,
-                    toAmount: toAmountValue,
-                    quote: quote,
-                    slippage: slippage,
-                },
-            });
-        }
-    };
-
     const setBalance100 = () => {
         setFromAmountValue(fromAssetValue.balance);
         multiSwapStore.setSwapAmount(fromAssetValue.balance)
@@ -659,8 +477,7 @@ function Setup() {
                                 width: "100%",
                             }}
                         >
-
-                            {routes && Array.isArray(routes) && (
+                            {routes && Array.isArray(routes) && routes.length > 0 && (
                                 <>
                                     <Typography
                                         className={[
@@ -670,7 +487,7 @@ function Setup() {
                                     >
                                         Routes:
                                     </Typography>
-                                    {routes?.map(renderRoutes)}
+                                    {routes.map(renderRoutes)}
                                 </>
                             )}
                         </div>
@@ -892,18 +709,27 @@ function Setup() {
                 console.log('swap', swap && JSON.parse(JSON.stringify(swap)))
 
                 let buttonLabel = 'Swap'
+                let loadingMessage = ''
                 let handleClickButton = doSwap
                 let disableButton = isFetchingAllowance
                     || isFetchingSwapQuery
                     || isFetchingApprove
                     || isFetchingSwap
                     || !swapAmount
+                    || tokenIn === null
+                    || tokenOut === null
+                    || multiSwapStore.error !== null
+
+                if (isFetchingSwapQuery) loadingMessage = 'loading data of routes...'
+                if (isFetchingAllowance) loadingMessage = 'loading ...'
+                if (isFetchingApprove) loadingMessage = 'transaction of approve in process...'
+                if (isFetchingSwap) loadingMessage = 'token swap in progress...'
 
                 if (!!swapAmount === false) {
                     buttonLabel = 'Enter Amount'
                 }
 
-                if (allowed === false) {
+                if (allowed === false && tokenIn) {
                     buttonLabel = 'Approve'
                     handleClickButton = doApprove
                     if (!isFetchingApprove) {
@@ -1098,33 +924,6 @@ function Setup() {
                                 }
                             )}
 
-                            {toAssetError && (
-                                <div
-                                    style={{ marginTop: 20 }}
-                                    className={[
-                                        classes.warningContainer,
-                                        classes[`warningContainer--${appTheme}`],
-                                        classes.warningContainerError,
-                                    ].join(" ")}
-                                >
-                                    <div
-                                        className={[
-                                            classes.warningDivider,
-                                            classes.warningDividerError,
-                                        ].join(" ")}
-                                    ></div>
-                                    <Typography
-                                        className={[
-                                            classes.warningError,
-                                            classes[`warningText--${appTheme}`],
-                                        ].join(" ")}
-                                        align="center"
-                                    >
-                                        {toAssetError}
-                                    </Typography>
-                                </div>
-                            )}
-
                             {renderSmallInput(
                                 "slippage",
                                 slippage,
@@ -1134,7 +933,8 @@ function Setup() {
                                     // onSlippageChanged(event)
                                 }
                             )}
-                            {slippageError && (
+
+                            {multiSwapStore.error && (
                                 <div
                                     style={{ marginTop: 20 }}
                                     className={[
@@ -1156,18 +956,42 @@ function Setup() {
                                         ].join(" ")}
                                         align="center"
                                     >
-                                        {slippageError}
+                                        {multiSwapStore.error}
                                     </Typography>
                                 </div>
                             )}
 
                             {!hidequote ? renderSwapInformation({ routes }) : null}
 
-                            {loading && (
+                            {(isFetchingApprove || isFetchingSwap) && (
                                 <div className={classes.loader}>
                                     <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
                                 </div>
                             )}
+
+                            {loadingMessage !== '' && (
+                                <div classes={classes.loadingMessageWrapper}>
+                                    <div
+                                        className={[classes.quoteLoader, classes.quoteLoaderLoading].join(
+                                            " "
+                                        )}
+                                    >
+                                        <div
+                                            className={[
+                                                classes.loadingMessage,
+                                                classes[`loadingMessage--${appTheme}`]
+                                            ].join(' ')}
+                                        >
+                                            {loadingMessage}
+                                        </div>
+                                        <CircularProgress
+                                            size={20}
+                                            className={classes.loadingCircle}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
 
                             <BtnSwap
                                 onClick={handleClickButton}

@@ -62,6 +62,7 @@ class MultiSwapStore {
     isFetchingSwap = false
 
     debSwapQuery = null
+    error = null
 
     constructor() {
         makeAutoObservable(this, {
@@ -90,6 +91,7 @@ class MultiSwapStore {
     setTokenIn(value) {
         this.tokenIn = value
         this.swap = null
+        this.error = null
         this.allowed = false
         this._checkAllowance()
         this.debSwapQuery()
@@ -98,6 +100,7 @@ class MultiSwapStore {
     setTokenOut(value) {
         this.tokenOut = value
         this.swap = null
+        this.error = null
         this.debSwapQuery()
     }
 
@@ -118,21 +121,29 @@ class MultiSwapStore {
     async approve() {
         if (this.provider && this.tokenIn) {
             this.isFetchingApprove = true
-            console.log('--- --- 1', this.isFetchingApprove)
-            const res = await approve(this.tokenIn, this.provider)
-            await res.wait()
-            await this._checkAllowance()
-            this.isFetchingApprove = false
-            console.log('--- --- 2', this.isFetchingApprove)
+            try {
+                const res = await approve(this.tokenIn, this.provider)
+                await res.wait()
+                await this._checkAllowance()
+            } catch (e) {
+                this.error = 'Transaction of approve is failed'
+            } finally {
+                this.isFetchingApprove = false
+            }
         }
     }
 
     async doSwap() {
         if (this.swap) {
             this.isFetchingSwap = true
-            const res = await doSwap(this.swap, this.slippage)
-            await res.wait()
-            this.isFetchingSwap = false
+                try {
+                const res = await doSwap(this.swap, this.slippage)
+                await res.wait()
+            } catch (e) {
+                this.error = 'Swap request error'
+            } finally {
+                this.isFetchingSwap = false
+            }
         }
     }
 
@@ -153,36 +164,32 @@ class MultiSwapStore {
 
     async _swapQuery() {
         if (this.tokenIn && this.tokenOut && this.swapAmount && this.provider) {
-            console.log(
-                'this.tokenIn && this.tokenOut && this.swapAmount ',
-                this.tokenIn , this.tokenOut , this.swapAmount
-            )
             const [tokenIn, tokenOut] = await Promise.all([
               this._getToken(this.tokenIn),
               this._getToken(this.tokenOut),
             ])
             const swapAmount = ethers.utils.parseUnits(this.swapAmount, tokenIn.decimals).toString();
             this.isFetchingSwapQuery = true
-            const response = await swapQuery(tokenIn, tokenOut, swapAmount)
-            this.swap = response
-            console.log(
-                'this.routes',
-                this.routes && JSON.parse(
-                    JSON.stringify(
-                        this.routes
-                    )
-                )
-            )
-            this.isFetchingSwapQuery = false
+
+            try {
+                const response = await swapQuery(tokenIn, tokenOut, swapAmount)
+                this.swap = response
+
+                if (this.swap?.swaps?.length === 0) {
+                    this.error = 'Routes not found'
+                }
+            } catch (e) {
+                this.error = 'Swap query request error'
+            } finally {
+                this.isFetchingSwapQuery = false
+            }
         }
     }
 
     async _checkAllowance() {
-        console.log('_checkAllowance .provider', this.provider)
         if (this.provider) {
             this.isFetchingAllowance = true
             const response = await allowance(this.tokenIn, this.provider)
-            console.log('_checkAllowance response', response)
             this.allowed = response
             this.isFetchingAllowance = false
             return response

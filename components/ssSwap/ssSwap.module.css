@@ -661,6 +661,21 @@ input[type=number].massiveInputAmount {
   margin-bottom: 6px;
 }
 
+.loadingMessageWrapper {
+  position: relative;
+}
+
+.loadingMessage {
+  position: absolute;
+  top: 15px;
+  left: 58px;
+  color: #0A2C40;
+}
+
+.loadingMessage--dark {
+  color: #fff;
+}
+
 .routesListItemSymbol {
   margin-left: 6px;
   font-size: 14px;
