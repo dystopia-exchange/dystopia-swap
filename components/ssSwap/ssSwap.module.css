@@ -630,6 +630,57 @@ input[type=number].massiveInputAmount {
   border: 2px solid #DB3434;
 }
 
+
+.routesPlatform {
+  position: static !important;
+  margin-bottom: 10px;
+}
+
+.routesList {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  border: 1px solid #5F7285;
+  border-radius: 25px;
+  margin-bottom: 15px;
+  padding-left: 6px;
+  padding-rigth: 6px;
+}
+
+.routesListItem:first-child {
+
+}
+
+.routesListItem {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.routesListItemSymbol {
+  margin-left: 6px;
+  font-size: 14px;
+}
+
+.routesListItemArrow {
+  width: auto;
+  display: flex;
+  justify-content: center;
+  padding-left: 12px;
+  padding-right: 12px;
+  overflow: hidden;
+  margin-top: -30px;
+  margin-bottom: -30px;
+}
+
+.routesListItemArrow--dark {
+
+}
+
 @media (max-width: 470px) {
   .inputBalanceSlippageText::after {
     font-size: 18px !important;

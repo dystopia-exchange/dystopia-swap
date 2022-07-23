@@ -153,6 +153,10 @@ class MultiSwapStore {
 
     async _swapQuery() {
         if (this.tokenIn && this.tokenOut && this.swapAmount && this.provider) {
+            console.log(
+                'this.tokenIn && this.tokenOut && this.swapAmount ',
+                this.tokenIn , this.tokenOut , this.swapAmount
+            )
             const [tokenIn, tokenOut] = await Promise.all([
               this._getToken(this.tokenIn),
               this._getToken(this.tokenOut),
@@ -193,8 +197,9 @@ class MultiSwapStore {
     }
 
     get routes() {
-        function tokenByIndex(swap, i) {
+        const tokenByIndex = (swap, i) => {
             const address = swap.tokenAddresses[i];
+            this._getToken(address)
             return address
         }
 
@@ -221,7 +226,14 @@ class MultiSwapStore {
                     tokenOut,
                     dex
                 }
-            })
+            }).reduce((acc, item) => {
+                if (item.percentage !== null) {
+                    acc.push([item])
+                } else {
+                    acc[acc.length - 1].push(item)
+                }
+                return acc
+            }, [])
         }
     }
 }

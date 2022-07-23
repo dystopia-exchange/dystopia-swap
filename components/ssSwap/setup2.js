@@ -511,7 +511,6 @@ function Setup() {
     const setBalance100 = () => {
         setFromAmountValue(fromAssetValue.balance);
         multiSwapStore.setSwapAmount(fromAssetValue.balance)
-        console.log('fromAssetValue.balance', fromAssetValue.balance)
 
         if (
             !(
@@ -553,106 +552,100 @@ function Setup() {
     const renderSwapInformation = (args) => {
         const { routes } = args
 
-        // if (quoteError) {
-        //     return (
-        //         <div
-        //             className={[classes.quoteLoader, classes.quoteLoaderError].join(" ")}
-        //         >
-        //             <div
-        //                 className={[
-        //                     classes.quoteLoaderDivider,
-        //                     classes.quoteLoaderDividerError,
-        //                 ].join(" ")}
-        //             ></div>
-        //             <Typography className={classes.quoteError}>{quoteError}</Typography>
-        //         </div>
-        //     );
-        // }
-
-        // if (quoteLoading) {
-        //     return (
-        //         <div
-        //             className={[classes.quoteLoader, classes.quoteLoaderLoading].join(
-        //                 " "
-        //             )}
-        //         >
-        //             <CircularProgress size={20} className={classes.loadingCircle} />
-        //         </div>
-        //     );
-        // }
-
         const renderRoutes = (route) => {
-            const { percentage, dex } = route
-            let tokenIn = null
-            let tokenOut = null
-            const baseAsset = stores.stableSwapStore.getStore("baseAssets");
-
-            baseAsset.forEach((asset) => {
-                if (asset.address.toLowerCase() === route.tokenIn.toLowerCase()) {
-                    tokenIn = asset
-                }
-                if (asset.address.toLowerCase() === route.tokenOut.toLowerCase()) {
-                    tokenOut = asset
-                }
-            })
-
-            // if (percentage === null) {
-            //     return null
-            // }
+            const [{ percentage, dex }] = route
 
             return (
-                <div
-                    className={[classes.route, classes[`route--${appTheme}`]].join(
-                        " "
-                    )}
-                >
+                <>
                     <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            width: '100%',
-                        }}
+                        className={[
+                            classes.routesPlatform,
+                            classes.routeLinesLeftText,
+                            classes[`routeLinesLeftText--${appTheme}`]
+                        ].join(" ")}
                     >
-                        <img
-                            className={[
-                                classes.routeIcon,
-                                classes[`routeIcon--${appTheme}`],
-                            ].join(" ")}
-                            alt=""
-                            src={tokenIn.logoURI}
-                            height="40px"
-                            onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                            }}
-                        />
-
-                        <div
-                            className={[
-                                classes.routeLinesLeftText,
-                                classes[`routeLinesLeftText--${appTheme}`],
-                            ].join(" ")}
-                            style={{ position: 'static' }}
-                        >
-                            {dex.name}{' '}{percentage}%
-                        </div>
-
-                        <img
-                             className={[
-                                 classes.routeIcon,
-                                 classes[`routeIcon--${appTheme}`],
-                             ].join(" ")}
-                             alt=""
-                             src={tokenOut.logoURI}
-                             height="40px"
-                             onError={(e) => {
-                                 e.target.onerror = null;
-                                 e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                             }}
-                        />
+                        {dex.name}{' '}{percentage}%
                     </div>
-                </div>
+                    <div className={[classes.routesList]}>
+                        {route.map((el, index) => {
+                            let tokenIn = null
+                            let tokenOut = null
+                            const baseAsset = stores.stableSwapStore.getStore("baseAssets");
+
+                            baseAsset.forEach((asset) => {
+                                if (asset.address.toLowerCase() === el.tokenIn.toLowerCase()) {
+                                    tokenIn = asset
+                                }
+                                if (asset.address.toLowerCase() === el.tokenOut.toLowerCase()) {
+                                    tokenOut = asset
+                                }
+                            })
+
+                            const isLastEl = index === route.length - 1
+
+                            return (
+                                <div className={[classes.routesListItem].join(" ")}>
+                                    {index === 0 && (
+                                        <>
+                                            <img
+                                                className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(" ")}
+                                                alt=""
+                                                src={tokenIn.logoURI}
+                                                height="40px"
+                                                onError={(e) => {
+                                                    e.target.onerror = null;
+                                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                                                }}
+                                            />
+                                            <span className={[classes.routesListItemSymbol].join(' ')}>
+                                                {tokenIn?.symbol}
+                                            </span>
+                                        </>
+                                    )}
+
+                                    {index === 0 && (
+                                        <div
+                                            className={[
+                                                classes.routesListItemArrow,
+                                                classes[`routesListItemArrow--${appTheme}`]
+                                            ].join(" ")}
+                                        >
+                                              <svg width="22" height="70" viewBox="0 0 22 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M22 35L17 32.1132V37.8868L22 35ZM0 35.5H17.5V34.5H0V35.5Z" fill="#86B9D6"/>
+                                              </svg>
+                                        </div>
+                                    )}
+
+                                    <img
+                                        className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(" ")}
+                                        alt=""
+                                        src={tokenOut.logoURI}
+                                        height="40px"
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                                        }}
+                                    />
+                                    <span className={[classes.routesListItemSymbol].join(' ')}>
+                                        {tokenOut?.symbol}
+                                    </span>
+                                    {!isLastEl && (
+                                        <div
+                                            className={[
+                                                classes.routesListItemArrow,
+                                                classes[`routesListItemArrow--${appTheme}`]
+                                            ].join(" ")}
+                                        >
+                                            <svg width="22" height="70" viewBox="0 0 22 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M22 35L17 32.1132V37.8868L22 35ZM0 35.5H17.5V34.5H0V35.5Z" fill="#86B9D6"/>
+                                            </svg>
+                                        </div>
+                                    )}
+                                </div>
+                            )
+                        })}
+                    </div>
+                </>
             )
         }
 
@@ -666,134 +659,6 @@ function Setup() {
                                 width: "100%",
                             }}
                         >
-                            {/*
-                            {fromAmountValue <= Number(fromAssetValue.balance) && (
-                                <div
-                                    className={[
-                                        classes.warningContainer,
-                                        classes[`warningContainer--${appTheme}`],
-                                        BigNumber(quote.priceImpact).gt(5)
-                                            ? classes.warningContainerError
-                                            : classes.warningContainerWarning,
-                                    ].join(" ")}
-                                >
-                                    <div
-                                        className={[
-                                            classes.warningDivider,
-                                            BigNumber(quote.priceImpact).gt(5)
-                                                ? classes.warningDividerError
-                                                : classes.warningDividerWarning,
-                                        ].join(" ")}
-                                    ></div>
-                                    <Typography
-                                        className={[
-                                            BigNumber(quote.priceImpact).gt(5)
-                                                ? classes.warningError
-                                                : classes.warningWarning,
-                                            classes[`warningText--${appTheme}`],
-                                        ].join(" ")}
-                                        align="center"
-                                    >
-                                        Price impact: {formatCurrency(quote.priceImpact)}%
-                                    </Typography>
-                                </div>
-                            )}
-                            */}
-                            {/*
-
-                            {fromAmountValue > Number(fromAssetValue.balance) && (
-                                <div
-                                    className={[
-                                        classes.warningContainer,
-                                        classes[`warningContainer--${appTheme}`],
-                                        BigNumber(quote.priceImpact).gt(5)
-                                            ? classes.warningContainerError
-                                            : classes.warningContainerWarning,
-                                    ].join(" ")}
-                                >
-                                    <div
-                                        className={[
-                                            classes.warningDivider,
-                                            BigNumber(quote.priceImpact).gt(5)
-                                                ? classes.warningDividerError
-                                                : classes.warningDividerWarning,
-                                        ].join(" ")}
-                                    ></div>
-
-                                    <Typography
-                                        className={[
-                                            BigNumber(quote.priceImpact).gt(5)
-                                                ? classes.warningError
-                                                : classes.warningWarning,
-                                            classes[`warningText--${appTheme}`],
-                                        ].join(" ")}
-                                        align="center"
-                                    >
-                                        Balance is below the entered value
-                                    </Typography>
-                                </div>
-                            )}
-
-                            */}
-
-                            {/*
-
-                            <Typography
-                                className={[
-                                    classes.depositInfoHeading,
-                                    classes[`depositInfoHeading--${appTheme}`],
-                                    classes.depositInfoHeadingPrice,
-                                ].join(" ")}
-                            >
-                                Price Info
-                            </Typography>
-
-
-                            <div
-                                className={[
-                                    classes.priceInfos,
-                                    classes[`priceInfos--${appTheme}`],
-                                ].join(" ")}
-                            >
-                                <div
-                                    className={[
-                                        classes.priceInfo,
-                                        classes[`priceInfo--${appTheme}`],
-                                    ].join(" ")}
-                                >
-                                    <Typography className={classes.text}>
-                                        {`${fromAssetValue?.symbol} per ${toAssetValue?.symbol}`}
-                                    </Typography>
-
-                                    <Typography className={classes.title}>
-                                        {formatCurrency(
-                                            BigNumber(quote.inputs.fromAmount)
-                                                .div(quote.output.finalValue)
-                                                .toFixed(18)
-                                        )}
-                                    </Typography>
-                                </div>
-
-                                <div
-                                    className={[
-                                        classes.priceInfo,
-                                        classes[`priceInfo--${appTheme}`],
-                                    ].join(" ")}
-                                >
-                                    <Typography className={classes.text}>
-                                        {`${toAssetValue?.symbol} per ${fromAssetValue?.symbol}`}
-                                    </Typography>
-
-                                    <Typography className={classes.title}>
-                                        {formatCurrency(
-                                            BigNumber(quote.output.finalValue)
-                                                .div(quote.inputs.fromAmount)
-                                                .toFixed(18)
-                                        )}
-                                    </Typography>
-                                </div>
-                            </div>
-                            */}
 
                             {routes && Array.isArray(routes) && (
                                 <>
@@ -890,8 +755,6 @@ function Setup() {
         assetOptions,
         onAssetSelect
     ) => {
-
-        console.log('assetValue', assetValue, amountValue)
 
         return (
             <div
