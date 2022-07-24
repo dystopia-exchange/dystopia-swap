@@ -108,6 +108,7 @@ class MultiSwapStore {
 
     setSwapAmount(value) {
         this.swapAmount = value
+        this.error = null
         this.debSwapQuery()
     }
 
