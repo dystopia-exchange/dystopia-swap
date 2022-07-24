@@ -291,9 +291,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    alignItems: 'flex-start',
   },
   toolbarInfo: {
     position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
     maxWidth: 918,
     padding: '12px 24px',
     paddingRight: 100,
@@ -318,8 +321,11 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbarInfoLink: {
     position: 'absolute',
-    top: 25,
+    top: 35,
     right: 25,
+    ["@media (max-width: 1550px)"]: {
+      top: 14,
+    },
     ["@media (max-width: 575px)"]: {
       top: 'auto',
       right: 'auto',
@@ -330,14 +336,14 @@ const useStyles = makeStyles((theme) => ({
   sidebar: {
     position: 'absolute',
     left: -400,
-    paddingTop: 300,
+    paddingTop: 210,
 
     display: 'flex',
     flexDirection: 'column',
     width: '370px',
 
     ["@media (max-width: 1550px)"]: {
-      paddingTop: 390,
+      paddingTop: 272,
     },
     ["@media (max-width: 1199px)"]: {
       position: 'static',
@@ -553,6 +559,41 @@ const useStyles = makeStyles((theme) => ({
       background: '#c4ff00',
     },
   },
+  aprButton: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 24,
+
+    width: '100%',
+    height: 72,
+
+    marginBottom: 12,
+
+    border: '1px solid #1F2B49',
+    borderRadius: 12,
+
+    background: '#171D2D',
+
+    fontFamily: 'Poppins',
+    fontWeight: 400,
+    fontSize: 16,
+    lineHeight: '100%',
+
+    color: '#E4E9F4',
+
+    ["@media (max-width: 1550px)"]: {
+      marginBottom: 0,
+    },
+
+    ["@media (max-width: 1550px)"]: {
+      marginTop: 12,
+    },
+
+    '& > span': {
+      color: '#D3F85A',
+    }
+  },
   mergeButton: {
     display: 'flex',
     justifyContent: 'center',
@@ -678,7 +719,7 @@ const EnhancedTableToolbar = (props) => {
 
 
           <div className={classes.toolbarInfo}>
-            Lock your CONE to earn rewards and governance rights. Each locked position is created and represented as an NFT, meaning you can hold multiple locked positions.
+            Lock CONE to earn voting power, rewards and boost your LP rewards.
             <span className={classes.toolbarInfoLink}>
             <img src="/images/ui/explorer.svg" />
           </span>
@@ -687,8 +728,8 @@ const EnhancedTableToolbar = (props) => {
 
         <div className={classes.sidebar}>
 
-          <div className={classes.addButton}>
-            NFT APR: {parseInt(props.veToken?.veDistApr)}%
+          <div className={classes.aprButton}>
+            veCONE Rewards APR: <span>{parseInt(props.veToken?.veDistApr)}%</span>
           </div>
 
           <div className={classes.addButton} onClick={onCreate}>
