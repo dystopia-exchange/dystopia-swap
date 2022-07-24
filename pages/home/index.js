@@ -31,7 +31,7 @@ const HomePage = () => {
           >
             <BtnEnterApp
               labelClassName={classes.buttonEnterLabel}
-              label={"Enter App"}
+              label={"Launch app"}
             />
           </div>
         </div>
