@@ -997,7 +997,13 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                                         lineHeight: '120%',
                                         color: '#8191B9',
                                       }}>
-                                    Expires {moment.unix(row.lockEnds).fromNow()}
+                                        {(BigNumber(row.lockEnds).lt(moment().unix()) &&
+                                          BigNumber(row.lockEnds).gt(0))
+                                            ? `Expired ${moment.unix(row.lockEnds).fromNow()}`
+                                            : `Expires in ${moment.unix(row.lockEnds).fromNow()}`
+                                        }
+                                    {/* Expires in {moment.unix(row.lockEnds).fromNow()} */}
+                                    {/* Expired {moment.unix(row.lockEnds).fromNow()} ago */}
                                   </Typography>
                                 </TableCell>
 
@@ -1032,7 +1038,12 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                                         onView(row);
                                       }}
                                   >
-                                    Manage
+                                    {(BigNumber(row.lockEnds).lt(moment().unix()) &&
+                                      BigNumber(row.lockEnds).gt(0))
+                                        ? 'WITHDRAW'
+                                        : 'EDIT'
+                                    }
+                                    {/* Manage */}
                                   </Button>
                                 </TableCell>
                               </TableRow>
