@@ -1,3 +1,111 @@
+.lockedNFT {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: #060B17;
+  border: 1px solid #060B17;
+  border-radius: 12px;
+  min-height: 56px;
+  padding: 0;
+  margin: 20px 0 0 0;
+}
+.lockedNFTTitle {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #E4E9F4;
+  padding-left: 16px;
+}
+.lockedNFTToken {
+  display: flex;
+  width: 50%;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+  background: #171D2D;
+  border-radius: 12px;
+  padding: 0 16px;
+}
+.lockedNFTID {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #E4E9F4;
+}
+.lockedNFTVe {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #8191B9;
+}
+@media (max-width: 860px) {
+  .lockedNFT {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 0;
+  }
+  .lockedNFTTitle {
+    display: flex;
+    width: 100%;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    height: 46px;
+    align-items: center;
+  }
+  .lockedNFTToken {
+    width: 100%;
+    height: 46px;
+  }
+  .lockedNFTID {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+  }
+  .lockedNFTVe {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+
+.refreshWarnBlock {
+  height: 56px;
+  padding: 16px;
+  background: rgba(6, 11, 23, 0.5);
+  /* weak */
+
+  border: 1px solid #1F2B49;
+  border-radius: 12px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  /* identical to box height, or 150% */
+
+  display: flex;
+  align-items: center;
+
+  /* light */
+
+  color: #8191B9;
+  margin-top: 20px;
+  margin-left: 16px;
+  width: 66%;
+}
+
+.refreshWarnSymbol {
+  width: 20px;
+  height: 20px;
+  margin-right: 16px;
+  border-radius: 10px;
+  background: #1F2B49;
+  transform: matrix(1, 0, 0, -1, 0, 0);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .tooltipCircle {
   display: flex;
   justify-content: center;
@@ -354,8 +462,10 @@ input[type=number].mediumInputAmount {
 }
 
 .slippageIconContainer {
+  position: absolute;
+  right: 0;
   display: flex;
-  padding: 11px;
+  padding: 12px 20px;
   background: transparent;
   /*border: 1px solid #86b9d6;*/
   cursor: pointer;
@@ -459,7 +569,7 @@ input[type=number].mediumInputAmount {
   position: absolute;
   left: 321px;
   top: 23px;
-  width: 320px;
+  width: 440px;
 }
 
 .inputBalanceTextContainerForPair {
@@ -1095,8 +1205,8 @@ input[type=number].mediumInputAmount {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  width: 100%;
-  padding: 6px 12px;
+  /*width: 100%;*/
+  padding: 6px 38px 6px 12px;
 }
 
 
@@ -1110,22 +1220,29 @@ input[type=number].mediumInputAmount {
 
 .nftTitle {
   display: flex;
-  min-width: 540px;
+  min-width: 440px;
   align-items: center;
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
   color: #E4E9F4;
-  padding: 0 10px;
-  height: 56px;
+  padding: 10px 16px;
+  min-height: 56px;
 }
 
 .nftItems {
   display: flex;
-  width: 100%;
+  width: 302px;
   background-color: #181d2d;
   border-radius: 12px;
   color: #D3F85A;
+}
+
+
+@media (max-width: 860px) {
+  .nftItems {
+    width: 100%;
+  }
 }
 
 .controls {
@@ -1228,6 +1345,10 @@ input[type=number].mediumInputAmount {
 .tokenSelect {
   border-radius: 0 !important;
 }
+.tokenSelect:hover, .tokenSelectOpen {
+  border: 1px solid #D3F85A;
+  border-radius: 12px !important;
+}
 
 .tokenSelect > svg {
   color: #5F7285 !important;
@@ -1255,34 +1376,58 @@ input[type=number].mediumInputAmount {
 .tokenSelectInput > .menuOption > .menuOptionSec,
 .tokenSelectInput--dark > .menuOption > .menuOptionSec {
   /*display: none !important;*/
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  color: #8191B9 !important;
 }
 
 .tokenSelectInput > .menuOption > .menuOptionLabel,
 .tokenSelectInput--dark > .menuOption > .menuOptionLabel {
   font-weight: 400 !important;
-  font-size: 14px !important;
+  font-size: 16px !important;
+  line-height: 24px;
+
+}
+
+.listPaper {
+  margin-top: 8px;
+  border: 1px solid #D3F85A;
+  border-radius: 12px !important;
+  background: #060B17 !important;
 }
 
 .list,
 .list--dark {
   padding: 0 !important;
-  background: #DBE6EC !important;
+  background: #060B17;
 }
 
-.list--dark {
-  background: #151718 !important;
-}
 
 .list > li,
 .list--dark > li {
   padding: 0 !important;
+  height: 48px;
+  border: none !important;
 }
 
 .list > li > .menuOption,
 .list--dark > li > .menuOption {
   width: 100%;
-  padding: 10px !important;
-  border: 1px solid #0B5E8E !important;
+  padding: 10px 16px !important;
+  /*border: 1px solid #0B5E8E !important;*/
+}
+
+@media (max-width: 860px) {
+
+}
+
+.nftword {
+  display: none;
+}
+.list--dark > li > .menuOption .nftword {
+  display: inline-flex;
+  margin-right: 4px;
 }
 
 .list > li:not(:last-of-type) > .menuOption,
@@ -1295,6 +1440,13 @@ input[type=number].mediumInputAmount {
   padding-right: 0 !important;
 }
 
+.menuOptionSecText {
+  text-align: right;
+  color: #8191B9;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+}
 
 .assetSelectBalance {
   flex: 1;
@@ -1434,15 +1586,20 @@ input[type=number].mediumInputAmount {
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-  padding: 16px 18px 12px;
+  padding: 18px 18px 18px;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 120%;
+  font-size: 16px;
+  line-height: 24px;
+  min-height: 64px;
 }
 
 .disclaimerContainer--dark {
   background: #24292D;
   color: #A2E3A9;
+}
+
+.disclaimerContainerDefault {
+  border: 1px solid #1F2B49;
 }
 
 .disclaimerContainerWarnSymbol {
@@ -1458,6 +1615,10 @@ input[type=number].mediumInputAmount {
   font-size: 16px;
   font-weight: bold;
   margin-right: 10px;
+}
+
+.disclaimerContainerDefault .disclaimerContainerWarnSymbol {
+  background: #779BF4;
 }
 
 .disclaimerContainerError {
@@ -1783,6 +1944,12 @@ input[type=number].mediumInputAmount {
 }
 
 @media (max-width: 860px) {
+  .nftTitle {
+    min-width: 100%;
+  }
+  .refreshWarnBlock {
+    display: none;
+  }
   .displayAssetIcon {
     width: 20px;
     height: 20px;
@@ -2281,11 +2448,11 @@ input[type=number].mediumInputAmount {
 
   .slippageCont {
     width: 100%;
-    height: 40px;
+    height: 48px;
   }
 
   .slippageRoot {
-    height: 36px;
+    height: 46px;
     width: 200px !important;
   }
 

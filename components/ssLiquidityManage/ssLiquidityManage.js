@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import {
   Paper,
-  Grid,
   Typography,
   Button,
   TextField,
@@ -11,11 +10,7 @@ import {
   Tooltip,
   IconButton,
   MenuItem,
-  Dialog,
   InputBase,
-  DialogTitle,
-  DialogContent,
-  Popover,
   Select,
   ClickAwayListener,
 } from "@mui/material";
@@ -24,17 +19,12 @@ import { formatCurrency } from "../../utils";
 import classes from "./ssLiquidityManage.module.css";
 import stores from "../../stores";
 import { ACTIONS, CONTRACTS } from "../../stores/constants";
+import {VE_TOKEN_NAME} from '../../stores/constants/contracts'
 import {
-  Search,
-  DeleteOutline,
   ArrowBackIosNew,
-  Close,
-  Settings,
-  ArrowDropDownCircleOutlined,
 } from "@mui/icons-material";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import { formatSymbol, formatInputAmount } from "../../utils";
-import SwapIconBg from "../../ui/SwapIconBg";
 import AssetSelect from "../../ui/AssetSelect";
 import Borders from "../../ui/Borders";
 import Loader from "../../ui/Loader";
@@ -1160,7 +1150,8 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   depositLoading ||
                   stakeLoading ||
                   depositStakeLoading ||
-                  createLoading
+                  createLoading ||
+                    !BigNumber(assetValue?.balance).gt(0)
                 }
                 onFocus={onFocus ? onFocus : null}
                 inputProps={{
@@ -1489,7 +1480,12 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                 I want to unstake LP
               </Typography>
 
-              <Tooltip title='Select "I want to unstake LP" if you have staked LP in the gauge.'>
+              <Tooltip
+                  title='Select "I want to unstake LP" if you have staked LP in the gauge.'
+                  componentsProps={{
+                    tooltip: { style: {padding: 24, background: '#1F2B49', fontSize: 16, fontWeight: 400, border: '1px solid #779BF4', borderRadius: 12,}},
+                  }}
+              >
                 <div className={classes.tooltipCircle}>
                   <svg width="10" height="10" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M2.23914 0.95C2.91914 0.95 3.46247 1.13667 3.86914 1.51C4.28247 1.88333 4.48914 2.39333 4.48914 3.04C4.48914 3.71333 4.27581 4.22 3.84914 4.56C3.42247 4.9 2.85581 5.07 2.14914 5.07L2.10914 5.86H1.11914L1.06914 4.29H1.39914C2.04581 4.29 2.53914 4.20333 2.87914 4.03C3.22581 3.85667 3.39914 3.52667 3.39914 3.04C3.39914 2.68667 3.29581 2.41 3.08914 2.21C2.88914 2.01 2.60914 1.91 2.24914 1.91C1.88914 1.91 1.60581 2.00667 1.39914 2.2C1.19247 2.39333 1.08914 2.66333 1.08914 3.01H0.0191407C0.0191407 2.61 0.109141 2.25333 0.289141 1.94C0.469141 1.62667 0.725807 1.38333 1.05914 1.21C1.39914 1.03667 1.79247 0.95 2.23914 0.95ZM1.59914 8.07C1.39247 8.07 1.21914 8 1.07914 7.86C0.939141 7.72 0.869141 7.54667 0.869141 7.34C0.869141 7.13333 0.939141 6.96 1.07914 6.82C1.21914 6.68 1.39247 6.61 1.59914 6.61C1.79914 6.61 1.96914 6.68 2.10914 6.82C2.24914 6.96 2.31914 7.13333 2.31914 7.34C2.31914 7.54667 2.24914 7.72 2.10914 7.86C1.96914 8 1.79914 8.07 1.59914 8.07Z" fill="#586586"/>
@@ -1520,7 +1516,12 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                 I want to remove LP
               </Typography>
 
-              <Tooltip title='Select "I want to remove LP" if you have unstaked LP and want to remove liquidity.'>
+              <Tooltip
+                  title='Select "I want to remove LP" if you have unstaked LP and want to remove liquidity.'
+                  componentsProps={{
+                    tooltip: { style: {padding: 24, background: '#1F2B49', fontSize: 16, fontWeight: 400, border: '1px solid #779BF4', borderRadius: 12,}},
+                  }}
+              >
                 <div className={classes.tooltipCircle}>
                   <svg width="10" height="10" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M2.23914 0.95C2.91914 0.95 3.46247 1.13667 3.86914 1.51C4.28247 1.88333 4.48914 2.39333 4.48914 3.04C4.48914 3.71333 4.27581 4.22 3.84914 4.56C3.42247 4.9 2.85581 5.07 2.14914 5.07L2.10914 5.86H1.11914L1.06914 4.29H1.39914C2.04581 4.29 2.53914 4.20333 2.87914 4.03C3.22581 3.85667 3.39914 3.52667 3.39914 3.04C3.39914 2.68667 3.29581 2.41 3.08914 2.21C2.88914 2.01 2.60914 1.91 2.24914 1.91C1.88914 1.91 1.60581 2.00667 1.39914 2.2C1.19247 2.39333 1.08914 2.66333 1.08914 3.01H0.0191407C0.0191407 2.61 0.109141 2.25333 0.289141 1.94C0.469141 1.62667 0.725807 1.38333 1.05914 1.21C1.39914 1.03667 1.79247 0.95 2.23914 0.95ZM1.59914 8.07C1.39247 8.07 1.21914 8 1.07914 7.86C0.939141 7.72 0.869141 7.54667 0.869141 7.34C0.869141 7.13333 0.939141 6.96 1.07914 6.82C1.21914 6.68 1.39247 6.61 1.59914 6.61C1.79914 6.61 1.96914 6.68 2.10914 6.82C2.24914 6.96 2.31914 7.13333 2.31914 7.34C2.31914 7.54667 2.24914 7.72 2.10914 7.86C1.96914 8 1.79914 8.07 1.59914 8.07Z" fill="#586586"/>
@@ -1730,7 +1731,9 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                     depositLoading ||
                     stakeLoading ||
                     depositStakeLoading ||
-                    createLoading
+                    createLoading ||
+                      (withdrawAction !== "remove" && !withdrawAsset?.gauge?.balance) ||
+                      ((withdrawAction === "remove" || withdrawAction === "unstake-remove") && (!withdrawAsset?.balance || !BigNumber(withdrawAsset?.balance).gt(0)))
                   }
                   onFocus={amount1Focused ? amount1Focused : null}
                   inputProps={{
@@ -1796,7 +1799,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
     );
   };
 
-  const renderSmallInput = (type, amountValue, amountError, amountChanged) => {
+  /*const renderSmallInput = (type, amountValue, amountError, amountChanged) => {
     return (
       <div
         className={[
@@ -1862,7 +1865,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
         </div>
       </div>
     );
-  };
+  };*/
 
   const renderMediumInputToggle = (type, value) => {
     return (
@@ -1928,7 +1931,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
           <Hint
               fill="#586586"
               hintText={
-                "New curve: x3y+y3x, which allows efficient stable swaps"
+                "Stable pool provides correlated asset swaps with low slippage."
               }
               open={openStablePoolHint}
               anchor={stablePoolHntAnchor}
@@ -1996,7 +1999,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
           <Hint
               fill="#586586"
               hintText={
-                "Classic Uniswap V2 pool"
+                "Volatile pools are the most appropriate for uncorrelated assets, their structure provides greater flexibility for price fluctuation."
               }
               open={openVolatilePoolHint}
               anchor={volatilePoolHntAnchor}
@@ -2030,21 +2033,8 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
             classes[`slippageIconContainer--${appTheme}`],
           ].join(" ")}
         >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              className={[
-                classes.slippageIcon,
-                openSelectToken ? classes["slippageIcon--active"] : "",
-                classes[`slippageIcon--${appTheme}`],
-              ].join(" ")}
-              d="M9.99999 10.9766L14.125 6.85156L15.3033 8.0299L9.99999 13.3332L4.69666 8.0299L5.87499 6.85156L9.99999 10.9766Z"
-            />
+          <svg width="18" height="9" viewBox="0 0 18 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16.9201 0.950012L10.4001 7.47001C9.63008 8.24001 8.37008 8.24001 7.60008 7.47001L1.08008 0.950012" stroke="#D3F85A" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
       </ClickAwayListener>
@@ -2054,9 +2044,11 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
   const renderTokenSelect = () => {
     return (
       <Select
+          onClick={openSelect}
         className={[
           classes.tokenSelect,
           classes[`tokenSelect--${appTheme}`],
+            openSelectToken ? classes.tokenSelectOpen : '',
         ].join(" ")}
         fullWidth
         value={token}
@@ -2077,7 +2069,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                           color: appTheme === "dark" ? "#7C838A" : "#5688A5",
                         }}
                       >
-                        Select veTET
+                        Select {veToken?.symbol}
                       </div>
                     );
                   }
@@ -2087,6 +2079,8 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
         MenuProps={{
           classes: {
             list: appTheme === "dark" ? classes["list--dark"] : classes.list,
+            paper: classes.listPaper,
+            // root: '',
           },
         }}
         open={openSelectToken}
@@ -2114,13 +2108,13 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   <Typography
                     className={classes.menuOptionLabel}
                     style={{
-                      fontWeight: 500,
-                      fontSize: 12,
-                      marginRight: 30,
+                      // fontWeight: 500,
+                      // fontSize: 12,
+                      // marginRight: 30,
                       color: "#D3F85A",
                     }}
                   >
-                    #{option.id}
+                    <span className={classes.nftword}>NFT </span>#{option.id}
                   </Typography>
 
                   <div
@@ -2131,12 +2125,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                     ].join(" ")}
                   >
                     <Typography
-                      style={{
-                        fontWeight: 400,
-                        fontSize: 10,
-                        color: appTheme === "dark" ? "#7C838A" : "#5688A5",
-                        textAlign: "right",
-                      }}
+                        className={classes.menuOptionSecText}
                     >
                       {formatCurrency(option.lockValue)} {veToken?.symbol}
                     </Typography>
@@ -2169,6 +2158,16 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
     }
   };
 
+  const [lockedNft, setLockedNft] = useState()
+
+  useEffect(() => {
+    if (withdrawAsset?.gauge?.tokenId && vestNFTs.length > 0) {
+      setLockedNft(vestNFTs.filter(a => a.id == withdrawAsset?.gauge?.tokenId)[0])
+    } else {
+      setLockedNft(undefined)
+    }
+  }, [withdrawAsset?.gauge?.tokenId, vestNFTs.length]);
+
   return (
       <div className="g-flex g-flex--justify-center">
         <div className={classes.bigscreenSidebar}>
@@ -2199,7 +2198,9 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   classes[`titleSection--${appTheme}`],
                 ].join(" ")}
             >
-              <Tooltip title="Back to Liquidity" placement="top">
+              <Tooltip title="Back to Liquidity" placement="top" componentsProps={{
+                tooltip: { style: {padding: 24, background: '#1F2B49', fontSize: 16, fontWeight: 400, border: '1px solid #779BF4', borderRadius: 12,}},
+              }}>
                 <IconButton onClick={onBack}>
                   <ArrowBackIosNew
                       className={[
@@ -2367,7 +2368,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                     {!createLP &&
                         <div className={classes.nftRow} style={{width: '100%',}}>
                           <div className={classes.nftTitle}>
-                            Choose Locked NFT to connect with your Staking
+                            Attach {VE_TOKEN_NAME} to your LP to receive boosted rewards
                           </div>
                           <div className={classes.nftItems}>{renderTokenSelect()}</div>
                         </div>
@@ -2515,7 +2516,6 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                           </div>
                       }
 
-
                       {createLP && renderMediumInputToggle("stable", stable)}
                     </div>
 
@@ -2626,6 +2626,23 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                   />*/}
                     {/*</Popover>*/}
                     {/*</div>*/}
+
+                    {!createLP &&
+                        <div
+                            className={[
+                              classes.disclaimerContainer,
+                              classes.disclaimerContainerDefault,
+
+                            ].join(" ")}
+                        >
+                          <div className={classes.disclaimerContainerWarnSymbol}>
+                            !
+                          </div>
+                          <div>
+                            Select veTET NFT for your LP Stake to get an APR boost in proportion to Voting Power.
+                          </div>
+                        </div>
+                    }
                   </>
               )}
               {activeTab === "withdraw" && (
@@ -2768,15 +2785,16 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                               onStake(pair, amount0, pair.balance);
                             }
                           }}
-                          disabled={amount0 === "" || !pair?.gauge}
+                          disabled={amount0 === "" || !withdrawAsset}
                           className={[
                             classes.buttonOverride,
                             classes[`buttonOverride--${appTheme}`],
                           ].join(" ")}
                       >
               <span className={classes.actionButtonText}>
-                {amount0 !== "" && "Stake LP"}
-                {amount0 === "" && "Enter Amount"}
+                {!withdrawAsset && amount0 === "" && "Select LP & Enter Amount"}
+                {withdrawAsset && amount0 !== "" && "Stake LP"}
+                {withdrawAsset && amount0 === "" && "Enter Amount"}
               </span>
                         {depositLoading && (
                             <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
@@ -2789,6 +2807,153 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
 
           {activeTab === "withdraw" && (
               <>
+                <div className="g-flex g-flex--wrap" style={{width: '100%'}}>
+                  {withdrawAction === "remove" &&
+                      <div
+                          className={["g-flex g-flex--align-center g-flex--space-between", classes.slippageCont].join(' ')}
+                      >
+                        <div
+                            style={{
+                              display: 'flex',
+                              fontWeight: 400,
+                              fontSize: 14,
+                              // marginBottom: 10,
+                              color: '#E4E9F4',
+                            }}
+                        >
+                          <span style={{marginRight: 10,}}>Slippage</span>
+                          <Hint
+                              fill="#586586"
+                              hintText={
+                                "Slippage is the difference between the price you expect to get on the crypto you have ordered and the price you actually get when the order executes."
+                              }
+                              open={openHint}
+                              anchor={hintAnchor}
+                              handleClick={handleClickPopover}
+                              handleClose={handleClosePopover}
+                              vertical={46}
+                          />
+                        </div>
+
+                        <div
+                            style={{
+                              position: "relative",
+                              // marginBottom: 20,
+                            }}
+                        >
+                          <TextField
+                              placeholder="0.00"
+                              fullWidth
+                              error={slippageError}
+                              helperText={slippageError}
+                              value={slippage}
+                              onChange={onSlippageChanged}
+                              disabled={
+                                  depositLoading ||
+                                  stakeLoading ||
+                                  depositStakeLoading ||
+                                  createLoading
+                              }
+                              classes={{
+                                root: [
+                                  classes.slippageRoot,
+                                  appTheme === "dark"
+                                      ? classes["slippageRoot--dark"]
+                                      : classes["slippageRoot--light"],
+                                ].join(" "),
+                              }}
+                              InputProps={{
+                                style: {
+                                  border: "none",
+                                  borderRadius: 0,
+                                },
+                                classes: {
+                                  root: classes.searchInput,
+                                },
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                            <span
+                                style={{
+                                  color:
+                                      appTheme === "dark" ? "#ffffff" : "#325569",
+                                }}
+                            >
+                              %
+                            </span>
+                                    </InputAdornment>
+                                ),
+                              }}
+                              inputProps={{
+                                className: [
+                                  classes.smallInput,
+                                  classes[`inputBalanceSlippageText--${appTheme}`],
+                                ].join(" "),
+                                style: {
+                                  padding: 0,
+                                  borderRadius: 0,
+                                  border: "none",
+                                  fontSize: 14,
+                                  fontWeight: 400,
+                                  lineHeight: "120%",
+                                  color: appTheme === "dark" ? "#C6CDD2" : "#325569",
+                                },
+                              }}
+                          />
+                        </div>
+                        {slippageError && (
+                            <div
+                                style={{ marginTop: 20 }}
+                                className={[
+                                  classes.warningContainer,
+                                  classes[`warningContainer--${appTheme}`],
+                                  classes.warningContainerError,
+                                ].join(" ")}
+                            >
+                              <div
+                                  className={[
+                                    classes.warningDivider,
+                                    classes.warningDividerError,
+                                  ].join(" ")}
+                              ></div>
+                              <Typography
+                                  className={[
+                                    classes.warningError,
+                                    classes[`warningText--${appTheme}`],
+                                  ].join(" ")}
+                                  align="center"
+                              >
+                                {slippageError}
+                              </Typography>
+                            </div>
+                        )}
+                      </div>
+                  }
+                  {withdrawAction === "remove" &&
+                      <div className={classes.refreshWarnBlock}>
+                        <span className={classes.refreshWarnSymbol}>!</span>
+                        <span>
+                          If you do not see your pool amount, refresh the page
+                        </span>
+                      </div>
+                  }
+
+                  {withdrawAction === "unstake" && lockedNft &&
+                      <div className={classes.lockedNFT}>
+                        <div className={classes.lockedNFTTitle}>
+                          Connected Locked NFT to this LP Staking
+                        </div>
+                        <div className={classes.lockedNFTToken}>
+                          <div className={classes.lockedNFTID}>
+                            #{lockedNft.id}
+                          </div>
+                          <div className={classes.lockedNFTVe}>
+                            {formatCurrency(lockedNft.lockValue)} {veToken?.symbol}
+                          </div>
+                        </div>
+                      </div>
+                  }
+
+                </div>
                 <Button
                     variant="contained"
                     size="large"
