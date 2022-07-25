@@ -2065,11 +2065,11 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
                           paddingLeft: 15.5,
                           paddingRight: 10,
                           fontWeight: 400,
-                          fontSize: 14,
-                          color: appTheme === "dark" ? "#7C838A" : "#5688A5",
+                          fontSize: 16,
+                          color: '#D3F85A',
                         }}
                       >
-                        Select {veToken?.symbol}
+                        Select {veToken?.symbol} NFT
                       </div>
                     );
                   }
@@ -2093,6 +2093,17 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
               : classes.tokenSelectInput,
         }}
       >
+        {!vestNFTs.length &&
+            <div className={classes.noNFT}>
+              <div className={classes.noNFTtext}>
+                You receive NFT by creating a Lock of your CONE for some time, the more CONE you lock and for the longest time, the more Voting Power your NFT will have.
+              </div>
+              <div className={classes.noNFTlinks}>
+                <span className={classes.noNFTlinkButton} onClick={() => {router.push("/swap")}}>BUY CONE</span>
+                <span className={classes.noNFTlinkButton} onClick={() => {router.push("/vest")}}>LOCK CONE FOR NFT</span>
+              </div>
+            </div>
+        }
         {vestNFTs &&
           vestNFTs.map((option) => {
             return (
