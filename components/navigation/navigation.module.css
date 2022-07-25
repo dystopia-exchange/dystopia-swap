@@ -3,6 +3,9 @@
   flex-direction: row;
   align-items: center;
 
+  margin-right: auto;
+  margin-left: 250px;
+
   border: none !important;
 
   background: transparent;
@@ -11,6 +14,8 @@
 @media (max-width: 1500px) {
   .navigationContainer {
     order: 1;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 

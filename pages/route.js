@@ -7,6 +7,7 @@ import Vote from "./vote";
 import Rewards from "./rewards";
 import Whitelist from "./whitelist";
 import Bribe from "./bribe/create";
+import HomePage from "./home";
 
 import { useRouter } from "next/router";
 
@@ -35,9 +36,9 @@ function Route({ changeTheme, ...props }) {
   } else if (activePath.includes("/bribe")) {
     return <Bribe props={props} changeTheme={changeTheme} />;
   } else if (activePath.includes("/")) {
-    return <Swap props={props} changeTheme={changeTheme} />;
+    return <HomePage props={props} />;
   } else {
-    return <Swap props={props} changeTheme={changeTheme} />;
+    return <HomePage props={props} />;
   }
 }
 

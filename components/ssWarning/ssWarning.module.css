@@ -25,6 +25,12 @@
   }
 }
 
+.paperBody {
+  background: rgba(0, 0, 0, .1) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
 .warningContainer {
   position: relative;
   width: 1052px;
