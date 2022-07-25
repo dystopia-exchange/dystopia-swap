@@ -504,7 +504,7 @@ function Setup() {
                                             classes[`depositInfoHeading--${appTheme}`],
                                         ].join(" ")}
                                     >
-                                        Routes:
+                                        Routes
                                     </Typography>
                                     {routes.map(renderRoutes)}
                                 </>
@@ -977,6 +977,60 @@ function Setup() {
                                     setSlippage(event.target.value)
                                     // onSlippageChanged(event)
                                 }
+                            )}
+
+                            {loadingMessage === ''
+                                && multiSwapStore.swap !== null
+                                && multiSwapStore.error === null
+                                && (
+                                <>
+                                    <Typography
+                                        className={[
+                                            classes.depositInfoHeading,
+                                            classes[`depositInfoHeading--${appTheme}`],
+                                            classes.depositInfoHeadingPrice,
+                                        ].join(" ")}
+                                    >
+                                        Price Info
+                                    </Typography>
+
+                                    <div
+                                        className={[
+                                            classes.priceInfos,
+                                            classes[`priceInfos--${appTheme}`],
+                                        ].join(" ")}
+                                    >
+                                        <div
+                                            className={[
+                                                classes.priceInfo,
+                                                classes[`priceInfo--${appTheme}`],
+                                            ].join(" ")}
+                                        >
+                                            <Typography className={classes.text}>
+                                                {`${fromAssetValue?.symbol} per ${toAssetValue?.symbol}`}
+                                            </Typography>
+
+                                            <Typography className={classes.title}>
+                                                {multiSwapStore.priceInfo.tokenOutPrice}
+                                            </Typography>
+                                        </div>
+
+                                        <div
+                                            className={[
+                                                classes.priceInfo,
+                                                classes[`priceInfo--${appTheme}`],
+                                            ].join(" ")}
+                                        >
+                                            <Typography className={classes.text}>
+                                                {`${toAssetValue?.symbol} per ${fromAssetValue?.symbol}`}
+                                            </Typography>
+
+                                            <Typography className={classes.title}>
+                                                {multiSwapStore.priceInfo.tokenInPrice}
+                                            </Typography>
+                                        </div>
+                                    </div>
+                                </>
                             )}
 
                             {multiSwapStore.error && (

@@ -52,6 +52,11 @@ class MultiSwapStore {
     provider = null
 
     tokenIn = null
+    priceInfo = {
+        tokenInPrice: null,
+        tokenOutPrice: null,
+    }
+
     tokenOut = null
     swapAmount = null
     slippage = '2'
@@ -76,7 +81,7 @@ class MultiSwapStore {
             setSlippage: action.bound,
             setProvider: action.bound,
             excludePlatformToggle: action.bound,
-
+            calcPriceInfo: action.bound,
             reverseTokens: action.bound,
             approve: action.bound,
             doSwap: action.bound,
@@ -139,6 +144,29 @@ class MultiSwapStore {
         }
     }
 
+    async calcPriceImpact() {
+        const minAmount = '1000'
+    }
+
+    calcPriceInfo(tokenOut) {
+        const returnAmount = ethers.utils
+            .formatUnits(this.swap.returnAmount, tokenOut.decimals)
+            .toString();
+
+        const tokenInPrice = (
+            parseFloat(returnAmount) / parseFloat(this.swapAmount)
+        ).toFixed(4);
+
+        const tokenOutPrice = (
+            parseFloat(this.swapAmount) / parseFloat(returnAmount)
+        ).toFixed(4);
+
+        this.priceInfo = {
+            tokenInPrice,
+            tokenOutPrice,
+        }
+    }
+
     async doSwap() {
         if (this.swap) {
             this.isFetchingSwap = true
@@ -195,6 +223,7 @@ class MultiSwapStore {
             try {
                 const response = await swapQuery(tokenIn, tokenOut, swapAmount, this.excludePlatforms)
                 this.swap = response
+                this.calcPriceInfo(tokenOut)
 
                 if (this.swap?.swaps?.length === 0) {
                     this.error = 'Routes not found'
