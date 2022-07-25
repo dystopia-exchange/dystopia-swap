@@ -686,8 +686,8 @@ input[type=number].massiveInputAmount {
   width: auto;
   display: flex;
   justify-content: center;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 22px;
+  padding-right: 22px;
   margin-top: -30px;
   margin-bottom: -30px;
   position: relative;
@@ -732,6 +732,7 @@ input[type=number].massiveInputAmount {
 .excludedPlatformList {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .excludedPlatformListItem {

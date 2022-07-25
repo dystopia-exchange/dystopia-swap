@@ -50,13 +50,12 @@ class MultiSwapStore {
     data = {}
 
     provider = null
-
     tokenIn = null
     priceInfo = {
         tokenInPrice: null,
         tokenOutPrice: null,
     }
-
+    priceImpact = null
     tokenOut = null
     swapAmount = null
     slippage = '2'
@@ -144,24 +143,32 @@ class MultiSwapStore {
         }
     }
 
-    async calcPriceImpact() {
-        const minAmount = '1000'
+    async calcPriceImpact(priceInfo) {
+        const [tokenIn, tokenOut] = await Promise.all([
+            this._getToken(this.tokenIn),
+            this._getToken(this.tokenOut),
+        ])
+        const minSwapAmount = ethers.utils.parseUnits('1000', tokenIn.decimals).toString();
+        const response = await swapQuery(tokenIn, tokenOut, minSwapAmount, this.excludePlatforms)
+        const minSwapPriceInfo = this.calcPriceInfo(tokenIn, tokenOut, response)
+        const priceImpact = 100 - (parseFloat(priceInfo.tokenInPrice) * 100 / parseFloat(minSwapPriceInfo.tokenInPrice))
+        return priceImpact
     }
 
-    calcPriceInfo(tokenOut) {
-        const returnAmount = ethers.utils
-            .formatUnits(this.swap.returnAmount, tokenOut.decimals)
-            .toString();
+    calcPriceInfo(tokenIn, tokenOut, swap) {
+        if (!tokenOut || !swap) {
+            return {
+                tokenInPrice: null,
+                tokenOutPrice: null,
+            }
+        }
 
-        const tokenInPrice = (
-            parseFloat(returnAmount) / parseFloat(this.swapAmount)
-        ).toFixed(4);
+        const returnAmount = ethers.utils.formatUnits(swap.returnAmount, tokenOut.decimals).toString();
+        const swapAmount = ethers.utils.formatUnits(swap.swapAmount, tokenIn.decimals).toString();
+        const tokenInPrice = (parseFloat(returnAmount) / parseFloat(swapAmount)).toFixed(4);
+        const tokenOutPrice = (parseFloat(swapAmount) / parseFloat(returnAmount)).toFixed(4);
 
-        const tokenOutPrice = (
-            parseFloat(this.swapAmount) / parseFloat(returnAmount)
-        ).toFixed(4);
-
-        this.priceInfo = {
+        return {
             tokenInPrice,
             tokenOutPrice,
         }
@@ -223,7 +230,8 @@ class MultiSwapStore {
             try {
                 const response = await swapQuery(tokenIn, tokenOut, swapAmount, this.excludePlatforms)
                 this.swap = response
-                this.calcPriceInfo(tokenOut)
+                this.priceInfo = this.calcPriceInfo(tokenIn, tokenOut, response)
+                this.priceImpact = await this.calcPriceImpact(this.priceInfo)
 
                 if (this.swap?.swaps?.length === 0) {
                     this.error = 'Routes not found'

@@ -979,6 +979,26 @@ function Setup() {
                                 }
                             )}
 
+                            {(!isFetchingSwapQuery
+                                && multiSwapStore.error === null
+                                && multiSwapStore.priceImpact !== null)
+                            && (
+                                <>
+                                    <Typography
+                                        style={{ marginTop: 5 }}
+                                        className={[
+                                            multiSwapStore.priceImpact > 5
+                                                ? classes.warningError
+                                                : classes.warningWarning,
+                                            classes[`warningText--${appTheme}`],
+                                        ].join(" ")}
+                                        align="center"
+                                    >
+                                        Price impact: {parseFloat(parseFloat(multiSwapStore.priceImpact).toFixed(2))}%
+                                    </Typography>
+                                </>
+                            )}
+
                             {loadingMessage === ''
                                 && multiSwapStore.swap !== null
                                 && multiSwapStore.error === null
