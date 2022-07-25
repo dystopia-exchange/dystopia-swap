@@ -633,7 +633,8 @@ input[type=number].massiveInputAmount {
 
 .routesPlatform {
   position: static !important;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  font-size: 15px;
 }
 
 .routesList {
@@ -685,11 +686,66 @@ input[type=number].massiveInputAmount {
   width: auto;
   display: flex;
   justify-content: center;
-  padding-left: 12px;
-  padding-right: 12px;
-  overflow: hidden;
+  padding-left: 24px;
+  padding-right: 24px;
   margin-top: -30px;
   margin-bottom: -30px;
+  position: relative;
+}
+
+.routesListItemArrow svg {
+  transform: scale(1.4);
+}
+
+.routesListItemArrowPlatform {
+  position: absolute;
+  top: 44px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+}
+
+.routesListItemArrowPlatformExclude {
+  margin-left: 3px;
+  font-size: 20px;
+  color: red;
+  opacity: 0.6;
+  font-size: 20px;
+  line-height: 10px;
+}
+
+.excludedPlatformWrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.excludedPlatformTitle {
+  margin-right: 12px;
+  color: #7C838A;
+  font-size: 14px;
+}
+
+.excludedPlatformList {
+  display: flex;
+  align-items: center;
+}
+
+.excludedPlatformListItem {
+  margin-right: 10px;
+  font-size: 12px;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+}
+
+.routesListItemArrowPlatformExclude:hover,
+.excludedPlatformListItem:hover {
+  opacity: 1;
+  cursor: pointer;
 }
 
 .routesListItemArrow--dark {

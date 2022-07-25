@@ -97,12 +97,12 @@ export async function api(func = '', query = undefined) {
     return await (await fetch(url)).json();
 }
 
-export async function swapQuery(tokenIn, tokenOut, swapAmount) {
+export async function swapQuery(tokenIn, tokenOut, swapAmount, excludePlatforms = []) {
     const query = {
         tokenIn,
         tokenOut,
         swapAmount,
-        excludePlatforms: [],
+        excludePlatforms,
     };
 
     const swap = await api('swap', {

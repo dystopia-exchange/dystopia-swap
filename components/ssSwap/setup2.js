@@ -372,7 +372,7 @@ function Setup() {
         const { routes } = args
 
         const renderRoutes = (route) => {
-            const [{ percentage, dex }] = route
+            const [{ percentage }] = route
 
             return (
                 <>
@@ -383,7 +383,7 @@ function Setup() {
                             classes[`routeLinesLeftText--${appTheme}`]
                         ].join(" ")}
                     >
-                        {dex.name}{' '}{percentage}%
+                        {percentage}%
                     </div>
                     <div className={[classes.routesList]}>
                         {route.map((el, index) => {
@@ -429,9 +429,18 @@ function Setup() {
                                                 classes[`routesListItemArrow--${appTheme}`]
                                             ].join(" ")}
                                         >
-                                              <svg width="22" height="70" viewBox="0 0 22 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M22 35L17 32.1132V37.8868L22 35ZM0 35.5H17.5V34.5H0V35.5Z" fill="#86B9D6"/>
-                                              </svg>
+                                            <svg width="22" height="70" viewBox="0 0 22 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M22 35L17 32.1132V37.8868L22 35ZM0 35.5H17.5V34.5H0V35.5Z" fill="#86B9D6"/>
+                                            </svg>
+                                            <span className={[classes.routesListItemArrowPlatform].join(' ')}>
+                                                {el.dex.name}
+                                                <span
+                                                    className={[classes.routesListItemArrowPlatformExclude].join(' ')}
+                                                    onClick={() => {
+                                                        multiSwapStore.excludePlatformToggle(el.dex.name)
+                                                    }}
+                                                >&#215;</span>
+                                            </span>
                                         </div>
                                     )}
 
@@ -458,6 +467,15 @@ function Setup() {
                                             <svg width="22" height="70" viewBox="0 0 22 70" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M22 35L17 32.1132V37.8868L22 35ZM0 35.5H17.5V34.5H0V35.5Z" fill="#86B9D6"/>
                                             </svg>
+                                            <span
+                                                className={[classes.routesListItemArrowPlatform].join(' ')}
+                                                 onClick={() => {
+                                                     multiSwapStore.excludePlatformToggle(route[index + 1].dex.name)
+                                                 }}
+                                            >
+                                                {route[index + 1].dex.name}
+                                                <span className={[classes.routesListItemArrowPlatformExclude].join(' ')}>&#215;</span>
+                                            </span>
                                         </div>
                                     )}
                                 </div>
@@ -489,6 +507,32 @@ function Setup() {
                                         Routes:
                                     </Typography>
                                     {routes.map(renderRoutes)}
+                                </>
+                            )}
+                            {multiSwapStore.excludedPlatforms.length > 0 && (
+                                <>
+                                    <div className={classes.excludedPlatformWrapper}>
+                                        <div className={classes.excludedPlatformTitle}>Excluded platforms:{' '}</div>
+                                        <div className={classes.excludedPlatformList}>
+                                            {multiSwapStore.excludedPlatforms.map((el) => {
+                                                return (
+                                                    <>
+                                                          <span className={classes.excludedPlatformListItem}>
+                                                               {el}
+                                                               <span
+                                                                   className={[classes.routesListItemArrowPlatformExclude].join(' ')}
+                                                                   onClick={() => {
+                                                                       multiSwapStore.excludePlatformToggle(el)
+                                                                   }}
+                                                               >
+                                                                   &#215;
+                                                               </span>
+                                                          </span>
+                                                    </>
+                                                )
+                                            })}
+                                        </div>
+                                    </div>
                                 </>
                             )}
                         </div>
@@ -937,7 +981,7 @@ function Setup() {
 
                             {multiSwapStore.error && (
                                 <div
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15, marginBottom: 10 }}
                                     className={[
                                         classes.warningContainer,
                                         classes[`warningContainer--${appTheme}`],

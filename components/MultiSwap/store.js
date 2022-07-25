@@ -19,14 +19,15 @@ const erc20abi = [
 ];
 
 function getPoolInfo(multiswapData, poolId) {
-    console.log('getPoolInfo poolId', poolId);
     const dexId = parseInt(poolId.slice(-1), 16);
-    console.log('dexId', dexId);
+
+    const _DEX_MASK =
+        '0x0000000000000000000000000000000000000000fffffffffffffffffffffff0';
 
     for (const dex of multiswapData.dexes) {
         if (
             dex.mask &&
-            simpleAnd(poolId, dex.mask) === dex.mask &&
+            simpleAnd(poolId, _DEX_MASK) === dex.mask &&
             dex.dexId === dexId
         ) {
             return dex;
@@ -54,6 +55,7 @@ class MultiSwapStore {
     tokenOut = null
     swapAmount = null
     slippage = '2'
+    excludePlatforms = []
 
     isFetchingSwapQuery = false
     swap = null
@@ -73,6 +75,7 @@ class MultiSwapStore {
             setSwapAmount: action.bound,
             setSlippage: action.bound,
             setProvider: action.bound,
+            excludePlatformToggle: action.bound,
 
             reverseTokens: action.bound,
             approve: action.bound,
@@ -139,7 +142,7 @@ class MultiSwapStore {
     async doSwap() {
         if (this.swap) {
             this.isFetchingSwap = true
-                try {
+            try {
                 const res = await doSwap(this.swap, this.slippage, this.provider)
                 await res.wait()
                 await stores.stableSwapStore.fetchBaseAssets(
@@ -168,6 +171,18 @@ class MultiSwapStore {
         return this.tokensMap[address]
     }
 
+    excludePlatformToggle(id) {
+        this.error = null
+
+        if (this.excludePlatforms.includes(id)) {
+            this.excludePlatforms = this.excludePlatforms.filter(el => el !== id)
+        } else {
+            this.excludePlatforms = [...this.excludePlatforms, id]
+        }
+
+        this._swapQuery()
+    }
+
     async _swapQuery() {
         if (this.tokenIn && this.tokenOut && this.swapAmount && this.provider) {
             const [tokenIn, tokenOut] = await Promise.all([
@@ -178,7 +193,7 @@ class MultiSwapStore {
             this.isFetchingSwapQuery = true
 
             try {
-                const response = await swapQuery(tokenIn, tokenOut, swapAmount)
+                const response = await swapQuery(tokenIn, tokenOut, swapAmount, this.excludePlatforms)
                 this.swap = response
 
                 if (this.swap?.swaps?.length === 0) {
@@ -248,6 +263,10 @@ class MultiSwapStore {
                 return acc
             }, [])
         }
+    }
+
+    get excludedPlatforms() {
+        return this.excludePlatforms
     }
 }
 
