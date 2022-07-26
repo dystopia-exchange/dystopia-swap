@@ -4,11 +4,11 @@ import classes from "./home.module.css";
 import {useRouter} from "next/router";
 
 const socialLinks = {
-  twitter: "https://twitter.com/dystopiaswap",
-  discord: "https://t.co/dFsniy2Ktq",
-  telegram: "https://t.co/gkg3Ba1nmm",
-  gitbook: "https://dystopia-1.gitbook.io/dystopia-1/",
-  medium: "https://medium.com/@DystopiaSwap",
+  twitter: "https://twitter.com/Coneswap",
+  discord: "https://discord.gg/pet7xkwac7",
+  telegram: "https://t.me/+h-bgLOoWJS9iNDg9",
+  gitbook: "https://docs.cone.exchange/",
+  medium: "https://medium.com/@ConeSwap",
 };
 
 const HomePage = () => {
