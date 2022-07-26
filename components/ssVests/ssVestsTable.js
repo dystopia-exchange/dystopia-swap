@@ -1011,7 +1011,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                 padding: '0 30px',
                 background: '#060B17',
                 borderTop: '1px solid #d3f85a',
-                color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                color: '#8191B9',
               }}
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
@@ -1368,7 +1368,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                         borderTop: '1px solid #d3f85a',
                         // borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
                         // borderRadius: 100,
-                        color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                        color: '#8191B9',
                       }}
                       component="div"
                       count={vestNFTs.length}

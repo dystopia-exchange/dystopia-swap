@@ -26,6 +26,7 @@ import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import { ArrowDropDown, ExpandLess, ExpandMore } from "@mui/icons-material";
 import TablePaginationActions from "../table-pagination/table-pagination";
 import { formatSymbol } from "../../utils";
+import css from './ssRewardsTable.module.css';
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
@@ -1102,16 +1103,19 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
               width: "100%",
               // marginTop: 20,
               padding: "0 30px",
-              borderTop: '1px solid #D3F85A',
-              height: 70,
-              alignItems: 'center',
-              display: 'flex',
-              justifyContent: 'flex-end',
+              // borderTop: '1px solid #D3F85A',
+              borderTop: '1px solid #d3f85a',
+              background: '#060B17',
+              // height: 70,
+              // alignItems: 'center',
+              // display: 'flex',
+              // justifyContent: 'flex-end',
+              color: '#8191B9',
               // background: appTheme === "dark" ? "#24292D" : "#dbe6ec",
               // border: "1px solid #86B9D6",
               // borderColor: appTheme === "dark" ? "#5F7285" : "#86B9D6",
               // borderRadius: 100,
-              color: appTheme === "dark" ? "#7C838A" : "#5688A5",
+              // color: appTheme === "dark" ? "#7C838A" : "#5688A5",
             }}
             ActionsComponent={TablePaginationActions}
             rowsPerPageOptions={[5, 10, 25]}
@@ -1123,6 +1127,19 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
             rowsPerPageOptions={window.innerWidth < 435 ? [] : [5, 10, 25]}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            classes={{
+              root: css.paginationRoot,
+              toolbar: css.paginationToolbar,
+              spacer: css.paginationSpacer,
+              selectLabel: css.selectLabel,
+              selectRoot: css.selectRoot,
+              select: css.select,
+              selectIcon: css.selectIcon,
+              input: css.input,
+              menuItem: css.menuItem,
+              displayedRows: css.displayedRows,
+              actions: css.actions,
+            }}
           />
         </div>
       )}
@@ -1652,13 +1669,12 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
           <TablePagination
             className={"g-flex-column__item-fixed"}
             style={{
-              width: "100%",
-              padding: "0 30px",
-              background: appTheme === "dark" ? "#24292D" : "#dbe6ec",
-              border: "1px solid #86B9D6",
-              borderColor: appTheme === "dark" ? "#5F7285" : "#86B9D6",
-              borderRadius: 100,
-              color: appTheme === "dark" ? "#7C838A" : "#5688A5",
+              width: '100%',
+              padding: '0 30px',
+              background: '#060B17',
+              borderTop: '1px solid #d3f85a',
+              // borderRadius: 100,
+              color: '#8191B9',
             }}
             ActionsComponent={TablePaginationActions}
             rowsPerPageOptions={[5, 10, 25]}
@@ -1670,6 +1686,19 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
             rowsPerPageOptions={window.innerWidth < 435 ? [] : [5, 10, 25]}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            classes={{
+              root: css.paginationRoot,
+              toolbar: css.paginationToolbar,
+              spacer: css.paginationSpacer,
+              selectLabel: css.selectLabel,
+              selectRoot: css.selectRoot,
+              select: css.select,
+              selectIcon: css.selectIcon,
+              input: css.input,
+              menuItem: css.menuItem,
+              displayedRows: css.displayedRows,
+              actions: css.actions,
+            }}
           />
         </>
       )}
