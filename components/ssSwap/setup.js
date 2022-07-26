@@ -148,8 +148,10 @@ function Setup() {
                   (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL ||
                       toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
               )
-          )
-            calculateReceiveAmount(0, fromAssetValue, toAssetValue);
+          ) {
+              sethidequote(false);
+              calculateReceiveAmount(0, fromAssetValue, toAssetValue);
+          }
           else {
             sethidequote(true);
             setToAmountValue(0);
@@ -200,8 +202,10 @@ function Setup() {
                   (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL ||
                       toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
               )
-          )
+          ) {
+              sethidequote(false);
               calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
+          }
           else {
               sethidequote(true);
               setToAmountValue(fromAmountValue);
@@ -214,8 +218,10 @@ function Setup() {
                   (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL ||
                       toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
               )
-          )
+          ) {
+              sethidequote(false);
               calculateReceiveAmount(fromAmountValue, value, toAssetValue);
+          }
           else {
               sethidequote(true);
               setToAmountValue(fromAmountValue);
@@ -232,8 +238,10 @@ function Setup() {
                   (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL ||
                       toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
               )
-          )
+          ) {
+              sethidequote(false);
               calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
+          }
           else {
               sethidequote(true);
               setToAmountValue(fromAmountValue);
@@ -246,8 +254,10 @@ function Setup() {
                       fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
                   (value?.symbol == CONTRACTS.WFTM_SYMBOL || value?.symbol == CONTRACTS.FTM_SYMBOL)
               )
-          )
+          ) {
+              sethidequote(false);
               calculateReceiveAmount(fromAmountValue, fromAssetValue, value);
+          }
           else {
               sethidequote(true);
               setToAmountValue(fromAmountValue);
@@ -273,8 +283,10 @@ function Setup() {
                     fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
                 (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL || toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
             )
-        )
+        ) {
+            sethidequote(false);
             calculateReceiveAmount(value, fromAssetValue, toAssetValue);
+        }
         else {
             sethidequote(true);
             setToAmountValue(value);
@@ -508,12 +520,14 @@ function Setup() {
                   fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
               (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL || toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
           )
-      )
+      ) {
+          sethidequote(false);
           calculateReceiveAmount(
               fromAssetValue.balance,
               fromAssetValue,
               toAssetValue
           );
+      }
       else {
           sethidequote(true);
           setToAmountValue(fromAssetValue.balance);
@@ -531,8 +545,10 @@ function Setup() {
                   fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
               (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL || toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
           )
-      )
+      ) {
+          sethidequote(false);
           calculateReceiveAmount(fromAmountValue, ta, fa);
+      }
       else {
           sethidequote(true);
           setToAmountValue(fromAmountValue);
@@ -1071,11 +1087,11 @@ function Setup() {
             onAssetSelect,
             quote &&
             `1 ${fromAssetValue?.symbol} =
-        ${formatCurrency(
+        ${!hidequote ? formatCurrency(
                 BigNumber(quote.output.finalValue)
                     .div(quote.inputs.fromAmount)
                     .toFixed(18)
-            )}
+            ) : 1}
         ${toAssetValue?.symbol}`
         )}
 
@@ -1246,11 +1262,11 @@ function Setup() {
             onAssetSelect,
             quote &&
             `1 ${toAssetValue?.symbol} = 
-        ${formatCurrency(
+        ${!hidequote ? formatCurrency(
                 BigNumber(quote.inputs.fromAmount)
                     .div(quote.output.finalValue)
                     .toFixed(18)
-            )}
+            ) : 1}
         ${fromAssetValue?.symbol}`
         )}
 
@@ -1349,7 +1365,7 @@ function Setup() {
             </div>
         )}
 
-        {renderRoute()}
+        {!hidequote ? renderRoute() : ''}
 
         <div className={classes.controls}>
             {!hidequote ? renderSwapInformation() : null}
