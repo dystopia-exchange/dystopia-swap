@@ -36,7 +36,7 @@ const HomePage = () => {
           </div>
         </div>
         <div className={classes.column}>
-          <p className={classes.title2}>0.1% Swapping Fee</p>
+          <p className={classes.title2}>0.01% Swapping Fee</p>
           <p className={classes.title2}>Tokenized locks as NFTs</p>
           <p className={classes.title2}>Binance Network</p>
 
