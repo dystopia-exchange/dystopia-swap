@@ -364,7 +364,7 @@
     position: absolute;
     left: 0;
     top: 106px;
-    width: auto;
+    width: 347px;
   }
 
   .tokenSelect > div {
@@ -397,7 +397,7 @@
   .yourVotes {
     border-radius: 12px;
     position: absolute;
-    left: 270px;
+    left: 360px;
     top: 106px;
     height: 72px;
     width: 248px;
@@ -435,18 +435,18 @@
     height: 72px;
     width: 248px;
     top: 102px;
-    left: 538px;
+    left: 632px;
   }
 
   .buttonOverrideFixedReset {
     height: 72px;
     width: 248px;
     top: 102px;
-    left: 808px;
+    left: 902px;
   }
 
   .yourVotes {
-    left: 270px;
+    left: 366px;
     top: 102px;
     height: 72px;
     width: 248px;

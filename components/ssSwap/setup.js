@@ -16,7 +16,7 @@ import {
 } from "../../utils";
 import classes from "./ssSwap.module.css";
 import stores from "../../stores";
-import { ACTIONS } from "../../stores/constants";
+import { ACTIONS, CONTRACTS } from "../../stores/constants";
 import BigNumber from "bignumber.js";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import BtnSwap from "../../ui/BtnSwap";
@@ -49,6 +49,7 @@ function Setup() {
 
   const [quoteError, setQuoteError] = useState(null);
   const [quote, setQuote] = useState(null);
+  const [hidequote, sethidequote] = useState(false);
   const [hintAnchor, setHintAnchor] = React.useState(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -142,13 +143,15 @@ function Setup() {
           setToAmountValue("");
           if (
               !(
-                  (fromAssetValue?.symbol == "MATIC" ||
-                      fromAssetValue?.symbol == "WMATIC") &&
-                  (toAssetValue?.symbol == "WMATIC" ||
-                      toAssetValue?.symbol == "MATIC")
+                  (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                      fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+                  (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL ||
+                      toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
               )
-          )
-            calculateReceiveAmount(0, fromAssetValue, toAssetValue);
+          ) {
+              sethidequote(false);
+              calculateReceiveAmount(0, fromAssetValue, toAssetValue);
+          }
           else {
             sethidequote(true);
             setToAmountValue(0);
@@ -162,6 +165,8 @@ function Setup() {
 
         stores.emitter.on(ACTIONS.ERROR, errorReturned);
         stores.emitter.on(ACTIONS.UPDATED, ssUpdated);
+        stores.emitter.on(ACTIONS.WRAP_RETURNED, wrapReturned);
+        stores.emitter.on(ACTIONS.UNWRAP_RETURNED, wrapReturned);
         stores.emitter.on(ACTIONS.SWAP_RETURNED, swapReturned);
         stores.emitter.on(ACTIONS.QUOTE_SWAP_RETURNED, quoteReturned);
         stores.emitter.on(ACTIONS.BASE_ASSETS_UPDATED, assetsUpdated);
@@ -190,19 +195,73 @@ function Setup() {
       if (value.address === toAssetValue.address) {
         setToAssetValue(fromAssetValue);
         setFromAssetValue(toAssetValue);
-        calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
+          if (
+              !(
+                  (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                      fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+                  (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL ||
+                      toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+              )
+          ) {
+              sethidequote(false);
+              calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
+          }
+          else {
+              sethidequote(true);
+              setToAmountValue(fromAmountValue);
+          }
       } else {
         setFromAssetValue(value);
-        calculateReceiveAmount(fromAmountValue, value, toAssetValue);
+          if (
+              !(
+                  (value?.symbol == CONTRACTS.FTM_SYMBOL || value?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+                  (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL ||
+                      toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+              )
+          ) {
+              sethidequote(false);
+              calculateReceiveAmount(fromAmountValue, value, toAssetValue);
+          }
+          else {
+              sethidequote(true);
+              setToAmountValue(fromAmountValue);
+          }
       }
     } else {
       if (value.address === fromAssetValue.address) {
         setFromAssetValue(toAssetValue);
         setToAssetValue(fromAssetValue);
-        calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
+          if (
+              !(
+                  (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                      fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+                  (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL ||
+                      toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+              )
+          ) {
+              sethidequote(false);
+              calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
+          }
+          else {
+              sethidequote(true);
+              setToAmountValue(fromAmountValue);
+          }
       } else {
         setToAssetValue(value);
-        calculateReceiveAmount(fromAmountValue, fromAssetValue, value);
+          if (
+              !(
+                  (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                      fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+                  (value?.symbol == CONTRACTS.WFTM_SYMBOL || value?.symbol == CONTRACTS.FTM_SYMBOL)
+              )
+          ) {
+              sethidequote(false);
+              calculateReceiveAmount(fromAmountValue, fromAssetValue, value);
+          }
+          else {
+              sethidequote(true);
+              setToAmountValue(fromAmountValue);
+          }
       }
     }
 
@@ -218,7 +277,20 @@ function Setup() {
       setToAmountValue("");
       setQuote(null);
     } else {
-      calculateReceiveAmount(value, fromAssetValue, toAssetValue);
+        if (
+            !(
+                (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                    fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+                (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL || toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+            )
+        ) {
+            sethidequote(false);
+            calculateReceiveAmount(value, fromAssetValue, toAssetValue);
+        }
+        else {
+            sethidequote(true);
+            setToAmountValue(value);
+        }
     }
   };
 
@@ -311,13 +383,155 @@ function Setup() {
     }
   };
 
+    const onWrap = () => {
+        if (
+            !fromAmountValue ||
+            fromAmountValue > Number(fromAssetValue.balance) ||
+            Number(fromAmountValue) <= 0
+        ) {
+            return;
+        }
+
+        setFromAmountError(false);
+        setFromAssetError(false);
+        setToAssetError(false);
+
+        let error = false;
+
+        if (!fromAmountValue || fromAmountValue === "" || isNaN(fromAmountValue)) {
+            setFromAmountError("From amount is required");
+            error = true;
+        } else {
+            if (
+                !fromAssetValue.balance ||
+                isNaN(fromAssetValue.balance) ||
+                BigNumber(fromAssetValue.balance).lte(0)
+            ) {
+                setFromAmountError("Invalid balance");
+                error = true;
+            } else if (BigNumber(fromAmountValue).lt(0)) {
+                setFromAmountError("Invalid amount");
+                error = true;
+            } else if (
+                fromAssetValue &&
+                BigNumber(fromAmountValue).gt(fromAssetValue.balance)
+            ) {
+                setFromAmountError(`Greater than your available balance`);
+                error = true;
+            }
+        }
+
+        if (!fromAssetValue || fromAssetValue === null) {
+            setFromAssetError("From asset is required");
+            error = true;
+        }
+
+        if (!toAssetValue || toAssetValue === null) {
+            setFromAssetError("To asset is required");
+            error = true;
+        }
+
+        if (!error) {
+            setLoading(true);
+
+            stores.dispatcher.dispatch({
+                type: ACTIONS.WRAP,
+                content: {
+                    fromAsset: fromAssetValue,
+                    toAsset: toAssetValue,
+                    fromAmount: fromAmountValue,
+                    toAmount: toAmountValue,
+                    quote: quote,
+                    slippage: slippage,
+                },
+            });
+        }
+    };
+    const onUnwrap = () => {
+        if (
+            !fromAmountValue ||
+            fromAmountValue > Number(fromAssetValue.balance) ||
+            Number(fromAmountValue) <= 0
+        ) {
+            return;
+        }
+
+        setFromAmountError(false);
+        setFromAssetError(false);
+        setToAssetError(false);
+
+        let error = false;
+
+        if (!fromAmountValue || fromAmountValue === "" || isNaN(fromAmountValue)) {
+            setFromAmountError("From amount is required");
+            error = true;
+        } else {
+            if (
+                !fromAssetValue.balance ||
+                isNaN(fromAssetValue.balance) ||
+                BigNumber(fromAssetValue.balance).lte(0)
+            ) {
+                setFromAmountError("Invalid balance");
+                error = true;
+            } else if (BigNumber(fromAmountValue).lt(0)) {
+                setFromAmountError("Invalid amount");
+                error = true;
+            } else if (
+                fromAssetValue &&
+                BigNumber(fromAmountValue).gt(fromAssetValue.balance)
+            ) {
+                setFromAmountError(`Greater than your available balance`);
+                error = true;
+            }
+        }
+
+        if (!fromAssetValue || fromAssetValue === null) {
+            setFromAssetError("From asset is required");
+            error = true;
+        }
+
+        if (!toAssetValue || toAssetValue === null) {
+            setFromAssetError("To asset is required");
+            error = true;
+        }
+
+        if (!error) {
+            setLoading(true);
+
+            stores.dispatcher.dispatch({
+                type: ACTIONS.UNWRAP,
+                content: {
+                    fromAsset: fromAssetValue,
+                    toAsset: toAssetValue,
+                    fromAmount: fromAmountValue,
+                    toAmount: toAmountValue,
+                    quote: quote,
+                    slippage: slippage,
+                },
+            });
+        }
+    };
+
   const setBalance100 = () => {
     setFromAmountValue(fromAssetValue.balance);
-    calculateReceiveAmount(
-        fromAssetValue.balance,
-        fromAssetValue,
-        toAssetValue
-    );
+      if (
+          !(
+              (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                  fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+              (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL || toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+          )
+      ) {
+          sethidequote(false);
+          calculateReceiveAmount(
+              fromAssetValue.balance,
+              fromAssetValue,
+              toAssetValue
+          );
+      }
+      else {
+          sethidequote(true);
+          setToAmountValue(fromAssetValue.balance);
+      }
   };
 
   const swapAssets = () => {
@@ -325,7 +539,20 @@ function Setup() {
     const ta = toAssetValue;
     setFromAssetValue(ta);
     setToAssetValue(fa);
-    calculateReceiveAmount(fromAmountValue, ta, fa);
+      if (
+          !(
+              (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                  fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+              (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL || toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+          )
+      ) {
+          sethidequote(false);
+          calculateReceiveAmount(fromAmountValue, ta, fa);
+      }
+      else {
+          sethidequote(true);
+          setToAmountValue(fromAmountValue);
+      }
   };
 
   const renderSwapInformation = () => {
@@ -860,11 +1087,11 @@ function Setup() {
             onAssetSelect,
             quote &&
             `1 ${fromAssetValue?.symbol} =
-        ${formatCurrency(
+        ${!hidequote ? formatCurrency(
                 BigNumber(quote.output.finalValue)
                     .div(quote.inputs.fromAmount)
                     .toFixed(18)
-            )}
+            ) : 1}
         ${toAssetValue?.symbol}`
         )}
 
@@ -1035,11 +1262,11 @@ function Setup() {
             onAssetSelect,
             quote &&
             `1 ${toAssetValue?.symbol} = 
-        ${formatCurrency(
+        ${!hidequote ? formatCurrency(
                 BigNumber(quote.inputs.fromAmount)
                     .div(quote.output.finalValue)
                     .toFixed(18)
-            )}
+            ) : 1}
         ${fromAssetValue?.symbol}`
         )}
 
@@ -1138,14 +1365,18 @@ function Setup() {
             </div>
         )}
 
-        {renderRoute()}
+        {!hidequote ? renderRoute() : ''}
 
         <div className={classes.controls}>
-          {renderSwapInformation()}
+            {!hidequote ? renderSwapInformation() : null}
 
           <div className={classes.controlsBtn}>
             <BtnSwap
-                onClick={onSwap}
+                onClick={(fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL && toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL)
+                    ? onWrap
+                    : (fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL && toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+                        ? onUnwrap
+                        : onSwap}
                 className={classes.btnSwap}
                 labelClassName={[
                   !fromAmountValue ||
@@ -1166,15 +1397,25 @@ function Setup() {
                 }
                 loading={loading}
                 label={
-                  loading
-                      ? "Swapping"
-                      : !fromAmountValue || Number(fromAmountValue) <= 0
-                          ? "Enter Amount"
-                          : fromAmountValue > Number(fromAssetValue.balance)
-                              ? "Insufficient funds"
-                              : quote && BigNumber(quote.priceImpact).gt(5)
-                                  ? "Swap | Are you sure?"
-                                  : "Swap"
+                    loading && fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL && toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL
+                        ? "Wrapping"
+                        : loading && fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL && toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL
+                            ? "Unwrapping"
+                            : loading &&
+                            !(
+                                (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                                    fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+                                (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL ||
+                                    toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+                            )
+                                ? "Swapping"
+                                : !fromAmountValue || Number(fromAmountValue) <= 0
+                                    ? "Enter Amount"
+                                    : (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL && toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL)
+                                        ? "Wrap"
+                                        : (fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL && toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+                                            ? "Unwrap"
+                                            : "Swap"
                 }
             ></BtnSwap>
           </div>

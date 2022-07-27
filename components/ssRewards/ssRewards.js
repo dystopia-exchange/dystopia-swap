@@ -32,17 +32,18 @@ export default function ssRewards() {
       if (nfts?.length > 0) {
        nfts.sort((a, b) => (+a.id) - (+b.id));
 
-       if (!token) {
-         setToken(nfts[0]);
+       setToken(nfts[0]);
+
+       // if (!token) {
+       //   window.setTimeout(() => {
+       //    stores.dispatcher.dispatch({type: ACTIONS.GET_REWARD_BALANCES, content: {tokenID: nfts[0].id}});
+       //  });
+       // }
+     // else {
         window.setTimeout(() => {
           stores.dispatcher.dispatch({type: ACTIONS.GET_REWARD_BALANCES, content: {tokenID: nfts[0].id}});
         });
-       } 
-     else {
-        window.setTimeout(() => {
-          stores.dispatcher.dispatch({type: ACTIONS.GET_REWARD_BALANCES, content: {tokenID: token.id}});
-        });
-      }
+      // }
     } else {
       window.setTimeout(() => {
         stores.dispatcher.dispatch({type: ACTIONS.GET_REWARD_BALANCES, content: {tokenID: 0}});
@@ -141,10 +142,14 @@ export default function ssRewards() {
               Rewards
           </div>
 
-
-
           <div className={classes.nftSelect}>
-              {TokenSelect({value: token, options: vestNFTs, symbol: veToken?.symbol, handleChange})}
+              {TokenSelect({
+                  value: token,
+                  options: vestNFTs,
+                  symbol: veToken?.symbol,
+                  handleChange,
+                  placeholder: 'Select veCONE NFT',
+              })}
           </div>
           <div
               className={[classes.addButton, classes[`addButton--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--justify-center'].join(' ')}
