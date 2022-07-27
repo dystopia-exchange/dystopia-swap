@@ -190,7 +190,30 @@ const headCells = [
     id: 'balance',
     numeric: true,
     disablePadding: false,
-    label: 'TVL / APR',
+    label: <div style={{display: 'flex',}}>
+      <span>TVL / APR</span>
+      <Tooltip
+          title='APR is based on current prices of tokens, token boosted APR, your veCONE amount, the % of TVL using veCONE and gauge TVL.'
+          componentsProps={{
+            tooltip: { style: {padding: 24, background: '#1F2B49', fontSize: 16, fontWeight: 400, border: '1px solid #779BF4', borderRadius: 12,}},
+          }}
+      >
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: 16,
+          height: 16,
+          borderRadius: 100,
+          border: '1px solid #586586',
+          marginLeft: 8,
+        }}>
+          <svg width="10" height="10" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.23914 0.95C2.91914 0.95 3.46247 1.13667 3.86914 1.51C4.28247 1.88333 4.48914 2.39333 4.48914 3.04C4.48914 3.71333 4.27581 4.22 3.84914 4.56C3.42247 4.9 2.85581 5.07 2.14914 5.07L2.10914 5.86H1.11914L1.06914 4.29H1.39914C2.04581 4.29 2.53914 4.20333 2.87914 4.03C3.22581 3.85667 3.39914 3.52667 3.39914 3.04C3.39914 2.68667 3.29581 2.41 3.08914 2.21C2.88914 2.01 2.60914 1.91 2.24914 1.91C1.88914 1.91 1.60581 2.00667 1.39914 2.2C1.19247 2.39333 1.08914 2.66333 1.08914 3.01H0.0191407C0.0191407 2.61 0.109141 2.25333 0.289141 1.94C0.469141 1.62667 0.725807 1.38333 1.05914 1.21C1.39914 1.03667 1.79247 0.95 2.23914 0.95ZM1.59914 8.07C1.39247 8.07 1.21914 8 1.07914 7.86C0.939141 7.72 0.869141 7.54667 0.869141 7.34C0.869141 7.13333 0.939141 6.96 1.07914 6.82C1.21914 6.68 1.39247 6.61 1.59914 6.61C1.79914 6.61 1.96914 6.68 2.10914 6.82C2.24914 6.96 2.31914 7.13333 2.31914 7.34C2.31914 7.54667 2.24914 7.72 2.10914 7.86C1.96914 8 1.79914 8.07 1.59914 8.07Z" fill="#586586"/>
+          </svg>
+        </div>
+      </Tooltip>
+    </div>,
     isHideInDetails: true,
   },
   {
@@ -380,6 +403,15 @@ EnhancedTableHead.propTypes = {
 };
 
 const useStyles = makeStyles({
+  tooltipCircle: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 16,
+    height: 16,
+    borderRadius: 100,
+    border: '1px solid #586586',
+  },
   infoContainer: {
     position: 'relative',
     padding: 22,
@@ -2483,6 +2515,19 @@ export default function EnhancedTable({pairs, isLoading}) {
                             }}
                             noWrap>
                             TVL / APR
+                            <Tooltip
+                                title='APR is based on current prices of tokens, token boosted APR, your veCONE amount, the % of TVL using veCONE and gauge TVL.'
+                                componentsProps={{
+                                  tooltip: { style: {padding: 24, background: '#1F2B49', fontSize: 16, fontWeight: 400, border: '1px solid #779BF4', borderRadius: 12,}},
+                                }}
+                                style={{display: 'inline-flex', marginLeft: 12,}}
+                            >
+                              <div className={classes.tooltipCircle}>
+                                <svg width="10" height="10" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M2.23914 0.95C2.91914 0.95 3.46247 1.13667 3.86914 1.51C4.28247 1.88333 4.48914 2.39333 4.48914 3.04C4.48914 3.71333 4.27581 4.22 3.84914 4.56C3.42247 4.9 2.85581 5.07 2.14914 5.07L2.10914 5.86H1.11914L1.06914 4.29H1.39914C2.04581 4.29 2.53914 4.20333 2.87914 4.03C3.22581 3.85667 3.39914 3.52667 3.39914 3.04C3.39914 2.68667 3.29581 2.41 3.08914 2.21C2.88914 2.01 2.60914 1.91 2.24914 1.91C1.88914 1.91 1.60581 2.00667 1.39914 2.2C1.19247 2.39333 1.08914 2.66333 1.08914 3.01H0.0191407C0.0191407 2.61 0.109141 2.25333 0.289141 1.94C0.469141 1.62667 0.725807 1.38333 1.05914 1.21C1.39914 1.03667 1.79247 0.95 2.23914 0.95ZM1.59914 8.07C1.39247 8.07 1.21914 8 1.07914 7.86C0.939141 7.72 0.869141 7.54667 0.869141 7.34C0.869141 7.13333 0.939141 6.96 1.07914 6.82C1.21914 6.68 1.39247 6.61 1.59914 6.61C1.79914 6.61 1.96914 6.68 2.10914 6.82C2.24914 6.96 2.31914 7.13333 2.31914 7.34C2.31914 7.54667 2.24914 7.72 2.10914 7.86C1.96914 8 1.79914 8.07 1.59914 8.07Z" fill="#586586"/>
+                                </svg>
+                              </div>
+                            </Tooltip>
                           </Typography>
 
                           <div
