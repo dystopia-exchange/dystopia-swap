@@ -121,8 +121,8 @@ input[type=number].massiveInputAmount {
   position: absolute;
   top: 22px;
   font-style: normal !important;
-  font-weight: 400 !important;
-  font-size: 16px !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
   /*line-height: 16px !important;*/
   color: #8191B9;
 }
@@ -147,9 +147,9 @@ input[type=number].massiveInputAmount {
 }
 
 .largeInput {
-  padding: 0 0 0 20px !important;
+  padding: 0 0 0 16px !important;
   font-weight: 400 !important;
-  font-size: 30px !important;
+  font-size: 24px !important;
   line-height: 100% !important;
   border: none !important;
   outline: none !important;
@@ -267,6 +267,7 @@ input[type=number].massiveInputAmount {
   font-weight: 600 !important;
   font-size: 32px !important;
   line-height: 48px !important;
+  letter-spacing: 0 !important;
 }
 
 .autocompleteContainer {
@@ -294,10 +295,11 @@ input[type=number].massiveInputAmount {
   font-weight: 500;
   font-size: 60px;
   line-height: 72px;
+  letter-spacing: 0.04em;
   top: 1px;
   width: 700px;
   /*height: 60px;*/
-  margin: 0 0 20px 0;
+  margin: 0 0 28px 0;
 }
 
 .loadingCircle {
@@ -619,7 +621,7 @@ input[type=number].massiveInputAmount {
 }
 
 .displayAssetIconSec {
-  margin-left: -10px;
+  margin-left: -22px;
 }
 
 .img1Logo {
@@ -707,7 +709,7 @@ input[type=number].massiveInputAmount {
 .depositInfoContainer {
   position: relative;
   padding: 20px;
-  margin-top: 12px;
+  margin-top: 23px;
   display: flex;
   /*flex-wrap: wrap;*/
   width: 100%;
@@ -743,6 +745,7 @@ input[type=number].massiveInputAmount {
   font-weight: 400;
   font-size: 16px !important;
   line-height: 24px !important;
+  letter-spacing: 0 !important;
 }
 
 .depositInfoHeading--light .highlight {
@@ -811,8 +814,8 @@ input[type=number].massiveInputAmount {
   cursor: pointer;
   position: absolute;
   left: 26px;
-  width: 340px;
-  height: 60px;
+  width: 377px;
+  height: 72px;
   padding: 0 20px;
   background: transparent !important;
   border: 1px solid #C6CDD2;

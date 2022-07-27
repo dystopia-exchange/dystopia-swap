@@ -316,7 +316,7 @@ export default function ssBribeCreate() {
           <rect x="4" y="4" width="56" height="56" rx="28" stroke="#060B17" stroke-width="8"/>
         </svg>
 
-        <div style={{marginTop: 30}}>
+        <div style={{marginTop: 36}}>
           {renderMassiveInput('amount', amount, amountError, amountChanged, asset, null, assetOptions, onAssetSelect)}
         </div>
 
