@@ -27,6 +27,7 @@ import {
   USD_PLUS_BOOSTED_DATA_URL,
 } from "./constants/contracts";
 import router from "next/router";
+import { assetIcons } from '../public/images/assets/asset-icons'
 
 const pairsQuery = `
 {
@@ -132,6 +133,9 @@ const client = createClient({ url: process.env.NEXT_PUBLIC_API });
 
 const removeDuplicate = (arr) => {
   const assets = arr.reduce((acc, item) => {
+    if (item.symbol in assetIcons) {
+      item.logoURI = '/images/assets/' + assetIcons[item.symbol]
+    }
     acc[item.symbol] = item;
     return acc;
   }, {});
