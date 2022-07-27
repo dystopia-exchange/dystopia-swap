@@ -1002,6 +1002,7 @@ function Setup() {
                             {loadingMessage === ''
                                 && multiSwapStore.swap !== null
                                 && multiSwapStore.error === null
+                                && multiSwapStore.isMaticToken === false
                                 && (
                                 <>
                                     <Typography

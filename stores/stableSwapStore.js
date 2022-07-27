@@ -4697,6 +4697,7 @@ class Store {
       const sendFromAmount = BigNumber(fromAmount)
         .times(10 ** fromAsset.decimals)
         .toFixed(0);
+
       const sendValue = sendFromAmount;
       const wmaticContract = new web3.eth.Contract(
         CONTRACTS.WFTM_ABI,

@@ -3,7 +3,8 @@ import {allowance, approve, doSwap, getSwapContract, swapQuery, api} from "./uti
 import * as ethers from 'ethers'
 import { debounce } from "debounce"
 import stores from "../../stores";
-import {ACTIONS} from "../../stores/constants";
+import { wmaticAbi } from './wmaticAbi'
+import {CONTRACTS} from "../../stores/constants";
 
 const erc20abi = [
     // Read-Only Functions
@@ -44,6 +45,7 @@ function simpleAnd(a, mask) {
     return ethers.utils.hexlify(C, {});
 }
 
+const WMATIC = '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270'
 
 class MultiSwapStore {
     tokensMap = {}
@@ -124,7 +126,7 @@ class MultiSwapStore {
     }
 
     reverseTokens() {
-        this.setTokenIn(this.setTokenOut)
+        this.setTokenIn(this.tokenOut)
         this.setTokenOut(this.tokenIn)
     }
 
@@ -175,19 +177,25 @@ class MultiSwapStore {
     }
 
     async doSwap() {
-        if (this.swap) {
-            this.isFetchingSwap = true
-            try {
+        if (this.swap === null) {
+            return
+        }
+
+        this.isFetchingSwap = true
+
+        try {
+            if (this.isMaticToken) {
+                await this.swapMatic()
+            } else {
                 const res = await doSwap(this.swap, this.slippage, this.provider)
                 await res.wait()
-                await stores.stableSwapStore.fetchBaseAssets(
-                    [this.tokenIn, this.tokenOut]
-                )
-            } catch (e) {
-                this.error = 'Swap request error'
-            } finally {
-                this.isFetchingSwap = false
+                await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
             }
+        } catch (e) {
+            console.log('error', e)
+            this.error = 'Swap request error'
+        } finally {
+            this.isFetchingSwap = false
         }
     }
 
@@ -196,11 +204,7 @@ class MultiSwapStore {
             const erc20 = new ethers.Contract(address, erc20abi, this.provider)
             const decimals = await erc20.decimals()
             const symbol = await erc20.symbol()
-            const token = {
-                address,
-                decimals,
-                symbol,
-            }
+            const token = { address, decimals, symbol }
             this.tokensMap[address] = token
         }
         return this.tokensMap[address]
@@ -218,7 +222,18 @@ class MultiSwapStore {
         this._swapQuery()
     }
 
+    get isMaticToken() {
+        return this.tokenIn === 'MATIC' || this.tokenOut === 'MATIC'
+    }
+
     async _swapQuery() {
+        if (this.isMaticToken) {
+            this.allowed = true
+            const returnAmount = ethers.utils.parseUnits(this.swapAmount ?? '0', 18).toString()
+            this.swap = { returnAmount }
+            return
+        }
+
         if (this.tokenIn && this.tokenOut && this.swapAmount && this.provider) {
             const [tokenIn, tokenOut] = await Promise.all([
               this._getToken(this.tokenIn),
@@ -245,6 +260,11 @@ class MultiSwapStore {
     }
 
     async _checkAllowance() {
+        if (this.isMaticToken) {
+            this.allowed = true
+            return true
+        }
+
         if (this.provider) {
             this.isFetchingAllowance = true
             const response = await allowance(this.tokenIn, this.provider)
@@ -271,7 +291,7 @@ class MultiSwapStore {
         if (this.swap === null) {
             return null
         } else {
-            return this.swap.swaps.map((s) => {
+            return this.swap.swaps?.map((s) => {
                 let percentage = null;
 
                 if (parseFloat(s.amount) > 0) {
@@ -291,19 +311,69 @@ class MultiSwapStore {
                     tokenOut,
                     dex
                 }
-            }).reduce((acc, item) => {
+            })?.reduce((acc, item) => {
                 if (item.percentage !== null) {
                     acc.push([item])
                 } else {
                     acc[acc.length - 1].push(item)
                 }
                 return acc
-            }, [])
+            }, []) ?? []
         }
     }
 
     get excludedPlatforms() {
         return this.excludePlatforms
+    }
+
+    async swapMatic() {
+        const tokens = [this.tokenIn, this.tokenOut].map((el) => el.toLowerCase())
+
+        const contract = new ethers.Contract(WMATIC, wmaticAbi, this.provider.getSigner())
+        const web3 = await stores.accountStore.getWeb3Provider();
+        const gasPrice = await stores.accountStore.getGasPrice();
+        const wmaticContract = new web3.eth.Contract(
+            CONTRACTS.WFTM_ABI,
+            CONTRACTS.WFTM_ADDRESS
+        );
+        const account = stores.accountStore.getStore("account");
+
+        if (tokens.includes('matic') && tokens.includes(WMATIC.toLowerCase())) {
+            const amount = ethers.utils.parseUnits(this.swapAmount, 18).toString()
+            let wrapTXID = stores.stableSwapStore.getTXUUID();
+
+            if (this.tokenIn === 'MATIC') {
+                const depositPromise = new Promise((resolve, reject) => {
+                    stores.stableSwapStore._callContractWait(
+                        web3,
+                        wmaticContract,
+                        "deposit",
+                        [],
+                        account,
+                        gasPrice,
+                        null,
+                        null,
+                        wrapTXID,
+                        (err) => {
+                            if (err) {
+                                reject(err);
+                                return;
+                            }
+                            resolve();
+                        },
+                        null,
+                        amount,
+                    );
+                });
+                await depositPromise;
+            } else {
+                const res = await contract.withdraw(amount)
+                await res.wait()
+                await stores.stableSwapStore.fetchBaseAssets([this.tokenIn])
+            }
+            await stores.stableSwapStore.fetchBaseAssets([WMATIC])
+            await stores.stableSwapStore._getBaseAssetInfo(web3, account)
+        }
     }
 }
 
