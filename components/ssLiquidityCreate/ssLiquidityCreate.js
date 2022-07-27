@@ -532,7 +532,6 @@ export default function SSLiquidityCreate() {
 }
 
 function AssetSelect({ type, value, assetOptions, onSelect }) {
-
   const [ open, setOpen ] = useState(false);
   const [ search, setSearch ] = useState('')
   const [ filteredAssetOptions, setFilteredAssetOptions ] = useState([])
