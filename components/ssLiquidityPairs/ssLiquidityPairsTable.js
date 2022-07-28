@@ -40,6 +40,7 @@ import {
 import SortSelect from '../select-sort/select-sort';
 import { formatCurrency } from '../../utils';
 import classes from './ssLiquidityPairs.module.css';
+import css from './ssLiquidityPairs.module.css';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import TablePaginationActions from '../table-pagination/table-pagination';
 import { formatSymbol } from '../../utils';
@@ -2326,9 +2327,9 @@ export default function EnhancedTable({pairs, isLoading}) {
                 padding: '0 30px',
                 background: '#060B17',
                 borderTop: '1px solid #d3f85a',
-                height: 70,
-                display: 'flex',
-                justifyContent: 'flex-end',
+                // height: 70,
+                // display: 'flex',
+                // justifyContent: 'flex-end',
                 // borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
                 // borderRadius: 100,
                 color: '#8191B9',
@@ -2343,6 +2344,19 @@ export default function EnhancedTable({pairs, isLoading}) {
               ActionsComponent={TablePaginationActions}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
+              classes={{
+                root: css.paginationRoot,
+                toolbar: css.paginationToolbar,
+                spacer: css.paginationSpacer,
+                selectLabel: css.selectLabel,
+                selectRoot: css.selectRoot,
+                select: css.select,
+                selectIcon: css.selectIcon,
+                input: css.input,
+                menuItem: css.menuItem,
+                displayedRows: css.displayedRows,
+                actions: css.actions,
+              }}
             />
           </div>
         </>
@@ -2787,14 +2801,12 @@ export default function EnhancedTable({pairs, isLoading}) {
                   className={'g-flex-column__item-fixed'}
                   style={{
                     width: '100%',
-                    marginTop: 20,
+                    // marginTop: 20,
                     padding: '0 30px',
                     background: '#060B17',
-                    borderRadius: 12,
+                    borderTop: '1px solid #d3f85a',
+                    // borderRadius: 12,
                     color: '#8191B9',
-                  }}
-                  classes={{
-                    displayedRows: classes.displayedRows,
                   }}
                   component="div"
                   count={filteredPairs.length}
@@ -2805,6 +2817,19 @@ export default function EnhancedTable({pairs, isLoading}) {
                   ActionsComponent={TablePaginationActions}
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
+                  classes={{
+                    root: css.paginationRoot,
+                    toolbar: css.paginationToolbar,
+                    spacer: css.paginationSpacer,
+                    selectLabel: css.selectLabel,
+                    selectRoot: css.selectRoot,
+                    select: css.select,
+                    selectIcon: css.selectIcon,
+                    input: css.input,
+                    menuItem: css.menuItem,
+                    displayedRows: css.displayedRows,
+                    actions: css.actions,
+                  }}
               />
           }
         </div>

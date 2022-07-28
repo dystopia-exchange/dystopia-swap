@@ -4,7 +4,8 @@ import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 export default function ffWarning({close, title, subTitle, icon, description, btnLabel1, btnLabel2, action2}) {
   const navigateToMedium = () => {
-    window.open("https://medium.com/@DystopiaSwap", "_blank");
+    // window.open("https://medium.com/@DystopiaSwap", "_blank");
+    window.open("https://docs.cone.exchange/cone-swap/", "_blank");
   };
 
   const {appTheme} = useAppThemeContext();
