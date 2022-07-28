@@ -813,13 +813,13 @@ input[type=number].massiveInputAmount {
 .titleSection {
   cursor: pointer;
   position: absolute;
-  left: 26px;
-  width: 377px;
+  left: 12px;
+  width: 342px;
   height: 72px;
-  padding: 0 20px;
+  /*padding: 0 20px;*/
   background: transparent !important;
-  border: 1px solid #C6CDD2;
-  border-radius: 14px;
+  /*border: 1px solid #C6CDD2;*/
+  /*border-radius: 14px;*/
   color: #E4E9F4;
   display: flex;
   align-items: center;
@@ -829,7 +829,7 @@ input[type=number].massiveInputAmount {
   margin-left: 10px;
 }
 
-@media (max-width:1600px) {
+@media (max-width:1482px) {
   .titleSection {
     width: 78px;
     box-sizing: border-box;
@@ -1078,7 +1078,7 @@ input[type=number].massiveInputAmount {
     /* padding: 0; */
     width: 48px;
     height: 48px;
-    padding: 5px;
+    /*padding: 5px;*/
   }
 
   .textField, .textFieldTop {
