@@ -12,7 +12,7 @@ import {
   MenuItem,
   InputBase,
   Select,
-  ClickAwayListener,
+  ClickAwayListener, Grid,
 } from "@mui/material";
 import BigNumber from "bignumber.js";
 import { formatCurrency } from "../../utils";
@@ -31,7 +31,7 @@ import Loader from "../../ui/Loader";
 import SwitchCustom from "../../ui/Switch";
 import Hint from "../hint/hint";
 
-export default function ssLiquidityManage({activeTab = 'deposit',}) {
+export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
   const router = useRouter();
   const amount0Ref = useRef(null);
   const amount1Ref = useRef(null);
@@ -73,7 +73,7 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
   const [withdrawAmount0, setWithdrawAmount0] = useState("");
   const [withdrawAmount1, setWithdrawAmount1] = useState("");
 
-  // const [activeTab, setActiveTab] = useState("deposit");
+  const [activeTab, setActiveTab] = useState(initActiveTab);
   const [quote, setQuote] = useState(null);
   const [withdrawQuote, setWithdrawQuote] = useState(null);
 
@@ -2065,11 +2065,11 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                           paddingLeft: 15.5,
                           paddingRight: 10,
                           fontWeight: 400,
-                          fontSize: 14,
-                          color: appTheme === "dark" ? "#7C838A" : "#5688A5",
+                          fontSize: 16,
+                          color: '#D3F85A',
                         }}
                       >
-                        Select {veToken?.symbol}
+                        Select {veToken?.symbol} NFT
                       </div>
                     );
                   }
@@ -2093,6 +2093,17 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
               : classes.tokenSelectInput,
         }}
       >
+        {!vestNFTs.length &&
+            <div className={classes.noNFT}>
+              <div className={classes.noNFTtext}>
+                You receive NFT by creating a Lock of your CONE for some time, the more CONE you lock and for the longest time, the more Voting Power your NFT will have.
+              </div>
+              <div className={classes.noNFTlinks}>
+                <span className={classes.noNFTlinkButton} onClick={() => {router.push("/swap")}}>BUY CONE</span>
+                <span className={classes.noNFTlinkButton} onClick={() => {router.push("/vest")}}>LOCK CONE FOR NFT</span>
+              </div>
+            </div>
+        }
         {vestNFTs &&
           vestNFTs.map((option) => {
             return (
@@ -2185,12 +2196,57 @@ export default function ssLiquidityManage({activeTab = 'deposit',}) {
                 ].join(" ")}
             />
           </IconButton>
-            <span>
+            <span className={classes.bigScreenBackText}>
               Back to Liquidity
             </span>
           </div>
         </div>
         <Paper elevation={0} className={[classes.container, "g-flex-column"]}>
+
+          <div className={classes.toggleButtons}>
+            <Grid container spacing={0} sx={{height: '100%'}}>
+              <Grid item lg={6} md={6} sm={6} xs={6}>
+                <Paper
+                    className={`${activeTab === "deposit" ? classes.buttonActive : classes.button} ${classes.topLeftButton}`}
+                    onClick={toggleDeposit}
+                    disabled={depositLoading}
+                >
+                  <span
+                      style={{
+                        color: activeTab === "deposit"
+                            ? "#060B17"
+                            : "#8191B9",
+                      }}
+                  >
+                    Add Liquidity
+                  </span>
+                </Paper>
+              </Grid>
+
+              <Grid item lg={6} md={6} sm={6} xs={6}>
+                <Paper
+                    className={`${
+                        activeTab === "withdraw" ? classes.buttonActive : classes.button
+                    } ${classes.bottomLeftButton} ${
+                        appTheme === "dark" ? classes["bottomLeftButton--dark"] : ""
+                    }`}
+                    onClick={toggleWithdraw}
+                    disabled={depositLoading}
+                >
+                  <span
+                      style={{
+                        color: activeTab === "withdraw"
+                            ? "#060B17"
+                            : "#8191B9",
+                      }}
+                  >
+                   Withdraw Liquidity
+                  </span>
+                </Paper>
+              </Grid>
+            </Grid>
+          </div>
+
           <div className={[classes.titleTitle, "g-flex g-flex--align-center g-flex--wrap"].join(" ")}>
             <div
                 className={[
