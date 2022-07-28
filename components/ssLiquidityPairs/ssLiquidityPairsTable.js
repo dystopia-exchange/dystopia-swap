@@ -187,7 +187,7 @@ const headCells = [
     isHideInDetails: true,
   },
   {
-    id: 'balance',
+    id: 'tvl',
     numeric: true,
     disablePadding: false,
     label: <div style={{display: 'flex',}}>
@@ -1057,8 +1057,8 @@ const EnhancedTableToolbar = (props) => {
   const localToggles = getLocalToggles();
 
   const options = [
-    {id: 'balance--asc', label: 'TVL: high to low'},
-    {id: 'balance--desc', label: 'TVL: low to high'},
+    {id: 'tvl--asc', label: 'TVL: high to low'},
+    {id: 'tvl--desc', label: 'TVL: low to high'},
     {id: 'poolBalance--asc', label: 'My Pool: high to low'},
     {id: 'poolBalance--desc', label: 'My Pool: low to high'},
     {id: 'stakedBalance--asc', label: 'My Stake: high to low'},
@@ -1722,7 +1722,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                       lineHeight: '120%',
                                       color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
                                     }}>
-                                    {BigNumber(row.tvl).toFixed(2)} <span style={{color: 'rgb(124, 131, 138)'}}>$</span>
+                                      {formatCurrency(BigNumber(row.tvl))} <span style={{color: 'rgb(124, 131, 138)'}}>$</span>
                                   </Typography>
 
                                   <Typography
