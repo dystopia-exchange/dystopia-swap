@@ -15,11 +15,8 @@ import {
   Skeleton,
   Accordion,
   AccordionSummary,
-  AccordionDetails, Button, DialogTitle, DialogContent, Dialog, Hidden,
-  
+  AccordionDetails, Button, DialogTitle, DialogContent, Dialog, InputBase,
 } from '@mui/material';
-import Tooltip from '@mui/material/Tooltip';
-import QuizIcon from '@mui/icons-material/Quiz';
 import numeral from "numeral";
 import BigNumber from 'bignumber.js';
 
@@ -33,11 +30,11 @@ import css from "./ssVotesTable.module.css";
 const CustomSlider = styled(Slider)(({theme, appTheme, disabled}) => {
 
   const MuiSliderthumb = {
-    backgroundColor: appTheme === 'dark' ? '#4CADE6' : '#5688A5'
+    backgroundColor: '#C0E255',
   }
 
   const MuiSliderTrack = {
-    backgroundColor: '#9BC9E4',
+    // backgroundColor: '#9BC9E4',
   }
 
   const MuiSliderRail = {
@@ -54,11 +51,12 @@ const CustomSlider = styled(Slider)(({theme, appTheme, disabled}) => {
 
   return ({
     color: appTheme === 'dark' ? '#3880ff' : '#3880ff',
-    height: 2,
+    height: 4,
     padding: '15px 0',
     '& .MuiSlider-thumb': {
-      height: 10,
-      width: 10,
+      borderRadius: 12,
+      height: 12,
+      width: 24,
       backgroundColor: MuiSliderthumb.backgroundColor,
       boxShadow: 'none',
       '&:focus, &:hover, &.Mui-active': {
@@ -69,11 +67,11 @@ const CustomSlider = styled(Slider)(({theme, appTheme, disabled}) => {
       },
     },
     '& .MuiSlider-valueLabel': {
-      fontSize: 10,
-      fontWeight: 400,
-      top: -6,
-      border: '1px solid #0B5E8E',
-      background: '#B9DFF5',
+      fontSize: 16,
+      fontWeight: 500,
+      top: -8,
+      // border: '1px solid #0B5E8E',
+      background: 'transparent',
       padding: 5,
       borderRadius: 0,
       '&:before': {
@@ -81,7 +79,7 @@ const CustomSlider = styled(Slider)(({theme, appTheme, disabled}) => {
         borderRight: '1px solid #0B5E8E',
       },
       '& *': {
-        color: '#325569',
+        color: '#E4E9F4',
       },
     },
     '& .MuiSlider-track': {
@@ -96,11 +94,11 @@ const CustomSlider = styled(Slider)(({theme, appTheme, disabled}) => {
     },
     '& .MuiSlider-mark': {
       opacity: 0,
-      backgroundColor: disabled ? MuiSliderTrack.backgroundColor : '#CFE5F2',
+      backgroundColor: "transparent",
       height: 2,
       width: 2,
       '&.MuiSlider-markActive': {
-        backgroundColor: disabled ? MuiSliderTrack.backgroundColor : '#CFE5F2',
+        // backgroundColor: disabled ? MuiSliderTrack.backgroundColor : '#CFE5F2',
         opacity: 0,
       },
     },
@@ -270,15 +268,6 @@ const headCells = [
     disablePadding: false,
     label: 'My Votes',
   },
-  {
-    id: 'mvp',
-    numeric: true,
-    disablePadding: false,
-    label: 'My Vote %',
-    width: 200,
-    isHideInDetails: true,
-  },
-  
 ];
 
 const StickyTableCell = styled(TableCell)(({theme, appTheme}) => ({
@@ -426,9 +415,79 @@ EnhancedTableHead.propTypes = {
 };
 
 const useStyles = makeStyles((theme) => {
-  const {appTheme} = useAppThemeContext();
-
   return ({
+    voteTooltip: {
+      background: '#060B17',
+      border: '1px solid #D3F85A',
+      borderRadius: 12,
+      flexDirection: 'column',
+      width: 448,
+      height: 172,
+      position: 'absolute',
+      top: 46,
+      right: 14,
+      zIndex: 1,
+      padding: '24px 24px',
+    },
+    voteTooltipSliderValues: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      color: '#586586',
+      fontSize: 16,
+      fontWeight: 400,
+      marginBottom: 3,
+    },
+    voteTooltipSlider: {},
+    voteTooltipBody: {
+      display: 'flex',
+      textAlign: 'left',
+      marginTop: 3,
+      justifyContent: 'space-between',
+      height: 56,
+    },
+    voteTooltipText: {
+      width: 160,
+      color: '#8191B9',
+      fontSize: 16,
+      fontWeight: 400,
+      display: 'flex',
+      alignItems: 'center',
+    },
+    voteTooltipVoteBlock: {
+      display: 'flex',
+      width: 223,
+      border: '1px solid #586586',
+      borderRadius: 12,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      position: 'relative',
+    },
+    voteTooltipVoteBlockTitle: {
+      color: '#E4E9F4',
+      fontSize: 16,
+      fontWeight: 500,
+      marginLeft: 14,
+    },
+    voteTooltipVoteBlockInput: {
+      background: '#171D2D',
+      border: '1px solid #586586',
+      borderRadius: 12,
+      width: 113,
+      height: 56,
+      padding: 0,
+      fontSize: 16,
+      fontWeight: 400,
+      color: '#8191B9',
+      paddingLeft: 32,
+      boxSizing: 'border-box',
+    },
+    voteTooltipVoteBlockInputAddornment: {
+      position: 'absolute',
+      right: 32,
+      fontSize: 16,
+      fontWeight: 400,
+      color: '#8191B9',
+    },
     cont: {
       ["@media (min-width:1920px)"]: {
         marginLeft: 433,
@@ -846,6 +905,9 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
     setWindowWidth(window.innerWidth);
   });
 
+
+  const [voteTooltipOpen, setVoteTooltipOpen] = useState(false);
+
   return (
     <>
       {windowWidth >= 806 &&
@@ -1079,44 +1141,101 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
                             borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
-                            overflow: 'hidden',
-                          }}>
-                          {
-                            tableCellContent(
-                              formatCurrency(BigNumber(sliderValue).div(100).times(token?.lockValue)),
-                              `${formatCurrency(sliderValue)} %`,
-                              null,
-                              null,
-                            )
-                          }
-                        </TableCell>
-
-                        <TableCell
-                          className={classes.cell}
-                          align="right"
-                          style={{
-                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
-                            overflow: 'hidden',
+                            // overflow: 'hidden',
                           }}>
                           <div style={{
-                            paddingTop: 12,
-                            paddingLeft: 12,
-                            paddingRight: 12,
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            alignItems: 'center',
+                            position: 'relative',
                           }}>
-                            <CustomSlider
-                              appTheme={appTheme}
-                              valueLabelDisplay="auto"
-                              value={sliderValue}
-                              onChange={(event, value) => {
-                                onSliderChange(event, value, row);
-                              }}
-                              min={-100}
-                              max={100}
-                              marks
-                              step={1}
-                              disabled={noTokenSelected}
-                            />
+                            <div>
+                              {
+                                tableCellContent(
+                                    formatCurrency(BigNumber(sliderValue).div(100).times(token?.lockValue)),
+                                    `${formatCurrency(sliderValue)} %`,
+                                    null,
+                                    null,
+                                )
+                              }
+                            </div>
+                            <div>
+                              <Button
+                                  variant="outlined"
+                                  color="primary"
+                                  style={{
+                                    padding: '8px 14px',
+                                    border: `1px solid #D3F85A`,
+                                    borderRadius: 12,
+                                    fontWeight: 600,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: voteTooltipOpen == row.address ? '#060B17' : '#D3F85A',
+                                    textTransform: 'uppercase',
+                                    marginLeft: 20,
+                                    height: 40,
+                                    background: voteTooltipOpen == row.address ? '#C0E255' : 'transparent',
+                                  }}
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                    event.preventDefault();
+
+                                    if (voteTooltipOpen == row.address) {
+                                      setVoteTooltipOpen(false)
+                                    } else {
+                                      setVoteTooltipOpen(row.address)
+                                    }
+                                  }}>
+                                VOTE
+                              </Button>
+                              <div
+                                  className={classes.voteTooltip}
+                                  style={{display: voteTooltipOpen == row.address ? 'flex' : 'none'}}
+                              >
+                                <div className={classes.voteTooltipSliderValues}>
+                                  <span style={{width: 36,}}>-100</span>
+                                  <span>0</span>
+                                  <span style={{width: 36,}}>100</span>
+                                </div>
+                                <div className={classes.voteTooltipSlider}>
+                                  <CustomSlider
+                                      appTheme={appTheme}
+                                      valueLabelDisplay="on"
+                                      value={sliderValue}
+                                      onChange={(event, value) => {
+                                        onSliderChange(event, value, row);
+                                      }}
+                                      min={-100}
+                                      max={100}
+                                      marks
+                                      step={1}
+                                      disabled={noTokenSelected}
+                                  />
+                                </div>
+
+                                <div className={classes.voteTooltipBody}>
+                                  <div className={classes.voteTooltipText}>
+                                    Move slider or edit your vote manually
+                                  </div>
+                                  <div className={classes.voteTooltipVoteBlock}>
+                                    <div className={classes.voteTooltipVoteBlockTitle}>Your Vote</div>
+                                    <InputBase
+                                        value={sliderValue}
+                                        onChange={(event, value) => {
+                                          onSliderChange(event, event.target.value, row);
+                                        }}
+                                        inputProps={{
+                                          className: classes.voteTooltipVoteBlockInput,
+                                        }}
+                                        InputProps={{
+                                          disableUnderline: true,
+                                        }}
+                                    />
+                                    <div className={classes.voteTooltipVoteBlockInputAddornment}>%</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </TableCell>
                         

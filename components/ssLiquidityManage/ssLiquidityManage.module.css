@@ -1,3 +1,37 @@
+.noNFT {
+  display: flex;
+  flex-direction: column;
+  width: 347px;
+  padding: 16px 25px;
+  margin-top: 10px;
+}
+
+.noNFTtext {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #E4E9F4;
+  margin-bottom: 25px;
+}
+.noNFTlinks {
+  display: flex;
+  gap: 12px;
+}
+.noNFTlinkButton {
+  background: rgba(119, 155, 244, 0.15);
+  border: 1px solid #779BF4;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  color: #779BF4;
+  cursor: pointer;
+}
+
 .lockedNFT {
   display: flex;
   align-items: center;
@@ -382,29 +416,32 @@ input[type=number].mediumInputAmount {
 }
 
 .toggleButtons {
+  margin-bottom: 32px;
+  padding: 3px;
   display: flex;
   flex-direction: column;
   width: 100%;
   background: transparent !important;
   color: #0A2C40 !important;
-  border-radius: 0 !important;
+  border: 1px solid #779BF4 !important;
+  border-radius: 12px !important;
+  height: 72px;
 }
 
 .topLeftButton,
 .bottomLeftButton {
   width: 100%;
-  height: 58px;
   border: none !important;
   border-radius: 0 !important;
-  background: #DBE6EC !important;
+  background: transparent !important;
   min-height: 50px;
-  padding-top: 19px;
-  padding-bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: none !important;
   cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .button {
@@ -420,45 +457,24 @@ input[type=number].mediumInputAmount {
 }
 
 .bottomLeftButton {
-  background: transparent url("/images/ui/liquidity-tab-right.svg") !important;
-  border-bottom: 1px solid #86B9D6 !important;
-  border-left: 1px solid #86B9D6 !important;
+  height: 100%;
 }
 
 .bottomLeftButton.buttonActive {
-  background: transparent url("/images/ui/liquidity-tab-right--active.svg") !important;
+  background: #779BF4 !important;
+  border-radius: 8px !important;
   border: none !important;
-}
-
-.bottomLeftButton--dark {
-  background: transparent url("/images/ui/liquidity-tab-right--dark.svg") !important;
-  border-bottom: 1px solid #5F7285 !important;
-  border-left: 1px solid #5F7285 !important;
-}
-
-.bottomLeftButton--dark.buttonActive {
-  background: transparent url("/images/ui/liquidity-tab-right--active--dark.svg") !important;
 }
 
 .topLeftButton {
-  background: transparent url("/images/ui/liquidity-tab-left.svg") !important;
-  border-bottom: 1px solid #86B9D6 !important;
-  border-right: 1px solid #86B9D6 !important;
+  display: flex;
+  height: 100%;
+  align-items: center;
 }
 
 .topLeftButton.buttonActive {
-  background: transparent url("/images/ui/liquidity-tab-left--active.svg") !important;
-  border: none !important;
-}
-
-.topLeftButton--dark {
-  background: transparent url("/images/ui/liquidity-tab-left--dark.svg") !important;
-  border-bottom: 1px solid #5F7285 !important;
-  border-right: 1px solid #5F7285 !important;
-}
-
-.topLeftButton--dark.buttonActive {
-  background: transparent url("/images/ui/liquidity-tab-left--active--dark.svg") !important;
+  background: #779BF4 !important;
+  border-radius: 8px !important;
 }
 
 .slippageIconContainer {
@@ -1116,7 +1132,7 @@ input[type=number].mediumInputAmount {
 
 .titleSectionBack {
   width: 100%;
-  height: 68px;
+  height: 72px;
   padding: 0 20px;
   background: transparent;
   border: 1px solid #C6CDD2;
@@ -1162,7 +1178,7 @@ input[type=number].mediumInputAmount {
   /* white */
   color: #E4E9F4;
   margin-top: 0;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 
@@ -1220,7 +1236,7 @@ input[type=number].mediumInputAmount {
 
 .nftTitle {
   display: flex;
-  min-width: 440px;
+  min-width: 380px;
   align-items: center;
   font-weight: 400;
   font-size: 16px;
@@ -1232,7 +1248,7 @@ input[type=number].mediumInputAmount {
 
 .nftItems {
   display: flex;
-  width: 302px;
+  width: 375px;
   background-color: #181d2d;
   border-radius: 12px;
   color: #D3F85A;
@@ -1803,8 +1819,8 @@ input[type=number].mediumInputAmount {
   border-radius: 14px;
   position: absolute;
   right: 0;
-  top: 0;
-  height: 72px;
+  top: 12px;
+  height: 56px;
 }
 
 
@@ -1905,18 +1921,45 @@ input[type=number].mediumInputAmount {
   width: 28px;
 }
 
-@media (max-width:1600px) {
+@media (max-width:1919px) {
   .bigscreenSidebar {
     display:flex;
     position: absolute;
     left: 16px;
-    width: 198px;
+    width: 299px;
     height: calc(100vh - 200px);
+  }
+
+  .topLeftButton,
+  .bottomLeftButton {
+    font-size: 24px;
   }
 }
 
+@media (max-width:1482px) {
+  .bigscreenSidebar {
+    display:flex;
+    position: absolute;
+    left: 16px;
+    width: auto;
+    height: calc(100vh - 200px);
+  }
 
-@media (max-width:1200px) {
+  .backIcon {
+    margin-right: 2px;
+  }
+
+  .bigScreenBackText {
+    display: none;
+  }
+}
+
+@media (max-width:1332px) {
+  .toggleButtons {
+    margin-left: 88px;
+    width: calc(100% - 88px);
+  }
+
   .backIcon {
     margin-right: 2px;
   }
@@ -1927,15 +1970,16 @@ input[type=number].mediumInputAmount {
 
   .titleSection {
     display: flex;
-    margin-left: 6px;
-    /*top: -72px;*/
-    width: 52px;
+    width: 72px;
+    height: 72px;
     justify-content: center;
+    position: absolute;
+    top: -104px;
+    left: 95px;
   }
 
   .depositHeader {
-    /*font-size: 14px;*/
-    margin-left: 20px;
+    margin-left: 0;
   }
 
   .bigscreenSidebar {
@@ -1944,6 +1988,27 @@ input[type=number].mediumInputAmount {
 }
 
 @media (max-width: 860px) {
+  .titleSection {
+    top: -68px;
+    display: flex;
+    width: 48px;
+    height: 48px;
+  }
+
+  .toggleButtons {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+    height: 48px;
+    margin-bottom: 20px;
+  }
+
+  .topLeftButton,
+  .bottomLeftButton {
+    height: 100%;
+    min-height: 40px;
+    font-size: 12px;
+  }
+
   .nftTitle {
     min-width: 100%;
   }
@@ -2034,7 +2099,7 @@ input[type=number].mediumInputAmount {
 
   .depositSwitcherLabelCont {
     width: 100%;
-    margin-top: 20px;
+    margin-top: 4px;
     position: relative !important;
   }
 
@@ -2439,7 +2504,6 @@ input[type=number].mediumInputAmount {
     font-weight: 500;
     font-size: 40px;
     line-height: 48px;
-    margin-left: 20px;
   }
 
   .depositSwitcherLabel {

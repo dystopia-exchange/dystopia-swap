@@ -69,8 +69,8 @@ export function MergeLock() {
         <NFTItem />
       </div>
 
-      <div className={classesMerge.info}>
-        <Typography className={classes.info} color="textSecondary">
+      <div className={classes.info}>
+        <Typography className={classes.infoInner} color="textSecondary">
           <img src="/images/ui/info-circle-blue.svg" />
           <span>New NFT will have the the longest expiry date out of 2 NFTs exposed to the merge.</span>
         </Typography>

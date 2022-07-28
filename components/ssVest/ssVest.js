@@ -47,7 +47,7 @@ export default function ssVest() {
         <Lock nft={nft} govToken={govToken} veToken={veToken} />
       )}
       {/* {router.query.id === "withdraw" && <WithdrawLock nft={nft} govToken={govToken} veToken={veToken} />} */}
-      {router.query.id === "merge" && <MergeLock nft={nft} govToken={govToken} veToken={veToken} />}
+      {/* {router.query.id === "merge" && <MergeLock nft={nft} govToken={govToken} veToken={veToken} />} */}
       {router.query.id !== "create" &&
         nft &&
         BigNumber(nft.lockEnds).gte(moment().unix()) &&

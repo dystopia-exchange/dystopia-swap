@@ -80,13 +80,13 @@ export default function ssLock({govToken, veToken}) {
         days = 7;
         break;
       case 'month':
-        days = 30;
+        days = 28;
         break;
       case 'year':
-        days = 365;
+        days = 364;
         break;
       case 'years':
-        days = 1460;
+        days = 1456;
         break;
       default:
     }
@@ -369,23 +369,38 @@ export default function ssLock({govToken, veToken}) {
         <Button
           className={[
             classes.buttonOverride,
-            (lockLoading || amount === '' || Number(amount) === 0 ? classes.buttonOverrideDisabled : "")
+            (lockLoading ||
+              amount === '' ||
+              Number(amount) === 0 ||
+              ((moment(selectedDate).diff(moment(), 'days') + 1) % 7 !== 0) ? classes.buttonOverrideDisabled : "")
           ].join(" ")}
           fullWidth
           variant="contained"
           size="large"
           color="primary"
-          disabled={lockLoading || amount === '' || Number(amount) === 0}
+          disabled={
+            lockLoading ||
+            amount === '' ||
+            Number(amount) === 0 ||
+            ((moment(selectedDate).diff(moment(), 'days') + 1) % 7 !== 0)
+          }
           onClick={onLock}>
           <Typography className={classes.actionButtonText}>
-            {lockLoading ? `Locking` :
-              (lockLoading || amount === '' || Number(amount) === 0) ? 'Enter Lock Amount' :
-                `Lock Tokens & Get veCONE`
+            {lockLoading
+              ? `Locking`
+              : (lockLoading || amount === '' || Number(amount) === 0)
+                ? 'Enter Lock Amount'
+                : ((moment(selectedDate).diff(moment(), 'days') + 1) % 7 !== 0)
+                  ? 'Wrong expiration date'
+                  : `Lock Tokens & Get veCONE`
             }
           </Typography>
 
           {lockLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
         </Button>
+
+        {/* {moment(selectedDate).diff(moment(), 'days') + 1} --- */}
+        {/* {(moment(selectedDate).diff(moment(), 'days') + 1) % 7 === 0 ? 'nine' : 'none'}; */}
       </Paper>
     </>
   );
