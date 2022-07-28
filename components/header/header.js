@@ -225,7 +225,7 @@ function Header(props) {
       stores.emitter.removeListener(CONNECT_WALLET, connectWallet);
       stores.emitter.removeListener(ACCOUNT_CHANGED, accountChanged);
     };
-  }, [maticBalance]);
+  }, [maticBalance, accountStore?.chainId]);
 
   const openWarning = () => {
     setWarningOpen(true);
@@ -524,7 +524,7 @@ function Header(props) {
         </div>
 
         {warningOpen &&
-        <WrongNetwork visible={_visible} onClose={_onModalClose} />
+        <WrongNetwork visible={_visible} onClose={_onModalClose} onSwitch={switchChain}  />
 
           // <SSWarning
           //   close={switchChain}
