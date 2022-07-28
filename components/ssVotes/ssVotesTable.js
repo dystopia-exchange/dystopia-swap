@@ -25,6 +25,7 @@ import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import TablePaginationActions from '../table-pagination/table-pagination';
 import SortSelect from '../select-sort/select-sort';
 import { formatSymbol } from '../../utils';
+import css from "./ssVotesTable.module.css";
 
 const CustomSlider = styled(Slider)(({theme, appTheme, disabled}) => {
 
@@ -1253,8 +1254,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
               background: '#060B17',
               borderTop: '1px solid #d3f85a',
               color: '#8191B9',
-              fontSize: 14,
-              fontWeight: 500,
+              // fontSize: 14,
+              // fontWeight: 500,
             }}
             labelRowsPerPage={window.innerWidth < 550 ? '' : 'Rows per page:'}
             rowsPerPageOptions={window.innerWidth < 435 ? [] : [5, 10, 25]}
@@ -1265,6 +1266,19 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
             ActionsComponent={TablePaginationActions}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            classes={{
+              root: css.paginationRoot,
+              toolbar: css.paginationToolbar,
+              spacer: css.paginationSpacer,
+              selectLabel: css.selectLabel,
+              selectRoot: css.selectRoot,
+              select: css.select,
+              selectIcon: css.selectIcon,
+              input: css.input,
+              menuItem: css.menuItem,
+              displayedRows: css.displayedRows,
+              actions: css.actions,
+            }}
           />
         </div>
       }
@@ -1816,11 +1830,11 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
               background: '#060B17',
               // border: '1px solid #86B9D6',
               // borderColor: appTheme === 'dark' ? '#5F7285' : '#86B9D6',
-              borderRadius: 12,
+              // borderRadius: 12,
               marginBottom: 40,
               color: '#8191B9',
-              fontSize: 14,
-              fontWeight: 500,
+              // fontSize: 14,
+              // fontWeight: 500,
             }}
             component="div"
             count={gauges.length}
@@ -1831,6 +1845,19 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
             ActionsComponent={TablePaginationActions}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            classes={{
+              root: css.paginationRoot,
+              toolbar: css.paginationToolbar,
+              spacer: css.paginationSpacer,
+              selectLabel: css.selectLabel,
+              selectRoot: css.selectRoot,
+              select: css.select,
+              selectIcon: css.selectIcon,
+              input: css.input,
+              menuItem: css.menuItem,
+              displayedRows: css.displayedRows,
+              actions: css.actions,
+            }}
           />
         </>
       )}
