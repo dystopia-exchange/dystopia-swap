@@ -30,6 +30,7 @@ import Borders from "../../ui/Borders";
 import Loader from "../../ui/Loader";
 import SwitchCustom from "../../ui/Switch";
 import Hint from "../hint/hint";
+import BackButton from "../../ui/BackButton";
 
 export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
   const router = useRouter();
@@ -2182,24 +2183,10 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
   return (
       <div className="g-flex g-flex--justify-center">
         <div className={classes.bigscreenSidebar}>
-          <div
-              className={[
-                classes.titleSectionBack,
-                classes[`titleSectionBack--${appTheme}`],
-              ].join(" ")}
-          >
-          <IconButton onClick={onBack}>
-            <ArrowBackIosNew
-                className={[
-                  classes.backIcon,
-                  classes[`backIcon--${appTheme}`],
-                ].join(" ")}
-            />
-          </IconButton>
-            <span className={classes.bigScreenBackText}>
-              Back to Liquidity
-            </span>
-          </div>
+          <BackButton
+              text="Back to Liquidity"
+              url="/liquidity"
+          />
         </div>
         <Paper elevation={0} className={[classes.container, "g-flex-column"]}>
 
@@ -2251,21 +2238,12 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
             <div
                 className={[
                   classes.titleSection,
-                  classes[`titleSection--${appTheme}`],
                 ].join(" ")}
             >
-              <Tooltip title="Back to Liquidity" placement="top" componentsProps={{
-                tooltip: { style: {padding: 24, background: '#1F2B49', fontSize: 16, fontWeight: 400, border: '1px solid #779BF4', borderRadius: 12,}},
-              }}>
-                <IconButton onClick={onBack}>
-                  <ArrowBackIosNew
-                      className={[
-                        classes.backIcon,
-                        classes[`backIcon--${appTheme}`],
-                      ].join(" ")}
-                  />
-                </IconButton>
-              </Tooltip>
+              <BackButton
+                  text="Back to Liquidity"
+                  url="/liquidity"
+              />
             </div>
 
             {createLP && activeTab === "deposit" && (

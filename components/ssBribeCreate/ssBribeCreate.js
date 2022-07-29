@@ -11,9 +11,9 @@ import {
   Dialog,
   MenuItem,
   IconButton,
-  Select, InputBase, DialogTitle, DialogContent,
+  InputBase, DialogTitle, DialogContent,
 } from '@mui/material';
-import { Add, Search, ArrowBack, DeleteOutline, ArrowBackIosNew, Close } from '@mui/icons-material';
+import { DeleteOutline, ArrowBackIosNew } from '@mui/icons-material';
 import BigNumber from 'bignumber.js';
 import { formatCurrency } from '../../utils';
 import classes from './ssBribeCreate.module.css';
@@ -25,6 +25,7 @@ import {
   ETHERSCAN_URL,
 } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import BackButton from "../../ui/BackButton";
 
 export default function ssBribeCreate() {
 
@@ -287,17 +288,11 @@ export default function ssBribeCreate() {
       className={[classes.container, classes[`container--${appTheme}`, 'g-flex-column']].join(' ')}>
       <div
         className={[classes.titleSection, classes[`titleSection--${appTheme}`]].join(' ')}
-        onClick={onBack}
       >
-        <Tooltip title="Back to Vote" placement="top">
-          <IconButton >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 0C4.49 0 0 4.49 0 10C0 15.51 4.49 20 10 20C15.51 20 20 15.51 20 10C20 4.49 15.51 0 10 0ZM11.79 13C12.08 13.29 12.08 13.77 11.79 14.06C11.64 14.21 11.45 14.28 11.26 14.28C11.07 14.28 10.88 14.21 10.73 14.06L7.2 10.53C6.91 10.24 6.91 9.76 7.2 9.47L10.73 5.94C11.02 5.65 11.5 5.65 11.79 5.94C12.08 6.23 12.08 6.71 11.79 7L8.79 10L11.79 13Z" fill="#E4E9F4"/>
-            </svg>
-            {/*<ArrowBackIosNew className={[classes.backIcon, classes[`backIcon--${appTheme}`]].join(' ')}/>*/}
-          </IconButton>
-        </Tooltip>
-        <span className={classes.titleBackText}>Back to Vote</span>
+        <BackButton
+            text="Back to Vote"
+            url="/vote"
+        />
       </div>
 
       <div className={[classes[`top`], classes[`top--${appTheme}`]].join(' ')}>
@@ -306,9 +301,20 @@ export default function ssBribeCreate() {
 
       <div className={[classes.reAddPadding, classes[`reAddPadding--${appTheme}`]].join(' ')}>
         {renderMassiveGaugeInput('gauge', gauge, null, gaugeOptions, onGagugeSelect)}
-        <div style={{marginTop: 20}}>
+        <svg className={classes.bribeSvg} width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="4" width="56" height="56" rx="28" fill="#171D2D"/>
+          <path d="M29.5 33.75C29.5 34.72 30.25 35.5 31.17 35.5H33.05C33.85 35.5 34.5 34.82 34.5 33.97C34.5 33.06 34.1 32.73 33.51 32.52L30.5 31.47C29.91 31.26 29.51 30.94 29.51 30.02C29.51 29.18 30.16 28.49 30.96 28.49H32.84C33.76 28.49 34.51 29.27 34.51 30.24" stroke="#8191B9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M32 27.5V36.5" stroke="#8191B9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M42 32C42 37.52 37.52 42 32 42C26.48 42 22 37.52 22 32C22 26.48 26.48 22 32 22" stroke="#8191B9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M37 23V27H41" stroke="#8191B9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M42 22L37 27" stroke="#8191B9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="4" y="4" width="56" height="56" rx="28" stroke="#060B17" stroke-width="8"/>
+        </svg>
+
+        <div style={{marginTop: 36}}>
           {renderMassiveInput('amount', amount, amountError, amountChanged, asset, null, assetOptions, onAssetSelect)}
         </div>
+
         {amountError && <div
           style={{marginTop: 20}}
           className={[
@@ -417,7 +423,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
               className={[classes.assetOptionIcon, classes[`assetOptionIcon--${appTheme}`]].join(' ')}
               alt=""
               src={asset ? `${asset.logoURI}` : ''}
-              height="60px"
+              // height="60px"
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -427,7 +433,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
           </div>
         </div>
         <div className={classes.assetSelectIconName}>
-          <Typography variant="h5">{asset ? formatSymbol(asset.symbol) : ''}</Typography>
+          <Typography className={classes.assetSymbolName} variant="h5">{asset ? formatSymbol(asset.symbol) : ''}</Typography>
           <Typography variant="subtitle1" color="textSecondary">{asset ? formatSymbol(asset.name) : ''}</Typography>
         </div>
         <div className={classes.assetSelectActions}>
@@ -472,6 +478,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
         <div className={classes.assetSelectIconName}>
           <Typography
             variant="h5"
+            className={classes.assetSymbolName}
             style={{
               fontWeight: 500,
               fontSize: 24,
@@ -492,17 +499,19 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
         <div className={classes.assetSelectBalance}>
           <Typography
             variant="h5"
+            className={classes.assetSelectBalanceTypo}
             style={{
-              fontWeight: 500,
-              fontSize: 24,
-              lineHeight: '32px',
-              color: '#E4E9F4',
+              // fontWeight: 500,
+              // fontSize: 24,
+              // lineHeight: '32px',
+              // color: '#E4E9F4',
             }}>
             {(asset && asset.balance) ? formatCurrency(asset.balance) : '0.00'}
           </Typography>
 
           <Typography
             variant="subtitle1"
+            className={classes.assetSelectBalanceSubtitle1}
             style={{
               fontWeight: 500,
               fontSize: 16,
@@ -649,7 +658,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
       }}>
         <div className={classes.assetSelectMenuItem}>
           <div
-            className={[classes.displayDualIconContainer, classes[`displayDualIconContainerSec--${appTheme}`]].join(' ')}>
+            className={[classes.displayDualIconContainer, classes.displayDualIconContainerManage].join(' ')}>
             <img
               className={classes.displayAssetIconSingle}
               alt=""
@@ -678,9 +687,11 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
           }
         }}
       >
-        <div style={{
+        <div
+            className={classes.dialogContainer}
+            style={{
           width: 782,
-          height: 780,
+          height: 710,
           background: '#1F2B49',
           borderRadius: 12,
         }}>
@@ -688,23 +699,25 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
             padding: 30,
             paddingTop: 24,
             paddingBottom: 0,
-            fontWeight: 500,
-            fontSize: 18,
-            lineHeight: '140%',
-            color: '#0A2C40',
+            // fontWeight: 500,
+            // fontSize: 18,
+            // lineHeight: '140%',
+            // color: '#0A2C40',
           }}>
             <div style={{
               display: 'flex',
               alignItems: 'flex-start',
               justifyContent: 'space-between',
             }}>
-              <div style={{
+              <div
+                  className={classes.dialogTitle}
+                  style={{
                 display: 'flex',
                 alignItems: 'center',
-                color: '#E4E9F4',
-                fontSize: 60,
-                fontWeight: 500,
-                lineHeight: '72px',
+                // color: '#E4E9F4',
+                // fontSize: 60,
+                // fontWeight: 500,
+                // lineHeight: '72px',
               }}>
                 {manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
                   marginRight: 10,
@@ -714,7 +727,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
                 }}/>}
                 {'Select a Token'}
               </div>
-              <svg style={{marginTop: 12,cursor: 'pointer',}} onClick={onClose} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className={classes.dialogClose} onClick={onClose} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.19 0H5.81C2.17 0 0 2.17 0 5.81V14.18C0 17.83 2.17 20 5.81 20H14.18C17.82 20 19.99 17.83 19.99 14.19V5.81C20 2.17 17.83 0 14.19 0ZM13.36 12.3C13.65 12.59 13.65 13.07 13.36 13.36C13.21 13.51 13.02 13.58 12.83 13.58C12.64 13.58 12.45 13.51 12.3 13.36L10 11.06L7.7 13.36C7.55 13.51 7.36 13.58 7.17 13.58C6.98 13.58 6.79 13.51 6.64 13.36C6.35 13.07 6.35 12.59 6.64 12.3L8.94 10L6.64 7.7C6.35 7.41 6.35 6.93 6.64 6.64C6.93 6.35 7.41 6.35 7.7 6.64L10 8.94L12.3 6.64C12.59 6.35 13.07 6.35 13.36 6.64C13.65 6.93 13.65 7.41 13.36 7.7L11.06 10L13.36 12.3Z" fill="#8191B9"/>
               </svg>
             </div>
@@ -889,21 +902,20 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
         <div className={classes.assetSelectBalance}>
           <Typography
             variant="h5"
+            className={classes.assetSelectBalanceTypo}
             style={{
-              fontWeight: 500,
-              fontSize: 24,
+              // fontWeight: 500,
+              // fontSize: 24,
               // lineHeight: '32px',
-              color: '#E4E9F4',
+              // color: '#E4E9F4',
             }}>
             {(asset && asset.balance) ? formatCurrency(asset.balance) : '0.00'}
           </Typography>
 
           <Typography
               variant="subtitle1"
+              className={classes.assetSelectBalanceSubtitle1}
               style={{
-                fontWeight: 500,
-                fontSize: 16,
-                lineHeight: '24px',
                 color: '#8191B9',
               }}>
             {'Balance'}
@@ -1053,7 +1065,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
       }}>
         <div className={classes.assetSelectMenuItem}>
           <div
-            className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
+            className={[classes.displayDualIconContainer, classes.displayDualIconContainerSelect,].join(' ')}>
             <img
               className={[
                 classes.displayAssetIcon,
@@ -1103,8 +1115,8 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
         <div
           className={classes.dialogContainer}
           style={{
-            width: 782,
-            height: 750,
+            // width: 782,
+            // height: 750,
             background: '#1F2B49',
             borderRadius: 12,
           }}>
@@ -1114,22 +1126,19 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
               padding: 30,
               paddingTop: 24,
               paddingBottom: 0,
-              fontWeight: 500,
-              fontSize: 18,
-              color: '#0A2C40',
             }}>
             <div style={{
               display: 'flex',
               alignItems: 'flex-start',
               justifyContent: 'space-between',
             }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-                paddingBottom: 8,
-                  fontSize: 60,
-              }}>
+              <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    paddingBottom: 8,
+                  }}
+              >
                 {manageLocal && <ArrowBackIosNew onClick={toggleLocal} style={{
                   marginRight: 10,
                   width: 18,
@@ -1138,7 +1147,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
                 }}/>}
                 {manageLocalAssets && manageLocal ? 'Manage local assets' : 'Select LP'}
               </div>
-              <svg style={{marginTop: 12,cursor: 'pointer',}} onClick={onClose} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className={classes.dialogClose} onClick={onClose} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.19 0H5.81C2.17 0 0 2.17 0 5.81V14.18C0 17.83 2.17 20 5.81 20H14.18C17.82 20 19.99 17.83 19.99 14.19V5.81C20 2.17 17.83 0 14.19 0ZM13.36 12.3C13.65 12.59 13.65 13.07 13.36 13.36C13.21 13.51 13.02 13.58 12.83 13.58C12.64 13.58 12.45 13.51 12.3 13.36L10 11.06L7.7 13.36C7.55 13.51 7.36 13.58 7.17 13.58C6.98 13.58 6.79 13.51 6.64 13.36C6.35 13.07 6.35 12.59 6.64 12.3L8.94 10L6.64 7.7C6.35 7.41 6.35 6.93 6.64 6.64C6.93 6.35 7.41 6.35 7.7 6.64L10 8.94L12.3 6.64C12.59 6.35 13.07 6.35 13.36 6.64C13.65 6.93 13.65 7.41 13.36 7.7L11.06 10L13.36 12.3Z" fill="#8191B9"/>
               </svg>
             </div>

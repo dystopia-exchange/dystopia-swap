@@ -41,6 +41,7 @@ class Store {
             },
             gasSpeed: 'fast',
             currentBlock: 12906197,
+            chainId: null,
         };
 
         dispatcher.register(
@@ -124,7 +125,7 @@ class Store {
             const supportedChainIds = [process.env.NEXT_PUBLIC_CHAINID];
             const parsedChainId = (parseInt(chainId + '', 16) + '');
             const isChainSupported = supportedChainIds.includes(parsedChainId);
-            that.setStore({ chainInvalid: !isChainSupported });
+            that.setStore({ chainInvalid: !isChainSupported, chainId: parsedChainId });
             await stores.stableSwapStore.configure()
             that.emitter.emit(ACTIONS.ACCOUNT_CHANGED);
             that.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);

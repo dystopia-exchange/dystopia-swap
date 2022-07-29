@@ -1,0 +1,50 @@
+.root {
+    cursor: pointer;
+    width: 100%;
+    height: 72px;
+    padding: 0 0 0 34px;
+    background: transparent;
+    border: 1px solid #C6CDD2;
+    border-radius: 14px;
+    color: #E4E9F4;
+    display: flex;
+    align-items: center;
+}
+
+.root:hover {
+    background: rgba(228, 233, 244, 0.1);
+    border: 1px solid #E4E9F4;
+}
+
+.pushed, .root:active, .root:focus {
+    background: rgba(228, 233, 244, 0.25);
+    border: 1px solid #E4E9F4;
+}
+
+.text {
+    margin-left: 18px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    color: #E4E9F4;
+}
+
+@media (max-width:1482px) {
+    .root {
+        width: 72px;
+        padding: 0;
+        justify-content: center;
+    }
+    .text {
+        display: none;
+    }
+}
+
+@media (max-width: 860px) {
+    .root {
+        width: 48px;
+        height: 48px;
+    }
+}
