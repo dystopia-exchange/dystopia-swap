@@ -354,10 +354,11 @@
 
   .title {
     font-size: 60px;
+    line-height: 120%;
   }
 
   .topBarContainer {
-    padding-bottom: 200px;
+    padding-bottom: 230px;
   }
 
   .tokenSelect {
@@ -408,7 +409,7 @@
     width: 380px !important;
     height: 72px;
     position: absolute !important;
-    top: 9px;
+    top: 0px;
     right: 186px;
   }
 
@@ -422,7 +423,7 @@
 
 @media (min-width: 1200px) {
   .topBarContainer {
-    padding-bottom: 100px;
+    padding-bottom: 130px;
   }
 
   .tokenSelect {
@@ -469,7 +470,7 @@
 
 @media (min-width: 1920px) {
   .topBarContainer {
-    padding-left: 433px;
+    padding-left: 400px;
     padding-bottom: 30px;
   }
 
