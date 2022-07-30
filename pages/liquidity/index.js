@@ -6,7 +6,7 @@ function Liquidity() {
   return (
     <NotConnect
       title="Liquidity"
-      description="SCreate a pair or add liquidity to existing stable or volatile Liquidity Pairs."
+      description="Create a pair or add liquidity to existing stable or volatile Liquidity Pairs."
       buttonText="LAUNCH APP"
     >
       <LiquidityPairs />
