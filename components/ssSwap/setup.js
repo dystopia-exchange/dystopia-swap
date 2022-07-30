@@ -887,7 +887,7 @@ function Setup() {
             <div className={classes.inputBalanceSlippageHelp}>
               <Hint
                   hintText={
-                    "Slippage is the difference between the price you expect to get on the crypto you have ordered and the price you actually get when the order executes."
+                    "Slippage is the price difference between the submission of a transaction and the confirmation of the transaction on the blockchain."
                   }
                   open={openHint}
                   anchor={hintAnchor}
