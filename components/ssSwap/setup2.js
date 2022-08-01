@@ -27,6 +27,7 @@ import {MultiSwap} from "../MultiSwap";
 import { observer } from 'mobx-react'
 import { multiSwapStore } from '../MultiSwap/store'
 import * as ethers from 'ethers'
+import {millifyValue, toFixed} from './utils'
 
 function Setup() {
     const [, updateState] = React.useState();
@@ -1056,7 +1057,11 @@ function Setup() {
                                             </Typography>
 
                                             <Typography className={classes.title}>
-                                                {multiSwapStore.priceInfo.tokenOutPrice?.toFixed(8)}
+                                                {
+                                                    multiSwapStore.priceInfo.tokenOutPrice < 1
+                                                        ? toFixed(multiSwapStore.priceInfo.tokenOutPrice + '')
+                                                        : multiSwapStore.priceInfo.tokenOutPrice?.toFixed(2)
+                                                }
                                             </Typography>
                                         </div>
 
@@ -1071,7 +1076,11 @@ function Setup() {
                                             </Typography>
 
                                             <Typography className={classes.title}>
-                                                {multiSwapStore.priceInfo.tokenInPrice?.toFixed(8)}
+                                                {
+                                                    multiSwapStore.priceInfo.tokenInPrice < 1
+                                                        ? toFixed(multiSwapStore.priceInfo.tokenInPrice + '')
+                                                        : multiSwapStore.priceInfo.tokenInPrice?.toFixed(2)
+                                                }
                                             </Typography>
                                         </div>
                                     </div>
