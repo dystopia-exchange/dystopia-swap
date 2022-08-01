@@ -1209,7 +1209,9 @@ export default function EnhancedTable({
                           }}
                         >
                           {row?.gaugebribes.bribeTokens.length
-                            ? row?.gaugebribes.bribeTokens.map((bribe, idx) => {
+                            ? row?.gaugebribes.bribeTokens
+                              .filter(x => !BigNumber(x?.left).isZero())
+                              .map((bribe, idx) => {
                                 return (
                                   <>
                                     {tableCellContent(
@@ -1765,7 +1767,9 @@ export default function EnhancedTable({
                                         )}
                                       {headCell.id === "apy" &&
                                       row?.gaugebribes.bribeTokens.length
-                                        ? row?.gaugebribes.bribeTokens.map((bribe, idx) => {
+                                        ? row?.gaugebribes.bribeTokens
+                                          .filter(x => !BigNumber(x?.left).isZero())
+                                          .map((bribe, idx) => {
                                             return (
                                               <div
                                                 className={[
@@ -1843,7 +1847,9 @@ export default function EnhancedTable({
                                         formatSymbol(row.token0.symbol)}
                                       {headCell.id === "apy" &&
                                       row?.gaugebribes.bribeTokens.length
-                                        ? row?.gaugebribes.bribeTokens.map((bribe, idx) => {
+                                        ? row?.gaugebribes.bribeTokens
+                                          .filter(x => !BigNumber(x?.left).isZero())
+                                          .map((bribe, idx) => {
                                             return (
                                               <div
                                                 className={[
