@@ -376,15 +376,6 @@ function Setup() {
 
             return (
                 <>
-                    <div
-                        className={[
-                            classes.routesPlatform,
-                            classes.routeLinesLeftText,
-                            classes[`routeLinesLeftText--${appTheme}`]
-                        ].join(" ")}
-                    >
-                        {percentage}%
-                    </div>
                     <div className={[classes.routesList]}>
                         {route.map((el, index) => {
                             let tokenIn = null
@@ -403,7 +394,7 @@ function Setup() {
                             const isLastEl = index === route.length - 1
 
                             return (
-                                <div className={[classes.routesListItem].join(" ")}>
+                                <>
                                     {index === 0 && (
                                         <>
                                             <img
@@ -416,36 +407,53 @@ function Setup() {
                                                     e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                                 }}
                                             />
-                                            <span className={[classes.routesListItemSymbol].join(' ')}>
-                                                {tokenIn?.symbol}
-                                            </span>
                                         </>
                                     )}
 
                                     {index === 0 && (
-                                        <div
-                                            className={[
-                                                classes.routesListItemArrow,
-                                                classes[`routesListItemArrow--${appTheme}`]
-                                            ].join(" ")}
-                                        >
-                                            <svg width="22" height="70" viewBox="0 0 22 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M22 35L17 32.1132V37.8868L22 35ZM0 35.5H17.5V34.5H0V35.5Z" fill="#86B9D6"/>
-                                            </svg>
-                                            <span className={[classes.routesListItemArrowPlatform].join(' ')}>
-                                                {el.dex.name}
-                                                <span
-                                                    className={[classes.routesListItemArrowPlatformExclude].join(' ')}
-                                                    onClick={() => {
-                                                        multiSwapStore.excludePlatformToggle(el.dex.name)
-                                                    }}
-                                                >&#215;</span>
-                                            </span>
-                                        </div>
+                                        <>
+                                            <div
+                                                className={[
+                                                    classes.routesPlatform,
+                                                    classes.routeLinesLeftText,
+                                                    classes[`routeLinesLeftText--${appTheme}`]
+                                                ].join(" ")}
+                                            >
+                                                {percentage}%
+                                            </div>
+
+                                            <div
+                                                className={[
+                                                    classes.routesListItemArrow,
+                                                    classes[`routesListItemArrow--${appTheme}`]
+                                                ].join(" ")}
+                                            >
+                                                <div className={[
+                                                    classes.routesListItemArrowIcon,
+                                                    classes[`routesListItemArrowIcon--${appTheme}`]
+                                                ].join(' ')}></div>
+                                                <span className={[
+                                                    classes.routesListItemArrowPlatform,
+                                                    classes[`routesListItemArrowPlatform--${appTheme}`]
+                                                ].join(' ')}>
+                                                    {el.dex.name}
+                                                    <span
+                                                        className={[classes.routesListItemArrowPlatformExclude].join(' ')}
+                                                        onClick={() => {
+                                                            multiSwapStore.excludePlatformToggle(el.dex.name)
+                                                        }}
+                                                    >&#215;</span>
+                                                </span>
+                                            </div>
+                                        </>
                                     )}
 
                                     <img
-                                        className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(" ")}
+                                        className={[
+                                            classes.routeIcon,
+                                            classes[`routeIcon--${appTheme}`],
+                                            isLastEl ? '' : classes.routeSmallIcon
+                                        ].join(" ")}
                                         alt=""
                                         src={tokenOut.logoURI}
                                         height="40px"
@@ -454,9 +462,15 @@ function Setup() {
                                             e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
                                         }}
                                     />
-                                    <span className={[classes.routesListItemSymbol].join(' ')}>
-                                        {tokenOut?.symbol}
-                                    </span>
+
+                                    {!isLastEl && (
+                                        <span className={[
+                                            classes.routesListItemSymbol,
+                                            classes[`routesListItemSymbol--${appTheme}`]
+                                        ].join(' ')}>
+                                            {tokenOut?.symbol}
+                                        </span>
+                                    )}
                                     {!isLastEl && (
                                         <div
                                             className={[
@@ -464,11 +478,15 @@ function Setup() {
                                                 classes[`routesListItemArrow--${appTheme}`]
                                             ].join(" ")}
                                         >
-                                            <svg width="22" height="70" viewBox="0 0 22 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M22 35L17 32.1132V37.8868L22 35ZM0 35.5H17.5V34.5H0V35.5Z" fill="#86B9D6"/>
-                                            </svg>
+                                            <div className={[
+                                                classes.routesListItemArrowIcon,
+                                                classes[`routesListItemArrowIcon--${appTheme}`]
+                                            ].join(' ')}></div>
                                             <span
-                                                className={[classes.routesListItemArrowPlatform].join(' ')}
+                                                className={[
+                                                    classes.routesListItemArrowPlatform,
+                                                    classes[`routesListItemArrowPlatform--${appTheme}`]
+                                                ].join(' ')}
                                                  onClick={() => {
                                                      multiSwapStore.excludePlatformToggle(route[index + 1].dex.name)
                                                  }}
@@ -478,7 +496,7 @@ function Setup() {
                                             </span>
                                         </div>
                                     )}
-                                </div>
+                                </>
                             )
                         })}
                     </div>
@@ -512,12 +530,18 @@ function Setup() {
                             {multiSwapStore.excludedPlatforms.length > 0 && (
                                 <>
                                     <div className={classes.excludedPlatformWrapper}>
-                                        <div className={classes.excludedPlatformTitle}>Excluded platforms:{' '}</div>
+                                        <div className={[
+                                            classes.excludedPlatformTitle,
+                                            classes[`excludedPlatformTitle--${appTheme}`]
+                                        ].join(' ')}>Excluded platforms:{' '}</div>
                                         <div className={classes.excludedPlatformList}>
                                             {multiSwapStore.excludedPlatforms.map((el) => {
                                                 return (
                                                     <>
-                                                          <span className={classes.excludedPlatformListItem}>
+                                                          <span className={[
+                                                              classes.excludedPlatformListItem,
+                                                              classes[`excludedPlatformListItem--${appTheme}`]
+                                                          ].join(' ')}>
                                                                {el}
                                                                <span
                                                                    className={[classes.routesListItemArrowPlatformExclude].join(' ')}
@@ -1032,7 +1056,7 @@ function Setup() {
                                             </Typography>
 
                                             <Typography className={classes.title}>
-                                                {multiSwapStore.priceInfo.tokenOutPrice}
+                                                {multiSwapStore.priceInfo.tokenOutPrice?.toFixed(8)}
                                             </Typography>
                                         </div>
 
@@ -1047,7 +1071,7 @@ function Setup() {
                                             </Typography>
 
                                             <Typography className={classes.title}>
-                                                {multiSwapStore.priceInfo.tokenInPrice}
+                                                {multiSwapStore.priceInfo.tokenInPrice?.toFixed(8)}
                                             </Typography>
                                         </div>
                                     </div>

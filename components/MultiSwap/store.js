@@ -167,8 +167,8 @@ class MultiSwapStore {
 
         const returnAmount = ethers.utils.formatUnits(swap.returnAmount, tokenOut.decimals).toString();
         const swapAmount = ethers.utils.formatUnits(swap.swapAmount, tokenIn.decimals).toString();
-        const tokenInPrice = (parseFloat(returnAmount) / parseFloat(swapAmount)).toFixed(4);
-        const tokenOutPrice = (parseFloat(swapAmount) / parseFloat(returnAmount)).toFixed(4);
+        const tokenInPrice = (parseFloat(returnAmount) / parseFloat(swapAmount))
+        const tokenOutPrice = (parseFloat(swapAmount) / parseFloat(returnAmount));
 
         return {
             tokenInPrice,
