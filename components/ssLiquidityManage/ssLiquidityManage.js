@@ -2722,7 +2722,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
                       )}
                     </Button>
                 )}
-                {amount0 !== "" && amount1 !== "" && createLP && pair !== null && (
+                {amount0 !== "" && amount1 !== "" && createLP && pair !== null && (pair.gauge || needAddToWhiteList) && (
                     <Button
                         variant="contained"
                         size="large"
@@ -2745,7 +2745,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
                       )}
                     </Button>
                 )}
-                {!pair?.gauge && pair && (
+                {!pair?.gauge && pair && !needAddToWhiteList && (
                     <Button
                         variant="contained"
                         size="large"
@@ -2772,9 +2772,9 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
                         }
                         onClick={onCreateGauge}
                     >
-                      <Typography className={classes.actionButtonText}>
+                      <span className={classes.actionButtonText}>
                         {createLoading ? `Creating` : `Create Gauge`}
-                      </Typography>
+                      </span>
                       {createLoading && (
                           <CircularProgress size={10} className={classes.loadingCircle} />
                       )}
