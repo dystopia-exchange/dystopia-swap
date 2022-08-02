@@ -2593,8 +2593,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
 
                                   {pair?.balance > 0 && !amount0Error && !amount1Error && (
                                       <>
-                                        {formatSymbol(pair?.name)} LP exists in your wallet.
-                                        Choose “I have LP token” to stake it.
+                                        There are {pair?.token0.symbol}-{pair?.token1.symbol} LP tokens in your wallet. Click on "I have LP token" to stake it.
                                       </>
                                   )}
                                 </div>
