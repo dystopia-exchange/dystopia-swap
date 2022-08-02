@@ -145,7 +145,7 @@ export default function ssWhitelist() {
                 <div style={{ marginRight: 9 }}>Listing Fee</div>
 
                 <Hint
-                  hintText={'Listing fee either needs to be locked in your veCONE NFT or be paid and burnt on the list.'}
+                  hintText={'You must have the indicated amount of veCONE to whitelist an asset.'}
                   open={openFeeHint}
                   anchor={feeHintAnchor}
                   handleClick={handleClickFeePopover}
@@ -227,11 +227,11 @@ export default function ssWhitelist() {
                   </div>
                 }
 
-                {(!nft || (token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee))) &&
+                {(!nft || (!token.isWhitelisted && nft && BigNumber(nft.lockValue).lt(token.listingFee)) || (token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee))) &&
                   <>
                     {!token.isWhitelisted &&
                       <Hint
-                        hintText={'Vest Value < Fee means you cannot proceed with the whitelisting as there is not enough funds locked in the chosen veCONE.'}
+                        hintText={'Cannot proceed with whitelisting due to insufficient veCONE.'}
                         open={openActionHint}
                         anchor={actionHintAnchor}
                         handleClick={handleClickActionPopover}
@@ -311,7 +311,7 @@ export default function ssWhitelist() {
                   </div>
 
                   <Hint
-                    hintText={'Listing fee either needs to be locked in your veCONE NFT or be paid and burnt on the list.'}
+                    hintText={'You must have the indicated amount of veCONE to whitelist an asset.'}
                     open={openFeeHint}
                     anchor={feeHintAnchor}
                     handleClick={handleClickFeePopover}
@@ -350,11 +350,11 @@ export default function ssWhitelist() {
                     </div>
                   }
 
-                  {(!nft || (token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee))) &&
+                  {(!nft || (!token.isWhitelisted && nft && BigNumber(nft.lockValue).lt(token.listingFee)) || (token.isWhitelisted && nft && BigNumber(nft.lockValue).gt(token.listingFee))) &&
                     <>
                       {!token.isWhitelisted &&
                         <Hint
-                          hintText={'Vest Value < Fee means you cannot proceed with the whitelisting as there is not enough funds locked in the chosen veCONE.'}
+                          hintText={'Cannot proceed with whitelisting due to insufficient veCONE.'}
                           open={openActionHint}
                           anchor={actionHintAnchor}
                           handleClick={handleClickActionPopover}
