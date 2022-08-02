@@ -170,6 +170,7 @@ const StatButton = () => {
 
 function Header(props) {
   const accountStore = stores.accountStore.getStore("account");
+  const web3ModalStore = stores.accountStore.getStore("web3modal");
   const router = useRouter();
 
   const [account, setAccount] = useState(accountStore);
@@ -403,7 +404,7 @@ function Header(props) {
                         className={[classes.accountButtonAddress, classes[`accountButtonAddress--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
                       {account && account.address && (
                           <>
-                            <div className={`${classes.accountIcon} ${classes.metamask}`} style={{ marginRight: 8 }}>
+                            <div className={`${classes.accountIcon} ${web3ModalStore?.cachedProvider == 'walletconnect' ? classes.walletConnect : (web3ModalStore?.cachedProvider == 'walletlink' ? classes.coinbase : classes.metamask)}`} style={{ marginRight: 8 }}>
                             </div>
 
                             {/* <div
