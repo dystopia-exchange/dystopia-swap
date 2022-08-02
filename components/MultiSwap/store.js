@@ -1,10 +1,10 @@
 import { makeAutoObservable, action } from 'mobx'
-import {allowance, approve, doSwap, getSwapContract, swapQuery, api} from "./utils";
+import { allowance, approve, doSwap, getSwapContract, swapQuery, api } from "./utils";
 import * as ethers from 'ethers'
 import { debounce } from "debounce"
 import stores from "../../stores";
 import { wmaticAbi } from './wmaticAbi'
-import {CONTRACTS} from "../../stores/constants";
+import { CONTRACTS } from "../../stores/constants";
 
 const erc20abi = [
     // Read-Only Functions
@@ -126,8 +126,11 @@ class MultiSwapStore {
     }
 
     reverseTokens() {
-        this.setTokenIn(this.tokenOut)
-        this.setTokenOut(this.tokenIn)
+        const { tokenOut, tokenIn } = this
+        this.setTokenIn(tokenOut)
+        this.setTokenOut(tokenIn)
+        this._checkAllowance()
+        this.debSwapQuery()
     }
 
     async approve() {
@@ -236,8 +239,8 @@ class MultiSwapStore {
 
         if (this.tokenIn && this.tokenOut && this.swapAmount && this.provider) {
             const [tokenIn, tokenOut] = await Promise.all([
-              this._getToken(this.tokenIn),
-              this._getToken(this.tokenOut),
+                this._getToken(this.tokenIn),
+                this._getToken(this.tokenOut),
             ])
             const swapAmount = ethers.utils.parseUnits(this.swapAmount, tokenIn.decimals).toString();
             this.isFetchingSwapQuery = true

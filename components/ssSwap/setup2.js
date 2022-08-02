@@ -23,11 +23,11 @@ import BtnSwap from "../../ui/BtnSwap";
 import Hint from "../hint/hint";
 import Loader from "../../ui/Loader";
 import AssetSelect from "../../ui/AssetSelect";
-import {MultiSwap} from "../MultiSwap";
+import { MultiSwap } from "../MultiSwap";
 import { observer } from 'mobx-react'
 import { multiSwapStore } from '../MultiSwap/store'
 import * as ethers from 'ethers'
-import {millifyValue, toFixed} from './utils'
+import { millifyValue, toFixed } from './utils'
 
 function Setup() {
     const [, updateState] = React.useState();
@@ -351,6 +351,7 @@ function Setup() {
     };
 
     const swapAssets = () => {
+        multiSwapStore.reverseTokens()
         const fa = fromAssetValue;
         const ta = toAssetValue;
         setFromAssetValue(ta);
@@ -488,9 +489,9 @@ function Setup() {
                                                     classes.routesListItemArrowPlatform,
                                                     classes[`routesListItemArrowPlatform--${appTheme}`]
                                                 ].join(' ')}
-                                                 onClick={() => {
-                                                     multiSwapStore.excludePlatformToggle(route[index + 1].dex.name)
-                                                 }}
+                                                onClick={() => {
+                                                    multiSwapStore.excludePlatformToggle(route[index + 1].dex.name)
+                                                }}
                                             >
                                                 {route[index + 1].dex.name}
                                                 <span className={[classes.routesListItemArrowPlatformExclude].join(' ')}>&#215;</span>
@@ -508,59 +509,59 @@ function Setup() {
         return (
             <>
                 <div className={classes.depositInfoContainer}>
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                width: "100%",
-                            }}
-                        >
-                            {routes && Array.isArray(routes) && routes.length > 0 && (
-                                <>
-                                    <Typography
-                                        className={[
-                                            classes.depositInfoHeading,
-                                            classes[`depositInfoHeading--${appTheme}`],
-                                        ].join(" ")}
-                                    >
-                                        Routes
-                                    </Typography>
-                                    {routes.map(renderRoutes)}
-                                </>
-                            )}
-                            {multiSwapStore.excludedPlatforms.length > 0 && (
-                                <>
-                                    <div className={classes.excludedPlatformWrapper}>
-                                        <div className={[
-                                            classes.excludedPlatformTitle,
-                                            classes[`excludedPlatformTitle--${appTheme}`]
-                                        ].join(' ')}>Excluded platforms:{' '}</div>
-                                        <div className={classes.excludedPlatformList}>
-                                            {multiSwapStore.excludedPlatforms.map((el) => {
-                                                return (
-                                                    <>
-                                                          <span className={[
-                                                              classes.excludedPlatformListItem,
-                                                              classes[`excludedPlatformListItem--${appTheme}`]
-                                                          ].join(' ')}>
-                                                               {el}
-                                                               <span
-                                                                   className={[classes.routesListItemArrowPlatformExclude].join(' ')}
-                                                                   onClick={() => {
-                                                                       multiSwapStore.excludePlatformToggle(el)
-                                                                   }}
-                                                               >
-                                                                   &#215;
-                                                               </span>
-                                                          </span>
-                                                    </>
-                                                )
-                                            })}
-                                        </div>
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            width: "100%",
+                        }}
+                    >
+                        {routes && Array.isArray(routes) && routes.length > 0 && (
+                            <>
+                                <Typography
+                                    className={[
+                                        classes.depositInfoHeading,
+                                        classes[`depositInfoHeading--${appTheme}`],
+                                    ].join(" ")}
+                                >
+                                    Routes
+                                </Typography>
+                                {routes.map(renderRoutes)}
+                            </>
+                        )}
+                        {multiSwapStore.excludedPlatforms.length > 0 && (
+                            <>
+                                <div className={classes.excludedPlatformWrapper}>
+                                    <div className={[
+                                        classes.excludedPlatformTitle,
+                                        classes[`excludedPlatformTitle--${appTheme}`]
+                                    ].join(' ')}>Excluded platforms:{' '}</div>
+                                    <div className={classes.excludedPlatformList}>
+                                        {multiSwapStore.excludedPlatforms.map((el) => {
+                                            return (
+                                                <>
+                                                    <span className={[
+                                                        classes.excludedPlatformListItem,
+                                                        classes[`excludedPlatformListItem--${appTheme}`]
+                                                    ].join(' ')}>
+                                                        {el}
+                                                        <span
+                                                            className={[classes.routesListItemArrowPlatformExclude].join(' ')}
+                                                            onClick={() => {
+                                                                multiSwapStore.excludePlatformToggle(el)
+                                                            }}
+                                                        >
+                                                            &#215;
+                                                        </span>
+                                                    </span>
+                                                </>
+                                            )
+                                        })}
                                     </div>
-                                </>
-                            )}
-                        </div>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
             </>
         );
@@ -671,34 +672,34 @@ function Setup() {
                         noWrap
                         onClick={() => setBalance100()}
                     >
-                    <span>
-                      {assetValue && assetValue.balance
-                          ? " " + formatCurrency(assetValue.balance)
-                          : ""}
-                    </span>
+                        <span>
+                            {assetValue && assetValue.balance
+                                ? " " + formatCurrency(assetValue.balance)
+                                : ""}
+                        </span>
                     </Typography>
 
                     {assetValue?.balance &&
-                    Number(assetValue?.balance) > 0 &&
-                    type === "From" && (
-                        <div
-                            style={{
-                                cursor: "pointer",
-                                fontWeight: 500,
-                                fontSize: 14,
-                                lineHeight: "120%",
-                                color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
-                            }}
-                            onClick={() => setBalance100()}
-                        >
-                            MAX
-                        </div>
-                    )}
+                        Number(assetValue?.balance) > 0 &&
+                        type === "From" && (
+                            <div
+                                style={{
+                                    cursor: "pointer",
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    lineHeight: "120%",
+                                    color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
+                                }}
+                                onClick={() => setBalance100()}
+                            >
+                                MAX
+                            </div>
+                        )}
                 </div>
 
                 <div
                     className={`${classes.massiveInputContainer} ${(amountError || assetError) && classes.error
-                    }`}
+                        }`}
                 >
                     <div className={classes.massiveInputAssetSelect}>
                         <AssetSelect
@@ -776,7 +777,7 @@ function Setup() {
                     routes,
                 } = renderProps
 
-                console.log('swap', swap && JSON.parse(JSON.stringify(swap)))
+                // console.log('swap', swap && JSON.parse(JSON.stringify(swap)))
 
                 let buttonLabel = 'Swap'
                 let loadingMessage = ''
@@ -1007,85 +1008,85 @@ function Setup() {
                             {(!isFetchingSwapQuery
                                 && multiSwapStore.error === null
                                 && multiSwapStore.priceImpact !== null)
-                            && (
-                                <>
-                                    <Typography
-                                        style={{ marginTop: 5 }}
-                                        className={[
-                                            multiSwapStore.priceImpact > 5
-                                                ? classes.warningError
-                                                : classes.warningWarning,
-                                            classes[`warningText--${appTheme}`],
-                                        ].join(" ")}
-                                        align="center"
-                                    >
-                                        Price impact: {parseFloat(parseFloat(multiSwapStore.priceImpact).toFixed(2))}%
-                                    </Typography>
-                                </>
-                            )}
+                                && (
+                                    <>
+                                        <Typography
+                                            style={{ marginTop: 5 }}
+                                            className={[
+                                                multiSwapStore.priceImpact > 5
+                                                    ? classes.warningError
+                                                    : classes.warningWarning,
+                                                classes[`warningText--${appTheme}`],
+                                            ].join(" ")}
+                                            align="center"
+                                        >
+                                            Price impact: {parseFloat(parseFloat(multiSwapStore.priceImpact).toFixed(2))}%
+                                        </Typography>
+                                    </>
+                                )}
 
                             {loadingMessage === ''
                                 && multiSwapStore.swap !== null
                                 && multiSwapStore.error === null
                                 && multiSwapStore.isMaticToken === false
                                 && (
-                                <>
-                                    <Typography
-                                        className={[
-                                            classes.depositInfoHeading,
-                                            classes[`depositInfoHeading--${appTheme}`],
-                                            classes.depositInfoHeadingPrice,
-                                        ].join(" ")}
-                                    >
-                                        Price Info
-                                    </Typography>
-
-                                    <div
-                                        className={[
-                                            classes.priceInfos,
-                                            classes[`priceInfos--${appTheme}`],
-                                        ].join(" ")}
-                                    >
-                                        <div
+                                    <>
+                                        <Typography
                                             className={[
-                                                classes.priceInfo,
-                                                classes[`priceInfo--${appTheme}`],
+                                                classes.depositInfoHeading,
+                                                classes[`depositInfoHeading--${appTheme}`],
+                                                classes.depositInfoHeadingPrice,
                                             ].join(" ")}
                                         >
-                                            <Typography className={classes.text}>
-                                                {`${fromAssetValue?.symbol} per ${toAssetValue?.symbol}`}
-                                            </Typography>
-
-                                            <Typography className={classes.title}>
-                                                {
-                                                    multiSwapStore.priceInfo.tokenOutPrice < 1
-                                                        ? toFixed(multiSwapStore.priceInfo.tokenOutPrice + '')
-                                                        : multiSwapStore.priceInfo.tokenOutPrice?.toFixed(2)
-                                                }
-                                            </Typography>
-                                        </div>
+                                            Price Info
+                                        </Typography>
 
                                         <div
                                             className={[
-                                                classes.priceInfo,
-                                                classes[`priceInfo--${appTheme}`],
+                                                classes.priceInfos,
+                                                classes[`priceInfos--${appTheme}`],
                                             ].join(" ")}
                                         >
-                                            <Typography className={classes.text}>
-                                                {`${toAssetValue?.symbol} per ${fromAssetValue?.symbol}`}
-                                            </Typography>
+                                            <div
+                                                className={[
+                                                    classes.priceInfo,
+                                                    classes[`priceInfo--${appTheme}`],
+                                                ].join(" ")}
+                                            >
+                                                <Typography className={classes.text}>
+                                                    {`${fromAssetValue?.symbol} per ${toAssetValue?.symbol}`}
+                                                </Typography>
 
-                                            <Typography className={classes.title}>
-                                                {
-                                                    multiSwapStore.priceInfo.tokenInPrice < 1
-                                                        ? toFixed(multiSwapStore.priceInfo.tokenInPrice + '')
-                                                        : multiSwapStore.priceInfo.tokenInPrice?.toFixed(2)
-                                                }
-                                            </Typography>
+                                                <Typography className={classes.title}>
+                                                    {
+                                                        multiSwapStore.priceInfo.tokenOutPrice < 1
+                                                            ? toFixed(multiSwapStore.priceInfo.tokenOutPrice + '')
+                                                            : multiSwapStore.priceInfo.tokenOutPrice?.toFixed(2)
+                                                    }
+                                                </Typography>
+                                            </div>
+
+                                            <div
+                                                className={[
+                                                    classes.priceInfo,
+                                                    classes[`priceInfo--${appTheme}`],
+                                                ].join(" ")}
+                                            >
+                                                <Typography className={classes.text}>
+                                                    {`${toAssetValue?.symbol} per ${fromAssetValue?.symbol}`}
+                                                </Typography>
+
+                                                <Typography className={classes.title}>
+                                                    {
+                                                        multiSwapStore.priceInfo.tokenInPrice < 1
+                                                            ? toFixed(multiSwapStore.priceInfo.tokenInPrice + '')
+                                                            : multiSwapStore.priceInfo.tokenInPrice?.toFixed(2)
+                                                    }
+                                                </Typography>
+                                            </div>
                                         </div>
-                                    </div>
-                                </>
-                            )}
+                                    </>
+                                )}
 
                             {multiSwapStore.error && (
                                 <div
