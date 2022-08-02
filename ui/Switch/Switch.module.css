@@ -3,17 +3,6 @@
   cursor: pointer;
 }
 
-.toggle {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 20px;
-  height: 20px;
-  background: #4f5d7f;
-  border-radius: 100px;
-  transition: all 0.16s ease;
-}
-
 .track {
   width: 44px;
   height: 26px;
@@ -21,26 +10,45 @@
   border: 1px solid #8191B9;
   border-radius: 100px;
   transition: all 0.16s ease;
+  opacity: 0.72;
 }
+
+.toggle {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: #8191B9;
+  border-radius: 100px;
+  transition: all 0.16s ease;
+}
+
 
 .switch:hover .track {
-  background: #24292D;
+  background: #1F2B49;
 }
 
-.switch:hover .toggle {
-  background: #5b6b7c;
+.switch:active .track {
+  background: #060B17;
+}
+
+.switch--active .track {
+  background: rgba(119, 155, 244, 0.25);
+  opacity: 1;
 }
 
 .switch--active .toggle,
 .switch--active:hover .toggle {
   transform: translateX(18px);
-  background: #8191B9;
 }
 
-.switch--active .track,
 .switch--active:hover .track {
-  background: rgba(119, 155, 244, 0.25);
-  border: 1px solid #8191B9;
+  background: rgba(119, 155, 244, 0.15);
+}
+
+.switch--active:active .track {
+  background: rgba(119, 155, 244, 0.4);
 }
 
 @media (min-width: 1920px) {

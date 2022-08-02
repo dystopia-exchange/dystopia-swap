@@ -184,6 +184,12 @@ p.paragraph1 {
   color: #FFF !important;
 }
 
+p.paragraph1 ~ p {
+  font-size: 14px;
+  line-height: 16px;
+}
+
+
 .buttonsContainer {
   display: flex;
   justify-content: space-between;
