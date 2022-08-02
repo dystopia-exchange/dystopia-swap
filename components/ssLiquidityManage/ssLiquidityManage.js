@@ -2672,7 +2672,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
                             !
                           </div>
                           <div>
-                            Select veTET NFT for your LP Stake to get an APR boost in proportion to Voting Power.
+                            Select veCONE NFT for your LP Stake to get an APR boost in proportion to Voting Power.
                           </div>
                         </div>
                     }
