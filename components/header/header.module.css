@@ -250,6 +250,15 @@
   background: rgba(23, 29, 45, 0.6) !important;
 }
 
+.notificationsButtonDisabled {
+  pointer-events: none;
+}
+
+.notificationsButtonDisabled svg {
+  color: #586586;
+  fill: #586586;
+}
+
 .connectButton {
   display: flex;
   justify-content: center;
