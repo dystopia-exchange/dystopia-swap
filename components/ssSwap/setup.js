@@ -539,6 +539,9 @@ function Setup() {
     const ta = toAssetValue;
     setFromAssetValue(ta);
     setToAssetValue(fa);
+
+    const toAmount = toAmountValue
+
       if (
           !(
               (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
@@ -547,7 +550,10 @@ function Setup() {
           )
       ) {
           sethidequote(false);
-          calculateReceiveAmount(fromAmountValue, ta, fa);
+          setFromAmountValue(toAmount)
+          setToAmountValue("");
+          setQuote(null);
+          calculateReceiveAmount(toAmountValue, ta, fa);
       }
       else {
           sethidequote(true);
@@ -670,32 +676,13 @@ function Setup() {
               className={[
                 classes.warningContainer,
                 classes[`warningContainer--${appTheme}`],
-                BigNumber(quote.priceImpact).gt(5)
-                    ? classes.warningContainerError
-                    : classes.warningContainerWarning,
+                classes.warningContainerError
               ].join(" ")}
           >
-            {/* <div
-            className={[
-              classes.warningDivider,
-              BigNumber(quote.priceImpact).gt(5)
-                ? classes.warningDividerError
-                : classes.warningDividerWarning,
-            ].join(" ")}
-          ></div> */}
-            {BigNumber(quote.priceImpact).gt(5) ? (
-                <img src="/images/ui/info-circle-red.svg" width="24px" style={{ marginRight: 8 }} />
-            ) : (
-                <img src="/images/ui/info-circle-yellow.svg" width="24px" style={{ marginRight: 8 }} />
-            )}
+            <img src="/images/ui/info-circle-red.svg" width="24px" style={{ marginRight: 8 }} />
 
             <Typography
-                className={[
-                  BigNumber(quote.priceImpact).gt(5)
-                      ? classes.warningError
-                      : classes.warningWarning,
-                  classes[`warningText--${appTheme}`],
-                ].join(" ")}
+                className={classes.warningError}
                 align="center"
             >
               Insufficient funds {fromAssetValue?.symbol}
