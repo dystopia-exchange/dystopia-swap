@@ -385,10 +385,10 @@ function Setup() {
                             const baseAsset = stores.stableSwapStore.getStore("baseAssets");
 
                             baseAsset.forEach((asset) => {
-                                if (asset.address.toLowerCase() === el.tokenIn.toLowerCase()) {
+                                if (asset.address?.toLowerCase() === el.tokenIn?.toLowerCase()) {
                                     tokenIn = asset
                                 }
-                                if (asset.address.toLowerCase() === el.tokenOut.toLowerCase()) {
+                                if (asset.address?.toLowerCase() === el.tokenOut?.toLowerCase()) {
                                     tokenOut = asset
                                 }
                             })
@@ -402,7 +402,7 @@ function Setup() {
                                             <img
                                                 className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(" ")}
                                                 alt=""
-                                                src={tokenIn.logoURI}
+                                                src={tokenIn?.logoURI}
                                                 height="40px"
                                                 onError={(e) => {
                                                     e.target.onerror = null;
@@ -457,7 +457,7 @@ function Setup() {
                                             isLastEl ? '' : classes.routeSmallIcon
                                         ].join(" ")}
                                         alt=""
-                                        src={tokenOut.logoURI}
+                                        src={tokenOut?.logoURI}
                                         height="40px"
                                         onError={(e) => {
                                             e.target.onerror = null;

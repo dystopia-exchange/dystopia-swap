@@ -242,6 +242,7 @@ class MultiSwapStore {
                 this._getToken(this.tokenIn),
                 this._getToken(this.tokenOut),
             ])
+            console.log('tokenIn', JSON.parse(JSON.stringify(this.tokenIn)))
             const swapAmount = ethers.utils.parseUnits(this.swapAmount, tokenIn.decimals).toString();
             this.isFetchingSwapQuery = true
 

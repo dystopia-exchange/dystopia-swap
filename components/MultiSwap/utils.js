@@ -1,5 +1,5 @@
 import * as ethers from 'ethers'
-import {_SLIPPAGE_PRECISION, multiSwapAddress} from './constants'
+import { _SLIPPAGE_PRECISION, multiSwapAddress } from './constants'
 //@ts-ignore
 import MultiSwap2Abi from './MultiSwap2.json'
 import BigNumber from "bignumber.js";
@@ -61,6 +61,9 @@ export function getDeadline() {
 }
 
 export async function doSwap(swap, slippage, provider) {
+    console.log('----- swap args:', JSON.parse(JSON.stringify(swap)))
+    console.log('----- ', getSlippage(slippage), getDeadline())
+
     if (swap && swap.returnAmount) {
         // noinspection JSUnresolvedFunction
         const tx = await getSwapContract()
