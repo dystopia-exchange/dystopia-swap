@@ -15,7 +15,7 @@ import {
   Skeleton,
   Accordion,
   AccordionSummary,
-  AccordionDetails, Button, DialogTitle, DialogContent, Dialog, InputBase,
+  AccordionDetails, Button, DialogTitle, DialogContent, Dialog, InputBase, MenuItem, Select,
 } from '@mui/material';
 import numeral from "numeral";
 import BigNumber from 'bignumber.js';
@@ -26,6 +26,7 @@ import TablePaginationActions from '../table-pagination/table-pagination';
 import SortSelect from '../select-sort/select-sort';
 import { formatSymbol } from '../../utils';
 import css from "./ssVotesTable.module.css";
+import cssTokenSelect from '../select-token/select-token.module.css';
 
 const CustomSlider = styled(Slider)(({theme, appTheme, disabled}) => {
 
@@ -416,6 +417,9 @@ EnhancedTableHead.propTypes = {
 
 const useStyles = makeStyles((theme) => {
   return ({
+    tokenSelect: {
+      marginBottom: 24,
+    },
     voteTooltip: {
       background: '#060B17',
       border: '1px solid #D3F85A',
@@ -453,9 +457,28 @@ const useStyles = makeStyles((theme) => {
       display: 'flex',
       alignItems: 'center',
     },
+    voteTooltipTextModal: {
+      // width: 160,
+      color: '#8191B9',
+      fontSize: 14,
+      fontWeight: 400,
+      lineHeight: '20px',
+      display: 'flex',
+      // alignItems: 'center',
+      marginBottom: 12,
+    },
     voteTooltipVoteBlock: {
       display: 'flex',
       width: 223,
+      border: '1px solid #586586',
+      borderRadius: 12,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      position: 'relative',
+    },
+    voteTooltipVoteBlockModal: {
+      display: 'flex',
+      width: '100%',
       border: '1px solid #586586',
       borderRadius: 12,
       justifyContent: 'space-between',
@@ -473,6 +496,19 @@ const useStyles = makeStyles((theme) => {
       border: '1px solid #586586',
       borderRadius: 12,
       width: 113,
+      height: 56,
+      padding: 0,
+      fontSize: 16,
+      fontWeight: 400,
+      color: '#8191B9',
+      paddingLeft: 32,
+      boxSizing: 'border-box',
+    },
+    voteTooltipVoteBlockInputModal: {
+      background: '#171D2D',
+      border: '1px solid #586586',
+      borderRadius: 12,
+      width: 193,
       height: 56,
       padding: 0,
       fontSize: 16,
@@ -514,6 +550,15 @@ const useStyles = makeStyles((theme) => {
     inline: {
       display: 'flex',
       alignItems: 'center',
+    },
+    inlinePair: {
+      display: 'flex',
+      alignItems: 'center',
+      background: '#171D2D',
+      padding: 16,
+      borderRadius: 12,
+      marginBottom: 20,
+      height: 72,
     },
     inlineBetween: {
       display: 'flex',
@@ -691,7 +736,10 @@ const useStyles = makeStyles((theme) => {
       padding: 0,
     },
     dialogPaper: {
-      borderRadius: 0,
+      borderRadius: 12,
+      width: 353,
+      background: '#060B17',
+      border: '1px solid #D3F85A',
     },
     dialogBody: {
       background: 'rgba(0, 0, 0, 0.1) !important',
@@ -714,7 +762,7 @@ const useStyles = makeStyles((theme) => {
   });
 });
 
-export default function EnhancedTable({gauges, setParentSliderValues, defaultVotes, veToken, token, showSearch, noTokenSelected}) {
+export default function EnhancedTable({gauges, setParentSliderValues, defaultVotes, veToken, token, showSearch, noTokenSelected, handleChangeNFT, vestNFTs}) {
   const classes = useStyles();
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('totalVotes');
@@ -747,6 +795,18 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
   useEffect(() => {
     setSliderValues(defaultVotes);
   }, [defaultVotes]);
+
+  const arrowIcon = () => {
+    return (
+        <svg style={{pointerEvents: 'none', position: 'absolute', right: 16,}} width="18" height="9"
+             viewBox="0 0 18 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+              d="M16.9201 0.949951L10.4001 7.46995C9.63008 8.23995 8.37008 8.23995 7.60008 7.46995L1.08008 0.949951"
+              stroke="#D3F85A" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+              stroke-linejoin="round"/>
+        </svg>
+    );
+  };
 
   const onSliderChange = (event, value, asset) => {
     let newSliderValues = [...sliderValues];
@@ -896,8 +956,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
     setVoteDialogOpen(false);
   };
 
-  const openVoteDialog = () => {
-    setVoteDialogOpen(true);
+  const openVoteDialog = (row) => {
+    setVoteDialogOpen(row?.address);
   };
 
   window.addEventListener('resize', () => {
@@ -907,6 +967,16 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
 
 
   const [voteTooltipOpen, setVoteTooltipOpen] = useState(false);
+
+  const [openSelectToken, setOpenSelectToken] = useState(false);
+
+  const toggleSelect = (t) => {
+    if (openSelectToken) {
+      setOpenSelectToken(false)
+    } else {
+      setOpenSelectToken(t?.address);
+    }
+  };
 
   return (
     <>
@@ -1312,7 +1382,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                   return (
                       <>
                         <Dialog
-                            open={voteDialogOpen}
+                            open={voteDialogOpen === row.address}
                             onClose={closeModal}
                             onClick={(e) => {
                               if (e.target.classList.contains('MuiDialog-container')) {
@@ -1320,26 +1390,19 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               }
                             }}
                             fullWidth={false}
-                            maxWidth="false"
                             fullScreen={false}
                             BackdropProps={{style: {backgroundColor: 'transparent'}}}
                             classes={{
                               paper: classes.dialogPaper,
                               scrollPaper: classes.dialogBody,
                             }}>
-                          <div style={{
-                            background: '#060B17',
-                            border: appTheme === "dark" ? '1px solid #5F7285' : '1px solid #86B9D6',
-                            borderRadius: 12,
-                          }}>
+                          <div>
                             <DialogTitle style={{
-                              padding: 30,
-                              paddingBottom: 16,
+                              padding: 24,
+                              paddingBottom: 20,
                               fontWeight: 500,
-                              fontSize: 18,
-                              lineHeight: '140%',
-                              color: '#0A2C40',
-                              background: appTheme === "dark" ? '#151718' : '#CFE5F2',
+                              fontSize: 20,
+                              lineHeight: '28px',
                             }}>
                               <div style={{
                                 display: 'flex',
@@ -1347,25 +1410,166 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                 justifyContent: 'space-between',
                               }}>
                                 <div style={{
-                                  color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
+                                  color: '#E4E9F4',
                                 }}>
-                                  My Vote %
+                                  Vote
                                 </div>
 
-                                {/*<Close
-                            style={{
-                              cursor: 'pointer',
-                              color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
-                            }}
-                            onClick={closeModal}/>*/}
+                                <svg onClick={closeModal} style={{
+                                  cursor: 'pointer',
+                                }} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M14.19 0H5.81C2.17 0 0 2.17 0 5.81V14.18C0 17.83 2.17 20 5.81 20H14.18C17.82 20 19.99 17.83 19.99 14.19V5.81C20 2.17 17.83 0 14.19 0ZM13.36 12.3C13.65 12.59 13.65 13.07 13.36 13.36C13.21 13.51 13.02 13.58 12.83 13.58C12.64 13.58 12.45 13.51 12.3 13.36L10 11.06L7.7 13.36C7.55 13.51 7.36 13.58 7.17 13.58C6.98 13.58 6.79 13.51 6.64 13.36C6.35 13.07 6.35 12.59 6.64 12.3L8.94 10L6.64 7.7C6.35 7.41 6.35 6.93 6.64 6.64C6.93 6.35 7.41 6.35 7.7 6.64L10 8.94L12.3 6.64C12.59 6.35 13.07 6.35 13.36 6.64C13.65 6.93 13.65 7.41 13.36 7.7L11.06 10L13.36 12.3Z" fill="#8191B9"/>
+                                </svg>
                         </div>
                       </DialogTitle>
 
                       <DialogContent style={{
-                        padding: 30,
-                        paddingBottom: 20,
-                        background: appTheme === 'dark' ? '#24292D' : '#DBE6EC',
+                        padding: 24,
+                        paddingTop: 0,
                       }}>
+
+                        <div className={classes.inlinePair}>
+                          <div className={classes.doubleImages}>
+                            <img
+                                className={[classes.img1Logo, classes[`img1Logo--${appTheme}`]].join(' ')}
+                                src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
+                                width="37"
+                                height="37"
+                                alt=""
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                                }}
+                            />
+                            <img
+                                className={[classes.img2Logo, classes[`img2Logo--${appTheme}`]].join(' ')}
+                                src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
+                                width="37"
+                                height="37"
+                                alt=""
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                                }}
+                            />
+                          </div>
+                          <div>
+                            <Typography
+                                className={classes.textSpaced}
+                                style={{
+                                  fontWeight: 500,
+                                  fontSize: 16,
+                                  lineHeight: '20px',
+                                  color: '#E4E9F4',
+                                  marginBottom: 2,
+                                }}
+                                noWrap>
+                              {formatSymbol(row?.symbol)}
+                            </Typography>
+                            <Typography
+                                className={classes.textSpaced}
+                                style={{
+                                  fontWeight: 400,
+                                  fontSize: 14,
+                                  lineHeight: '16px',
+                                  color: '#8191B9',
+                                }}
+                                noWrap>
+                              {row?.isStable ? 'Stable Pool' : 'Volatile Pool'}
+                            </Typography>
+                          </div>
+                        </div>
+
+                        <div className={classes.tokenSelect}>
+                          <Select
+                              open={openSelectToken === row.address}
+                              onClick={() => {toggleSelect(row)}}
+                              className={[cssTokenSelect.tokenSelect, cssTokenSelect[`tokenSelect--${appTheme}`], openSelectToken ? cssTokenSelect.tokenSelectOpen : '',].join(' ')}
+                              style={{
+                                border: '1px solid #D3F85A', // always visible
+                              }}
+                              fullWidth
+                              MenuProps={{
+                                classes: {
+                                  list: appTheme === 'dark' ? cssTokenSelect['list--dark'] : cssTokenSelect.list,
+                                  paper: cssTokenSelect.listPaper,
+                                },
+                              }}
+                              value={token}
+                              {...{
+                                displayEmpty: token === null ? true : undefined,
+                                renderValue: token === null ? (selected) => {
+                                  if (selected === null) {
+                                    return (
+                                        <div className={cssTokenSelect.placeholder}>
+                                          Select veCONE NFT
+                                        </div>
+                                    );
+                                  }
+                                } : undefined,
+                              }}
+                              onChange={handleChangeNFT}
+                              IconComponent={arrowIcon}
+                              inputProps={{
+                                className: appTheme === 'dark' ? cssTokenSelect['tokenSelectInput--dark'] : cssTokenSelect.tokenSelectInput,
+                              }}>
+                            {(!vestNFTs || !vestNFTs.length) &&
+                                <div className={cssTokenSelect.noNFT}>
+                                  <div className={cssTokenSelect.noNFTtext}>
+                                    You receive NFT by creating a Lock of your CONE for some time, the more CONE you lock and for
+                                    the longest time, the more Voting Power your NFT will have.
+                                  </div>
+                                  <div className={cssTokenSelect.noNFTlinks}>
+                        <span className={cssTokenSelect.noNFTlinkButton} onClick={() => {
+                          router.push("/swap")
+                        }}>BUY CONE</span>
+                                    <span className={cssTokenSelect.noNFTlinkButton} onClick={() => {
+                                      router.push("/vest")
+                                    }}>LOCK CONE FOR NFT</span>
+                                  </div>
+                                </div>
+                            }
+                            {vestNFTs?.map((option) => {
+                              return (
+                                  <MenuItem
+                                      key={option.id}
+                                      value={option}>
+                                    <div
+                                        className={[cssTokenSelect.menuOption, 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
+                                      <Typography
+                                          style={{
+                                            fontWeight: 500,
+                                            fontSize: 16,
+                                            color: '#D3F85A',
+                                          }}>
+                                        #{option.id}
+                                      </Typography>
+
+                                      <div className={[cssTokenSelect.menuOptionSec, 'g-flex-column'].join(' ')}>
+                                        <Typography
+                                            style={{
+                                              fontWeight: 400,
+                                              fontSize: 16,
+                                              color: '#8191B9',
+                                            }}>
+                                          {formatCurrency(option.lockValue)}
+                                          {veToken?.symbol ? ' ' + veToken.symbol : ''}
+                                        </Typography>
+
+                                      </div>
+                                    </div>
+                                  </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </div>
+
+                        <div className={classes.voteTooltipSliderValues}>
+                          <span style={{width: 36,}}>-100</span>
+                          <span>0</span>
+                          <span style={{width: 36,}}>100</span>
+                        </div>
+
                         <CustomSlider
                           appTheme={appTheme}
                           valueLabelDisplay="auto"
@@ -1379,7 +1583,28 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           step={1}
                         />
 
-                        <Button
+                        <div className={classes.voteTooltipTextModal}>
+                          Move slider or edit your vote manually
+                        </div>
+
+                        <div className={classes.voteTooltipVoteBlockModal}>
+                          <div className={classes.voteTooltipVoteBlockTitle}>Your Vote</div>
+                          <InputBase
+                              value={sliderValue}
+                              onChange={(event, value) => {
+                                onSliderChange(event, event.target.value, row);
+                              }}
+                              inputProps={{
+                                className: classes.voteTooltipVoteBlockInputModal,
+                              }}
+                              InputProps={{
+                                disableUnderline: true,
+                              }}
+                          />
+                          <div className={classes.voteTooltipVoteBlockInputAddornment}>%</div>
+                        </div>
+
+                       {/* <Button
                           variant="outlined"
                           color="primary"
                           style={{
@@ -1395,7 +1620,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           }}
                           onClick={closeModal}>
                           Save & Close
-                        </Button>
+                        </Button>*/}
                       </DialogContent>
                     </div>
                   </Dialog>

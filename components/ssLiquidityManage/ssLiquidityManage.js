@@ -2593,8 +2593,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
 
                                   {pair?.balance > 0 && !amount0Error && !amount1Error && (
                                       <>
-                                        {formatSymbol(pair?.name)} LP exists in your wallet.
-                                        Choose “I have LP token” to stake it.
+                                        There are {pair?.token0.symbol}-{pair?.token1.symbol} LP tokens in your wallet. Click on "I have LP token" to stake it.
                                       </>
                                   )}
                                 </div>
@@ -2673,7 +2672,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
                             !
                           </div>
                           <div>
-                            Select veTET NFT for your LP Stake to get an APR boost in proportion to Voting Power.
+                            Select veCONE NFT for your LP Stake to get an APR boost in proportion to Voting Power.
                           </div>
                         </div>
                     }
@@ -2722,7 +2721,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
                       )}
                     </Button>
                 )}
-                {amount0 !== "" && amount1 !== "" && createLP && pair !== null && (
+                {amount0 !== "" && amount1 !== "" && createLP && pair !== null && (pair.gauge || needAddToWhiteList) && (
                     <Button
                         variant="contained"
                         size="large"
@@ -2745,7 +2744,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
                       )}
                     </Button>
                 )}
-                {!pair?.gauge && pair && (
+                {!pair?.gauge && pair && !needAddToWhiteList && (
                     <Button
                         variant="contained"
                         size="large"
@@ -2772,9 +2771,9 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
                         }
                         onClick={onCreateGauge}
                     >
-                      <Typography className={classes.actionButtonText}>
+                      <span className={classes.actionButtonText}>
                         {createLoading ? `Creating` : `Create Gauge`}
-                      </Typography>
+                      </span>
                       {createLoading && (
                           <CircularProgress size={10} className={classes.loadingCircle} />
                       )}

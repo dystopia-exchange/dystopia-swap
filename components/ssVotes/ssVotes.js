@@ -410,6 +410,8 @@ export default function ssVotes() {
         token={token}
         noTokenSelected={noTokenSelected}
         showSearch={showSearch}
+        handleChangeNFT={handleChange}
+        vestNFTs={vestNFTs}
       />
     </>
   );

@@ -141,8 +141,14 @@ function Navigation(props) {
     );
   };
 
+  const needSmartMenuContainer =
+      router.asPath.includes('swap')
+      || router.asPath.includes('liquidity/')
+      || router.asPath.includes('vest/')
+      || router.asPath.includes('bribe/create')
+
   return (
-    <div className={classes.navigationContainer}>
+    <div className={`${classes.navigationContainer} ${needSmartMenuContainer ? classes.navigationContainerSmart : ''}`}>
       <div
         className={[
           classes.navigationContent,

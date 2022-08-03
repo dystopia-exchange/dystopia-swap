@@ -575,6 +575,10 @@
   background-image: url("/connectors/icn-metamask.svg");
 }
 
+.walletConnect {
+  background-image: url("/connectors/walletConnectIcon.svg");
+}
+
 .ledger {
   background-image: url("/connectors/icn-ledger.svg");
 }

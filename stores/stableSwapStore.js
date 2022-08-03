@@ -1513,6 +1513,10 @@ class Store {
                     .toFixed(2)
                   : 0;
 
+              if(pair.gauge.weight.isZero()) {
+                pair.gauge.expectAPR = 0;
+              }
+
               let apr = new BigNumber(0);
               const rts = pair.gauge.rewardTokens;
               for(let i = 0; i < rts.length; i++) {
