@@ -231,10 +231,32 @@
   height: 48px;
   position: absolute !important;
   right: 0;
+  padding-right: 16px !important;
+}
+
+.searchInput:hover {
+  background-color: #1F2B49 !important;
 }
 
 .searchInput > fieldset {
   border: none !important;
+}
+
+.searchInputInput {
+  padding: 16px !important;
+  font-size: 14px !important;
+}
+
+.searchInputInput::placeholder {
+  color: #8191B9 !important;
+}
+
+.searchInputIcon {
+  display: flex;
+  align-items: center;
+  height: 0.01em;
+  max-height: 2em;
+  transform: scale(0.8);
 }
 
 .smallerText {
@@ -417,6 +439,16 @@
     height: 72px;
     position: absolute !important;
     right: 0;
+    padding-right: 24px !important;
+  }
+
+  .searchInputInput {
+    padding: 24px !important;
+    font-size: 16px !important;
+  }
+
+  .searchInputIcon {
+    transform: scale(1);
   }
 }
 

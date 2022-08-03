@@ -538,13 +538,14 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
             onChange={onSearchChanged}
             InputProps={{
               style: {
-                background: 'transparent',
+                background: '#171D2D',
                 border: '1px solid',
-                borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
-                borderRadius: 0,
+                borderColor: '#779BF4',
+                borderRadius: 12,
               },
               classes: {
                 root: classes.searchInput,
+                input: classes.searchInputInput,
               },
               endAdornment: <InputAdornment position="end">
                 {/*Search icon*/}
@@ -565,7 +566,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
                 border: 'none',
                 fontSize: '16px',
                 lineHeight: '120%',
-                color: '#8191B9',
+                color: '#E4E9F4',
               },
             }}
           />
@@ -607,6 +608,7 @@ function AssetSelectManage({type, value, assetOptions, onSelect, manageLocalAsse
               classes: {
                 root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
                 inputAdornedEnd: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
+                input: classes.searchInputInput,
               },
               endAdornment: <InputAdornment position="end">
                 {/*Search icon*/}
@@ -940,13 +942,14 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
             onChange={onSearchChanged}
             InputProps={{
               style: {
-                background: 'transparent',
+                background: '#171D2D',
                 border: '1px solid',
-                borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
+                borderColor: '#779BF4',
                 borderRadius: 0,
               },
               classes: {
                 root: classes.searchInput,
+                input: classes.searchInputInput
               },
               endAdornment: <InputAdornment position="end">
                   {/*Search icon*/}
@@ -962,12 +965,12 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
             }}
             inputProps={{
               style: {
-                padding: '10px',
+                padding: '24px',
                 borderRadius: 0,
                 border: 'none',
-                fontSize: '14px',
+                fontSize: '16px',
                 lineHeight: '120%',
-                color: '#86B9D6',
+                color: '#E4E9F4',
               },
             }}
           />
@@ -1010,6 +1013,7 @@ function AssetSelectPair({type, value, assetOptions, onSelect, manageLocalAssets
               classes: {
                 root: [classes.searchInput, classes[`searchInput--${appTheme}`]].join(' '),
                 inputAdornedEnd: [classes.searchInputText, classes[`searchInputText--${appTheme}`]].join(' '),
+                input: classes.searchInputInput,
               },
               endAdornment: <InputAdornment position="end">
                   {/*Search icon*/}

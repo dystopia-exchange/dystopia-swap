@@ -58,6 +58,10 @@
   background: #171D2D;
 }
 
+.searchInput:hover {
+  background-color: #1F2B49;
+}
+
 @media (max-width: 1199px) {
   .searchInput {
     order: -1;
@@ -70,6 +74,10 @@
     height: 48px !important;
     padding: 16px !important;
   }
+}
+
+.searchInputInput::placeholder {
+  color: #8191B9 !important;
 }
 
 .searchInputIcon {
