@@ -976,13 +976,8 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    ["@media (min-width:1483px)"]: {
-      // fontWeight: 600,
+    ["@media (min-width:806px)"]: {
       fontSize: 18,
-    },
-    ["@media (min-width:1920px)"]: {
-      // fontWeight: 600,
-      // fontSize: 18,
     },
   },
   table: {
