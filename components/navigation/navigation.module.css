@@ -11,12 +11,14 @@
   background: transparent;
 }
 
-.navigationContainerSmart {
-  width: 100vw;
-  position: absolute;
-  margin-left: calc(50vw - 408px);
-  top: 22px;
-  left: 0;
+@media (min-width: 1501px) {
+  .navigationContainerSmart {
+    width: 100vw;
+    position: absolute;
+    margin-left: calc(50vw - 408px);
+    top: 22px;
+    left: 0;
+  }
 }
 
 @media (max-width: 1500px) {
