@@ -5,7 +5,6 @@
   font-size: 60px;
   line-height: 72px;
   width: 100%;
-  /*padding-left: 370px;*/
 }
 
 .disclaimerContainerWrapper {
@@ -17,24 +16,17 @@
 
 .tableWrapper {
   display: flex;
-  /*padding-left: 370px;*/
   width: 100%;
   flex-direction: column;
 }
 
 .tableWrapper > div {
   width: 100%;
-  /*background: #060B17;*/
-  /*border: 1px solid #D3F85A;*/
-  /*border-radius: 12px;*/
   overflow: hidden;
 }
 
 .nftSelect {
   margin-top: 20px;
-  /*position: absolute;*/
-  /*top: 0;*/
-  /*left: 0;*/
   width: 100%;
 }
 
@@ -70,7 +62,6 @@
 }
 
 .toolbarContainer {
-  /*margin-bottom: 10px;*/
   flex-direction: column;
   position: relative;
 }
@@ -160,26 +151,11 @@
   font-size: 16px !important;
   line-height: 24px !important;
   letter-spacing: 0.1em !important;
-  /* or 150% */
-
-  /* white */
-
   color: #E4E9F4 !important;
-
-  /* brand-add15 */
-
   background: rgba(119, 155, 244, 0.15) !important;
-  /* brand-add */
-
   border: 1px solid #779BF4 !important;
   border-radius: 12px !important;
 }
-
-/*.disclaimer--dark {
-  background: #2D3741 !important;
-  border: 2px solid #4CADE6 !important;
-  color: #C6CDD2 !important;
-}*/
 
 .addButton {
   margin: 24px 0;
@@ -187,24 +163,7 @@
   height: 72px;
   cursor: pointer;
   position: relative;
-  /*top: 100px;*/
 }
-
-/*.addButton--light:hover > p {
-  background: #C6BAF0;
-}
-
-.addButton--light:active > p {
-  background: #B9A4EE;
-}
-
-.addButton--dark:hover > p {
-  background: #402E61;
-}
-
-.addButton--dark:active > p {
-  background: #523880;
-}*/
 
 .addButtonIcon {
   width: 50px;
@@ -229,11 +188,9 @@
     flex-direction: row;
   }
   .tableWrapper > div {
-    /*width: 100%;*/
     background: #060B17;
     border: 1px solid #D3F85A;
     border-radius: 12px;
-    /*overflow: hidden;*/
   }
   .toolbarContainer {
     height: 100px;
@@ -281,10 +238,6 @@
   }
 }
 
-.actionButtonText--dark {
-  /*background: #33284C;*/
-}
-
 .divider {
   position: absolute;
   width: 100px;
@@ -303,10 +256,6 @@
     left: 90px;
     width: calc(100% - 180px);
   }
-
-/*  .toolbarContainer {
-    margin-top: 68px;
-  }*/
 }
 
 @media (max-width:660px) {
@@ -344,20 +293,6 @@
     background-image: url("/images/ui/swap-coin-top-360--dark.svg");
   }
 
-  .textField--amount0-light,
-  .textField--withdraw-light {
-    width: 280px;
-    height: 114px;
-    background-image: url("/images/ui/swap-coin-top-360--light.svg");
-  }
-
-  .textField--amount1-light {
-    margin-top: -30px;
-    width: 280px;
-    height: 114px;
-    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
-  }
-
   .textField--amount1-dark {
     margin-top: -30px;
     width: 280px;
@@ -365,17 +300,12 @@
     background-image: url("/images/ui/swap-coin-bottom-360--dark.svg");
   }
 
-  .textField--To-light,
   .textField--To-dark {
     margin-top: -50px;
   }
 
   .swapIconContainer--dark {
     background-image: url("/images/ui/swap-coin-btn-360--dark.svg");
-  }
-
-  .swapIconContainer--light {
-    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
   }
 
   .inputBalanceText,
@@ -427,10 +357,6 @@
   .displayDualIconContainer {
     width: 60px;
     height: 60px;
-  }
-
-  .displayDualIconContainer--light {
-    background-image: url("/images/ui/swap-currency-circle-360--light.svg");
   }
 
   .displayDualIconContainer--dark {
@@ -496,10 +422,6 @@
     width: 35%;
   }
 
-  .routeArrow--light {
-    background: var(--background-light) url("/images/ui/swap-route-arrow--light.svg");
-  }
-
   .routeArrow--dark {
     background: var(--background-dark) url("/images/ui/swap-route-arrow--dark.svg");
   }
@@ -519,18 +441,6 @@
     margin-left: 0 !important;
     width: 320px !important;
     height: 50px;
-  }
-
-  .buttonOverride--light {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
-  }
-
-  .buttonOverride--light:hover {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
-  }
-
-  .buttonOverride--light:active {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
   }
 
   .buttonOverride--dark {
@@ -600,11 +510,6 @@
     flex-direction: row;
   }
 
-  .vestInfoTextTop--light {
-    border-right: none;
-    border-bottom: 1px solid #86B9D6;
-  }
-
   .vestInfoTextTop--dark {
     border-right: none;
     border-bottom: 1px solid #5F7285;
@@ -669,12 +574,7 @@
     width: 280px !important;
   }
 
-  .addButton {
-    /* width: auto; */
-  }
-
   .actionButtonText {
-    /* width: 85px; */
     padding: 8px 15px;
   }
 }

@@ -218,10 +218,6 @@ input[type=number].mediumInputAmount {
   margin-bottom: 20px;
 }
 
-/*.warningContainer--light {
-  background: #CFE5F2;
-}*/
-
 .container {
   align-self: center;
   width: 788px;
@@ -1357,15 +1353,11 @@ input[type=number].mediumInputAmount {
 
 .tokenSelectInput--dark {
   padding: 6px 12px 6px 6px !important;
-  /*border: 1px solid #5F7285 !important;*/
-  /*border-right: none !important;*/
-  /*border-radius: 0 !important;*/
   color: #D3F85A !important;
 }
 
 .tokenSelectInput > .menuOption > .menuOptionSec,
 .tokenSelectInput--dark > .menuOption > .menuOptionSec {
-  /*display: none !important;*/
   font-weight: 400 !important;
   font-size: 16px !important;
   line-height: 24px !important;
@@ -1647,7 +1639,6 @@ input[type=number].mediumInputAmount {
   box-shadow: none !important;
   animation: none !important;
   transition: all 0.32s ease !important;
-
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 600 !important;
@@ -1742,7 +1733,6 @@ input[type=number].mediumInputAmount {
 .liqBodyLabel {
   color: #8191B9;
   width: 100%;
-  /*border-right: none;*/
 }
 
 .liqBodyLabelOutline {
@@ -1996,8 +1986,6 @@ input[type=number].mediumInputAmount {
 
   .massiveInputAssetSelectSingle {
     min-width: 140px;
-
-    /*margin-bottom: 4px;*/
   }
 
   .massiveInputAssetSelectSingle > div > div > div {
