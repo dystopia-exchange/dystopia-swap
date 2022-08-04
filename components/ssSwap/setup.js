@@ -570,39 +570,33 @@ function Setup() {
                   >
                     {fromAmountValue <= Number(fromAssetValue.balance) && (
                         <div
-                            className={[
-                              classes.priceImpactWrapper,
-                              classes[`warningContainer--${appTheme}`],
-                              BigNumber(quote.priceImpact).gt(5)
-                                  ? classes.priceImpactWrapperError
-                                  : classes.priceImpactWrapperWarning,
-                            ].join(" ")}
+                          className={[
+                            classes.priceImpactWrapper,
+                            classes[`warningContainer--${appTheme}`],
+                            BigNumber(quote.priceImpact).gt(5)
+                              ? classes.priceImpactWrapperError
+                              : classes.priceImpactWrapperWarning,
+                          ].join(" ")}
                         >
-                          {/* <div
-                      className={[
-                        classes.warningDivider,
-                        BigNumber(quote.priceImpact).gt(5)
-                          ? classes.warningDividerError
-                          : classes.warningDividerWarning,
-                      ].join(" ")}
-                    ></div> */}
                           <Typography
-                              className={[
-                                BigNumber(quote.priceImpact).gt(5)
-                                    ? classes.warningError
-                                    : classes.warningWarning,
-                                classes[`warningText--${appTheme}`],
-                              ].join(" ")}
-                              align="center"
-                          >
-                      <span className={classes.priceImpactTitle}>
-                        Price impact
-                      </span>{" "}
-                            <span className={[classes.priceImpactValue,
+                            className={[
+                              classes.priceImpactRow,
                               BigNumber(quote.priceImpact).gt(5)
+                                ? classes.warningError
+                                : classes.warningWarning,
+                              classes[`warningText--${appTheme}`],
+                            ].join(" ")}
+                            align="center"
+                          >
+                            <span className={classes.priceImpactTitle}>
+                              Price impact
+                            </span>{" "}
+                            <span
+                              className={[classes.priceImpactValue,
+                                BigNumber(quote.priceImpact).gt(5)
                                   ? classes.priceImpactValueError
                                   : classes.priceImpactValueWarning,
-                            ].join(" ")}>
+                                ].join(" ")}>
                         {formatCurrency(quote.priceImpact)}%
                       </span>
                           </Typography>
@@ -629,16 +623,11 @@ function Setup() {
                   className={[
                     classes.warningContainer,
                     classes[`warningContainer--${appTheme}`],
-                    // BigNumber(quote.priceImpact).gt(5)
-                    //   ? classes.warningContainerError
-                    //   : classes.warningContainerWarning,
                   ].join(" ")}
               >
                 <Typography
                     className={[
-                      // BigNumber(quote.priceImpact).gt(5)
-                      //   ? classes.warningError
-                      //   : classes.warningWarning,
+                      classes.priceImpactRow,
                       classes[`warningText--${appTheme}`],
                     ].join(" ")}
                     align="center"
@@ -647,12 +636,8 @@ function Setup() {
                     Price impact
                   </span>{" "}
                   <span className={[classes.priceImpactValue,
-                    // BigNumber(quote.priceImpact).gt(5)
-                    // ? classes.priceImpactValueError
-                    // : classes.priceImpactValueWarning,
                   ].join(" ")}>
                     0.00%
-                    {/* {formatCurrency(quote.priceImpact)}% */}
                   </span>
                 </Typography>
               </div>
