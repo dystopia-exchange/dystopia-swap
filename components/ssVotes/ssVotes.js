@@ -46,7 +46,6 @@ export default function ssVotes() {
     setGauges(filteredAssets);
 
     const tvldata = await stores.stableSwapStore.getStore("tvls");
-    console.log(tvldata, "tvl2");
 
     const nfts = stores.stableSwapStore.getStore("vestNFTs");
     setVestNFTs(nfts);

@@ -21,6 +21,14 @@ export const WFTM_DECIMALS = 18
 export const WFTM_LOGO = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png'
 export const WFTM_ABI = abis.wftmABI
 
+// alternative route asset
+export const USDP_ADDRESS = '0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f'
+export const USDP_NAME = 'USD Plus'
+export const USDP_SYMBOL = 'USD+'
+export const USDP_DECIMALS = 6
+export const USDP_LOGO = 'https://2173993027-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F9HhCCgYexXiRot0OWAJY%2Fuploads%2FQ41zhb0z0oV5WI1zpKEg%2FUSD%2B%20logo.png?alt=media&token=533d9ed9-6904-4f45-82a3-2c9e1060a3b5'
+export const USDP_ABI = abis.erc20ABI
+
 export const FTM_ADDRESS = 'MATIC'
 export const FTM_NAME = 'MATIC'
 export const FTM_SYMBOL = 'MATIC' 
@@ -51,3 +59,8 @@ export const BRIBE_ABI = abis.bribeABI
 export const TOKEN_ABI = abis.tokenABI
 
 export const MULTICALL_ADDRESS = '0x11ce4B23bD875D7F5C6a31084f55fDe1e9A87507'
+
+export const USD_PLUS_ADDRESS = '0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f'
+export const USD_PLUS_BOOSTED_DATA_URL = 'https://app.overnight.fi/api/balancer/week/apr'
+
+export const SPHERE_ADDRESS = '0x62f594339830b90ae4c084ae7d223ffafd9658a7'

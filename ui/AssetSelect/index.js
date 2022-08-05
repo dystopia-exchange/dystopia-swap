@@ -138,7 +138,7 @@ const AssetSelect = (
           <IconButton onClick={() => {
             deleteOption(asset);
           }}>
-            <DeleteOutline/>
+            <DeleteOutline />
           </IconButton>
           <IconButton onClick={() => {
             viewOption(asset);
@@ -194,7 +194,7 @@ const AssetSelect = (
                 alt=""
                 src={asset ? `${asset?.token1?.logoURI}` : ''}
                 height="30px"
-                style={{marginLeft: "-15px"}}
+                style={{ marginLeft: "-15px" }}
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
@@ -270,7 +270,7 @@ const AssetSelect = (
               startAdornment: <InputAdornment position="start">
                 <Search style={{
                   color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                }}/>
+                }} />
               </InputAdornment>,
             }}
           />
@@ -278,7 +278,7 @@ const AssetSelect = (
 
         {filteredAssetOptions?.filter(option => option.local === true).length > 0 &&
           <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
-            <Borders/>
+            <Borders />
             {
               filteredAssetOptions
                 .filter(option => option.local === true)
@@ -302,7 +302,7 @@ const AssetSelect = (
     return (
       <>
         <div className={classes.searchInline}>
-          <Borders/>
+          <Borders />
 
           <TextField
             variant="outlined"
@@ -318,7 +318,7 @@ const AssetSelect = (
               startAdornment: <InputAdornment position="start">
                 <Search style={{
                   color: appTheme === "dark" ? '#4CADE6' : '#0B5E8E',
-                }}/>
+                }} />
               </InputAdornment>,
             }}
           />
@@ -331,7 +331,7 @@ const AssetSelect = (
             marginBottom: !isManageLocal ? 34 : 53,
             marginTop: 30,
           }}>
-          <Borders/>
+          <Borders />
 
           {filteredAssetOptions?.length > 0 &&
             <div className={[classes.assetSearchResults, classes[`assetSearchResults--${appTheme}`]].join(' ')}>
@@ -363,7 +363,7 @@ const AssetSelect = (
     );
   };
 
-  const {appTheme} = useAppThemeContext();
+  const { appTheme } = useAppThemeContext();
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -389,7 +389,7 @@ const AssetSelect = (
             {typeIcon === 'single' &&
               <>
                 {interactiveBorder &&
-                  <SwapIconBg/>
+                  <SwapIconBg />
                 }
 
                 <img
@@ -441,7 +441,7 @@ const AssetSelect = (
         }}
         aria-labelledby="simple-dialog-title"
         open={open}
-        style={{borderRadius: 0}}
+        style={{ borderRadius: 0 }}
         onClick={(e) => {
           if (e.target.classList.contains('MuiDialog-container')) {
             onClose();
@@ -482,7 +482,7 @@ const AssetSelect = (
                   width: 18,
                   height: 18,
                   cursor: 'pointer',
-                }}/>}
+                }} />}
                 {isManageLocal && manageLocal ? 'Manage local assets' : title}
               </div>
 
@@ -491,12 +491,12 @@ const AssetSelect = (
                   cursor: 'pointer',
                   color: appTheme === "dark" ? '#ffffff' : '#0A2C40',
                 }}
-                onClick={onClose}/>
+                onClick={onClose} />
             </div>
           </DialogTitle>
 
           <DialogContent
-            style={{overflow: 'hidden'}}
+            style={{ overflow: 'hidden' }}
             className={[classes.dialogContent, 'g-flex-column__item', 'g-flex-column'].join(' ')}>
             {!manageLocal && renderOptions()}
             {isManageLocal && manageLocal && renderManageLocal()}

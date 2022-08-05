@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { ACTIONS } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import BtnEnterApp from '../../ui/BtnEnterApp';
+import { WalletConnect } from '../../components/WalletConnect'
 
 export default function Migrate() {
   const accountStore = stores.accountStore.getStore('account');
@@ -26,11 +27,17 @@ export default function Migrate() {
       onAddressClicked();
     };
 
+    const disconnectWallet = () => {
+      setAccount(null)
+    }
+
     stores.emitter.on(ACTIONS.ACCOUNT_CONFIGURED, accountConfigure);
     stores.emitter.on(ACTIONS.CONNECT_WALLET, connectWallet);
+    stores.emitter.on(ACTIONS.DISCONNECT_WALLET, disconnectWallet);
     return () => {
       stores.emitter.removeListener(ACTIONS.ACCOUNT_CONFIGURED, accountConfigure);
       stores.emitter.removeListener(ACTIONS.CONNECT_WALLET, connectWallet);
+      stores.emitter.removeListener(ACTIONS.DISCONNECT_WALLET, disconnectWallet);
     };
   }, []);
 
@@ -89,19 +96,24 @@ export default function Migrate() {
                 Migrate your LP tokens.
               </Typography>
             </div>
-
-            <div
-              className={[classes.buttonConnect, classes[`buttonConnect--${appTheme}`]].join(' ')}
-              onMouseOver={btnHoverColor}
-              onMouseOut={btnDefaultColor}
-              onMouseDown={btnClickColor}
-              onClick={onAddressClicked}>
-              <BtnEnterApp
-                labelClassName={classes.buttonEnterLabel}
-                label={`Connect wallet\nto continue`}
-                btnColor={getBtnColor}
-              />
-            </div>
+            <WalletConnect>
+              {({ connect }) => {
+                return (
+                  <div
+                    className={[classes.buttonConnect, classes[`buttonConnect--${appTheme}`]].join(' ')}
+                    onMouseOver={btnHoverColor}
+                    onMouseOut={btnDefaultColor}
+                    onMouseDown={btnClickColor}
+                    onClick={connect}>
+                      <BtnEnterApp
+                        labelClassName={classes.buttonEnterLabel}
+                        label={`Connect wallet\nto continue`}
+                        btnColor={getBtnColor}
+                      />
+                  </div>
+                )
+              }}
+            </WalletConnect>
           </div>
         </Paper>
       }

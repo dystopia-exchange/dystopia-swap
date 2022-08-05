@@ -196,8 +196,7 @@ function EnhancedTableHead(props) {
                   sortDirection={orderBy === headCell.id ? order : false}
                   style={{
                     background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
-                    borderBottom: '1px solid #9BC9E4',
-                    borderColor: appTheme === 'dark' ? '#5F7285' : '#9BC9E4',
+                    borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                     zIndex: 10,
                   }}>
                   <TableSortLabel
@@ -226,8 +225,7 @@ function EnhancedTableHead(props) {
                 : <StyledTableCell
                   style={{
                     background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
-                    borderBottom: '1px solid #9BC9E4',
-                    borderColor: appTheme === 'dark' ? '#5F7285' : '#9BC9E4',
+                    borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                     color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
                   }}
                   key={headCell.id}
@@ -498,6 +496,17 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: 45,
   },
+  ["@media (max-width: 660px)"]: {
+    toolbar:{
+      display: 'flex',
+      paddingLeft:"10px",
+      paddingRight:"10px",
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }
+  },
+  
   cellPaddings: {
     padding: '11px 20px',
     ["@media (max-width:530px)"]: {
@@ -536,7 +545,9 @@ const EnhancedTableToolbar = (props) => {
   const onSearchChanged = (event) => {
     setSearch(event.target.value);
   };
-
+  const onMerge = () => {
+    router.push('/vest/merge');
+  };
   const onCreate = () => {
     router.push('/vest/create');
   };
@@ -572,12 +583,35 @@ const EnhancedTableToolbar = (props) => {
           Create Lock
         </Typography>
       </div>
+      <div
+        className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
+        onClick={onMerge}
+        style={{ marginLeft: 20 }}
+      >
 
+        <Typography
+          className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
+        >
+          {windowWidth <= 660 ? 'Merge' : 'Merge NFTs'}
+        </Typography>
+      </div>
       {windowWidth <= 660 && (
         <div className={[classes.sortSelect, css.sortSelect].join(' ')}>
           {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
         </div>
       )}
+
+      <div
+        className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
+        style={{ marginLeft: 20 }}
+      >
+        <Typography
+          className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
+        >
+          NFT APR: {parseInt(props.veToken?.veDistApr)}%
+        </Typography>
+      </div>
+
     </Toolbar>
   );
 };
@@ -653,6 +687,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
     <>
       <EnhancedTableToolbar
         handleRequestSort={handleRequestSort}
+        veToken={veToken}
         setSortDirection={setSortDirection}/>
 
       {windowWidth > 660 &&
@@ -693,8 +728,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                         <StickyTableCell
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                           }}
                           className={classes.cell}>
                           <div className={classes.inline}>
@@ -742,8 +776,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                           align="right"
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             overflow: 'hidden',
                           }}>
                           <Typography
@@ -774,8 +807,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                           align="right"
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             overflow: 'hidden',
                           }}>
                           <Typography
@@ -806,8 +838,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                           align="right"
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             overflow: 'hidden',
                           }}>
                           <Typography
@@ -838,8 +869,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                           align="right"
                           style={{
                             background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            border: '1px dashed #CFE5F2',
-                            borderColor: appTheme === 'dark' ? '#2D3741' : '#CFE5F2',
+                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                             overflow: 'hidden',
                           }}>
                           <Button
@@ -973,7 +1003,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                       <div
                         style={{
                           borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
-                          borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                          borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                         }}
                         className={['g-flex', 'g-flex--align-center'].join(' ')}>
                         <div
@@ -988,7 +1018,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                               fontWeight: 500,
                               fontSize: 12,
                               lineHeight: '120%',
-                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
                               color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
                             }}
                             noWrap>
