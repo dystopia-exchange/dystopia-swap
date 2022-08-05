@@ -1003,7 +1003,7 @@ p.inputTitleText {
   }
 
   .priceImpactWrapper {
-    padding: 17px 15px 12px !important;
+    padding: 12px 15px 12px !important;
   }
 
   .priceImpactWrapper > p {
@@ -1033,6 +1033,15 @@ p.inputTitleText {
   color: #1B4F20 !important;
 }
 
+@media (max-width: 630px) {
+  .priceImpactRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+}
+
 .priceImpactTitle {
   display: block;
 
@@ -1042,6 +1051,12 @@ p.inputTitleText {
   font-weight: 500;
 
   color: #E4E9F4;
+}
+
+@media (max-width: 630px) {
+  .priceImpactTitle {
+    margin-bottom: 0;
+  }
 }
 
 .priceImpactValue {
