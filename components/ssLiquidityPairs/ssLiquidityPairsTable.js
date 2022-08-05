@@ -264,14 +264,14 @@ const StickyTableCell = styled(TableCell)(({theme, appTheme}) => ({
   position: "sticky",
   // zIndex: 5,
   whiteSpace: 'nowrap',
-  padding: '20px 25px 15px',
+  padding: '15px 24px 16px',
 }));
 
 const StyledTableCell = styled(TableCell)(({theme, appTheme}) => ({
   background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
   width: 'auto',
   whiteSpace: 'nowrap',
-  padding: '20px 25px 15px',
+  padding: '15px 24px 16px',
 }));
 
 const sortIcon = (sortDirection) => {
@@ -438,7 +438,7 @@ const useStyles = makeStyles({
   tableWrapper: {
     overflowY: 'initial',
     ["@media (min-width:1920px)"]: {
-      paddingLeft: 433,
+      paddingLeft: 400,
     },
   },
   tableContWrapper: {
@@ -456,7 +456,7 @@ const useStyles = makeStyles({
       marginTop: 30,
     },
     ["@media (min-width:1920px)"]: {
-      marginTop: 20,
+      marginTop: 30,
     },
   },
   mobmsg: {
@@ -490,6 +490,7 @@ const useStyles = makeStyles({
     fontWeight: 500,
     color: '#E4E9F4',
     lineHeight: '72px',
+    letterSpacing: '0.04em',
 
     ["@media (min-width:806px)"]: {
       fontSize: 60,
@@ -514,9 +515,9 @@ const useStyles = makeStyles({
     },
     ["@media (min-width:1920px)"]: {
       flexDirection: 'column',
-      width: '377px',
+      width: '370px',
       position: 'absolute',
-      left: -414,
+      left: -400,
     },
   },
   root: {
@@ -879,7 +880,7 @@ const useStyles = makeStyles({
     // },
   },
   addButton: {
-    marginTop: 20,
+    marginTop: 30,
     display: 'flex',
     alignItems: 'center',
     borderRadius: 12,
@@ -891,6 +892,7 @@ const useStyles = makeStyles({
     ["@media (min-width:806px)"]: {
       width: 248,
       height: 72,
+      marginTop: 20,
     },
     ["@media (min-width:1333px)"]: {
       // width: 248,
@@ -903,6 +905,7 @@ const useStyles = makeStyles({
     ["@media (min-width:1920px)"]: {
       width: '100%',
       height: 96,
+      marginTop: 30,
     },
   },
   actionButtonText: {
@@ -1636,8 +1639,8 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   <img
                                     className={classes.imgLogo}
                                     src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
-                                    width="37"
-                                    height="37"
+                                    width="36"
+                                    height="36"
                                     alt=""
                                     onError={(e) => {
                                       e.target.onerror = null;
@@ -1651,8 +1654,8 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   <img
                                     className={classes.imgLogo}
                                     src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
-                                    width="37"
-                                    height="37"
+                                    width="36"
+                                    height="36"
                                     alt=""
                                     onError={(e) => {
                                       e.target.onerror = null;
@@ -1665,10 +1668,11 @@ export default function EnhancedTable({pairs, isLoading}) {
                                 <Typography
                                   className={classes.textSpaced}
                                   style={{
+                                    marginBottom: 4,
                                     fontWeight: 500,
                                     fontSize: 14,
                                     lineHeight: '120%',
-                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    color: '#E4E9F4',
                                   }}
                                   noWrap>
                                   {formatSymbol(row?.symbol)}
@@ -1679,7 +1683,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                     fontWeight: 400,
                                     fontSize: 14,
                                     lineHeight: '120%',
-                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                    color: '#8191B9',
                                   }}
                                   noWrap>
                                   {row?.isStable ? 'Stable Pool' : 'Volatile Pool'}
@@ -1692,7 +1696,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                             className={[classes.cell, classes.hiddenMobile].join(' ')}
                             style={{
                               background: '#171D2D',
-                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                              borderBottom: '1px solid #323B54',
                               overflow: 'hidden',
                             }}
                             align="right">
@@ -1713,10 +1717,11 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   <Typography
                                     className={classes.textSpaced}
                                     style={{
+                                      marginBottom: 8,
                                       fontWeight: 500,
                                       fontSize: 14,
                                       lineHeight: '120%',
-                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      color: '#E4E9F4',
                                     }}>
                                       {formatCurrency(BigNumber(row.tvl))} <span style={{color: 'rgb(124, 131, 138)'}}>$</span>
                                   </Typography>
@@ -1727,7 +1732,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                       fontWeight: 500,
                                       fontSize: 14,
                                       lineHeight: '120%',
-                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      color: '#8191B9',
                                     }}>
                                     {BigNumber(row?.gauge?.apr).gt(0) ? (
                                         <div>
@@ -1820,7 +1825,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                             className={[classes.cell, classes.hiddenMobile].join(' ')}
                             style={{
                               background: '#171D2D',
-                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                              borderBottom: '1px solid #323B54',
                             }}
                             align="right">
                             {(row && row.balance && row.totalSupply) &&
@@ -1840,10 +1845,11 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   <Typography
                                     className={classes.textSpaced}
                                     style={{
+                                      marginBottom: 8,
                                       fontWeight: 500,
                                       fontSize: 14,
                                       lineHeight: '120%',
-                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      color: '#E4E9F4',
                                     }}>
                                     {formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve0))}
                                   </Typography>
@@ -1854,7 +1860,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                       fontWeight: 500,
                                       fontSize: 14,
                                       lineHeight: '120%',
-                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      color: '#E4E9F4',
                                     }}>
                                     {formatCurrency(BigNumber(row.balance).div(row.totalSupply).times(row.reserve1))}
                                   </Typography>
@@ -1871,6 +1877,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   <Typography
                                     className={`${classes.textSpaced} ${classes.symbol}`}
                                     style={{
+                                      marginBottom: 8,
                                       fontWeight: 400,
                                       fontSize: 14,
                                       lineHeight: '120%',
@@ -1916,7 +1923,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                               className={[classes.cell, classes.hiddenMobile].join(' ')}
                               style={{
                                 background: '#171D2D',
-                                borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                                borderBottom: '1px solid #323B54',
                               }}
                               align="right">
 
@@ -1935,10 +1942,11 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   <Typography
                                     className={classes.textSpaced}
                                     style={{
+                                      marginBottom: 8,
                                       fontWeight: 500,
                                       fontSize: 14,
                                       lineHeight: '120%',
-                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      color: '#E4E9F4',
                                     }}>
                                     {(row && row.gauge && row.gauge.balance && row.gauge.totalSupply) ? formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve0)) : "0.00"}
                                   </Typography>
@@ -1949,7 +1957,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                       fontWeight: 500,
                                       fontSize: 14,
                                       lineHeight: '120%',
-                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      color: '#E4E9F4',
                                     }}>
                                     {(row && row.gauge && row.gauge.balance && row.gauge.totalSupply) ? formatCurrency(BigNumber(row.gauge.balance).div(row.gauge.totalSupply).times(row.gauge.reserve1)) : "0.00"}
                                   </Typography>
@@ -1966,6 +1974,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   <Typography
                                     className={`${classes.textSpaced} ${classes.symbol}`}
                                     style={{
+                                      marginBottom: 8,
                                       fontWeight: 400,
                                       fontSize: 14,
                                       lineHeight: '120%',
@@ -2015,7 +2024,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                               className={[classes.cell, classes.hiddenMobile].join(' ')}
                               style={{
                                 background: '#171D2D',
-                                borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                                borderBottom: '1px solid #323B54',
                               }}
                               align="right">
                               <Typography
@@ -2024,7 +2033,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   fontWeight: 500,
                                   fontSize: 14,
                                   lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                  color: '#E4E9F4',
                                   whiteSpace: 'nowrap',
                                 }}>
                                 No gauge
@@ -2036,7 +2045,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                             className={[classes.cell, classes.hiddenSmallMobile].join(' ')}
                             style={{
                               background: '#171D2D',
-                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                              borderBottom: '1px solid #323B54',
                             }}
                             align="right">
                             <div
@@ -2055,10 +2064,11 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   <Typography
                                     className={classes.textSpaced}
                                     style={{
+                                      marginBottom: 8,
                                       fontWeight: 500,
                                       fontSize: 14,
                                       lineHeight: '120%',
-                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      color: '#E4E9F4',
                                       whiteSpace: 'nowrap',
                                     }}>
                                     {formatCurrency(row.reserve0)}
@@ -2070,7 +2080,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                       fontWeight: 500,
                                       fontSize: 14,
                                       lineHeight: '120%',
-                                      color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                      color: '#E4E9F4',
                                       whiteSpace: 'nowrap',
                                     }}>
                                     {formatCurrency(row.reserve1)}
@@ -2105,6 +2115,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   <Typography
                                     className={`${classes.textSpaced} ${classes.symbol}`}
                                     style={{
+                                      marginBottom: 8,
                                       fontWeight: 400,
                                       fontSize: 14,
                                       lineHeight: '120%',
@@ -2150,7 +2161,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                               className={[classes.cell, classes.hiddenMobile].join(' ')}
                               style={{
                                 background: '#171D2D',
-                                borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                                borderBottom: '1px solid #323B54',
                               }}
                               align="right">
                               <div
@@ -2158,7 +2169,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   display: 'flex',
                                   justifyContent: 'flex-end',
                                 }}>
-                                {(row && row.gauge && row.gauge.reserve0 && row.token0) &&
+                                {(row && row.gauge && row.gauge.reserve0 && row.token0) ? (
                                   <div
                                     className={classes.inlineEnd}
                                     style={{
@@ -2169,10 +2180,11 @@ export default function EnhancedTable({pairs, isLoading}) {
                                     <Typography
                                       className={classes.textSpaced}
                                       style={{
+                                        marginBottom: 8,
                                         fontWeight: 500,
                                         fontSize: 14,
                                         lineHeight: '120%',
-                                        color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                        color: '#E4E9F4',
                                         whiteSpace: 'nowrap',
                                       }}>
                                       {formatCurrency(row.gauge.reserve0)}
@@ -2184,12 +2196,13 @@ export default function EnhancedTable({pairs, isLoading}) {
                                         fontWeight: 500,
                                         fontSize: 14,
                                         lineHeight: '120%',
-                                        color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                        color: '#E4E9F4',
                                         whiteSpace: 'nowrap',
                                       }}>
                                       {formatCurrency(row.gauge.reserve1)}
                                     </Typography>
                                   </div>
+                                  ) : null
                                 }
                                 {!(row && row.gauge && row.gauge.reserve0 && row.token0) &&
                                   <div
@@ -2207,7 +2220,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                       style={{marginTop: '1px', marginBottom: '1px'}}/>
                                   </div>
                                 }
-                                {(row && row.gauge && row.gauge.reserve1 && row.token1) &&
+                                {(row && row.gauge && row.gauge.reserve1 && row.token1) ? (
                                   <div
                                     className={classes.inlineEnd}
                                     style={{
@@ -2219,6 +2232,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                     <Typography
                                       className={`${classes.textSpaced} ${classes.symbol}`}
                                       style={{
+                                        marginBottom: 8,
                                         fontWeight: 400,
                                         fontSize: 14,
                                         lineHeight: '120%',
@@ -2238,6 +2252,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                                       {formatSymbol(row.token1.symbol)}
                                     </Typography>
                                   </div>
+                                  ) : null
                                 }
                                 {!(row && row.gauge && row.gauge.reserve1 && row.token1) &&
                                   <div
@@ -2265,7 +2280,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                               className={[classes.cell, classes.hiddenMobile].join(' ')}
                               style={{
                                 background: '#171D2D',
-                                borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                                borderBottom: '1px solid #323B54',
                               }}
                               align="right">
                               <Typography
@@ -2378,7 +2393,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                     margin: 0,
                     marginBottom: 20,
                     background: '#171D2D',
-                    border: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                    border: `1px solid #060B17`,
                     borderRadius: 12,
                   }}
                   disableGutters={true}
@@ -2397,7 +2412,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                     <div className={['g-flex-column', 'g-flex-column__item'].join(' ')}>
                       <div
                         style={{
-                          padding: '15px 20px',
+                          padding: '16px 20px',
                         }}
                         className={['g-flex', 'g-flex--align-center'].join(' ')}>
                         <div className={classes.doubleImages}>
@@ -2406,8 +2421,8 @@ export default function EnhancedTable({pairs, isLoading}) {
                             <img
                               className={classes.imgLogo}
                               src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
-                              width="37"
-                              height="37"
+                              width="36"
+                              height="36"
                               alt=""
                               onError={(e) => {
                                 e.target.onerror = null;
@@ -2421,8 +2436,8 @@ export default function EnhancedTable({pairs, isLoading}) {
                             <img
                               className={classes.imgLogo}
                               src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
-                              width="37"
-                              height="37"
+                              width="36"
+                              height="36"
                               alt=""
                               onError={(e) => {
                                 e.target.onerror = null;
@@ -2436,10 +2451,11 @@ export default function EnhancedTable({pairs, isLoading}) {
                           <Typography
                             className={classes.textSpaced}
                             style={{
+                              marginBottom: 4,
                               fontWeight: 500,
                               fontSize: 16,
                               lineHeight: '120%',
-                              color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                              color: '#E4E9F4',
                             }}
                             noWrap>
                             {formatSymbol(row?.symbol)}
@@ -2450,7 +2466,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                               fontWeight: 400,
                               fontSize: 14,
                               lineHeight: '120%',
-                              color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                              color: '#8191B9',
                             }}
                             noWrap>
                             {row?.isStable ? 'Stable Pool' : 'Volatile Pool'}
@@ -2460,30 +2476,38 @@ export default function EnhancedTable({pairs, isLoading}) {
 
                       <div
                         style={{
-                          borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
-                          borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                          borderTop: `1px solid #060B17`,
+                          borderBottom: `1px solid #060B17`,
                         }}
                         className={['g-flex', 'g-flex--align-center'].join(' ')}>
                         <div
                           style={{
                             width: '50%',
-                            borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                            borderRight: `1px solid #060B17`,
                           }}>
                           <Typography
                             className={classes.cellHeadPaddings}
                             style={{
-                              background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
+                              paddingTop: 8,
+                              paddingBottom: 8,
+                              background: '#060B17',
                               fontWeight: 500,
-                              fontSize: 12,
-                              lineHeight: '120%',
-                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
-                              color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
+                              fontSize: 14,
+                              lineHeight: '16px',
+                              borderBottom: '1px solid #060B17',
+                              color: '#8191B9',
                             }}
                             noWrap>
                             Action
                           </Typography>
 
-                          <div className={classes.cellPaddings}>
+                          <div
+                            className={classes.cellPaddings}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              height: 72,
+                            }}>
                             <Button
                               variant="outlined"
                               color="primary"
@@ -2507,18 +2531,17 @@ export default function EnhancedTable({pairs, isLoading}) {
                           </div>
                         </div>
 
-                        <div
-                          style={{
-                            width: '50%',
-                          }}>
+                        <div style={{ width: '50%' }}>
                           <Typography
                             className={classes.cellHeadPaddings}
                             style={{
-                              background: appTheme === 'dark' ? '#151718' : '#CFE5F2',
+                              paddingTop: 8,
+                              paddingBottom: 8,
+                              background: '#060B17',
                               fontWeight: 500,
                               fontSize: 14,
-                              lineHeight: '120%',
-                              borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              lineHeight: '16px',
+                              borderBottom: '1px solid #060B17',
                               color: '#8191B9',
                               textAlign: 'right',
                             }}
@@ -2544,6 +2567,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                             style={{
                               display: 'flex',
                               justifyContent: 'flex-end',
+                              height: 72,
                             }}>
                             <div
                               className={classes.inlineEnd}
@@ -2555,6 +2579,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                               <Typography
                                 className={classes.textSpaced}
                                 style={{
+                                  marginBottom: 4,
                                   fontWeight: 500,
                                   fontSize: 14,
                                   lineHeight: '120%',
@@ -2598,6 +2623,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                               <Typography
                                 className={`${classes.textSpaced} ${classes.symbol}`}
                                 style={{
+                                  marginBottom: 4,
                                   fontWeight: 400,
                                   fontSize: 14,
                                   lineHeight: '120%',
@@ -2622,9 +2648,7 @@ export default function EnhancedTable({pairs, isLoading}) {
                       </div>
 
                       <div
-                        style={{
-                          background: appTheme === 'dark' ? '#151718' : '#9BC9E4',
-                        }}
+                        style={{ padding: '10px 20px', background: '#060B17' }}
                         className={[classes.cellHeadPaddings, 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
                         <Typography
                           style={{
@@ -2638,17 +2662,35 @@ export default function EnhancedTable({pairs, isLoading}) {
                         </Typography>
 
                         {expanded !== labelId &&
-                          <ExpandMore
+                          <div
                             style={{
-                              color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
-                            }}/>
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              width: 25,
+                              height: 25,
+                              borderRadius: '50%',
+                              backgroundColor: '#779BF4'
+                            }}
+                          >
+                            <ExpandMore style={{ color: '#060B17' }} />
+                          </div>
                         }
 
                         {expanded === labelId &&
-                          <ExpandLess
+                          <div
                             style={{
-                              color: appTheme === 'dark' ? '#4CADE6' : '#0B5E8E',
-                            }}/>
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              width: 25,
+                              height: 25,
+                              borderRadius: '50%',
+                              backgroundColor: '#779BF4'
+                            }}
+                         >
+                          <ExpandLess style={{ color: '#060B17' }} />
+                          </div>
                         }
                       </div>
                     </div>
@@ -2663,8 +2705,8 @@ export default function EnhancedTable({pairs, isLoading}) {
                         {!headCell.isHideInDetails &&
                           <div
                             style={{
-                              height: 56,
-                              borderTop: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                              height: 72,
+                              borderTop: '1px solid #060B17',
                             }}
                             className={['g-flex', 'g-flex--align-center'].join(' ')}>
                             <Typography
@@ -2675,10 +2717,10 @@ export default function EnhancedTable({pairs, isLoading}) {
                                 display: 'flex',
                                 alignItems: 'center',
                                 fontWeight: 500,
-                                fontSize: 12,
-                                lineHeight: '120%',
-                                color: appTheme === 'dark' ? '#C6CDD2' : '#325569',
-                                borderRight: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#9BC9E4'}`,
+                                fontSize: 14,
+                                lineHeight: '16px',
+                                color: '#E4E9F4',
+                                borderRight: '1px solid #060B17',
                               }}
                               noWrap>
                               {headCell.label}
@@ -2701,10 +2743,11 @@ export default function EnhancedTable({pairs, isLoading}) {
                                 <Typography
                                   className={classes.textSpaced}
                                   style={{
+                                    marginBottom: 4,
                                     fontWeight: 500,
                                     fontSize: 14,
-                                    lineHeight: '120%',
-                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    lineHeight: '16px',
+                                    color: '#E4E9F4',
                                     whiteSpace: 'nowrap',
                                   }}>
                                   {headCell.id === 'poolAmount' && formatCurrency(row.reserve0)}
@@ -2720,8 +2763,8 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   style={{
                                     fontWeight: 500,
                                     fontSize: 14,
-                                    lineHeight: '120%',
-                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    lineHeight: '16px',
+                                    color: '#E4E9F4',
                                     whiteSpace: 'nowrap',
                                   }}>
                                   {headCell.id === 'poolAmount' && formatCurrency(row.reserve1)}
@@ -2744,10 +2787,12 @@ export default function EnhancedTable({pairs, isLoading}) {
                                 <Typography
                                   className={`${classes.textSpaced} ${classes.symbol}`}
                                   style={{
+                                    marginBottom: 4,
                                     fontWeight: 400,
                                     fontSize: 14,
-                                    lineHeight: '120%',
-                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                    lineHeight: '16px',
+                                    color: '#8191B9',
+                                    textAlign: 'right',
                                   }}>
                                   {formatSymbol(row.token0.symbol)}
                                 </Typography>
@@ -2757,8 +2802,9 @@ export default function EnhancedTable({pairs, isLoading}) {
                                   style={{
                                     fontWeight: 400,
                                     fontSize: 14,
-                                    lineHeight: '120%',
-                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                    lineHeight: '16px',
+                                    color: '#8191B9',
+                                    textAlign: 'right',
                                   }}>
                                   {formatSymbol(row.token1.symbol)}
                                 </Typography>

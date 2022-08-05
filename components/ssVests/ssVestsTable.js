@@ -137,14 +137,14 @@ const StickyTableCell = styled(TableCell)(({theme, appTheme}) => ({
   position: "sticky",
   // zIndex: 5,
   whiteSpace: 'nowrap',
-  padding: '20px 25px 15px',
+  padding: '15px 24px 16px',
 }));
 
 const StyledTableCell = styled(TableCell)(({theme, appTheme}) => ({
   background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
   width: 'auto',
   whiteSpace: 'nowrap',
-  padding: '20px 25px 15px',
+  padding: '15px 24px 16px',
 }));
 
 const sortIcon = (sortDirection) => {
@@ -270,18 +270,24 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-end',
     width: '100%',
     position: 'relative',
-    ["@media (max-width: 1550px)"]: {
+    ["@media (max-width: 1450px)"]: {
       display: 'flex',
       flexDirection: 'column',
+      alignItems: 'flex-start',
     },
   },
   toolbarTitle: {
     fontSize: '60px',
+    lineHeight: '120%',
     fontWeight: 500,
     color: '#E4E9F4',
     letterSpacing: '0.04em !important',
+    ["@media (max-width: 1450px)"]: {
+      marginBottom: 12,
+    },
     ["@media (max-width: 575px)"]: {
       fontSize: 40,
       letterSpacing: '0 !important',
@@ -291,13 +297,16 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    alignItems: 'flex-start',
+    ["@media (max-width: 1450px)"]: {
+      width: '100%',
+    },
   },
   toolbarInfo: {
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
     maxWidth: 918,
+    minHeight: 72,
     padding: '12px 24px',
     paddingRight: 100,
     fontFamily: 'Roboto Mono',
@@ -309,8 +318,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '12px',
     background: 'rgba(119, 155, 244, 0.15)',
     color: '#E4E9F4',
-    ["@media (max-width: 1550px)"]: {
+    ["@media (max-width: 1450px)"]: {
       maxWidth: '100%',
+      width: '100%',
     },
     ["@media (max-width: 575px)"]: {
       padding: 12,
@@ -321,7 +331,7 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbarInfoLink: {
     position: 'absolute',
-    top: 35,
+    top: 25,
     right: 25,
     ["@media (max-width: 1550px)"]: {
       top: 14,
@@ -342,8 +352,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     width: '370px',
 
-    ["@media (max-width: 1550px)"]: {
-      paddingTop: 272,
+    ["@media (max-width: 1450px)"]: {
+      paddingTop: 285,
     },
     ["@media (max-width: 1199px)"]: {
       position: 'static',
@@ -703,7 +713,7 @@ const EnhancedTableToolbar = (props) => {
   window.addEventListener('resize', handleResize);
 
   return (
-      <Toolbar className={classes.toolbar} style={{ marginBottom: 20 }}>
+      <Toolbar className={classes.toolbar} style={{ marginBottom: 30 }}>
         <div className={classes.toolbarFirst}>
           <div className={classes.toolbarTitleRow}>
             <Typography className={classes.toolbarTitle}>
@@ -1323,7 +1333,7 @@ export default function EnhancedTable({vestNFTs, govToken, veToken}) {
                                   }
 
                                   {expanded === labelId &&
-                                  <div
+                                    <div
                                       style={{
                                         display: 'flex',
                                         justifyContent: 'center',

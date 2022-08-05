@@ -278,14 +278,14 @@ const StickyTableCell = styled(TableCell)(({theme, appTheme}) => ({
   position: "sticky",
   zIndex: 5,
   whiteSpace: 'nowrap',
-  padding: '20px 25px 15px',
+  padding: '15px 24px 16px',
 }));
 
 const StyledTableCell = styled(TableCell)(({theme, appTheme}) => ({
   background: appTheme === 'dark' ? '#24292D' : '#CFE5F2',
   width: 'auto',
   whiteSpace: 'nowrap',
-  padding: '20px 25px 15px',
+  padding: '15px 24px 16px',
 }));
 
 const sortIcon = (sortDirection) => {
@@ -349,9 +349,9 @@ function EnhancedTableHead(props) {
                     <Typography
                       className={classes.headerText}
                       style={{
-                        fontWeight: 600,
-                        fontSize: 12,
-                        lineHeight: '120%',
+                        fontWeight: 500,
+                        fontSize: 14,
+                        lineHeight: '115%',
                         color: '#8191B9',
                       }}>
                       {headCell.label}
@@ -385,9 +385,9 @@ function EnhancedTableHead(props) {
                     <Typography
                       className={classes.headerText}
                       style={{
-                        fontWeight: 600,
-                        fontSize: 12,
-                        lineHeight: '120%',
+                        fontWeight: 500,
+                        fontSize: 14,
+                        lineHeight: '115%',
                         color: '#8191B9',
                       }}>
                       {headCell.label}
@@ -526,7 +526,7 @@ const useStyles = makeStyles((theme) => {
     },
     cont: {
       ["@media (min-width:1920px)"]: {
-        marginLeft: 433,
+        marginLeft: 400,
       },
     },
     root: {
@@ -892,9 +892,10 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
           <Typography
             className={classes.textSpaced}
             style={{
+              marginBottom: 8,
               fontWeight: 400,
               fontSize: 14,
-              lineHeight: '120%',
+              lineHeight: '115%',
               color: '#E4E9F4',
             }}>
             {data1}
@@ -905,7 +906,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
             style={{
               fontWeight: 400,
               fontSize: 14,
-              lineHeight: '120%',
+              lineHeight: '115%',
               color: '#E4E9F4',
             }}>
             {data2}
@@ -921,12 +922,14 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
               alignItems: 'flex-end',
               paddingLeft: 10,
             }}>
+
             <Typography
               className={`${classes.textSpaced} ${classes.symbol}`}
               style={{
+                marginBottom: 8,
                 fontWeight: 400,
                 fontSize: 14,
-                lineHeight: '120%',
+                lineHeight: '115%',
                 color: '#8191B9',
               }}>
               {symbol1}
@@ -1030,8 +1033,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                       <TableRow key={row?.gauge?.address}>
                         <StickyTableCell
                           style={{
-                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                            background: '#171D2D',
+                            borderBottom: '1px solid #323B54',
                           }}
                           className={classes.cell}>
                           <div className={classes.inline}>
@@ -1039,8 +1042,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               <img
                                 className={[classes.img1Logo, classes[`img1Logo--${appTheme}`]].join(' ')}
                                 src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
-                                width="37"
-                                height="37"
+                                width="36"
+                                height="36"
                                 alt=""
                                 onError={(e) => {
                                   e.target.onerror = null;
@@ -1050,8 +1053,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               <img
                                 className={[classes.img2Logo, classes[`img2Logo--${appTheme}`]].join(' ')}
                                 src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
-                                width="37"
-                                height="37"
+                                width="36"
+                                height="36"
                                 alt=""
                                 onError={(e) => {
                                   e.target.onerror = null;
@@ -1063,10 +1066,11 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               <Typography
                                 className={classes.textSpaced}
                                 style={{
+                                  marginBottom: 4,
                                   fontWeight: 500,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                  fontSize: 16,
+                                  lineHeight: '125%',
+                                  color: '#E4E9F4',
                                 }}
                                 noWrap>
                                 {formatSymbol(row?.symbol)}
@@ -1076,8 +1080,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                 style={{
                                   fontWeight: 400,
                                   fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                  lineHeight: '115%',
+                                  color: '#8191B9',
                                 }}
                                 noWrap>
                                 {row?.isStable ? 'Stable Pool' : 'Volatile Pool'}
@@ -1089,8 +1093,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           className={classes.cell}
                           align="right"
                           style={{
-                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                            background: '#171D2D',
+                            borderBottom: '1px solid #323B54',
                             overflow: 'hidden',
                           }}>
                             
@@ -1107,8 +1111,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           className={classes.cell}
                           align="right"
                           style={{
-                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                            background: '#171D2D',
+                            borderBottom: '1px solid #323B54',
                             overflow: 'hidden',
                           }}>
                           {
@@ -1126,8 +1130,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           className={classes.cell}
                           align="right"
                           style={{
-                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                            background: '#171D2D',
+                            borderBottom: '1px solid #323B54',
                             overflow: 'hidden',
                           }}>
                           {
@@ -1144,8 +1148,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           className={classes.cell}
                           align="right"
                           style={{
-                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                            background: '#171D2D',
+                            borderBottom: '1px solid #323B54',
                             overflow: 'hidden',
                           }}>
                           {
@@ -1162,8 +1166,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           className={classes.cell}
                           align="right"
                           style={{
-                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                            background: '#171D2D',
+                            borderBottom: '1px solid #323B54',
                             overflow: 'hidden',
                           }}>
                           {
@@ -1180,8 +1184,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           className={classes.cell}
                           align="right"
                           style={{
-                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                            background: '#171D2D',
+                            borderBottom: '1px solid #323B54',
                             overflow: 'hidden',
                           }}>
                           {
@@ -1209,8 +1213,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           className={classes.cell}
                           align="right"
                           style={{
-                            background: appTheme === 'dark' ? '#151718' : '#DBE6EC',
-                            borderBottom: `1px solid ${appTheme === 'dark' ? '#2D3741' : '#CFE5F2'}`,
+                            background: '#171D2D',
+                            borderBottom: '1px solid #323B54',
                             // overflow: 'hidden',
                           }}>
                           <div style={{
@@ -1234,16 +1238,15 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                   variant="outlined"
                                   color="primary"
                                   style={{
-                                    padding: '8px 14px',
-                                    border: `1px solid #D3F85A`,
+                                    padding: '7px 14px',
+                                    border: `1px solid rgb(211, 248, 90)`,
                                     borderRadius: 12,
                                     fontWeight: 600,
                                     fontSize: 14,
                                     lineHeight: '120%',
-                                    color: voteTooltipOpen == row.address ? '#060B17' : '#D3F85A',
+                                    color: 'rgb(211, 248, 90)',
                                     textTransform: 'uppercase',
                                     marginLeft: 20,
-                                    height: 40,
                                     background: voteTooltipOpen == row.address ? '#C0E255' : 'transparent',
                                   }}
                                   onClick={(event) => {
@@ -1652,8 +1655,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                   <img
                                       className={[classes.img1Logo, classes[`img1Logo--${appTheme}`]].join(' ')}
                                       src={(row && row.token0 && row.token0.logoURI) ? row.token0.logoURI : ``}
-                                      width="37"
-                                      height="37"
+                                      width="36"
+                                      height="36"
                                       alt=""
                                       onError={(e) => {
                                         e.target.onerror = null;
@@ -1663,8 +1666,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                   <img
                                       className={[classes.img2Logo, classes[`img2Logo--${appTheme}`]].join(' ')}
                                       src={(row && row.token1 && row.token1.logoURI) ? row.token1.logoURI : ``}
-                                      width="37"
-                                      height="37"
+                                      width="36"
+                                      height="36"
                                       alt=""
                                       onError={(e) => {
                                         e.target.onerror = null;
@@ -1677,6 +1680,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                   <Typography
                                       className={classes.textSpaced}
                                       style={{
+                                        marginBottom: 4,
                                         fontWeight: 500,
                                         fontSize: 16,
                                         lineHeight: '20px',
@@ -1724,7 +1728,15 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                     My Votes
                                   </Typography>
 
-                                  <div className={classes.cellPaddings}>
+                                  <div
+                                    className={classes.cellPaddings}
+                                    style={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      height: 72,
+                                      borderRight: '1px solid rgb(6, 11, 23)',
+                                    }}
+                                  >
                                     <div style={{display: 'flex',}}>
                                       <div
                                           // className={classes.inlineEnd}
@@ -1737,6 +1749,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                         <Typography
                                             className={classes.textSpaced}
                                             style={{
+                                              marginBottom: 4,
                                               fontWeight: 400,
                                               fontSize: 14,
                                               lineHeight: '120%',
@@ -1763,13 +1776,13 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                           variant="outlined"
                                           color="primary"
                                           style={{
-                                            padding: '8px 14px',
-                                            border: `1px solid #D3F85A`,
+                                            padding: '7px 14px',
+                                            border: `1px solid rgb(211, 248, 90)`,
                                             borderRadius: 12,
                                             fontWeight: 600,
                                             fontSize: 14,
                                             lineHeight: '120%',
-                                            color: '#D3F85A',
+                                            color: 'rgb(211, 248, 90)',
                                             textTransform: 'uppercase',
                                             marginLeft: 20,
                                           }}
@@ -1809,6 +1822,8 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       style={{
                                         display: 'flex',
                                         justifyContent: 'flex-end',
+                                        alignItems: 'center',
+                                        height: 72,
                                       }}>
                                     <div
                                         className={classes.inlineEnd}
@@ -1820,6 +1835,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                       <Typography
                                           className={classes.textSpaced}
                                           style={{
+                                            marginBottom: 4,
                                             fontWeight: 400,
                                             fontSize: 14,
                                             lineHeight: '120%',
@@ -1896,7 +1912,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                   {!headCell.isHideInDetails &&
                                       <div
                                           style={{
-                                            height: 56,
+                                            height: 72,
                                             borderTop: `1px solid #060B17`,
                                           }}
                                           className={['g-flex', 'g-flex--align-center'].join(' ')}>
@@ -1984,7 +2000,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                     {headCell.id === 'apy' && ''}
                                     {headCell.id === 'myVotes' && `${formatCurrency(sliderValue)} %`}
                                   </Typography>
-                                </div>
+                                        </div>
 
                                           <div
                                               className={classes.inlineEnd}
@@ -1997,6 +2013,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                             <Typography
                                                 className={`${classes.textSpaced} ${classes.symbol}`}
                                                 style={{
+                                                  marginBottom: 4,
                                                   fontWeight: 400,
                                                   fontSize: 14,
                                                   lineHeight: '120%',
