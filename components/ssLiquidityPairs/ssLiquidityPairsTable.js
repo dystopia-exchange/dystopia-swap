@@ -665,6 +665,7 @@ const useStyles = makeStyles({
   textSearchField: {
     width: '100%',
     // paddingRight: 0,
+
     ["@media (min-width:806px)"]: {
       width: 374,
       position: 'absolute',
@@ -682,6 +683,11 @@ const useStyles = makeStyles({
     width: 747,
     height: 72,
     paddingRight: 24,
+  
+    '&:hover': {
+      backgroundColor: '#1F2B49 !important',
+    },
+
     // zIndex: 99,
     '& > fieldset': {
       border: 'none',
@@ -701,7 +707,26 @@ const useStyles = makeStyles({
     ["@media (max-width:805px)"]: {
       height: 48,
       marginTop: 2,
+      paddingRight: 16,
     },
+  },
+  searchInputInput: {
+    '&::placeholder': {
+      color: '#8191B9 !important',
+    },
+    ["@media (max-width:805px)"]: {
+      padding: '16px !important',
+      fontSize: '14px !important'
+    }
+  },
+  searchInputIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    height: '0.01em',
+    maxHeight: '2em',
+    ["@media (max-width: 767px)"]: {
+      transform: 'scale(0.8)',
+    }
   },
   actionsButtons: {
     ["@media (max-width:1332px)"]: {
@@ -1339,36 +1364,38 @@ const EnhancedTableToolbar = (props) => {
           onChange={onSearchChanged}
           InputProps={{
             style: {
-              background: appTheme === "dark" ? '#151718' : '#DBE6EC',
+              background: '#171D2D',
               border: '1px solid',
-              borderColor: appTheme === "dark" ? '#5F7285' : '#86B9D6',
+              borderColor: '#779BF4',
               borderRadius: 12,
-              paddingLeft: 8,
             },
             classes: {
               root: classes.searchInput,
+              input: classes.searchInputInput
             },
             endAdornment: <InputAdornment position="end">
               {/*Search icon*/}
-              <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10.5 20C15.7467 20 20 15.7467 20 10.5C20 5.25329 15.7467 1 10.5 1C5.25329 1 1 5.25329 1 10.5C1 15.7467 5.25329 20 10.5 20Z" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <div style={{position: 'relative'}}>
-                <svg style={{position: 'absolute', top: 8, right: 0,}} width="4" height="4" viewBox="0 0 4 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3 3L1 1" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <div className={classes.searchInputIcon}>
+                <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.5 20C15.7467 20 20 15.7467 20 10.5C20 5.25329 15.7467 1 10.5 1C5.25329 1 1 5.25329 1 10.5C1 15.7467 5.25329 20 10.5 20Z" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
+                <div style={{position: 'relative'}}>
+                  <svg style={{position: 'absolute', top: 8, right: 0,}} width="4" height="4" viewBox="0 0 4 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 3L1 1" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
               </div>
             </InputAdornment>,
           }}
           inputProps={{
             style: {
-              padding: 11.5,
+              padding: 24,
               borderRadius: 0,
               border: 'none',
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: 400,
               lineHeight: '120%',
-              color: appTheme === "dark" ? '#C6CDD2' : '#325569',
+              color: '#E4E9F4',
             },
           }}
         />

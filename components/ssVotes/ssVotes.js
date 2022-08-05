@@ -328,9 +328,11 @@ export default function ssVotes() {
                 },
                 classes: {
                   root: classes.searchInput,
+                  input: classes.searchInputInput,
                 },
                 endAdornment: (
-                  <InputAdornment position="start" style={{marginRight: 8,}}>
+                  <InputAdornment position="end">
+                    <div className={classes.searchInputIcon}>
                       <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M10.5 20C15.7467 20 20 15.7467 20 10.5C20 5.25329 15.7467 1 10.5 1C5.25329 1 1 5.25329 1 10.5C1 15.7467 5.25329 20 10.5 20Z" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
@@ -339,18 +341,19 @@ export default function ssVotes() {
                               <path d="M3 3L1 1" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                           </svg>
                       </div>
+                    </div>
                   </InputAdornment>
                 ),
               }}
               inputProps={{
                 style: {
-                  padding: 16,
+                  padding: 24,
                   borderRadius: 0,
                   border: "none",
                   fontSize: 16,
                   fontWeight: 400,
                   lineHeight: "120%",
-                  color: '#d4ddff',
+                  color: '#E4E9F4',
                 },
               }}
             />

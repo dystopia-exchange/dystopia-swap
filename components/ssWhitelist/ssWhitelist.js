@@ -404,6 +404,7 @@ export default function ssWhitelist() {
             InputProps={{
               classes: {
                 root: classes.searchInput,
+                input: classes.searchInputInput,
               },
               endAdornment: <InputAdornment position="end">
                 <div className={classes.searchInputIcon}>
