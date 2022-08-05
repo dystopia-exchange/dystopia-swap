@@ -12,13 +12,25 @@
   margin-bottom: 12px;
 }
 
-.transaction {
+/* .transaction {
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 460px;
   margin-bottom: 20px;
+  z-index: 9999;
+} */
+
+.transaction {
+  position: absolute;
+
+  top: 148px;
+  right: 28px;
+
+  width: 513px;
+  margin-bottom: 20px;
+
   z-index: 9999;
 }
 
@@ -292,6 +304,13 @@
 
   .transaction,
   .transactionTopBg {
-    width: 100%;
+    width: calc(100% - 24px);
+  }
+
+  .transaction {
+    top: auto;
+    bottom: 0;
+    right: auto;
+    margin: 0 12px 20px;
   }
 }
