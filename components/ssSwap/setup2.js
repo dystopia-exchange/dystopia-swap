@@ -371,7 +371,7 @@ function Setup() {
     };
 
     const renderSwapInformation = (args) => {
-        const { routes } = args
+        const { routes, multiswapData } = args
 
         const renderRoutes = (route) => {
             const [{ percentage }] = route
@@ -392,6 +392,10 @@ function Setup() {
                                     tokenOut = asset
                                 }
                             })
+
+                            if (tokenOut === null && multiswapData.tokens && multiswapData.tokens[el.tokenOut]) {
+                                tokenOut = multiswapData.tokens[el.tokenOut]
+                            }
 
                             const isLastEl = index === route.length - 1
 
@@ -457,7 +461,7 @@ function Setup() {
                                             isLastEl ? '' : classes.routeSmallIcon
                                         ].join(" ")}
                                         alt=""
-                                        src={tokenOut?.logoURI}
+                                        src={tokenOut?.logoURI || `/tokens/unknown-logo--${appTheme}.svg`}
                                         height="40px"
                                         onError={(e) => {
                                             e.target.onerror = null;
@@ -1115,7 +1119,7 @@ function Setup() {
                                 </div>
                             )}
 
-                            {!hidequote ? renderSwapInformation({ routes }) : null}
+                            {!hidequote ? renderSwapInformation({ routes, multiswapData }) : null}
 
                             {(isFetchingApprove || isFetchingSwap) && (
                                 <div className={classes.loader}>
