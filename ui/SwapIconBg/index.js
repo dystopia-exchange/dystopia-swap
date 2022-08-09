@@ -13,7 +13,7 @@ const SwapIconBg = () => {
 
   return (
     <>
-      {windowWidth > 470 &&
+      {windowWidth > 530 &&
         <svg
           style={{
             position: 'absolute',
@@ -62,7 +62,7 @@ const SwapIconBg = () => {
         </svg>
       }
 
-      {windowWidth <= 470 &&
+      {windowWidth <= 530 &&
         <svg
           style={{
             position: 'absolute',

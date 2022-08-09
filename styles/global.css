@@ -1,5 +1,6 @@
 input[type="date"]::-webkit-calendar-picker-indicator {
-  color: rgba(128, 128, 128, 0);
+  display: none;
+  /* color: rgba(128, 128, 128, 0);
   background: url('/calendar.svg') no-repeat;
   background-size: contain;
   opacity: 1;
@@ -8,19 +9,45 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   position: absolute;
   top: 20px;
   left: -103px;
-  z-index: 9;
+  z-index: 9; */
+}
+
+.input-date-icon input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  background: url('/calendar.svg') no-repeat;
+  background-size: contain;
+  background-position: center;
+  color: rgba(128, 128, 128, 0);
+
+  display: block;
+
+  width: 30px;
+  height: 30px;
+
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 530px) {
+  .input-date-icon input[type="date"]::-webkit-calendar-picker-indicator {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 button {
   text-transform: none !important;
 }
 
-@media (max-width: 530px) {
+/* @media (max-width: 530px) {
   input[type="date"]::-webkit-calendar-picker-indicator {
     top: 12px;
     left: -71px;
   }
-}
+} */
 
 .web3modal-modal-lightbox {
   z-index: 100 !important;

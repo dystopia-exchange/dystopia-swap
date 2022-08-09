@@ -121,6 +121,23 @@ export default function ffLockDuration({nft, updateLockDuration}) {
               <div
                 className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
                 <div className={classes.displayAssetIcon}></div>
+                <InputBase
+                  className={[classes.massiveInputAmountDateHidden, 'input-date-icon'].join(" ")}
+                  type="date"
+                  placeholder="Lock Expiry Date"
+                  error={amountError}
+                  helperText={amountError}
+                  value={amountValue}
+                  onChange={amountChanged}
+                  disabled={lockLoading}
+                  inputProps={{
+                    min: moment().add(7, 'days').format('YYYY-MM-DD'),
+                    max: moment().add(1460, 'days').format('YYYY-MM-DD'),
+                  }}
+                  InputProps={{
+                    disableUnderline: true,
+                  }}
+                />
               </div>
             </div>
           </div>

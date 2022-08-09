@@ -155,6 +155,7 @@
   flex-direction: column;
   align-items: flex-start;
   width: 460px;
+  max-width: 460px;
   background: transparent !important;
 }
 
@@ -166,6 +167,7 @@
 
 .reAddPadding3 {
   width: 462px;
+  max-width: 462px;
   padding: 12px 30px 30px;
   background: #DBE6EC !important;
   border: 1px solid #86B9D6 !important;
@@ -181,6 +183,7 @@
 .top {
   top: 1px;
   width: 464px;
+  max-width: 464px;
   height: 18px;
   margin-bottom: -1px;
   margin-left: -2px;
@@ -592,6 +595,32 @@ input[type=number].massiveInputAmount {
   top: 28px;
   border: none !important;
   margin-right: 20px !important;
+}
+
+.massiveInputAmountDateHidden {
+  position: absolute !important;
+}
+
+.massiveInputAmountDateHidden input {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: 40px;
+  height: 40px;
+
+  padding: 0;
+
+  font-size: 0;
+
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 530px) {
+  .massiveInputAmountDateHidden input {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 .massiveInputAddress {
@@ -1013,6 +1042,7 @@ input[type=number].massiveInputAmount {
 
   .top {
     width: calc(100% + 2px);
+    border-right: 1px solid #5F7285;
   }
 
   .textField {

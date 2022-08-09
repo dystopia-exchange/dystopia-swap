@@ -146,7 +146,23 @@ export default function ssLock({govToken, veToken}) {
               <div
                 className={[classes.displayDualIconContainer, classes[`displayDualIconContainer--${appTheme}`]].join(' ')}>
                 <SwapIconBg/>
-                <div className={[classes.displayAssetIcon, classes[`displayAssetIcon--${appTheme}`]].join(' ')}/>
+                <div className={[classes.displayAssetIcon, classes[`displayAssetIcon--${appTheme}`]].join(' ')} />
+                <InputBase
+                  className={[classes.massiveInputAmountDateHidden, 'input-date-icon'].join(" ")}
+                  type="date"
+                  error={amountError}
+                  helperText={amountError}
+                  value={amountValue}
+                  onChange={amountChanged}
+                  disabled={lockLoading}
+                  inputProps={{
+                    min: moment().add(7, 'days').format('YYYY-MM-DD'),
+                    max: moment().add(1460, 'days').format('YYYY-MM-DD'),
+                  }}
+                  InputProps={{
+                    disableUnderline: true,
+                  }}
+                />
               </div>
             </div>
           </div>
