@@ -63,14 +63,14 @@ export default function ffWarning({close, title, subTitle, icon, description, bt
             <div className={classes.primaryButton} onClick={action2 ? action2 : navigateToMedium}>
               <Typography
                 className={classes.buttonTextPrimary}>
-                {btnLabel2 ? btnLabel2 : 'Learn More'}
+                {btnLabel2 ? btnLabel2 : 'LEARN MORE'}
               </Typography>
               <img src="/images/ui/explorer.svg" width="20px" />
             </div>
 
             <div className={classes.secondaryButton} onClick={close}>
               <Typography className={classes.buttonTextSecondary}>
-                {btnLabel1 ? btnLabel1 : 'I understand the risks involved, proceed to the app'}
+                {btnLabel1 ? btnLabel1 : 'I UNDERSTAND THE RISKS INVOLVED, PROCEED TO THE APP'}
               </Typography>
             </div>
           </div>
