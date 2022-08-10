@@ -92,11 +92,16 @@
 .transactionDescriptionTitle {
   margin-left: 10px !important;
   padding-bottom: 10px !important;
+  padding-right: 10px;
   font-weight: 500 !important;
   font-size: 14px !important;
   line-height: 120% !important;
   border-bottom: 1px solid #86B9D6;
   text-align: left;
+
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .transactionDescriptionTitle--CONFIRMED,
@@ -120,11 +125,12 @@
 .transactionDescription {
   max-height: 200px;
   overflow-y: auto;
-  word-break: break-all;
-  white-space: pre-wrap;
+  /* word-break: break-all; */
+  /* white-space: pre-wrap; */
   padding-right: 10px !important;
   padding-top: 10px !important;
   padding-bottom: 10px !important;
+  padding-right: 10px;
   margin-left: 10px !important;
   margin-top: 10px !important;
   font-weight: 400 !important;
@@ -132,6 +138,14 @@
   line-height: 120% !important;
   color: #5688A5 !important;
   text-align: left;
+
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.transactionDescriptionHash {
+  margin-left: 0 !important;
 }
 
 .capitalise {
@@ -145,7 +159,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .orangeIcon {

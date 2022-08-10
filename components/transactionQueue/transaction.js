@@ -221,30 +221,41 @@ export default function Transaction({ transaction }) {
             {transaction.description}
           </Typography>
 
-          {transaction.txHash && (
-            <div className={classes.transactionHash}>
-              <Typography className={classes.transactionDescription}>
-                {formatAddress(transaction.txHash, "long")}
-              </Typography>
-            </div>
-          )}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              paddingRight: 10,
+              paddingLeft: 10,
+            }}
+          >
+            {transaction.txHash && (
+              <div className={classes.transactionHash}>
+                <Typography className={[classes.transactionDescription, classes.transactionDescriptionHash].join(" ")}>
+                  {formatAddress(transaction.txHash, "long")}
+                </Typography>
+              </div>
+            )}
 
-          {transaction.txHash && (
-            <div
-              style={{
-                marginTop: 10,
-                textAlign: "right",
-                fontWeight: 500,
-                fontSize: 12,
-                lineHeight: "120%",
-                color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
-                cursor: "pointer",
-              }}
-              onClick={onViewTX}
-            >
-              View in Explorer
-            </div>
-          )}
+            {transaction.txHash && (
+              <div
+                style={{
+                  marginTop: 10,
+                  textAlign: "right",
+                  fontWeight: 500,
+                  fontSize: 12,
+                  lineHeight: "120%",
+                  color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
+                  cursor: "pointer",
+                }}
+                onClick={onViewTX}
+              >
+                View in Explorer
+              </div>
+            )}
+          </div>
 
           {transaction.error && (
             <Typography className={classes.transactionDescription}>
