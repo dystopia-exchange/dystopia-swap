@@ -47,14 +47,13 @@ export const WrongNetwork = (props) => {
           <Typography className={classes.paragraph}>
             Please check that your wallet is connected to BSC Network, only
             after you can proceed. If you do not have a BSC Network in your
-            wallet, you can add it through the link "Add-To-Metamask" on the
-            https://chainlist.org/chain/56.
+            wallet, you can add it through the footer link.
           </Typography>
 
           <div className={classes.buttonsContainer}>
             <a className={classes.primaryButton} href="https://chainlist.org/chain/56" target="_blank" rel="noreferrer">
               <Typography className={classes.buttonTextPrimary}>
-                Add BSC Mainnet
+                ADD BSC MAINNET
               </Typography>
               <img src="/images/ui/explorer.svg" width="20px" />
             </a>
@@ -62,7 +61,7 @@ export const WrongNetwork = (props) => {
             <div className={classes.secondaryButton} onClick={onSwitch}>
               {/* <div className={classes.secondaryButton} onClick={action2 ? action2 : navigateToMedium}> */}
               <Typography className={classes.buttonTextSecondary}>
-                Switch to BSC Mainnet
+                SWITCH TO BSC MAINNET
               </Typography>
             </div>
           </div>
