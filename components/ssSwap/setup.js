@@ -1387,7 +1387,7 @@ function Setup() {
                                         ? "Wrap"
                                         : (fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL && toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
                                             ? "Unwrap"
-                                            : "Swap"
+                                            : quote && BigNumber(quote.priceImpact).gt(5) ? "SWAP | ARE YOU SURE?" : "SWAP"
                 }
             ></BtnSwap>
           </div>
