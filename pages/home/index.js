@@ -152,10 +152,10 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      <div className={classes.infoButton}>
-        <span>How to invest with ve(3,3) - article</span>
+      <a href="https://docs.cone.exchange/cone-swap/" className={classes.infoButton}>
+        <span>LEARN MORE</span>
         <img src="/images/ui/explorer.svg" />
-      </div>
+      </a>
     </div>
   );
 
