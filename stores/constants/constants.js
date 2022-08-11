@@ -89,6 +89,12 @@ export const BASE_ASSETS_WHITELIST = [
     symbol: "FXS",
   },
   {
+    id: "0x1a3acf6d19267e2d3e7f898f42803e90c9219062",
+    address: "0x1a3acf6d19267e2d3e7f898f42803e90c9219062",
+    chainId: "137",
+    symbol: "FXS",
+  },
+  {
     id: "0x45c32fa6df82ead1e2ef74d17b76547eddfaff89",
     address: "0x45c32fa6df82ead1e2ef74d17b76547eddfaff89",
     chainId: "137",
