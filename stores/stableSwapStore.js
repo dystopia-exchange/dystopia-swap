@@ -136,7 +136,8 @@ const removeDuplicate = (arr) => {
     if (item.symbol in assetIcons) {
       item.logoURI = '/images/assets/' + assetIcons[item.symbol]
     }
-    acc[item.symbol] = item;
+    // acc[item.symbol] = item;
+    acc[item.address.toLowerCase()] = item;
     return acc;
   }, {});
   return Object.values(assets);
@@ -1140,7 +1141,7 @@ class Store {
       baseAssets = baseAssets.filter((token) => {
         return BLACK_LIST_TOKENS.indexOf(token.address.toLowerCase()) === -1;
       });
-      let dupAssets = [];
+      /*let dupAssets = [];
       baseAssets.forEach((token, id) => {
         BASE_ASSETS_WHITELIST.forEach((wl) => {
           if (token.address.toLowerCase() !== wl.address.toLowerCase()
@@ -1150,7 +1151,7 @@ class Store {
         });
       });
       for (var i = dupAssets.length - 1; i >= 0; i--)
-        baseAssets.splice(dupAssets[i], 1);
+        baseAssets.splice(dupAssets[i], 1);*/
 
       // console.log("baseAssets",removeDuplicate([...baseAssets, ...localBaseAssets]))
       return removeDuplicate([...baseAssets, ...localBaseAssets]);
