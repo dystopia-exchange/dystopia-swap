@@ -280,6 +280,7 @@ p.paragraph1 ~ p {
 }
 
 .buttonTextSecondary {
+  padding: 0 10px;
   font-size: 18px !important;
   line-height: 24px !important;
   font-weight: 600 !important;

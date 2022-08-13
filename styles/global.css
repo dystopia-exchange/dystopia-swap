@@ -27,36 +27,127 @@ button {
 }
 
 .web3modal-modal-card {
-  width: 400px !important;
   display: flex !important;
-  flex-direction: column !important;
-  background: #1F2B49 !important;
+  /* flex-direction: column !important; */
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  max-width: 1052px !important;
+  width: 1052px !important;
+
+  padding: 152px 40px 40px !important;
+
   border-radius: 12px !important;
-  padding: 25px !important;
+
+  background: #1F2B49 !important;
+}
+
+@media (max-width: 991px) {
+  .web3modal-modal-card {
+    padding-top: 223px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .web3modal-modal-card {
+    padding: 144px 20px 20px !important;
+  }
+}
+
+@media (max-width: 575px) {
+  .web3modal-modal-card {
+    padding: 120px 20px 20px !important;
+  }
+}
+
+.web3modal-modal-card::before {
+  content: 'Select your wallet provider';
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  padding: 40px;
+
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 60px;
+  line-height: 72px;
+  text-align: left;
+
+  color: #FFFFFF;
+}
+
+@media (max-width: 991px) {
+  .web3modal-modal-card::before {
+    max-width: 800px;
+  }
+}
+
+@media (max-width: 767px) {
+  .web3modal-modal-card::before {
+    max-width: 600px;
+    font-size: 48px;
+    line-height: 52px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 575px) {
+  .web3modal-modal-card::before {
+    max-width: 400px;
+    font-size: 32px;
+    line-height: 40px;
+  }
+}
+
+.web3modal-provider-wrapper {
+  width: calc(50% - 14px) !important;
+  margin-bottom: 28px !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+@media (max-width: 991px) {
+  .web3modal-provider-wrapper {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .web3modal-provider-wrapper {
+    margin-bottom: 16px !important;
+  }
+}
+
+.web3modal-provider-wrapper:last-child {
+  width: 100% !important;
+  margin-bottom: 0 !important;
 }
 
 .web3modal-provider-container {
-  background: rgba(119, 155, 244, 0.15) !important;
+  display: flex !important;
+  justify-content: center !important;
+  flex-direction: row-reverse!important;
+  align-items: center !important;
+
+  height: 120px;
+
+  padding: 10px 20px !important;
+
   border: 1px solid #779BF4 !important;
   border-radius: 12px !important;
-  padding: 10px 20px !important;
-  display: flex !important;
-  justify-content: space-between !important;
-  flex-direction: row !important;
-  align-items: center !important;
-}
 
-.web3modal-provider-name {
-  color: #779BF4 !important;
+  background: rgba(119, 155, 244, 0.15) !important;
 }
 
 .web3modal-provider-container:hover {
   background: #1F2B49 !important;
 }
 
-.web3modal-provider-wrapper {
-  border: none !important;
-  margin-bottom: 6px !important;
+.web3modal-provider-name {
+  color: #779BF4 !important;
 }
 
 .web3modal-provider-description {
@@ -67,11 +158,13 @@ button {
   width: auto !important;
   order: 0 !important;
   margin-top: 0 !important;
-  font-size: 20px !important;
+  font-size: 32px !important;
+  font-weight: 500 !important;
 }
 
 .web3modal-provider-icon {
   order: 1 !important;
-  width: 38px !important;
-  height: 38px !important;
+  width: 32px !important;
+  height: 32px !important;
+  margin-right: 25px !important;
 }
