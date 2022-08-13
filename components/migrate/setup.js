@@ -19,7 +19,7 @@ import Form from "../../ui/MigratorForm";
 import classes from "./ssMigrate.module.css";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import stores from "../../stores";
-import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
+import {ACTIONS, CONTRACTS, ETHERSCAN_URL, ZERO_ADDRESS} from "../../stores/constants";
 import { BigNumber } from "ethers";
 import { parseUnits } from "ethers/lib/utils";
 import Borders from "../../ui/Borders";
@@ -96,10 +96,10 @@ export default function Setup() {
   const getPairDetails = async (token0, token1) => {
     const multicall = await stores.accountStore.getMulticall();
 
-    if (token0 == "MATIC") {
+    if (token0 == "BNB") {
       token0 = CONTRACTS.WFTM_ADDRESS;
     }
-    if (token1 == "MATIC") {
+    if (token1 == "BNB") {
       token1 = CONTRACTS.WFTM_ADDRESS;
     }
 
@@ -119,7 +119,7 @@ export default function Setup() {
           const pairAddress = await factoryContract.methods
             .getPair(token0, token1)
             .call();
-          if (pairAddress !== "0x0000000000000000000000000000000000000000") {
+          if (pairAddress !== ZERO_ADDRESS) {
             const pairContract = new web3.eth.Contract(
               pairContractAbi,
               pairAddress
@@ -433,10 +433,10 @@ export default function Setup() {
     let addy0 = token0.address;
     let addy1 = token1.address;
 
-    if (token0.address === "MATIC") {
+    if (token0.address === "BNB") {
       addy0 = CONTRACTS.WFTM_ADDRESS;
     }
-    if (token1.address === "MATIC") {
+    if (token1.address === "BNB") {
       addy1 = CONTRACTS.WFTM_ADDRESS;
     }
 

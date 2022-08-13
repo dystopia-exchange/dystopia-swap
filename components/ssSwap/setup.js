@@ -16,7 +16,7 @@ import {
 } from "../../utils";
 import classes from "./ssSwap.module.css";
 import stores from "../../stores";
-import { ACTIONS, CONTRACTS } from "../../stores/constants";
+import {ACTIONS, CONE_ADDRESS, CONTRACTS, WBNB_ADDRESS} from "../../stores/constants";
 import BigNumber from "bignumber.js";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import BtnSwap from "../../ui/BtnSwap";
@@ -116,14 +116,14 @@ function Setup() {
 
           if (baseAsset.length > 0 && toAssetValue == null) {
             const dystIndex = baseAsset.findIndex((token) => {
-              return token.id == "0x39ab6574c289c3ae4d88500eec792ab5b947a5eb";
+              return token.address?.toLowerCase() === CONE_ADDRESS;
             });
             setToAssetValue(baseAsset[dystIndex]);
           }
 
           if (baseAsset.length > 0 && fromAssetValue == null) {
             const wmaticIndex = baseAsset.findIndex((token) => {
-              return token.id == "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270";
+              return token.address === "BNB";
             });
             setFromAssetValue(baseAsset[wmaticIndex]);
           }
