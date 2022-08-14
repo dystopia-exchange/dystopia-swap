@@ -419,10 +419,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toolbar: {
-    marginBottom: 30,
+    margin: '0 -10px 30px',
     padding: 0,
     minHeight: 'auto',
-    ["@media (max-width:660px)"]: {
+    ["@media (max-width: 660px)"]: {
       paddingBottom: 70,
     },
   },
@@ -443,7 +443,16 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: 215,
     height: 50,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 20,
     cursor: 'pointer',
+    ["&:last-child"]: {
+      marginRight: 0,
+    },
+    ["@media (max-width: 750px)"]: {
+      width: 150,
+    },
   },
   'addButton--light': {
     '&:hover > p': {
@@ -464,17 +473,19 @@ const useStyles = makeStyles((theme) => ({
   addButtonIcon: {
     width: 50,
     height: '100%',
+    flexShrink: 0,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     background: '#8F5AE8',
   },
   actionButtonText: {
-    width: 200,
+    width: '100%',
     height: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: '0 10px',
     fontWeight: 700,
     fontSize: 16,
     lineHeight: '120%',
@@ -495,15 +506,22 @@ const useStyles = makeStyles((theme) => ({
   sortSelect: {
     position: 'absolute',
     top: 45,
+    left: 10,
+    ["@media (max-width: 660px)"]: {
+      top: 0,
+    }
   },
   ["@media (max-width: 660px)"]: {
-    toolbar:{
+    toolbar: {
       display: 'flex',
-      paddingLeft:"10px",
-      paddingRight:"10px",
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
+    }
+  },
+  ["@media (max-width: 660px)"]: {
+    toolbar: {
+      flexWrap: 'wrap',
     }
   },
   
@@ -586,7 +604,6 @@ const EnhancedTableToolbar = (props) => {
       <div
         className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
         onClick={onMerge}
-        style={{ marginLeft: 20 }}
       >
 
         <Typography
@@ -596,14 +613,15 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       </div>
       {windowWidth <= 660 && (
-        <div className={[classes.sortSelect, css.sortSelect].join(' ')}>
-          {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
+        <div className={css.sortSelectWrapper}>
+          <div className={[classes.sortSelect, css.sortSelect].join(' ')}>
+            {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
+          </div>
         </div>
       )}
 
       <div
         className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
-        style={{ marginLeft: 20 }}
       >
         <Typography
           className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}

@@ -1,5 +1,3 @@
-
-
 .container {
   max-width: 1400px;
   width: calc(100% - 180px);
@@ -37,13 +35,23 @@
   margin-top: 30px;
 }
 
+@media (max-width: 660px) {
+  .sortSelect {
+    margin-top: 0;
+  }
 
-  .addButton{
-    width: 115px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  
+  .sortSelectWrapper {
+    position: relative;
+    order: 3;
+    width: 100%;
+    min-width: 100px;
+  }
 }
- 
+
+.addButton {
+  width: 115px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
