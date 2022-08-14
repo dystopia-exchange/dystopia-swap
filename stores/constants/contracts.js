@@ -50,8 +50,7 @@ export const VOTER_ABI = abis.voterABI
 
 export const REWARD_ADDRESS = '0xA60205802E1B5C6EC1CAFA3cAcd49dFeECe05AC9'
 
-// todo change
-export const LIBRARY_ADDRESS = '0xAC587e0535a278379eB898e3FdbeFd4d713EacB7'
+export const LIBRARY_ADDRESS = '0x6f2fb669B52e4ED21a019e9db197F27f4B88eBf9'
 export const LIBRARY_ABI = abis.dystopiaLibraryABI
 
 export const ERC20_ABI = abis.erc20ABI

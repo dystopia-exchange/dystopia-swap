@@ -4439,17 +4439,15 @@ class Store {
         let amountIn = bestAmountOut.receiveAmounts[i];
         // let amountOut = bestAmountOut.receiveAmounts[i + 1];
 
-        // todo change the logic or deploy the library
-        // const res = await libraryContract.methods
-        //   .getTradeDiff(
-        //     amountIn,
-        //     bestAmountOut.routes[i].from,
-        //     bestAmountOut.routes[i].to,
-        //     bestAmountOut.routes[i].stable
-        //   )
-        //   .call();
-        // const ratio = BigNumber(res.b).div(res.a);
-        const ratio = 1;
+        const res = await libraryContract.methods
+          .getTradeDiff(
+            amountIn,
+            bestAmountOut.routes[i].from,
+            bestAmountOut.routes[i].to,
+            bestAmountOut.routes[i].stable
+          )
+          .call();
+        const ratio = BigNumber(res.b).div(res.a);
         totalRatio = BigNumber(totalRatio).times(ratio).toFixed(18);
       }
 
