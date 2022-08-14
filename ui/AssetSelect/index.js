@@ -12,13 +12,11 @@ import {
   MenuItem,
   TextField,
   Typography,
-  Popover,
 } from '@mui/material';
-import { ArrowBackIosNew, Close, DeleteOutline, Search } from '@mui/icons-material';
+import { Close, DeleteOutline, Search } from '@mui/icons-material';
 import { formatCurrency } from '../../utils';
-import Borders from '../Borders';
 import BigNumber from 'bignumber.js';
-import SwapIconBg from '../SwapIconBg';
+import { TokenOptions } from './TokenOptions'
 
 const AssetSelect = (
   {
@@ -39,7 +37,24 @@ const AssetSelect = (
 
   const [manageLocal, setManageLocal] = useState(false);
 
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClosePopover = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOpenPopover = (event) => {
+    if (!value) {
+      return;
+    }
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
   const openSearch = () => {
+    if (anchorEl) {
+      return;
+    }
+
     setSearch('');
     setOpen(true);
   };
@@ -458,7 +473,12 @@ const AssetSelect = (
               )}
 
               {typeIcon !== 'double' &&
-                  <div className={classes.dotsSelectMenu}/>
+                <TokenOptions
+                  value={value}
+                  anchorEl={anchorEl}
+                  handleClosePopover={handleClosePopover}
+                  handleOpenPopover={handleOpenPopover}
+                />
               }
           </div>
         </div>
