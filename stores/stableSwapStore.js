@@ -6,7 +6,7 @@ import {
   CONTRACTS,
   BASE_ASSETS_WHITELIST,
   BLACK_LIST_TOKENS,
-  ROUTE_ASSETS
+  ROUTE_ASSETS, CONE_ADDRESS
 } from "./constants";
 import { v4 as uuidv4 } from "uuid";
 
@@ -694,10 +694,10 @@ class Store {
   };
 
   getPair = async (addressA, addressB, stab) => {
-    if (addressA === "MATIC") {
+    if (addressA === "BNB") {
       addressA = CONTRACTS.WFTM_ADDRESS;
     }
-    if (addressB === "MATIC") {
+    if (addressB === "BNB") {
       addressB = CONTRACTS.WFTM_ADDRESS;
     }
 
@@ -1070,7 +1070,7 @@ class Store {
 
   // DISPATCHER FUNCTIONS
   configure = async (payload) => {
-    try {
+    // try {
       this.setStore({ govToken: this._getGovTokenBase() });
       this.setStore({ veToken: await this._getVeTokenBase() });
       this.setStore({ baseAssets: await this._getBaseAssets() });
@@ -1083,10 +1083,10 @@ class Store {
       setTimeout(() => {
         this.dispatcher.dispatch({ type: ACTIONS.GET_BALANCES });
       }, 1);
-    } catch (ex) {
-      console.log(ex);
-      this.emitter.emit(ACTIONS.ERROR, ex);
-    }
+    // } catch (ex) {
+    //   console.log("STORE error", ex);
+    //   this.emitter.emit(ACTIONS.ERROR, ex);
+    // }
   };
 
   _getBaseAssets = async () => {
@@ -1100,7 +1100,7 @@ class Store {
             `https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`
           )
           : await axios.get(
-            `https://raw.githubusercontent.com/dystopia-exchange/default-token-list/master/tokens/matic.json`
+            `https://raw.githubusercontent.com/cone-exchange/token-list/main/lists/pancakeswap-extended.json`
           );
       // console.log("defaultTokenList RESPONSE",defaultTokenList)
       const nativeFTM = {
@@ -1112,14 +1112,18 @@ class Store {
         symbol: CONTRACTS.FTM_SYMBOL,
       };
 
-      for (let i = 0; i < defaultTokenList.data.length; i++) {
+      for (let i = 0; i < defaultTokenList.data.tokens.length; i++) {
         for (let j = 0; j < baseAssets.length; j++) {
           baseAssets[j].address = baseAssets[j].id
           baseAssets[j].balance = 0
           baseAssets[j].chainId = 0
 
-          if (defaultTokenList.data[i].address.toLowerCase() === baseAssets[j].address.toLowerCase()) {
-            baseAssets[j].logoURI = defaultTokenList.data[i].logoURI;
+          if (defaultTokenList.data.tokens[i].address?.toLowerCase() === baseAssets[j].address.toLowerCase()) {
+            baseAssets[j].logoURI = defaultTokenList.data.tokens[i].logoURI;
+          }
+
+          if(baseAssets[j].address.toLowerCase() === CONE_ADDRESS) {
+            baseAssets[j].logoURI = 'https://raw.githubusercontent.com/cone-exchange/cone-assets/master/con%20token%20icon.png'
           }
 
           if (baseAssets[j].name === "miMATIC") {
@@ -1134,13 +1138,13 @@ class Store {
       let localBaseAssets = this.getLocalAssets();
 
       baseAssets = baseAssets.filter((token) => {
-        return BLACK_LIST_TOKENS.indexOf(token.address.toLowerCase()) === -1;
+        return BLACK_LIST_TOKENS.indexOf(token.id?.toLowerCase()) === -1;
       });
       let dupAssets = [];
       baseAssets.forEach((token, id) => {
         BASE_ASSETS_WHITELIST.forEach((wl) => {
-          if (token.address.toLowerCase() !== wl.address.toLowerCase()
-            && wl.symbol.toLowerCase() === token.symbol.toLowerCase()) {
+          if (token.id?.toLowerCase() !== wl.address?.toLowerCase()
+            && wl.symbol?.toLowerCase() === token.symbol?.toLowerCase()) {
             dupAssets.push(id);
           }
         });
@@ -1594,7 +1598,7 @@ class Store {
       const baseAssetsBalances = await Promise.all(
         baseAssets.map(async (asset) => {
           try {
-            if (asset.address === "MATIC") {
+            if (asset.address === "BNB") {
               let bal = await web3.eth.getBalance(account.address);
               return {
                 balanceOf: bal,
@@ -1717,10 +1721,10 @@ class Store {
 
       let toki0 = token0.address;
       let toki1 = token1.address;
-      if (token0.address === "MATIC") {
+      if (token0.address === "BNB") {
         toki0 = CONTRACTS.WFTM_ADDRESS;
       }
-      if (token1.address === "MATIC") {
+      if (token1.address === "BNB") {
         toki1 = CONTRACTS.WFTM_ADDRESS;
       }
 
@@ -1792,7 +1796,7 @@ class Store {
       let allowance1 = 0;
 
       // CHECK ALLOWANCES AND SET TX DISPLAY
-      if (token0.address !== "MATIC") {
+      if (token0.address !== "BNB") {
         allowance0 = await this._getDepositAllowance(web3, token0, account);
         if (BigNumber(allowance0).lt(amount0)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -1815,7 +1819,7 @@ class Store {
         });
       }
 
-      if (token1.address !== "MATIC") {
+      if (token1.address !== "BNB") {
         allowance1 = await this._getDepositAllowance(web3, token1, account);
         if (BigNumber(allowance1).lt(amount1)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -1939,7 +1943,7 @@ class Store {
       ];
       let sendValue = null;
 
-      if (token0.address === "MATIC") {
+      if (token0.address === "BNB") {
         func = "addLiquidityMATIC";
         params = [
           token1.address,
@@ -1952,7 +1956,7 @@ class Store {
         ];
         sendValue = sendAmount0;
       }
-      if (token1.address === "MATIC") {
+      if (token1.address === "BNB") {
         func = "addLiquidityMATIC";
         params = [
           token0.address,
@@ -1988,10 +1992,10 @@ class Store {
           // GET PAIR FOR NEWLY CREATED LIQUIDITY POOL
           let tok0 = token0.address;
           let tok1 = token1.address;
-          if (token0.address === "MATIC") {
+          if (token0.address === "BNB") {
             tok0 = CONTRACTS.WFTM_ADDRESS;
           }
-          if (token1.address === "MATIC") {
+          if (token1.address === "BNB") {
             tok1 = CONTRACTS.WFTM_ADDRESS;
           }
           const pairFor = await factoryContract.methods
@@ -2110,7 +2114,7 @@ class Store {
             );
           };
 
-          if (gaugeAddress === "0x0000000000000000000000000000000000000000") {
+          if (gaugeAddress === ZERO_ADDRESS) {
             // SUBMIT CREATE GAUGE TRANSACTION
             this._callContractWait(
               web3,
@@ -2206,10 +2210,10 @@ class Store {
       const gasPrice = await stores.accountStore.getGasPrice();
       const allowanceCallsPromises = [];
 
-      if (token0.address === "MATIC") {
+      if (token0.address === "BNB") {
         token0.address = CONTRACTS.WFTM_ADDRESS;
       }
-      if (token1.address === "MATIC") {
+      if (token1.address === "BNB") {
         token1.address = CONTRACTS.WFTM_ADDRESS;
       }
 
@@ -2325,10 +2329,10 @@ class Store {
 
       let toki0 = token0.address;
       let toki1 = token1.address;
-      if (token0.address === "MATIC") {
+      if (token0.address === "BNB") {
         toki0 = CONTRACTS.WFTM_ADDRESS;
       }
-      if (token1.address === "MATIC") {
+      if (token1.address === "BNB") {
         toki1 = CONTRACTS.WFTM_ADDRESS;
       }
 
@@ -2386,7 +2390,7 @@ class Store {
       let allowance1 = 0;
 
       // CHECK ALLOWANCES AND SET TX DISPLAY
-      if (token0.address !== "MATIC") {
+      if (token0.address !== "BNB") {
         allowance0 = await this._getDepositAllowance(web3, token0, account);
         if (BigNumber(allowance0).lt(amount0)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -2409,7 +2413,7 @@ class Store {
         });
       }
 
-      if (token1.address !== "MATIC") {
+      if (token1.address !== "BNB") {
         allowance1 = await this._getDepositAllowance(web3, token1, account);
         if (BigNumber(allowance1).lt(amount1)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -2533,7 +2537,7 @@ class Store {
       ];
       let sendValue = null;
 
-      if (token0.address === "MATIC") {
+      if (token0.address === "BNB") {
         func = "addLiquidityMATIC";
         params = [
           token1.address,
@@ -2546,7 +2550,7 @@ class Store {
         ];
         sendValue = sendAmount0;
       }
-      if (token1.address === "MATIC") {
+      if (token1.address === "BNB") {
         func = "addLiquidityMATIC";
         params = [
           token0.address,
@@ -2581,10 +2585,10 @@ class Store {
           // GET PAIR FOR NEWLY CREATED LIQUIDITY POOL
           let tok0 = token0.address;
           let tok1 = token1.address;
-          if (token0.address === "MATIC") {
+          if (token0.address === "BNB") {
             tok0 = CONTRACTS.WFTM_ADDRESS;
           }
-          if (token1.address === "MATIC") {
+          if (token1.address === "BNB") {
             tok1 = CONTRACTS.WFTM_ADDRESS;
           }
           const pairFor = await factoryContract.methods
@@ -2697,7 +2701,7 @@ class Store {
       let allowance1 = 0;
 
       // CHECK ALLOWANCES AND SET TX DISPLAY
-      if (token0.address !== "MATIC") {
+      if (token0.address !== "BNB") {
         allowance0 = await this._getDepositAllowance(web3, token0, account);
         if (BigNumber(allowance0).lt(amount0)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -2720,7 +2724,7 @@ class Store {
         });
       }
 
-      if (token1.address !== "MATIC") {
+      if (token1.address !== "BNB") {
         allowance1 = await this._getDepositAllowance(web3, token1, account);
         if (BigNumber(allowance1).lt(amount1)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -2851,7 +2855,7 @@ class Store {
       ];
       let sendValue = null;
 
-      if (token0.address === "MATIC") {
+      if (token0.address === "BNB") {
         func = "addLiquidityMATIC";
         params = [
           token1.address,
@@ -2864,7 +2868,7 @@ class Store {
         ];
         sendValue = sendAmount0;
       }
-      if (token1.address === "MATIC") {
+      if (token1.address === "BNB") {
         func = "addLiquidityMATIC";
         params = [
           token0.address,
@@ -3145,7 +3149,7 @@ class Store {
       let allowance1 = 0;
 
       // CHECK ALLOWANCES AND SET TX DISPLAY
-      if (token0.address !== "MATIC") {
+      if (token0.address !== "BNB") {
         allowance0 = await this._getDepositAllowance(web3, token0, account);
         if (BigNumber(allowance0).lt(amount0)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -3168,7 +3172,7 @@ class Store {
         });
       }
 
-      if (token1.address !== "MATIC") {
+      if (token1.address !== "BNB") {
         allowance1 = await this._getDepositAllowance(web3, token1, account);
         if (BigNumber(allowance1).lt(amount1)) {
           this.emitter.emit(ACTIONS.TX_STATUS, {
@@ -3351,7 +3355,7 @@ class Store {
       ];
       let sendValue = null;
 
-      if (token0.address === "MATIC") {
+      if (token0.address === "BNB") {
         func = "addLiquidityMATIC";
         params = [
           token1.address,
@@ -3364,7 +3368,7 @@ class Store {
         ];
         sendValue = sendAmount0;
       }
-      if (token1.address === "MATIC") {
+      if (token1.address === "BNB") {
         func = "addLiquidityMATIC";
         params = [
           token0.address,
@@ -3522,10 +3526,10 @@ class Store {
       let addy0 = token0.address;
       let addy1 = token1.address;
 
-      if (token0.address === "MATIC") {
+      if (token0.address === "BNB") {
         addy0 = CONTRACTS.WFTM_ADDRESS;
       }
-      if (token1.address === "MATIC") {
+      if (token1.address === "BNB") {
         addy1 = CONTRACTS.WFTM_ADDRESS;
       }
 
@@ -4254,10 +4258,10 @@ class Store {
       let addy0 = fromAsset.address;
       let addy1 = toAsset.address;
 
-      if (fromAsset.address === "MATIC") {
+      if (fromAsset.address === "BNB") {
         addy0 = CONTRACTS.WFTM_ADDRESS;
       }
-      if (toAsset.address === "MATIC") {
+      if (toAsset.address === "BNB") {
         addy1 = CONTRACTS.WFTM_ADDRESS;
       }
 
@@ -4435,15 +4439,17 @@ class Store {
         let amountIn = bestAmountOut.receiveAmounts[i];
         // let amountOut = bestAmountOut.receiveAmounts[i + 1];
 
-        const res = await libraryContract.methods
-          .getTradeDiff(
-            amountIn,
-            bestAmountOut.routes[i].from,
-            bestAmountOut.routes[i].to,
-            bestAmountOut.routes[i].stable
-          )
-          .call();
-        const ratio = BigNumber(res.b).div(res.a);
+        // todo change the logic or deploy the library
+        // const res = await libraryContract.methods
+        //   .getTradeDiff(
+        //     amountIn,
+        //     bestAmountOut.routes[i].from,
+        //     bestAmountOut.routes[i].to,
+        //     bestAmountOut.routes[i].stable
+        //   )
+        //   .call();
+        // const ratio = BigNumber(res.b).div(res.a);
+        const ratio = 1;
         totalRatio = BigNumber(totalRatio).times(ratio).toFixed(18);
       }
 
@@ -4514,7 +4520,7 @@ class Store {
       let allowance = 0;
 
       // CHECK ALLOWANCES AND SET TX DISPLAY
-      if (fromAsset.address !== "MATIC") {
+      if (fromAsset.address !== "BNB") {
         allowance = await this._getSwapAllowance(web3, fromAsset, account);
 
         if (BigNumber(allowance).lt(fromAmount)) {
@@ -4619,7 +4625,7 @@ class Store {
         func = "swapExactTokensForTokensSupportingFeeOnTransferTokens";
       }
 
-      if (fromAsset.address === "MATIC") {
+      if (fromAsset.address === "BNB") {
         func = "swapExactMATICForTokens";
         params = [
           sendMinAmountOut,
@@ -4629,7 +4635,7 @@ class Store {
         ];
         sendValue = sendFromAmount;
       }
-      if (toAsset.address === "MATIC") {
+      if (toAsset.address === "BNB") {
         func = "swapExactTokensForMATIC";
         if (
           fromAsset.address.toLowerCase() ===
@@ -4827,7 +4833,7 @@ class Store {
       const ba = await Promise.all(
         baseAssets.map(async (asset) => {
           if (asset.address.toLowerCase() === assetAddress.toLowerCase()) {
-            if (asset.address === "MATIC") {
+            if (asset.address === "BNB") {
               let bal = await web3.eth.getBalance(account.address);
               asset.balance = BigNumber(bal)
                 .div(10 ** parseInt(asset.decimals))

@@ -447,7 +447,7 @@ function Header(props) {
 
                     <Typography
                         className={[classes.headBalanceTxt, classes[`headBalanceTxt--${appTheme}`], 'g-flex', 'g-flex--align-center'].join(' ')}>
-                      {maticBalance ? maticBalance : 0} MATIC
+                      {maticBalance ? maticBalance : 0} BNB
                     </Typography>
                   </Button>
 

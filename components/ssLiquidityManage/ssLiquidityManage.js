@@ -357,10 +357,10 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
       let addy0 = assetA.address;
       let addy1 = assetB.address;
 
-      if (assetA.address === "MATIC") {
+      if (assetA.address === "BNB") {
         addy0 = CONTRACTS.WFTM_ADDRESS;
       }
-      if (assetB.address === "MATIC") {
+      if (assetB.address === "BNB") {
         addy1 = CONTRACTS.WFTM_ADDRESS;
       }
 
