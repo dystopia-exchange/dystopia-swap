@@ -466,7 +466,7 @@ a.linkz {
   background-color: var(--main-secondary-dark) !important;
 }
 
-.nav-button--active.nav-button--light {;
+.nav-button--active.nav-button--light {
   background-color: var(--menu-highlight-light) !important;
   border: 1px solid var(--main-secondary-light) !important;
   color: var(--main-secondary-light) !important;
@@ -481,6 +481,32 @@ a.linkz {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 1650px) {
+  .nav-button {
+    padding: 10px 20px !important;
+  }
+
+  .nav-button-corner-top::before,
+  .nav-button-corner-top::after {
+    top: -14.5px;
+  }
+
+  .nav-button-corner-top::before,
+  .nav-button-corner-bottom::before {
+    left: -26px;
+  }
+
+  .nav-button-corner-top::after,
+  .nav-button-corner-bottom::after {
+    right: -26px;
+  }
+
+  .nav-button-corner-bottom::before,
+  .nav-button-corner-bottom::after {
+    bottom: -14.5px;
   }
 }
 
