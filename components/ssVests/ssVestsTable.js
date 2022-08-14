@@ -28,6 +28,7 @@ import TablePaginationActions from '../table-pagination/table-pagination';
 import SortSelect from '../select-sort/select-sort';
 import BigNumber from 'bignumber.js';
 import css from './ssVests.module.css'
+import { Notification } from './notification';
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
@@ -419,10 +420,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toolbar: {
-    marginBottom: 30,
-    padding: 0,
     minHeight: 'auto',
-    ["@media (max-width:660px)"]: {
+
+    marginBottom: 30,
+
+    padding: 0,
+
+    ["@media (max-width: 1400px)"]: {
+      display: 'flex',
+      flexDirection: 'column-reverse',
+      alignItems: 'flex-start',
+    },
+
+    ["@media (max-width: 660px)"]: {
       paddingBottom: 70,
     },
   },
@@ -496,17 +506,6 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: 45,
   },
-  ["@media (max-width: 660px)"]: {
-    toolbar:{
-      display: 'flex',
-      paddingLeft:"10px",
-      paddingRight:"10px",
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }
-  },
-  
   cellPaddings: {
     padding: '11px 20px',
     ["@media (max-width:530px)"]: {
@@ -570,48 +569,50 @@ const EnhancedTableToolbar = (props) => {
 
   return (
     <Toolbar className={classes.toolbar} style={{ marginBottom: 30 }}>
-      <div
-        className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
-        onClick={onCreate}>
-        <div className={classes.addButtonIcon}>
-          <LockOutlined style={{width: 20, color: '#fff'}}/>
+      <div className={css.toolbarContent}>
+        <div
+          className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
+          onClick={onCreate}>
+          <div className={classes.addButtonIcon}>
+            <LockOutlined style={{width: 20, color: '#fff'}}/>
+          </div>
+            
+          <Typography
+            className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
+          >
+            Create Lock
+          </Typography>
         </div>
-          
-        <Typography
-          className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
+        <div
+          className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
+          onClick={onMerge}
+          style={{ marginLeft: 20 }}
         >
-          Create Lock
-        </Typography>
-      </div>
-      <div
-        className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
-        onClick={onMerge}
-        style={{ marginLeft: 20 }}
-      >
 
-        <Typography
-          className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
-        >
-          {windowWidth <= 660 ? 'Merge' : 'Merge NFTs'}
-        </Typography>
-      </div>
-      {windowWidth <= 660 && (
-        <div className={[classes.sortSelect, css.sortSelect].join(' ')}>
-          {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
+          <Typography
+            className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
+          >
+            {windowWidth <= 660 ? 'Merge' : 'Merge NFTs'}
+          </Typography>
         </div>
-      )}
-
-      <div
-        className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
-        style={{ marginLeft: 20 }}
-      >
-        <Typography
-          className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
+        {windowWidth <= 660 && (
+          <div className={[classes.sortSelect, css.sortSelect].join(' ')}>
+            {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
+          </div>
+        )}
+        <div
+          className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
+          style={{ marginLeft: 20 }}
         >
-          NFT APR: {parseInt(props.veToken?.veDistApr)}%
-        </Typography>
+          <Typography
+            className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
+          >
+            NFT APR: {parseInt(props.veToken?.veDistApr)}%
+          </Typography>
+        </div>
       </div>
-
+      
+      <Notification />
     </Toolbar>
   );
 };
