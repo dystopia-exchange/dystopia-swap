@@ -1154,7 +1154,7 @@ class Store {
         baseAssets.splice(dupAssets[i], 1);*/
 
       // console.log("baseAssets",removeDuplicate([...baseAssets, ...localBaseAssets]))
-      return removeDuplicate([...baseAssets, ...localBaseAssets]);
+      return removeDuplicate([...localBaseAssets, ...baseAssets]);
     } catch (ex) {
       console.log(ex);
       return [];
