@@ -1,3 +1,25 @@
+.title {
+  font-weight: 500;
+  font-size: 40px;
+  /* identical to box height, or 120% */
+
+  /* white */
+  color: #E4E9F4;
+}
+
+.topBarContainer {
+  position: relative;
+  padding: 0 0 0 0;
+  width: 100%;
+}
+
+
+/*.sidebar {
+  display: flex;
+  flex-direction: column;
+}*/
+
+
 .container {
   max-width: 1400px;
   width: calc(100% - 180px);
@@ -31,9 +53,9 @@
   bottom: 30px;
   left: 50%;
   transform: translatex(-50%);
-  border-radius: 12 !important;
+  border-radius: 12px !important;
   border: 1px solid rgba(126, 153, 176, 0.2);
-  z-index: 20 !important;
+  /*z-index: 20 !important;*/
 }
 
 .actionButton {
@@ -46,20 +68,19 @@
 
 .infoSection {
   padding: 0 0 0 20px;
-  background: #DBE6EC;
-  border: 1px solid #86B9D6;
+  /*background: #DBE6EC;*/
+  /*border: 1px solid #86B9D6;*/
 }
 
 .infoSection--dark {
-  background: #151718;
-  border: 1px solid #5F7285;
+  /*background: #151718;*/
+  /*border: 1px solid #5F7285;*/
 }
 
 .helpText {
-  font-weight: 500 !important;
+  font-weight: 400 !important;
   font-size: 18px !important;
-  line-height: 140% !important;
-  color: #15B525 !important;
+  color: #5EE852 !important;
   white-space: nowrap !important;
 }
 
@@ -89,6 +110,39 @@
 }
 
 
+.buttonOverrideFixedCast {
+  background-color: #D3F85A !important;
+  color: #060B17 !important;
+  white-space: nowrap;
+  text-transform: uppercase !important;
+  border-radius: 0 !important;
+  height: 48px;
+  width: 122px;
+  position: fixed !important;
+  top: unset;
+  left: unset;
+  bottom: 0;
+  right: 88px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.buttonOverrideFixedReset {
+  height: 48px;
+  background-color: rgba(50, 54, 63, 0.85) !important;
+  border: 1px solid #779BF4 !important;
+  border-radius: 0 !important;
+  width: 71px;
+  text-transform: uppercase !important;
+  position: fixed !important;
+  top: unset;
+  left: unset;
+  right: 16px;
+  bottom: 0;
+  cursor: pointer;
+  z-index: 10;
+}
+
 .buttonOverrideFixed {
   padding: 12px 20px !important;
   margin-left: 20px !important;
@@ -105,19 +159,11 @@
   box-shadow: none !important;
 }
 
-.buttonOverrideFixed--light {
-}
-
 .buttonOverrideFixed--dark {
   background: #494B51 !important;
   outline: 1px solid #7F828B !important;
 }
 
-.buttonOverrideFixedDisabled--light {
-  background: #D4D5DB!important;
-  color: #A3A9BA !important;
-  outline: 1px solid #A3A9BA !important;
-}
 
 .buttonOverrideFixedDisabled--dark {
   background: #494B51 !important;
@@ -134,15 +180,9 @@
   flex: 1;
   display: flex;
   width: 100%;
-  padding: 0px 24px !important;
+  padding: 0 24px !important;
 }
 
-.topBarContainer {
-  position: relative;
-  padding: 30px 0px;
-  padding-top: 0px;
-  width: 100%;
-}
 
 .textField {
   margin-bottom: 4px;
@@ -178,12 +218,45 @@
   font-size: 32px !important;
 }
 
+.searchInputRoot {
+  width: 100% !important;
+  height: 48px;
+  position: absolute !important;
+  top: 68px;
+  right: 0;
+}
+
 .searchInput {
-  width: 430px !important;
+  width: 100% !important;
+  height: 48px;
+  position: absolute !important;
+  right: 0;
+  padding-right: 16px !important;
+}
+
+.searchInput:hover {
+  background-color: #1F2B49 !important;
 }
 
 .searchInput > fieldset {
   border: none !important;
+}
+
+.searchInputInput {
+  padding: 16px !important;
+  font-size: 14px !important;
+}
+
+.searchInputInput::placeholder {
+  color: #8191B9 !important;
+}
+
+.searchInputIcon {
+  display: flex;
+  align-items: center;
+  height: 0.01em;
+  max-height: 2em;
+  transform: scale(0.8);
 }
 
 .smallerText {
@@ -193,18 +266,12 @@
 }
 
 .addButton {
-  width: 215px;
-  height: 50px;
+  width: 170px;
+  height: 48px;
   margin-left: 20px;
   cursor: pointer;
-}
-
-.addButton--light:hover > p {
-  background: #C6BAF0;
-}
-
-.addButton--light:active > p {
-  background: #B9A4EE;
+  position: absolute;
+  right: 60px;
 }
 
 .addButton--dark:hover > p {
@@ -222,23 +289,20 @@
 }
 
 .actionButtonText {
+  text-transform: uppercase;
   width: 200px;
   height: 100%;
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 600;
+  font-size: 24px;
   line-height: 120%;
-  background: #D2D0F2;
-  color: #8F5AE8;
+  background: rgba(119, 155, 244, 0.15);
+  border: 1px solid #779BF4;
+  border-radius: 12px;
+  /* brand-add */
+  color: #779BF4;
   transition: all ease 300ms;
 }
 
-.actionButtonText--light {
-  background: #D2D0F2;
-}
-
-.actionButtonText--dark {
-  background: #33284C;
-}
 
 .searchButton {
   width: 50px !important;
@@ -275,15 +339,216 @@
   border: 1px solid #4CADE6;
 }
 
-@media (max-width: 1360px) {
+.yourVotes {
+  background: #171D2D;
+  border: 1px solid #171D2D;
+  border-radius: 0;
+  justify-content: space-between;
+  padding: 24px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  width: calc(100vw - 209px);
+  height: 48px;
+}
+
+.tokenSelect {
+  position: absolute;
+  left: 0;
+  top: 128px;
+  width: 100%;
+  height: 48px;
+}
+.tokenSelect > div {
+  height: 48px;
+}
+
+@media (min-width: 806px) {
+  .addButton {
+    width: 170px;
+    height: 72px;
+    margin-left: 20px;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+  }
+
+  .title {
+    font-size: 60px;
+    line-height: 120%;
+  }
+
+  .topBarContainer {
+    padding-bottom: 230px;
+  }
+
+  .tokenSelect {
+    position: absolute;
+    left: 0;
+    top: 106px;
+    width: 347px;
+  }
+
+  .tokenSelect > div {
+    height: 72px;
+  }
+
+  .buttonOverrideFixedCast {
+    position: absolute !important;
+    border-radius: 12px !important;
+    height: 72px;
+    width: 248px;
+    top: 192px;
+    left: 0;
+    font-weight: 600 !important;
+    font-size: 18px !important;
+    z-index: 0;
+  }
+
+  .buttonOverrideFixedReset {
+    background-color: rgba(119, 155, 244, 0.15) !important;
+    border-radius: 12px !important;
+    position: absolute !important;
+    height: 72px;
+    width: 248px;
+    top: 192px;
+    left: 270px;
+    z-index: 0;
+  }
+
+  .yourVotes {
+    border-radius: 12px;
+    position: absolute;
+    left: 360px;
+    top: 106px;
+    height: 72px;
+    width: 248px;
+    z-index: 0;
+  }
+
+  .searchInputRoot {
+    width: 380px !important;
+    height: 72px;
+    position: absolute !important;
+    top: 0px;
+    right: 186px;
+  }
+
+  .searchInput {
+    width: 380px !important;
+    height: 72px;
+    position: absolute !important;
+    right: 0;
+    padding-right: 24px !important;
+  }
+
+  .searchInputInput {
+    padding: 24px !important;
+    font-size: 16px !important;
+  }
+
+  .searchInputIcon {
+    transform: scale(1);
+  }
+}
+
+@media (min-width: 1200px) {
+  .topBarContainer {
+    padding-bottom: 130px;
+  }
+
+  .tokenSelect {
+    position: absolute;
+    left: 0;
+    top: 100px;
+  }
+
+  .buttonOverrideFixedCast {
+    height: 72px;
+    width: 248px;
+    top: 102px;
+    left: 632px;
+  }
+
+  .buttonOverrideFixedReset {
+    height: 72px;
+    width: 248px;
+    top: 102px;
+    left: 902px;
+  }
+
+  .yourVotes {
+    left: 366px;
+    top: 102px;
+    height: 72px;
+    width: 248px;
+  }
+
+  .searchInputRoot {
+    width: 630px !important;
+    height: 72px;
+    position: absolute !important;
+    right: 186px;
+  }
+
+  .searchInput {
+    width: 630px !important;
+    height: 72px;
+    position: absolute !important;
+    right: 0;
+  }
+}
+
+@media (min-width: 1920px) {
+  .topBarContainer {
+    padding-left: 400px;
+    padding-bottom: 30px;
+  }
+
+  .tokenSelect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 377px;
+    height: 80px;
+  }
+
+  .yourVotes {
+    position: absolute;
+    left: 0;
+    top: 96px;
+    height: 72px;
+    width: 377px;
+  }
+
+  .buttonOverrideFixedCast {
+    height: 96px;
+    width: 377px;
+    top: 186px;
+    left: 0;
+    font-size: 32px !important;
+  }
+
+  .buttonOverrideFixedReset {
+    height: 72px;
+    width: 377px;
+    top: 302px;
+    left: 0;
+  }
+}
+
+
+
+/*@media (max-width: 1360px) {
   .searchInput {
     position: absolute !important;
     top: 30px;
     right: 0;
   }
-}
+}*/
 
-@media (max-width: 1210px) {
+/*@media (max-width: 1210px) {
   .addButton {
     position: absolute;
     top: 60px;
@@ -310,13 +575,15 @@
   .topBarContainer {
     padding-top: 15px;
   }
-}
+}*/
 
-.sortSelect {
+/*.sortSelect {
   position: absolute;
-  top: 60px;
-}
+  top: 4px;
+  right: 0;
+}*/
 
+/*
 @media (max-width: 660px) {
   .topBarContainer {
     height: 96px;
@@ -350,10 +617,10 @@
 
   .controls > .tokenSelect {
     margin-bottom: 12px;
-    /* position: absolute !important;
+    !* position: absolute !important;
     top: 0;
     left: auto;
-    right: 0; */
+    right: 0; *!
   }
 
   .addButton {
@@ -745,3 +1012,6 @@
     padding: 8px 15px;
   }
 }
+*/
+
+

@@ -1,0 +1,86 @@
+.notConnectedContent {
+  display: flex;
+  flex-direction: column;
+
+  margin: 0 auto;
+
+  width: 100%;
+  max-width: 676px;
+
+  border-radius: 0 !important;
+
+  background: transparent !important;
+  box-shadow: none !important;
+
+  transform: translateX(-50px);
+}
+
+@media (max-width: 1500px) {
+  .notConnectedContent {
+    margin: 0;
+    transform: none;
+  }
+}
+
+.contentFloatText {
+  margin-bottom: 40px !important;
+
+  font-family: "Poppins", serif !important;
+  font-size: 96px !important;
+  font-weight: 500 !important;
+  line-height: 144px !important;
+
+  color: #ffffff !important;
+}
+
+@media (max-width: 650px) {
+  .contentFloatText {
+    font-size: 48px !important;
+    line-height: 52px !important;
+  }
+}
+
+.title {
+  margin-top: 0;
+  margin-bottom: 40px;
+
+  font-family: "Poppins";
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+
+  color: #fff;
+}
+
+.buttonConnect {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 377px;
+  height: 96px;
+
+  border-radius: 12px;
+
+  background: #d3f85a;
+
+  padding: 0 !important;
+
+  border: none !important;
+  background-color: #d3f85a !important;
+
+  cursor: pointer;
+}
+
+.buttonEnterLabel {
+  font-family: "Poppins";
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  line-height: 48px !important;
+
+  color: #171d2d !important;
+
+  white-space: pre-line;
+}

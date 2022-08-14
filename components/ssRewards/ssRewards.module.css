@@ -1,3 +1,34 @@
+.pageTitle {
+  /* white */
+  color: #E4E9F4;
+  font-weight: 500;
+  font-size: 60px;
+  line-height: 72px;
+  width: 100%;
+}
+
+.disclaimerContainerWrapper {
+  justify-content: right;
+  top: 0;
+  position: absolute;
+  right: 0;
+}
+
+.tableWrapper {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.tableWrapper > div {
+  width: 100%;
+  overflow: hidden;
+}
+
+.nftSelect {
+  margin-top: 20px;
+  width: 100%;
+}
 
 .container {
   max-width: 1400px;
@@ -31,7 +62,8 @@
 }
 
 .toolbarContainer {
-  margin-bottom: 10px;
+  flex-direction: column;
+  position: relative;
 }
 
 .searchContainer {
@@ -111,41 +143,26 @@
 }
 
 .disclaimer {
-  padding: 20px 16px !important;
-  background: #CFE5F2 !important;
-  border: 2px solid #0B5E8E !important;
+  align-items: center;
+  display: flex;
+  gap: 20px;
+  padding: 12px 24px !important;;
   font-weight: 400 !important;
-  font-size: 14px !important;
-  line-height: 120% !important;
-  color: #325569 !important;
-}
-
-.disclaimer--dark {
-  background: #2D3741 !important;
-  border: 2px solid #4CADE6 !important;
-  color: #C6CDD2 !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  letter-spacing: 0.1em !important;
+  color: #E4E9F4 !important;
+  background: rgba(119, 155, 244, 0.15) !important;
+  border: 1px solid #779BF4 !important;
+  border-radius: 12px !important;
 }
 
 .addButton {
-  width: 215px;
-  height: 50px;
+  margin: 24px 0;
+  width: 100%;
+  height: 72px;
   cursor: pointer;
-}
-
-.addButton--light:hover > p {
-  background: #C6BAF0;
-}
-
-.addButton--light:active > p {
-  background: #B9A4EE;
-}
-
-.addButton--dark:hover > p {
-  background: #402E61;
-}
-
-.addButton--dark:active > p {
-  background: #523880;
+  position: relative;
 }
 
 .addButtonIcon {
@@ -155,22 +172,70 @@
 }
 
 .actionButtonText {
-  width: 200px;
+  width: 100%;
   height: 100%;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 120%;
-  background: #D2D0F2;
-  color: #8F5AE8;
+  font-weight: 600 !important;
+  font-size: 32px !important;
+  line-height: 48px;
+  background: #D3F85A;
+  border-radius: 12px;
+  color: #060B17;
   transition: all ease 300ms;
 }
 
-.actionButtonText--light {
-  background: #D2D0F2;
+@media (min-width: 806px) {
+  .tableWrapper {
+    flex-direction: row;
+  }
+  .tableWrapper > div {
+    background: #060B17;
+    border: 1px solid #D3F85A;
+    border-radius: 12px;
+  }
+  .toolbarContainer {
+    height: 100px;
+    flex-direction: row;
+    margin-bottom: 82px;
+  }
+  .nftSelect {
+    margin-top: 0;
+    position: absolute;
+    top: 90px;
+    left: 0;
+    width: 300px;
+  }
+  .addButton {
+    margin: 0;
+    width: 300px;
+    height: 72px;
+    position: absolute;
+    top: 90px;
+    left: 322px;
+  }
 }
 
-.actionButtonText--dark {
-  background: #33284C;
+@media (min-width: 1920px) {
+  .tableWrapper {
+    padding-left: 400px;
+  }
+  .pageTitle {
+    padding-left: 400px;
+  }
+  .toolbarContainer {
+    margin-bottom: 0;
+  }
+  .nftSelect {
+    top: 0;
+    left: 0;
+    width: 377px;
+  }
+  .addButton {
+    width: 377px;
+    height: 96px;
+    position: absolute;
+    top: 100px;
+    left: 0;
+  }
 }
 
 .divider {
@@ -190,10 +255,6 @@
     top: 40px;
     left: 90px;
     width: calc(100% - 180px);
-  }
-
-  .toolbarContainer {
-    margin-top: 68px;
   }
 }
 
@@ -232,20 +293,6 @@
     background-image: url("/images/ui/swap-coin-top-360--dark.svg");
   }
 
-  .textField--amount0-light,
-  .textField--withdraw-light {
-    width: 280px;
-    height: 114px;
-    background-image: url("/images/ui/swap-coin-top-360--light.svg");
-  }
-
-  .textField--amount1-light {
-    margin-top: -30px;
-    width: 280px;
-    height: 114px;
-    background-image: url("/images/ui/swap-coin-bottom-360--light.svg");
-  }
-
   .textField--amount1-dark {
     margin-top: -30px;
     width: 280px;
@@ -253,17 +300,12 @@
     background-image: url("/images/ui/swap-coin-bottom-360--dark.svg");
   }
 
-  .textField--To-light,
   .textField--To-dark {
     margin-top: -50px;
   }
 
   .swapIconContainer--dark {
     background-image: url("/images/ui/swap-coin-btn-360--dark.svg");
-  }
-
-  .swapIconContainer--light {
-    background-image: url("/images/ui/swap-coin-btn-360--light.svg");
   }
 
   .inputBalanceText,
@@ -315,10 +357,6 @@
   .displayDualIconContainer {
     width: 60px;
     height: 60px;
-  }
-
-  .displayDualIconContainer--light {
-    background-image: url("/images/ui/swap-currency-circle-360--light.svg");
   }
 
   .displayDualIconContainer--dark {
@@ -384,10 +422,6 @@
     width: 35%;
   }
 
-  .routeArrow--light {
-    background: var(--background-light) url("/images/ui/swap-route-arrow--light.svg");
-  }
-
   .routeArrow--dark {
     background: var(--background-dark) url("/images/ui/swap-route-arrow--dark.svg");
   }
@@ -407,18 +441,6 @@
     margin-left: 0 !important;
     width: 320px !important;
     height: 50px;
-  }
-
-  .buttonOverride--light {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
-  }
-
-  .buttonOverride--light:hover {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
-  }
-
-  .buttonOverride--light:active {
-    background: transparent url("/images/ui/swap-btn-360--light.svg") no-repeat !important;
   }
 
   .buttonOverride--dark {
@@ -488,11 +510,6 @@
     flex-direction: row;
   }
 
-  .vestInfoTextTop--light {
-    border-right: none;
-    border-bottom: 1px solid #86B9D6;
-  }
-
   .vestInfoTextTop--dark {
     border-right: none;
     border-bottom: 1px solid #5F7285;
@@ -557,12 +574,7 @@
     width: 280px !important;
   }
 
-  .addButton {
-    width: auto;
-  }
-
   .actionButtonText {
-    width: 85px;
     padding: 8px 15px;
   }
 }

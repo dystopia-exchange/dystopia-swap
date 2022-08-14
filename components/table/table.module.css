@@ -1,5 +1,6 @@
 .tableBodyWrapper {
-  padding: 30px;
+  padding: 25px 24px;
+  background-color: #171D2D;
 }
 
 .tableBodyWrapper--light {
@@ -13,7 +14,8 @@
 .tableBodyLoader {}
 
 .tableBodyMessage {
-  font-style: normal;
-  font-size: 24px;
-  line-height: 120%;
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
 }

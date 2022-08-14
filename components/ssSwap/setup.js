@@ -16,7 +16,7 @@ import {
 } from "../../utils";
 import classes from "./ssSwap.module.css";
 import stores from "../../stores";
-import { ACTIONS } from "../../stores/constants";
+import {ACTIONS, CONE_ADDRESS, CONTRACTS, WBNB_ADDRESS} from "../../stores/constants";
 import BigNumber from "bignumber.js";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import BtnSwap from "../../ui/BtnSwap";
@@ -116,14 +116,14 @@ function Setup() {
 
           if (baseAsset.length > 0 && toAssetValue == null) {
             const dystIndex = baseAsset.findIndex((token) => {
-              return token.id == "0x39ab6574c289c3ae4d88500eec792ab5b947a5eb";
+              return token.address?.toLowerCase() === CONE_ADDRESS;
             });
             setToAssetValue(baseAsset[dystIndex]);
           }
 
           if (baseAsset.length > 0 && fromAssetValue == null) {
             const wmaticIndex = baseAsset.findIndex((token) => {
-              return token.id == "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270";
+              return token.address === "BNB";
             });
             setFromAssetValue(baseAsset[wmaticIndex]);
           }
@@ -132,6 +132,7 @@ function Setup() {
 
         const assetsUpdated = () => {
           const baseAsset = stores.stableSwapStore.getStore("baseAssets");
+
           setToAssetOptions(baseAsset);
           setFromAssetOptions(baseAsset);
         };
@@ -142,13 +143,15 @@ function Setup() {
           setToAmountValue("");
           if (
               !(
-                  (fromAssetValue?.symbol == "MATIC" ||
-                      fromAssetValue?.symbol == "WMATIC") &&
-                  (toAssetValue?.symbol == "WMATIC" ||
-                      toAssetValue?.symbol == "MATIC")
+                  (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                      fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+                  (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL ||
+                      toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
               )
-          )
-            calculateReceiveAmount(0, fromAssetValue, toAssetValue);
+          ) {
+              sethidequote(false);
+              calculateReceiveAmount(0, fromAssetValue, toAssetValue);
+          }
           else {
             sethidequote(true);
             setToAmountValue(0);
@@ -192,65 +195,73 @@ function Setup() {
       if (value.address === toAssetValue.address) {
         setToAssetValue(fromAssetValue);
         setFromAssetValue(toAssetValue);
-        if (
-            !(
-                (fromAssetValue?.symbol == "MATIC" ||
-                    fromAssetValue?.symbol == "WMATIC") &&
-                (toAssetValue?.symbol == "WMATIC" ||
-                    toAssetValue?.symbol == "MATIC")
-            )
-        )
-          calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
-        else {
-          sethidequote(true);
-          setToAmountValue(fromAmountValue);
-        }
+          if (
+              !(
+                  (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                      fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+                  (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL ||
+                      toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+              )
+          ) {
+              sethidequote(false);
+              calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
+          }
+          else {
+              sethidequote(true);
+              setToAmountValue(fromAmountValue);
+          }
       } else {
         setFromAssetValue(value);
-        if (
-            !(
-                (value?.symbol == "MATIC" || value?.symbol == "WMATIC") &&
-                (toAssetValue?.symbol == "WMATIC" ||
-                    toAssetValue?.symbol == "MATIC")
-            )
-        )
-          calculateReceiveAmount(fromAmountValue, value, toAssetValue);
-        else {
-          sethidequote(true);
-          setToAmountValue(fromAmountValue);
-        }
+          if (
+              !(
+                  (value?.symbol == CONTRACTS.FTM_SYMBOL || value?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+                  (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL ||
+                      toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+              )
+          ) {
+              sethidequote(false);
+              calculateReceiveAmount(fromAmountValue, value, toAssetValue);
+          }
+          else {
+              sethidequote(true);
+              setToAmountValue(fromAmountValue);
+          }
       }
     } else {
       if (value.address === fromAssetValue.address) {
         setFromAssetValue(toAssetValue);
         setToAssetValue(fromAssetValue);
-        if (
-            !(
-                (fromAssetValue?.symbol == "MATIC" ||
-                    fromAssetValue?.symbol == "WMATIC") &&
-                (toAssetValue?.symbol == "WMATIC" ||
-                    toAssetValue?.symbol == "MATIC")
-            )
-        )
-          calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
-        else {
-          sethidequote(true);
-          setToAmountValue(fromAmountValue);
-        }
+          if (
+              !(
+                  (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                      fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+                  (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL ||
+                      toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+              )
+          ) {
+              sethidequote(false);
+              calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
+          }
+          else {
+              sethidequote(true);
+              setToAmountValue(fromAmountValue);
+          }
       } else {
         setToAssetValue(value);
-        if (
-            !(
-                (fromAssetValue?.symbol == "MATIC" ||
-                    fromAssetValue?.symbol == "WMATIC") &&
-                (value?.symbol == "WMATIC" || value?.symbol == "MATIC")
-            )
-        )
-          calculateReceiveAmount(fromAmountValue, fromAssetValue, value);
-        else {
-          sethidequote(true);
-          setToAmountValue(fromAmountValue);
-        }
+          if (
+              !(
+                  (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                      fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+                  (value?.symbol == CONTRACTS.WFTM_SYMBOL || value?.symbol == CONTRACTS.FTM_SYMBOL)
+              )
+          ) {
+              sethidequote(false);
+              calculateReceiveAmount(fromAmountValue, fromAssetValue, value);
+          }
+          else {
+              sethidequote(true);
+              setToAmountValue(fromAmountValue);
+          }
       }
     }
 
@@ -266,23 +277,24 @@ function Setup() {
       setToAmountValue("");
       setQuote(null);
     } else {
-      if (
-          !(
-              (fromAssetValue?.symbol == "MATIC" ||
-                  fromAssetValue?.symbol == "WMATIC") &&
-              (toAssetValue?.symbol == "WMATIC" || toAssetValue?.symbol == "MATIC")
-          )
-      )
-        calculateReceiveAmount(value, fromAssetValue, toAssetValue);
-      else {
-        sethidequote(true);
-        setToAmountValue(value);
-      }
-      // else setToAmountValue(value);
+        if (
+            !(
+                (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                    fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+                (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL || toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+            )
+        ) {
+            sethidequote(false);
+            calculateReceiveAmount(value, fromAssetValue, toAssetValue);
+        }
+        else {
+            sethidequote(true);
+            setToAmountValue(value);
+        }
     }
   };
 
-  const toAmountChanged = (event) => { };
+  const toAmountChanged = (event) => {};
 
   const onSlippageChanged = (event) => {
     if (event.target.value == "" || !isNaN(event.target.value)) {
@@ -370,153 +382,156 @@ function Setup() {
       });
     }
   };
-  const onWrap = () => {
-    if (
-        !fromAmountValue ||
-        fromAmountValue > Number(fromAssetValue.balance) ||
-        Number(fromAmountValue) <= 0
-    ) {
-      return;
-    }
 
-    setFromAmountError(false);
-    setFromAssetError(false);
-    setToAssetError(false);
+    const onWrap = () => {
+        if (
+            !fromAmountValue ||
+            fromAmountValue > Number(fromAssetValue.balance) ||
+            Number(fromAmountValue) <= 0
+        ) {
+            return;
+        }
 
-    let error = false;
+        setFromAmountError(false);
+        setFromAssetError(false);
+        setToAssetError(false);
 
-    if (!fromAmountValue || fromAmountValue === "" || isNaN(fromAmountValue)) {
-      setFromAmountError("From amount is required");
-      error = true;
-    } else {
-      if (
-          !fromAssetValue.balance ||
-          isNaN(fromAssetValue.balance) ||
-          BigNumber(fromAssetValue.balance).lte(0)
-      ) {
-        setFromAmountError("Invalid balance");
-        error = true;
-      } else if (BigNumber(fromAmountValue).lt(0)) {
-        setFromAmountError("Invalid amount");
-        error = true;
-      } else if (
-          fromAssetValue &&
-          BigNumber(fromAmountValue).gt(fromAssetValue.balance)
-      ) {
-        setFromAmountError(`Greater than your available balance`);
-        error = true;
-      }
-    }
+        let error = false;
 
-    if (!fromAssetValue || fromAssetValue === null) {
-      setFromAssetError("From asset is required");
-      error = true;
-    }
+        if (!fromAmountValue || fromAmountValue === "" || isNaN(fromAmountValue)) {
+            setFromAmountError("From amount is required");
+            error = true;
+        } else {
+            if (
+                !fromAssetValue.balance ||
+                isNaN(fromAssetValue.balance) ||
+                BigNumber(fromAssetValue.balance).lte(0)
+            ) {
+                setFromAmountError("Invalid balance");
+                error = true;
+            } else if (BigNumber(fromAmountValue).lt(0)) {
+                setFromAmountError("Invalid amount");
+                error = true;
+            } else if (
+                fromAssetValue &&
+                BigNumber(fromAmountValue).gt(fromAssetValue.balance)
+            ) {
+                setFromAmountError(`Greater than your available balance`);
+                error = true;
+            }
+        }
 
-    if (!toAssetValue || toAssetValue === null) {
-      setFromAssetError("To asset is required");
-      error = true;
-    }
+        if (!fromAssetValue || fromAssetValue === null) {
+            setFromAssetError("From asset is required");
+            error = true;
+        }
 
-    if (!error) {
-      setLoading(true);
+        if (!toAssetValue || toAssetValue === null) {
+            setFromAssetError("To asset is required");
+            error = true;
+        }
 
-      stores.dispatcher.dispatch({
-        type: ACTIONS.WRAP,
-        content: {
-          fromAsset: fromAssetValue,
-          toAsset: toAssetValue,
-          fromAmount: fromAmountValue,
-          toAmount: toAmountValue,
-          quote: quote,
-          slippage: slippage,
-        },
-      });
-    }
-  };
-  const onUnwrap = () => {
-    if (
-        !fromAmountValue ||
-        fromAmountValue > Number(fromAssetValue.balance) ||
-        Number(fromAmountValue) <= 0
-    ) {
-      return;
-    }
+        if (!error) {
+            setLoading(true);
 
-    setFromAmountError(false);
-    setFromAssetError(false);
-    setToAssetError(false);
+            stores.dispatcher.dispatch({
+                type: ACTIONS.WRAP,
+                content: {
+                    fromAsset: fromAssetValue,
+                    toAsset: toAssetValue,
+                    fromAmount: fromAmountValue,
+                    toAmount: toAmountValue,
+                    quote: quote,
+                    slippage: slippage,
+                },
+            });
+        }
+    };
+    const onUnwrap = () => {
+        if (
+            !fromAmountValue ||
+            fromAmountValue > Number(fromAssetValue.balance) ||
+            Number(fromAmountValue) <= 0
+        ) {
+            return;
+        }
 
-    let error = false;
+        setFromAmountError(false);
+        setFromAssetError(false);
+        setToAssetError(false);
 
-    if (!fromAmountValue || fromAmountValue === "" || isNaN(fromAmountValue)) {
-      setFromAmountError("From amount is required");
-      error = true;
-    } else {
-      if (
-          !fromAssetValue.balance ||
-          isNaN(fromAssetValue.balance) ||
-          BigNumber(fromAssetValue.balance).lte(0)
-      ) {
-        setFromAmountError("Invalid balance");
-        error = true;
-      } else if (BigNumber(fromAmountValue).lt(0)) {
-        setFromAmountError("Invalid amount");
-        error = true;
-      } else if (
-          fromAssetValue &&
-          BigNumber(fromAmountValue).gt(fromAssetValue.balance)
-      ) {
-        setFromAmountError(`Greater than your available balance`);
-        error = true;
-      }
-    }
+        let error = false;
 
-    if (!fromAssetValue || fromAssetValue === null) {
-      setFromAssetError("From asset is required");
-      error = true;
-    }
+        if (!fromAmountValue || fromAmountValue === "" || isNaN(fromAmountValue)) {
+            setFromAmountError("From amount is required");
+            error = true;
+        } else {
+            if (
+                !fromAssetValue.balance ||
+                isNaN(fromAssetValue.balance) ||
+                BigNumber(fromAssetValue.balance).lte(0)
+            ) {
+                setFromAmountError("Invalid balance");
+                error = true;
+            } else if (BigNumber(fromAmountValue).lt(0)) {
+                setFromAmountError("Invalid amount");
+                error = true;
+            } else if (
+                fromAssetValue &&
+                BigNumber(fromAmountValue).gt(fromAssetValue.balance)
+            ) {
+                setFromAmountError(`Greater than your available balance`);
+                error = true;
+            }
+        }
 
-    if (!toAssetValue || toAssetValue === null) {
-      setFromAssetError("To asset is required");
-      error = true;
-    }
+        if (!fromAssetValue || fromAssetValue === null) {
+            setFromAssetError("From asset is required");
+            error = true;
+        }
 
-    if (!error) {
-      setLoading(true);
+        if (!toAssetValue || toAssetValue === null) {
+            setFromAssetError("To asset is required");
+            error = true;
+        }
 
-      stores.dispatcher.dispatch({
-        type: ACTIONS.UNWRAP,
-        content: {
-          fromAsset: fromAssetValue,
-          toAsset: toAssetValue,
-          fromAmount: fromAmountValue,
-          toAmount: toAmountValue,
-          quote: quote,
-          slippage: slippage,
-        },
-      });
-    }
-  };
+        if (!error) {
+            setLoading(true);
+
+            stores.dispatcher.dispatch({
+                type: ACTIONS.UNWRAP,
+                content: {
+                    fromAsset: fromAssetValue,
+                    toAsset: toAssetValue,
+                    fromAmount: fromAmountValue,
+                    toAmount: toAmountValue,
+                    quote: quote,
+                    slippage: slippage,
+                },
+            });
+        }
+    };
 
   const setBalance100 = () => {
     setFromAmountValue(fromAssetValue.balance);
-    if (
-        !(
-            (fromAssetValue?.symbol == "MATIC" ||
-                fromAssetValue?.symbol == "WMATIC") &&
-            (toAssetValue?.symbol == "WMATIC" || toAssetValue?.symbol == "MATIC")
-        )
-    )
-      calculateReceiveAmount(
-          fromAssetValue.balance,
-          fromAssetValue,
-          toAssetValue
-      );
-    else {
-      sethidequote(true);
-      setToAmountValue(fromAssetValue.balance);
-    }
+      if (
+          !(
+              (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                  fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+              (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL || toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+          )
+      ) {
+          sethidequote(false);
+          calculateReceiveAmount(
+              fromAssetValue.balance,
+              fromAssetValue,
+              toAssetValue
+          );
+      }
+      else {
+          sethidequote(true);
+          setToAmountValue(fromAssetValue.balance);
+      }
   };
 
   const swapAssets = () => {
@@ -524,292 +539,302 @@ function Setup() {
     const ta = toAssetValue;
     setFromAssetValue(ta);
     setToAssetValue(fa);
-    if (
-        !(
-            (fromAssetValue?.symbol == "MATIC" ||
-                fromAssetValue?.symbol == "WMATIC") &&
-            (toAssetValue?.symbol == "WMATIC" || toAssetValue?.symbol == "MATIC")
-        )
-    )
-      calculateReceiveAmount(fromAmountValue, ta, fa);
-    else {
-      sethidequote(true);
-      setToAmountValue(fromAmountValue);
-    }
+
+    const toAmount = toAmountValue
+
+      if (
+          !(
+              (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                  fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+              (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL || toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+          )
+      ) {
+          sethidequote(false);
+          setFromAmountValue(toAmount)
+          setToAmountValue("");
+          setQuote(null);
+          calculateReceiveAmount(toAmountValue, ta, fa);
+      }
+      else {
+          sethidequote(true);
+          setToAmountValue(fromAmountValue);
+      }
   };
 
   const renderSwapInformation = () => {
-    if (quoteError) {
+    if (!quoteError && !quoteLoading && quote && fromAmountValue <= Number(fromAssetValue.balance)) {
       return (
-          <div
-              className={[classes.quoteLoader, classes.quoteLoaderError].join(" ")}
-          >
-            <div
-                className={[
-                  classes.quoteLoaderDivider,
-                  classes.quoteLoaderDividerError,
-                ].join(" ")}
-            ></div>
-            <Typography className={classes.quoteError}>{quoteError}</Typography>
-          </div>
-      );
-    }
-
-    if (quoteLoading) {
-      return (
-          <div
-              className={[classes.quoteLoader, classes.quoteLoaderLoading].join(
-                  " "
+          <div className={classes.controlsInfo}>
+            <div className={classes.depositInfoContainer}>
+              {quote && (
+                  <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "100%",
+                      }}
+                  >
+                    {fromAmountValue <= Number(fromAssetValue.balance) && (
+                        <div
+                          className={[
+                            classes.priceImpactWrapper,
+                            classes[`warningContainer--${appTheme}`],
+                            BigNumber(quote.priceImpact).gt(5)
+                              ? classes.priceImpactWrapperError
+                              : classes.priceImpactWrapperWarning,
+                          ].join(" ")}
+                        >
+                          <Typography
+                            className={[
+                              classes.priceImpactRow,
+                              BigNumber(quote.priceImpact).gt(5)
+                                ? classes.warningError
+                                : classes.warningWarning,
+                              classes[`warningText--${appTheme}`],
+                            ].join(" ")}
+                            align="center"
+                          >
+                            <span className={classes.priceImpactTitle}>
+                              Price impact
+                            </span>{" "}
+                            <span
+                              className={[classes.priceImpactValue,
+                                BigNumber(quote.priceImpact).gt(5)
+                                  ? classes.priceImpactValueError
+                                  : classes.priceImpactValueWarning,
+                                ].join(" ")}>
+                        {formatCurrency(quote.priceImpact)}%
+                      </span>
+                          </Typography>
+                        </div>
+                    )}
+                  </div>
               )}
-          >
-            <CircularProgress size={20} className={classes.loadingCircle} />
+            </div>
           </div>
       );
     }
 
     return (
-        <div className={classes.depositInfoContainer}>
-          {quote && (
+        <div className={classes.controlsInfo}>
+          <div className={classes.depositInfoContainer}>
+            <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                }}
+            >
               <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "100%",
-                  }}
+                  className={[
+                    classes.warningContainer,
+                    classes[`warningContainer--${appTheme}`],
+                  ].join(" ")}
               >
-                {fromAmountValue <= Number(fromAssetValue.balance) && (
-                    <div
-                        className={[
-                          classes.warningContainer,
-                          classes[`warningContainer--${appTheme}`],
-                          BigNumber(quote.priceImpact).gt(5)
-                              ? classes.warningContainerError
-                              : classes.warningContainerWarning,
-                        ].join(" ")}
-                    >
-                      <div
-                          className={[
-                            classes.warningDivider,
-                            BigNumber(quote.priceImpact).gt(5)
-                                ? classes.warningDividerError
-                                : classes.warningDividerWarning,
-                          ].join(" ")}
-                      ></div>
-                      <Typography
-                          className={[
-                            BigNumber(quote.priceImpact).gt(5)
-                                ? classes.warningError
-                                : classes.warningWarning,
-                            classes[`warningText--${appTheme}`],
-                          ].join(" ")}
-                          align="center"
-                      >
-                        Price impact: {formatCurrency(quote.priceImpact)}%
-                      </Typography>
-                    </div>
-                )}
-
-                {fromAmountValue > Number(fromAssetValue.balance) && (
-                    <div
-                        className={[
-                          classes.warningContainer,
-                          classes[`warningContainer--${appTheme}`],
-                          BigNumber(quote.priceImpact).gt(5)
-                              ? classes.warningContainerError
-                              : classes.warningContainerWarning,
-                        ].join(" ")}
-                    >
-                      <div
-                          className={[
-                            classes.warningDivider,
-                            BigNumber(quote.priceImpact).gt(5)
-                                ? classes.warningDividerError
-                                : classes.warningDividerWarning,
-                          ].join(" ")}
-                      ></div>
-
-                      <Typography
-                          className={[
-                            BigNumber(quote.priceImpact).gt(5)
-                                ? classes.warningError
-                                : classes.warningWarning,
-                            classes[`warningText--${appTheme}`],
-                          ].join(" ")}
-                          align="center"
-                      >
-                        Balance is below the entered value
-                      </Typography>
-                    </div>
-                )}
-
                 <Typography
                     className={[
-                      classes.depositInfoHeading,
-                      classes[`depositInfoHeading--${appTheme}`],
-                      classes.depositInfoHeadingPrice,
+                      classes.priceImpactRow,
+                      classes[`warningText--${appTheme}`],
                     ].join(" ")}
+                    align="center"
                 >
-                  Price Info
+                  <span className={classes.priceImpactTitle}>
+                    Price impact
+                  </span>{" "}
+                  <span className={[classes.priceImpactValue,
+                  ].join(" ")}>
+                    0.00%
+                  </span>
                 </Typography>
+              </div>
+            </div>
+          </div>
+        </div>
+    );
+  };
 
-                <div
+  const renderBalanceIsBellowError = () => {
+    if (!quoteError && !quoteLoading && quote && fromAmountValue > Number(fromAssetValue.balance)) {
+      return (
+          <div
+              style={{ marginBottom: 20 }}
+              className={[
+                classes.warningContainer,
+                classes[`warningContainer--${appTheme}`],
+                classes.warningContainerError
+              ].join(" ")}
+          >
+            <img src="/images/ui/info-circle-red.svg" width="24px" style={{ marginRight: 8 }} />
+
+            <Typography
+                className={classes.warningError}
+                align="center"
+            >
+              Insufficient funds {fromAssetValue?.symbol}
+            </Typography>
+          </div>
+      )
+    }
+
+    return null;
+  }
+
+  const renderRoute = () => {
+    if (!quoteError && !quoteLoading && quote) {
+      return (
+          <div style={{ marginTop: 0, marginBottom: 20 }}>
+            <div
+                className={[classes.route, classes[`route--${appTheme}`]].join(" ")}
+            >
+              <div className={classes.routeIconWrap}>
+                <img
                     className={[
-                      classes.priceInfos,
-                      classes[`priceInfos--${appTheme}`],
+                      classes.routeIcon,
+                      classes[`routeIcon--${appTheme}`],
                     ].join(" ")}
-                >
-                  <div
-                      className={[
-                        classes.priceInfo,
-                        classes[`priceInfo--${appTheme}`],
-                      ].join(" ")}
-                  >
-                    <Typography className={classes.text}>
-                      {`${fromAssetValue?.symbol} per ${toAssetValue?.symbol}`}
-                    </Typography>
+                    alt=""
+                    src={fromAssetValue ? `${fromAssetValue.logoURI}` : ""}
+                    width="30px"
+                    height="30px"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                    }}
+                />
+              </div>
 
-                    <Typography className={classes.title}>
-                      {formatCurrency(
-                          BigNumber(quote.inputs.fromAmount)
-                              .div(quote.output.finalValue)
-                              .toFixed(18)
-                      )}
-                    </Typography>
-                  </div>
-
-                  <div
-                      className={[
-                        classes.priceInfo,
-                        classes[`priceInfo--${appTheme}`],
-                      ].join(" ")}
-                  >
-                    <Typography className={classes.text}>
-                      {`${toAssetValue?.symbol} per ${fromAssetValue?.symbol}`}
-                    </Typography>
-
-                    <Typography className={classes.title}>
-                      {formatCurrency(
-                          BigNumber(quote.output.finalValue)
-                              .div(quote.inputs.fromAmount)
-                              .toFixed(18)
-                      )}
-                    </Typography>
-                  </div>
-                </div>
-
-                <Typography
-                    className={[
-                      classes.depositInfoHeading,
-                      classes[`depositInfoHeading--${appTheme}`],
-                    ].join(" ")}
-                >
-                  Route
-                </Typography>
-
-                <div
-                    className={[classes.route, classes[`route--${appTheme}`]].join(
-                        " "
-                    )}
-                >
-                  <img
-                      className={[
-                        classes.routeIcon,
-                        classes[`routeIcon--${appTheme}`],
-                      ].join(" ")}
-                      alt=""
-                      src={fromAssetValue ? `${fromAssetValue.logoURI}` : ""}
-                      height="40px"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                      }}
-                  />
-                  <div className={classes.line}>
+              <div className={classes.line}>
+                {!quote?.output?.routeAsset && (
                     <div
                         className={[
                           classes.routeLinesLeft,
                           classes[`routeLinesLeft--${appTheme}`],
                         ].join(" ")}
-                    ></div>
+                    >
+                      <div className={classes.routeLinesLeftArrow} />
+                    </div>
+                )}
 
-                    {quote?.output?.routeAsset && (
-                        <>
-                          <div
-                              className={[
-                                classes.routeLinesLeftText,
-                                classes[`routeLinesLeftText--${appTheme}`],
-                              ].join(" ")}
-                          >
-                            {quote.output.routes[0].stable ? "Stable" : "Volatile"}
-                          </div>
+                {quote?.output?.routeAsset && (
+                    <>
+                      <div
+                          className={[
+                            classes.routeLinesLeftPart1,
+                            classes[`routeLinesLeft--${appTheme}`],
+                          ].join(" ")}
+                      >
+                        <div className={classes.routeLinesLeftPart1Arrow} />
+                      </div>
+                      <div
+                          className={[
+                            classes.routeLinesLeftText,
+                            classes[`routeLinesLeftText--${appTheme}`],
+                          ].join(" ")}
+                      >
+                        {quote.output.routes[0].stable ? "Stable" : "Volatile"}
+                      </div>
+                      <div
+                          className={[
+                            classes.routeLinesLeftPart2,
+                            classes[`routeLinesLeft--${appTheme}`],
+                          ].join(" ")}
+                      >
+                        <div className={classes.routeLinesLeftPart2Arrow} />
+                      </div>
 
-                          <img
-                              className={[
-                                classes.routeIcon,
-                                classes[`routeIcon--${appTheme}`],
-                              ].join(" ")}
-                              alt=""
-                              src={
-                                quote.output.routeAsset
-                                    ? `${quote.output.routeAsset.logoURI}`
-                                    : ""
-                              }
-                              height="40px"
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                              }}
-                          />
-
-                          <div
-                              className={[
-                                classes.routeLinesRightText,
-                                classes[`routeLinesRightText--${appTheme}`],
-                              ].join(" ")}
-                          >
-                            {quote.output.routes[1].stable ? "Stable" : "Volatile"}
-                          </div>
-                        </>
-                    )}
-
-                    {!quote?.output?.routeAsset && (
-                        <div
+                      <div className={classes.routeIconWrap}>
+                        <img
                             className={[
-                              classes.routeArrow,
-                              classes[`routeArrow--${appTheme}`],
+                              classes.routeIcon,
+                              classes[`routeIcon--${appTheme}`],
                             ].join(" ")}
-                        >
-                          {quote.output.routes[0].stable ? "Stable" : "Volatile"}
-                        </div>
-                    )}
+                            alt=""
+                            src={
+                              quote.output.routeAsset
+                                  ? `${quote.output.routeAsset.logoURI}`
+                                  : ""
+                            }
+                            height="40px"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                            }}
+                        />
+                      </div>
 
+                      <div
+                          className={[
+                            classes.routeLinesRightPart1,
+                            classes[`routeLinesLeft--${appTheme}`],
+                          ].join(" ")}
+                      >
+                        <div className={classes.routeLinesRightPart1Arrow} />
+                      </div>
+                      <div
+                          className={[
+                            classes.routeLinesRightText,
+                            classes[`routeLinesRightText--${appTheme}`],
+                          ].join(" ")}
+                      >
+                        {quote.output.routes[1].stable ? "Stable" : "Volatile"}
+                      </div>
+                      <div
+                          className={[
+                            classes.routeLinesRightPart2,
+                            classes[`routeLinesLeft--${appTheme}`],
+                          ].join(" ")}
+                      >
+                        <div className={classes.routeLinesRightPart2Arrow} />
+                      </div>
+                    </>
+                )}
+
+                {!quote?.output?.routeAsset && (
+                    <div
+                        className={[
+                          classes.routeArrow,
+                          classes[`routeArrow--${appTheme}`],
+                        ].join(" ")}
+                    >
+                      {quote.output.routes[0].stable ? "Stable" : "Volatile"}
+                    </div>
+                )}
+
+                {!quote?.output?.routeAsset && (
                     <div
                         className={[
                           classes.routeLinesRight,
                           classes[`routeLinesRight--${appTheme}`],
                         ].join(" ")}
-                    ></div>
-                  </div>
-
-                  <img
-                      className={[
-                        classes.routeIcon,
-                        classes[`routeIcon--${appTheme}`],
-                      ].join(" ")}
-                      alt=""
-                      src={toAssetValue ? `${toAssetValue.logoURI}` : ""}
-                      height="40px"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                      }}
-                  />
-                </div>
+                    >
+                      <div className={classes.routeLinesRightArrow} />
+                    </div>
+                )}
               </div>
-          )}
-        </div>
-    );
-  };
+
+              <div className={classes.routeIconWrap}>
+                <img
+                    className={[
+                      classes.routeIcon,
+                      classes[`routeIcon--${appTheme}`],
+                    ].join(" ")}
+                    alt=""
+                    src={toAssetValue ? `${toAssetValue.logoURI}` : ""}
+                    width="30px"
+                    height="30px"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                    }}
+                />
+              </div>
+            </div>
+          </div>
+      )
+    }
+
+    return null;
+  }
 
   const renderSmallInput = (type, amountValue, amountError, amountChanged) => {
     return (
@@ -831,16 +856,18 @@ function Setup() {
               Slippage
             </Typography>
 
-            <Hint
-                hintText={
-                  "Slippage is the difference between the price you expect to get on the crypto you have ordered and the price you actually get when the order executes."
-                }
-                open={openHint}
-                anchor={hintAnchor}
-                handleClick={handleClickPopover}
-                handleClose={handleClosePopover}
-                vertical={-110}
-            ></Hint>
+            <div className={classes.inputBalanceSlippageHelp}>
+              <Hint
+                  hintText={
+                    "Slippage is the price difference between the submission of a transaction and the confirmation of the transaction on the blockchain."
+                  }
+                  open={openHint}
+                  anchor={hintAnchor}
+                  handleClick={handleClickPopover}
+                  handleClose={handleClosePopover}
+                  vertical={46}
+              />
+            </div>
           </div>
 
           <TextField
@@ -868,7 +895,7 @@ function Setup() {
                   padding: 0,
                   borderRadius: 0,
                   border: "none",
-                  color: appTheme === "dark" ? "#ffffff" : "#0A2C40",
+                  color: "#E4E9F4",
                   paddingRight: amountValue?.length >= 8 ? 10 : 0,
                 },
               }}
@@ -885,7 +912,8 @@ function Setup() {
       assetValue,
       assetError,
       assetOptions,
-      onAssetSelect
+      onAssetSelect,
+      priceCompareText
   ) => {
     return (
         <div
@@ -894,90 +922,93 @@ function Setup() {
               classes[`textField--${type}-${appTheme}`],
             ].join(" ")}
         >
-          <Typography className={classes.inputTitleText} noWrap>
-            {type === "From" ? "From" : "To"}
-          </Typography>
+          <div className={classes.inputRow}>
+            <div className={classes.inputColumn}>
+              <div className={classes.massiveInputTitle}>
+                <Typography className={classes.inputTitleText} noWrap>
+                  {type === "From" ? "From" : "To"}
 
-          <div
-              className={[
-                classes.inputBalanceTextContainer,
-                "g-flex",
-                "g-flex--align-center",
-              ].join(" ")}
-          >
-            <img
-                src="/images/ui/icon-wallet.svg"
-                className={classes.walletIcon}
-            />
+                  <span>{priceCompareText}</span>
+                </Typography>
+              </div>
 
-            <Typography
-                className={[classes.inputBalanceText, "g-flex__item"].join(" ")}
-                noWrap
-                onClick={() => setBalance100()}
-            >
-            <span>
-              {assetValue && assetValue.balance
-                  ? " " + formatCurrency(assetValue.balance)
-                  : ""}
-            </span>
-            </Typography>
-
-            {assetValue?.balance &&
-            Number(assetValue?.balance) > 0 &&
-            type === "From" && (
-                <div
-                    style={{
-                      cursor: "pointer",
-                      fontWeight: 500,
-                      fontSize: 14,
-                      lineHeight: "120%",
-                      color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
-                    }}
-                    onClick={() => setBalance100()}
-                >
-                  MAX
-                </div>
-            )}
-          </div>
-
-          <div
-              className={`${classes.massiveInputContainer} ${(amountError || assetError) && classes.error
-              }`}
-          >
-            <div className={classes.massiveInputAssetSelect}>
-              <AssetSelect
-                  type={type}
-                  value={assetValue}
-                  assetOptions={assetOptions}
-                  onSelect={onAssetSelect}
-              />
+              <div className={classes.massiveInputAssetSelect}>
+                <AssetSelect
+                    type={type}
+                    value={assetValue}
+                    assetOptions={assetOptions}
+                    onSelect={onAssetSelect}
+                />
+              </div>
             </div>
 
-            <InputBase
-                className={classes.massiveInputAmount}
-                placeholder="0.00"
-                error={amountError}
-                value={amountValue}
-                onChange={amountChanged}
-                disabled={loading || type === "To"}
-                inputMode={"decimal"}
-                inputProps={{
-                  className: [
-                    classes.largeInput,
-                    classes[`largeInput--${appTheme}`],
-                  ].join(" "),
-                }}
-            />
+            <div className={classes.inputColumn}>
+              <div className={classes.massiveInputTitle}>
+                <div
+                    className={[
+                      classes.inputBalanceTextContainer,
+                      "g-flex",
+                      "g-flex--align-center",
+                    ].join(" ")}
+                >
+                  <img
+                      src="/images/ui/icon-wallet.svg"
+                      className={classes.walletIcon}
+                  />
 
-            <Typography
-                className={[
-                  classes.smallerText,
-                  classes[`smallerText--${appTheme}`],
-                ].join(" ")}
-            >
-              {assetValue?.symbol}
-            </Typography>
+                  <Typography
+                      className={[classes.inputBalanceText, "g-flex__item"].join(
+                          " "
+                      )}
+                      noWrap
+                      onClick={() => setBalance100()}
+                  >
+                  <span>
+                    {assetValue && assetValue.balance
+                        ? " " + formatCurrency(assetValue.balance)
+                        : ""}
+                  </span>
+                  </Typography>
+
+                  {assetValue?.balance &&
+                  Number(assetValue?.balance) > 0 &&
+                  type === "From" && (
+                      <div
+                          className={classes.max}
+                          onClick={() => setBalance100()}
+                      >
+                        MAX
+                      </div>
+                  )}
+                </div>
+              </div>
+
+              <InputBase
+                  className={[
+                    classes.massiveInputAmount,
+                    type === "From" && fromAmountValue > Number(fromAssetValue?.balance) ? classes.massiveInputAmountError : ''
+                  ].join(" ")}
+                  placeholder="0.00"
+                  error={amountError}
+                  value={amountValue}
+                  onChange={amountChanged}
+                  disabled={loading || type === "To"}
+                  inputMode={"decimal"}
+                  inputProps={{
+                    className: [
+                      classes.largeInput,
+                      classes[`largeInput--${appTheme}`],
+                    ].join(" "),
+                  }}
+              />
+            </div>
           </div>
+          {/* <div
+          className={`${classes.massiveInputContainer} ${
+            (amountError || assetError) && classes.error
+          }`}
+        >
+        </div> */}
         </div>
     );
   };
@@ -1006,6 +1037,17 @@ function Setup() {
 
   return (
       <div className={classes.swapInputs}>
+        <div className={classes.swapInputsHeader}>
+          <Typography className={classes.swapInputsHeader}>Swap</Typography>
+
+          {renderSmallInput(
+              "slippage",
+              slippage,
+              slippageError,
+              onSlippageChanged
+          )}
+        </div>
+
         {renderMassiveInput(
             "From",
             fromAmountValue,
@@ -1014,7 +1056,15 @@ function Setup() {
             fromAssetValue,
             fromAssetError,
             fromAssetOptions,
-            onAssetSelect
+            onAssetSelect,
+            quote &&
+            `1 ${fromAssetValue?.symbol} =
+        ${!hidequote ? formatCurrency(
+                BigNumber(quote.output.finalValue)
+                    .div(quote.inputs.fromAmount)
+                    .toFixed(18)
+            ) : 1}
+        ${toAssetValue?.symbol}`
         )}
 
         {fromAssetError && (
@@ -1044,51 +1094,55 @@ function Setup() {
             </div>
         )}
 
-        <div
-            className={[
-              classes.swapIconContainer,
-              classes[`swapIconContainer--${appTheme}`],
-            ].join(" ")}
-            onMouseOver={swapIconHover}
-            onMouseOut={swapIconDefault}
-            onMouseDown={swapIconClick}
-            onMouseUp={swapIconDefault}
-            onTouchStart={swapIconClick}
-            onTouchEnd={swapIconDefault}
-            onClick={swapAssets}
-        >
-          {windowWidth > 470 && (
-              <svg
+        <div className={classes.swapIconContainerOuter}>
+          <div className={classes.inputRow}>
+            <div className={classes.inputColumn}>
+              <div
+                  className={[
+                    classes.swapIconContainer,
+                    classes[`swapIconContainer--${appTheme}`],
+                  ].join(" ")}
+                  onMouseOver={swapIconHover}
+                  onMouseOut={swapIconDefault}
+                  onMouseDown={swapIconClick}
+                  onMouseUp={swapIconDefault}
+                  onTouchStart={swapIconClick}
+                  onTouchEnd={swapIconDefault}
+                  onClick={swapAssets}
+              >
+                <img src="/images/ui/arrow-down.png" />
+                {/* {windowWidth > 470 && (
+                <svg
                   width="80"
                   height="80"
                   viewBox="0 0 80 80"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle
+                >
+                  <circle
                     cx="40"
                     cy="40"
                     r="39.5"
                     fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
                     stroke={appTheme === "dark" ? "#5F7285" : "#86B9D6"}
-                />
+                  />
 
-                <rect
+                  <rect
                     y="30"
                     width="4"
                     height="20"
                     fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
-                />
+                  />
 
-                <rect
+                  <rect
                     x="76"
                     y="30"
                     width="4"
                     height="20"
                     fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
-                />
+                  />
 
-                <circle
+                  <circle
                     cx="40"
                     cy="40"
                     r="29.5"
@@ -1099,50 +1153,50 @@ function Setup() {
                       swapIconBorderColor ||
                       (appTheme === "dark" ? "#5F7285" : "#86B9D6")
                     }
-                />
+                  />
 
-                <path
+                  <path
                     d="M41.0002 44.172L46.3642 38.808L47.7782 40.222L40.0002 48L32.2222 40.222L33.6362 38.808L39.0002 44.172V32H41.0002V44.172Z"
                     fill={
                       swapIconArrowColor ||
                       (appTheme === "dark" ? "#4CADE6" : "#0B5E8E")
                     }
-                />
-              </svg>
-          )}
+                  />
+                </svg>
+              )}
 
-          {windowWidth <= 470 && (
-              <svg
+              {windowWidth <= 470 && (
+                <svg
                   width="50"
                   height="50"
                   viewBox="0 0 50 50"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle
+                >
+                  <circle
                     cx="25"
                     cy="25"
                     r="24.5"
                     fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
                     stroke={appTheme === "dark" ? "#5F7285" : "#86B9D6"}
-                />
+                  />
 
-                <rect
+                  <rect
                     y="20"
                     width="3"
                     height="10"
                     fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
-                />
+                  />
 
-                <rect
+                  <rect
                     x="48"
                     y="20"
                     width="2"
                     height="10"
                     fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
-                />
+                  />
 
-                <circle
+                  <circle
                     cx="25"
                     cy="25"
                     r="18.5"
@@ -1153,17 +1207,20 @@ function Setup() {
                       swapIconBorderColor ||
                       (appTheme === "dark" ? "#5F7285" : "#86B9D6")
                     }
-                />
+                  />
 
-                <path
+                  <path
                     d="M25.8336 28.4773L30.3036 24.0073L31.4819 25.1857L25.0002 31.6673L18.5186 25.1857L19.6969 24.0073L24.1669 28.4773V18.334H25.8336V28.4773Z"
                     fill={
                       swapIconArrowColor ||
                       (appTheme === "dark" ? "#ffffff" : "#ffffff")
                     }
-                />
-              </svg>
-          )}
+                  />
+                </svg>
+              )} */}
+              </div>
+            </div>
+          </div>
         </div>
 
         {renderMassiveInput(
@@ -1174,12 +1231,22 @@ function Setup() {
             toAssetValue,
             toAssetError,
             toAssetOptions,
-            onAssetSelect
+            onAssetSelect,
+            quote &&
+            `1 ${toAssetValue?.symbol} = 
+        ${!hidequote ? formatCurrency(
+                BigNumber(quote.inputs.fromAmount)
+                    .div(quote.output.finalValue)
+                    .toFixed(18)
+            ) : 1}
+        ${fromAssetValue?.symbol}`
         )}
+
+        <div style={{ marginBottom: 20}} />
 
         {toAssetError && (
             <div
-                style={{ marginTop: 20 }}
+                style={{ marginTop: 20, marginBottom: 20 }}
                 className={[
                   classes.warningContainer,
                   classes[`warningContainer--${appTheme}`],
@@ -1204,11 +1271,9 @@ function Setup() {
             </div>
         )}
 
-        {renderSmallInput("slippage", slippage, slippageError, onSlippageChanged)}
-
         {slippageError && (
             <div
-                style={{ marginTop: 20 }}
+                style={{ marginTop: 20, marginBottom: 20 }}
                 className={[
                   classes.warningContainer,
                   classes[`warningContainer--${appTheme}`],
@@ -1233,57 +1298,100 @@ function Setup() {
             </div>
         )}
 
-        {!hidequote ? renderSwapInformation() : null}
-
         {loading && (
             <div className={classes.loader}>
               <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />
             </div>
         )}
 
-        <BtnSwap
-            onClick={
-              (fromAssetValue?.symbol == "MATIC" && toAssetValue?.symbol == "WMATIC")
-                  ? onWrap
-                  : (fromAssetValue?.symbol == "WMATIC" && toAssetValue?.symbol == "MATIC")
-                      ? onUnwrap
-                      : onSwap
-            }
-            className={classes.btnSwap}
-            labelClassName={
-              !fromAmountValue ||
-              fromAmountValue > Number(fromAssetValue.balance) ||
-              Number(fromAmountValue) <= 0
-                  ? classes["actionButtonText--disabled"]
-                  : classes.actionButtonText
-            }
-            isDisabled={
-              !fromAmountValue ||
-              fromAmountValue > Number(fromAssetValue.balance) ||
-              Number(fromAmountValue) <= 0
-            }
-            label={
-              loading && fromAssetValue?.symbol == "MATIC" && toAssetValue?.symbol == "WMATIC"
-                  ? "Wrapping"
-                  : loading && fromAssetValue?.symbol == "WMATIC" && toAssetValue?.symbol == "MATIC"
-                      ? "Unwrapping"
-                      : loading &&
-                      !(
-                          (fromAssetValue?.symbol == "MATIC" ||
-                              fromAssetValue?.symbol == "WMATIC") &&
-                          (toAssetValue?.symbol == "WMATIC" ||
-                              toAssetValue?.symbol == "MATIC")
-                      )
-                          ? "Swapping"
-                          : !fromAmountValue || Number(fromAmountValue) <= 0
-                              ? "Enter Amount"
-                              : (fromAssetValue?.symbol == "MATIC" && toAssetValue?.symbol == "WMATIC")
-                                  ? "Wrap"
-                                  : (fromAssetValue?.symbol == "WMATIC" && toAssetValue?.symbol == "MATIC")
-                                      ? "Unwrap"
-                                      : "Swap"
-            }
-        ></BtnSwap>
+        {quoteError && (
+            <div
+                className={[classes.quoteLoader, classes.quoteLoaderError].join(" ")}
+            >
+              <div
+                  className={[classes.quoteLoaderIcon, classes.quoteLoaderIconError].join(
+                      " "
+                  )}
+              >
+                <img src="/images/ui/info-circle-red.svg" width="24px" />
+              </div>
+              {/* <div
+            className={[
+              classes.quoteLoaderDivider,
+              classes.quoteLoaderDividerError,
+            ].join(" ")}
+          ></div> */}
+              <Typography className={classes.quoteError}>{quoteError}</Typography>
+            </div>
+        )}
+
+        {renderBalanceIsBellowError()}
+
+        {quoteLoading && (
+            <div
+                className={[classes.quoteLoader, classes.quoteLoaderLoading].join(
+                    " "
+                )}
+            >
+              <CircularProgress size={20} className={classes.loadingCircle} />
+            </div>
+        )}
+
+        {!hidequote ? renderRoute() : ''}
+
+        <div className={classes.controls}>
+            {!hidequote ? renderSwapInformation() : null}
+
+          <div className={classes.controlsBtn}>
+            <BtnSwap
+                onClick={(fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL && toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL)
+                    ? onWrap
+                    : (fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL && toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+                        ? onUnwrap
+                        : onSwap}
+                className={classes.btnSwap}
+                labelClassName={[
+                  !fromAmountValue ||
+                  fromAmountValue > Number(fromAssetValue.balance) ||
+                  Number(fromAmountValue) <= 0
+                      ? classes["actionButtonText--disabled"]
+                      : classes.actionButtonText,
+                  quote
+                      ? BigNumber(quote.priceImpact).gt(5)
+                          ? classes.actionButtonTextError
+                          : classes.actionButtonTextErrorWarning
+                      : "",
+                ].join(" ")}
+                isDisabled={
+                  !fromAmountValue ||
+                  fromAmountValue > Number(fromAssetValue.balance) ||
+                  Number(fromAmountValue) <= 0
+                }
+                loading={loading}
+                label={
+                    loading && fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL && toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL
+                        ? "Wrapping"
+                        : loading && fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL && toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL
+                            ? "Unwrapping"
+                            : loading &&
+                            !(
+                                (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL ||
+                                    fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL) &&
+                                (toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL ||
+                                    toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+                            )
+                                ? "Swapping"
+                                : !fromAmountValue || Number(fromAmountValue) <= 0
+                                    ? "Enter Amount"
+                                    : (fromAssetValue?.symbol == CONTRACTS.FTM_SYMBOL && toAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL)
+                                        ? "Wrap"
+                                        : (fromAssetValue?.symbol == CONTRACTS.WFTM_SYMBOL && toAssetValue?.symbol == CONTRACTS.FTM_SYMBOL)
+                                            ? "Unwrap"
+                                            : quote && BigNumber(quote.priceImpact).gt(5) ? "SWAP | ARE YOU SURE?" : "SWAP"
+                }
+            ></BtnSwap>
+          </div>
+        </div>
       </div>
   );
 }

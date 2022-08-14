@@ -41,6 +41,7 @@ class Store {
             },
             gasSpeed: 'fast',
             currentBlock: 12906197,
+            chainId: null,
         };
 
         dispatcher.register(
@@ -124,7 +125,7 @@ class Store {
             const supportedChainIds = [process.env.NEXT_PUBLIC_CHAINID];
             const parsedChainId = (parseInt(chainId + '', 16) + '');
             const isChainSupported = supportedChainIds.includes(parsedChainId);
-            that.setStore({ chainInvalid: !isChainSupported });
+            that.setStore({ chainInvalid: !isChainSupported, chainId: parsedChainId });
             await stores.stableSwapStore.configure()
             that.emitter.emit(ACTIONS.ACCOUNT_CHANGED);
             that.emitter.emit(ACTIONS.ACCOUNT_CONFIGURED);
@@ -134,11 +135,11 @@ class Store {
 
     getGasPrices = async (payload) => {
         const gasPrices = await this._getGasPrices();
-        let gasSpeed = localStorage.getItem('dystopia.finance-gas-speed');
+        let gasSpeed = localStorage.getItem('cone.finance-gas-speed');
 
         if (!gasSpeed) {
             gasSpeed = 'fast';
-            localStorage.getItem('dystopia.finance-gas-speed', 'fast');
+            localStorage.getItem('cone.finance-gas-speed', 'fast');
         }
 
         this.setStore({ gasPrices: gasPrices, gasSpeed: gasSpeed });

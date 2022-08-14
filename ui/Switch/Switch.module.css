@@ -3,70 +3,68 @@
   cursor: pointer;
 }
 
+.track {
+  width: 44px;
+  height: 26px;
+  background: #171D2D;
+  border: 1px solid #8191B9;
+  border-radius: 100px;
+  transition: all 0.16s ease;
+  opacity: 0.72;
+}
+
 .toggle {
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 24px;
-  height: 24px;
-  background: #86B9D6;
+  width: 20px;
+  height: 20px;
+  background: #8191B9;
   border-radius: 100px;
   transition: all 0.16s ease;
 }
 
-.toggle--dark {
-  background: #7C838A;
-  border-radius: 100px;
-}
-
-.track {
-  width: 54px;
-  height: 30px;
-  background: #DBE6EC;
-  border: 1px solid #86B9D6;
-  border-radius: 100px;
-  transition: all 0.16s ease;
-}
-
-.track--dark {
-  background: #151718;
-  border: 1px solid #7C838A;
-}
 
 .switch:hover .track {
-  background: #B9DFF5;
-  border: 1px solid #86B9D6;
+  background: #1F2B49;
 }
 
-.switch:hover .toggle--dark {
-  background: #5F7285;
+.switch:active .track {
+  background: #060B17;
 }
 
-.switch:hover .track--dark {
-  background: #24292D;
-  border: 1px solid #5F7285;
+.switch--active .track {
+  background: rgba(119, 155, 244, 0.25);
+  opacity: 1;
 }
 
 .switch--active .toggle,
 .switch--active:hover .toggle {
-  transform: translateX(24px);
-  background: #0B5E8E;
+  transform: translateX(18px);
 }
 
-.switch--active .track,
 .switch--active:hover .track {
-  background: #B9DFF5;
-  border: 1px solid #0B5E8E;
+  background: rgba(119, 155, 244, 0.15);
 }
 
-.switch--active .toggle--dark,
-.switch--active:hover .toggle--dark {
-  transform: translateX(24px);
-  background: #4CADE6;
+.switch--active:active .track {
+  background: rgba(119, 155, 244, 0.4);
 }
 
-.switch--active .track--dark,
-.switch--active:hover .track--dark {
-  background: #24292D;
-  border: 1px solid #4CADE6;
+@media (min-width: 1920px) {
+  .track {
+    width: 72px;
+    height: 40px;
+  }
+  .toggle {
+    width: 32px;
+    height: 32px;
+    left: 4px;
+    top: 4px;
+  }
+
+  .switch--active .toggle,
+  .switch--active:hover .toggle {
+    transform: translateX(32px);
+  }
 }

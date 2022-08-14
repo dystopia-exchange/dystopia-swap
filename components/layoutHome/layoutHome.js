@@ -49,8 +49,8 @@ export default function Layout({
           as="font"
           crossOrigin=""
         />
-        <meta name="description" content="Dystopia allows low cost, near 0 slippage trades on uncorrelated or tightly correlated assets built on Fantom." />
-        <meta name="og:title" content="Dystopia" />
+        <meta name="description" content="Cone allows low cost, near 0 slippage trades on uncorrelated or tightly correlated assets built on Fantom." />
+        <meta name="og:title" content="Cone" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <div className={classes.content}>

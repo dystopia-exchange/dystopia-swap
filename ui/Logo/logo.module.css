@@ -1,0 +1,29 @@
+.logoIconImg {
+    display: none;
+}
+@media (max-width: 850px) {
+    .logoImg {
+        display: none;
+    }
+    .logoIconImg {
+        display: inline;
+        /*width: 32px;*/
+        height: 40px;
+    }
+}
+
+.logoText {
+    margin-top: 2px;
+    margin-left: 15px;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 40px;
+    letter-spacing: 0;
+    color: #fff;
+}
+
+@media (max-width: 850px) {
+    .logoText {
+        display: none;
+    }
+}

@@ -24,7 +24,7 @@ const theme = createTheme({
       fontSize: 16,
     },
     fontFamily: [
-      '"Roboto Mono"',
+      '"Poppins"',
       'Inter',
       'Arial',
       '-apple-system',

@@ -14,6 +14,7 @@ function Navigation(props) {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("swap");
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
 
   function handleNavigate(route) {
     router.push(route);
@@ -92,8 +93,8 @@ function Navigation(props) {
         {renderSubNav("Vest", "vest")}
         {renderSubNav("Vote", "vote")}
         {renderSubNav("Rewards", "rewards")}
+        {/*{renderSubNav("Migrate", "migrate")}*/}
         {renderSubNav("Whitelist", "whitelist")}
-        {renderSubNav("Migrate", "migrate")}
       </ToggleButtonGroup>
     );
   };
@@ -119,7 +120,7 @@ function Navigation(props) {
         ].join(" ")}
         classes={{ selected: classes[`nav-button--active`] }}
       >
-        <div
+        {/* <div
           className={[
             classes[`nav-button-corner-top`],
             classes[`nav-button-corner-top--${appTheme}`],
@@ -130,21 +131,44 @@ function Navigation(props) {
               classes[`nav-button-corner-bottom`],
               classes[`nav-button-corner-bottom--${appTheme}`],
             ].join(" ")}
-          >
+          > */}
             <Typography variant="h2" className={classes.subtitleText}>
               {title}
             </Typography>
-          </div>
-        </div>
+          {/* </div> */}
+        {/* </div> */}
       </ToggleButton>
     );
   };
 
+  const needSmartMenuContainer =
+      router.asPath.includes('swap')
+      || router.asPath.includes('liquidity/')
+      || router.asPath.includes('vest/')
+      || router.asPath.includes('bribe/create')
+
   return (
-    <div className={classes.navigationContainer}>
-      <div className={classes.navigationContent}>{renderNavs()}</div>
+    <div className={`${classes.navigationContainer} ${needSmartMenuContainer ? classes.navigationContainerSmart : ''}`}>
+      <div
+        className={[
+          classes.navigationContent,
+          isMenuVisible ? classes.navigationContentActive : ''
+        ].join(" ")}>
+          {renderNavs()}
+          {props.children}
+        </div>
 
       {warningOpen && <SSWarning close={closeWarning} />}
+
+      <div
+        className={[
+          classes.navigationToggle,
+          isMenuVisible ? classes.navigationToggleActive : ''
+        ].join(" ")}
+        onClick={() => setIsMenuVisible(!isMenuVisible)}
+      >
+        <span></span>
+      </div>
     </div>
   );
 }

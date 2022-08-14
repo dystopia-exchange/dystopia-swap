@@ -16,7 +16,7 @@ const LightButton = (props) => {
   const toggleTheme = useCallback(() => {
     setAppTheme("light");
 
-    localStorage.setItem('dystopia.finance-dark-mode', 'light');
+    localStorage.setItem('cone.finance-dark-mode', 'light');
   }, [appTheme, setAppTheme]);
 
   return (

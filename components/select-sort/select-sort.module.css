@@ -1,3 +1,40 @@
+.opts {
+  position: absolute;
+  width: calc(100vw - 60px);
+  max-width: 600px;
+  right: 0px;
+  /* right: -60px; */
+  top: 58px;
+  z-index: 1;
+  background-color: #171D2D;
+  border-radius: 12px;
+  border: 1px solid #779BF4;
+}
+
+@media (max-width: 575px) {
+  .opts {
+    width: calc(100vw - 40px);
+  }
+}
+
+@media (min-width: 680px) {
+  .opts {
+    width: calc(100vw - 120px);
+  }
+}
+
+.optsHead {
+  display: flex;
+  justify-content: space-between;
+}
+
+.optsHeadTitle {
+  font-weight: 500;
+  font-size: 40px;
+  color: #E4E9F4;
+  padding: 10px 20px;
+}
+
 .sortSelect > svg,
 .sortSelect--dark > svg {
   color: #5F7285 !important;
@@ -59,24 +96,17 @@
   padding-right: 0 !important;
 }
 
-
 .sortSelect {
-  position: relative;
-  margin-left: 1px;
-  min-width: 215px !important;
+  /* position: relative; */
   cursor: pointer;
-  z-index: 11;
 }
 
 .sortIcon {
-  margin-right: 10px;
+  margin: 0 12px
 }
 
 .menuOption {
-  padding: 0 40px 0 60px;
-  background: #DBE6EC;
-  border-left: 1px solid #0B5E8E;
-  border-right: 1px solid #0B5E8E;
+  padding: 0 40px 0 20px;
   transition: all 0.32s ease;
 }
 
@@ -85,8 +115,8 @@
   background: #B9DFF5;
 }
 
-.menuOption--dark {
-  background: #151718;
+.menuOption:nth-child(even) {
+  border-top: 1px solid #586586;
 }
 
 .menuOption:nth-child(odd) .optionBorder {
@@ -94,9 +124,9 @@
 }
 
 .menuOption:last-child {
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  border-bottom: 1px solid #0B5E8E;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  /*border-bottom: 1px solid #0B5E8E;*/
 }
 
 .menuOption:last-child .optionBorder {
@@ -104,18 +134,14 @@
 }
 
 .selectedOption {
-  position: relative;
+  /* position: relative; */
   height: 50px;
-  width: 100%;
-  border-radius: 100px;
-  background: #B9DFF5;
-  outline: 1px solid #0B5E8E;
-  z-index: 9;
+  width: 48px;
+  border-radius: 12px;
 }
 
 .selectedOption--dark {
-  background: #151718;
-  outline: 1px solid #4CADE6;
+  background: rgba(119, 155, 244, 0.15);;
 }
 
 .selectedOptionBg {

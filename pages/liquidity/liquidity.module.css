@@ -1,15 +1,14 @@
 .notConnectedContent {
-  width: calc(100%) !important;
-  background: transparent !important;
-  text-align: center;
-  height: calc(100vh);
-  box-shadow: none !important;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
   flex-direction: column;
+
+  width: calc(100%) !important;
+  height: calc(100vh);
+
   border-radius: 0 !important;
+
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 .contentFloat {
@@ -18,11 +17,64 @@
 }
 
 .contentFloatText {
-  font-family: 'PPNeueMachina', serif !important;
-  font-weight: 700 !important;
-  font-size: 72px !important;
+  margin-bottom: 40px !important;
+
+  font-family: 'Poppins', serif !important;
+  font-size: 96px !important;
+  font-weight: 500 !important;
+  line-height: 144px !important;
+
   color: #ffffff !important;
 }
+
+.title {
+  max-width: 500px;
+
+  margin-bottom: 40px;
+
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+
+  color: #fff;
+}
+
+.buttonConnect {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 377px;
+  height: 96px;
+
+  border-radius: 12px;
+
+  background: #D3F85A;
+
+  margin-top: 40px !important;
+  padding: 0 !important;
+
+  border: none !important;
+  background-color: #D3F85A !important;
+
+  cursor: pointer;
+}
+
+.buttonEnterLabel {
+  font-family: 'Poppins';
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  line-height: 48px !important;
+
+  color: #171D2D !important;
+
+  white-space: pre-line;
+}
+
+/* deprecated */
 
 .mainDescBg {
   position: relative;
@@ -68,40 +120,6 @@
   font-weight: 400 !important;
   line-height: 140% !important;
   color: #0A2C40 !important;
-}
-
-.mainDescBg--dark {
-  background: rgba(21, 23, 24, 0.8);
-  border-color: #304E61;
-}
-
-.mainDescBg--dark::before {
-  border-color: #304E61 transparent transparent transparent;
-}
-
-.mainDescBg--dark::after {
-  border-color: transparent transparent #304E61 transparent;
-}
-
-.mainDescNC--dark {
-  color: #ffffff !important;
-}
-
-.buttonConnect {
-  position: relative;
-  margin-top: 40px !important;
-  padding: 0 !important;
-  border: none !important;
-  background-color: transparent !important;
-  cursor: pointer;
-}
-
-.buttonEnterLabel {
-  font-weight: 700 !important;
-  font-size: 16px !important;
-  line-height: 120% !important;
-  color: #8F5AE8 !important;
-  white-space: pre-line;
 }
 
 @media (max-width: 530px) {

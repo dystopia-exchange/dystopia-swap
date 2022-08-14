@@ -19,7 +19,7 @@ import Form from "../../ui/MigratorForm";
 import classes from "./ssMigrate.module.css";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import stores from "../../stores";
-import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
+import {ACTIONS, CONTRACTS, ETHERSCAN_URL, ZERO_ADDRESS} from "../../stores/constants";
 import { BigNumber } from "ethers";
 import { parseUnits } from "ethers/lib/utils";
 import Borders from "../../ui/Borders";
@@ -44,7 +44,7 @@ export default function Setup() {
   const [toAssetOptions, setToAssetOptions] = useState([]);
   const [selectedValue, setSelectedValue] = React.useState("a");
   const [checkpair, setcheckpair] = useState(false);
-  const [dystopiaPair, setdystopiaPair] = useState(null);
+  const [conePair, setconePair] = useState(null);
   const [quote, setQuote] = useState(null);
   const [amount0, setAmount0] = useState("");
   const [amount1, setAmount1] = useState("");
@@ -66,7 +66,7 @@ export default function Setup() {
           parseFloat(pair?.totalSupply.toString())) *
         parseFloat(pair?.reserve1.toString());
 
-      setdystopiaPair(pair);
+      setconePair(pair);
       let removedToken0 =
         (amount * pairDetails?.weiReserve1) / pairDetails?.totalSupply;
       let removedToken1 =
@@ -96,10 +96,10 @@ export default function Setup() {
   const getPairDetails = async (token0, token1) => {
     const multicall = await stores.accountStore.getMulticall();
 
-    if (token0 == "MATIC") {
+    if (token0 == "BNB") {
       token0 = CONTRACTS.WFTM_ADDRESS;
     }
-    if (token1 == "MATIC") {
+    if (token1 == "BNB") {
       token1 = CONTRACTS.WFTM_ADDRESS;
     }
 
@@ -119,7 +119,7 @@ export default function Setup() {
           const pairAddress = await factoryContract.methods
             .getPair(token0, token1)
             .call();
-          if (pairAddress !== "0x0000000000000000000000000000000000000000") {
+          if (pairAddress !== ZERO_ADDRESS) {
             const pairContract = new web3.eth.Contract(
               pairContractAbi,
               pairAddress
@@ -254,7 +254,7 @@ export default function Setup() {
     }
     setPairDetails(null);
     setcheckpair(false);
-    setdystopiaPair(false);
+    setconePair(false);
     setQuote(null);
     forceUpdate();
   };
@@ -326,9 +326,9 @@ export default function Setup() {
     }
 
     if (parseFloat(am) <= 0 || am == null || am == "" || isNaN(am)) {
-      setdystopiaPair(false);
+      setconePair(false);
     } else {
-      setdystopiaPair(true);
+      setconePair(true);
     }
 
     pairDetails.token0Bal =
@@ -380,7 +380,7 @@ export default function Setup() {
         pairDetails.token0,
         pairDetails.token1
       );
-      setdystopiaPair(true);
+      setconePair(true);
     }
   };
 
@@ -433,10 +433,10 @@ export default function Setup() {
     let addy0 = token0.address;
     let addy1 = token1.address;
 
-    if (token0.address === "MATIC") {
+    if (token0.address === "BNB") {
       addy0 = CONTRACTS.WFTM_ADDRESS;
     }
-    if (token1.address === "MATIC") {
+    if (token1.address === "BNB") {
       addy1 = CONTRACTS.WFTM_ADDRESS;
     }
 
@@ -481,9 +481,9 @@ export default function Setup() {
           parseFloat(pair?.totalSupply.toString())) *
         parseFloat(pair?.reserve1.toString());
 
-      setdystopiaPair(pair);
+      setconePair(pair);
     } else {
-      setdystopiaPair(false);
+      setconePair(false);
     }
   };
 
@@ -681,7 +681,7 @@ export default function Setup() {
             </DialogTitle>
 
             <div className={classes.searchInline}>
-              <Borders />
+              {/* <Borders /> */}
 
               <TextField
                 variant="outlined"
@@ -700,11 +700,12 @@ export default function Setup() {
                       classes[`searchInputText--${appTheme}`],
                     ].join(" "),
                   },
-                  startAdornment: (
-                    <InputAdornment position="start">
+                  endAdornment: (
+                    <InputAdornment position="end">
                       <Search
                         style={{
-                          color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
+                          color: '#779BF4',
+                          // color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
                         }}
                       />
                     </InputAdornment>
@@ -1291,7 +1292,7 @@ export default function Setup() {
                 amount == "" ||
                 isNaN(amount)
               ) ? (
-                dystopiaPair ? (
+                conePair ? (
                   <div>
                     <div
                       className={[
@@ -1408,7 +1409,7 @@ export default function Setup() {
                                   classes[`pairPoolLabel--${appTheme}`],
                                 ].join(" ")}
                               >
-                                Dystopia Pool
+                                Cone Pool
                               </div>
                             </div>
                           </div>

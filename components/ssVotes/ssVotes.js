@@ -186,9 +186,37 @@ export default function ssVotes() {
           "g-flex--space-between",
         ].join(" ")}
       >
+          <div className={classes.title}>
+              Vote
+          </div>
+          <div className={[classes.yourVotes, "g-flex", "g-flex--align-center"].join(" ")}>
+              <Typography
+                  style={{
+                      fontWeight: 400,
+                      fontSize: windowWidth < 660 ? 14 : 16,
+                      color: '#E4E9F4',
+                      whiteSpace: "nowrap",
+                  }}
+              >
+                  You Votes:
+              </Typography>
+
+              <Typography
+                  className={[
+                      `${
+                          BigNumber(totalVotes).gt(100)
+                              ? classes.errorText
+                              : classes.helpText
+                      }`,
+                      noTokenSelected ? classes.infoSectionPercentDisabled : "",
+                  ].join(" ")}
+              >
+                  {formatCurrency(totalVotes)} %
+              </Typography>
+          </div>
         <div
           style={{
-            position: "relative",
+            // position: "relative",
           }}
           className={["g-flex", "g-flex--align-center"].join(" ")}
         >
@@ -202,35 +230,9 @@ export default function ssVotes() {
               "g-flex--space-between",
             ].join(" ")}
           >
-            <div className={["g-flex", "g-flex--align-center"].join(" ")}>
-              <Typography
-                style={{
-                  fontWeight: 400,
-                  fontSize: windowWidth < 660 ? 14 : 18,
-                  color: appTheme === "dark" ? "#ffffff" : "#5688A5",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Votes:
-              </Typography>
-
-              <Typography
-                className={[
-                  `${
-                    BigNumber(totalVotes).gt(100)
-                      ? classes.errorText
-                      : classes.helpText
-                  }`,
-                  noTokenSelected ? classes.infoSectionPercentDisabled : "",
-                ].join(" ")}
-              >
-                {formatCurrency(totalVotes)}%
-              </Typography>
-            </div>
             <Button
               className={[
-                classes.buttonOverrideFixed,
-                classes[`buttonOverrideFixed--${appTheme}`],
+                classes.buttonOverrideFixedCast,
                 noTokenSelected || disableCastVotes
                   ? classes[`buttonOverrideFixedDisabled--${appTheme}`]
                   : null,
@@ -246,24 +248,14 @@ export default function ssVotes() {
               }
               onClick={onVote}
             >
-              <Typography
-                style={{
-                  fontWeight: 700,
-                  fontSize: windowWidth < 660 ? 14 : 16,
-                  // color: appTheme === 'dark' ? '#8F5AE8' : '#8F5AE8',
-                  whiteSpace: "nowrap",
-                }}
-              >
                 {voteLoading ? `Casting Votes` : `Cast Votes`}
-              </Typography>
               {voteLoading && (
                 <CircularProgress size={10} className={classes.loadingCircle} />
               )}
             </Button>
             <Button
               className={[
-                classes.buttonOverrideFixed,
-                classes[`buttonOverrideFixed--${appTheme}`],
+                classes.buttonOverrideFixedReset,
                 noTokenSelected || disableCastVotes
                   ? classes[`buttonOverrideFixedDisabled--${appTheme}`]
                   : null,
@@ -276,13 +268,13 @@ export default function ssVotes() {
             >
               <Typography
                 style={{
-                  fontWeight: 700,
-                  fontSize: windowWidth < 660 ? 14 : 16,
-                  // color: appTheme === 'dark' ? '#8F5AE8' : '#8F5AE8',
+                  fontWeight: 600,
+                  fontSize: windowWidth < 660 ? 14 : 18,
+                  color: '#779BF4',
                   whiteSpace: "nowrap",
                 }}
               >
-                {voteLoading ? `Reseting Votes` : `Reset Votes`}
+                {voteLoading ? (windowWidth >= 806 ? `Reseting Votes` : 'Reseting') : (windowWidth >= 806 ? `Reset Votes` : 'Reset')}
               </Typography>
               {voteLoading && (
                 <CircularProgress size={10} className={classes.loadingCircle} />
@@ -300,17 +292,6 @@ export default function ssVotes() {
             ].join(" ")}
             onClick={onBribe}
           >
-            <div
-              className={[
-                classes.addButtonIcon,
-                "g-flex",
-                "g-flex--align-center",
-                "g-flex--justify-center",
-              ].join(" ")}
-            >
-              <Add style={{ width: 20, color: "#fff" }} />
-            </div>
-
             <Typography
               className={[
                 classes.actionButtonText,
@@ -330,45 +311,49 @@ export default function ssVotes() {
             " "
           )}
         >
-          {(windowWidth > 1360 || showSearch) && (
+          {1/*(windowWidth > 1200 || showSearch)*/ && (
             <TextField
-              className={classes.searchInput}
+              className={classes.searchInputRoot}
               variant="outlined"
               fullWidth
-              placeholder="Search by name or paste address"
+              placeholder="Type or paste the address"
               value={search}
               onChange={onSearchChanged}
               InputProps={{
                 style: {
-                  background: appTheme === "dark" ? "#151718" : "#DBE6EC",
+                  background: '#171D2D',
                   border: "1px solid",
-                  borderColor: appTheme === "dark" ? "#5F7285" : "#86B9D6",
-                  borderRadius: 0,
+                  borderColor: '#779BF4',
+                  borderRadius: 12,
                 },
                 classes: {
                   root: classes.searchInput,
+                  input: classes.searchInputInput,
                 },
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Search
-                      style={{
-                        width: 20,
-                        height: 20,
-                        color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
-                      }}
-                    />
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <div className={classes.searchInputIcon}>
+                      <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M10.5 20C15.7467 20 20 15.7467 20 10.5C20 5.25329 15.7467 1 10.5 1C5.25329 1 1 5.25329 1 10.5C1 15.7467 5.25329 20 10.5 20Z" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <div style={{position: 'relative'}}>
+                          <svg style={{position: 'absolute', top: 8, right: 0,}} width="4" height="4" viewBox="0 0 4 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M3 3L1 1" stroke="#779BF4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                      </div>
+                    </div>
                   </InputAdornment>
                 ),
               }}
               inputProps={{
                 style: {
-                  padding: 12,
+                  padding: 24,
                   borderRadius: 0,
                   border: "none",
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: 400,
                   lineHeight: "120%",
-                  color: appTheme === "dark" ? "#C6CDD2" : "#325569",
+                  color: '#E4E9F4',
                 },
               }}
             />
@@ -380,11 +365,11 @@ export default function ssVotes() {
               options: vestNFTs,
               symbol: veToken?.symbol,
               handleChange,
-              placeholder: "Click to select veDYST",
+              placeholder: "Select veCONE NFT",
             })}
           </div>
 
-          {windowWidth <= 1360 && (
+          {/*{windowWidth <= 1360 && (
             <IconButton
               className={[
                 classes.searchButton,
@@ -395,7 +380,7 @@ export default function ssVotes() {
             >
               <Search />
             </IconButton>
-          )}
+          )}*/}
         </div>
       </div>
 
@@ -428,6 +413,8 @@ export default function ssVotes() {
         token={token}
         noTokenSelected={noTokenSelected}
         showSearch={showSearch}
+        handleChangeNFT={handleChange}
+        vestNFTs={vestNFTs}
       />
     </>
   );
