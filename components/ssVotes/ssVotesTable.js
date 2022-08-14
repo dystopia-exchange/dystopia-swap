@@ -153,10 +153,10 @@ function descendingComparator(a, b, orderBy, sliderValues) {
       return 0;
 
     case 'totalVotes':
-      if (BigNumber(b?.gauge?.weightPercent).lt(a?.gauge?.weightPercent)) {
+      if (BigNumber(b?.gauge?.weight).lt(a?.gauge?.weight)) {
         return -1;
       }
-      if (BigNumber(b?.gauge?.weightPercent).gt(a?.gauge?.weightPercent)) {
+      if (BigNumber(b?.gauge?.weight).gt(a?.gauge?.weight)) {
         return 1;
       }
       return 0;
