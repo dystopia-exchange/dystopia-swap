@@ -4439,6 +4439,11 @@ class Store {
         let amountIn = bestAmountOut.receiveAmounts[i];
         // let amountOut = bestAmountOut.receiveAmounts[i + 1];
 
+        // console.log('amountIn', amountIn);
+        // console.log('from,', bestAmountOut.routes[i].from);
+        // console.log('to,', bestAmountOut.routes[i].to);
+        // console.log('stable', bestAmountOut.routes[i].stable);
+
         const res = await libraryContract.methods
           .getTradeDiff(
             amountIn,
