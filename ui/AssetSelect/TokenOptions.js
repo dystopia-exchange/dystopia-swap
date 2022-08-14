@@ -7,7 +7,7 @@ import { Popover } from "@mui/material";
 export const TokenOptions = (props) => {
   const { value, anchorEl, handleClosePopover, handleOpenPopover } = props;
 
-  const testOpen = Boolean(anchorEl);
+  const visible = Boolean(anchorEl);
 
   return (
     <>
@@ -22,7 +22,7 @@ export const TokenOptions = (props) => {
         <div />
       </div>
       <Popover
-        open={testOpen}
+        open={visible}
         anchorEl={anchorEl}
         onClose={handleClosePopover}
         anchorOrigin={{
