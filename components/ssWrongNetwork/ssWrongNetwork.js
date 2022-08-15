@@ -5,10 +5,6 @@ import { useAppThemeContext } from "../../ui/AppThemeProvider";
 export const WrongNetwork = (props) => {
   const { visible, onClose, onSwitch } = props;
 
-  const navigateToMedium = () => {
-    window.open("https://medium.com/@DystopiaSwap", "_blank");
-  };
-
   const { appTheme } = useAppThemeContext();
 
   return (

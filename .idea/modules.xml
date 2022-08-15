@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/dystopia-swap.iml" filepath="$PROJECT_DIR$/.idea/dystopia-swap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/cone-swap.iml" filepath="$PROJECT_DIR$/.idea/cone-swap.iml" />
     </modules>
   </component>
 </project>

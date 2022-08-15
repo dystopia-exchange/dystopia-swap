@@ -1153,7 +1153,7 @@ class Store {
         baseAssets.splice(dupAssets[i], 1);
 
       // console.log("baseAssets",removeDuplicate([...baseAssets, ...localBaseAssets]))
-      return removeDuplicate([...baseAssets, ...localBaseAssets]);
+      return removeDuplicate([...localBaseAssets, ...baseAssets]);
     } catch (ex) {
       console.log(ex);
       return [];
@@ -4438,6 +4438,11 @@ class Store {
       for (let i = 0; i < bestAmountOut.routes.length; i++) {
         let amountIn = bestAmountOut.receiveAmounts[i];
         // let amountOut = bestAmountOut.receiveAmounts[i + 1];
+
+        // console.log('amountIn', amountIn);
+        // console.log('from,', bestAmountOut.routes[i].from);
+        // console.log('to,', bestAmountOut.routes[i].to);
+        // console.log('stable', bestAmountOut.routes[i].stable);
 
         const res = await libraryContract.methods
           .getTradeDiff(
