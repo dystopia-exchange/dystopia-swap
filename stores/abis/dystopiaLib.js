@@ -1,13 +1,17 @@
 export const dystopiaLibraryABI = [{
-  "inputs": [{
-    "internalType": "uint256",
-    "name": "amountIn",
-    "type": "uint256"
-  }, {"internalType": "address", "name": "tokenIn", "type": "address"}, {
+  "inputs": [{"internalType": "address", "name": "_router", "type": "address"}],
+  "stateMutability": "nonpayable",
+  "type": "constructor"
+}, {
+  "inputs": [{"internalType": "uint256", "name": "amountIn", "type": "uint256"}, {
     "internalType": "address",
-    "name": "tokenOut",
+    "name": "tokenIn",
     "type": "address"
-  }, {"internalType": "bool", "name": "stable", "type": "bool"}],
+  }, {"internalType": "address", "name": "tokenOut", "type": "address"}, {
+    "internalType": "bool",
+    "name": "stable",
+    "type": "bool"
+  }],
   "name": "getAmountOut",
   "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
   "stateMutability": "view",
@@ -66,6 +70,30 @@ export const dystopiaLibraryABI = [{
     "name": "b",
     "type": "uint256"
   }],
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "inputs": [{"internalType": "uint256", "name": "amountIn", "type": "uint256"}, {
+    "internalType": "address",
+    "name": "tokenIn",
+    "type": "address"
+  }, {"internalType": "address", "name": "tokenOut", "type": "address"}, {
+    "internalType": "bool",
+    "name": "stable",
+    "type": "bool"
+  }, {"internalType": "uint256", "name": "sample", "type": "uint256"}],
+  "name": "getTradeDiffSimple",
+  "outputs": [{"internalType": "uint256", "name": "a", "type": "uint256"}, {
+    "internalType": "uint256",
+    "name": "b",
+    "type": "uint256"
+  }],
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "inputs": [],
+  "name": "router",
+  "outputs": [{"internalType": "contract IRouter", "name": "", "type": "address"}],
   "stateMutability": "view",
   "type": "function"
 }]
