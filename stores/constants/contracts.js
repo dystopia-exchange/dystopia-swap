@@ -61,7 +61,7 @@ export const TOKEN_ABI = abis.tokenABI
 
 export const MULTICALL_ADDRESS = '0xFC9b894D0b4a34AB41278Df5F2aBEEb5de95c9e4'
 
-export const USD_PLUS_ADDRESS = '0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f'
-export const USD_PLUS_BOOSTED_DATA_URL = 'https://app.overnight.fi/api/balancer/week/apr'
+export const USD_PLUS_ADDRESS = '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
+export const USD_PLUS_BOOSTED_DATA_URL = 'https://bsc.overnight.fi/api/balancer/week/apr'
 
 export const SPHERE_ADDRESS = '0x62f594339830b90ae4c084ae7d223ffafd9658a7'
