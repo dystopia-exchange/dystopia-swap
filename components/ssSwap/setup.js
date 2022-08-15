@@ -599,11 +599,11 @@ function Setup() {
                             </span>{" "}
                             <span
                               className={[classes.priceImpactValue,
-                                BigNumber(quote.priceImpact).gt(5)
+                                BigNumber(quote.priceImpact).gt(5) || BigNumber(quote.priceImpact).lt(0)
                                   ? classes.priceImpactValueError
                                   : classes.priceImpactValueWarning,
                                 ].join(" ")}>
-                        {formatCurrency(quote.priceImpact)}%
+                        {quote.priceImpact > 0 ? formatCurrency(quote.priceImpact) : "Unknown"}%
                       </span>
                           </Typography>
                         </div>
