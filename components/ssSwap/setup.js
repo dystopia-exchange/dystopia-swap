@@ -562,7 +562,7 @@ function Setup() {
   };
 
   const renderSwapInformation = () => {
-    if (!quoteError && !quoteLoading && quote && fromAmountValue <= Number(fromAssetValue.balance)) {
+    if (!quoteError && !quoteLoading && quote) {
       return (
           <div className={classes.controlsInfo}>
             <div className={classes.depositInfoContainer}>
@@ -574,7 +574,7 @@ function Setup() {
                         width: "100%",
                       }}
                   >
-                    {fromAmountValue <= Number(fromAssetValue.balance) && (
+                    { (
                         <div
                           className={[
                             classes.priceImpactWrapper,
