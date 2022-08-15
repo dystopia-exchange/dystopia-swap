@@ -13,7 +13,7 @@
 
 @media (min-width: 1501px) {
   .navigationContainerSmart {
-    width: 100vw;
+    width: calc(50vw + 300px);
     position: absolute;
     margin-left: calc(50vw - 408px);
     top: 22px;
