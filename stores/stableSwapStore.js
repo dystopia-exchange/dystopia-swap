@@ -4447,19 +4447,21 @@ class Store {
         // console.log('stable', bestAmountOut.routes[i].stable);
 
         const res = await libraryContract.methods
-          .getTradeDiff(
+          .getTradeDiffSimple(
             amountIn,
             bestAmountOut.routes[i].from,
             bestAmountOut.routes[i].to,
-            bestAmountOut.routes[i].stable
+            bestAmountOut.routes[i].stable,
+            1000
           )
           .call();
         const ratio = BigNumber(res.b).div(res.a);
+        // console.log('ratio', ratio.toFixed(18), res.a, res.b, )
         totalRatio = BigNumber(totalRatio).times(ratio).toFixed(18);
       }
 
       const priceImpact = BigNumber(1).minus(totalRatio).times(100).toFixed(18);
-
+      // console.log('priceImpact', priceImpact);
       const returnValue = {
         inputs: {
           fromAmount: fromAmount,
