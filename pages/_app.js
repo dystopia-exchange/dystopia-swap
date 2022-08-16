@@ -106,23 +106,25 @@ export default function MyApp({ Component, pageProps }) {
           )}
 
           {!validateConfigured() && (
-            <div>
-              <img
-                src={
-                  appTheme === "dark"
-                    ? "/images/big-logo--dark.svg"
-                    : "/images/big-logo.svg"
-                }
-                style={{
-                  position: "absolute",
-                  width: "242px",
-                  height: "30px",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                }}
-              />
-            </div>
+              <div style={{
+                width: '100%',
+                height: '100%',
+                position: 'absolute',
+                backgroundImage: 'url(/images/background/background.jpg)',
+                backgroundPosition: 'center',
+                backgroundSize: 'cover',
+              }}>
+                <img
+                    src={"/images/ui/logo.png"}
+                    style={{
+                      position: "absolute",
+                      width: "242px",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                    }}
+                />
+              </div>
           )}
         </AppThemeProvider>
       </React.Fragment>
