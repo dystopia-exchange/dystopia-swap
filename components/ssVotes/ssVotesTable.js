@@ -1120,7 +1120,7 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                               `${formatCurrency(BigNumber(row?.gauge?.apr), 0)}%`,
                               `${formatCurrency(BigNumber(row?.gauge?.expectAPR), 0)}%`,
                               'Current',
-                              'Expected'
+                              'Next week'
                             )
                           }
                           
