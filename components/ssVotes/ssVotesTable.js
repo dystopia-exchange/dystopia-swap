@@ -1102,7 +1102,7 @@ export default function EnhancedTable({
                           }}
                         >
                           {tableCellContent(
-                            `${numeral(parseInt(row?.tvl)).format("($ 0a)")} `,
+                            `${numeral(parseInt(row?.tvl)).format(parseInt(row?.tvl) > 1000 ? "($ 0.00a)" : "($ 0a)")} `,
                             null,
                             null,
                             null
@@ -1750,8 +1750,8 @@ export default function EnhancedTable({
                                       }}
                                     >
                                       {headCell.id === "tvl" &&
-                                        `${numeral(parseInt(row?.tvl)).format(
-                                          "($ 0a)"
+                                        `${numeral(parseInt(row?.tvl)).format(parseInt(row?.tvl) > 1000 ? 
+                                          "($ 0.00a)" : "($ 0a)"
                                         )} `}
                                       {headCell.id === "apr" &&
                                         `${formatCurrency(BigNumber(row?.gauge?.apr), 0)}%`}

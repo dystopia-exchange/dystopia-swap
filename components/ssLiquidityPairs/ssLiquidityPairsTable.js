@@ -2065,7 +2065,7 @@ export default function EnhancedTable({ pairs, isLoading }) {
                               isNaN(BigNumber(row?.tvl))
                                 ? null
                                 : `${numeral(parseInt(row?.tvl)).format(
-                                    "($ 0a)"
+                                      parseInt(row?.tvl) > 1000 ? "($ 0.00a)" : "($ 0a)"
                                   )} `,
                               null,
                               null,
@@ -3383,7 +3383,7 @@ export default function EnhancedTable({ pairs, isLoading }) {
                                   {headCell.id === "tvl" &&
                                     tableCellContent(
                                       `${numeral(parseInt(row?.tvl)).format(
-                                        "($ 0a)"
+                                          parseInt(row?.tvl) > 1000 ? "($ 0.00a)" : "($ 0a)"
                                       )} `
                                     )}
                                   {headCell.id === "poolBalance" &&
