@@ -4439,10 +4439,10 @@ class Store {
         let amountIn = bestAmountOut.receiveAmounts[i];
         // let amountOut = bestAmountOut.receiveAmounts[i + 1];
 
-        console.log('amountIn', amountIn);
-        console.log('from,', bestAmountOut.routes[i].from);
-        console.log('to,', bestAmountOut.routes[i].to);
-        console.log('stable', bestAmountOut.routes[i].stable);
+        // console.log('amountIn', amountIn);
+        // console.log('from,', bestAmountOut.routes[i].from);
+        // console.log('to,', bestAmountOut.routes[i].to);
+        // console.log('stable', bestAmountOut.routes[i].stable);
 
         const res = await libraryContract.methods
           .getTradeDiff3(
@@ -4453,12 +4453,12 @@ class Store {
           )
           .call();
         const ratio = BigNumber(res.b).div(res.a);
-        console.log('ratio', ratio.toFixed(18), res.a, res.b, )
+        // console.log('ratio', ratio.toFixed(18), res.a, res.b, )
         totalRatio = BigNumber(totalRatio).times(ratio).toFixed(18);
       }
 
       const priceImpact = BigNumber(1).minus(totalRatio).times(100).toFixed(18);
-      console.log('priceImpact', priceImpact);
+      // console.log('priceImpact', priceImpact);
       const returnValue = {
         inputs: {
           fromAmount: fromAmount,
