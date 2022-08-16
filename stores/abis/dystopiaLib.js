@@ -81,6 +81,42 @@ export const dystopiaLibraryABI = [{
     "internalType": "bool",
     "name": "stable",
     "type": "bool"
+  }],
+  "name": "getTradeDiff2",
+  "outputs": [{"internalType": "uint256", "name": "a", "type": "uint256"}, {
+    "internalType": "uint256",
+    "name": "b",
+    "type": "uint256"
+  }],
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "inputs": [{"internalType": "uint256", "name": "amountIn", "type": "uint256"}, {
+    "internalType": "address",
+    "name": "tokenIn",
+    "type": "address"
+  }, {"internalType": "address", "name": "tokenOut", "type": "address"}, {
+    "internalType": "bool",
+    "name": "stable",
+    "type": "bool"
+  }],
+  "name": "getTradeDiff3",
+  "outputs": [{"internalType": "uint256", "name": "a", "type": "uint256"}, {
+    "internalType": "uint256",
+    "name": "b",
+    "type": "uint256"
+  }],
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "inputs": [{"internalType": "uint256", "name": "amountIn", "type": "uint256"}, {
+    "internalType": "address",
+    "name": "tokenIn",
+    "type": "address"
+  }, {"internalType": "address", "name": "tokenOut", "type": "address"}, {
+    "internalType": "bool",
+    "name": "stable",
+    "type": "bool"
   }, {"internalType": "uint256", "name": "sample", "type": "uint256"}],
   "name": "getTradeDiffSimple",
   "outputs": [{"internalType": "uint256", "name": "a", "type": "uint256"}, {
