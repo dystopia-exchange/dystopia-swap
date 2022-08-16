@@ -4445,12 +4445,11 @@ class Store {
         // console.log('stable', bestAmountOut.routes[i].stable);
 
         const res = await libraryContract.methods
-          .getTradeDiffSimple(
+          .getTradeDiff3(
             amountIn,
             bestAmountOut.routes[i].from,
             bestAmountOut.routes[i].to,
-            bestAmountOut.routes[i].stable,
-            1000
+            bestAmountOut.routes[i].stable
           )
           .call();
         const ratio = BigNumber(res.b).div(res.a);
