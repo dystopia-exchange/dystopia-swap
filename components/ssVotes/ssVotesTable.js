@@ -176,6 +176,15 @@ function descendingComparator(a, b, orderBy, sliderValues) {
       }
       return 0;
 
+    case "apr":
+      if (BigNumber(b?.gauge.apr).lt(a?.gauge.apr)) {
+        return -1;
+      }
+      if (BigNumber(b?.gauge.apr).gt(a?.gauge.apr)) {
+        return 1;
+      }
+      return 0;
+
     case "apy":
       let apyA = a?.gaugebribes.bribeTokens.length
         ? a?.gaugebribes.bribeTokens
