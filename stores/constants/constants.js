@@ -255,3 +255,7 @@ export const ROUTE_ASSETS = [
     symbol: "MAI",
   }
 ];
+
+export const DIRECT_SWAP_ROUTES = {
+  '0x62f594339830b90ae4c084ae7d223ffafd9658a7': ['0x236eec6359fb44cce8f97e99387aa7f8cd5cde1f',],
+}
