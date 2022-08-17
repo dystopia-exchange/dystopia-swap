@@ -563,7 +563,7 @@
   }
 }
 
-@media (max-width: 410px) {
+@media (max-width: 440px) {
   .logoContainer {
     margin-left: 10px;
   }
@@ -581,7 +581,7 @@
   }
 }
 
-@media (max-width: 350px) {
+@media (max-width: 360px) {
   .logoContainer {
     display: none;
   }

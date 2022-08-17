@@ -4,7 +4,7 @@ import { useAppThemeContext } from "../AppThemeProvider";
 
 const Logo = (props) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const {width = windowWidth <= 770 ? "24" : "156", height = windowWidth <= 770 ? "34" : "36"} = props;
+  const {width = windowWidth <= 780 ? "24" : "156", height = windowWidth <= 780 ? "34" : "36"} = props;
   const {appTheme} = useAppThemeContext();
   const mainFillColor = appTheme === "dark" ? "white" : "#0A2C40";
 
