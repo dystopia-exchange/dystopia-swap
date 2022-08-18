@@ -1548,8 +1548,7 @@ class Store {
                 if (boostedApr0Response.data && boostedApr0Response.data.apr) {
                   pair.gauge.boostedApr0 = new BigNumber(
                       boostedApr0Response.data.apr
-                  ).times(100)
-                      .times(reserve0ETH).div(reserve0ETH.plus(reserve1ETH));
+                  ).times(reserve0ETH).div(reserve0ETH.plus(reserve1ETH));
                 }
               }
 
@@ -1580,8 +1579,7 @@ class Store {
                 if (boostedApr1Response.data && boostedApr1Response.data.apr) {
                   pair.gauge.boostedApr1 = new BigNumber(
                       boostedApr1Response.data.apr
-                  ).times(100)
-                      .times(reserve1ETH).div(reserve0ETH.plus(reserve1ETH));
+                  ).times(reserve1ETH).div(reserve0ETH.plus(reserve1ETH));
                 }
               }
 
