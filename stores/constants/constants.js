@@ -24,7 +24,9 @@ export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 
 export const BLACK_LIST_TOKENS = [
-  '0x104592a158490a9228070e0a8e5343b499e125d0'.toLowerCase() // wrong FRAX
+  '0x104592a158490a9228070e0a8e5343b499e125d0'.toLowerCase(), // wrong FRAX
+  '0x8d546026012bf75073d8a586f24a5d5ff75b9716'.toLowerCase(), // old SPHERE
+  '0x17e9c5b37283ac5fbe527011cec257b832f03eb3'.toLowerCase(), // old SPHERE
 ]
 
 export const BASE_ASSETS_WHITELIST = [
@@ -85,6 +87,12 @@ export const BASE_ASSETS_WHITELIST = [
   {
     id: "0x3e121107f6f22da4911079845a470757af4e1a1b",
     address: "0x3e121107f6f22da4911079845a470757af4e1a1b",
+    chainId: "137",
+    symbol: "FXS",
+  },
+  {
+    id: "0x1a3acf6d19267e2d3e7f898f42803e90c9219062",
+    address: "0x1a3acf6d19267e2d3e7f898f42803e90c9219062",
     chainId: "137",
     symbol: "FXS",
   },

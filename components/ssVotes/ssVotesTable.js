@@ -176,6 +176,15 @@ function descendingComparator(a, b, orderBy, sliderValues) {
       }
       return 0;
 
+    case "apr":
+      if (BigNumber(b?.gauge.apr).lt(a?.gauge.apr)) {
+        return -1;
+      }
+      if (BigNumber(b?.gauge.apr).gt(a?.gauge.apr)) {
+        return 1;
+      }
+      return 0;
+
     case "apy":
       let apyA = a?.gaugebribes.bribeTokens.length
         ? a?.gaugebribes.bribeTokens
@@ -1102,7 +1111,7 @@ export default function EnhancedTable({
                           }}
                         >
                           {tableCellContent(
-                            `${numeral(parseInt(row?.tvl)).format("($ 0a)")} `,
+                            `${numeral(parseInt(row?.tvl)).format(parseInt(row?.tvl) > 1000 ? "($ 0.00a)" : "($ 0a)")} `,
                             null,
                             null,
                             null
@@ -1750,8 +1759,8 @@ export default function EnhancedTable({
                                       }}
                                     >
                                       {headCell.id === "tvl" &&
-                                        `${numeral(parseInt(row?.tvl)).format(
-                                          "($ 0a)"
+                                        `${numeral(parseInt(row?.tvl)).format(parseInt(row?.tvl) > 1000 ? 
+                                          "($ 0.00a)" : "($ 0a)"
                                         )} `}
                                       {headCell.id === "apr" &&
                                         `${formatCurrency(BigNumber(row?.gauge?.apr), 0)}%`}
