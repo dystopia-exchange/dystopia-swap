@@ -733,7 +733,7 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
     setWindowWidth(window.innerWidth);
   });
 
-  console.log('rewards', rewards);
+  // console.log('rewards', rewards);
 
   return (
     <>
@@ -1137,7 +1137,7 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
       {windowWidth < 806 && (
         <>
           <div style={{ overflow: "auto" }}>
-            {Array.isArray(rewards).length > 0
+            {Array.from(rewards).length > 0
               ? stableSort(rewards, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
