@@ -63,4 +63,7 @@ export const MULTICALL_ADDRESS = '0x11ce4B23bD875D7F5C6a31084f55fDe1e9A87507'
 export const USD_PLUS_ADDRESS = '0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f'
 export const USD_PLUS_BOOSTED_DATA_URL = 'https://app.overnight.fi/api/balancer/week/apr'
 
+export const ST_MATIC_ADDRESS = '0x3a58a54c066fdc0f2d55fc9c89f0415c92ebf3c4'
+export const ST_MATIC_BOOSTED_DATA_URL = 'https://polygon.lido.fi/api/stats'
+
 export const SPHERE_ADDRESS = '0x62f594339830b90ae4c084ae7d223ffafd9658a7'
