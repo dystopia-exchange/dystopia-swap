@@ -762,7 +762,7 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
               />
 
               <TableBody classes={{ root: classes.tableBody }}>
-                {Array.isArray(rewards).length > 0
+                {Array.from(rewards).length > 0
                   ? stableSort(rewards, getComparator(order, orderBy))
                       .slice(
                         page * rowsPerPage,
@@ -772,7 +772,6 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                         if (!row) {
                           return null;
                         }
-
                         return (
                           <TableRow
                             key={"ssRewardsTable" + index}
@@ -1027,7 +1026,7 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                                 tableCellContent(
                                   formatCurrency(row.gauge.rewardsEarned),
                                   null,
-                                  "DYST",
+                                  "CONE",
                                   null
                                 )}
 
@@ -1445,7 +1444,7 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
                                     tableCellContent(
                                       formatCurrency(row.gauge.rewardsEarned),
                                       null,
-                                      "DYST",
+                                      "CONE",
                                       null
                                     )}
 
