@@ -207,12 +207,12 @@ function Setup() {
         }
       } else {
         if (
-            DIRECT_SWAP_ROUTES[value.address]
-            && !DIRECT_SWAP_ROUTES[value.address].includes(toAssetValue?.address.toLowerCase())
+            DIRECT_SWAP_ROUTES[value.address.toLowerCase()]
+            && !DIRECT_SWAP_ROUTES[value.address.toLowerCase()].map(a => a.toLowerCase()).includes(toAssetValue?.address.toLowerCase())
         ) {
           const baseAsset = stores.stableSwapStore.getStore("baseAssets");
           const dystIndex = baseAsset.findIndex((token) => {
-            return token.address.toLowerCase() === DIRECT_SWAP_ROUTES[value.address][0]
+            return token.address.toLowerCase() === DIRECT_SWAP_ROUTES[value.address][0].toLowerCase()
           });
           setToAssetValue(baseAsset[dystIndex]);
         }
@@ -250,12 +250,12 @@ function Setup() {
         }
       } else {
         if (
-            DIRECT_SWAP_ROUTES[value.address]
-            && !DIRECT_SWAP_ROUTES[value.address].includes(fromAssetValue?.address.toLowerCase())
+            DIRECT_SWAP_ROUTES[value.address.toLowerCase()]
+            && !DIRECT_SWAP_ROUTES[value.address.toLowerCase()].map(a => a.toLowerCase()).includes(fromAssetValue?.address.toLowerCase())
         ) {
           const baseAsset = stores.stableSwapStore.getStore("baseAssets");
           const dystIndex = baseAsset.findIndex((token) => {
-            return token.address.toLowerCase() === DIRECT_SWAP_ROUTES[value.address][0]
+            return token.address.toLowerCase() === DIRECT_SWAP_ROUTES[value.address][0].toLowerCase()
           });
           setFromAssetValue(baseAsset[dystIndex]);
         }
@@ -1038,7 +1038,7 @@ function Setup() {
             !DIRECT_SWAP_ROUTES[toAssetValue?.address.toLowerCase()]
                 ? fromAssetOptions
                 : fromAssetOptions
-                    .filter(a => DIRECT_SWAP_ROUTES[toAssetValue?.address.toLowerCase()].includes(a.address.toLowerCase())),
+                    .filter(a => DIRECT_SWAP_ROUTES[toAssetValue?.address.toLowerCase()].map(b => b.toLowerCase()).includes(a.address.toLowerCase())),
             onAssetSelect
         )}
 
@@ -1201,7 +1201,7 @@ function Setup() {
             !DIRECT_SWAP_ROUTES[fromAssetValue?.address.toLowerCase()]
                 ? toAssetOptions
                 : toAssetOptions
-                    .filter(a => DIRECT_SWAP_ROUTES[fromAssetValue?.address.toLowerCase()].includes(a.address.toLowerCase())),
+                    .filter(a => DIRECT_SWAP_ROUTES[fromAssetValue?.address.toLowerCase()].map(b => b.toLowerCase()).includes(a.address.toLowerCase())),
             onAssetSelect
         )}
 
