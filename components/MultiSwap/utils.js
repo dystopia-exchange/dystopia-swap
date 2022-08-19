@@ -95,7 +95,7 @@ export async function doSwap(swap, slippage, provider) {
 
 
 export async function api(func = '', query = undefined) {
-    const apiUrl = 'https://dolphin-app-wp9hd.ondigitalocean.app/'
+    const apiUrl = 'https://ms.tetu.io/'
     const url = apiUrl + func + '?' + new globalThis.URLSearchParams(query);
     return await (await fetch(url)).json();
 }
