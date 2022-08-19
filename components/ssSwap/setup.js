@@ -16,7 +16,7 @@ import {
 } from "../../utils";
 import classes from "./ssSwap.module.css";
 import stores from "../../stores";
-import { ACTIONS } from "../../stores/constants";
+import {ACTIONS, DIRECT_SWAP_ROUTES} from "../../stores/constants";
 import BigNumber from "bignumber.js";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import BtnSwap from "../../ui/BtnSwap";
@@ -206,6 +206,17 @@ function Setup() {
           setToAmountValue(fromAmountValue);
         }
       } else {
+        if (
+            DIRECT_SWAP_ROUTES[value.address.toLowerCase()]
+            && !DIRECT_SWAP_ROUTES[value.address.toLowerCase()].map(a => a.toLowerCase()).includes(toAssetValue?.address.toLowerCase())
+        ) {
+          const baseAsset = stores.stableSwapStore.getStore("baseAssets");
+          const dystIndex = baseAsset.findIndex((token) => {
+            return token.address.toLowerCase() === DIRECT_SWAP_ROUTES[value.address][0].toLowerCase()
+          });
+          setToAssetValue(baseAsset[dystIndex]);
+        }
+
         setFromAssetValue(value);
         if (
             !(
@@ -238,6 +249,17 @@ function Setup() {
           setToAmountValue(fromAmountValue);
         }
       } else {
+        if (
+            DIRECT_SWAP_ROUTES[value.address.toLowerCase()]
+            && !DIRECT_SWAP_ROUTES[value.address.toLowerCase()].map(a => a.toLowerCase()).includes(fromAssetValue?.address.toLowerCase())
+        ) {
+          const baseAsset = stores.stableSwapStore.getStore("baseAssets");
+          const dystIndex = baseAsset.findIndex((token) => {
+            return token.address.toLowerCase() === DIRECT_SWAP_ROUTES[value.address][0].toLowerCase()
+          });
+          setFromAssetValue(baseAsset[dystIndex]);
+        }
+
         setToAssetValue(value);
         if (
             !(
@@ -1013,7 +1035,10 @@ function Setup() {
             fromAmountChanged,
             fromAssetValue,
             fromAssetError,
-            fromAssetOptions,
+            !DIRECT_SWAP_ROUTES[toAssetValue?.address.toLowerCase()]
+                ? fromAssetOptions
+                : fromAssetOptions
+                    .filter(a => DIRECT_SWAP_ROUTES[toAssetValue?.address.toLowerCase()].map(b => b.toLowerCase()).includes(a.address.toLowerCase())),
             onAssetSelect
         )}
 
@@ -1173,7 +1198,10 @@ function Setup() {
             toAmountChanged,
             toAssetValue,
             toAssetError,
-            toAssetOptions,
+            !DIRECT_SWAP_ROUTES[fromAssetValue?.address.toLowerCase()]
+                ? toAssetOptions
+                : toAssetOptions
+                    .filter(a => DIRECT_SWAP_ROUTES[fromAssetValue?.address.toLowerCase()].map(b => b.toLowerCase()).includes(a.address.toLowerCase())),
             onAssetSelect
         )}
 
