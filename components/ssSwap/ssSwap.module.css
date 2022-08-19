@@ -357,7 +357,7 @@ input[type=number].massiveInputAmount {
   line-height: 120%;
   font-weight: 500 !important;
   color: #5688A5 !important;
-  margin-top: 20px !important;
+  margin-top: 10px !important;
   margin-bottom: 6px !important;
   font-size: 14px !important;
 }
@@ -544,6 +544,14 @@ input[type=number].massiveInputAmount {
   border-radius: 100px;
 }
 
+.routeSmallIcon {
+  width: 30px !important;
+  height: 30px !important;
+  padding: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
+}
+
 .routeIcon--light {
   background: #CFE5F2;
   border: 1px solid #86B9D6;
@@ -628,6 +636,170 @@ input[type=number].massiveInputAmount {
 .quoteLoaderError {
   min-width: 100%;
   border: 2px solid #DB3434;
+}
+
+
+.routesPlatform {
+  position: static !important;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: normal;
+  margin-left: 8px;
+  color: #7C838A;
+}
+
+.routesPlatform--light {
+  color: #325569 !important;
+}
+
+.routesList {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  border-radius: 25px;
+  margin-bottom: 15px;
+}
+
+.routesListItem:first-child {
+
+}
+
+.routesListItem {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.loadingMessageWrapper {
+  position: relative;
+}
+
+.loadingMessage {
+  position: absolute;
+  top: 15px;
+  left: 58px;
+  color: #0A2C40;
+}
+
+.loadingMessage--dark {
+  color: #fff;
+}
+
+.routesListItemSymbol {
+  margin-left: 6px;
+  font-size: 14px;
+}
+
+.routesListItemSymbol--light {
+  color: #325569;
+}
+
+.routesListItemArrowIcon {
+  height: 1px;
+  width: calc(100% - 1px);
+  flex-basis: calc(100% - 1px);
+  background-color: #5F7285;
+  margin-bottom: 3px;
+  margin-top: 16px;
+  position: relative;
+}
+
+.routesListItemArrowIcon:before {
+  content: '';
+  position: absolute;
+  top: -2.5px;
+  right: -1px;
+  width: 0;
+  height: 0;
+  border-top: 3px solid transparent;
+  border-left: 6px solid #5F7285;
+  border-bottom: 3px solid transparent;
+}
+
+.routesListItemArrow {
+  width: auto;
+  flex-basis: auto;
+  flex-grow: 100;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-top: -30px;
+  margin-bottom: -30px;
+  position: relative;
+}
+
+.routesListItemArrow svg {
+  transform: scale(1.4);
+}
+
+.routesListItemArrowPlatform {
+  font-size: 10px;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+}
+
+.routesListItemArrowPlatform--light {
+  color: #0A2C40;
+}
+
+.routesListItemArrowPlatformExclude {
+  margin-left: 3px;
+  font-size: 20px;
+  color: red;
+  opacity: 0.6;
+  font-size: 20px;
+  line-height: 10px;
+}
+
+.excludedPlatformWrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.excludedPlatformTitle {
+  margin-right: 12px;
+  color: #7C838A;
+  font-size: 14px;
+}
+
+.excludedPlatformTitle--light {
+  color: #325569 !important;
+}
+
+.excludedPlatformList {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.excludedPlatformListItem {
+  margin-right: 10px;
+  font-size: 12px;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+}
+
+.excludedPlatformListItem--light {
+  color: #325569 !important;
+}
+
+.routesListItemArrowPlatformExclude:hover,
+.excludedPlatformListItem:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.routesListItemArrow--dark {
+
 }
 
 @media (max-width: 470px) {

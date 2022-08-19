@@ -1077,6 +1077,17 @@ class Store {
     }
   };
 
+  fetchBaseAssets = async (addresses) => {
+    if (addresses && Array.isArray(addresses)) {
+      const web3 = await stores.accountStore.getWeb3Provider();
+      const account = stores.accountStore.getStore("account");
+
+      await Promise.all(addresses.map((addr) => this._getSpecificAssetInfo(web3, account, addr)));
+
+      this.emitter.emit(ACTIONS.BASE_ASSETS_UPDATED);
+    }
+  }
+
   // DISPATCHER FUNCTIONS
   configure = async (payload) => {
     try {
@@ -4729,6 +4740,7 @@ class Store {
       const sendFromAmount = BigNumber(fromAmount)
         .times(10 ** fromAsset.decimals)
         .toFixed(0);
+
       const sendValue = sendFromAmount;
       const wmaticContract = new web3.eth.Contract(
         CONTRACTS.WFTM_ABI,

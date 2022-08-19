@@ -590,7 +590,8 @@ function Setup() {
     }
 
     return (
-        <div className={classes.depositInfoContainer}>
+        <>
+          <div className={classes.depositInfoContainer}>
           {quote && (
               <div
                   style={{
@@ -830,6 +831,7 @@ function Setup() {
               </div>
           )}
         </div>
+        </>
     );
   };
 
