@@ -1125,7 +1125,7 @@ class Store {
           }
 
           if(baseAssets[j].address.toLowerCase() === CONE_ADDRESS) {
-            baseAssets[j].logoURI = 'https://raw.githubusercontent.com/cone-exchange/cone-assets/master/con%20token%20icon.png'
+            baseAssets[j].logoURI = 'https://icons.llama.fi/cone.png'
           }
 
           if (baseAssets[j].name === "miMATIC") {
