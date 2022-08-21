@@ -2403,6 +2403,22 @@
       "chainId": 56,
       "decimals": 18,
       "logoURI": "https://tokens.pancakeswap.finance/images/0x1D229B958D5DDFca92146585a8711aECbE56F095.png"
+    },
+    {
+      "name": "Tetu Token",
+      "symbol": "TETU",
+      "address": "0x1f681B1c4065057E07b95a1E5e504fB2c85F4625",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://assets.coingecko.com/coins/images/17882/small/gradient_icon_926.png"
+    },
+    {
+      "name": "USD+",
+      "symbol": "USD+",
+      "address": "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://2173993027-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F9HhCCgYexXiRot0OWAJY%2Fuploads%2FQ41zhb0z0oV5WI1zpKEg%2FUSD%2B%20logo.png?alt=media&token=533d9ed9-6904-4f45-82a3-2c9e1060a3b5"
     }
   ]
 }
