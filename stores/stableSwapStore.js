@@ -1,4 +1,4 @@
-import async from "promise-async";
+import DEFAULT_TOKEN_LIST from './constants/tokenlist.json'
 import {
   MAX_UINT256,
   ZERO_ADDRESS,
@@ -1119,9 +1119,10 @@ class Store {
           ? await axios.get(
               `https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`
             )
-          : await axios.get(
+          : {data: DEFAULT_TOKEN_LIST,}
+          /*await axios.get(
               `https://raw.githubusercontent.com/dystopia-exchange/default-token-list/master/tokens/matic.json`
-            );
+            )*/;
       // console.log("defaultTokenList RESPONSE",defaultTokenList)
       const nativeFTM = {
         id: CONTRACTS.FTM_ADDRESS,
