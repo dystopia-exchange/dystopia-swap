@@ -3,8 +3,9 @@ import { allowance, approve, doSwap, getSwapContract, swapQuery, api } from "./u
 import * as ethers from 'ethers'
 import { debounce } from "debounce"
 import stores from "../../stores";
-import { wmaticAbi } from './wmaticAbi'
-import { CONTRACTS } from "../../stores/constants";
+// import { wmaticAbi } from './wmaticAbi'
+// import { CONTRACTS } from "../../stores/constants";
+import {FTM_SYMBOL, WFTM_ADDRESS} from "../../stores/constants/contracts";
 
 const erc20abi = [
     // Read-Only Functions
@@ -19,7 +20,7 @@ const erc20abi = [
     "event Transfer(address indexed from, address indexed to, uint amount)"
 ];
 
-const WMATIC = '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270'
+// const WMATIC = '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270'
 
 class MultiSwapStore {
     tokensMap = {}
@@ -101,10 +102,19 @@ class MultiSwapStore {
 
     reverseTokens() {
         const { tokenOut, tokenIn } = this
-        this.setTokenIn(tokenOut)
-        this.setTokenOut(tokenIn)
-        this._checkAllowance()
-        this.debSwapQuery()
+        if (this.isWrapUnwrap) {
+            this.swap = null
+            this.error = null
+            this.allowed = true
+            this.tokenIn = tokenOut
+            this.tokenOut = tokenIn
+            this.debSwapQuery()
+        } else {
+            this.setTokenIn(tokenOut)
+            this.setTokenOut(tokenIn)
+            this._checkAllowance()
+            this.debSwapQuery()
+        }
     }
 
     async approve() {
@@ -149,13 +159,9 @@ class MultiSwapStore {
         this.isFetchingSwap = true
 
         try {
-            if (this.isMaticToken) {
-                await this.swapMatic()
-            } else {
-                const res = await doSwap(this.swap, this.slippage, this.provider)
-                await res.wait()
-                await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
-            }
+            const res = await doSwap(this.swap, this.slippage, this.provider)
+            await res.wait()
+            await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
         } catch (e) {
             console.log('error', e)
             this.error = 'Swap request error'
@@ -165,6 +171,14 @@ class MultiSwapStore {
     }
 
     async _getToken(address) {
+        if (address === FTM_SYMBOL) {
+            return {
+                address: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+                symbol: FTM_SYMBOL,
+                decimals: 18,
+            }
+        }
+
         if (!(address in this.tokensMap)) {
             const erc20 = new ethers.Contract(address, erc20abi, this.provider)
             const decimals = await erc20.decimals()
@@ -187,12 +201,13 @@ class MultiSwapStore {
         this._swapQuery()
     }
 
-    get isMaticToken() {
-        return this.tokenIn === 'MATIC' || this.tokenOut === 'MATIC'
+    get isWrapUnwrap() {
+        return (this.tokenIn === FTM_SYMBOL && ''.concat(this.tokenOut).toLowerCase() === WFTM_ADDRESS.toLowerCase())
+            || (''.concat(this.tokenIn).toLowerCase() === WFTM_ADDRESS.toLowerCase() && this.tokenOut === FTM_SYMBOL)
     }
 
     async _swapQuery() {
-        if (this.isMaticToken) {
+        if (this.isWrapUnwrap) {
             this.allowed = true
             const returnAmount = ethers.utils.parseUnits(this.swapAmount ?? '0', 18).toString()
             this.swap = { returnAmount }
@@ -225,7 +240,12 @@ class MultiSwapStore {
     }
 
     async _checkAllowance() {
-        if (this.isMaticToken) {
+        if (this.isWrapUnwrap) {
+            this.allowed = true
+            return true
+        }
+
+        if (this.tokenIn === FTM_SYMBOL) {
             this.allowed = true
             return true
         }
@@ -293,7 +313,7 @@ class MultiSwapStore {
         return this.excludePlatforms
     }
 
-    async swapMatic() {
+    /*async swapMatic() {
         const tokens = [this.tokenIn, this.tokenOut].map((el) => el.toLowerCase())
 
         const contract = new ethers.Contract(WMATIC, wmaticAbi, this.provider.getSigner())
@@ -341,7 +361,7 @@ class MultiSwapStore {
             await stores.stableSwapStore.fetchBaseAssets([WMATIC])
             await stores.stableSwapStore._getBaseAssetInfo(web3, account)
         }
-    }
+    }*/
 }
 
 export const multiSwapStore = new MultiSwapStore()

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
     TextField,
     Typography,
-    InputAdornment,
     CircularProgress,
     InputBase,
 } from "@mui/material";
@@ -10,13 +9,11 @@ import { withTheme } from "@mui/styles";
 import {
     formatCurrency,
     formatInputAmount,
-    formatAddress,
-    formatCurrencyWithSymbol,
-    formatCurrencySmall,
 } from "../../utils";
 import classes from "./ssSwap.module.css";
 import stores from "../../stores";
 import { ACTIONS } from "../../stores/constants";
+import {FTM_SYMBOL, WFTM_SYMBOL} from "../../stores/constants/contracts";
 import BigNumber from "bignumber.js";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import BtnSwap from "../../ui/BtnSwap";
@@ -27,7 +24,7 @@ import { MultiSwap } from "../MultiSwap";
 import { observer } from 'mobx-react'
 import { multiSwapStore } from '../MultiSwap/store'
 import * as ethers from 'ethers'
-import { millifyValue, toFixed } from './utils'
+import { toFixed } from './utils'
 
 function Setup() {
     const [, updateState] = React.useState();
@@ -163,13 +160,15 @@ function Setup() {
                 setToAmountValue("");
                 if (
                     !(
-                        (fromAssetValue?.symbol == "MATIC" ||
-                            fromAssetValue?.symbol == "WMATIC") &&
-                        (toAssetValue?.symbol == "WMATIC" ||
-                            toAssetValue?.symbol == "MATIC")
+                        (fromAssetValue?.symbol === FTM_SYMBOL ||
+                            fromAssetValue?.symbol === WFTM_SYMBOL) &&
+                        (toAssetValue?.symbol === WFTM_SYMBOL ||
+                            toAssetValue?.symbol === FTM_SYMBOL)
                     )
-                )
+                ) {
+                    sethidequote(false);
                     calculateReceiveAmount(0, fromAssetValue, toAssetValue);
+                }
                 else {
                     sethidequote(true);
                     setToAmountValue(0);
@@ -216,14 +215,15 @@ function Setup() {
                 setFromAssetValue(toAssetValue);
                 if (
                     !(
-                        (fromAssetValue?.symbol == "MATIC" ||
-                            fromAssetValue?.symbol == "WMATIC") &&
-                        (toAssetValue?.symbol == "WMATIC" ||
-                            toAssetValue?.symbol == "MATIC")
+                        (fromAssetValue?.symbol === FTM_SYMBOL ||
+                            fromAssetValue?.symbol === WFTM_SYMBOL) &&
+                        (toAssetValue?.symbol === WFTM_SYMBOL ||
+                            toAssetValue?.symbol === FTM_SYMBOL)
                     )
-                )
+                ) {
+                    sethidequote(false);
                     calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
-                else {
+                } else {
                     sethidequote(true);
                     setToAmountValue(fromAmountValue);
                 }
@@ -231,13 +231,15 @@ function Setup() {
                 setFromAssetValue(value);
                 if (
                     !(
-                        (value?.symbol == "MATIC" || value?.symbol == "WMATIC") &&
-                        (toAssetValue?.symbol == "WMATIC" ||
-                            toAssetValue?.symbol == "MATIC")
+                        (value?.symbol === FTM_SYMBOL || value?.symbol === WFTM_SYMBOL) &&
+                        (toAssetValue?.symbol === WFTM_SYMBOL ||
+                            toAssetValue?.symbol === FTM_SYMBOL)
                     )
-                )
+                ) {
+                    sethidequote(false);
                     calculateReceiveAmount(fromAmountValue, value, toAssetValue);
-                else {
+                } else {
+                    // console.log('onAssetSelect from wrap/unwrap')
                     sethidequote(true);
                     setToAmountValue(fromAmountValue);
                 }
@@ -248,14 +250,15 @@ function Setup() {
                 setToAssetValue(fromAssetValue);
                 if (
                     !(
-                        (fromAssetValue?.symbol == "MATIC" ||
-                            fromAssetValue?.symbol == "WMATIC") &&
-                        (toAssetValue?.symbol == "WMATIC" ||
-                            toAssetValue?.symbol == "MATIC")
+                        (fromAssetValue?.symbol === FTM_SYMBOL ||
+                            fromAssetValue?.symbol === WFTM_SYMBOL) &&
+                        (toAssetValue?.symbol === WFTM_SYMBOL ||
+                            toAssetValue?.symbol === FTM_SYMBOL)
                     )
-                )
+                ) {
+                    sethidequote(false);
                     calculateReceiveAmount(fromAmountValue, toAssetValue, fromAssetValue);
-                else {
+                } else {
                     sethidequote(true);
                     setToAmountValue(fromAmountValue);
                 }
@@ -263,13 +266,15 @@ function Setup() {
                 setToAssetValue(value);
                 if (
                     !(
-                        (fromAssetValue?.symbol == "MATIC" ||
-                            fromAssetValue?.symbol == "WMATIC") &&
-                        (value?.symbol == "WMATIC" || value?.symbol == "MATIC")
+                        (fromAssetValue?.symbol === FTM_SYMBOL || fromAssetValue?.symbol === WFTM_SYMBOL)
+                        &&
+                        (value?.symbol === WFTM_SYMBOL || value?.symbol === FTM_SYMBOL)
                     )
-                )
+                ) {
+                    sethidequote(false);
                     calculateReceiveAmount(fromAmountValue, fromAssetValue, value);
-                else {
+                } else {
+                    // console.log('onAssetSelect to wrap/unwrap')
                     sethidequote(true);
                     setToAmountValue(fromAmountValue);
                 }
@@ -290,17 +295,18 @@ function Setup() {
         } else {
             if (
                 !(
-                    (fromAssetValue?.symbol == "MATIC" ||
-                        fromAssetValue?.symbol == "WMATIC") &&
-                    (toAssetValue?.symbol == "WMATIC" || toAssetValue?.symbol == "MATIC")
+                    (fromAssetValue?.symbol === FTM_SYMBOL || fromAssetValue?.symbol === WFTM_SYMBOL)
+                    &&
+                    (toAssetValue?.symbol === WFTM_SYMBOL || toAssetValue?.symbol === FTM_SYMBOL)
                 )
-            )
+            ) {
+                sethidequote(false);
                 calculateReceiveAmount(value, fromAssetValue, toAssetValue);
-            else {
+            } else {
+                // console.log('from amount changed wrap/unwrap')
                 sethidequote(true);
                 setToAmountValue(value);
             }
-            // else setToAmountValue(value);
         }
     };
 
@@ -334,17 +340,18 @@ function Setup() {
 
         if (
             !(
-                (fromAssetValue?.symbol == "MATIC" ||
-                    fromAssetValue?.symbol == "WMATIC") &&
-                (toAssetValue?.symbol == "WMATIC" || toAssetValue?.symbol == "MATIC")
+                (fromAssetValue?.symbol === FTM_SYMBOL ||
+                    fromAssetValue?.symbol === WFTM_SYMBOL) &&
+                (toAssetValue?.symbol === WFTM_SYMBOL || toAssetValue?.symbol === FTM_SYMBOL)
             )
-        )
+        ) {
+            sethidequote(false);
             calculateReceiveAmount(
                 fromAssetValue.balance,
                 fromAssetValue,
                 toAssetValue
             );
-        else {
+        } else {
             sethidequote(true);
             setToAmountValue(fromAssetValue.balance);
         }
@@ -358,13 +365,14 @@ function Setup() {
         setToAssetValue(fa);
         if (
             !(
-                (fromAssetValue?.symbol == "MATIC" ||
-                    fromAssetValue?.symbol == "WMATIC") &&
-                (toAssetValue?.symbol == "WMATIC" || toAssetValue?.symbol == "MATIC")
+                (fromAssetValue?.symbol === FTM_SYMBOL ||
+                    fromAssetValue?.symbol === WFTM_SYMBOL) &&
+                (toAssetValue?.symbol === WFTM_SYMBOL || toAssetValue?.symbol === FTM_SYMBOL)
             )
-        )
+        ) {
+            sethidequote(false);
             calculateReceiveAmount(fromAmountValue, ta, fa);
-        else {
+        } else {
             sethidequote(true);
             setToAmountValue(fromAmountValue);
         }
@@ -765,6 +773,135 @@ function Setup() {
         setSwapIconArrowColor(null);
     };
 
+    const onWrap = () => {
+        if (
+            !fromAmountValue ||
+            fromAmountValue > Number(fromAssetValue.balance) ||
+            Number(fromAmountValue) <= 0
+        ) {
+            return;
+        }
+
+        setFromAmountError(false);
+        setFromAssetError(false);
+        setToAssetError(false);
+
+        let error = false;
+
+        if (!fromAmountValue || fromAmountValue === "" || isNaN(fromAmountValue)) {
+            setFromAmountError("From amount is required");
+            error = true;
+        } else {
+            if (
+                !fromAssetValue.balance ||
+                isNaN(fromAssetValue.balance) ||
+                BigNumber(fromAssetValue.balance).lte(0)
+            ) {
+                setFromAmountError("Invalid balance");
+                error = true;
+            } else if (BigNumber(fromAmountValue).lt(0)) {
+                setFromAmountError("Invalid amount");
+                error = true;
+            } else if (
+                fromAssetValue &&
+                BigNumber(fromAmountValue).gt(fromAssetValue.balance)
+            ) {
+                setFromAmountError(`Greater than your available balance`);
+                error = true;
+            }
+        }
+
+        if (!fromAssetValue || fromAssetValue === null) {
+            setFromAssetError("From asset is required");
+            error = true;
+        }
+
+        if (!toAssetValue || toAssetValue === null) {
+            setFromAssetError("To asset is required");
+            error = true;
+        }
+
+        if (!error) {
+            setLoading(true);
+
+            stores.dispatcher.dispatch({
+                type: ACTIONS.WRAP,
+                content: {
+                    fromAsset: fromAssetValue,
+                    toAsset: toAssetValue,
+                    fromAmount: fromAmountValue,
+                    toAmount: toAmountValue,
+                    quote: quote,
+                    slippage: slippage,
+                },
+            });
+        }
+    };
+    const onUnwrap = () => {
+        if (
+            !fromAmountValue ||
+            fromAmountValue > Number(fromAssetValue.balance) ||
+            Number(fromAmountValue) <= 0
+        ) {
+            return;
+        }
+
+        setFromAmountError(false);
+        setFromAssetError(false);
+        setToAssetError(false);
+
+        let error = false;
+
+        if (!fromAmountValue || fromAmountValue === "" || isNaN(fromAmountValue)) {
+            setFromAmountError("From amount is required");
+            error = true;
+        } else {
+            if (
+                !fromAssetValue.balance ||
+                isNaN(fromAssetValue.balance) ||
+                BigNumber(fromAssetValue.balance).lte(0)
+            ) {
+                setFromAmountError("Invalid balance");
+                error = true;
+            } else if (BigNumber(fromAmountValue).lt(0)) {
+                setFromAmountError("Invalid amount");
+                error = true;
+            } else if (
+                fromAssetValue &&
+                BigNumber(fromAmountValue).gt(fromAssetValue.balance)
+            ) {
+                setFromAmountError(`Greater than your available balance`);
+                error = true;
+            }
+        }
+
+        if (!fromAssetValue || fromAssetValue === null) {
+            setFromAssetError("From asset is required");
+            error = true;
+        }
+
+        if (!toAssetValue || toAssetValue === null) {
+            setFromAssetError("To asset is required");
+            error = true;
+        }
+
+        if (!error) {
+            setLoading(true);
+
+            stores.dispatcher.dispatch({
+                type: ACTIONS.UNWRAP,
+                content: {
+                    fromAsset: fromAssetValue,
+                    toAsset: toAssetValue,
+                    fromAmount: fromAmountValue,
+                    toAmount: toAmountValue,
+                    quote: quote,
+                    slippage: slippage,
+                },
+            });
+        }
+    };
+
     return (
         <MultiSwap>
             {(renderProps) => {
@@ -810,6 +947,16 @@ function Setup() {
                     if (!isFetchingApprove) {
                         disableButton = false
                     }
+                }
+
+                if ((fromAssetValue?.symbol === FTM_SYMBOL && toAssetValue?.symbol === WFTM_SYMBOL)) {
+                    buttonLabel = 'Wrap'
+                    handleClickButton = onWrap
+                }
+
+                if (fromAssetValue?.symbol === WFTM_SYMBOL && toAssetValue?.symbol === FTM_SYMBOL) {
+                    buttonLabel = 'Unwrap'
+                    handleClickButton = onUnwrap
                 }
 
                 return (
