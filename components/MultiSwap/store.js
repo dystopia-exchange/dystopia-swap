@@ -5,7 +5,7 @@ import { debounce } from "debounce"
 import stores from "../../stores";
 // import { wmaticAbi } from './wmaticAbi'
 // import { CONTRACTS } from "../../stores/constants";
-import {FTM_SYMBOL, WFTM_ADDRESS} from "../../stores/constants/contracts";
+import {FTM_SYMBOL, WFTM_ADDRESS, WFTM_DECIMALS, WFTM_SYMBOL} from "../../stores/constants/contracts";
 
 const erc20abi = [
     // Read-Only Functions
@@ -156,6 +156,15 @@ class MultiSwapStore {
             return
         }
 
+        if (this.swap && this.swap.swapData) {
+            if (this.tokenIn === FTM_SYMBOL) {
+                this.swap.swapData.tokenIn = '0x0000000000000000000000000000000000000000'
+            }
+            if (this.tokenOut === FTM_SYMBOL) {
+                this.swap.swapData.tokenOut = '0x0000000000000000000000000000000000000000'
+            }
+        }
+
         this.isFetchingSwap = true
 
         try {
@@ -173,9 +182,9 @@ class MultiSwapStore {
     async _getToken(address) {
         if (address === FTM_SYMBOL) {
             return {
-                address: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-                symbol: FTM_SYMBOL,
-                decimals: 18,
+                address: WFTM_ADDRESS,
+                symbol: WFTM_SYMBOL,
+                decimals: WFTM_DECIMALS,
             }
         }
 
@@ -212,6 +221,10 @@ class MultiSwapStore {
             const returnAmount = ethers.utils.parseUnits(this.swapAmount ?? '0', 18).toString()
             this.swap = { returnAmount }
             return
+        }
+
+        if (this.tokenIn === FTM_SYMBOL) {
+            this.allowed = true
         }
 
         if (this.tokenIn && this.tokenOut && this.swapAmount && this.provider) {
