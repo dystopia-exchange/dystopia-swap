@@ -1,8 +1,8 @@
-import { Dialog, Typography, Button } from "@mui/material";
+import { Dialog, Typography } from "@mui/material";
 import classes from "./ssWarning.module.css";
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
-export default function ffWarning({close, title, subTitle, icon, description, btnLabel1, btnLabel2, action2}) {
+export default function ffWarning({close, title, subTitle, icon, description, btnLabel1, btnLabel2, action2, showTitle = true}) {
   const navigateToMedium = () => {
     window.open("https://medium.com/@DystopiaSwap", "_blank");
   };
@@ -74,22 +74,24 @@ export default function ffWarning({close, title, subTitle, icon, description, bt
             </div>
           </div>
 
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-            }}>
-            <img
-              src={appTheme === "dark" ? `/images/${icon ? icon : 'icon-warning'}--dark.svg` : `/images/${icon ? icon : 'icon-warning'}.svg`}
-              className={classes.warningIcon}/>
+          {showTitle && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+              }}>
+              <img
+                src={appTheme === "dark" ? `/images/${icon ? icon : 'icon-warning'}--dark.svg` : `/images/${icon ? icon : 'icon-warning'}.svg`}
+                className={classes.warningIcon}/>
 
-            <Typography className={[classes.title1, classes[`title1--${appTheme}`]].join(' ')}>
-              {title ? title : 'Dystopia Disclaimer:'}
-            </Typography>
-          </div>
+              <Typography className={[classes.title1, classes[`title1--${appTheme}`]].join(' ')}>
+                {title ? title : 'Dystopia Disclaimer:'}
+              </Typography>
+            </div>
+          )}
 
           <Typography className={[classes.title2, classes[`title2--${appTheme}`]].join(' ')}>
-            {subTitle ? subTitle : 'Acknowledgement of Terms &amp; Conditions of access'}
+            {subTitle ? subTitle : 'Acknowledgement of Terms & Conditions of access'}
           </Typography>
 
           <Typography
