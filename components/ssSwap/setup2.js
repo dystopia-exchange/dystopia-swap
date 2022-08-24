@@ -12,7 +12,7 @@ import {
 } from "../../utils";
 import classes from "./ssSwap.module.css";
 import stores from "../../stores";
-import { ACTIONS } from "../../stores/constants";
+import {ACTIONS, DIRECT_SWAP_ROUTES} from "../../stores/constants";
 import {FTM_SYMBOL, WFTM_SYMBOL} from "../../stores/constants/contracts";
 import BigNumber from "bignumber.js";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
@@ -211,6 +211,8 @@ function Setup() {
     const onAssetSelect = (type, value) => {
         if (type === "From") {
             if (value.address === toAssetValue.address) {
+                multiSwapStore.setTokenIn(toAssetValue.address)
+                multiSwapStore.setTokenOut(fromAssetValue.address)
                 setToAssetValue(fromAssetValue);
                 setFromAssetValue(toAssetValue);
                 if (
@@ -228,6 +230,20 @@ function Setup() {
                     setToAmountValue(fromAmountValue);
                 }
             } else {
+                // if there is a direct swap route for fromAssetValue, then select the first token available in the route for toAssetValue
+                if (
+                    DIRECT_SWAP_ROUTES[value.address.toLowerCase()]
+                    && !DIRECT_SWAP_ROUTES[value.address.toLowerCase()].includes(toAssetValue?.address.toLowerCase())
+                ) {
+                    const baseAsset = stores.stableSwapStore.getStore("baseAssets");
+                    const dystIndex = baseAsset.findIndex((token) => {
+                        return token.address.toLowerCase() === DIRECT_SWAP_ROUTES[value.address][0].toLowerCase()
+                    });
+                    setToAssetValue(baseAsset[dystIndex]);
+                    multiSwapStore.setTokenOut(baseAsset[dystIndex].address)
+                }
+
+                multiSwapStore.setTokenIn(value.address)
                 setFromAssetValue(value);
                 if (
                     !(
@@ -246,6 +262,8 @@ function Setup() {
             }
         } else {
             if (value.address === fromAssetValue.address) {
+                multiSwapStore.setTokenIn(toAssetValue.address)
+                multiSwapStore.setTokenOut(fromAssetValue.address)
                 setFromAssetValue(toAssetValue);
                 setToAssetValue(fromAssetValue);
                 if (
@@ -263,6 +281,20 @@ function Setup() {
                     setToAmountValue(fromAmountValue);
                 }
             } else {
+                // if there is a direct swap route for toAssetValue, then select the first token available in the route for fromAssetValue
+                if (
+                    DIRECT_SWAP_ROUTES[value.address.toLowerCase()]
+                    && !DIRECT_SWAP_ROUTES[value.address.toLowerCase()].includes(fromAssetValue?.address.toLowerCase())
+                ) {
+                    const baseAsset = stores.stableSwapStore.getStore("baseAssets");
+                    const dystIndex = baseAsset.findIndex((token) => {
+                        return token.address.toLowerCase() === DIRECT_SWAP_ROUTES[value.address][0].toLowerCase()
+                    });
+                    setFromAssetValue(baseAsset[dystIndex]);
+                    multiSwapStore.setTokenIn(baseAsset[dystIndex].address)
+                }
+
+                multiSwapStore.setTokenOut(value.address)
                 setToAssetValue(value);
                 if (
                     !(
@@ -379,7 +411,7 @@ function Setup() {
     };
 
     const renderSwapInformation = (args) => {
-        const { routes, multiswapData } = args
+        const { routes, multiswapData, directSwapRoute } = args
 
         const renderRoutes = (route) => {
             const [{ percentage }] = route
@@ -451,12 +483,12 @@ function Setup() {
                                                     classes[`routesListItemArrowPlatform--${appTheme}`]
                                                 ].join(' ')}>
                                                     {el.dex.name}
-                                                    <span
+                                                    {!directSwapRoute && <span
                                                         className={[classes.routesListItemArrowPlatformExclude].join(' ')}
                                                         onClick={() => {
                                                             multiSwapStore.excludePlatformToggle(el.dex.name)
                                                         }}
-                                                    >&#215;</span>
+                                                    >&#215;</span>}
                                                 </span>
                                             </div>
                                         </>
@@ -974,11 +1006,11 @@ function Setup() {
                                 },
                                 fromAssetValue,
                                 fromAssetError,
-                                fromAssetOptions,
-                                (type, value) => {
-                                    onAssetSelect(type, value)
-                                    setTokenIn(value.address)
-                                }
+                                !DIRECT_SWAP_ROUTES[toAssetValue?.address.toLowerCase()]
+                                    ? fromAssetOptions
+                                    : fromAssetOptions
+                                        .filter(a => DIRECT_SWAP_ROUTES[toAssetValue?.address.toLowerCase()].includes(a.address.toLowerCase())),
+                                onAssetSelect
                             )}
 
                             {fromAssetError && (
@@ -1140,11 +1172,11 @@ function Setup() {
                                 toAmountChanged,
                                 toAssetValue,
                                 toAssetError,
-                                toAssetOptions,
-                                (type, value) => {
-                                    onAssetSelect(type, value)
-                                    setTokenOut(value.address)
-                                }
+                                !DIRECT_SWAP_ROUTES[fromAssetValue?.address.toLowerCase()]
+                                    ? toAssetOptions
+                                    : toAssetOptions
+                                        .filter(a => DIRECT_SWAP_ROUTES[fromAssetValue?.address.toLowerCase()].includes(a.address.toLowerCase())),
+                                onAssetSelect
                             )}
 
                             {renderSmallInput(
@@ -1294,7 +1326,7 @@ function Setup() {
                                 </div>
                             )}
 
-                            {!hidequote ? renderSwapInformation({ routes, multiswapData }) : null}
+                            {!hidequote ? renderSwapInformation({ routes, multiswapData,  directSwapRoute: multiSwapStore.isDirectRoute, }) : null}
 
                             {(isFetchingApprove || isFetchingSwap) && (
                                 <div className={classes.loader}>

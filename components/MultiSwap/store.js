@@ -6,6 +6,9 @@ import stores from "../../stores";
 // import { wmaticAbi } from './wmaticAbi'
 // import { CONTRACTS } from "../../stores/constants";
 import {FTM_SYMBOL, WFTM_ADDRESS, WFTM_DECIMALS, WFTM_SYMBOL} from "../../stores/constants/contracts";
+import {DIRECT_SWAP_ROUTES} from "../../stores/constants";
+import {ROUTER_ADDRESS} from "../../stores/constants/contracts";
+import {multiSwapAddress} from "./constants";
 
 const erc20abi = [
     // Read-Only Functions
@@ -121,7 +124,7 @@ class MultiSwapStore {
         if (this.provider && this.tokenIn) {
             this.isFetchingApprove = true
             try {
-                const res = await approve(this.tokenIn, this.provider)
+                const res = await approve(this.tokenIn, this.provider, this.isDirectRoute ? ROUTER_ADDRESS : multiSwapAddress)
                 await res.wait()
                 await this._checkAllowance()
             } catch (e) {
@@ -167,15 +170,40 @@ class MultiSwapStore {
 
         this.isFetchingSwap = true
 
-        try {
-            const res = await doSwap(this.swap, this.slippage, this.provider)
-            await res.wait()
-            await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
-        } catch (e) {
-            console.log('error', e)
-            this.error = 'Swap request error'
-        } finally {
-            this.isFetchingSwap = false
+        if (this.isDirectRoute) {
+            const [tokenIn, tokenOut] = await Promise.all([
+                this._getToken(this.tokenIn),
+                this._getToken(this.tokenOut),
+            ])
+            try {
+                /*const res = */await stores.stableSwapStore.swap({
+                    content: {
+                        fromAsset: tokenIn,
+                        toAsset: tokenOut,
+                        fromAmount: this.swapAmount,
+                        quote: this.swap.quote,
+                        slippage: this.slippage,
+                    }
+                })
+                // await res.wait()
+                await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
+            } catch (e) {
+                console.log('error', e)
+                this.error = 'Swap request error'
+            } finally {
+                this.isFetchingSwap = false
+            }
+        } else {
+            try {
+                const res = await doSwap(this.swap, this.slippage, this.provider)
+                await res.wait()
+                await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
+            } catch (e) {
+                console.log('error', e)
+                this.error = 'Swap request error'
+            } finally {
+                this.isFetchingSwap = false
+            }
         }
     }
 
@@ -215,6 +243,11 @@ class MultiSwapStore {
             || (''.concat(this.tokenIn).toLowerCase() === WFTM_ADDRESS.toLowerCase() && this.tokenOut === FTM_SYMBOL)
     }
 
+    get isDirectRoute() {
+        return (DIRECT_SWAP_ROUTES[this.tokenIn?.toLowerCase()] && DIRECT_SWAP_ROUTES[this.tokenIn.toLowerCase()].includes(this.tokenOut.toLowerCase()))
+            || (DIRECT_SWAP_ROUTES[this.tokenOut?.toLowerCase()] && DIRECT_SWAP_ROUTES[this.tokenOut.toLowerCase()].includes(this.tokenIn.toLowerCase()))
+    }
+
     async _swapQuery() {
         if (this.isWrapUnwrap) {
             this.allowed = true
@@ -232,22 +265,56 @@ class MultiSwapStore {
                 this._getToken(this.tokenIn),
                 this._getToken(this.tokenOut),
             ])
-            console.log('tokenIn', JSON.parse(JSON.stringify(this.tokenIn)))
+            // console.log('tokenIn', JSON.parse(JSON.stringify(this.tokenIn)))
             const swapAmount = ethers.utils.parseUnits(this.swapAmount, tokenIn.decimals).toString();
             this.isFetchingSwapQuery = true
 
-            try {
-                const response = await swapQuery(tokenIn, tokenOut, swapAmount, this.excludePlatforms)
-                this.swap = response
-                this.priceInfo = this.calcPriceInfo(tokenIn, tokenOut, response)
-                this.priceImpact = this.swap.priceImpact*100
-                if (this.swap?.swaps?.length === 0) {
-                    this.error = 'Routes not found'
+            // query old router for direct swap routes
+            if (this.isDirectRoute) {
+                const response = await stores.stableSwapStore.quoteSwap({
+                    content: {
+                        fromAsset: tokenIn,
+                        toAsset: tokenOut,
+                        fromAmount: this.swapAmount,
+                    },
+                })
+
+                // console.log('directSwapRoute old router response', response)
+
+                if (response.output.finalValue) {
+                    this.swap = {
+                        returnAmount: response.output.receiveAmounts[1],
+                        priceImpact: response.priceImpact,
+                        swapAmount: response.output.receiveAmounts[0],
+                        tokenAddresses: [this.tokenIn, this.tokenOut],
+                        swaps: [{
+                            poolId: '0x421a018cc5839c4c0300afb21c725776dc389b1addddddddddddddddddddddd0',
+                            assetInIndex: 0,
+                            assetOutIndex: 1,
+                            amount: response.output.receiveAmounts[0],
+                        }],
+                        quote: response,
+                    }
+                    this.priceInfo = this.calcPriceInfo(tokenIn, tokenOut, this.swap)
+                    this.priceImpact = this.swap.priceImpact*100
                 }
-            } catch (e) {
-                this.error = 'Swap query request error'
-            } finally {
+
                 this.isFetchingSwapQuery = false
+            } else {
+                try {
+                    const response = await swapQuery(tokenIn, tokenOut, swapAmount, this.excludePlatforms)
+                    this.swap = response
+                    // console.log(this.swap)
+                    this.priceInfo = this.calcPriceInfo(tokenIn, tokenOut, response)
+                    this.priceImpact = this.swap.priceImpact*100
+                    if (this.swap?.swaps?.length === 0) {
+                        this.error = 'Routes not found'
+                    }
+                } catch (e) {
+                    this.error = 'Swap query request error'
+                } finally {
+                    this.isFetchingSwapQuery = false
+                }
             }
         }
     }
@@ -265,7 +332,7 @@ class MultiSwapStore {
 
         if (this.provider) {
             this.isFetchingAllowance = true
-            const response = await allowance(this.tokenIn, this.provider)
+            const response = await allowance(this.tokenIn, this.provider, this.isDirectRoute ? ROUTER_ADDRESS : multiSwapAddress)
             this.allowed = response
             this.isFetchingAllowance = false
             return response
@@ -302,7 +369,7 @@ class MultiSwapStore {
                 const tokenIn = tokenByIndex(this.swap, s.assetInIndex);
                 const tokenOut = tokenByIndex(this.swap, s.assetOutIndex);
                 const dex = {
-                    name: this.swap.swapPlatforms[s.poolId],
+                    name: this.swap.swapPlatforms ? this.swap.swapPlatforms[s.poolId] : 'Dystopia',
                 };
 
                 return {
@@ -325,56 +392,6 @@ class MultiSwapStore {
     get excludedPlatforms() {
         return this.excludePlatforms
     }
-
-    /*async swapMatic() {
-        const tokens = [this.tokenIn, this.tokenOut].map((el) => el.toLowerCase())
-
-        const contract = new ethers.Contract(WMATIC, wmaticAbi, this.provider.getSigner())
-        const web3 = await stores.accountStore.getWeb3Provider();
-        const gasPrice = await stores.accountStore.getGasPrice();
-        const wmaticContract = new web3.eth.Contract(
-            CONTRACTS.WFTM_ABI,
-            CONTRACTS.WFTM_ADDRESS
-        );
-        const account = stores.accountStore.getStore("account");
-
-        if (tokens.includes('matic') && tokens.includes(WMATIC.toLowerCase())) {
-            const amount = ethers.utils.parseUnits(this.swapAmount, 18).toString()
-            let wrapTXID = stores.stableSwapStore.getTXUUID();
-
-            if (this.tokenIn === 'MATIC') {
-                const depositPromise = new Promise((resolve, reject) => {
-                    stores.stableSwapStore._callContractWait(
-                        web3,
-                        wmaticContract,
-                        "deposit",
-                        [],
-                        account,
-                        gasPrice,
-                        null,
-                        null,
-                        wrapTXID,
-                        (err) => {
-                            if (err) {
-                                reject(err);
-                                return;
-                            }
-                            resolve();
-                        },
-                        null,
-                        amount,
-                    );
-                });
-                await depositPromise;
-            } else {
-                const res = await contract.withdraw(amount)
-                await res.wait()
-                await stores.stableSwapStore.fetchBaseAssets([this.tokenIn])
-            }
-            await stores.stableSwapStore.fetchBaseAssets([WMATIC])
-            await stores.stableSwapStore._getBaseAssetInfo(web3, account)
-        }
-    }*/
 }
 
 export const multiSwapStore = new MultiSwapStore()

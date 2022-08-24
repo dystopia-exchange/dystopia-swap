@@ -4499,6 +4499,7 @@ class Store {
       };
 
       this.emitter.emit(ACTIONS.QUOTE_SWAP_RETURNED, returnValue);
+      return returnValue
     } catch (ex) {
       console.error(ex);
 

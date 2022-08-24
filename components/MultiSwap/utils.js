@@ -18,7 +18,7 @@ export function getSwapContract(signer) {
     );
 }
 
-export async function allowance(tokenAddress, provider) {
+export async function allowance(tokenAddress, provider, router = multiSwapAddress) {
     let contract = new ethers.Contract(
         tokenAddress,
         ERC20Abi,
@@ -26,12 +26,12 @@ export async function allowance(tokenAddress, provider) {
     );
     const signer = provider.getSigner()
     const address = await signer.getAddress();
-    const res = await contract.callStatic.allowance(address, multiSwapAddress);
+    const res = await contract.callStatic.allowance(address, router);
     return res && res?._hex && res?._hex !== '0x00'
 }
 
 
-export async function approve(tokenAddress, provider) {
+export async function approve(tokenAddress, provider, router = multiSwapAddress) {
     const amount = ethers.constants.MaxUint256;
     const tokenContract = new ethers.Contract(
         tokenAddress,
@@ -40,7 +40,7 @@ export async function approve(tokenAddress, provider) {
     );
     const tx = await tokenContract
         .connect(provider.getSigner())
-        .approve(multiSwapAddress, amount, { gasLimit: 100000 });
+        .approve(router, amount, { gasLimit: 100000 });
 
     return tx
 
