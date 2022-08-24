@@ -931,6 +931,7 @@ function Setup() {
                     || tokenIn === null
                     || tokenOut === null
                     || multiSwapStore.error !== null
+                || fromAmountValue > Number(fromAssetValue?.balance)
 
                 if (isFetchingSwapQuery) loadingMessage = 'loading data of routes...'
                 if (isFetchingAllowance) loadingMessage = 'loading ...'
@@ -944,7 +945,7 @@ function Setup() {
                 if (allowed === false && tokenIn) {
                     buttonLabel = 'Approve'
                     handleClickButton = doApprove
-                    if (!isFetchingApprove) {
+                    if (!isFetchingApprove && fromAmountValue <= Number(fromAssetValue?.balance)) {
                         disableButton = false
                     }
                 }
@@ -1132,7 +1133,7 @@ function Setup() {
                             {renderMassiveInput(
                                 "To",
                                 swap?.returnAmount
-                                    ? ethers.utils.formatUnits(swap?.returnAmount, toAssetValue.decimals)
+                                    ? ethers.utils.formatUnits(swap?.returnAmount, toAssetValue?.decimals)
                                     : swap?.returnAmount
                                 ,
                                 toAmountError,
@@ -1176,10 +1177,37 @@ function Setup() {
                                     </>
                                 )}
 
+                            {fromAmountValue > Number(fromAssetValue?.balance) && (
+                                <div
+                                    className={[
+                                        classes.warningContainer,
+                                        classes[`warningContainer--${appTheme}`],
+                                        classes.warningContainerError,
+                                    ].join(" ")}
+                                >
+                                    <div
+                                        className={[
+                                            classes.warningDivider,
+                                            classes.warningDividerError,
+                                        ].join(" ")}
+                                    ></div>
+
+                                    <Typography
+                                        className={[
+                                            classes.warningError,
+                                            classes[`warningText--${appTheme}`],
+                                        ].join(" ")}
+                                        align="center"
+                                    >
+                                        Balance is below the entered value
+                                    </Typography>
+                                </div>
+                            )}
+
                             {loadingMessage === ''
                                 && multiSwapStore.swap !== null
                                 && multiSwapStore.error === null
-                                && multiSwapStore.isMaticToken === false
+                                && multiSwapStore.isWrapUnwrap === false
                                 && (
                                     <>
                                         <Typography
