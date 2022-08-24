@@ -6,7 +6,7 @@ import {
   CONTRACTS,
   BASE_ASSETS_WHITELIST,
   BLACK_LIST_TOKENS,
-  ROUTE_ASSETS
+  ROUTE_ASSETS, DIRECT_SWAP_ROUTES
 } from "./constants";
 import { v4 as uuidv4 } from "uuid";
 
@@ -4277,15 +4277,11 @@ class Store {
       ) {
         return null;
       }
-      // override the routeAsset
-      let newRouteAssets = null;
-      if (
-        fromAsset.address.toLowerCase() ===
-          CONTRACTS.SPHERE_ADDRESS.toLowerCase() ||
-        toAsset.address.toLowerCase() === CONTRACTS.SPHERE_ADDRESS.toLowerCase()
-      ) {
-        newRouteAssets = await this._getUSDPRouteAssets();
-      }
+
+      const directSwapRoute =
+          (DIRECT_SWAP_ROUTES[fromAsset.address.toLowerCase()] && DIRECT_SWAP_ROUTES[fromAsset.address.toLowerCase()].includes(toAsset.address.toLowerCase()))
+      || (DIRECT_SWAP_ROUTES[toAsset.address.toLowerCase()] && DIRECT_SWAP_ROUTES[toAsset.address.toLowerCase()].includes(fromAsset.address.toLowerCase()))
+
       const routeAssets = _routeAssets;
 
       let addy0 = fromAsset.address;
@@ -4298,82 +4294,76 @@ class Store {
         addy1 = CONTRACTS.WFTM_ADDRESS;
       }
 
-      const includesRouteAddress = routeAssets.filter((asset) => {
-        return (
-          asset.address.toLowerCase() == addy0.toLowerCase() ||
-          asset.address.toLowerCase() == addy1.toLowerCase()
-        );
-      });
-
       let amountOuts = [];
 
-      // if (includesRouteAddress.length === 0) {
-      amountOuts = routeAssets
-        .map((routeAsset) => {
-          return [
-            {
-              routes: [
+      if (!directSwapRoute) {
+        amountOuts = routeAssets
+            .map((routeAsset) => {
+              return [
                 {
-                  from: addy0,
-                  to: routeAsset.address,
-                  stable: true,
+                  routes: [
+                    {
+                      from: addy0,
+                      to: routeAsset.address,
+                      stable: true,
+                    },
+                    {
+                      from: routeAsset.address,
+                      to: addy1,
+                      stable: true,
+                    },
+                  ],
+                  routeAsset: routeAsset,
                 },
                 {
-                  from: routeAsset.address,
-                  to: addy1,
-                  stable: true,
-                },
-              ],
-              routeAsset: routeAsset,
-            },
-            {
-              routes: [
-                {
-                  from: addy0,
-                  to: routeAsset.address,
-                  stable: false,
-                },
-                {
-                  from: routeAsset.address,
-                  to: addy1,
-                  stable: false,
-                },
-              ],
-              routeAsset: routeAsset,
-            },
-            {
-              routes: [
-                {
-                  from: addy0,
-                  to: routeAsset.address,
-                  stable: true,
+                  routes: [
+                    {
+                      from: addy0,
+                      to: routeAsset.address,
+                      stable: false,
+                    },
+                    {
+                      from: routeAsset.address,
+                      to: addy1,
+                      stable: false,
+                    },
+                  ],
+                  routeAsset: routeAsset,
                 },
                 {
-                  from: routeAsset.address,
-                  to: addy1,
-                  stable: false,
+                  routes: [
+                    {
+                      from: addy0,
+                      to: routeAsset.address,
+                      stable: true,
+                    },
+                    {
+                      from: routeAsset.address,
+                      to: addy1,
+                      stable: false,
+                    },
+                  ],
+                  routeAsset: routeAsset,
                 },
-              ],
-              routeAsset: routeAsset,
-            },
-            {
-              routes: [
                 {
-                  from: addy0,
-                  to: routeAsset.address,
-                  stable: false,
+                  routes: [
+                    {
+                      from: addy0,
+                      to: routeAsset.address,
+                      stable: false,
+                    },
+                    {
+                      from: routeAsset.address,
+                      to: addy1,
+                      stable: true,
+                    },
+                  ],
+                  routeAsset: routeAsset,
                 },
-                {
-                  from: routeAsset.address,
-                  to: addy1,
-                  stable: true,
-                },
-              ],
-              routeAsset: routeAsset,
-            },
-          ];
-        })
-        .flat();
+              ];
+            })
+            .flat();
+      }
 
       amountOuts.push({
         routes: [
