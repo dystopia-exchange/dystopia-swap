@@ -44,14 +44,6 @@
   background: #24292D;
 }
 
-.warningContainerError {
-  border: 2px solid #DB3434;
-}
-
-.warningContainerWarning {
-  border: 2px solid #15B525;
-}
-
 .warningError.warningText--light {
   color: #631515 !important;
 }
@@ -559,6 +551,14 @@
   background: #CFE5F2;
 }
 
+.warningContainerError {
+  border: 2px solid #DB3434;
+}
+
+.warningContainerWarning {
+  border: 2px solid #15B525;
+}
+
 .massiveInputContainer {
   display: flex;
   flex-wrap: wrap;
@@ -577,9 +577,9 @@
   border: none !important;
   margin-right: 20px !important;
 }
-input[type=number].massiveInputAmount::-webkit-inner-spin-button, 
-input[type=number].massiveInputAmount::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
+input[type=number].massiveInputAmount::-webkit-inner-spin-button,
+input[type=number].massiveInputAmount::-webkit-outer-spin-button {
+  -webkit-appearance: none;
 }
 
 input[type=number].massiveInputAmount {

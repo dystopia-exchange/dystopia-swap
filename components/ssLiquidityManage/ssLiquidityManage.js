@@ -2284,6 +2284,22 @@ export default function ssLiquidityManage() {
     }
   };
 
+  const withdrawActionButton = () => {
+    if (activeTab !== "withdraw") {
+      return;
+    }
+    let amp = '';
+    let action;
+    if (withdrawAction === "") {
+      amp = !parseFloat(withdrawAmount) ? ' & ' : '';
+      action = "Choose the action";
+    } else {
+      action = !parseFloat(withdrawAmount) ? '' : withdrawAction === "unstake" ? "Unstake LP" : withdrawAction === "remove" ? "Remove LP" : "";
+    }
+    const amount = !parseFloat(withdrawAmount) ? "Enter Amount" : '';
+    return `${action}${amp}${amount}`;
+  }
+
   return (
     <Paper elevation={0} className={[classes.container, "g-flex-column"]}>
       <div
@@ -2966,24 +2982,7 @@ export default function ssLiquidityManage() {
             ].join(" ")}
           >
             <span className={classes.actionButtonText}>
-              {withdrawAsset !== null && (
-                <>
-                  {withdrawAction == "" && "Choose the action"}
-
-                  {parseFloat(withdrawAmount) > 0 &&
-                    withdrawAction === "unstake" &&
-                    "Unstake LP"}
-
-                  {parseFloat(withdrawAmount) > 0 &&
-                    withdrawAction === "remove" &&
-                    "Remove LP"}
-
-                  {(parseFloat(withdrawAmount) == 0 || withdrawAmount == "") &&
-                    "Enter Amount"}
-                </>
-              )}
-
-              {withdrawAsset === null && "Choose the pair"}
+              {withdrawAsset !== null ? withdrawActionButton() : "Choose the pair"}
             </span>
             {depositLoading && (
               <Loader color={appTheme === "dark" ? "#8F5AE8" : "#8F5AE8"} />

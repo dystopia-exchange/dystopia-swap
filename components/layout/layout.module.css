@@ -26,6 +26,22 @@
   background-size: cover;
 }
 
+.content--light *::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+}
+
+.content--light * {
+  scrollbar-color: var(--border-light) transparent;
+}
+
+.content--dark *::-webkit-scrollbar-thumb {
+  background: var(--border-dark);
+}
+
+.content--dark * {
+  scrollbar-color: var(--border-dark) transparent;
+}
+
 .homePage--light {
   background: #DBE6EC;
 }

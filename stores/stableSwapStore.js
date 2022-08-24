@@ -26,6 +26,10 @@ import {
   USD_PLUS_ADDRESS,
   USD_PLUS_BOOSTED_DATA_URL,
 } from "./constants/contracts";
+import {
+  ST_MATIC_ADDRESS, 
+  ST_MATIC_BOOSTED_DATA_URL
+} from "./constants/contracts";
 import router from "next/router";
 import { assetIcons } from '../public/images/assets/asset-icons'
 
@@ -1534,6 +1538,21 @@ class Store {
               const reserve1ETH = BigNumber(parseFloat(pair.reserve1)).times(pair.token1.derivedETH)
 
               if (
+                  pair.token0.address.toLowerCase() ===
+                  CONTRACTS.ST_MATIC_ADDRESS.toLowerCase()
+              ) {
+                let boostedApr0Response = await axios.get(
+                    CONTRACTS.ST_MATIC_BOOSTED_DATA_URL
+                );
+
+                if (boostedApr0Response.data && boostedApr0Response.data.apr) {
+                  pair.gauge.boostedApr0 = new BigNumber(
+                      boostedApr0Response.data.apr
+                  ).times(reserve0ETH).div(reserve0ETH.plus(reserve1ETH));
+                }
+              }
+
+              if (
                 pair.token0.address.toLowerCase() ===
                 CONTRACTS.USD_PLUS_ADDRESS.toLowerCase()
               ) {
@@ -1546,6 +1565,21 @@ class Store {
                     boostedApr0Response.data
                   ).times(100)
                     .times(reserve0ETH).div(reserve0ETH.plus(reserve1ETH));
+                }
+              }
+
+              if (
+                  pair.token1.address.toLowerCase() ===
+                  CONTRACTS.ST_MATIC_ADDRESS.toLowerCase()
+              ) {
+                let boostedApr1Response = await axios.get(
+                    CONTRACTS.ST_MATIC_BOOSTED_DATA_URL
+                );
+
+                if (boostedApr1Response.data && boostedApr1Response.data.apr) {
+                  pair.gauge.boostedApr1 = new BigNumber(
+                      boostedApr1Response.data.apr
+                  ).times(reserve1ETH).div(reserve0ETH.plus(reserve1ETH));
                 }
               }
 

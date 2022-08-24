@@ -178,6 +178,12 @@ class Store {
     }
   };
 
+  isWeb3ProviderExist = async () => {
+    const hasEthereum = !!window?.ethereum;
+    const hasProvider = await detectProvider();
+    return hasEthereum || hasProvider;
+  }
+
   getWeb3Provider = async () => {
     // let web3context = this.getStore('web3context');
     // let provider = null;
