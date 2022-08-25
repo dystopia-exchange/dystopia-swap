@@ -141,6 +141,7 @@
 }
 
 .tooltipCircle {
+  flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1278,32 +1279,41 @@ input[type=number].mediumInputAmount {
   flex-shrink: 1;
   width: 1%;
   color: #FFFFFF;
-  border: 1px solid #86B9D6;
+  background: #171D2D;
+  border: 1px solid #1F2B49;
   transition: all ease 300ms;
   cursor: pointer;
   border-radius: 14px;
+}
+
+.toggleOption:hover {
+  background: #1F2B49;
+}
+
+.toggleOption.active {
+  background: #171D2D;
 }
 
 .toggleOption:first-child {
   margin-right: 10px;
 }
 
-.toggleOption:hover {
+/* .toggleOption:hover {
   background: #394178 !important;
-}
+} */
 
-.toggleOption.active {
+/* .toggleOption.active {
   color: #7E99B0;
-}
+} */
 
 .toggleOption--dark {
-  border: 1px solid transparent;
-  background: #1a1c2c;
+  /* border: 1px solid transparent; */
+  /* background: #1a1c2c; */
 }
 
-.toggleOption--dark.active {
+/* .toggleOption--dark.active {
   border: 1px solid #5F7285;
-}
+} */
 
 .toggleOptionText {
   width: 100%;
@@ -1311,24 +1321,24 @@ input[type=number].mediumInputAmount {
   font-weight: 500 !important;
   font-size: 16px !important;
   line-height: 24px !important;
+  color: #E4E9F4 !important;
 }
 
-.toggleOption .toggleOptionText {
+/* .toggleOption .toggleOptionText {
   color: #0B5E8E;
-}
+} */
 
-.toggleOption--dark .toggleOptionText {
+/* .toggleOption--dark .toggleOptionText {
   color: #FFFFFF;
-}
+} */
 
 .toggleOption.active .toggleOptionText {
-  color: #4CADE6;
+  color: #779BF4 !important;
 }
 
-
-.toggleOption--dark.active .toggleOptionText {
+/* .toggleOption--dark.active .toggleOptionText {
   color: #4CADE6;
-}
+} */
 
 .tokenSelect {
   border-radius: 0 !important;

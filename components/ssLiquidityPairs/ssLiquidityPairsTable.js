@@ -196,7 +196,21 @@ const headCells = [
       <Tooltip
           title='APR is based on current prices of tokens, token boosted APR, your veCONE amount, the % of TVL using veCONE and gauge TVL.'
           componentsProps={{
-            tooltip: { style: {padding: 24, background: '#1F2B49', fontSize: 16, fontWeight: 400, border: '1px solid #779BF4', borderRadius: 12,}},
+            tooltip: {
+              style: {
+                padding: 24,
+
+                fontFamily: 'Poppins',
+                fontSize: 16,
+                fontWeight: 400,
+                lineHeight: '24px',
+                
+                border: '1px solid #779BF4',
+                borderRadius: 12,
+
+                background: '#1F2B49',
+                color: '#E4E9F4',
+              }},
           }}
       >
         <div style={{
@@ -2577,7 +2591,21 @@ export default function EnhancedTable({pairs, isLoading}) {
                             <Tooltip
                                 title='APR is based on current prices of tokens, token boosted APR, your veCONE amount, the % of TVL using veCONE and gauge TVL.'
                                 componentsProps={{
-                                  tooltip: { style: {padding: 24, background: '#1F2B49', fontSize: 16, fontWeight: 400, border: '1px solid #779BF4', borderRadius: 12,}},
+                                  tooltip: {
+                                    style: {
+                                      padding: 24,
+
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16,
+                                      fontWeight: 400,
+                                      lineHeight: '24px',
+                                      
+                                      border: '1px solid #779BF4',
+                                      borderRadius: 12,
+
+                                      background: '#1F2B49',
+                                      color: '#E4E9F4',
+                                    }},
                                 }}
                                 style={{display: 'inline-flex', marginLeft: 12,}}
                             >
