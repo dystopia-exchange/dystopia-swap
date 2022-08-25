@@ -551,6 +551,7 @@ input[type=number].mediumInputAmount {
 }
 
 .textFieldReceiveAsset {
+  flex-grow: 1;
   padding: 12px 20px;
   position: relative;
   background-color: #131314;

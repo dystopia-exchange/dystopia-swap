@@ -1760,6 +1760,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
             <div
               style={{
                 position: "relative",
+                width: '100%',
               }}
             >
               <div
