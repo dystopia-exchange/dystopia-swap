@@ -532,6 +532,7 @@ input[type=number].massiveInputAmount {
 .massiveInputAmount {
   position: absolute !important;
   left: 322px;
+  right: 0;
   top: 48px;
   height: 90px;
   border: none !important;
