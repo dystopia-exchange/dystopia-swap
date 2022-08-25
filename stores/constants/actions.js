@@ -8,6 +8,7 @@ export const TX_CONFIRMED = "TX_CONFIRMED";
 export const TX_STATUS = "TX_STATUS";
 export const TX_ADDED = "TX_ADDED";
 export const TX_OPEN = "TX_OPEN";
+export const TX_CLEAR_QUEUE = "TX_CLEAR_QUEUE";
 
 export const CONNECTION_CONNECTED = "CONNECTION_CONNECTED";
 export const CONNECTION_DISCONNECTED = "CONNECTION_DISCONNECTED";
