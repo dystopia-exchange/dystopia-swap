@@ -6,7 +6,7 @@ import {
   CONTRACTS,
   BASE_ASSETS_WHITELIST,
   BLACK_LIST_TOKENS,
-  ROUTE_ASSETS, DIRECT_SWAP_ROUTES
+  ROUTE_ASSETS, DIRECT_SWAP_ROUTES, ALLOWED_DUPLICATE_SYMBOLS
 } from "./constants";
 import { v4 as uuidv4 } from "uuid";
 
@@ -140,8 +140,12 @@ const removeDuplicate = (arr) => {
     if (item.symbol in assetIcons) {
       item.logoURI = '/images/assets/' + assetIcons[item.symbol]
     }
-    // acc[item.symbol] = item;
-    acc[item.address.toLowerCase()] = item;
+    if (ALLOWED_DUPLICATE_SYMBOLS.includes(item.symbol)) {
+      acc[item.address.toLowerCase()] = item;
+    } else {
+      acc[item.symbol] = item;
+    }
+
     return acc;
   }, {});
   return Object.values(assets);
@@ -1157,17 +1161,21 @@ class Store {
       baseAssets = baseAssets.filter((token) => {
         return BLACK_LIST_TOKENS.indexOf(token.address.toLowerCase()) === -1;
       });
-      /*let dupAssets = [];
+      let dupAssets = [];
       baseAssets.forEach((token, id) => {
         BASE_ASSETS_WHITELIST.forEach((wl) => {
-          if (token.address.toLowerCase() !== wl.address.toLowerCase()
-              && wl.symbol.toLowerCase() === token.symbol.toLowerCase()) {
+          if (
+              token.address.toLowerCase() !== wl.address.toLowerCase()
+              && wl.symbol.toLowerCase() === token.symbol.toLowerCase()
+              && !ALLOWED_DUPLICATE_SYMBOLS.includes(token.symbol)
+          ) {
             dupAssets.push(id);
           }
         });
       });
-      for (var i = dupAssets.length - 1; i >= 0; i--)
-        baseAssets.splice(dupAssets[i], 1);*/
+      for (var i = dupAssets.length - 1; i >= 0; i--) {
+        baseAssets.splice(dupAssets[i], 1);
+      }
 
       // console.log("baseAssets",removeDuplicate([...baseAssets, ...localBaseAssets]))
       return removeDuplicate([...localBaseAssets, ...baseAssets]);

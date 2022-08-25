@@ -263,3 +263,7 @@ export const DIRECT_SWAP_ROUTES = {
   // penDYST -> PEN
   ["0x5b0522391d0a5a37fd117fe4c43e8876fb4e91e6".toLowerCase()]: ["0x9008d70a5282a936552593f410abcbce2f891a97".toLowerCase(),],
 }
+
+export const ALLOWED_DUPLICATE_SYMBOLS = [
+    "FXS",
+]
