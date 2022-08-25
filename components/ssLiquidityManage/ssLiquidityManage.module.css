@@ -1606,21 +1606,21 @@ input[type=number].mediumInputAmount {
 }
 
 .disclaimerContainerError {
-  border: 1px solid #DB3434;
-  color: #631515;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 28px;
+  border: 1px solid #E25656;
+  color: #E4E9F4;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .disclaimerContainerError > .disclaimerContainerWarnSymbol {
-  background-color: #DB3434;
+  background-color: #E25656;
 }
 
 .disclaimerContainerError--dark {
-  background: #24292D;
-  border: 1px solid #DB3434;
-  color: #EC9999;
+  background: rgba(6, 11, 23, 0.5);
+  border: 1px solid #E25656;
+  color: #E4E9F4;
 }
 
 .disclaimerContainerWarning {

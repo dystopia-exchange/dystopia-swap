@@ -542,7 +542,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
         setAmount0Error("Invalid amount");
         error = true;
       } else if (asset0 && BigNumber(amount0).gt(asset0.balance)) {
-        setAmount0Error(`Greater than your available balance`);
+        setAmount0Error(`Insufficient funds ${asset0?.symbol}`);
         error = true;
       }
     }
@@ -562,7 +562,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
         setAmount1Error("Invalid amount");
         error = true;
       } else if (asset1 && BigNumber(amount1).gt(asset1.balance)) {
-        setAmount1Error(`Greater than your available balance`);
+        setAmount1Error(`Insufficient funds ${asset1?.symbol}`);
         error = true;
       }
     }
@@ -625,7 +625,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
         setAmount0Error("Invalid amount");
         error = true;
       } else if (asset0 && BigNumber(amount0).gt(asset0.balance)) {
-        setAmount0Error(`Greater than your available balance`);
+        setAmount0Error(`Insufficient funds ${asset0?.symbol}`);
         error = true;
       }
     }
@@ -645,7 +645,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
         setAmount1Error("Invalid amount");
         error = true;
       } else if (asset1 && BigNumber(amount1).gt(asset1.balance)) {
-        setAmount1Error(`Greater than your available balance`);
+        setAmount1Error(`Insufficient funds ${asset1?.symbol}`);
         error = true;
       }
     }
@@ -2590,7 +2590,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
                                 <div>
                                   {amount0Error && <>{amount0Error}</>}
 
-                                  {amount1Error && <>{amount1Error}</>}
+                                  {!amount0Error && amount1Error && <>{amount1Error}</>}
 
                                   {pair?.balance > 0 && !amount0Error && !amount1Error && (
                                       <>
