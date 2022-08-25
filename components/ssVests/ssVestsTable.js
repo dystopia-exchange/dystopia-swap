@@ -27,7 +27,7 @@ import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import TablePaginationActions from '../table-pagination/table-pagination';
 import SortSelect from '../select-sort/select-sort';
 import BigNumber from 'bignumber.js';
-import css from './ssVests.module.css'
+import css from './ssVests.module.css';
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
@@ -422,9 +422,12 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 30,
     padding: 0,
     minHeight: 'auto',
-    ["@media (max-width:660px)"]: {
-      paddingBottom: 70,
-    },
+  },
+  addButtonWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginBottom: 0
   },
   tableContainer: {
     border: 'none',
@@ -444,6 +447,7 @@ const useStyles = makeStyles((theme) => ({
     width: 215,
     height: 50,
     cursor: 'pointer',
+    marginRight: 20
   },
   'addButton--light': {
     '&:hover > p': {
@@ -470,7 +474,7 @@ const useStyles = makeStyles((theme) => ({
     background: '#8F5AE8',
   },
   actionButtonText: {
-    width: 200,
+    width: 215,
     height: '100%',
     display: 'flex',
     alignItems: 'center',
@@ -492,21 +496,6 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
     padding: 0,
   },
-  sortSelect: {
-    position: 'absolute',
-    top: 45,
-  },
-  ["@media (max-width: 660px)"]: {
-    toolbar:{
-      display: 'flex',
-      paddingLeft:"10px",
-      paddingRight:"10px",
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }
-  },
-  
   cellPaddings: {
     padding: '11px 20px',
     ["@media (max-width:530px)"]: {
@@ -520,6 +509,33 @@ const useStyles = makeStyles((theme) => ({
       // eslint-disable-line no-useless-computed-key
       padding: '5px 10px',
     },
+  },
+  ["@media (max-width: 660px)"]: {
+    toolbar: {
+      display: 'block',
+      paddingLeft: 0,
+      paddingRight: 0
+    },
+    addButtonWrapper: {
+      marginBottom: 30
+    },
+    addButton: {
+      width: 'auto',
+    },
+    actionButtonText: {
+      width: 'fit-content',
+      paddingLeft: "12px",
+      paddingRight: "12px",
+    }
+  },
+  ["@media (max-width: 500px)"]: {
+    addButtonWrapper: {
+      flexWrap: 'wrap',
+      marginBottom: 10
+    },
+    addButton: {
+      marginBottom: 20
+    }
   },
 }));
 
@@ -570,48 +586,48 @@ const EnhancedTableToolbar = (props) => {
 
   return (
     <Toolbar className={classes.toolbar} style={{ marginBottom: 30 }}>
-      <div
-        className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
-        onClick={onCreate}>
-        <div className={classes.addButtonIcon}>
-          <LockOutlined style={{width: 20, color: '#fff'}}/>
-        </div>
-          
-        <Typography
-          className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
-        >
-          Create Lock
-        </Typography>
-      </div>
-      <div
-        className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
-        onClick={onMerge}
-        style={{ marginLeft: 20 }}
-      >
+      <div className={[classes.addButtonWrapper].join(' ')}>
+        <div
+          className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
+          onClick={onCreate}>
+          <div className={classes.addButtonIcon}>
+            <LockOutlined style={{width: 20, color: '#fff'}}/>
+          </div>
 
-        <Typography
-          className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
+          <Typography
+            className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
+          >
+            Create Lock
+          </Typography>
+        </div>
+
+        <div
+          className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
+          onClick={onMerge}
         >
-          {windowWidth <= 660 ? 'Merge' : 'Merge NFTs'}
-        </Typography>
+          <Typography
+            className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
+          >
+            {windowWidth <= 660 ? 'Merge' : 'Merge NFTs'}
+          </Typography>
+        </div>
+
+        <div
+          className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
+        >
+          <Typography
+            className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
+          >
+            NFT APR: {parseInt(props.veToken?.veDistApr)}%
+          </Typography>
+        </div>
       </div>
+
       {windowWidth <= 660 && (
         <div className={[classes.sortSelect, css.sortSelect].join(' ')}>
           {SortSelect({value: sortValueId, options, handleChange: handleChangeSort, sortDirection})}
         </div>
       )}
-
-      <div
-        className={[classes.addButton, classes[`addButton--${appTheme}`]].join(' ')}
-        style={{ marginLeft: 20 }}
-      >
-        <Typography
-          className={[classes.actionButtonText, classes[`actionButtonText--${appTheme}`]].join(' ')}
-        >
-          NFT APR: {parseInt(props.veToken?.veDistApr)}%
-        </Typography>
-      </div>
-
     </Toolbar>
   );
 };
