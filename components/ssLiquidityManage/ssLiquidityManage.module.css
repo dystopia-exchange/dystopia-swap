@@ -909,6 +909,7 @@ input[type=number].mediumInputAmount {
 
 .massiveInputAmount {
   display: flex;
+  flex-grow: 1;
   border: none !important;
   background-color: #181d2d;
   padding: 8px 12px;
