@@ -1,10 +1,10 @@
 {
   "name": "PancakeSwap Extended",
-  "timestamp": "2022-07-06T17:23:32.899Z",
+  "timestamp": "2022-08-23T02:38:03.755Z",
   "version": {
     "major": 2,
     "minor": 16,
-    "patch": 98
+    "patch": 103
   },
   "logoURI": "https://pancakeswap.finance/logo.png",
   "keywords": [
@@ -1613,6 +1613,14 @@
       "logoURI": "https://tokens.pancakeswap.finance/images/0x630d98424eFe0Ea27fB1b3Ab7741907DFFEaAd78.png"
     },
     {
+      "name": "Meta Apes Peel",
+      "symbol": "PEEL",
+      "address": "0x734548a9e43d2D564600b1B2ed5bE9C2b911c6aB",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://tokens.pancakeswap.finance/images/0x734548a9e43d2D564600b1B2ed5bE9C2b911c6aB.png"
+    },
+    {
       "name": "ConstitutionDAO",
       "symbol": "PEOPLE",
       "address": "0x2c44b726ADF1963cA47Af88B284C06f30380fC78",
@@ -1715,6 +1723,14 @@
       "chainId": 56,
       "decimals": 2,
       "logoURI": "https://tokens.pancakeswap.finance/images/0xBc5609612b7C44BEf426De600B5fd1379DB2EcF1.png"
+    },
+    {
+      "name": "pStake Finance",
+      "symbol": "PSTAKE",
+      "address": "0x4C882ec256823eE773B25b414d36F92ef58a7c0C",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://tokens.pancakeswap.finance/images/0x4C882ec256823eE773B25b414d36F92ef58a7c0C.png"
     },
     {
       "name": "Qubit Token",
@@ -1877,6 +1893,14 @@
       "logoURI": "https://tokens.pancakeswap.finance/images/0x232FB065D9d24c34708eeDbF03724f2e95ABE768.png"
     },
     {
+      "name": "Meta Apes Shell",
+      "symbol": "SHELL",
+      "address": "0x208cfEc94d2BA8B8537da7A9BB361c6baAD77272",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://tokens.pancakeswap.finance/images/0x208cfEc94d2BA8B8537da7A9BB361c6baAD77272.png"
+    },
+    {
       "name": "CryptoBlades Skill Token",
       "symbol": "SKILL",
       "address": "0x154A9F9cbd3449AD22FDaE23044319D6eF2a1Fab",
@@ -1899,6 +1923,14 @@
       "chainId": 56,
       "decimals": 18,
       "logoURI": "https://tokens.pancakeswap.finance/images/0x1633b7157e7638C4d6593436111Bf125Ee74703F.png"
+    },
+    {
+      "name": "Staked BNB",
+      "symbol": "stkBNB",
+      "address": "0xc2E9d07F66A89c44062459A47a0D2Dc038E4fb16",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://tokens.pancakeswap.finance/images/0xc2E9d07F66A89c44062459A47a0D2Dc038E4fb16.png"
     },
     {
       "name": "Sushi",
@@ -1941,12 +1973,12 @@
       "logoURI": "https://tokens.pancakeswap.finance/images/0x71DE20e0C4616E7fcBfDD3f875d568492cBE4739.png"
     },
     {
-      "name": "Switcheo",
+      "name": "Carbon Protocol",
       "symbol": "SWTH",
-      "address": "0x250b211EE44459dAd5Cd3bCa803dD6a7EcB5d46C",
+      "address": "0xC0ECB8499D8dA2771aBCbF4091DB7f65158f1468",
       "chainId": 56,
       "decimals": 8,
-      "logoURI": "https://tokens.pancakeswap.finance/images/0x250b211EE44459dAd5Cd3bCa803dD6a7EcB5d46C.png"
+      "logoURI": "https://tokens.pancakeswap.finance/images/0xC0ECB8499D8dA2771aBCbF4091DB7f65158f1468.png"
     },
     {
       "name": "Swipe",
@@ -2069,7 +2101,7 @@
       "logoURI": "https://tokens.pancakeswap.finance/images/0x85EAC5Ac2F758618dFa09bDbe0cf174e7d574D5B.png"
     },
     {
-      "name": "Thunder Token",
+      "name": "ThunderCore",
       "symbol": "TT",
       "address": "0x990E7154bB999FAa9b2fa5Ed29E822703311eA85",
       "chainId": 56,
@@ -2227,6 +2259,14 @@
       "chainId": 56,
       "decimals": 8,
       "logoURI": "https://tokens.pancakeswap.finance/images/0x7e396BfC8a2f84748701167c2d622F041A1D7a17.png"
+    },
+    {
+      "name": "Wombat Token",
+      "symbol": "WOM",
+      "address": "0xAD6742A35fB341A9Cc6ad674738Dd8da98b94Fb1",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://tokens.pancakeswap.finance/images/0xAD6742A35fB341A9Cc6ad674738Dd8da98b94Fb1.png"
     },
     {
       "name": "Wootrade",
@@ -2403,6 +2443,62 @@
       "chainId": 56,
       "decimals": 18,
       "logoURI": "https://tokens.pancakeswap.finance/images/0x1D229B958D5DDFca92146585a8711aECbE56F095.png"
+    },
+    {
+      "name": "Tetu Token",
+      "symbol": "TETU",
+      "address": "0x1f681B1c4065057E07b95a1E5e504fB2c85F4625",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://assets.coingecko.com/coins/images/17882/small/gradient_icon_926.png"
+    },
+    {
+      "name": "USD+",
+      "symbol": "USD+",
+      "address": "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://2173993027-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F9HhCCgYexXiRot0OWAJY%2Fuploads%2FQ41zhb0z0oV5WI1zpKEg%2FUSD%2B%20logo.png?alt=media&token=533d9ed9-6904-4f45-82a3-2c9e1060a3b5"
+    },
+    {
+      "name": "MAI",
+      "symbol": "MAI",
+      "address": "0x3f56e0c36d275367b8c502090edf38289b3dea0d",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://assets.coingecko.com/coins/images/15264/small/mimatic-red.png"
+    },
+    {
+      "name": "Qi Dao",
+      "symbol": "QI",
+      "address": "0xdDC3D26BAA9D2d979F5E2e42515478bf18F354D5",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://assets.coingecko.com/coins/images/15329/small/qi.png"
+    },
+    {
+      "name": "UNKWN",
+      "symbol": "UNKWN",
+      "address": "0xD7FbBf5CB43b4A902A8c994D94e821f3149441c7",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://app.unknown.money/static/media/unknwn.c73760df.svg"
+    },
+    {
+      "name": "VALAS",
+      "symbol": "VALAS",
+      "address": "0xb1ebdd56729940089ecc3ad0bbeeb12b6842ea6f",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://assets.coingecko.com/coins/images/24733/small/valas-finance.png"
+    },
+    {
+      "name": "MDB+",
+      "symbol": "MDB+",
+      "address": "0x9f8bb16f49393eea4331a39b69071759e54e16ea",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://s2.coinmarketcap.com/static/img/coins/64x64/20408.png"
     }
   ]
 }

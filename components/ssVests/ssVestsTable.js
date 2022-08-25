@@ -696,6 +696,10 @@ const EnhancedTableToolbar = (props) => {
     router.push('/vest/create');
   };
 
+  const onMerge = () => {
+    router.push('/vest/merge');
+  };
+
   const handleChangeSort = ({target: {value}}) => {
     const property = value.substring(0, value.indexOf('--'));
     const event = value.substring(value.indexOf('--') + 2);
@@ -746,7 +750,7 @@ const EnhancedTableToolbar = (props) => {
             Create Lock
           </div>
 
-          <div className={classes.mergeButton} onClick={onCreate}>
+          <div className={classes.mergeButton} onClick={onMerge}>
             MERGE MY LOCKED NFTs
           </div>
         </div>

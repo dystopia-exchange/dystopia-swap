@@ -1125,7 +1125,7 @@ class Store {
           }
 
           if(baseAssets[j].address.toLowerCase() === CONE_ADDRESS) {
-            baseAssets[j].logoURI = 'https://raw.githubusercontent.com/cone-exchange/cone-assets/master/con%20token%20icon.png'
+            baseAssets[j].logoURI = 'https://icons.llama.fi/cone.png'
           }
 
           if (baseAssets[j].name === "miMATIC") {
@@ -4447,12 +4447,11 @@ class Store {
         // console.log('stable', bestAmountOut.routes[i].stable);
 
         const res = await libraryContract.methods
-          .getTradeDiffSimple(
+          .getTradeDiff3(
             amountIn,
             bestAmountOut.routes[i].from,
             bestAmountOut.routes[i].to,
-            bestAmountOut.routes[i].stable,
-            1000
+            bestAmountOut.routes[i].stable
           )
           .call();
         const ratio = BigNumber(res.b).div(res.a);
@@ -7035,7 +7034,7 @@ class Store {
         const context = this;
 
         let sendGasAmount = BigNumber(gasAmount).times(1.5).toFixed(0);
-        let sendGasPrice = BigNumber(gasPrice).times(1.5).toFixed(0);
+        let sendGasPrice = BigNumber(gasPrice).toFixed(0);
         // if (paddGasCost) {
         //   sendGasAmount = BigNumber(sendGasAmount).times(1.15).toFixed(0)
         // }
