@@ -7034,7 +7034,7 @@ class Store {
         const context = this;
 
         let sendGasAmount = BigNumber(gasAmount).times(1.5).toFixed(0);
-        let sendGasPrice = BigNumber(gasPrice).times(1.5).toFixed(0);
+        let sendGasPrice = BigNumber(gasPrice).toFixed(0);
         // if (paddGasCost) {
         //   sendGasAmount = BigNumber(sendGasAmount).times(1.15).toFixed(0)
         // }
