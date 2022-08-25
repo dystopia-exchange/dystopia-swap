@@ -113,7 +113,7 @@ export default function TransactionQueue({setQueueLength}) {
       setTransactions(txs);
     };
 
-    stores.emitter.on(ACTIONS.CLEAR_TRANSACTION_QUEUE, clearTransactions);
+    stores.emitter.on(ACTIONS.TX_CLEAR_QUEUE, clearTransactions);
     stores.emitter.on(ACTIONS.TX_ADDED, transactionAdded);
     stores.emitter.on(ACTIONS.TX_PENDING, transactionPending);
     stores.emitter.on(ACTIONS.TX_SUBMITTED, transactionSubmitted);
@@ -121,9 +121,8 @@ export default function TransactionQueue({setQueueLength}) {
     stores.emitter.on(ACTIONS.TX_REJECTED, transactionRejected);
     stores.emitter.on(ACTIONS.TX_STATUS, transactionStatus);
     stores.emitter.on(ACTIONS.TX_OPEN, openQueue);
-
     return () => {
-      stores.emitter.removeListener(ACTIONS.CLEAR_TRANSACTION_QUEUE, clearTransactions);
+      stores.emitter.removeListener(ACTIONS.TX_CLEAR_QUEUE, clearTransactions);
       stores.emitter.removeListener(ACTIONS.TX_ADDED, transactionAdded);
       stores.emitter.removeListener(ACTIONS.TX_PENDING, transactionPending);
       stores.emitter.removeListener(ACTIONS.TX_SUBMITTED, transactionSubmitted);
@@ -134,7 +133,7 @@ export default function TransactionQueue({setQueueLength}) {
     };
   }, [transactions]);
 
-  const renderDone = (txs) => {
+  const renderDone = (transactions) => {
     if (!(transactions && transactions.filter((tx) => {
       return ['DONE', 'CONFIRMED'].includes(tx.status);
     })
