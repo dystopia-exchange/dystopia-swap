@@ -67,7 +67,20 @@ export async function doSwap(swap, slippage, provider) {
 
     if (swap && swap.returnAmount) {
         const swapNative = swap.swapData.tokenIn === ZERO_ADDRESS;
-        // noinspection JSUnresolvedFunction
+
+        // call static check for swap error catching
+        await getSwapContract()
+            .connect(provider.getSigner())
+            .callStatic
+            .multiSwap(
+                swap.swapData, // in/out tokens, amounts
+                swap.swaps, // array of swaps
+                swap.tokenAddresses, // array of inter token addresses
+                getSlippage(slippage),
+                getDeadline(),
+                { gasLimit: 3000000, value: swapNative ? swap.swapData.swapAmount : 0 }
+            )
+
         const tx = await getSwapContract()
             .connect(provider.getSigner())
             .multiSwap(
@@ -81,7 +94,7 @@ export async function doSwap(swap, slippage, provider) {
 
         return tx
 
-        console.log('tx', tx);
+        // console.log('tx', tx);
 
         // const tokenIn = tokens[swap.tokenIn].symbol;
         // const tokenOut = tokens[swap.tokenOut].symbol;
