@@ -4462,7 +4462,7 @@ class Store {
           return BigNumber(best.finalValue).gt(current.finalValue)
             ? best
             : current;
-        }, 0);
+        });
 
       if (!bestAmountOut) {
         this.emitter.emit(
@@ -4483,7 +4483,7 @@ class Store {
         // let amountOut = bestAmountOut.receiveAmounts[i + 1];
 
         const res = await libraryContract.methods
-          .getTradeDiff(
+          .getTradeDiff3(
             amountIn,
             bestAmountOut.routes[i].from,
             bestAmountOut.routes[i].to,
