@@ -125,9 +125,10 @@ class MultiSwapStore {
             this.isFetchingApprove = true
             try {
                 const res = await approve(this.tokenIn, this.provider, this.isDirectRoute ? ROUTER_ADDRESS : multiSwapAddress)
-                await res.wait()
+                await res.wait(1)
                 await this._checkAllowance()
             } catch (e) {
+                console.error(e)
                 this.error = 'Transaction of approve is failed'
             } finally {
                 this.isFetchingApprove = false
@@ -281,7 +282,7 @@ class MultiSwapStore {
 
                 // console.log('directSwapRoute old router response', response)
 
-                if (response.output.finalValue) {
+                if (response?.output?.finalValue) {
                     this.swap = {
                         returnAmount: response.output.receiveAmounts[1],
                         priceImpact: response.priceImpact,
