@@ -3,6 +3,7 @@ import { _SLIPPAGE_PRECISION, multiSwapAddress } from './constants'
 //@ts-ignore
 import MultiSwap2Abi from './MultiSwap2.json'
 import BigNumber from "bignumber.js";
+import {ZERO_ADDRESS} from "../../stores/constants";
 require('url')
 
 const ERC20Abi = [
@@ -65,6 +66,7 @@ export async function doSwap(swap, slippage, provider) {
     console.log('----- ', getSlippage(slippage), getDeadline())
 
     if (swap && swap.returnAmount) {
+        const swapNative = swap.swapData.tokenIn === ZERO_ADDRESS;
         // noinspection JSUnresolvedFunction
         const tx = await getSwapContract()
             .connect(provider.getSigner())
@@ -74,7 +76,7 @@ export async function doSwap(swap, slippage, provider) {
                 swap.tokenAddresses, // array of inter token addresses
                 getSlippage(slippage),
                 getDeadline(),
-                { gasLimit: 3000000 }
+                { gasLimit: 3000000, value: swapNative ? swap.swapData.swapAmount : 0 }
             );
 
         return tx
