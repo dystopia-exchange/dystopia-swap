@@ -14,3 +14,7 @@
   background: #2D3741 !important;
   border: 2px solid #5F7285 !important;
 }
+
+.popoverPaperAuto {
+  width: auto !important;
+}
