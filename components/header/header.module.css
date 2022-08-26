@@ -497,7 +497,7 @@
   padding: 5px;
   margin-left: 10px;
   background: #DBE6EC;
-  border: 2px solid #15B525;
+  border: 1px solid #0B5E8E;
   border-radius: 100px;
   cursor: pointer;
   transition: all 0.32s ease;
@@ -509,6 +509,7 @@
 
 .statButton--dark {
   background: #151718;
+  border-color: #4CADE6;
 }
 
 .statButton--dark:hover {
