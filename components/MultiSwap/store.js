@@ -297,7 +297,7 @@ class MultiSwapStore {
                         quote: response,
                     }
                     this.priceInfo = this.calcPriceInfo(tokenIn, tokenOut, this.swap)
-                    this.priceImpact = this.swap.priceImpact*100
+                    this.priceImpact = this.swap.priceImpact
                 }
 
                 this.isFetchingSwapQuery = false
