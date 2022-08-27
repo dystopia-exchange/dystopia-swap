@@ -854,9 +854,9 @@ const useStyles = makeStyles({
     },
   },
   filterContainer: {
-    minWidth: '340px',
+    minWidth: '272px',
     marginTop: '15px',
-    padding: '30px',
+    padding: '24px',
     paddingBottom: '20px',
     boxShadow: '0 10px 20px 0 rgba(0,0,0,0.2)',
     borderRadius: 12,
@@ -872,7 +872,7 @@ const useStyles = makeStyles({
   },
   filterItem: {
     position: 'relative',
-    padding: '8px 0',
+    padding: '5px 0',
   },
   'filterItem--dark': {
     borderColor: '#5F7285',
@@ -885,12 +885,15 @@ const useStyles = makeStyles({
   },
   filterLabel: {
     fontSize: '16px',
+    lineHeight: '24px',
     fontWeight: 400,
     color: '#E4E9F4',
   },
   filterListTitle: {
+    fontFamily: 'Poppins',
     fontWeight: 500,
-    fontSize: 40,
+    fontSize: 48,
+    lineHeight: '52px',
     color: '#E4E9F4',
   },
   infoIcon: {
@@ -1053,7 +1056,7 @@ const useStyles = makeStyles({
     },
   },
   popoverPaper: {
-    width: 340,
+    width: 272,
     minHeight: 292,
     padding: 0,
     background: 'none',
@@ -1065,6 +1068,11 @@ const useStyles = makeStyles({
   displayedRows: {
     fontSize: 12,
   },
+  closePopover: {
+    ['&:hover']: {
+      backgroundColor: '#8191B9 !important',
+    }
+  }
 });
 
 const getLocalToggles = () => {
@@ -1297,7 +1305,7 @@ const EnhancedTableToolbar = (props) => {
                 display: 'flex',
                 alignItems: 'start',
                 justifyContent: 'space-between',
-                marginBottom: 10,
+                marginBottom: 14,
               }}>
                 <Typography className={[classes.filterListTitle, classes[`filterListTitle--${appTheme}`]].join(' ')}>
                   Filters
@@ -1316,6 +1324,7 @@ const EnhancedTableToolbar = (props) => {
                       marginTop: 4,
                     }}
                     onClick={handleClick}
+                    className={classes.closePopover}
                 >
                   <Close
                       style={{
@@ -1329,7 +1338,7 @@ const EnhancedTableToolbar = (props) => {
               <div
                 className={[classes.filterItem, classes[`filterItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
                 <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>
-                  Active Gauges
+                  Active gauges
                 </Typography>
 
                 <SwitchCustom
@@ -1342,7 +1351,7 @@ const EnhancedTableToolbar = (props) => {
               <div
                 className={[classes.filterItem, classes[`filterItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
                 <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>
-                  Stable Pools
+                  Stable pools
                 </Typography>
 
                 <SwitchCustom
@@ -1355,7 +1364,7 @@ const EnhancedTableToolbar = (props) => {
               <div
                 className={[classes.filterItem, classes[`filterItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
                 <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>
-                  Volatile Pools
+                  Volatile pools
                 </Typography>
 
                 <SwitchCustom
