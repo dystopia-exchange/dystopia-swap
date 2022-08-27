@@ -4299,8 +4299,8 @@ class Store {
       }
 
       const directSwapRoute =
-          (DIRECT_SWAP_ROUTES[fromAsset.address.toLowerCase()] && DIRECT_SWAP_ROUTES[fromAsset.address.toLowerCase()].includes(toAsset.address.toLowerCase()))
-      || (DIRECT_SWAP_ROUTES[toAsset.address.toLowerCase()] && DIRECT_SWAP_ROUTES[toAsset.address.toLowerCase()].includes(fromAsset.address.toLowerCase()))
+          (DIRECT_SWAP_ROUTES[fromAsset.address.toLowerCase()] && DIRECT_SWAP_ROUTES[fromAsset.address.toLowerCase()]  === toAsset.address.toLowerCase())
+      || (DIRECT_SWAP_ROUTES[toAsset.address.toLowerCase()] && DIRECT_SWAP_ROUTES[toAsset.address.toLowerCase()]  === fromAsset.address.toLowerCase())
 
       const routeAssets = _routeAssets;
 
