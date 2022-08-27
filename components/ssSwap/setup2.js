@@ -233,11 +233,11 @@ function Setup() {
                 // if there is a direct swap route for fromAssetValue, then select the first token available in the route for toAssetValue
                 if (
                     DIRECT_SWAP_ROUTES[value.address.toLowerCase()]
-                    && !DIRECT_SWAP_ROUTES[value.address.toLowerCase()].includes(toAssetValue?.address.toLowerCase())
+                    && DIRECT_SWAP_ROUTES[value.address.toLowerCase()] !== toAssetValue?.address.toLowerCase()
                 ) {
                     const baseAsset = stores.stableSwapStore.getStore("baseAssets");
                     const dystIndex = baseAsset.findIndex((token) => {
-                        return token.address.toLowerCase() === DIRECT_SWAP_ROUTES[value.address][0].toLowerCase()
+                        return token.address.toLowerCase() === DIRECT_SWAP_ROUTES[value.address].toLowerCase()
                     });
                     setToAssetValue(baseAsset[dystIndex]);
                     multiSwapStore.setTokenOut(baseAsset[dystIndex].address)
@@ -284,11 +284,11 @@ function Setup() {
                 // if there is a direct swap route for toAssetValue, then select the first token available in the route for fromAssetValue
                 if (
                     DIRECT_SWAP_ROUTES[value.address.toLowerCase()]
-                    && !DIRECT_SWAP_ROUTES[value.address.toLowerCase()].includes(fromAssetValue?.address.toLowerCase())
+                    && DIRECT_SWAP_ROUTES[value.address.toLowerCase()] !== fromAssetValue?.address.toLowerCase()
                 ) {
                     const baseAsset = stores.stableSwapStore.getStore("baseAssets");
                     const dystIndex = baseAsset.findIndex((token) => {
-                        return token.address.toLowerCase() === DIRECT_SWAP_ROUTES[value.address][0].toLowerCase()
+                        return token.address.toLowerCase() === DIRECT_SWAP_ROUTES[value.address].toLowerCase()
                     });
                     setFromAssetValue(baseAsset[dystIndex]);
                     multiSwapStore.setTokenIn(baseAsset[dystIndex].address)
@@ -1009,7 +1009,7 @@ function Setup() {
                                 !DIRECT_SWAP_ROUTES[toAssetValue?.address.toLowerCase()]
                                     ? fromAssetOptions
                                     : fromAssetOptions
-                                        .filter(a => DIRECT_SWAP_ROUTES[toAssetValue?.address.toLowerCase()].includes(a.address.toLowerCase())),
+                                        .filter(a => DIRECT_SWAP_ROUTES[toAssetValue?.address.toLowerCase()] === a.address.toLowerCase()),
                                 onAssetSelect
                             )}
 
@@ -1175,7 +1175,7 @@ function Setup() {
                                 !DIRECT_SWAP_ROUTES[fromAssetValue?.address.toLowerCase()]
                                     ? toAssetOptions
                                     : toAssetOptions
-                                        .filter(a => DIRECT_SWAP_ROUTES[fromAssetValue?.address.toLowerCase()].includes(a.address.toLowerCase())),
+                                        .filter(a => DIRECT_SWAP_ROUTES[fromAssetValue?.address.toLowerCase()] === a.address.toLowerCase()),
                                 onAssetSelect
                             )}
 

@@ -90,6 +90,9 @@ class MultiSwapStore {
         this.tokenOut = value
         this.swap = null
         this.error = null
+        // need to check approve for case when we use direct routes
+        // this.allowed = false
+        // this._checkAllowance()
         this.debSwapQuery()
     }
 
@@ -124,13 +127,19 @@ class MultiSwapStore {
         if (this.provider && this.tokenIn) {
             this.isFetchingApprove = true
             try {
-                const res = await approve(this.tokenIn, this.provider, this.isDirectRoute ? ROUTER_ADDRESS : multiSwapAddress)
-                await res.wait(1)
+                // console.log('CALL APPROVE', this.allowed)
+                await this._checkAllowance()
+                // console.log('allowed', this.allowed)
+                if(!this.allowed) {
+                    const res = await approve(this.tokenIn, this.provider, this.isDirectRoute ? ROUTER_ADDRESS : multiSwapAddress)
+                    await res.wait(2)
+                }
                 await this._checkAllowance()
             } catch (e) {
-                console.error(e)
+                // console.error('CALL APPROVE ERROR', e)
                 this.error = 'Transaction of approve is failed'
             } finally {
+                // console.log('END CALL APPROVE')
                 this.isFetchingApprove = false
             }
         }
@@ -245,8 +254,8 @@ class MultiSwapStore {
     }
 
     get isDirectRoute() {
-        return (DIRECT_SWAP_ROUTES[this.tokenIn?.toLowerCase()] && DIRECT_SWAP_ROUTES[this.tokenIn.toLowerCase()].includes(this.tokenOut.toLowerCase()))
-            || (DIRECT_SWAP_ROUTES[this.tokenOut?.toLowerCase()] && DIRECT_SWAP_ROUTES[this.tokenOut.toLowerCase()].includes(this.tokenIn.toLowerCase()))
+        return (!!DIRECT_SWAP_ROUTES[this.tokenIn?.toLowerCase()] && DIRECT_SWAP_ROUTES[this.tokenIn?.toLowerCase()] === this.tokenOut?.toLowerCase())
+            || (!!DIRECT_SWAP_ROUTES[this.tokenOut?.toLowerCase()] && DIRECT_SWAP_ROUTES[this.tokenOut?.toLowerCase()] === this.tokenIn?.toLowerCase())
     }
 
     async _swapQuery() {
@@ -330,8 +339,8 @@ class MultiSwapStore {
             this.allowed = true
             return true
         }
-
-        if (this.provider) {
+        // console.log('_checkAllowance', this.isDirectRoute)
+        if (this.provider && this.isDirectRoute !== undefined) {
             this.isFetchingAllowance = true
             const response = await allowance(this.tokenIn, this.provider, this.isDirectRoute ? ROUTER_ADDRESS : multiSwapAddress)
             this.allowed = response
