@@ -1190,7 +1190,9 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                           }}>
                           {
                             row?.gaugebribes.bribeTokens.length ? (
-                                row?.gaugebribes.bribeTokens.map((bribe, idx) => {
+                                row?.gaugebribes.bribeTokens
+                                  .filter(x => !BigNumber(x?.left).isZero())
+                                  .map((bribe, idx) => {
                                   return (
                                     <>
                                       {
@@ -1972,7 +1974,9 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                               {headCell.id === 'balance' && formatCurrency(BigNumber(row?.gauge?.balance).div(row?.gauge?.totalSupply).times(row?.gauge?.reserve0))}
                                               {headCell.id === 'liquidity' && formatCurrency(BigNumber(row?.reserve0))}
                                               {headCell.id === 'apy' && row?.gaugebribes.bribeTokens.length ? (
-                                                      row?.gaugebribes.bribeTokens.map((bribe, idx) => {
+                                                      row?.gaugebribes.bribeTokens
+                                                        .filter(x => !BigNumber(x?.left).isZero())
+                                                        .map((bribe, idx) => {
                                                         return (
                                                             <div className={['g-flex-column', 'g-flex--align-end'].join(' ')}>
                                                               {`${Number(bribe.apr).toFixed(1)}% APR`}
@@ -2023,7 +2027,9 @@ export default function EnhancedTable({gauges, setParentSliderValues, defaultVot
                                               {headCell.id === 'balance' && formatSymbol(row.token0.symbol)}
                                               {headCell.id === 'liquidity' && formatSymbol(row.token0.symbol)}
                                               {headCell.id === 'apy' && row?.gaugebribes.bribeTokens.length ? (
-                                                      row?.gaugebribes.bribeTokens.map((bribe, idx) => {
+                                                      row?.gaugebribes.bribeTokens
+                                                        .filter(x => !BigNumber(x?.left).isZero())
+                                                        .map((bribe, idx) => {
                                                         return (
                                                             <div className={['g-flex-column', 'g-flex--align-end'].join(' ')}>
                                                               {
