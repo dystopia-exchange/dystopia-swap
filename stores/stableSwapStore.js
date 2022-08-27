@@ -4492,6 +4492,7 @@ class Store {
           .call();
         const ratio = BigNumber(res.b).div(res.a);
         totalRatio = BigNumber(totalRatio).times(ratio).toFixed(18);
+        // console.log('>>> SWAP', i, bestAmountOut.routes[i].from, bestAmountOut.routes[i].to, bestAmountOut.routes[i].stable, res, ratio, totalRatio);
       }
 
       const priceImpact = BigNumber(1).minus(totalRatio).times(100).toFixed(18);
