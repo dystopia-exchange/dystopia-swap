@@ -9,20 +9,20 @@ import {
   BLACK_LIST_TOKENS,
   ROUTE_ASSETS, CONE_ADDRESS
 } from "./constants";
-import { v4 as uuidv4 } from "uuid";
+import {v4 as uuidv4} from "uuid";
 
 import * as moment from "moment";
-import { formatCurrency, retry } from "../utils";
+import {formatCurrency, retry} from "../utils";
 import stores from "./";
 
 import BigNumber from "bignumber.js";
-import { createClient } from "urql";
-import { assertValidExecutionArguments } from "graphql/execution/execute";
+import {createClient} from "urql";
+import {assertValidExecutionArguments} from "graphql/execution/execute";
 import axios from "axios";
 import pairContractAbi from "./abis/pairOldRouter.json";
 import migratorAbi from "./abis/migrator.json";
 import FactoryAbi from "./abis/FactoryAbi.json";
-import { ConstructionOutlined } from "@mui/icons-material";
+import {ConstructionOutlined} from "@mui/icons-material";
 import {
   USD_PLUS_ADDRESS,
   USD_PLUS_BOOSTED_DATA_URL,
@@ -129,7 +129,7 @@ query ve($id: ID!) {
 }
 `;
 
-const client = createClient({ url: process.env.NEXT_PUBLIC_API });
+const client = createClient({url: process.env.NEXT_PUBLIC_API});
 
 const removeDuplicate = (arr) => {
   const assets = arr.reduce((acc, item) => {
@@ -307,7 +307,7 @@ class Store {
   };
 
   setStore = (obj) => {
-    this.store = { ...this.store, ...obj };
+    this.store = {...this.store, ...obj};
     return this.emitter.emit(ACTIONS.STORE_UPDATED);
   };
 
@@ -365,7 +365,7 @@ class Store {
       const nftsLength = await vestingContract.methods
         .balanceOf(account.address)
         .call();
-      const arr = Array.from({ length: parseInt(nftsLength) }, (v, i) => i);
+      const arr = Array.from({length: parseInt(nftsLength)}, (v, i) => i);
 
       const nfts = await Promise.all(
         arr.map(async (idx) => {
@@ -392,7 +392,7 @@ class Store {
         })
       );
 
-      this.setStore({ vestNFTs: nfts });
+      this.setStore({vestNFTs: nfts});
 
       theNFT = nfts.filter((nft) => {
         return nft.id == id;
@@ -459,7 +459,7 @@ class Store {
         return nft;
       });
 
-      this.setStore({ vestNFTs: newVestNFTs });
+      this.setStore({vestNFTs: newVestNFTs});
       this.emitter.emit(ACTIONS.UPDATED);
       return null;
     } catch (ex) {
@@ -635,7 +635,7 @@ class Store {
           .rewardsListLength()
           .call();
         const arry = Array.from(
-          { length: parseInt(tokensLength) },
+          {length: parseInt(tokensLength)},
           (v, i) => i
         );
 
@@ -685,7 +685,7 @@ class Store {
       }
 
       pairs.push(thePair);
-      this.setStore({ pairs: pairs });
+      this.setStore({pairs: pairs});
 
       return thePair;
     } catch (ex) {
@@ -884,7 +884,7 @@ class Store {
           .rewardsListLength()
           .call();
         const arry = Array.from(
-          { length: parseInt(tokensLength) },
+          {length: parseInt(tokensLength)},
           (v, i) => i
         );
 
@@ -934,7 +934,7 @@ class Store {
       }
 
       pairs.push(thePair);
-      this.setStore({ pairs: pairs });
+      this.setStore({pairs: pairs});
 
       return thePair;
     }
@@ -967,7 +967,7 @@ class Store {
           );
         });
 
-        this.setStore({ baseAssets: removeDuplicate(baseAssets) });
+        this.setStore({baseAssets: removeDuplicate(baseAssets)});
         this.emitter.emit(
           ACTIONS.BASE_ASSETS_UPDATED,
           removeDuplicate(baseAssets)
@@ -1057,7 +1057,7 @@ class Store {
         const baseAssets = this.getStore("baseAssets");
         const storeBaseAssets = removeDuplicate([...baseAssets, newBaseAsset]);
 
-        this.setStore({ baseAssets: storeBaseAssets });
+        this.setStore({baseAssets: storeBaseAssets});
         this.emitter.emit(ACTIONS.BASE_ASSETS_UPDATED, storeBaseAssets);
       }
 
@@ -1072,18 +1072,18 @@ class Store {
   // DISPATCHER FUNCTIONS
   configure = async (payload) => {
     // try {
-      this.setStore({ govToken: this._getGovTokenBase() });
-      this.setStore({ veToken: await this._getVeTokenBase() });
-      this.setStore({ baseAssets: await this._getBaseAssets() });
-      this.setStore({ pairs: await this._getPairs() });
-      this.setStore({ routeAssets: ROUTE_ASSETS });
+    this.setStore({govToken: this._getGovTokenBase()});
+    this.setStore({veToken: await this._getVeTokenBase()});
+    this.setStore({baseAssets: await this._getBaseAssets()});
+    this.setStore({pairs: await this._getPairs()});
+    this.setStore({routeAssets: ROUTE_ASSETS});
 
-      this.emitter.emit(ACTIONS.UPDATED);
-      this.emitter.emit(ACTIONS.CONFIGURED_SS);
+    this.emitter.emit(ACTIONS.UPDATED);
+    this.emitter.emit(ACTIONS.CONFIGURED_SS);
 
-      setTimeout(() => {
-        this.dispatcher.dispatch({ type: ACTIONS.GET_BALANCES });
-      }, 1);
+    setTimeout(() => {
+      this.dispatcher.dispatch({type: ACTIONS.GET_BALANCES});
+    }, 1);
     // } catch (ex) {
     //   console.log("STORE error", ex);
     //   this.emitter.emit(ACTIONS.ERROR, ex);
@@ -1096,14 +1096,14 @@ class Store {
       // console.log("QUERY TWO RESPONSE",baseAssetsCall)
       let baseAssets = baseAssetsCall.data.tokens;
       const defaultTokenList =
-        process.env.NEXT_PUBLIC_CHAINID == 80001
-          ? await axios.get(
-            `https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`
-          )
-          : {data: DEFAULT_TOKEN_LIST,}
-          /*await axios.get(
-            `https://raw.githubusercontent.com/cone-exchange/token-list/main/lists/pancakeswap-extended.json`
-          )*/;
+          process.env.NEXT_PUBLIC_CHAINID == 80001
+            ? await axios.get(
+              `https://raw.githubusercontent.com/sanchitdawarsd/default-token-list/master/tokens/matic-testnet.json`
+            )
+            : {data: DEFAULT_TOKEN_LIST,}
+        /*await axios.get(
+          `https://raw.githubusercontent.com/cone-exchange/token-list/main/lists/pancakeswap-extended.json`
+        )*/;
       // console.log("defaultTokenList RESPONSE",defaultTokenList)
       const nativeFTM = {
         id: CONTRACTS.FTM_ADDRESS,
@@ -1124,7 +1124,7 @@ class Store {
             baseAssets[j].logoURI = defaultTokenList.data.tokens[i].logoURI;
           }
 
-          if(baseAssets[j].address.toLowerCase() === CONE_ADDRESS) {
+          if (baseAssets[j].address.toLowerCase() === CONE_ADDRESS) {
             baseAssets[j].logoURI = 'https://icons.llama.fi/cone.png'
           }
 
@@ -1182,16 +1182,16 @@ class Store {
     try {
       const pairsCall = await client.query(pairsQuery).toPromise();
       // console.log('QUERY PAIRS ERROR', pairsCall);
-      if(!!pairsCall.error) {
+      if (!!pairsCall.error) {
         console.log('QUERY PAIRS ERROR', pairsCall.error);
       }
 
       // for compatability fill some fields
-      for(let i = 0; i < pairsCall.data.pairs.length; i++) {
+      for (let i = 0; i < pairsCall.data.pairs.length; i++) {
         pairsCall.data.pairs[i].address = pairsCall.data.pairs[i].id;
         pairsCall.data.pairs[i].decimals = 18;
         pairsCall.data.pairs[i].rewardType = null;
-        if(!!pairsCall.data.pairs[i].gauge) {
+        if (!!pairsCall.data.pairs[i].gauge) {
           pairsCall.data.pairs[i].gauge.address = pairsCall.data.pairs[i].gauge.id;
           pairsCall.data.pairs[i].gauge.bribeAddress = pairsCall.data.pairs[i].gauge.bribe.id;
           pairsCall.data.pairs[i].gauge.balance = 0;
@@ -1323,7 +1323,7 @@ class Store {
       const nftsLength = await vestingContract.methods
         .balanceOf(account.address)
         .call();
-      const arr = Array.from({ length: parseInt(nftsLength) }, (v, i) => i);
+      const arr = Array.from({length: parseInt(nftsLength)}, (v, i) => i);
 
       const nfts = await Promise.all(
         arr.map(async (idx) => {
@@ -1350,7 +1350,7 @@ class Store {
         })
       );
 
-      this.setStore({ vestNFTs: nfts });
+      this.setStore({vestNFTs: nfts});
       this.emitter.emit(ACTIONS.UPDATED);
     } catch (ex) {
       console.error(ex);
@@ -1380,7 +1380,7 @@ class Store {
         .div(10 ** govToken.decimals)
         .toFixed(govToken.decimals);
 
-      this.setStore({ govToken });
+      this.setStore({govToken});
       this.emitter.emit(ACTIONS.UPDATED);
 
       this._getVestNFTs(web3, account);
@@ -1465,7 +1465,7 @@ class Store {
           }
         })
       );
-      this.setStore({ pairs: ps });
+      this.setStore({pairs: ps});
       this.emitter.emit(ACTIONS.UPDATED);
 
       const ps1 = await Promise.all(
@@ -1519,13 +1519,13 @@ class Store {
                     .toFixed(2)
                   : 0;
 
-              if(pair.gauge.weight.isZero()) {
+              if (pair.gauge.weight.isZero()) {
                 pair.gauge.expectAPR = 0;
               }
 
               let apr = new BigNumber(0);
               const rts = pair.gauge.rewardTokens;
-              for(let i = 0; i < rts.length; i++) {
+              for (let i = 0; i < rts.length; i++) {
                 apr = apr.plus(BigNumber(parseFloat(rts[i].apr)))
               }
 
@@ -1577,7 +1577,7 @@ class Store {
         })
       );
 
-      this.setStore({ pairs: ps1 });
+      this.setStore({pairs: ps1});
       this.emitter.emit(ACTIONS.UPDATED);
     } catch (ex) {
       console.log(ex);
@@ -1640,7 +1640,7 @@ class Store {
           .toFixed(parseInt(baseAssets[i].decimals));
         baseAssets[i].isWhitelisted = baseAssetsBalances[i].isWhitelisted;
       }
-      this.setStore({ baseAssets });
+      this.setStore({baseAssets});
       this.emitter.emit(ACTIONS.UPDATED);
     } catch (ex) {
       console.log(ex);
@@ -1693,7 +1693,7 @@ class Store {
       const baseAssets = this.getStore("baseAssets");
       const storeBaseAssets = [...baseAssets, ...localBaseAssets];
 
-      this.setStore({ baseAssets: storeBaseAssets });
+      this.setStore({baseAssets: storeBaseAssets});
 
       this.emitter.emit(ACTIONS.ASSET_SEARCHED, newBaseAsset);
     } catch (ex) {
@@ -1718,7 +1718,7 @@ class Store {
         return null;
       }
 
-      const { token0, token1, amount0, amount1, isStable, token, slippage } =
+      const {token0, token1, amount0, amount1, isStable, token, slippage} =
         payload.content;
 
       let toki0 = token0.address;
@@ -2326,7 +2326,7 @@ class Store {
         return null;
       }
 
-      const { token0, token1, amount0, amount1, isStable, slippage } =
+      const {token0, token1, amount0, amount1, isStable, slippage} =
         payload.content;
 
       let toki0 = token0.address;
@@ -2636,7 +2636,7 @@ class Store {
     try {
       const response = await client.query(pairsQuery).toPromise();
       const pairsCall = response;
-      this.setStore({ pairs: pairsCall.data.pairs });
+      this.setStore({pairs: pairsCall.data.pairs});
 
       await this._getPairInfo(web3, account, pairsCall.data.pairs);
     } catch (ex) {
@@ -2668,7 +2668,7 @@ class Store {
         return null;
       }
 
-      const { token0, token1, amount0, amount1, minLiquidity, pair, slippage } =
+      const {token0, token1, amount0, amount1, minLiquidity, pair, slippage} =
         payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
@@ -2928,7 +2928,7 @@ class Store {
         return null;
       }
 
-      const { pair, token, amount, percent } = payload.content;
+      const {pair, token, amount, percent} = payload.content;
 
       let stakeAllowanceTXID = this.getTXUUID();
       let stakeTXID = this.getTXUUID();
@@ -3506,7 +3506,7 @@ class Store {
         return null;
       }
 
-      const { pair, token0, token1, amount0, amount1 } = payload.content;
+      const {pair, token0, token1, amount0, amount1} = payload.content;
 
       if (!pair || !token0 || !token1 || amount0 == "" || amount1 == "") {
         return null;
@@ -3577,7 +3577,7 @@ class Store {
         return null;
       }
 
-      const { pair } = payload.content;
+      const {pair} = payload.content;
 
       if (!pair) {
         return;
@@ -3664,7 +3664,7 @@ class Store {
         return null;
       }
 
-      const { token0, token1, pair, percent, slippage } = payload.content;
+      const {token0, token1, pair, percent, slippage} = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let allowanceTXID = this.getTXUUID();
@@ -3823,7 +3823,7 @@ class Store {
         return null;
       }
 
-      const { token0, token1, amount, amount0, amount1, pair, slippage } =
+      const {token0, token1, amount, amount0, amount1, pair, slippage} =
         payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
@@ -4008,7 +4008,7 @@ class Store {
         return null;
       }
 
-      const { token0, token1, amount, percent, amount0, amount1, pair } =
+      const {token0, token1, amount, percent, amount0, amount1, pair} =
         payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
@@ -4102,7 +4102,7 @@ class Store {
         return null;
       }
 
-      const { pair, token0, token1, withdrawAmount } = payload.content;
+      const {pair, token0, token1, withdrawAmount} = payload.content;
 
       if (!pair || !token0 || !token1 || withdrawAmount == "") {
         return null;
@@ -4165,7 +4165,7 @@ class Store {
         return null;
       }
 
-      const { pair } = payload.content;
+      const {pair} = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let createGaugeTXID = this.getTXUUID();
@@ -4226,7 +4226,7 @@ class Store {
       // some path logic. Have a base asset (FTM) swap from start asset to FTM, swap from FTM back to out asset. Don't know.
       const _routeAssets = this.getStore("routeAssets");
 
-      const { fromAsset, toAsset, fromAmount } = payload.content;
+      const {fromAsset, toAsset, fromAmount} = payload.content;
 
       const routerContract = new web3.eth.Contract(
         CONTRACTS.ROUTER_ABI,
@@ -4446,17 +4446,26 @@ class Store {
         // console.log('to,', bestAmountOut.routes[i].to);
         // console.log('stable', bestAmountOut.routes[i].stable);
 
-        const res = await libraryContract.methods
-          .getTradeDiff3(
-            amountIn,
+        try {
+          const res = await libraryContract.methods
+            .getTradeDiff3(
+              amountIn,
+              bestAmountOut.routes[i].from,
+              bestAmountOut.routes[i].to,
+              bestAmountOut.routes[i].stable
+            )
+            .call();
+          const ratio = BigNumber(res.b).div(res.a);
+          // console.log('ratio', ratio.toFixed(18), res.a, res.b, )
+          totalRatio = BigNumber(totalRatio).times(ratio).toFixed(18);
+        } catch (e) {
+          console.log('Error define trade difference for',
+            amountIn?.toString(),
             bestAmountOut.routes[i].from,
             bestAmountOut.routes[i].to,
-            bestAmountOut.routes[i].stable
-          )
-          .call();
-        const ratio = BigNumber(res.b).div(res.a);
-        // console.log('ratio', ratio.toFixed(18), res.a, res.b, )
-        totalRatio = BigNumber(totalRatio).times(ratio).toFixed(18);
+            bestAmountOut.routes[i].stable)
+        }
+
       }
 
       const priceImpact = BigNumber(1).minus(totalRatio).times(100).toFixed(18);
@@ -4496,7 +4505,7 @@ class Store {
         return null;
       }
 
-      const { fromAsset, toAsset, fromAmount, toAmount, quote, slippage } =
+      const {fromAsset, toAsset, fromAmount, toAmount, quote, slippage} =
         payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
@@ -4696,7 +4705,7 @@ class Store {
         return null;
       }
 
-      const { fromAsset, toAsset, fromAmount, toAmount } = payload.content;
+      const {fromAsset, toAsset, fromAmount, toAmount} = payload.content;
 
       const gasPrice = await stores.accountStore.getGasPrice();
       let wrapTXID = this.getTXUUID();
@@ -4772,7 +4781,7 @@ class Store {
         return null;
       }
 
-      const { fromAsset, toAsset, fromAmount, toAmount } = payload.content;
+      const {fromAsset, toAsset, fromAmount, toAmount} = payload.content;
 
       let unwrapTXID = this.getTXUUID();
       const gasPrice = await stores.accountStore.getGasPrice();
@@ -4864,7 +4873,7 @@ class Store {
         })
       );
 
-      this.setStore({ baseAssets: removeDuplicate(ba) });
+      this.setStore({baseAssets: removeDuplicate(ba)});
       this.emitter.emit(ACTIONS.UPDATED);
     } catch (ex) {
       console.log(ex);
@@ -4915,7 +4924,7 @@ class Store {
       const nftsLength = await vestingContract.methods
         .balanceOf(account.address)
         .call();
-      const arr = Array.from({ length: parseInt(nftsLength) }, (v, i) => i);
+      const arr = Array.from({length: parseInt(nftsLength)}, (v, i) => i);
 
       const nfts = await Promise.all(
         arr.map(async (idx) => {
@@ -4942,7 +4951,7 @@ class Store {
         })
       );
 
-      this.setStore({ vestNFTs: nfts });
+      this.setStore({vestNFTs: nfts});
       this.emitter.emit(ACTIONS.VEST_NFTS_RETURNED, nfts);
     } catch (ex) {
       console.error(ex);
@@ -4965,7 +4974,7 @@ class Store {
       }
 
       const govToken = this.getStore("govToken");
-      const { amount, unlockTime } = payload.content;
+      const {amount, unlockTime} = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let allowanceTXID = this.getTXUUID();
@@ -5117,7 +5126,7 @@ class Store {
       }
 
       const govToken = this.getStore("govToken");
-      const { amount, tokenID } = payload.content;
+      const {amount, tokenID} = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let allowanceTXID = this.getTXUUID();
@@ -5247,7 +5256,7 @@ class Store {
       }
 
       const govToken = this.getStore("govToken");
-      const { tokenID, unlockTime } = payload.content;
+      const {tokenID, unlockTime} = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let vestTXID = this.getTXUUID();
@@ -5301,11 +5310,11 @@ class Store {
 
   withdrawVest = async (payload) => {
     try {
-      const { tokenID } = payload.content;
+      const {tokenID} = payload.content;
 
       const veGaugesQueryResponse = (await client.query(veQuery, {id: tokenID}).toPromise());
       // console.log('VE GAUGES', veGaugesQueryResponse)
-      if(!!veGaugesQueryResponse.error) {
+      if (!!veGaugesQueryResponse.error) {
         console.log("VE GAUGES QUERY ERROR", veGaugesQueryResponse.error);
       }
 
@@ -5472,11 +5481,11 @@ class Store {
   };
   merge = async (payload) => {
     try {
-      const { tokenIDOne, tokenIDTwo } = payload.content;
+      const {tokenIDOne, tokenIDTwo} = payload.content;
 
       const veGaugesQueryResponse = (await client.query(veQuery, {id: tokenIDOne.id}).toPromise());
       // console.log('VE GAUGES', veGaugesQueryResponse)
-      if(!!veGaugesQueryResponse.error) {
+      if (!!veGaugesQueryResponse.error) {
         console.log("VE GAUGES QUERY ERROR", veGaugesQueryResponse.error);
       }
 
@@ -5529,7 +5538,7 @@ class Store {
         }
       }
 
-      if(bribesLength !== 0) {
+      if (bribesLength !== 0) {
         let b = {
           uuid: voteResetTXID,
           description: `Reset votes`,
@@ -5720,7 +5729,7 @@ class Store {
       }
 
       const govToken = this.getStore("govToken");
-      const { tokenID, votes } = payload.content;
+      const {tokenID, votes} = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let voteTXID = this.getTXUUID();
@@ -5795,7 +5804,7 @@ class Store {
         return null;
       }
 
-      const { tokenID } = payload.content;
+      const {tokenID} = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let voteTXID = this.getTXUUID();
@@ -5858,7 +5867,7 @@ class Store {
         return null;
       }
 
-      const { tokenID } = payload.content;
+      const {tokenID} = payload.content;
       const pairs = this.getStore("pairs");
 
       if (!pairs) {
@@ -5928,7 +5937,7 @@ class Store {
         return null;
       }
 
-      const { asset, amount, gauge } = payload.content;
+      const {asset, amount, gauge} = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let allowanceTXID = this.getTXUUID();
@@ -6078,7 +6087,7 @@ class Store {
         return null;
       }
 
-      const { tokenID } = payload.content;
+      const {tokenID} = payload.content;
       const pairs = this.getStore("pairs");
 
       if (!pairs) {
@@ -6106,7 +6115,7 @@ class Store {
 
           if (rewardsListLength > 0) {
             const bribeTokens = [
-              { rewardRate: "", rewardAmount: "", address: "" },
+              {rewardRate: "", rewardAmount: "", address: ""},
             ];
             for (let i = 0; i < rewardsListLength; i++) {
               let [bribeTokenAddress] = await multicall.aggregate([
@@ -6177,7 +6186,7 @@ class Store {
         return null;
       }
 
-      const { tokenID } = payload.content;
+      const {tokenID} = payload.content;
 
       const pairs = this.getStore("pairs");
       const veToken = this.getStore("veToken");
@@ -6213,7 +6222,7 @@ class Store {
             ]);
 
             const bribeTokens = [
-              { rewardRate: "", rewardAmount: "", address: "", symbol: "" },
+              {rewardRate: "", rewardAmount: "", address: "", symbol: ""},
             ];
             for (let i = 0; i < rewardsListLength; i++) {
               let [bribeTokenAddress] = await multicall.aggregate([
@@ -6390,7 +6399,7 @@ class Store {
         return null;
       }
 
-      const { pair, tokenID } = payload.content;
+      const {pair, tokenID} = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let claimTXID = this.getTXUUID();
@@ -6437,7 +6446,7 @@ class Store {
             return this.emitter.emit(ACTIONS.ERROR, err);
           }
 
-          this.getRewardBalances({ content: { tokenID } });
+          this.getRewardBalances({content: {tokenID}});
           this.emitter.emit(ACTIONS.CLAIM_REWARD_RETURNED);
         }
       );
@@ -6462,7 +6471,7 @@ class Store {
         return null;
       }
 
-      const { pairs, tokenID } = payload.content;
+      const {pairs, tokenID} = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let claimTXID = this.getTXUUID();
@@ -6693,7 +6702,7 @@ class Store {
         }
       }
 
-      this.getRewardBalances({ content: { tokenID } });
+      this.getRewardBalances({content: {tokenID}});
       this.emitter.emit(ACTIONS.CLAIM_ALL_REWARDS_RETURNED);
     } catch (ex) {
       console.error(ex);
@@ -6715,7 +6724,7 @@ class Store {
         return null;
       }
 
-      const { pair, tokenID } = payload.content;
+      const {pair, tokenID} = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let claimTXID = this.getTXUUID();
@@ -6757,7 +6766,7 @@ class Store {
             return this.emitter.emit(ACTIONS.ERROR, err);
           }
 
-          this.getRewardBalances({ content: { tokenID } });
+          this.getRewardBalances({content: {tokenID}});
           this.emitter.emit(ACTIONS.CLAIM_REWARD_RETURNED);
         }
       );
@@ -6781,7 +6790,7 @@ class Store {
         return null;
       }
 
-      const { tokenID } = payload.content;
+      const {tokenID} = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let claimTXID = this.getTXUUID();
@@ -6821,7 +6830,7 @@ class Store {
             return this.emitter.emit(ACTIONS.ERROR, err);
           }
 
-          this.getRewardBalances({ content: { tokenID } });
+          this.getRewardBalances({content: {tokenID}});
           this.emitter.emit(ACTIONS.CLAIM_VE_DIST_RETURNED);
         }
       );
@@ -6845,7 +6854,7 @@ class Store {
         return null;
       }
 
-      const { pair, tokenID } = payload.content;
+      const {pair, tokenID} = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let claimTXID = this.getTXUUID();
@@ -6885,7 +6894,7 @@ class Store {
             return this.emitter.emit(ACTIONS.ERROR, err);
           }
 
-          this.getRewardBalances({ content: { tokenID } });
+          this.getRewardBalances({content: {tokenID}});
           this.emitter.emit(ACTIONS.CLAIM_REWARD_RETURNED);
         }
       );
@@ -6910,7 +6919,7 @@ class Store {
       }
       const veToken = this.getStore("veToken");
 
-      const { search } = payload.content;
+      const {search} = payload.content;
 
       const voterContract = new web3.eth.Contract(
         CONTRACTS.VOTER_ABI,
@@ -6949,7 +6958,7 @@ class Store {
         return null;
       }
 
-      const { token, nft } = payload.content;
+      const {token, nft} = payload.content;
 
       // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
       let whitelistTXID = this.getTXUUID();
@@ -6992,7 +7001,7 @@ class Store {
           window.setTimeout(() => {
             this.dispatcher.dispatch({
               type: ACTIONS.SEARCH_WHITELIST,
-              content: { search: token.address },
+              content: {search: token.address},
             });
           }, 2);
 
@@ -7026,10 +7035,10 @@ class Store {
     // }
     // console.log(uuid)
     //estimate gas
-    this.emitter.emit(ACTIONS.TX_PENDING, { uuid });
+    this.emitter.emit(ACTIONS.TX_PENDING, {uuid});
 
     const gasCost = contract.methods[method](...params)
-      .estimateGas({ from: account.address, value: sendValue })
+      .estimateGas({from: account.address, value: sendValue})
       .then((gasAmount) => {
         const context = this;
 
@@ -7052,7 +7061,7 @@ class Store {
             // maxPriorityFeePerGas: web3.utils.toWei("2", "gwei"),
           })
           .on("transactionHash", function (txHash) {
-            context.emitter.emit(ACTIONS.TX_SUBMITTED, { uuid, txHash });
+            context.emitter.emit(ACTIONS.TX_SUBMITTED, {uuid, txHash});
           })
           .on("receipt", function (receipt) {
             context.emitter.emit(ACTIONS.TX_CONFIRMED, {
@@ -7076,7 +7085,7 @@ class Store {
                 });
                 return callback(error.message);
               }
-              context.emitter.emit(ACTIONS.TX_REJECTED, { uuid, error: error });
+              context.emitter.emit(ACTIONS.TX_REJECTED, {uuid, error: error});
               callback(error);
             }
           })
@@ -7089,7 +7098,7 @@ class Store {
                 });
                 return callback(error.message);
               }
-              context.emitter.emit(ACTIONS.TX_REJECTED, { uuid, error: error });
+              context.emitter.emit(ACTIONS.TX_REJECTED, {uuid, error: error});
               callback(error);
             }
           });
@@ -7097,7 +7106,7 @@ class Store {
       .catch((ex) => {
         console.log(ex);
         if (ex.message) {
-          this.emitter.emit(ACTIONS.TX_REJECTED, { uuid, error: ex.message });
+          this.emitter.emit(ACTIONS.TX_REJECTED, {uuid, error: ex.message});
           return callback(ex.message);
         }
         this.emitter.emit(ACTIONS.TX_REJECTED, {
@@ -7113,7 +7122,7 @@ class Store {
 
     let promises = calls.map((call) => {
       return new Promise((res, rej) => {
-        let req = call.request({ from: callFrom }, (err, data) => {
+        let req = call.request({from: callFrom}, (err, data) => {
           if (err) rej(err);
           else res(data);
         });
