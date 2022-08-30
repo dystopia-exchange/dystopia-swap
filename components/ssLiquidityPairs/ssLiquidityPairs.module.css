@@ -14,18 +14,21 @@
 
 /* pagination */
 
-.paginationRoot {}
+.paginationRoot {
+}
 
-.paginationToolbar {}
+.paginationToolbar {
+}
 
-.paginationSpacer {}
+.paginationSpacer {
+}
 
 .selectLabel {
   font-size: 14px !important;
   font-weight: 500 !important;
   line-height: 14px !important;
 
-  color: #8191B9 !important;
+  color: #8191b9 !important;
 }
 
 .selectLabel + div {
@@ -43,29 +46,77 @@
   font-weight: 400 !important;
   line-height: 14px !important;
 
-  color: #E4E9F4 !important;
+  color: #e4e9f4 !important;
 }
 
 .selectIcon {
-  color: #779BF4 !important;
+  color: #779bf4 !important;
 }
 
-.input {}
+.input {
+}
 
-.menuItem {}
+.menuItem {
+}
 
 .displayedRows {
   font-size: 14px !important;
   font-weight: 400 !important;
   line-height: 16px !important;
 
-  color: #8191B9 !important;
+  color: #8191b9 !important;
 }
 
 .displayedRows + div button {
   border: none !important;
-  background-color: #1F2B49 !important;
+  background-color: #1f2b49 !important;
   color: #060b17 !important;
 }
 
-.actions {}
+.actions {
+}
+
+/* tooltip apr */
+
+.tooltip {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.tooltip b {
+  font-weight: 500;
+  color: #E4E9F4;
+}
+
+.tooltip_group {
+  margin-bottom: 16px;
+}
+
+.tooltip_group:last-child {
+  margin-bottom: 0;
+}
+
+.tooltip_row {
+  margin-bottom: 8px;
+  color: #8191B9;
+}
+
+.tooltip_row b:first-child {
+  display: inline-flex;
+  min-width: 60px;
+  margin-right: 12px;
+}
+
+.tooltip_row:last-child {
+  margin-bottom: 0;
+}
+
+.tooltip_wrapper {
+  padding: 24px !important;
+  border: 1px solid #779bf4 !important;
+  border-radius: 12px !important;
+  background: #1f2b49 !important;
+}

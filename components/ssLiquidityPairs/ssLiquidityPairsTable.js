@@ -46,7 +46,7 @@ import TablePaginationActions from '../table-pagination/table-pagination';
 import { formatSymbol } from '../../utils';
 import SwitchCustom from '../../ui/Switch';
 import { TableBodyPlaceholder } from '../../components/table';
-
+import QuizIcon from "@mui/icons-material/Quiz";
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
@@ -1756,52 +1756,141 @@ export default function EnhancedTable({pairs, isLoading}) {
                                 justifyContent: 'flex-end',
                               }}>
                               {(row && BigNumber(row.tvl).gt(0)) &&
-                                <div
-                                  className={classes.inlineEnd}
-                                  style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'flex-end',
-
-                                  }}>
-                                  <Typography
-                                    className={classes.textSpaced}
+                                <div style={{ display: 'flex' }}>
+                                  <div
+                                    className={classes.inlineEnd}
                                     style={{
-                                      marginBottom: 8,
-                                      fontWeight: 500,
-                                      fontSize: 14,
-                                      lineHeight: '120%',
-                                      color: '#E4E9F4',
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      alignItems: 'flex-end',
                                     }}>
-                                      {formatCurrency(BigNumber(row.tvl))} <span style={{color: 'rgb(124, 131, 138)'}}>$</span>
-                                  </Typography>
+                                    <Typography
+                                      className={classes.textSpaced}
+                                      style={{
+                                        marginBottom: 8,
+                                        fontWeight: 500,
+                                        fontSize: 14,
+                                        lineHeight: '120%',
+                                        color: '#E4E9F4',
+                                      }}>
+                                        {formatCurrency(BigNumber(row.tvl))} <span style={{color: 'rgb(124, 131, 138)'}}>$</span>
+                                    </Typography>
 
-                                  <Typography
-                                    className={classes.textSpaced}
-                                    style={{
-                                      fontWeight: 500,
-                                      fontSize: 14,
-                                      lineHeight: '120%',
-                                      color: '#8191B9',
-                                    }}>
-                                    {BigNumber(row?.gauge?.apr).gt(0) ? (
-                                        <div>
-                                          {`${
-                                              formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
+                                    <Typography
+                                      className={classes.textSpaced}
+                                      style={{
+                                        fontWeight: 500,
+                                        fontSize: 14,
+                                        lineHeight: '120%',
+                                        color: '#8191B9',
+                                      }}>
+                                      {BigNumber(row?.gauge?.apr).gt(0) ? (
+                                          <div>
+                                            {`${
+                                                formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
+                                                    BigNumber(row?.gauge?.boostedApr0),
+                                                    BigNumber(row?.gauge?.boostedApr1)
+                                                ),0)
+                                            }-${
+                                                formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
+                                                    BigNumber(row?.gauge?.boostedApr0),
+                                                    BigNumber(row?.gauge?.boostedApr1)
+                                                ),0)
+                                            }`}
+                                            <span style={{color: 'rgb(124, 131, 138)'}}> %</span>
+                                          </div>
+                                          )
+                                          : '-'}
+                                    </Typography>
+                                  </div>
+
+                                  <Tooltip
+                                    title={
+                                      <React.Fragment>
+                                        <div className={css.tooltip}>
+                                          <div className={css.tooltip_group}>
+                                            <div className={css.tooltip_row}>
+                                              <b>
+                                                {formatCurrency(
+                                                  BigNumber.sum(
+                                                    BigNumber(
+                                                      row?.gauge?.boostedApr0
+                                                    ),
+                                                    BigNumber(row?.gauge?.boostedApr1)
+                                                  ),
+                                                  2
+                                                )}
+                                                %
+                                              </b>{" "}
+                                              <b>Boosted APR</b>
+                                            </div>
+                                            <div className={css.tooltip_row}>
+                                              <b>
+                                                {formatCurrency(
                                                   BigNumber(row?.gauge?.boostedApr0),
-                                                  BigNumber(row?.gauge?.boostedApr1)
-                                              ),0)
-                                          }-${
-                                              formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
-                                                  BigNumber(row?.gauge?.boostedApr0),
-                                                  BigNumber(row?.gauge?.boostedApr1)
-                                              ),0)
-                                          }`}
-                                          <span style={{color: 'rgb(124, 131, 138)'}}> %</span>
+                                                  2
+                                                )}
+                                                %
+                                              </b>{" "}
+                                              {row.token0.symbol} APR
+                                            </div>
+                                            <div className={css.tooltip_row}>
+                                              <b>
+                                                {formatCurrency(
+                                                  BigNumber(row?.gauge?.boostedApr1),
+                                                  2
+                                                )}
+                                                %
+                                              </b>{" "}
+                                              {row.token1.symbol} APR
+                                            </div>  
+                                          </div>
+
+                                          <div className={css.tooltip_group}>
+                                            <div className={css.tooltip_row}>
+                                              <b>
+                                                {formatCurrency(
+                                                  BigNumber(row?.gauge?.apr)
+                                                    .div(100)
+                                                    .times(40),
+                                                  2
+                                                )}
+                                                %
+                                              </b>{" "}
+                                              <b>Min staking APR</b>
+                                            </div>
+                                            <div className={css.tooltip_row}>
+                                              <b>
+                                                {formatCurrency(
+                                                  BigNumber(row?.gauge?.apr)
+                                                    .div(100)
+                                                    .times(40),
+                                                  2
+                                                )}
+                                                %
+                                              </b>{" "}
+                                              Min APR
+                                            </div>
+                                            <div className={css.tooltip_row}>
+                                              <b>
+                                                {formatCurrency(
+                                                  BigNumber(row?.gauge?.apr),
+                                                  2
+                                                )}
+                                                %
+                                              </b>{" "}
+                                              Max APR
+                                            </div>
+                                          </div>
                                         </div>
-                                        )
-                                        : '-'}
-                                  </Typography>
+                                      </React.Fragment>
+                                    }
+                                    classes={{
+                                      tooltip: css.tooltip_wrapper
+                                    }}
+                                  >
+                                    <QuizIcon fontSize="small" style={{ color: "rgb(129, 145, 185)", marginLeft: 5 }} />
+                                  </Tooltip>
                                 </div>
                               }
                               {/*{!(row && row.token0 && row.token0.balance) &&
@@ -2633,79 +2722,171 @@ export default function EnhancedTable({pairs, isLoading}) {
                               justifyContent: 'flex-end',
                               height: 72,
                             }}>
-                            <div
-                              className={classes.inlineEnd}
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-end',
-                              }}>
-                              <Typography
-                                className={classes.textSpaced}
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                              <div
                                 style={{
-                                  marginBottom: 4,
-                                  fontWeight: 500,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
-                                  whiteSpace: 'nowrap',
-                                }}>
-                                {BigNumber(row?.tvl).gt(0) ? BigNumber(row?.tvl).toFixed(2) : '-'}
-                              </Typography>
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'flex-end',
+                                }}
+                              >
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    marginBottom: 4,
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    whiteSpace: 'nowrap',
+                                  }}>
+                                  {BigNumber(row?.tvl).gt(0) ? BigNumber(row?.tvl).toFixed(2) : '-'}
+                                </Typography>
 
-                              <Typography
-                                className={classes.textSpaced}
-                                style={{
-                                  fontWeight: 500,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
-                                  whiteSpace: 'nowrap',
-                                }}>
-                                {BigNumber(row?.gauge?.apr).gt(0) ? `${
-                                    formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
-                                        BigNumber(row?.gauge?.boostedApr0),
-                                        BigNumber(row?.gauge?.boostedApr1)
-                                    ),0)
-                                }-${
-                                    formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
-                                        BigNumber(row?.gauge?.boostedApr0),
-                                        BigNumber(row?.gauge?.boostedApr1)
-                                    ),0)
-                                }%` : '-'}
-                              </Typography>
-                            </div>
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    whiteSpace: 'nowrap',
+                                  }}>
+                                  {BigNumber(row?.gauge?.apr).gt(0) ? `${
+                                      formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
+                                          BigNumber(row?.gauge?.boostedApr0),
+                                          BigNumber(row?.gauge?.boostedApr1)
+                                      ),0)
+                                  }-${
+                                      formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
+                                          BigNumber(row?.gauge?.boostedApr0),
+                                          BigNumber(row?.gauge?.boostedApr1)
+                                      ),0)
+                                  }%` : '-'}
+                                </Typography>
+                              </div>
 
-                            <div
-                              className={classes.inlineEnd}
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-end',
-                                paddingLeft: 10,
-                              }}>
-                              <Typography
-                                className={`${classes.textSpaced} ${classes.symbol}`}
+                              <div
                                 style={{
-                                  marginBottom: 4,
-                                  fontWeight: 400,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                                }}>
-                                $
-                              </Typography>
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'flex-end',
+                                  paddingLeft: 10,
+                                }}
+                              >
+                                <Typography
+                                  className={`${classes.textSpaced} ${classes.symbol}`}
+                                  style={{
+                                    marginBottom: 4,
+                                    fontWeight: 400,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    minWidth: 15,
+                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                  }}>
+                                  $
+                                </Typography>
 
-                              <Typography
-                                className={`${classes.textSpaced} ${classes.symbol}`}
-                                style={{
-                                  fontWeight: 400,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                                }}>
-                                %
-                              </Typography>
+                                <Typography
+                                  className={`${classes.textSpaced} ${classes.symbol}`}
+                                  style={{
+                                    fontWeight: 400,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    minWidth: 15,
+                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                  }}>
+                                  %
+                                </Typography>
+                              </div>
+
+                              <Tooltip
+                                title={
+                                  <React.Fragment>
+                                    <div className={css.tooltip}>
+                                      <div className={css.tooltip_group}>
+                                        <div className={css.tooltip_row}>
+                                          <b>
+                                            {formatCurrency(
+                                              BigNumber.sum(
+                                                BigNumber(
+                                                  row?.gauge?.boostedApr0
+                                                ),
+                                                BigNumber(row?.gauge?.boostedApr1)
+                                              ),
+                                              2
+                                            )}
+                                            %
+                                          </b>{" "}
+                                          <b>Boosted APR</b>
+                                        </div>
+                                        <div className={css.tooltip_row}>
+                                          <b>
+                                            {formatCurrency(
+                                              BigNumber(row?.gauge?.boostedApr0),
+                                              2
+                                            )}
+                                            %
+                                          </b>{" "}
+                                          {row.token0.symbol} APR
+                                        </div>
+                                        <div className={css.tooltip_row}>
+                                          <b>
+                                            {formatCurrency(
+                                              BigNumber(row?.gauge?.boostedApr1),
+                                              2
+                                            )}
+                                            %
+                                          </b>{" "}
+                                          {row.token1.symbol} APR
+                                        </div>  
+                                      </div>
+
+                                      <div className={css.tooltip_group}>
+                                        <div className={css.tooltip_row}>
+                                          <b>
+                                            {formatCurrency(
+                                              BigNumber(row?.gauge?.apr)
+                                                .div(100)
+                                                .times(40),
+                                              2
+                                            )}
+                                            %
+                                          </b>{" "}
+                                          <b>Min staking APR</b>
+                                        </div>
+                                        <div className={css.tooltip_row}>
+                                          <b>
+                                            {formatCurrency(
+                                              BigNumber(row?.gauge?.apr)
+                                                .div(100)
+                                                .times(40),
+                                              2
+                                            )}
+                                            %
+                                          </b>{" "}
+                                          Min APR
+                                        </div>
+                                        <div className={css.tooltip_row}>
+                                          <b>
+                                            {formatCurrency(
+                                              BigNumber(row?.gauge?.apr),
+                                              2
+                                            )}
+                                            %
+                                          </b>{" "}
+                                          Max APR
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </React.Fragment>
+                                }
+                                classes={{
+                                  tooltip: css.tooltip_wrapper
+                                }}
+                              >
+                                <QuizIcon fontSize="small" style={{ color: "rgb(129, 145, 185)", marginLeft: 5 }} />
+                              </Tooltip>
                             </div>
                           </div>
                         </div>
