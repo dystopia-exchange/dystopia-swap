@@ -27,7 +27,7 @@ import {
   USD_PLUS_BOOSTED_DATA_URL,
 } from "./constants/contracts";
 import {
-  ST_MATIC_ADDRESS, 
+  ST_MATIC_ADDRESS,
   ST_MATIC_BOOSTED_DATA_URL
 } from "./constants/contracts";
 import router from "next/router";
@@ -4513,7 +4513,7 @@ class Store {
       console.error(ex);
 
       this.emitter.emit(ACTIONS.QUOTE_SWAP_RETURNED, null);
-      this.emitter.emit(ACTIONS.ERROR, ex);
+      // this.emitter.emit(ACTIONS.ERROR, ex);
     }
   };
 
