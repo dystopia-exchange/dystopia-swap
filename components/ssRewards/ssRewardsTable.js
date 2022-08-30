@@ -838,14 +838,14 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
 															row.gauge &&
 															row.gauge.bribesEarned &&
 															row.gauge.bribesEarned.map((bribe) => {
-																return tableCellContent(formatCurrency(bribe.earned), null, bribe.token?.symbol, null, bribe && bribe.token && bribe.token.logoURI ? bribe.token.logoURI : `/tokens/unknown-logo--${appTheme}.svg`);
+																return tableCellContent(parseFloat(bribe.earned).toFixed(4), null, bribe.token?.symbol, null, bribe && bribe.token && bribe.token.logoURI ? bribe.token.logoURI : `/tokens/unknown-logo--${appTheme}.svg`);
 															})}
 
-														{row && row.rewardType === 'Fees' && tableCellContent(formatCurrency(row.claimable0), formatCurrency(row.claimable1), row.token0?.symbol, row.token1?.symbol, row.token0 && row.token0.logoURI ? row.token0.logoURI : `/tokens/unknown-logo--${appTheme}.svg`, row.token1 && row.token1.logoURI ? row.token1.logoURI : `/tokens/unknown-logo--${appTheme}.svg`)}
+														{row && row.rewardType === 'Fees' && tableCellContent(parseFloat(row.claimable0).toFixed(4), parseFloat(row.claimable1).toFixed(4), row.token0?.symbol, row.token1?.symbol, row.token0 && row.token0.logoURI ? row.token0.logoURI : `/tokens/unknown-logo--${appTheme}.svg`, row.token1 && row.token1.logoURI ? row.token1.logoURI : `/tokens/unknown-logo--${appTheme}.svg`)}
 
-														{row && row.rewardType === 'Reward' && tableCellContent(formatCurrency(row.gauge.rewardsEarned), null, 'CONE', null)}
+														{row && row.rewardType === 'Reward' && tableCellContent(parseFloat(row.gauge.rewardsEarned).toFixed(4), null, 'CONE', null)}
 
-														{row && row.rewardType === 'Distribution' && tableCellContent(formatCurrency(row.earned), null, row.rewardToken.symbol, null)}
+														{row && row.rewardType === 'Distribution' && tableCellContent(parseFloat(row.earned).toFixed(4), null, row.rewardToken.symbol, null)}
 													</TableCell>
 
 													<TableCell
