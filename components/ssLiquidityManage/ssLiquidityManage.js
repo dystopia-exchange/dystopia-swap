@@ -542,7 +542,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
         setAmount0Error("Invalid amount");
         error = true;
       } else if (asset0 && BigNumber(amount0).gt(asset0.balance)) {
-        setAmount0Error(`Greater than your available balance`);
+        setAmount0Error(`Insufficient funds ${asset0?.symbol}`);
         error = true;
       }
     }
@@ -562,7 +562,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
         setAmount1Error("Invalid amount");
         error = true;
       } else if (asset1 && BigNumber(amount1).gt(asset1.balance)) {
-        setAmount1Error(`Greater than your available balance`);
+        setAmount1Error(`Insufficient funds ${asset1?.symbol}`);
         error = true;
       }
     }
@@ -625,7 +625,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
         setAmount0Error("Invalid amount");
         error = true;
       } else if (asset0 && BigNumber(amount0).gt(asset0.balance)) {
-        setAmount0Error(`Greater than your available balance`);
+        setAmount0Error(`Insufficient funds ${asset0?.symbol}`);
         error = true;
       }
     }
@@ -645,7 +645,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
         setAmount1Error("Invalid amount");
         error = true;
       } else if (asset1 && BigNumber(amount1).gt(asset1.balance)) {
-        setAmount1Error(`Greater than your available balance`);
+        setAmount1Error(`Insufficient funds ${asset1?.symbol}`);
         error = true;
       }
     }
@@ -1398,36 +1398,37 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
       <>
         {withdrawAction !== action && (
           <svg
-            width="20"
-            height="20"
+            width="24"
+            height="24"
             viewBox="0 0 20 20"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
               d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
-              fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
-              stroke={appTheme === "dark" ? "#4CADE6" : "#0B5E8E"}
+              fill="#171D2D"
+              stroke="#779BF4"
             />
           </svg>
         )}
 
         {withdrawAction === action && (
           <svg
-            width="20"
-            height="20"
+            width="24"
+            height="24"
             viewBox="0 0 20 20"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
               d="M0.5 10C0.5 4.7533 4.7533 0.5 10 0.5C15.2467 0.5 19.5 4.7533 19.5 10C19.5 15.2467 15.2467 19.5 10 19.5C4.7533 19.5 0.5 15.2467 0.5 10Z"
-              fill={appTheme === "dark" ? "#151718" : "#DBE6EC"}
-              stroke={appTheme === "dark" ? "#4CADE6" : "#0B5E8E"}
+              fill="#171D2D"
+              stroke="#779BF4"
             />
             <path
               d="M5 10C5 7.23858 7.23858 5 10 5C12.7614 5 15 7.23858 15 10C15 12.7614 12.7614 15 10 15C7.23858 15 5 12.7614 5 10Z"
-              fill={appTheme === "dark" ? "#4CADE6" : "#0B5E8E"}
+              fill="#779BF4"
+              style={{ transform: 'scale(1.2)', transformOrigin: 'center' }}
             />
           </svg>
         )}
@@ -1482,9 +1483,25 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
               </Typography>
 
               <Tooltip
+                  active={true}
                   title='Select "I want to unstake LP" if you have staked LP in the gauge.'
                   componentsProps={{
-                    tooltip: { style: {padding: 24, background: '#1F2B49', fontSize: 16, fontWeight: 400, border: '1px solid #779BF4', borderRadius: 12,}},
+                    tooltip: {
+                      style: {
+                        padding: '12px 24px',
+
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
+                        fontWeight: 400,
+                        lineHeight: '24px',
+                        
+                        border: '1px solid #779BF4',
+                        borderRadius: 12,
+
+                        background: '#1F2B49',
+                        color: '#E4E9F4',
+                      }
+                    },
                   }}
               >
                 <div className={classes.tooltipCircle}>
@@ -1520,7 +1537,22 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
               <Tooltip
                   title='Select "I want to remove LP" if you have unstaked LP and want to remove liquidity.'
                   componentsProps={{
-                    tooltip: { style: {padding: 24, background: '#1F2B49', fontSize: 16, fontWeight: 400, border: '1px solid #779BF4', borderRadius: 12,}},
+                    tooltip: {
+                      style: {
+                        padding: '12px 24px',
+
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
+                        fontWeight: 400,
+                        lineHeight: '24px',
+                        
+                        border: '1px solid #779BF4',
+                        borderRadius: 12,
+
+                        background: '#1F2B49',
+                        color: '#E4E9F4',
+                      }
+                    },
                   }}
               >
                 <div className={classes.tooltipCircle}>
@@ -1760,6 +1792,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
             <div
               style={{
                 position: "relative",
+                width: '100%',
               }}
             >
               <div
@@ -2589,7 +2622,7 @@ export default function ssLiquidityManage({initActiveTab = 'deposit',}) {
                                 <div>
                                   {amount0Error && <>{amount0Error}</>}
 
-                                  {amount1Error && <>{amount1Error}</>}
+                                  {!amount0Error && amount1Error && <>{amount1Error}</>}
 
                                   {pair?.balance > 0 && !amount0Error && !amount1Error && (
                                       <>

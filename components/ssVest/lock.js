@@ -347,6 +347,14 @@ export default function ssLock({govToken, veToken}) {
               {renderMassiveDateInput('date', selectedDate, selectedDateError, handleDateChange, govToken?.balance, govToken?.logoURI)}
             </div>
 
+            <Typography
+              className={[classes.info, classes[`info--${appTheme}`]].join(" ")}
+              color="textSecondary"
+            >
+              <img src="/images/ui/info-circle-blue.svg" />
+              <span>Lock period should be multiples of 1 week (e.g. 28, 35, 42 days, etc.)</span>
+            </Typography>
+
             {selectedDateError && <div
               style={{ marginTop: 20 }}
               className={[
