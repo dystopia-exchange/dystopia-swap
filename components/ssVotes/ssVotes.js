@@ -198,7 +198,7 @@ export default function ssVotes() {
                       whiteSpace: "nowrap",
                   }}
               >
-                  You Votes:
+                  Your Votes:
               </Typography>
 
               <Typography

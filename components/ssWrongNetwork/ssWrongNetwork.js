@@ -37,7 +37,7 @@ export const WrongNetwork = (props) => {
           </div>
 
           <Typography className={classes.title2}>
-            The chain you are connected is not supported!
+            The chain you are connected to is not supported!
           </Typography>
 
           <Typography className={classes.paragraph}>

@@ -46,7 +46,7 @@ import TablePaginationActions from '../table-pagination/table-pagination';
 import { formatSymbol } from '../../utils';
 import SwitchCustom from '../../ui/Switch';
 import { TableBodyPlaceholder } from '../../components/table';
-
+import QuizIcon from "@mui/icons-material/Quiz";
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {
@@ -196,7 +196,21 @@ const headCells = [
       <Tooltip
           title='APR is based on current prices of tokens, token boosted APR, your veCONE amount, the % of TVL using veCONE and gauge TVL.'
           componentsProps={{
-            tooltip: { style: {padding: 24, background: '#1F2B49', fontSize: 16, fontWeight: 400, border: '1px solid #779BF4', borderRadius: 12,}},
+            tooltip: {
+              style: {
+                padding: 24,
+
+                fontFamily: 'Poppins',
+                fontSize: 16,
+                fontWeight: 400,
+                lineHeight: '24px',
+                
+                border: '1px solid #779BF4',
+                borderRadius: 12,
+
+                background: '#1F2B49',
+                color: '#E4E9F4',
+              }},
           }}
       >
         <div style={{
@@ -840,9 +854,9 @@ const useStyles = makeStyles({
     },
   },
   filterContainer: {
-    minWidth: '340px',
+    minWidth: '272px',
     marginTop: '15px',
-    padding: '30px',
+    padding: '24px',
     paddingBottom: '20px',
     boxShadow: '0 10px 20px 0 rgba(0,0,0,0.2)',
     borderRadius: 12,
@@ -858,7 +872,7 @@ const useStyles = makeStyles({
   },
   filterItem: {
     position: 'relative',
-    padding: '8px 0',
+    padding: '5px 0',
   },
   'filterItem--dark': {
     borderColor: '#5F7285',
@@ -871,12 +885,15 @@ const useStyles = makeStyles({
   },
   filterLabel: {
     fontSize: '16px',
+    lineHeight: '24px',
     fontWeight: 400,
     color: '#E4E9F4',
   },
   filterListTitle: {
+    fontFamily: 'Poppins',
     fontWeight: 500,
-    fontSize: 40,
+    fontSize: 48,
+    lineHeight: '52px',
     color: '#E4E9F4',
   },
   infoIcon: {
@@ -1039,7 +1056,7 @@ const useStyles = makeStyles({
     },
   },
   popoverPaper: {
-    width: 340,
+    width: 272,
     minHeight: 292,
     padding: 0,
     background: 'none',
@@ -1051,6 +1068,11 @@ const useStyles = makeStyles({
   displayedRows: {
     fontSize: 12,
   },
+  closePopover: {
+    ['&:hover']: {
+      backgroundColor: '#8191B9 !important',
+    }
+  }
 });
 
 const getLocalToggles = () => {
@@ -1283,7 +1305,7 @@ const EnhancedTableToolbar = (props) => {
                 display: 'flex',
                 alignItems: 'start',
                 justifyContent: 'space-between',
-                marginBottom: 10,
+                marginBottom: 14,
               }}>
                 <Typography className={[classes.filterListTitle, classes[`filterListTitle--${appTheme}`]].join(' ')}>
                   Filters
@@ -1302,6 +1324,7 @@ const EnhancedTableToolbar = (props) => {
                       marginTop: 4,
                     }}
                     onClick={handleClick}
+                    className={classes.closePopover}
                 >
                   <Close
                       style={{
@@ -1315,7 +1338,7 @@ const EnhancedTableToolbar = (props) => {
               <div
                 className={[classes.filterItem, classes[`filterItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
                 <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>
-                  Active Gauges
+                  Active gauges
                 </Typography>
 
                 <SwitchCustom
@@ -1328,7 +1351,7 @@ const EnhancedTableToolbar = (props) => {
               <div
                 className={[classes.filterItem, classes[`filterItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
                 <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>
-                  Stable Pools
+                  Stable pools
                 </Typography>
 
                 <SwitchCustom
@@ -1341,7 +1364,7 @@ const EnhancedTableToolbar = (props) => {
               <div
                 className={[classes.filterItem, classes[`filterItem--${appTheme}`], 'g-flex', 'g-flex--align-center', 'g-flex--space-between'].join(' ')}>
                 <Typography className={[classes.filterLabel, classes[`filterLabel--${appTheme}`]].join(' ')}>
-                  Volatile Pools
+                  Volatile pools
                 </Typography>
 
                 <SwitchCustom
@@ -1733,52 +1756,141 @@ export default function EnhancedTable({pairs, isLoading}) {
                                 justifyContent: 'flex-end',
                               }}>
                               {(row && BigNumber(row.tvl).gt(0)) &&
-                                <div
-                                  className={classes.inlineEnd}
-                                  style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'flex-end',
-
-                                  }}>
-                                  <Typography
-                                    className={classes.textSpaced}
+                                <div style={{ display: 'flex' }}>
+                                  <div
+                                    className={classes.inlineEnd}
                                     style={{
-                                      marginBottom: 8,
-                                      fontWeight: 500,
-                                      fontSize: 14,
-                                      lineHeight: '120%',
-                                      color: '#E4E9F4',
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      alignItems: 'flex-end',
                                     }}>
-                                      {formatCurrency(BigNumber(row.tvl))} <span style={{color: 'rgb(124, 131, 138)'}}>$</span>
-                                  </Typography>
+                                    <Typography
+                                      className={classes.textSpaced}
+                                      style={{
+                                        marginBottom: 8,
+                                        fontWeight: 500,
+                                        fontSize: 14,
+                                        lineHeight: '120%',
+                                        color: '#E4E9F4',
+                                      }}>
+                                        {formatCurrency(BigNumber(row.tvl))} <span style={{color: 'rgb(124, 131, 138)'}}>$</span>
+                                    </Typography>
 
-                                  <Typography
-                                    className={classes.textSpaced}
-                                    style={{
-                                      fontWeight: 500,
-                                      fontSize: 14,
-                                      lineHeight: '120%',
-                                      color: '#8191B9',
-                                    }}>
-                                    {BigNumber(row?.gauge?.apr).gt(0) ? (
-                                        <div>
-                                          {`${
-                                              formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
+                                    <Typography
+                                      className={classes.textSpaced}
+                                      style={{
+                                        fontWeight: 500,
+                                        fontSize: 14,
+                                        lineHeight: '120%',
+                                        color: '#8191B9',
+                                      }}>
+                                      {BigNumber(row?.gauge?.apr).gt(0) ? (
+                                          <div>
+                                            {`${
+                                                formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
+                                                    BigNumber(row?.gauge?.boostedApr0),
+                                                    BigNumber(row?.gauge?.boostedApr1)
+                                                ),0)
+                                            }-${
+                                                formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
+                                                    BigNumber(row?.gauge?.boostedApr0),
+                                                    BigNumber(row?.gauge?.boostedApr1)
+                                                ),0)
+                                            }`}
+                                            <span style={{color: 'rgb(124, 131, 138)'}}> %</span>
+                                          </div>
+                                          )
+                                          : '-'}
+                                    </Typography>
+                                  </div>
+
+                                  <Tooltip
+                                    title={
+                                      <React.Fragment>
+                                        <div className={css.tooltip}>
+                                          <div className={css.tooltip_group}>
+                                            <div className={css.tooltip_row}>
+                                              <b>
+                                                {formatCurrency(
+                                                  BigNumber.sum(
+                                                    BigNumber(
+                                                      row?.gauge?.boostedApr0
+                                                    ),
+                                                    BigNumber(row?.gauge?.boostedApr1)
+                                                  ),
+                                                  2
+                                                )}
+                                                %
+                                              </b>{" "}
+                                              <b>Boosted APR</b>
+                                            </div>
+                                            <div className={css.tooltip_row}>
+                                              <b>
+                                                {formatCurrency(
                                                   BigNumber(row?.gauge?.boostedApr0),
-                                                  BigNumber(row?.gauge?.boostedApr1)
-                                              ),0)
-                                          }-${
-                                              formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
-                                                  BigNumber(row?.gauge?.boostedApr0),
-                                                  BigNumber(row?.gauge?.boostedApr1)
-                                              ),0)
-                                          }`}
-                                          <span style={{color: 'rgb(124, 131, 138)'}}> %</span>
+                                                  2
+                                                )}
+                                                %
+                                              </b>{" "}
+                                              {row.token0.symbol} APR
+                                            </div>
+                                            <div className={css.tooltip_row}>
+                                              <b>
+                                                {formatCurrency(
+                                                  BigNumber(row?.gauge?.boostedApr1),
+                                                  2
+                                                )}
+                                                %
+                                              </b>{" "}
+                                              {row.token1.symbol} APR
+                                            </div>  
+                                          </div>
+
+                                          <div className={css.tooltip_group}>
+                                            <div className={css.tooltip_row}>
+                                              <b>
+                                                {formatCurrency(
+                                                  BigNumber(row?.gauge?.apr)
+                                                    .div(100)
+                                                    .times(40),
+                                                  2
+                                                )}
+                                                %
+                                              </b>{" "}
+                                              <b>Min staking APR</b>
+                                            </div>
+                                            <div className={css.tooltip_row}>
+                                              <b>
+                                                {formatCurrency(
+                                                  BigNumber(row?.gauge?.apr)
+                                                    .div(100)
+                                                    .times(40),
+                                                  2
+                                                )}
+                                                %
+                                              </b>{" "}
+                                              Min APR
+                                            </div>
+                                            <div className={css.tooltip_row}>
+                                              <b>
+                                                {formatCurrency(
+                                                  BigNumber(row?.gauge?.apr),
+                                                  2
+                                                )}
+                                                %
+                                              </b>{" "}
+                                              Max APR
+                                            </div>
+                                          </div>
                                         </div>
-                                        )
-                                        : '-'}
-                                  </Typography>
+                                      </React.Fragment>
+                                    }
+                                    classes={{
+                                      tooltip: css.tooltip_wrapper
+                                    }}
+                                  >
+                                    <QuizIcon fontSize="small" style={{ color: "rgb(129, 145, 185)", marginLeft: 5 }} />
+                                  </Tooltip>
                                 </div>
                               }
                               {/*{!(row && row.token0 && row.token0.balance) &&
@@ -2577,7 +2689,21 @@ export default function EnhancedTable({pairs, isLoading}) {
                             <Tooltip
                                 title='APR is based on current prices of tokens, token boosted APR, your veCONE amount, the % of TVL using veCONE and gauge TVL.'
                                 componentsProps={{
-                                  tooltip: { style: {padding: 24, background: '#1F2B49', fontSize: 16, fontWeight: 400, border: '1px solid #779BF4', borderRadius: 12,}},
+                                  tooltip: {
+                                    style: {
+                                      padding: 24,
+
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16,
+                                      fontWeight: 400,
+                                      lineHeight: '24px',
+                                      
+                                      border: '1px solid #779BF4',
+                                      borderRadius: 12,
+
+                                      background: '#1F2B49',
+                                      color: '#E4E9F4',
+                                    }},
                                 }}
                                 style={{display: 'inline-flex', marginLeft: 12,}}
                             >
@@ -2596,79 +2722,171 @@ export default function EnhancedTable({pairs, isLoading}) {
                               justifyContent: 'flex-end',
                               height: 72,
                             }}>
-                            <div
-                              className={classes.inlineEnd}
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-end',
-                              }}>
-                              <Typography
-                                className={classes.textSpaced}
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                              <div
                                 style={{
-                                  marginBottom: 4,
-                                  fontWeight: 500,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
-                                  whiteSpace: 'nowrap',
-                                }}>
-                                {BigNumber(row?.tvl).gt(0) ? BigNumber(row?.tvl).toFixed(2) : '-'}
-                              </Typography>
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'flex-end',
+                                }}
+                              >
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    marginBottom: 4,
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    whiteSpace: 'nowrap',
+                                  }}>
+                                  {BigNumber(row?.tvl).gt(0) ? BigNumber(row?.tvl).toFixed(2) : '-'}
+                                </Typography>
 
-                              <Typography
-                                className={classes.textSpaced}
-                                style={{
-                                  fontWeight: 500,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
-                                  whiteSpace: 'nowrap',
-                                }}>
-                                {BigNumber(row?.gauge?.apr).gt(0) ? `${
-                                    formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
-                                        BigNumber(row?.gauge?.boostedApr0),
-                                        BigNumber(row?.gauge?.boostedApr1)
-                                    ),0)
-                                }-${
-                                    formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
-                                        BigNumber(row?.gauge?.boostedApr0),
-                                        BigNumber(row?.gauge?.boostedApr1)
-                                    ),0)
-                                }%` : '-'}
-                              </Typography>
-                            </div>
+                                <Typography
+                                  className={classes.textSpaced}
+                                  style={{
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    color: appTheme === 'dark' ? '#ffffff' : '#0A2C40',
+                                    whiteSpace: 'nowrap',
+                                  }}>
+                                  {BigNumber(row?.gauge?.apr).gt(0) ? `${
+                                      formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr).div(100).times(40),
+                                          BigNumber(row?.gauge?.boostedApr0),
+                                          BigNumber(row?.gauge?.boostedApr1)
+                                      ),0)
+                                  }-${
+                                      formatCurrency(BigNumber.sum(BigNumber(row?.gauge?.apr),
+                                          BigNumber(row?.gauge?.boostedApr0),
+                                          BigNumber(row?.gauge?.boostedApr1)
+                                      ),0)
+                                  }%` : '-'}
+                                </Typography>
+                              </div>
 
-                            <div
-                              className={classes.inlineEnd}
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-end',
-                                paddingLeft: 10,
-                              }}>
-                              <Typography
-                                className={`${classes.textSpaced} ${classes.symbol}`}
+                              <div
                                 style={{
-                                  marginBottom: 4,
-                                  fontWeight: 400,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                                }}>
-                                $
-                              </Typography>
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'flex-end',
+                                  paddingLeft: 10,
+                                }}
+                              >
+                                <Typography
+                                  className={`${classes.textSpaced} ${classes.symbol}`}
+                                  style={{
+                                    marginBottom: 4,
+                                    fontWeight: 400,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    minWidth: 15,
+                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                  }}>
+                                  $
+                                </Typography>
 
-                              <Typography
-                                className={`${classes.textSpaced} ${classes.symbol}`}
-                                style={{
-                                  fontWeight: 400,
-                                  fontSize: 14,
-                                  lineHeight: '120%',
-                                  color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
-                                }}>
-                                %
-                              </Typography>
+                                <Typography
+                                  className={`${classes.textSpaced} ${classes.symbol}`}
+                                  style={{
+                                    fontWeight: 400,
+                                    fontSize: 14,
+                                    lineHeight: '120%',
+                                    minWidth: 15,
+                                    color: appTheme === 'dark' ? '#7C838A' : '#5688A5',
+                                  }}>
+                                  %
+                                </Typography>
+                              </div>
+
+                              <Tooltip
+                                title={
+                                  <React.Fragment>
+                                    <div className={css.tooltip}>
+                                      <div className={css.tooltip_group}>
+                                        <div className={css.tooltip_row}>
+                                          <b>
+                                            {formatCurrency(
+                                              BigNumber.sum(
+                                                BigNumber(
+                                                  row?.gauge?.boostedApr0
+                                                ),
+                                                BigNumber(row?.gauge?.boostedApr1)
+                                              ),
+                                              2
+                                            )}
+                                            %
+                                          </b>{" "}
+                                          <b>Boosted APR</b>
+                                        </div>
+                                        <div className={css.tooltip_row}>
+                                          <b>
+                                            {formatCurrency(
+                                              BigNumber(row?.gauge?.boostedApr0),
+                                              2
+                                            )}
+                                            %
+                                          </b>{" "}
+                                          {row.token0.symbol} APR
+                                        </div>
+                                        <div className={css.tooltip_row}>
+                                          <b>
+                                            {formatCurrency(
+                                              BigNumber(row?.gauge?.boostedApr1),
+                                              2
+                                            )}
+                                            %
+                                          </b>{" "}
+                                          {row.token1.symbol} APR
+                                        </div>  
+                                      </div>
+
+                                      <div className={css.tooltip_group}>
+                                        <div className={css.tooltip_row}>
+                                          <b>
+                                            {formatCurrency(
+                                              BigNumber(row?.gauge?.apr)
+                                                .div(100)
+                                                .times(40),
+                                              2
+                                            )}
+                                            %
+                                          </b>{" "}
+                                          <b>Min staking APR</b>
+                                        </div>
+                                        <div className={css.tooltip_row}>
+                                          <b>
+                                            {formatCurrency(
+                                              BigNumber(row?.gauge?.apr)
+                                                .div(100)
+                                                .times(40),
+                                              2
+                                            )}
+                                            %
+                                          </b>{" "}
+                                          Min APR
+                                        </div>
+                                        <div className={css.tooltip_row}>
+                                          <b>
+                                            {formatCurrency(
+                                              BigNumber(row?.gauge?.apr),
+                                              2
+                                            )}
+                                            %
+                                          </b>{" "}
+                                          Max APR
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </React.Fragment>
+                                }
+                                classes={{
+                                  tooltip: css.tooltip_wrapper
+                                }}
+                              >
+                                <QuizIcon fontSize="small" style={{ color: "rgb(129, 145, 185)", marginLeft: 5 }} />
+                              </Tooltip>
                             </div>
                           </div>
                         </div>
