@@ -205,7 +205,8 @@ class MultiSwapStore {
             }
         } else {
             try {
-                const res = await doSwap(this.swap, this.slippage, this.provider)
+                // todo slippage is Price impact tolerance!!! temporally setup to 100% tolerance
+                const res = await doSwap(this.swap, '100', this.provider)
                 await res.wait()
                 await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
             } catch (e) {
