@@ -50,6 +50,8 @@ class MultiSwapStore {
     isFetchingSwap = false
 
     debSwapQuery = null
+    swapQueryTimeout = null
+    swapQueryInProgress = false
     error = null
 
     constructor() {
@@ -65,8 +67,15 @@ class MultiSwapStore {
             approve: action.bound,
             doSwap: action.bound,
         })
+        this.debSwapQuery = debounce(this._swapQuery.bind(this), 500)
+    }
 
-        this.debSwapQuery = debounce(this._swapQuery.bind(this), 300)
+    startSwapQueryPolling() {
+        if(this.swapQueryTimeout) {
+            clearInterval(this.swapQueryTimeout)
+        }
+        this.debSwapQuery()
+        this.swapQueryTimeout = setInterval(this._swapQuery.bind(this), 10000)
     }
 
     setProvider(provider) {
@@ -83,23 +92,20 @@ class MultiSwapStore {
         this.error = null
         this.allowed = false
         this._checkAllowance()
-        this.debSwapQuery()
+        this.startSwapQueryPolling()
     }
 
     setTokenOut(value) {
         this.tokenOut = value
         this.swap = null
         this.error = null
-        // need to check approve for case when we use direct routes
-        // this.allowed = false
-        // this._checkAllowance()
-        this.debSwapQuery()
+        this.startSwapQueryPolling()
     }
 
     setSwapAmount(value) {
         this.swapAmount = value
         this.error = null
-        this.debSwapQuery()
+        this.startSwapQueryPolling()
     }
 
     setSlippage(value) {
@@ -114,12 +120,12 @@ class MultiSwapStore {
             this.allowed = true
             this.tokenIn = tokenOut
             this.tokenOut = tokenIn
-            this.debSwapQuery()
+            this.startSwapQueryPolling()
         } else {
             this.setTokenIn(tokenOut)
             this.setTokenOut(tokenIn)
             this._checkAllowance()
-            this.debSwapQuery()
+            this.startSwapQueryPolling()
         }
     }
 
@@ -186,7 +192,7 @@ class MultiSwapStore {
                 this._getToken(this.tokenOut),
             ])
             try {
-                /*const res = */await stores.stableSwapStore.swap({
+                const res = await stores.stableSwapStore.swap({
                     content: {
                         fromAsset: tokenIn,
                         toAsset: tokenOut,
@@ -195,26 +201,39 @@ class MultiSwapStore {
                         slippage: this.slippage,
                     }
                 })
-                // await res.wait()
+                await res.wait(2)
                 await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
             } catch (e) {
                 console.log('error', e)
-                this.error = 'Swap request error'
+                this.error = this.parseError(e)
             } finally {
                 this.isFetchingSwap = false
             }
         } else {
             try {
-                // todo slippage is Price impact tolerance!!! temporally setup to 100% tolerance
-                const res = await doSwap(this.swap, '100', this.provider)
-                await res.wait()
+                const res = await doSwap(this.swap, this.slippage, this.provider)
+                await res.wait(2)
                 await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
             } catch (e) {
                 console.log('error', e)
-                this.error = 'Swap request error'
+                this.error = this.parseError(e)
             } finally {
                 this.isFetchingSwap = false
             }
+        }
+        if(this.swapQueryTimeout) {
+            clearInterval(this.swapQueryTimeout);
+        }
+        this.swapQueryTimeout = null;
+    }
+
+    parseError(err) {
+        if(err?.message?.indexOf('MSAmountOutLessThanRequired') !== -1) {
+            return "Returned amount less than expected. Increase slippage."
+        }  else if(err?.message?.indexOf('User denied transaction signature') !== -1) {
+            return null
+        } else {
+            return 'Swap request error'
         }
     }
 
@@ -260,73 +279,78 @@ class MultiSwapStore {
     }
 
     async _swapQuery() {
-        if (this.isWrapUnwrap) {
-            this.allowed = true
-            const returnAmount = ethers.utils.parseUnits(this.swapAmount ?? '0', 18).toString()
-            this.swap = { returnAmount }
-            return
-        }
+        if (!this.swapQueryInProgress) {
+            // console.log('>>> SWAP QUERY')
+            this.swapQueryInProgress = true;
+            if (this.isWrapUnwrap) {
+                this.allowed = true
+                const returnAmount = ethers.utils.parseUnits(this.swapAmount ?? '0', 18).toString()
+                this.swap = {returnAmount}
+                return
+            }
 
-        if (this.tokenIn === FTM_SYMBOL) {
-            this.allowed = true
-        }
+            if (this.tokenIn === FTM_SYMBOL) {
+                this.allowed = true
+            }
 
-        if (this.tokenIn && this.tokenOut && this.swapAmount && this.provider) {
-            const [tokenIn, tokenOut] = await Promise.all([
-                this._getToken(this.tokenIn),
-                this._getToken(this.tokenOut),
-            ])
-            // console.log('tokenIn', JSON.parse(JSON.stringify(this.tokenIn)))
-            const swapAmount = ethers.utils.parseUnits(this.swapAmount, tokenIn.decimals).toString();
-            this.isFetchingSwapQuery = true
+            if (this.tokenIn && this.tokenOut && this.swapAmount && this.provider) {
+                const [tokenIn, tokenOut] = await Promise.all([
+                    this._getToken(this.tokenIn),
+                    this._getToken(this.tokenOut),
+                ])
+                // console.log('tokenIn', JSON.parse(JSON.stringify(this.tokenIn)))
+                const swapAmount = ethers.utils.parseUnits(this.swapAmount, tokenIn.decimals).toString();
+                this.isFetchingSwapQuery = true
 
-            // query old router for direct swap routes
-            if (this.isDirectRoute) {
-                const response = await stores.stableSwapStore.quoteSwap({
-                    content: {
-                        fromAsset: tokenIn,
-                        toAsset: tokenOut,
-                        fromAmount: this.swapAmount,
-                    },
-                })
+                // query old router for direct swap routes
+                if (this.isDirectRoute) {
+                    const response = await stores.stableSwapStore.quoteSwap({
+                        content: {
+                            fromAsset: tokenIn,
+                            toAsset: tokenOut,
+                            fromAmount: this.swapAmount,
+                        },
+                    })
 
-                // console.log('directSwapRoute old router response', response)
+                    // console.log('directSwapRoute old router response', response)
 
-                if (response?.output?.finalValue) {
-                    this.swap = {
-                        returnAmount: response.output.receiveAmounts[1],
-                        priceImpact: response.priceImpact,
-                        swapAmount: response.output.receiveAmounts[0],
-                        tokenAddresses: [this.tokenIn, this.tokenOut],
-                        swaps: [{
-                            poolId: '0x421a018cc5839c4c0300afb21c725776dc389b1addddddddddddddddddddddd0',
-                            assetInIndex: 0,
-                            assetOutIndex: 1,
-                            amount: response.output.receiveAmounts[0],
-                        }],
-                        quote: response,
+                    if (response?.output?.finalValue) {
+                        this.swap = {
+                            returnAmount: response.output.receiveAmounts[1],
+                            priceImpact: response.priceImpact,
+                            swapAmount: response.output.receiveAmounts[0],
+                            tokenAddresses: [this.tokenIn, this.tokenOut],
+                            swaps: [{
+                                poolId: '0x421a018cc5839c4c0300afb21c725776dc389b1addddddddddddddddddddddd0',
+                                assetInIndex: 0,
+                                assetOutIndex: 1,
+                                amount: response.output.receiveAmounts[0],
+                            }],
+                            quote: response,
+                        }
+                        this.priceInfo = this.calcPriceInfo(tokenIn, tokenOut, this.swap)
+                        this.priceImpact = this.swap.priceImpact
                     }
-                    this.priceInfo = this.calcPriceInfo(tokenIn, tokenOut, this.swap)
-                    this.priceImpact = this.swap.priceImpact
-                }
 
-                this.isFetchingSwapQuery = false
-            } else {
-                try {
-                    const response = await swapQuery(tokenIn, tokenOut, swapAmount, this.excludePlatforms)
-                    this.swap = response
-                    // console.log(this.swap)
-                    this.priceInfo = this.calcPriceInfo(tokenIn, tokenOut, response)
-                    this.priceImpact = this.swap.priceImpact*100
-                    if (this.swap?.swaps?.length === 0) {
-                        this.error = 'Routes not found'
-                    }
-                } catch (e) {
-                    this.error = 'Swap query request error'
-                } finally {
                     this.isFetchingSwapQuery = false
+                } else {
+                    try {
+                        const response = await swapQuery(tokenIn, tokenOut, swapAmount, this.excludePlatforms)
+                        this.swap = response
+                        // console.log(this.swap)
+                        this.priceInfo = this.calcPriceInfo(tokenIn, tokenOut, response)
+                        this.priceImpact = this.swap.priceImpact * 100
+                        if (this.swap?.swaps?.length === 0) {
+                            this.error = 'Routes not found'
+                        }
+                    } catch (e) {
+                        this.error = 'Swap query request error'
+                    } finally {
+                        this.isFetchingSwapQuery = false
+                    }
                 }
             }
+            this.swapQueryInProgress = false;
         }
     }
 

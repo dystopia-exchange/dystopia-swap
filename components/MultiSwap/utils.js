@@ -62,8 +62,8 @@ export function getDeadline() {
 }
 
 export async function doSwap(swap, slippage, provider) {
-    console.log('----- swap args:', JSON.parse(JSON.stringify(swap)))
-    console.log('----- ', getSlippage(slippage), getDeadline())
+    // console.log('----- swap args:', JSON.parse(JSON.stringify(swap)))
+    // console.log('----- ', getSlippage(slippage), getDeadline())
 
     if (swap && swap.returnAmount) {
         const swapNative = swap.swapData.tokenIn === ZERO_ADDRESS;
