@@ -49,7 +49,8 @@ export default function TransactionQueue({setQueueLength}) {
       setType(params.type);
       setAction(params.verb);
       setOpen(true);
-      const txs = [...params.transactions];
+      const currentTxs = transactions?.length > 10 ? [...transactions].slice(0, 8) : [...transactions];
+      const txs = [...params.transactions, ...currentTxs];
       setTransactions(txs);
 
       setQueueLength(params.transactions.length);
@@ -113,7 +114,7 @@ export default function TransactionQueue({setQueueLength}) {
       setTransactions(txs);
     };
 
-    stores.emitter.on(ACTIONS.CLEAR_TRANSACTION_QUEUE, clearTransactions);
+    stores.emitter.on(ACTIONS.TX_CLEAR_QUEUE, clearTransactions);
     stores.emitter.on(ACTIONS.TX_ADDED, transactionAdded);
     stores.emitter.on(ACTIONS.TX_PENDING, transactionPending);
     stores.emitter.on(ACTIONS.TX_SUBMITTED, transactionSubmitted);
@@ -121,9 +122,8 @@ export default function TransactionQueue({setQueueLength}) {
     stores.emitter.on(ACTIONS.TX_REJECTED, transactionRejected);
     stores.emitter.on(ACTIONS.TX_STATUS, transactionStatus);
     stores.emitter.on(ACTIONS.TX_OPEN, openQueue);
-
     return () => {
-      stores.emitter.removeListener(ACTIONS.CLEAR_TRANSACTION_QUEUE, clearTransactions);
+      stores.emitter.removeListener(ACTIONS.TX_CLEAR_QUEUE, clearTransactions);
       stores.emitter.removeListener(ACTIONS.TX_ADDED, transactionAdded);
       stores.emitter.removeListener(ACTIONS.TX_PENDING, transactionPending);
       stores.emitter.removeListener(ACTIONS.TX_SUBMITTED, transactionSubmitted);
@@ -134,7 +134,7 @@ export default function TransactionQueue({setQueueLength}) {
     };
   }, [transactions]);
 
-  const renderDone = (txs) => {
+  const renderDone = (transactions) => {
     if (!(transactions && transactions.filter((tx) => {
       return ['DONE', 'CONFIRMED'].includes(tx.status);
     })

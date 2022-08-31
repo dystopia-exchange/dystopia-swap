@@ -92,11 +92,13 @@
 .transactionDescriptionTitle {
   margin-left: 10px !important;
   padding-bottom: 10px !important;
+  padding-right: 10px;
   font-weight: 500 !important;
   font-size: 14px !important;
   line-height: 120% !important;
   border-bottom: 1px solid #86B9D6;
   text-align: left;
+  word-break: break-word;
 }
 
 .transactionDescriptionTitle--CONFIRMED,

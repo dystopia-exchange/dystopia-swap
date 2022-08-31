@@ -233,6 +233,7 @@ export default function Transaction({ transaction }) {
             <div
               style={{
                 marginTop: 10,
+                paddingRight: 10,
                 textAlign: "right",
                 fontWeight: 500,
                 fontSize: 12,
