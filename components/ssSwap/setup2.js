@@ -351,19 +351,19 @@ function Setup() {
     };
 
     const calculateReceiveAmount = (amount, from, to) => {
-        if (amount !== "" && !isNaN(amount) && to != null) {
-            setQuoteLoading(true);
-            setQuoteError(false);
-
-            stores.dispatcher.dispatch({
-                type: ACTIONS.QUOTE_SWAP,
-                content: {
-                    fromAsset: from,
-                    toAsset: to,
-                    fromAmount: amount,
-                },
-            });
-        }
+        // if (amount !== "" && !isNaN(amount) && to != null) {
+        //     setQuoteLoading(true);
+        //     setQuoteError(false);
+        //
+        //     stores.dispatcher.dispatch({
+        //         type: ACTIONS.QUOTE_SWAP,
+        //         content: {
+        //             fromAsset: from,
+        //             toAsset: to,
+        //             fromAmount: amount,
+        //         },
+        //     });
+        // }
     };
 
     const setBalance100 = () => {
@@ -962,7 +962,7 @@ function Setup() {
                     || !swapAmount
                     || tokenIn === null
                     || tokenOut === null
-                    || multiSwapStore.error !== null
+                    // || multiSwapStore.error !== null
                 || fromAmountValue > Number(fromAssetValue?.balance)
 
                 if (isFetchingSwapQuery) loadingMessage = 'loading data of routes...'
