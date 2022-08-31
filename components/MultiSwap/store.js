@@ -144,7 +144,7 @@ class MultiSwapStore {
                 // console.log('allowed', this.allowed)
                 if(!this.allowed) {
                     const res = await approve(this.tokenIn, this.provider, this.isDirectRoute ? ROUTER_ADDRESS : multiSwapAddress)
-                    await res.wait(2)
+                    await res?.wait(2)
                 }
                 await this._checkAllowance()
             } catch (e) {
@@ -199,7 +199,7 @@ class MultiSwapStore {
                 this._getToken(this.tokenOut),
             ])
             try {
-                const res = await stores.stableSwapStore.swap({
+                await stores.stableSwapStore.swap({
                     content: {
                         fromAsset: tokenIn,
                         toAsset: tokenOut,
@@ -208,7 +208,6 @@ class MultiSwapStore {
                         slippage: this.slippage,
                     }
                 })
-                await res.wait(2)
                 await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
             } catch (e) {
                 console.log('error', e)
@@ -230,7 +229,7 @@ class MultiSwapStore {
             });
             try {
                 const res = await doSwap(this.swap, this.slippage, this.provider)
-                await res.wait(2)
+                await res?.wait(2)
                 await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
                 await this.notificationHandler({action: ACTIONS.TX_CONFIRMED, content: {txHash: res.hash}});
             } catch (e) {
