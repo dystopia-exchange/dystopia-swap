@@ -4514,7 +4514,7 @@ class Store {
       console.error(ex);
 
       this.emitter.emit(ACTIONS.QUOTE_SWAP_RETURNED, null);
-      this.emitter.emit(ACTIONS.ERROR, ex);
+      // this.emitter.emit(ACTIONS.ERROR, ex);
     }
   };
   emitSwapNotification = async ({action, content}) => {
