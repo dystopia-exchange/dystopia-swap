@@ -6,9 +6,10 @@ import stores from "../../stores";
 // import { wmaticAbi } from './wmaticAbi'
 // import { CONTRACTS } from "../../stores/constants";
 import {FTM_SYMBOL, WFTM_ADDRESS, WFTM_DECIMALS, WFTM_SYMBOL} from "../../stores/constants/contracts";
-import {DIRECT_SWAP_ROUTES} from "../../stores/constants";
+import { ACTIONS, DIRECT_SWAP_ROUTES } from "../../stores/constants";
 import {ROUTER_ADDRESS} from "../../stores/constants/contracts";
 import {multiSwapAddress} from "./constants";
+import { v4 as uuidv4 } from 'uuid';
 
 const erc20abi = [
     // Read-Only Functions
@@ -51,6 +52,7 @@ class MultiSwapStore {
 
     debSwapQuery = null
     error = null
+    swapTXHash = null;
 
     constructor() {
         makeAutoObservable(this, {
@@ -76,6 +78,10 @@ class MultiSwapStore {
     get contract() {
         return getSwapContract(this.provider.getSigner())
     }
+
+    get getTXUUID() {
+        return uuidv4();
+    };
 
     setTokenIn(value) {
         this.tokenIn = value
@@ -165,6 +171,7 @@ class MultiSwapStore {
     }
 
     async doSwap() {
+        this.swapTXHash = this.getTXUUID;
         if (this.swap === null) {
             return
         }
@@ -204,14 +211,27 @@ class MultiSwapStore {
                 this.isFetchingSwap = false
             }
         } else {
+            await this.notificationHandler({action: ACTIONS.TX_ADDED, content: {
+                    fromAsset: {address: this.swap?.tokenIn},
+                    toAsset: {address: this.swap?.tokenOut},
+                    fromAmount: this.swapAmount
+                }
+            });
+            await this.notificationHandler({action: ACTIONS.TX_STATUS, content: {
+                    fromAsset: {address: this.swap?.tokenIn},
+                    toAsset: {address: this.swap?.tokenOut}
+                }
+            });
             try {
                 // todo slippage is Price impact tolerance!!! temporally setup to 100% tolerance
-                const res = await doSwap(this.swap, '100', this.provider)
+                const res = await doSwap(this.swap, '100', this.provider, this.notificationHandler)
                 await res.wait()
                 await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
+                await this.notificationHandler({action: ACTIONS.TX_CONFIRMED, content: {txHash: res.hash}});
             } catch (e) {
                 console.log('error', e)
                 this.error = 'Swap request error'
+                await this.notificationHandler({action: ACTIONS.TX_REJECTED, content: {error: e}});
             } finally {
                 this.isFetchingSwap = false
             }
@@ -277,7 +297,7 @@ class MultiSwapStore {
                 this._getToken(this.tokenOut),
             ])
             // console.log('tokenIn', JSON.parse(JSON.stringify(this.tokenIn)))
-            const swapAmount = ethers.utils.parseUnits(this.swapAmount, tokenIn.decimals).toString();
+            const swapAmount = ethers.utils?.parseUnits(this.swapAmount, tokenIn.decimals).toString();
             this.isFetchingSwapQuery = true
 
             // query old router for direct swap routes
@@ -332,12 +352,24 @@ class MultiSwapStore {
 
     async _checkAllowance() {
         if (this.isWrapUnwrap) {
-            this.allowed = true
+            this.allowed = true;
+            await this.notificationHandler({action: ACTIONS.TX_STATUS, content: {
+                    fromAsset: {address: this.swap?.tokenIn},
+                    toAsset: {address: this.swap?.tokenOut},
+                    allowed: true
+                }
+            });
             return true
         }
 
         if (this.tokenIn === FTM_SYMBOL) {
-            this.allowed = true
+            this.allowed = true;
+            await this.notificationHandler({action: ACTIONS.TX_STATUS, content: {
+                    fromAsset: {address: this.swap?.tokenIn},
+                    toAsset: {address: this.swap?.tokenOut},
+                    allowed: true
+                }
+            });
             return true
         }
         // console.log('_checkAllowance', this.isDirectRoute)
@@ -346,8 +378,20 @@ class MultiSwapStore {
             const response = await allowance(this.tokenIn, this.provider, this.isDirectRoute ? ROUTER_ADDRESS : multiSwapAddress)
             this.allowed = response
             this.isFetchingAllowance = false
+            await this.notificationHandler({action: ACTIONS.TX_STATUS, content: {
+                    fromAsset: {address: this.swap?.tokenIn},
+                    toAsset: {address: this.swap?.tokenOut},
+                    allowed: response
+                }
+            });
             return response
         }
+        await this.notificationHandler({action: ACTIONS.TX_STATUS, content: {
+                fromAsset: {address: this.swap?.tokenIn},
+                toAsset: {address: this.swap?.tokenOut},
+                allowed: false
+            }
+        });
         return false
     }
 
@@ -402,6 +446,18 @@ class MultiSwapStore {
 
     get excludedPlatforms() {
         return this.excludePlatforms
+    }
+
+    notificationHandler = async (data) => {
+        const {content = {}, action} = data ?? {};
+        const fromAsset = {...content.fromAsset, symbol: this.tokenIn};
+        const toAsset = {...content.toAsset, symbol: this.tokenOut};
+        try {
+            await stores.stableSwapStore.emitSwapNotification({action, content: {...content, fromAsset, toAsset, swapTXHash: this.swapTXHash}});
+        } catch (e) {
+            console.log('notification error', e);
+            await this.notificationHandler({action: ACTIONS.TX_REJECTED, content: {error: e}});
+        }
     }
 }
 

@@ -49,7 +49,8 @@ export default function TransactionQueue({setQueueLength}) {
       setType(params.type);
       setAction(params.verb);
       setOpen(true);
-      const txs = [...params.transactions];
+      const currentTxs = transactions?.length > 10 ? [...transactions].slice(0, 8) : [...transactions];
+      const txs = [...params.transactions, ...currentTxs];
       setTransactions(txs);
 
       setQueueLength(params.transactions.length);

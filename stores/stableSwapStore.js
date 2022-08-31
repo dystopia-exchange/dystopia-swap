@@ -23,6 +23,7 @@ import migratorAbi from "./abis/migrator.json";
 import FactoryAbi from "./abis/FactoryAbi.json";
 import { ConstructionOutlined } from "@mui/icons-material";
 import {
+  FTM_SYMBOL,
   USD_PLUS_ADDRESS,
   USD_PLUS_BOOSTED_DATA_URL,
 } from "./constants/contracts";
@@ -4516,6 +4517,85 @@ class Store {
       this.emitter.emit(ACTIONS.ERROR, ex);
     }
   };
+  emitSwapNotification = async ({action, content}) => {
+    const {swapTXHash, fromAsset, toAsset, fromAmount, allowed, txHash, error = {}} = content ?? {};
+    let allowanceTXID = `${fromAsset.symbol}-${toAsset.symbol}`;
+    let swapTXID = `${toAsset.symbol}-${swapTXHash}`;
+    let payload = {};
+    switch ( action ) {
+
+      case ACTIONS.TX_ADDED:
+        payload = {
+          title: `Swap ${fromAsset.symbol} for ${toAsset.symbol}`,
+          type: "Swap",
+          verb: "Swap Successful",
+          transactions: [
+            {
+              uuid: allowanceTXID,
+              description: `Checking your ${fromAsset.symbol} allowance`,
+              status: "WAITING",
+            },
+            {
+              uuid: swapTXID,
+              description: `Swap ${formatCurrency(fromAmount)} ${
+                  fromAsset.symbol
+              } for ${toAsset.symbol}`,
+              status: "WAITING",
+            },
+          ],
+        };
+        break;
+
+      case ACTIONS.TX_STATUS:
+        if (fromAsset.symbol === FTM_SYMBOL) {
+          payload = {
+            uuid: allowanceTXID,
+            description: `Allowance on ${fromAsset.symbol} sufficient`,
+            status: "DONE",
+          }
+        } else {
+          payload = {
+            uuid: allowanceTXID,
+            description: allowed ? `Allowance on ${fromAsset.symbol} sufficient` : `Allowance on ${fromAsset.symbol} sufficient`,
+            status: allowed ? "DONE" : 'WAITING',
+          }
+        }
+        break;
+
+      case ACTIONS.TX_PENDING:
+        payload = {
+          uuid: swapTXID,
+          status: "PENDING"
+        };
+        break;
+
+      case ACTIONS.TX_SUBMITTED:
+        payload = {
+          uuid: swapTXID,
+          status: "SUBMITTED",
+          txHash
+        };
+        break;
+      case ACTIONS.TX_CONFIRMED:
+        payload = {
+          uuid: swapTXID,
+          status: "CONFIRMED",
+          txHash: txHash
+        };
+        break;
+      case ACTIONS.TX_REJECTED:
+        payload = {
+          uuid: swapTXID,
+          status: "REJECTED",
+          error: error.message
+        };
+        break;
+      default:
+        action = ACTIONS.TX_CLEAR_QUEUE;
+    }
+
+    this.emitter.emit(action, payload);
+  }
 
   swap = async (payload) => {
     try {

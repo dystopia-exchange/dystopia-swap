@@ -1,8 +1,7 @@
 import React  from 'react'
 import { observer } from 'mobx-react'
 import { multiSwapStore } from './store'
-import {useProvider} from "./hooks"
-import { debounce } from "debounce"
+import { useProvider } from "./hooks"
 
 export const MultiSwap = observer((props) => {
     const [provider] = useProvider()

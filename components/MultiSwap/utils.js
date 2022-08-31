@@ -3,7 +3,7 @@ import { _SLIPPAGE_PRECISION, multiSwapAddress } from './constants'
 //@ts-ignore
 import MultiSwap2Abi from './MultiSwap2.json'
 import BigNumber from "bignumber.js";
-import {ZERO_ADDRESS} from "../../stores/constants";
+import { ACTIONS, ZERO_ADDRESS } from "../../stores/constants";
 require('url')
 
 const ERC20Abi = [
@@ -61,13 +61,19 @@ export function getDeadline() {
     return Math.floor(Date.now() / 1000) + 60 * 30;
 }
 
-export async function doSwap(swap, slippage, provider) {
+export async function doSwap(swap, slippage, provider, notificationHandler) {
     console.log('----- swap args:', JSON.parse(JSON.stringify(swap)))
     console.log('----- ', getSlippage(slippage), getDeadline())
-
+    const notificationRequired = typeof notificationHandler === "function";
+    const notificationPayload = {
+        fromAsset: {address: swap?.tokenIn},
+        toAsset: {address: swap?.tokenOut},
+    };
     if (swap && swap.returnAmount) {
         const swapNative = swap.swapData.tokenIn === ZERO_ADDRESS;
-
+        if (notificationRequired) {
+            await notificationHandler({action: ACTIONS.TX_PENDING, content: notificationPayload});
+        }
         // call static check for swap error catching
         await getSwapContract()
             .connect(provider.getSigner())
@@ -91,7 +97,9 @@ export async function doSwap(swap, slippage, provider) {
                 getDeadline(),
                 { gasLimit: 3000000, value: swapNative ? swap.swapData.swapAmount : 0 }
             );
-
+        if (notificationRequired) {
+            await notificationHandler({action: ACTIONS.TX_SUBMITTED, content: {...notificationPayload, txHash: tx.hash}});
+        }
         return tx
 
         // console.log('tx', tx);
