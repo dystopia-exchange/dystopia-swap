@@ -236,6 +236,7 @@ class MultiSwapStore {
             } catch (e) {
                 console.log('error', e)
                 this.error = this.parseError(e)
+                await this.notificationHandler({action: ACTIONS.TX_REJECTED, content: {error: e}});
             } finally {
                 this.isFetchingSwap = false
             }

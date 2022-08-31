@@ -49,8 +49,7 @@ export default function TransactionQueue({setQueueLength}) {
       setType(params.type);
       setAction(params.verb);
       setOpen(true);
-      const currentTxs = transactions?.length > 10 ? [...transactions].slice(0, 8) : [...transactions];
-      const txs = [...params.transactions, ...currentTxs];
+      const txs = [...params.transactions];
       setTransactions(txs);
 
       setQueueLength(params.transactions.length);
@@ -162,15 +161,13 @@ export default function TransactionQueue({setQueueLength}) {
     }
 
     return (
-      <>
-        <div className={classes.transactionsContainer}>
-          {
-            transactions && transactions.map((tx, idx) => {
-              return <Transaction transaction={tx}/>;
-            })
-          }
-        </div>
-      </>
+      <div className={classes.transactionsContainer}>
+        {
+          transactions && transactions.map((tx, idx) => {
+            return <Transaction transaction={tx} key={idx}/>;
+          })
+        }
+      </div>
     );
   };
 
