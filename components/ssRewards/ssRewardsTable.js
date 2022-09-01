@@ -529,7 +529,7 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
+export default function EnhancedTable({ rewards, tokenID }) {
   const classes = useStyles();
   const router = useRouter();
 
@@ -1045,12 +1045,17 @@ export default function EnhancedTable({ rewards, vestNFTs, tokenID }) {
 
                               {row &&
                                 row.rewardType === "Reward" &&
-                                tableCellContent(
-                                  formatCurrency(row.gauge.rewardsEarned),
-                                  null,
-                                  "DYST",
-                                  null
-                                )}
+                                row.gauge &&
+                                row.gauge.rewardTokens &&
+                                row.gauge.rewardTokens.map((rt) => {
+                                  return tableCellContent(
+                                    formatCurrency(rt?.rewardsEarned),
+                                    null,
+                                    rt?.token?.symbol,
+                                    null,
+                                    null
+                                  );
+                                })}
 
                               {row &&
                                 row.rewardType === "Distribution" &&

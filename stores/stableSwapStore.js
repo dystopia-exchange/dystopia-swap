@@ -75,6 +75,11 @@ const pairsQuery = `
       }
       rewardTokens {
         apr
+        token {
+          id
+          decimals
+          symbol
+        }        
       }
     }
     gaugebribes {
@@ -134,7 +139,23 @@ query ve($id: ID!) {
 }
 `;
 
+const userQuery = `
+query user($account: ID!) {
+  user(id: $account) {
+    liquidityPositions {
+      liquidityTokenBalance
+      pair {
+        id
+        symbol
+      }
+    }        
+  }
+}
+`;
+
 const client = createClient({ url: process.env.NEXT_PUBLIC_API });
+
+let rewardsLoading = false;
 
 const removeDuplicate = (arr) => {
   const assets = arr.reduce((acc, item) => {
@@ -1376,6 +1397,7 @@ class Store {
 
       this.setStore({ vestNFTs: nfts });
       this.emitter.emit(ACTIONS.UPDATED);
+      this.emitter.emit(ACTIONS.UPDATED_NFTS);
     } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);
@@ -6282,6 +6304,11 @@ class Store {
   };
 
   getRewardBalances = async (payload) => {
+    const { tokenID } = payload.content;
+    if (rewardsLoading || !tokenID) {
+      return null;
+    }
+    rewardsLoading = true;
     try {
       const account = stores.accountStore.getStore("account");
       if (!account) {
@@ -6295,9 +6322,15 @@ class Store {
         return null;
       }
 
-      const { tokenID } = payload.content;
+      const userQueryResponse = (await client.query(userQuery, {account: account.address.toLowerCase()}).toPromise());
+      if(!!userQueryResponse.error) {
+        console.log("USER POSITIONS QUERY ERROR", account.address.toLowerCase(), userQueryResponse.error);
+      } else {
+        // console.log('USER POSITIONS', userQueryResponse)
+      }
+      const userPoolIds = userQueryResponse.data.user.liquidityPositions.map(p => p.pair.id)
 
-      const pairs = this.getStore("pairs");
+      const pairs = this.getStore("pairs").filter(p => userPoolIds.includes(p.id));
       const veToken = this.getStore("veToken");
       const govToken = this.getStore("govToken");
 
@@ -6331,7 +6364,7 @@ class Store {
             ]);
 
             const bribeTokens = [
-              { rewardRate: "", rewardAmount: "", address: "", symbol: "" },
+              {rewardRate: "", rewardAmount: "", address: "", symbol: ""},
             ];
             for (let i = 0; i < rewardsListLength; i++) {
               let [bribeTokenAddress] = await multicall.aggregate([
@@ -6443,6 +6476,7 @@ class Store {
           filteredFees.push(pair);
         }
       }
+
       const rewardsEarned = await Promise.all(
         filteredPairs2.map(async (pair) => {
           const gaugeContract = new web3.eth.Contract(
@@ -6450,16 +6484,17 @@ class Store {
             pair.gauge.address
           );
 
-          const [earned] = await Promise.all([
-            gaugeContract.methods
-              .earned(CONTRACTS.GOV_TOKEN_ADDRESS, account.address)
-              .call(),
-          ]);
+          for(const rt of pair.gauge.rewardTokens){
+            const [earned] = await Promise.all([
+              gaugeContract.methods
+                .earned(rt.token.id, account.address)
+                .call(),
+            ]);
 
-          pair.gauge.rewardsEarned = BigNumber(earned)
-            .div(10 ** 18)
-            .toFixed(18);
-
+            rt.rewardsEarned = BigNumber(earned)
+              .div(10 ** (+rt.token.decimals))
+              .toFixed(+rt.token.decimals);
+          }
           return pair;
         })
       );
@@ -6468,8 +6503,7 @@ class Store {
         let pair = Object.assign({}, rewardsEarned[j]);
         if (
           pair.gauge &&
-          pair.gauge.rewardsEarned &&
-          BigNumber(pair.gauge.rewardsEarned).gt(0)
+          pair.gauge.rewardTokens.reduce((a,b) => a + +b.rewardsEarned, 0) > 0
         ) {
           pair.rewardType = "Reward";
           filteredRewards.push(pair);
@@ -6491,6 +6525,8 @@ class Store {
     } catch (ex) {
       console.error(ex);
       this.emitter.emit(ACTIONS.ERROR, ex);
+    } finally {
+      rewardsLoading = false;
     }
   };
 
@@ -7151,8 +7187,8 @@ class Store {
       .then((gasAmount) => {
         const context = this;
 
-        let sendGasAmount = BigNumber(gasAmount).times(1.1).toFixed(0);
-        let sendGasPrice = BigNumber(gasPrice).times(1).toFixed(0);
+        let sendGasAmount = BigNumber(gasAmount).times(1.2).toFixed(0);
+        let sendGasPrice = BigNumber(gasPrice).times(1.2).toFixed(0);
         // if (paddGasCost) {
         //   sendGasAmount = BigNumber(sendGasAmount).times(1.15).toFixed(0)
         // }
