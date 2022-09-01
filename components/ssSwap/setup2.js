@@ -410,146 +410,186 @@ function Setup() {
         }
     };
 
+    const getTokenAssets = (route, multiSwapData) => {
+        let tokenIn = null
+        let tokenOut = null
+        const baseAsset = stores.stableSwapStore.getStore("baseAssets");
+
+        baseAsset.forEach((asset) => {
+            if (asset.address?.toLowerCase() === route.tokenIn?.toLowerCase()) {
+                tokenIn = asset
+            }
+            if (asset.address?.toLowerCase() === route.tokenOut?.toLowerCase()) {
+                tokenOut = asset
+            }
+        })
+
+        if (tokenOut === null && multiSwapData && multiSwapData.tokens && multiSwapData.tokens[route.tokenOut]) {
+            tokenOut = multiSwapData.tokens[route.tokenOut]
+        }
+
+        return {tokenIn, tokenOut};
+    }
+
     const renderSwapInformation = (args) => {
         const { routes, multiswapData, directSwapRoute } = args
 
-        const renderRoutes = (route) => {
-            const [{ percentage }] = route
+        const renderRoutes = (routesArr, multiSwapData) => {
+            const routesLength = routesArr ? routesArr.length : 0;
+            if (routesLength === 0) {
+                return;
+            }
+            let tokenIn = getTokenAssets(routesArr[0][0], multiSwapData)?.tokenIn;
+            let tokenOut = getTokenAssets(routesArr[0][routesArr[0].length - 1], multiSwapData)?.tokenOut;
+            const isMultiRouts = routesArr.length > 1;
 
             return (
-                <>
-                    <div className={[classes.routesList]}>
-                        {route.map((el, index) => {
-                            let tokenIn = null
-                            let tokenOut = null
-                            const baseAsset = stores.stableSwapStore.getStore("baseAssets");
-
-                            baseAsset.forEach((asset) => {
-                                if (asset.address?.toLowerCase() === el.tokenIn?.toLowerCase()) {
-                                    tokenIn = asset
-                                }
-                                if (asset.address?.toLowerCase() === el.tokenOut?.toLowerCase()) {
-                                    tokenOut = asset
-                                }
-                            })
-
-                            if (tokenOut === null && multiswapData.tokens && multiswapData.tokens[el.tokenOut]) {
-                                tokenOut = multiswapData.tokens[el.tokenOut]
-                            }
-
-                            const isLastEl = index === route.length - 1
-
-                            return (
-                                <>
-                                    {index === 0 && (
-                                        <>
-                                            <img
-                                                className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(" ")}
-                                                alt=""
-                                                src={tokenIn?.logoURI}
-                                                height="40px"
-                                                onError={(e) => {
-                                                    e.target.onerror = null;
-                                                    e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                                                }}
-                                            />
-                                        </>
-                                    )}
-
-                                    {index === 0 && (
-                                        <>
-                                            <div
-                                                className={[
-                                                    classes.routesPlatform,
-                                                    classes.routeLinesLeftText,
-                                                    classes[`routeLinesLeftText--${appTheme}`]
-                                                ].join(" ")}
-                                            >
-                                                {percentage}%
-                                            </div>
-
-                                            <div
-                                                className={[
-                                                    classes.routesListItemArrow,
-                                                    classes[`routesListItemArrow--${appTheme}`]
-                                                ].join(" ")}
-                                            >
-                                                <div className={[
-                                                    classes.routesListItemArrowIcon,
-                                                    classes[`routesListItemArrowIcon--${appTheme}`]
-                                                ].join(' ')}></div>
-                                                <span className={[
-                                                    classes.routesListItemArrowPlatform,
-                                                    classes[`routesListItemArrowPlatform--${appTheme}`]
-                                                ].join(' ')}>
-                                                    {el.dex.name}
-                                                    {!directSwapRoute && <span
-                                                        className={[classes.routesListItemArrowPlatformExclude].join(' ')}
-                                                        onClick={() => {
-                                                            multiSwapStore.excludePlatformToggle(el.dex.name)
-                                                        }}
-                                                    >&#215;</span>}
-                                                </span>
-                                            </div>
-                                        </>
-                                    )}
-
-                                    <img
-                                        className={[
-                                            classes.routeIcon,
-                                            classes[`routeIcon--${appTheme}`],
-                                            isLastEl ? '' : classes.routeSmallIcon
-                                        ].join(" ")}
-                                        alt=""
-                                        src={tokenOut?.logoURI || `/tokens/unknown-logo--${appTheme}.svg`}
-                                        height="40px"
-                                        onError={(e) => {
-                                            e.target.onerror = null;
-                                            e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
-                                        }}
-                                    />
-
-                                    {!isLastEl && (
-                                        <span className={[
-                                            classes.routesListItemSymbol,
-                                            classes[`routesListItemSymbol--${appTheme}`]
-                                        ].join(' ')}>
-                                            {tokenOut?.symbol}
-                                        </span>
-                                    )}
-                                    {!isLastEl && (
-                                        <div
-                                            className={[
-                                                classes.routesListItemArrow,
-                                                classes[`routesListItemArrow--${appTheme}`]
-                                            ].join(" ")}
-                                        >
-                                            <div className={[
-                                                classes.routesListItemArrowIcon,
-                                                classes[`routesListItemArrowIcon--${appTheme}`]
-                                            ].join(' ')}></div>
-                                            <span
-                                                className={[
-                                                    classes.routesListItemArrowPlatform,
-                                                    classes[`routesListItemArrowPlatform--${appTheme}`]
-                                                ].join(' ')}
-                                                onClick={() => {
-                                                    multiSwapStore.excludePlatformToggle(route[index + 1].dex.name)
-                                                }}
-                                            >
-                                                {route[index + 1].dex.name}
-                                                <span className={[classes.routesListItemArrowPlatformExclude].join(' ')}>&#215;</span>
-                                            </span>
-                                        </div>
-                                    )}
-                                </>
-                            )
-                        })}
+                <div className={classes.routesListWrapper}>
+                    <div className={[classes.routeMainIcon, classes[`routeMainIcon--${appTheme}`], classes[`routeMainIcon--${isMultiRouts ? 'in' : 'in-one'}`]].join(" ")}>
+                        <img
+                            className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(" ")}
+                            alt=""
+                            src={tokenIn?.logoURI}
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                            }}
+                        />
                     </div>
-                </>
+                    <div className={classes.routesListBlock}>
+                        {routesArr.map((route, idx) => {
+                        const [{ percentage }] = route;
+                        const isDirect = route?.length === 1;
+                        const routesListItemWrapper = route?.length > 3 ? [classes.routesListItemWrapper, classes.routesListItemWrapperLong].join(" ") : classes.routesListItemWrapper;
+                        return (
+                            <div className={[classes.routesList]} key={idx}>
+                                {route.map((el, index) => {
+                                    const {tokenOut} = getTokenAssets(el, multiSwapData);
+                                    const isLastEl = index === route.length - 1;
+                                    return (
+                                        <>
+                                            {index === 0 && (
+                                                <div className={routesListItemWrapper}>
+                                                    <div className={classes.routesListItemArrowWrapper}>
+                                                        <div
+                                                            className={[
+                                                                classes.routesPlatform,
+                                                                classes.routeLinesLeftText,
+                                                                classes[`routeLinesLeftText--${appTheme}`]
+                                                            ].join(" ")}
+                                                        >
+                                                            {percentage}%
+                                                        </div>
+
+                                                        <div
+                                                            className={[
+                                                                classes.routesListItemArrow,
+                                                                classes[`routesListItemArrow--${appTheme}`]
+                                                            ].join(" ")}
+                                                        >
+                                                            <div className={[
+                                                                classes.routesListItemArrowIcon,
+                                                                classes[`routesListItemArrowIcon--${appTheme}`]
+                                                            ].join(' ')}></div>
+                                                        </div>
+                                                    </div>
+                                                    <div className={[classes.routesListItemPlatformWrapper, classes[`routesListItemPlatformWrapper--${isDirect ? 'direct' : 'multi'}`]].join(" ")} >
+                                                        <span
+                                                            className={[
+                                                                classes.routesListItemArrowPlatform,
+                                                                classes[`routesListItemArrowPlatform--${appTheme}`]
+                                                            ].join(' ')}
+                                                        >
+                                                            <span className={[
+                                                                    classes.routesListItemArrowPlatformName,
+                                                                    classes[`routesListItemArrowPlatform--${appTheme}`]
+                                                                ].join(' ')}>{el.dex.name}</span>
+                                                            {!directSwapRoute && <span
+                                                                className={[classes.routesListItemArrowPlatformExclude].join(' ')}
+                                                                onClick={() => {
+                                                                        multiSwapStore.excludePlatformToggle(el.dex.name)
+                                                                    }}
+                                                            >&#215;</span>}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {!isLastEl &&
+                                                <div className={routesListItemWrapper}>
+                                                    <div className={classes.routesListItemArrowWrapper}>
+                                                        <img
+                                                            className={[
+                                                                classes.routeIcon,
+                                                                classes[ `routeIcon--${appTheme}` ],
+                                                                isLastEl ? '' : classes.routeSmallIcon
+                                                            ].join(" ")}
+                                                            alt=""
+                                                            src={tokenOut?.logoURI || `/tokens/unknown-logo--${appTheme}.svg`}
+                                                            onError={(e) => {
+                                                                e.target.onerror = null;
+                                                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                                                            }}
+                                                        />
+                                                        <span className={[
+                                                            classes.routesListItemSymbol,
+                                                            classes[ `routesListItemSymbol--${appTheme}` ]
+                                                        ].join(' ')}>
+                                                            {tokenOut?.symbol}
+                                                        </span>
+
+                                                        <div
+                                                            className={[
+                                                                classes.routesListItemArrow,
+                                                                classes[ `routesListItemArrow--${appTheme}` ]
+                                                            ].join(" ")}
+                                                        >
+                                                            <div className={[
+                                                                classes.routesListItemArrowIcon,
+                                                                classes[ `routesListItemArrowIcon--${appTheme}` ]
+                                                            ].join(' ')}></div>
+                                                        </div>
+                                                    </div>
+                                                    <div className={[classes.routesListItemPlatformWrapper, classes[`routesListItemPlatformWrapper--${isDirect ? 'direct' : 'multi'}`]].join(" ")} >
+                                                        <span
+                                                            className={[
+                                                                classes.routesListItemArrowPlatform,
+                                                                classes[ `routesListItemArrowPlatform--${appTheme}` ]
+                                                            ].join(' ')}
+                                                            onClick={() => {
+                                                                multiSwapStore.excludePlatformToggle(route[ index + 1 ].dex.name)
+                                                            }}
+                                                        >
+                                                            <span className={[
+                                                                classes.routesListItemArrowPlatformName,
+                                                                classes[ `routesListItemArrowPlatform--${appTheme}` ]
+                                                            ].join(' ')}>{route[ index + 1 ].dex.name}</span>
+                                                            <span
+                                                                className={[ classes.routesListItemArrowPlatformExclude ].join(' ')}>&#215;</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </>
+                                    )
+                                })}
+                            </div>
+                        )
+                    })}
+                    </div>
+                    <div className={[classes.routeMainIcon, classes[`routeMainIcon--${appTheme}`], classes[`routeMainIcon--${isMultiRouts ? 'out' : 'out-one'}`]].join(" ")}>
+                        <img
+                            className={[classes.routeIcon, classes[`routeIcon--${appTheme}`]].join(" ")}
+                            alt=""
+                            src={tokenOut?.logoURI}
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = `/tokens/unknown-logo--${appTheme}.svg`;
+                            }}
+                        />
+                    </div>
+                </div>
             )
         }
-
         return (
             <>
                 <div className={classes.depositInfoContainer}>
@@ -560,19 +600,7 @@ function Setup() {
                             width: "100%",
                         }}
                     >
-                        {routes && Array.isArray(routes) && routes.length > 0 && (
-                            <>
-                                <Typography
-                                    className={[
-                                        classes.depositInfoHeading,
-                                        classes[`depositInfoHeading--${appTheme}`],
-                                    ].join(" ")}
-                                >
-                                    Routes
-                                </Typography>
-                                {routes.map(renderRoutes)}
-                            </>
-                        )}
+                        {routes && Array.isArray(routes) && routes.length > 0 && renderRoutes(routes, multiswapData)}
                         {multiSwapStore.excludedPlatforms.length > 0 && (
                             <>
                                 <div className={classes.excludedPlatformWrapper}>
