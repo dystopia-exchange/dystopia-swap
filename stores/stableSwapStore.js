@@ -6894,7 +6894,7 @@ class Store {
         pair.gauge.address
       );
 
-      const sendTokens = [CONTRACTS.GOV_TOKEN_ADDRESS];
+      const sendTokens = pair.gauge.rewardTokens.map(p => p.token.id);
 
       this._callContractWait(
         web3,
