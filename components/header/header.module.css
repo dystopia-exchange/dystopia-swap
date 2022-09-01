@@ -526,13 +526,20 @@
   }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 686px) {
+  .testnetDisclaimerText {
+    font-size: 12px !important;
+    line-height: 22px !important;
+  }
+}
+
+@media (max-width: 670px) {
   .testnetDisclaimer {
     display: none;
   }
 }
 
-@media (max-width: 530px) {
+@media (max-width: 560px) {
   .testnetDisclaimer {
     display: none;
   }
@@ -582,7 +589,7 @@
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 380px) {
   .logoContainer {
     display: none;
   }
