@@ -24,6 +24,7 @@ export const GET_GAS_PRICES = "GET_GAS_PRICES";
 export const GAS_PRICES_RETURNED = "GAS_PRICES_RETURNED";
 
 export const UPDATED = "UPDATED";
+export const UPDATED_NFTS = "UPDATED_NFTS";
 
 export const CONFIGURE_SS = "CONFIGURE_SS";
 export const CONFIGURED_SS = "CONFIGURED_SS";
