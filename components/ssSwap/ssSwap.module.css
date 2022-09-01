@@ -503,7 +503,7 @@ input[type=number].massiveInputAmount {
 .routeLinesRightText {
   position: absolute;
   left: calc(25% + 2px);
-  padding: 2px 3px;
+  padding: 0 3px;
   background: var(--background-light);
   font-weight: 500;
   font-size: 12px;
@@ -540,13 +540,15 @@ input[type=number].massiveInputAmount {
 }
 
 .routeIcon {
-  padding: 4px;
-  border-radius: 100px;
+  padding: 2px;
+  border-radius: 30px;
+  width: 30px;
+  height: 30px;
 }
 
 .routeSmallIcon {
-  width: 30px !important;
-  height: 30px !important;
+  width: 17px !important;
+  height: 17px !important;
   padding: 0 !important;
   border: none !important;
   background-color: transparent !important;
@@ -641,10 +643,9 @@ input[type=number].massiveInputAmount {
 
 .routesPlatform {
   position: static !important;
-  margin-bottom: 5px;
+  margin: 0;
   font-size: 14px;
   font-weight: normal;
-  margin-left: 8px;
   color: #7C838A;
 }
 
@@ -656,14 +657,67 @@ input[type=number].massiveInputAmount {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   width: 100%;
-  border-radius: 25px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
-.routesListItem:first-child {
+.routesList:last-of-type {
+  margin-bottom: 0;
+}
 
+.routesList:first-of-type:last-of-type {
+  margin: 6px 0 -6px 0;
+}
+
+.routesListWrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  padding: 8px 0 4px 0;
+}
+
+.routesListBlock {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  padding: 0 2px;
+}
+
+.routesListBlock--light {
+  background: var(--background-light);
+}
+.routesListBlock--black {
+  background: var(--background-dark);
+}
+
+.routeMainIcon {
+  border-right: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.routeMainIcon img {
+  margin-right: -15px;
+}
+
+.routeMainIcon--in {}
+.routeMainIcon--out {
+  /*margin-right: 0;*/
+}
+.routeMainIcon--in-one,
+.routeMainIcon--out-one {
+  border-color: transparent !important;
+}
+
+.routeMainIcon--light {
+  border-color: #86B9D6;
+  background: var(--background-light);
+}
+.routeMainIcon--dark {
+  border-color: #5F7285;
+  background: var(--background-dark);
 }
 
 .routesListItem {
@@ -672,6 +726,31 @@ input[type=number].massiveInputAmount {
   align-items: center;
   margin-top: 6px;
   margin-bottom: 6px;
+}
+
+.routesListItemWrapper {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+}
+
+.routesListItemArrowWrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.routesListItemPlatformWrapper {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+}
+.routesListItemPlatformWrapper--direct {
+  justify-content: center;
+}
+.routesListItemPlatformWrapper--multi {
+  max-width: 25%;
 }
 
 .loadingMessageWrapper {
@@ -690,7 +769,7 @@ input[type=number].massiveInputAmount {
 }
 
 .routesListItemSymbol {
-  margin-left: 6px;
+  margin-left: 2px;
   font-size: 14px;
 }
 
@@ -727,10 +806,9 @@ input[type=number].massiveInputAmount {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  padding-left: 8px;
-  padding-right: 8px;
-  margin-top: -30px;
-  margin-bottom: -30px;
+  padding: 0 3px;
+  margin-top: -8px;
+  margin-bottom: 4px;
   position: relative;
 }
 
@@ -739,10 +817,16 @@ input[type=number].massiveInputAmount {
 }
 
 .routesListItemArrowPlatform {
-  font-size: 10px;
+  font-size: 12px;
   opacity: 0.8;
   display: flex;
   align-items: center;
+}
+
+.routesListItemArrowPlatformName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .routesListItemArrowPlatform--light {
@@ -946,3 +1030,33 @@ input[type=number].massiveInputAmount {
     margin-left: 0 !important;
   }
 }
+
+@media (max-width: 495px) {
+
+  .routeLinesLeftText,
+  .routeLinesRightText {
+    font-size: 10px;
+    padding: 2px 3px;
+  }
+  .routeIcon {
+    border-radius: 21px;
+    width: 21px;
+    height: 21px;
+  }
+  .routeMainIcon {
+    margin-right: 11px;
+  }
+  .routeMainIcon img {
+    margin-right: -11px;
+  }
+  .routesListItemArrowPlatform {
+    font-size: 10px;
+  }
+  .routesListItemWrapperLong .routesListItemArrowPlatformName {
+    max-width: 30px;
+  }
+  .routesListItemPlatformWrapper--direct .routesListItemArrowPlatformName {
+    max-width: none;
+  }
+}
+
