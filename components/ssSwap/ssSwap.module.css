@@ -374,7 +374,6 @@ input[type=number].massiveInputAmount {
   display: flex;
   align-items: baseline;
   width: 100%;
-  height: 67px;
 }
 
 .priceInfos--light {
@@ -388,8 +387,11 @@ input[type=number].massiveInputAmount {
 .priceInfo {
   display: flex;
   flex-direction: column;
+  align-content: space-between;
+  justify-content: space-between;
+  min-height: 67px;
   width: 50%;
-  padding: 11px 19px;
+  padding: 13px 10px 11px 19px;
 }
 
 .priceInfo > .title {
@@ -397,7 +399,7 @@ input[type=number].massiveInputAmount {
   margin: 5px 0 0;
   font-weight: 500 !important;
   font-size: 18px !important;
-  line-height: 140% !important;
+  line-height: 1 !important;
 }
 
 .priceInfo > .text {
@@ -405,7 +407,7 @@ input[type=number].massiveInputAmount {
   padding: 0;
   font-weight: 400 !important;
   font-size: 14px !important;
-  line-height: 120% !important;
+  line-height: 1 !important;
 }
 
 .priceInfo--light > .title {
@@ -755,12 +757,11 @@ input[type=number].massiveInputAmount {
 
 .loadingMessageWrapper {
   position: relative;
+  width: 100%;
 }
 
 .loadingMessage {
-  position: absolute;
-  top: 15px;
-  left: 58px;
+  margin-left: 10px;
   color: #0A2C40;
 }
 

@@ -1369,6 +1369,10 @@ function Setup() {
                                             " "
                                         )}
                                     >
+                                        <CircularProgress
+                                            size={20}
+                                            className={classes.loadingCircle}
+                                        />
                                         <div
                                             className={[
                                                 classes.loadingMessage,
@@ -1377,10 +1381,6 @@ function Setup() {
                                         >
                                             {loadingMessage}
                                         </div>
-                                        <CircularProgress
-                                            size={20}
-                                            className={classes.loadingCircle}
-                                        />
                                     </div>
                                 </div>
                             )}
