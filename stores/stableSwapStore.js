@@ -1395,7 +1395,7 @@ class Store {
         })
       );
 
-      this.setStore({ vestNFTs: nfts });
+      this.setStore({ vestNFTs: nfts ?? [] });
       this.emitter.emit(ACTIONS.UPDATED);
       this.emitter.emit(ACTIONS.UPDATED_NFTS);
     } catch (ex) {
@@ -6305,7 +6305,7 @@ class Store {
 
   getRewardBalances = async (payload) => {
     const { tokenID } = payload.content;
-    if (rewardsLoading || !tokenID) {
+    if (rewardsLoading) {
       return null;
     }
     rewardsLoading = true;
@@ -6352,7 +6352,7 @@ class Store {
 
       const multicall = await stores.accountStore.getMulticall();
 
-      if (tokenID) {
+      if (!!tokenID && tokenID !== 0) {
         const bribesEarned = await Promise.all(
           filteredPairs.map(async (pair) => {
             const bribeContract = new web3.eth.Contract(
