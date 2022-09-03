@@ -49,10 +49,20 @@ export default function TransactionQueue({setQueueLength}) {
       setType(params.type);
       setAction(params.verb);
       setOpen(true);
-      const txs = [...params.transactions];
+      const allowanceTXs = transactions.filter(tx => {
+        return !!tx.allowanceUUID && !!tx.isAllowance && params.transactions.filter(item => {
+          return tx.allowanceUUID === item.allowanceUUID;
+        }).length > 0;
+      })
+      const txs = [...allowanceTXs, ...params.transactions];
       setTransactions(txs);
+      setQueueLength(txs.length);
+    };
 
-      setQueueLength(params.transactions.length);
+    const transactionAllowanceAdded = (params) => {
+      const txs = [...params.transactions, ...transactions];
+      setTransactions(txs);
+      setQueueLength(txs.length);
     };
 
     const transactionPending = (params) => {
@@ -115,6 +125,7 @@ export default function TransactionQueue({setQueueLength}) {
 
     stores.emitter.on(ACTIONS.TX_CLEAR_QUEUE, clearTransactions);
     stores.emitter.on(ACTIONS.TX_ADDED, transactionAdded);
+    stores.emitter.on(ACTIONS.TX_ALLOWANCE_ADDED, transactionAllowanceAdded);
     stores.emitter.on(ACTIONS.TX_PENDING, transactionPending);
     stores.emitter.on(ACTIONS.TX_SUBMITTED, transactionSubmitted);
     stores.emitter.on(ACTIONS.TX_CONFIRMED, transactionConfirmed);
@@ -124,6 +135,7 @@ export default function TransactionQueue({setQueueLength}) {
     return () => {
       stores.emitter.removeListener(ACTIONS.TX_CLEAR_QUEUE, clearTransactions);
       stores.emitter.removeListener(ACTIONS.TX_ADDED, transactionAdded);
+      stores.emitter.removeListener(ACTIONS.TX_ALLOWANCE_ADDED, transactionAllowanceAdded);
       stores.emitter.removeListener(ACTIONS.TX_PENDING, transactionPending);
       stores.emitter.removeListener(ACTIONS.TX_SUBMITTED, transactionSubmitted);
       stores.emitter.removeListener(ACTIONS.TX_CONFIRMED, transactionConfirmed);
@@ -145,8 +157,8 @@ export default function TransactionQueue({setQueueLength}) {
     return (
       <div className={classes.transactionsContainer}>
         {
-          transactions && transactions.map((tx) => {
-            return <Transaction transaction={tx}/>;
+          transactions && transactions.map((tx, idx) => {
+            return <Transaction transaction={tx} key={idx} />;
           })
         }
       </div>
@@ -164,7 +176,7 @@ export default function TransactionQueue({setQueueLength}) {
       <div className={classes.transactionsContainer}>
         {
           transactions && transactions.map((tx, idx) => {
-            return <Transaction transaction={tx} key={idx}/>;
+            return <Transaction transaction={tx} key={idx} />;
           })
         }
       </div>

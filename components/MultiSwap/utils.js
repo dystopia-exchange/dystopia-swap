@@ -61,7 +61,7 @@ export function getDeadline() {
     return Math.floor(Date.now() / 1000) + 60 * 30;
 }
 
-export async function doSwap(swap, slippage, provider) {
+export async function doSwap(swap, slippage, provider, notificationHandler) {
     // console.log('----- swap args:', JSON.parse(JSON.stringify(swap)))
     // console.log('----- ', getSlippage(slippage), getDeadline())
     const notificationRequired = typeof notificationHandler === "function";
