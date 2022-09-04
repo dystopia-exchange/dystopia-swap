@@ -1293,8 +1293,8 @@ class Store {
         console.log(e, "error");
       }
       pairsCall2 = pairsCall2.filter((pair) => {
-        return BLACK_LIST_TOKENS.indexOf(pair.token0.address.toLowerCase()) === -1
-          && BLACK_LIST_TOKENS.indexOf(pair.token1.address.toLowerCase()) === -1
+        return BLACK_LIST_TOKENS.indexOf(pair.token0?.address?.toLowerCase()) === -1
+          && BLACK_LIST_TOKENS.indexOf(pair.token1?.address?.toLowerCase()) === -1
       });
       return pairsCall2;
     } catch (ex) {
@@ -6328,23 +6328,28 @@ class Store {
       } else {
         // console.log('USER POSITIONS', userQueryResponse)
       }
-      const userPoolIds = userQueryResponse.data.user.liquidityPositions.map(p => p.pair.id)
+      const userPoolIds = userQueryResponse.data.user?.liquidityPositions?.map(p => p.pair.id)
 
-      const pairs = this.getStore("pairs").filter(p => userPoolIds.includes(p.id));
+      const pairs = this.getStore("pairs")
+      const pairsWithPositions = pairs.filter(p => userPoolIds?.includes(p.id));
       const veToken = this.getStore("veToken");
       const govToken = this.getStore("govToken");
 
-      const filteredPairs = [
+      const pairsForBribes = [
         ...pairs.filter((pair) => {
           return pair && pair.gauge;
         }),
       ];
 
-      const filteredPairs2 = [
-        ...pairs.filter((pair) => {
+      const pairsForGauges = [
+        ...pairsWithPositions.filter((pair) => {
           return pair && pair.gauge;
         }),
       ];
+
+      // console.log('pairsWithPositions', pairsWithPositions)
+      // console.log('pairsForBribes', pairsForBribes)
+      // console.log('pairsForGauges', pairsForGauges)
 
       let veDistReward = [];
 
@@ -6354,7 +6359,7 @@ class Store {
 
       if (!!tokenID && tokenID !== 0) {
         const bribesEarned = await Promise.all(
-          filteredPairs.map(async (pair) => {
+          pairsForBribes.map(async (pair) => {
             const bribeContract = new web3.eth.Contract(
               CONTRACTS.BRIBE_ABI,
               pair.gauge.bribeAddress
@@ -6447,6 +6452,7 @@ class Store {
         const veDistEarned = await veDistContract.methods
           .claimable(tokenID)
           .call();
+        // console.log('veDistEarned', veDistEarned.toString());
         const vestNFTs = this.getStore("vestNFTs");
         let theNFT = vestNFTs.filter((vestNFT) => {
           return vestNFT.id == tokenID;
@@ -6466,8 +6472,8 @@ class Store {
       }
 
       const filteredFees = [];
-      for (let i = 0; i < pairs.length; i++) {
-        let pair = Object.assign({}, pairs[i]);
+      for (let i = 0; i < pairsWithPositions.length; i++) {
+        let pair = Object.assign({}, pairsWithPositions[i]);
         if (
           BigNumber(pair.claimable0).gt(0) ||
           BigNumber(pair.claimable1).gt(0)
@@ -6478,7 +6484,7 @@ class Store {
       }
 
       const rewardsEarned = await Promise.all(
-        filteredPairs2.map(async (pair) => {
+        pairsForGauges.map(async (pair) => {
           const gaugeContract = new web3.eth.Contract(
             CONTRACTS.GAUGE_ABI,
             pair.gauge.address
