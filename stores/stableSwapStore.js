@@ -4539,9 +4539,9 @@ class Store {
       // this.emitter.emit(ACTIONS.ERROR, ex);
     }
   };
-  emitSwapNotification = async ({action, content}) => {
+  emitMultiSwapNotification = async ({action, content}) => {
     const {swapTXHash, fromAsset, toAsset, fromAmount, allowed, txHash, error = {}} = content ?? {};
-    let allowanceTXID = `${fromAsset.symbol}-${toAsset.symbol}`;
+    let allowanceTXID = `${fromAsset.symbol}-allowance`;
     let swapTXID = `${toAsset.symbol}-${swapTXHash}`;
     let payload = {};
     switch ( action ) {
@@ -4553,16 +4553,26 @@ class Store {
           verb: "Swap Successful",
           transactions: [
             {
-              uuid: allowanceTXID,
-              description: `Checking your ${fromAsset.symbol} allowance`,
-              status: "WAITING",
-            },
-            {
               uuid: swapTXID,
               description: `Swap ${formatCurrency(fromAmount)} ${
                   fromAsset.symbol
               } for ${toAsset.symbol}`,
               status: "WAITING",
+              allowanceUUID: allowanceTXID,
+            },
+          ],
+        };
+        break;
+
+      case ACTIONS.TX_ALLOWANCE_ADDED:
+        payload = {
+          transactions: [
+            {
+              uuid: allowanceTXID,
+              description: `Allow the router to spend your ${fromAsset.symbol}`,
+              status: "WAITING",
+              allowanceUUID: allowanceTXID,
+              isAllowance: true
             },
           ],
         };
@@ -4574,12 +4584,14 @@ class Store {
             uuid: allowanceTXID,
             description: `Allowance on ${fromAsset.symbol} sufficient`,
             status: "DONE",
+            allowanceUUID: allowanceTXID
           }
         } else {
           payload = {
             uuid: allowanceTXID,
-            description: allowed ? `Allowance on ${fromAsset.symbol} sufficient` : `Allowance on ${fromAsset.symbol} sufficient`,
+            description: allowed ? `Allowance on ${fromAsset.symbol} sufficient` : `Allow the router to spend your ${fromAsset.symbol}`,
             status: allowed ? "DONE" : 'WAITING',
+            allowanceUUID: allowanceTXID
           }
         }
         break;
@@ -4612,10 +4624,10 @@ class Store {
           error: error.message
         };
         break;
-      default:
-        action = ACTIONS.TX_CLEAR_QUEUE;
+      case ACTIONS.TX_CLEAR_QUEUE:
+        payload = {};
+        console.log('Queue cleared');
     }
-
     this.emitter.emit(action, payload);
   }
 
@@ -7186,7 +7198,7 @@ class Store {
     // }
     // console.log(uuid)
     //estimate gas
-    this.emitter.emit(ACTIONS.TX_PENDING, { uuid });
+    // this.emitter.emit(ACTIONS.TX_PENDING, { uuid });
 
     const gasCost = contract.methods[method](...params)
       .estimateGas({ from: account.address, value: sendValue })

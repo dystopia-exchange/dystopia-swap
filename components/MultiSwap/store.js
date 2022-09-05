@@ -222,13 +222,8 @@ class MultiSwapStore {
                     fromAmount: this.swapAmount
                 }
             });
-            await this.notificationHandler({action: ACTIONS.TX_STATUS, content: {
-                    fromAsset: {address: this.swap?.tokenIn},
-                    toAsset: {address: this.swap?.tokenOut}
-                }
-            });
             try {
-                const res = await doSwap(this.swap, this.slippage, this.provider)
+                const res = await doSwap(this.swap, this.slippage, this.provider, this.notificationHandler)
                 await res?.wait(2)
                 await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
                 await this.notificationHandler({action: ACTIONS.TX_CONFIRMED, content: {txHash: res.hash}});
@@ -374,6 +369,12 @@ class MultiSwapStore {
     }
 
     async _checkAllowance() {
+        await this.notificationHandler({action: ACTIONS.TX_ALLOWANCE_ADDED, content: {
+                fromAsset: {address: this.swap?.tokenIn},
+                toAsset: {address: this.swap?.tokenOut}
+            }
+        });
+
         if (this.isWrapUnwrap) {
             this.allowed = true;
             await this.notificationHandler({action: ACTIONS.TX_STATUS, content: {
@@ -395,12 +396,14 @@ class MultiSwapStore {
             });
             return true
         }
+
         // console.log('_checkAllowance', this.isDirectRoute)
         if (this.provider && this.isDirectRoute !== undefined) {
             this.isFetchingAllowance = true
             const response = await allowance(this.tokenIn, this.provider, this.isDirectRoute ? ROUTER_ADDRESS : multiSwapAddress)
             this.allowed = response
             this.isFetchingAllowance = false
+
             await this.notificationHandler({action: ACTIONS.TX_STATUS, content: {
                     fromAsset: {address: this.swap?.tokenIn},
                     toAsset: {address: this.swap?.tokenOut},
@@ -476,7 +479,7 @@ class MultiSwapStore {
         const fromAsset = {...content.fromAsset, symbol: this.tokenIn};
         const toAsset = {...content.toAsset, symbol: this.tokenOut};
         try {
-            await stores.stableSwapStore.emitSwapNotification({action, content: {...content, fromAsset, toAsset, swapTXHash: this.swapTXHash}});
+            await stores.stableSwapStore.emitMultiSwapNotification({action, content: {...content, fromAsset, toAsset, swapTXHash: this.swapTXHash}});
         } catch (e) {
             console.log('notification error', e);
             await this.notificationHandler({action: ACTIONS.TX_REJECTED, content: {error: e}});
