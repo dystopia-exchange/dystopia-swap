@@ -4,6 +4,7 @@ import { _SLIPPAGE_PRECISION, multiSwapAddress } from './constants'
 import MultiSwap2Abi from './MultiSwap2.json'
 import BigNumber from "bignumber.js";
 import { ACTIONS, ZERO_ADDRESS } from "../../stores/constants";
+import {parseUnits} from "ethers/lib/utils";
 require('url')
 
 const ERC20Abi = [
@@ -19,7 +20,8 @@ export function getSwapContract(signer) {
     );
 }
 
-export async function allowance(tokenAddress, provider, router = multiSwapAddress) {
+export async function allowance(tokenAddress, provider, swapAmount, decimals, router = multiSwapAddress) {
+    console.log('swapAmount', swapAmount, decimals)
     let contract = new ethers.Contract(
         tokenAddress,
         ERC20Abi,
@@ -28,7 +30,7 @@ export async function allowance(tokenAddress, provider, router = multiSwapAddres
     const signer = provider.getSigner()
     const address = await signer.getAddress();
     const res = await contract.callStatic.allowance(address, router);
-    return res && res?._hex && res?._hex !== '0x00'
+    return res && BigNumber(res.toString()).gte(parseUnits(swapAmount ?? '0', decimals ?? '0').toString())
 }
 
 

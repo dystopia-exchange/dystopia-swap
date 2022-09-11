@@ -111,6 +111,7 @@ class MultiSwapStore {
     setSwapAmount(value) {
         this.swapAmount = value
         this.error = null
+        this._checkAllowance()
         this.startSwapQueryPolling()
     }
 
@@ -398,7 +399,9 @@ class MultiSwapStore {
         // console.log('_checkAllowance', this.isDirectRoute)
         if (this.provider && this.isDirectRoute !== undefined) {
             this.isFetchingAllowance = true
-            const response = await allowance(this.tokenIn, this.provider, this.isDirectRoute ? ROUTER_ADDRESS : multiSwapAddress)
+            const tokenIn = await this._getToken(this.tokenIn)
+            // console.log('tokenIn', this.swap)
+            const response = await allowance(this.tokenIn, this.provider, this.swapAmount, tokenIn.decimals, this.isDirectRoute ? ROUTER_ADDRESS : multiSwapAddress)
             this.allowed = response
             this.isFetchingAllowance = false
             await this.notificationHandler({action: ACTIONS.TX_STATUS, content: {
