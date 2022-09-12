@@ -9,6 +9,7 @@ import BtnEnterApp from '../../ui/BtnEnterApp'
 // import rightImageDark from '../../images/main-page/right-illustration-dark.png'
 
 import classes from './home.module.css'
+import {useRouter} from "next/router";
 
 const socialLinks = {
     twitter: 'https://twitter.com/dystopiaswap',
@@ -20,7 +21,8 @@ const socialLinks = {
 
 const HomePage = () => {
     const {appTheme} = useAppThemeContext();
-    
+    const router = useRouter();
+
     const [isHoverState, setIsHoverState] = useState(false);
     const [isClickState, setIsClickState] = useState(false);
     const [btnColor, setBtnColor] = useState(appTheme === 'dark' ? '#33284C' : '#D2D0F2');

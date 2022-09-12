@@ -85,6 +85,7 @@ function Setup() {
             };
 
             const quoteReturned = (val) => {
+                // console.log('quoteReturned val', val)
                 if (!val) {
                     setQuoteLoading(false);
                     setQuote(null);
@@ -111,6 +112,7 @@ function Setup() {
                     }
 
                     setToAmountValue(BigNumber(val.output.finalValue).toFixed(8));
+                    // console.log('setquote')
                     setQuote(val);
                 }
             };
@@ -185,7 +187,7 @@ function Setup() {
             stores.emitter.on(ACTIONS.WRAP_RETURNED, wrapReturned);
             stores.emitter.on(ACTIONS.UNWRAP_RETURNED, wrapReturned);
             stores.emitter.on(ACTIONS.SWAP_RETURNED, swapReturned);
-            // TODO: setQuote
+            // TODO: refactor multiswap to use emitter results
             // stores.emitter.on(ACTIONS.QUOTE_SWAP_RETURNED, quoteReturned);
             stores.emitter.on(ACTIONS.BASE_ASSETS_UPDATED, assetsUpdated);
 
@@ -786,7 +788,7 @@ function Setup() {
                         className={classes.massiveInputAmount}
                         placeholder="0.00"
                         error={amountError}
-                        value={amountValue}
+                        value={amountValue || ''}
                         onChange={amountChanged}
                         disabled={loading || type === "To"}
                         inputMode={"decimal"}
