@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js'
 import * as contractsTestnet from './contractsTestnet'
 import * as contracts from './contracts'
 import * as actions from './actions'
+import * as queries from './graph-queries'
 
 let isTestnet = process.env.NEXT_PUBLIC_CHAINID == 80001
 
@@ -18,10 +19,16 @@ export const ETHERSCAN_URL = scan
 
 export const CONTRACTS = cont
 export const ACTIONS = actions
+export const QUERIES = queries
+
+export const NETWORK_TOKEN_NAME = CONTRACTS.FTM_NAME;
 
 export const MAX_UINT256 = new BigNumber(2).pow(256).minus(1).toFixed(0)
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
+export const RENAME_ASSETS = {
+  "miMATIC": "MAI"
+}
 
 export const BLACK_LIST_TOKENS = [
   '0x104592a158490a9228070e0a8e5343b499e125d0'.toLowerCase(), // wrong FRAX

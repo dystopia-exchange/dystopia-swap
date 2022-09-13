@@ -8,7 +8,9 @@ export const useProvider = () => {
     useEffect(() => {
         async function getProvider() {
             const web3context = await stores.accountStore.getStore('web3context');
-            setProvider(new ethers.providers.Web3Provider(web3context.library.instance))
+            if (web3context) {
+                setProvider(new ethers.providers.Web3Provider(web3context.library.instance))
+            }
         }
         getProvider()
     }, [])

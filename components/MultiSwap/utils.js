@@ -21,7 +21,7 @@ export function getSwapContract(signer) {
 }
 
 export async function allowance(tokenAddress, provider, swapAmount, decimals, router = multiSwapAddress) {
-    console.log('swapAmount', swapAmount, decimals)
+    // console.log('swapAmount', swapAmount, decimals)
     let contract = new ethers.Contract(
         tokenAddress,
         ERC20Abi,

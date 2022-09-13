@@ -209,7 +209,8 @@ class MultiSwapStore {
                         slippage: this.slippage,
                     }
                 })
-                await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
+                // await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
+                await stores.stableSwapStore.loadBaseAssets()
             } catch (e) {
                 console.log('error', e)
                 this.error = this.parseError(e)
@@ -226,7 +227,8 @@ class MultiSwapStore {
             try {
                 const res = await doSwap(this.swap, this.slippage, this.provider, this.notificationHandler)
                 await res?.wait(2)
-                await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
+                // await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
+                await stores.stableSwapStore.loadBaseAssets()
                 await this.notificationHandler({action: ACTIONS.TX_CONFIRMED, content: {txHash: res.hash}});
             } catch (e) {
                 console.log('error', e)

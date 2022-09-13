@@ -315,10 +315,10 @@ function EnhancedTableHead(props) {
         }}
       >
         {headCells.map((headCell) => (
-          <>
+          <React.Fragment key={headCell.id + '_'}>
             {headCell.isSticky ? (
               <StickyTableCell
-                appTheme={appTheme}
+                // appTheme={appTheme}
                 key={headCell.id}
                 align={headCell.numeric ? "right" : "left"}
                 padding={"normal"}
@@ -403,7 +403,7 @@ function EnhancedTableHead(props) {
                 </TableSortLabel>
               </StyledTableCell>
             )}
-          </>
+          </React.Fragment>
         ))}
       </TableRow>
     </TableHead>
