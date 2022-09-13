@@ -13,7 +13,7 @@ import {
 import classes from "./ssSwap.module.css";
 import stores from "../../stores";
 import {ACTIONS, DIRECT_SWAP_ROUTES} from "../../stores/constants";
-import {FTM_SYMBOL, WFTM_SYMBOL} from "../../stores/constants/contracts";
+import {FTM_SYMBOL, WFTM_SYMBOL, WFTM_ADDRESS} from "../../stores/constants/contracts";
 import BigNumber from "bignumber.js";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import BtnSwap from "../../ui/BtnSwap";
@@ -176,7 +176,7 @@ function Setup() {
                     && multiSwapStore.tokenIn === null
                     && multiSwapStore.tokenOut === null
                 ) {
-                    const WMATIC = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
+                    const WMATIC = WFTM_ADDRESS
                     const DYST = '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb'
                     multiSwapStore.setTokenIn(WMATIC)
                     multiSwapStore.setTokenOut(DYST)
