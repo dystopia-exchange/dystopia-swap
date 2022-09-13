@@ -1,21 +1,14 @@
 import * as ethers from 'ethers'
-import { _SLIPPAGE_PRECISION, multiSwapAddress } from './constants'
-//@ts-ignore
-import MultiSwap2Abi from './MultiSwap2.json'
+import { _SLIPPAGE_PRECISION, multiSwapAddress, ERC20_ABI, MULTISWAP_ABI } from '../constants/contracts'
 import BigNumber from "bignumber.js";
-import { ACTIONS, ZERO_ADDRESS } from "../../stores/constants";
+import { ACTIONS, ZERO_ADDRESS } from "../constants";
 import {parseUnits} from "ethers/lib/utils";
 require('url')
-
-const ERC20Abi = [
-    'function approve(address _spender, uint256 _value) public returns (bool success)',
-    'function allowance(address owner, address spender) public returns (uint256)',
-]
 
 export function getSwapContract(signer) {
     return new ethers.Contract(
         multiSwapAddress,
-        MultiSwap2Abi,
+        MULTISWAP_ABI,
         signer
     );
 }
@@ -24,7 +17,7 @@ export async function allowance(tokenAddress, provider, swapAmount, decimals, ro
     // console.log('swapAmount', swapAmount, decimals)
     let contract = new ethers.Contract(
         tokenAddress,
-        ERC20Abi,
+        ERC20_ABI,
         provider
     );
     const signer = provider.getSigner()
@@ -38,7 +31,7 @@ export async function approve(tokenAddress, provider, router = multiSwapAddress)
     const amount = ethers.constants.MaxUint256;
     const tokenContract = new ethers.Contract(
         tokenAddress,
-        ERC20Abi,
+        ERC20_ABI,
         provider
     );
     const tx = await tokenContract
