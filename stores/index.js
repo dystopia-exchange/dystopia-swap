@@ -10,7 +10,7 @@ const emitter = new Emitter();
 
 const accountStore = new AccountStore(dispatcher, emitter);
 const stableSwapStore = new StableSwapStore(dispatcher, emitter);
-const multiSwapStore = new MultiSwapStore();
+const multiSwapStore = new MultiSwapStore(dispatcher, emitter);
 
 export default {
   accountStore,

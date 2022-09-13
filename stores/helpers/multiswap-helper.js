@@ -56,8 +56,8 @@ export function getDeadline() {
     return Math.floor(Date.now() / 1000) + 60 * 30;
 }
 
-export async function doSwap(swap, slippage, provider, notificationHandler) {
-    // console.log('----- swap args:', JSON.parse(JSON.stringify(swap)))
+export async function doSwap(swap, slippage, provider, notificationHandler, emitter) {
+    // console.log('multiswap-helper doSwap ----- swap args:', JSON.parse(JSON.stringify(swap)))
     // console.log('----- ', getSlippage(slippage), getDeadline())
     const notificationRequired = typeof notificationHandler === "function";
     const notificationPayload = {
@@ -95,9 +95,12 @@ export async function doSwap(swap, slippage, provider, notificationHandler) {
         if (notificationRequired) {
             await notificationHandler({action: ACTIONS.TX_SUBMITTED, content: {...notificationPayload, txHash: tx.hash}});
         }
-        return tx
 
-        // console.log('tx', tx);
+        // console.log('multiswap-helper doSwap done, tx:', tx)
+
+        emitter.emit(ACTIONS.SWAP_RETURNED);
+
+        return tx
 
         // const tokenIn = tokens[swap.tokenIn].symbol;
         // const tokenOut = tokens[swap.tokenOut].symbol;

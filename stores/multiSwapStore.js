@@ -37,7 +37,9 @@ class MultiSwapStore {
     error = null
     swapTXHash = null;
 
-    constructor() {
+    constructor(dispatcher, emitter) {
+        this.dispatcher = dispatcher;
+        this.emitter = emitter;
         makeAutoObservable(this, {
             setTokenIn: action.bound,
             setTokenOut: action.bound,
@@ -159,6 +161,7 @@ class MultiSwapStore {
     }
 
     async doSwap() {
+        // console.log('multiSwapStore doSwap')
         this.swapTXHash = this.getTXUUID;
         if (this.swap === null) {
             return
@@ -190,7 +193,6 @@ class MultiSwapStore {
                         slippage: this.slippage,
                     }
                 })
-                // await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
                 await stores.stableSwapStore.loadBaseAssets()
             } catch (e) {
                 console.log('error', e)
@@ -206,10 +208,12 @@ class MultiSwapStore {
                 }
             });
             try {
-                const res = await doSwap(this.swap, this.slippage, this.provider, this.notificationHandler)
+                const res = await doSwap(this.swap, this.slippage, this.provider, this.notificationHandler, this.emitter)
                 await res?.wait(2)
-                // await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
-                await stores.stableSwapStore.loadBaseAssets()
+                const web3 = await stores.stableSwapStore.getWeb3();
+                const account = stores.stableSwapStore.userAddress;
+                await stores.stableSwapStore._refreshAssetBalance(web3, account, this.swap?.tokenIn);
+                await stores.stableSwapStore._refreshAssetBalance(web3, account, this.swap?.tokenOut);
                 await this.notificationHandler({action: ACTIONS.TX_CONFIRMED, content: {txHash: res.hash}});
             } catch (e) {
                 console.log('error', e)
