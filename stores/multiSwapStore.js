@@ -1,30 +1,11 @@
 import { makeAutoObservable, action } from 'mobx'
-import { allowance, approve, doSwap, getSwapContract, swapQuery, api } from "./utils";
+import { allowance, approve, doSwap, getSwapContract, swapQuery, api } from "./helpers/multiswap-helper";
 import * as ethers from 'ethers'
 import { debounce } from "debounce"
-import stores from "../../stores";
-// import { wmaticAbi } from './wmaticAbi'
-// import { CONTRACTS } from "../../stores/constants";
-import {FTM_SYMBOL, WFTM_ADDRESS, WFTM_DECIMALS, WFTM_SYMBOL} from "../../stores/constants/contracts";
-import { ACTIONS, DIRECT_SWAP_ROUTES } from "../../stores/constants";
-import {ROUTER_ADDRESS} from "../../stores/constants/contracts";
-import {multiSwapAddress} from "./constants";
+import stores from "./";
+import { FTM_SYMBOL, WFTM_ADDRESS, WFTM_DECIMALS, WFTM_SYMBOL, ROUTER_ADDRESS, multiSwapAddress, ERC20_ABI } from "./constants/contracts";
+import { ACTIONS, DIRECT_SWAP_ROUTES, ZERO_ADDRESS } from "./constants";
 import { v4 as uuidv4 } from 'uuid';
-
-const erc20abi = [
-    // Read-Only Functions
-    "function balanceOf(address owner) view returns (uint256)",
-    "function decimals() view returns (uint8)",
-    "function symbol() view returns (string)",
-
-    // Authenticated Functions
-    "function transfer(address to, uint amount) returns (bool)",
-
-    // Events
-    "event Transfer(address indexed from, address indexed to, uint amount)"
-];
-
-// const WMATIC = '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270'
 
 class MultiSwapStore {
     tokensMap = {}
@@ -56,7 +37,9 @@ class MultiSwapStore {
     error = null
     swapTXHash = null;
 
-    constructor() {
+    constructor(dispatcher, emitter) {
+        this.dispatcher = dispatcher;
+        this.emitter = emitter;
         makeAutoObservable(this, {
             setTokenIn: action.bound,
             setTokenOut: action.bound,
@@ -178,6 +161,7 @@ class MultiSwapStore {
     }
 
     async doSwap() {
+        // console.log('multiSwapStore doSwap')
         this.swapTXHash = this.getTXUUID;
         if (this.swap === null) {
             return
@@ -185,10 +169,10 @@ class MultiSwapStore {
 
         if (this.swap && this.swap.swapData) {
             if (this.tokenIn === FTM_SYMBOL) {
-                this.swap.swapData.tokenIn = '0x0000000000000000000000000000000000000000'
+                this.swap.swapData.tokenIn = ZERO_ADDRESS
             }
             if (this.tokenOut === FTM_SYMBOL) {
-                this.swap.swapData.tokenOut = '0x0000000000000000000000000000000000000000'
+                this.swap.swapData.tokenOut = ZERO_ADDRESS
             }
         }
 
@@ -209,7 +193,6 @@ class MultiSwapStore {
                         slippage: this.slippage,
                     }
                 })
-                // await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
                 await stores.stableSwapStore.loadBaseAssets()
             } catch (e) {
                 console.log('error', e)
@@ -225,10 +208,12 @@ class MultiSwapStore {
                 }
             });
             try {
-                const res = await doSwap(this.swap, this.slippage, this.provider, this.notificationHandler)
+                const res = await doSwap(this.swap, this.slippage, this.provider, this.notificationHandler, this.emitter)
                 await res?.wait(2)
-                // await stores.stableSwapStore.fetchBaseAssets([this.tokenIn, this.tokenOut])
-                await stores.stableSwapStore.loadBaseAssets()
+                const web3 = await stores.stableSwapStore.getWeb3();
+                const account = stores.stableSwapStore.userAddress;
+                await stores.stableSwapStore._refreshAssetBalance(web3, account, this.swap?.tokenIn);
+                await stores.stableSwapStore._refreshAssetBalance(web3, account, this.swap?.tokenOut);
                 await this.notificationHandler({action: ACTIONS.TX_CONFIRMED, content: {txHash: res.hash}});
             } catch (e) {
                 console.log('error', e)
@@ -264,7 +249,7 @@ class MultiSwapStore {
         }
 
         if (!(address in this.tokensMap)) {
-            const erc20 = new ethers.Contract(address, erc20abi, this.provider)
+            const erc20 = new ethers.Contract(address, ERC20_ABI, this.provider)
             const decimals = await erc20.decimals()
             const symbol = await erc20.symbol()
             const token = { address, decimals, symbol }
@@ -492,4 +477,4 @@ class MultiSwapStore {
     }
 }
 
-export const multiSwapStore = new MultiSwapStore()
+export default MultiSwapStore;

@@ -20,13 +20,64 @@ import BtnSwap from "../../ui/BtnSwap";
 import Hint from "../hint/hint";
 import Loader from "../../ui/Loader";
 import AssetSelect from "../../ui/AssetSelect";
-import { MultiSwap } from "../MultiSwap";
 import { observer } from 'mobx-react'
-import { multiSwapStore } from '../MultiSwap/store'
 import * as ethers from 'ethers'
 import { toFixed } from './utils'
 
+const MultiSwap = observer((props) => {
+    const multiSwapStore = stores.multiSwapStore;
+    const [provider, setProvider] = useState(null)
+
+    useEffect(() => {
+        async function getProvider() {
+            const web3context = await stores.accountStore.getStore('web3context');
+            if (web3context) {
+                setProvider(new ethers.providers.Web3Provider(web3context.library.instance))
+            }
+        }
+        getProvider()
+    }, [])
+
+    const {
+        tokenIn, setTokenIn,
+        tokenOut, setTokenOut,
+        swapAmount, setSwapAmount,
+        slippage, setSlippage,
+        swap, isFetchingSwapQuery,
+        allowed, isFetchingAllowance,
+        reverseTokens: doReverseTokens,
+        approve: doApprove, isFetchingApprove,
+        doSwap, isFetchingSwap,
+        tokensMap, data: multiswapData,
+        routes,
+    } = multiSwapStore
+
+    if (multiSwapStore.provider === null && provider) {
+        multiSwapStore.setProvider(provider)
+    }
+
+    return (
+        <div style={{ color: '#fff' }}>
+            {props.children({
+                tokenIn, setTokenIn,
+                tokenOut, setTokenOut,
+                swapAmount, setSwapAmount,
+                slippage, setSlippage,
+                allowed, isFetchingAllowance,
+                swap, isFetchingSwapQuery,
+                doApprove, isFetchingApprove,
+                doSwap, isFetchingSwap,
+                doReverseTokens,
+                tokensMap,
+                multiswapData,
+                routes,
+            })}
+        </div>
+    )
+})
+
 function Setup() {
+    const multiSwapStore = stores.multiSwapStore;
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
 
