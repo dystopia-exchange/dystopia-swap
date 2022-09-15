@@ -941,8 +941,6 @@ class Store {
     )
   };
 
-
-
   migrate = async (payload) => {
     try {
       const context = this;
@@ -1093,98 +1091,6 @@ class Store {
       this.emitter.emit(ACTIONS.ERROR, ex);
     }
   };
-
-  emitMultiSwapNotification = async ({action, content}) => {
-    const {swapTXHash, fromAsset, toAsset, fromAmount, allowed, txHash, error = {}} = content ?? {};
-    let allowanceTXID = `${fromAsset.symbol}-allowance`;
-    let swapTXID = `${toAsset.symbol}-${swapTXHash}`;
-    let payload = {};
-    switch ( action ) {
-
-      case ACTIONS.TX_ADDED:
-        payload = {
-          title: `Swap ${fromAsset.symbol} for ${toAsset.symbol}`,
-          type: "Swap",
-          verb: "Swap Successful",
-          transactions: [
-            {
-              uuid: swapTXID,
-              description: `Swap ${formatCurrency(fromAmount)} ${
-                  fromAsset.symbol
-              } for ${toAsset.symbol}`,
-              status: "WAITING",
-              allowanceUUID: allowanceTXID,
-            },
-          ],
-        };
-        break;
-
-      case ACTIONS.TX_ALLOWANCE_ADDED:
-        payload = {
-          transactions: [
-            {
-              uuid: allowanceTXID,
-              description: `Allow the router to spend your ${fromAsset.symbol}`,
-              status: "WAITING",
-              allowanceUUID: allowanceTXID,
-              isAllowance: true
-            },
-          ],
-        };
-        break;
-
-      case ACTIONS.TX_STATUS:
-        if (fromAsset.symbol === FTM_SYMBOL) {
-          payload = {
-            uuid: allowanceTXID,
-            description: `Allowance on ${fromAsset.symbol} sufficient`,
-            status: "DONE",
-            allowanceUUID: allowanceTXID
-          }
-        } else {
-          payload = {
-            uuid: allowanceTXID,
-            description: allowed ? `Allowance on ${fromAsset.symbol} sufficient` : `Allow the router to spend your ${fromAsset.symbol}`,
-            status: allowed ? "DONE" : 'WAITING',
-            allowanceUUID: allowanceTXID
-          }
-        }
-        break;
-
-      case ACTIONS.TX_PENDING:
-        payload = {
-          uuid: swapTXID,
-          status: "PENDING"
-        };
-        break;
-
-      case ACTIONS.TX_SUBMITTED:
-        payload = {
-          uuid: swapTXID,
-          status: "SUBMITTED",
-          txHash
-        };
-        break;
-      case ACTIONS.TX_CONFIRMED:
-        payload = {
-          uuid: swapTXID,
-          status: "CONFIRMED",
-          txHash: txHash
-        };
-        break;
-      case ACTIONS.TX_REJECTED:
-        payload = {
-          uuid: swapTXID,
-          status: "REJECTED",
-          error: error.message
-        };
-        break;
-      case ACTIONS.TX_CLEAR_QUEUE:
-        payload = {};
-        console.log('Queue cleared');
-    }
-    this.emitter.emit(action, payload);
-  }
 
   _callContractWait = (
     web3,
