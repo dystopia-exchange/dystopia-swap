@@ -46,7 +46,7 @@ const MultiSwap = observer((props) => {
         swap, isFetchingSwapQuery,
         allowed, isFetchingAllowance,
         reverseTokens: doReverseTokens,
-        approve: doApprove, isFetchingApprove,
+        /*approve: doApprove, */isFetchingApprove,
         doSwap, isFetchingSwap,
         tokensMap, data: multiswapData,
         routes,
@@ -65,7 +65,7 @@ const MultiSwap = observer((props) => {
                 slippage, setSlippage,
                 allowed, isFetchingAllowance,
                 swap, isFetchingSwapQuery,
-                doApprove, isFetchingApprove,
+                /*doApprove,*/ isFetchingApprove,
                 doSwap, isFetchingSwap,
                 doReverseTokens,
                 tokensMap,
@@ -238,7 +238,6 @@ function Setup() {
             stores.emitter.on(ACTIONS.WRAP_RETURNED, wrapReturned);
             stores.emitter.on(ACTIONS.UNWRAP_RETURNED, wrapReturned);
             stores.emitter.on(ACTIONS.SWAP_RETURNED, swapReturned);
-            // TODO: refactor multiswap to use emitter results
             // stores.emitter.on(ACTIONS.QUOTE_SWAP_RETURNED, quoteReturned);
             stores.emitter.on(ACTIONS.BASE_ASSETS_UPDATED, assetsUpdated);
 
@@ -1025,7 +1024,7 @@ function Setup() {
                     slippage, setSlippage,
                     allowed, isFetchingAllowance,
                     swap, isFetchingSwapQuery,
-                    doApprove, isFetchingApprove,
+                    /*doApprove,*/ isFetchingApprove,
                     doSwap, isFetchingSwap,
                     multiswapData,
                     routes,
@@ -1057,7 +1056,7 @@ function Setup() {
 
                 if (allowed === false && tokenIn) {
                     buttonLabel = 'Approve'
-                    handleClickButton = doApprove
+                    // handleClickButton = doApprove
                     if (!isFetchingApprove && fromAmountValue <= Number(fromAssetValue?.balance)) {
                         disableButton = false
                     }

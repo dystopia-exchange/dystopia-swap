@@ -39,14 +39,6 @@ export async function approve(tokenAddress, provider, router = multiSwapAddress)
         .approve(router, amount, { gasLimit: 100000 });
 
     return tx
-
-    // console.log('Approve tx', tx);
-    // await notify(
-    //     'Approve ' + tokens[tokenAddress].symbol,
-    //     'Click to view transaction',
-    //     'https://free-png.ru/wp-content/uploads/2021/07/free-png.ru-3.png',
-    //     txScanUrl(tx)
-    // );
 }
 
 export function getSlippage(value) {
@@ -56,19 +48,11 @@ export function getDeadline() {
     return Math.floor(Date.now() / 1000) + 60 * 30;
 }
 
-export async function doSwap(swap, slippage, provider, notificationHandler, emitter) {
+export async function doSwap(swap, slippage, provider, emitter) {
     // console.log('multiswap-helper doSwap ----- swap args:', JSON.parse(JSON.stringify(swap)))
     // console.log('----- ', getSlippage(slippage), getDeadline())
-    const notificationRequired = typeof notificationHandler === "function";
-    const notificationPayload = {
-        fromAsset: {address: swap?.tokenIn},
-        toAsset: {address: swap?.tokenOut},
-    };
     if (swap && swap.returnAmount) {
         const swapNative = swap.swapData.tokenIn === ZERO_ADDRESS;
-        if (notificationRequired) {
-            await notificationHandler({action: ACTIONS.TX_PENDING, content: notificationPayload});
-        }
         // call static check for swap error catching
         await getSwapContract()
             .connect(provider.getSigner())
@@ -92,9 +76,6 @@ export async function doSwap(swap, slippage, provider, notificationHandler, emit
                 getDeadline(),
                 { gasLimit: 3000000, value: swapNative ? swap.swapData.swapAmount : 0 }
             );
-        if (notificationRequired) {
-            await notificationHandler({action: ACTIONS.TX_SUBMITTED, content: {...notificationPayload, txHash: tx.hash}});
-        }
 
         // console.log('multiswap-helper doSwap done, tx:', tx)
 

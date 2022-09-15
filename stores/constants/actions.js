@@ -7,7 +7,6 @@ export const TX_REJECTED = "TX_REJECTED";
 export const TX_CONFIRMED = "TX_CONFIRMED";
 export const TX_STATUS = "TX_STATUS";
 export const TX_ADDED = "TX_ADDED";
-export const TX_ALLOWANCE_ADDED = "TX_ALLOWANCE_ADDED";
 export const TX_OPEN = "TX_OPEN";
 export const TX_CLEAR_QUEUE = "TX_CLEAR_QUEUE";
 

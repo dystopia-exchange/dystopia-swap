@@ -4,8 +4,18 @@ import * as ethers from 'ethers'
 import { debounce } from "debounce"
 import stores from "./";
 import { FTM_SYMBOL, WFTM_ADDRESS, WFTM_DECIMALS, WFTM_SYMBOL, ROUTER_ADDRESS, multiSwapAddress, ERC20_ABI } from "./constants/contracts";
-import { ACTIONS, DIRECT_SWAP_ROUTES, ZERO_ADDRESS } from "./constants";
+import { DIRECT_SWAP_ROUTES, MAX_UINT256, ZERO_ADDRESS} from "./constants";
 import { v4 as uuidv4 } from 'uuid';
+import {formatCurrency, getTXUUID} from "../utils";
+import {
+    emitNewNotifications, emitNotificationConfirmed,
+    emitNotificationDone,
+    emitNotificationPending, emitNotificationRejected,
+    emitNotificationSubmitted,
+    emitStatus
+} from "./helpers/emit-helper";
+import {getTokenAllowance, isNetworkToken} from "./helpers/token-helper";
+import BigNumber from "bignumber.js";
 
 class MultiSwapStore {
     tokensMap = {}
@@ -119,28 +129,6 @@ class MultiSwapStore {
         }
     }
 
-    async approve() {
-        if (this.provider && this.tokenIn) {
-            this.isFetchingApprove = true
-            try {
-                // console.log('CALL APPROVE', this.allowed)
-                await this._checkAllowance()
-                // console.log('allowed', this.allowed)
-                if(!this.allowed) {
-                    const res = await approve(this.tokenIn, this.provider, this.isDirectRoute ? ROUTER_ADDRESS : multiSwapAddress)
-                    await res?.wait(2)
-                }
-                await this._checkAllowance()
-            } catch (e) {
-                // console.error('CALL APPROVE ERROR', e)
-                this.error = 'Transaction of approve is failed'
-            } finally {
-                // console.log('END CALL APPROVE')
-                this.isFetchingApprove = false
-            }
-        }
-    }
-
     calcPriceInfo(tokenIn, tokenOut, swap) {
         if (!tokenOut || !swap) {
             return {
@@ -161,7 +149,6 @@ class MultiSwapStore {
     }
 
     async doSwap() {
-        // console.log('multiSwapStore doSwap')
         this.swapTXHash = this.getTXUUID;
         if (this.swap === null) {
             return
@@ -201,24 +188,73 @@ class MultiSwapStore {
                 this.isFetchingSwap = false
             }
         } else {
-            await this.notificationHandler({action: ACTIONS.TX_ADDED, content: {
-                    fromAsset: {address: this.swap?.tokenIn},
-                    toAsset: {address: this.swap?.tokenOut},
-                    fromAmount: this.swapAmount
-                }
-            });
+            let allowanceTXID = getTXUUID();
+            let swapTXID = getTXUUID();
             try {
-                const res = await doSwap(this.swap, this.slippage, this.provider, this.notificationHandler, this.emitter)
-                await res?.wait(2)
-                const web3 = await stores.stableSwapStore.getWeb3();
+                // ADD TRNASCTIONS TO TRANSACTION QUEUE DISPLAY
                 const account = stores.stableSwapStore.userAddress;
+                const web3 = await stores.stableSwapStore.getWeb3();
+                const emitter = this.emitter
+                const fromAmount = this.swapAmount
+
+                const [fromAsset, toAsset] = await Promise.all([
+                    this._getToken(this.tokenIn),
+                    this._getToken(this.tokenOut),
+                ])
+
+                await emitNewNotifications(this.emitter, [
+                    {
+                        uuid: allowanceTXID,
+                        description: `Checking your ${fromAsset.symbol} allowance`,
+                        status: "WAITING",
+                    },
+                    {
+                        uuid: swapTXID,
+                        description: `Swap ${formatCurrency(fromAmount)} ${
+                            fromAsset.symbol
+                        } for ${toAsset.symbol}`,
+                        status: "WAITING",
+                    },
+                ]);
+
+                let allowance;
+
+                // CHECK ALLOWANCES AND SET TX DISPLAY
+                if (!isNetworkToken(fromAsset.address)) {
+                    allowance = await getTokenAllowance(web3, fromAsset, account, multiSwapAddress);
+
+                    if (BigNumber(allowance).lt(fromAmount)) {
+                        await emitStatus(emitter, allowanceTXID, `Allow the router to spend your ${fromAsset.symbol}`)
+                    } else {
+                        await emitNotificationDone(emitter, allowanceTXID, `Allowance on ${fromAsset.symbol} sufficient`)
+                    }
+                } else {
+                    allowance = MAX_UINT256;
+                    console.log("Allowance", allowanceTXID)
+                    await emitNotificationDone(emitter, allowanceTXID, `Allowance on ${fromAsset.symbol} sufficient`)
+                }
+
+                // SUBMIT REQUIRED ALLOWANCE TRANSACTIONS
+                if (BigNumber(allowance).lt(fromAmount)) {
+                    const res = await approve(this.tokenIn, this.provider, multiSwapAddress)
+                    emitNotificationSubmitted(emitter, allowanceTXID, res?.hash)
+                    await res?.wait(2)
+                    emitNotificationConfirmed(emitter, allowanceTXID, res?.hash)
+                }
+
+                emitNotificationPending(emitter, swapTXID)
+                const res = await doSwap(this.swap, this.slippage, this.provider, this.emitter)
+                emitNotificationSubmitted(emitter, swapTXID, res?.hash)
+
+                await res?.wait(2)
+                emitNotificationConfirmed(emitter, swapTXID, res?.hash)
+
                 await stores.stableSwapStore._refreshAssetBalance(web3, account, this.swap?.tokenIn);
                 await stores.stableSwapStore._refreshAssetBalance(web3, account, this.swap?.tokenOut);
-                await this.notificationHandler({action: ACTIONS.TX_CONFIRMED, content: {txHash: res.hash}});
             } catch (e) {
                 console.log('error', e)
                 this.error = this.parseError(e)
-                await this.notificationHandler({action: ACTIONS.TX_REJECTED, content: {error: e}});
+                emitNotificationRejected(this.emitter, swapTXID, this.error)
             } finally {
                 this.isFetchingSwap = false
             }
@@ -357,57 +393,25 @@ class MultiSwapStore {
     }
 
     async _checkAllowance() {
-        await this.notificationHandler({action: ACTIONS.TX_ALLOWANCE_ADDED, content: {
-                fromAsset: {address: this.swap?.tokenIn},
-                toAsset: {address: this.swap?.tokenOut}
-            }
-        });
-
         if (this.isWrapUnwrap) {
             this.allowed = true;
-            await this.notificationHandler({action: ACTIONS.TX_STATUS, content: {
-                    fromAsset: {address: this.swap?.tokenIn},
-                    toAsset: {address: this.swap?.tokenOut},
-                    allowed: true
-                }
-            });
             return true
         }
 
         if (this.tokenIn === FTM_SYMBOL) {
             this.allowed = true;
-            await this.notificationHandler({action: ACTIONS.TX_STATUS, content: {
-                    fromAsset: {address: this.swap?.tokenIn},
-                    toAsset: {address: this.swap?.tokenOut},
-                    allowed: true
-                }
-            });
             return true
         }
 
-        // console.log('_checkAllowance', this.isDirectRoute)
         if (this.provider && this.isDirectRoute !== undefined) {
             this.isFetchingAllowance = true
             const tokenIn = await this._getToken(this.tokenIn)
-            // console.log('tokenIn', this.swap)
             const response = await allowance(this.tokenIn, this.provider, this.swapAmount, tokenIn.decimals, this.isDirectRoute ? ROUTER_ADDRESS : multiSwapAddress)
             this.allowed = response
             this.isFetchingAllowance = false
-
-            await this.notificationHandler({action: ACTIONS.TX_STATUS, content: {
-                    fromAsset: {address: this.swap?.tokenIn},
-                    toAsset: {address: this.swap?.tokenOut},
-                    allowed: response
-                }
-            });
             return response
         }
-        await this.notificationHandler({action: ACTIONS.TX_STATUS, content: {
-                fromAsset: {address: this.swap?.tokenIn},
-                toAsset: {address: this.swap?.tokenOut},
-                allowed: false
-            }
-        });
+
         return false
     }
 
@@ -462,18 +466,6 @@ class MultiSwapStore {
 
     get excludedPlatforms() {
         return this.excludePlatforms
-    }
-
-    notificationHandler = async (data) => {
-        const {content = {}, action} = data ?? {};
-        const fromAsset = {...content.fromAsset, symbol: this.tokenIn};
-        const toAsset = {...content.toAsset, symbol: this.tokenOut};
-        try {
-            await stores.stableSwapStore.emitMultiSwapNotification({action, content: {...content, fromAsset, toAsset, swapTXHash: this.swapTXHash}});
-        } catch (e) {
-            console.log('notification error', e);
-            await this.notificationHandler({action: ACTIONS.TX_REJECTED, content: {error: e}});
-        }
     }
 }
 

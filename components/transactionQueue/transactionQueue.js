@@ -20,7 +20,6 @@ import { ACTIONS, ETHERSCAN_URL } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 
 export default function TransactionQueue({setQueueLength}) {
-
   const [open, setOpen] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [purpose, setPurpose] = useState(null);
@@ -45,18 +44,10 @@ export default function TransactionQueue({setQueueLength}) {
     };
 
     const transactionAdded = (params) => {
-      setPurpose(params.title);
-      setType(params.type);
-      setAction(params.verb);
       setOpen(true);
-      const allowanceTXs = transactions.filter(tx => {
-        return !!tx.allowanceUUID && !!tx.isAllowance && params.transactions.filter(item => {
-          return tx.allowanceUUID === item.allowanceUUID;
-        }).length > 0;
-      })
-      const txs = [...allowanceTXs, ...params.transactions];
+      const txs = [...params.transactions];
       setTransactions(txs);
-      setQueueLength(txs.length);
+      setQueueLength(params.transactions.length);
     };
 
     const transactionAllowanceAdded = (params) => {
@@ -125,7 +116,6 @@ export default function TransactionQueue({setQueueLength}) {
 
     stores.emitter.on(ACTIONS.TX_CLEAR_QUEUE, clearTransactions);
     stores.emitter.on(ACTIONS.TX_ADDED, transactionAdded);
-    stores.emitter.on(ACTIONS.TX_ALLOWANCE_ADDED, transactionAllowanceAdded);
     stores.emitter.on(ACTIONS.TX_PENDING, transactionPending);
     stores.emitter.on(ACTIONS.TX_SUBMITTED, transactionSubmitted);
     stores.emitter.on(ACTIONS.TX_CONFIRMED, transactionConfirmed);
@@ -135,7 +125,6 @@ export default function TransactionQueue({setQueueLength}) {
     return () => {
       stores.emitter.removeListener(ACTIONS.TX_CLEAR_QUEUE, clearTransactions);
       stores.emitter.removeListener(ACTIONS.TX_ADDED, transactionAdded);
-      stores.emitter.removeListener(ACTIONS.TX_ALLOWANCE_ADDED, transactionAllowanceAdded);
       stores.emitter.removeListener(ACTIONS.TX_PENDING, transactionPending);
       stores.emitter.removeListener(ACTIONS.TX_SUBMITTED, transactionSubmitted);
       stores.emitter.removeListener(ACTIONS.TX_CONFIRMED, transactionConfirmed);
