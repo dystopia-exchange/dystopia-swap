@@ -531,7 +531,6 @@ async function fetchGaugeBalancesForPairs(
           aprWithoutBoost = aprWithoutBoost.plus(rt.aprWithoutBoost);
         }
 
-
         pair.gauge.personalAPR = personalAPR.toString();
         pair.gauge.aprWithoutBoost = aprWithoutBoost.toString();
         pair.gauge.boost = personalAPR.div(aprWithoutBoost).toString();
@@ -554,6 +553,10 @@ function calcDerivedApr(pairs) {
       const startTime = Math.floor(Date.now() / 1000)
       rt.derivedAPR = calculateApr(startTime, rt.finishPeriod, rt.rewardsLeftEth, totalDerivedSupplyEth);
       derivedAPR = derivedAPR.plus(rt.derivedAPR);
+    }
+
+    if (derivedAPR.lt(0)) {
+      derivedAPR = BigNumber(0)
     }
 
     pair.gauge.derivedAPR = derivedAPR.toString();
