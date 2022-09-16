@@ -274,3 +274,6 @@ export const DIRECT_SWAP_ROUTES = {
 export const ALLOWED_DUPLICATE_SYMBOLS = [
     "FXS",
 ]
+
+export const DEFAULT_ASSET_FROM = "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270"
+export const DEFAULT_ASSET_TO = "0x39ab6574c289c3ae4d88500eec792ab5b947a5eb"

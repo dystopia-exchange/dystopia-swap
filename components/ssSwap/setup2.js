@@ -12,7 +12,7 @@ import {
 } from "../../utils";
 import classes from "./ssSwap.module.css";
 import stores from "../../stores";
-import {ACTIONS, DIRECT_SWAP_ROUTES} from "../../stores/constants";
+import {ACTIONS, DEFAULT_ASSET_FROM, DEFAULT_ASSET_TO, DIRECT_SWAP_ROUTES} from "../../stores/constants";
 import {FTM_SYMBOL, WFTM_SYMBOL, WFTM_ADDRESS} from "../../stores/constants/contracts";
 import BigNumber from "bignumber.js";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
@@ -187,14 +187,14 @@ function Setup() {
 
                 if (baseAsset.length > 0 && toAssetValue == null) {
                     const dystIndex = baseAsset.findIndex((token) => {
-                        return token.id == "0x39ab6574c289c3ae4d88500eec792ab5b947a5eb";
+                        return token.id == DEFAULT_ASSET_TO;
                     });
                     setToAssetValue(baseAsset[dystIndex]);
                 }
 
                 if (baseAsset.length > 0 && fromAssetValue == null) {
                     const wmaticIndex = baseAsset.findIndex((token) => {
-                        return token.id == "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270";
+                        return token.id == DEFAULT_ASSET_FROM;
                     });
                     setFromAssetValue(baseAsset[wmaticIndex]);
                 }
