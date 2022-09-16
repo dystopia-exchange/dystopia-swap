@@ -88,7 +88,6 @@ function Setup() {
     const [fromAmountValue, setFromAmountValue] = useState("");
     const [fromAmountError, setFromAmountError] = useState(false);
     const [fromAssetValue, setFromAssetValue] = useState(null);
-
     const [fromAssetError, setFromAssetError] = useState(false);
     const [fromAssetOptions, setFromAssetOptions] = useState([]);
 
@@ -170,14 +169,13 @@ function Setup() {
 
             const ssUpdated = () => {
                 const baseAsset = stores.stableSwapStore.getStore("baseAssets");
-
                 if (
                     baseAsset.length > 0
                     && multiSwapStore.tokenIn === null
                     && multiSwapStore.tokenOut === null
                 ) {
-                    const WMATIC = WFTM_ADDRESS
-                    const DYST = '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb'
+                    const WMATIC = DEFAULT_ASSET_FROM
+                    const DYST = DEFAULT_ASSET_TO
                     multiSwapStore.setTokenIn(WMATIC)
                     multiSwapStore.setTokenOut(DYST)
                 }
@@ -198,6 +196,27 @@ function Setup() {
                     });
                     setFromAssetValue(baseAsset[wmaticIndex]);
                 }
+
+                if (fromAssetValue && fromAssetValue.chainId === 'not_inited') {
+                    // console.log('asset not inited')
+                    const foundBaIndex = baseAsset.findIndex((token) => {
+                        return token.id == fromAssetValue.address;
+                    });
+                    if (foundBaIndex) {
+                        setFromAssetValue(baseAsset[foundBaIndex])
+                    }
+                }
+
+                if (toAssetValue && toAssetValue.chainId === 'not_inited') {
+                    // console.log('asset not inited')
+                    const foundBaIndex = baseAsset.findIndex((token) => {
+                        return token.id == toAssetValue.address;
+                    });
+                    if (foundBaIndex) {
+                        setToAssetValue(baseAsset[foundBaIndex])
+                    }
+                }
+
                 forceUpdate();
             };
 
@@ -246,11 +265,14 @@ function Setup() {
             return () => {
                 stores.emitter.removeListener(ACTIONS.ERROR, errorReturned);
                 stores.emitter.removeListener(ACTIONS.UPDATED, ssUpdated);
+                stores.emitter.removeListener(ACTIONS.WRAP_RETURNED, wrapReturned);
+                stores.emitter.removeListener(ACTIONS.UNWRAP_RETURNED, wrapReturned);
                 stores.emitter.removeListener(ACTIONS.SWAP_RETURNED, swapReturned);
-                stores.emitter.removeListener(
+
+                /*stores.emitter.removeListener(
                     ACTIONS.QUOTE_SWAP_RETURNED,
                     quoteReturned
-                );
+                );*/
                 stores.emitter.removeListener(
                     ACTIONS.BASE_ASSETS_UPDATED,
                     assetsUpdated
