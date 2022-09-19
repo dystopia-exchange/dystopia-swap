@@ -324,6 +324,7 @@ class MultiSwapStore {
                 this.allowed = true
                 const returnAmount = ethers.utils.parseUnits(this.swapAmount ?? '0', 18).toString()
                 this.swap = {returnAmount}
+                this.swapQueryInProgress = false;
                 return
             }
 

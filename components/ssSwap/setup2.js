@@ -1266,7 +1266,7 @@ function Setup() {
 
                             {renderMassiveInput(
                                 "To",
-                                swap?.returnAmount
+                                multiSwapStore.isWrapUnwrap ? toAmountValue : swap?.returnAmount
                                     ? ethers.utils.formatUnits(swap?.returnAmount, toAssetValue?.decimals)
                                     : swap?.returnAmount
                                 ,
@@ -1293,7 +1293,9 @@ function Setup() {
 
                             {(!isFetchingSwapQuery
                                 && multiSwapStore.error === null
-                                && multiSwapStore.priceImpact !== null)
+                                && multiSwapStore.priceImpact !== null
+                                && !multiSwapStore.isWrapUnwrap
+                                )
                                 && (
                                     <>
                                         <Typography
