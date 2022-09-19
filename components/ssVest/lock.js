@@ -257,7 +257,10 @@ export default function ssLock({govToken, veToken}) {
 
   const renderVestInformation = () => {
     const now = moment();
-    const expiry = moment(selectedDate);
+    let expiry = moment(selectedDate);
+    // round to weeks
+    const unixWeek = 604800
+    expiry = moment.unix(Math.floor(expiry.unix() / unixWeek) * unixWeek)
     const dayToExpire = expiry.diff(now, 'days');
 
     const tmpNFT = {
