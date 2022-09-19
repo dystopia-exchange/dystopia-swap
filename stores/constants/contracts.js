@@ -49,7 +49,7 @@ export const VOTER_ABI = abis.voterABI
 
 export const REWARD_ADDRESS = '0x39aB6574c289c3Ae4d88500eEc792AB5B947A5Eb'
 
-export const LIBRARY_ADDRESS = '0x58adF4039512D60eAAF034DdbD15F66F3bfC2583'
+export const LIBRARY_ADDRESS = '0xA220a4ADfCe3C11D600F6Bf4E7e2101BABd58466'
 export const LIBRARY_ABI = abis.dystopiaLibraryABI
 
 export const ERC20_ABI = abis.erc20ABI
@@ -57,6 +57,7 @@ export const PAIR_ABI = abis.pairABI
 export const GAUGE_ABI = abis.gaugeABI
 export const BRIBE_ABI = abis.bribeABI
 export const TOKEN_ABI = abis.tokenABI
+export const MULTISWAP_ABI = abis.multiSwapABI
 
 export const MULTICALL_ADDRESS = '0x11ce4B23bD875D7F5C6a31084f55fDe1e9A87507'
 
@@ -67,3 +68,6 @@ export const ST_MATIC_ADDRESS = '0x3a58a54c066fdc0f2d55fc9c89f0415c92ebf3c4'
 export const ST_MATIC_BOOSTED_DATA_URL = 'https://polygon.lido.fi/api/stats'
 
 export const SPHERE_ADDRESS = '0x62f594339830b90ae4c084ae7d223ffafd9658a7'
+
+export const multiSwapAddress = '0x11637b94Dfab4f102c21fDe9E34915Bb5F766A8a'
+export const _SLIPPAGE_PRECISION = 10000

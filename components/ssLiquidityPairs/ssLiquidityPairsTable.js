@@ -315,10 +315,10 @@ function EnhancedTableHead(props) {
         }}
       >
         {headCells.map((headCell) => (
-          <>
+          <React.Fragment key={headCell.id + '_'}>
             {headCell.isSticky ? (
               <StickyTableCell
-                appTheme={appTheme}
+                // appTheme={appTheme}
                 key={headCell.id}
                 align={headCell.numeric ? "right" : "left"}
                 padding={"normal"}
@@ -403,7 +403,7 @@ function EnhancedTableHead(props) {
                 </TableSortLabel>
               </StyledTableCell>
             )}
-          </>
+          </React.Fragment>
         ))}
       </TableRow>
     </TableHead>
@@ -1899,19 +1899,11 @@ export default function EnhancedTable({ pairs, isLoading }) {
                           >
                             {tableCellContent(
                               `${formatCurrency(
-                                BigNumber.sum(
-                                  BigNumber(row?.gauge?.apr).div(100).times(40),
-                                  BigNumber(row?.gauge?.boostedApr0),
-                                  BigNumber(row?.gauge?.boostedApr1)
-                                ),
-                                0
+                                  BigNumber(row?.gauge?.derivedAPR).div(100).times(40),
+                                  0
                               )}→${formatCurrency(
-                                BigNumber.sum(
-                                  BigNumber(row?.gauge?.apr),
-                                  BigNumber(row?.gauge?.boostedApr0),
-                                  BigNumber(row?.gauge?.boostedApr1)
-                                ),
-                                0
+                                  BigNumber(row?.gauge?.derivedAPR),
+                                  0
                               )}%`,
                               null,
                               <Tooltip
@@ -1922,102 +1914,65 @@ export default function EnhancedTable({ pairs, isLoading }) {
                                     }
                                     <br />
                                     <br />
-                                    {"Total APR"}
-                                    <br />
-                                    <b>
-                                      {formatCurrency(
-                                        BigNumber.sum(
-                                          BigNumber(row?.gauge?.apr)
-                                            .div(100)
-                                            .times(40),
-                                          BigNumber(row?.gauge?.boostedApr0),
-                                          BigNumber(row?.gauge?.boostedApr1)
-                                        ),
-                                        2
-                                      )}
-                                      %{" - "}
-                                      {formatCurrency(
-                                        BigNumber.sum(
-                                          BigNumber(row?.gauge?.apr),
-                                          BigNumber(row?.gauge?.boostedApr0),
-                                          BigNumber(row?.gauge?.boostedApr1)
-                                        ),
-                                        2
-                                      )}
-                                      %
-                                    </b>
-                                    <br />
-                                    <dl>
-                                      <dt>
-                                        <b>
-                                          {formatCurrency(
-                                            BigNumber.sum(
-                                              BigNumber(
-                                                row?.gauge?.boostedApr0
-                                              ),
-                                              BigNumber(row?.gauge?.boostedApr1)
-                                            ),
+
+                                    <table>
+                                      <tbody>
+                                      <tr>
+                                        <td style={{minWidth: 100}}>Min APR</td>
+                                        <td style={{textAlign: 'right'}}><b>{formatCurrency(
+                                            BigNumber(row?.gauge?.derivedAPR)
+                                                .div(100)
+                                                .times(40),
                                             2
-                                          )}
-                                          %
-                                        </b>{" "}
-                                        Boosted APR
-                                      </dt>
-                                      <dd>
-                                        <b>
-                                          {formatCurrency(
-                                            BigNumber(row?.gauge?.boostedApr0),
+                                        )}%</b></td>
+                                      </tr>
+                                      <tr>
+                                        <td>Max APR</td>
+                                        <td style={{textAlign: 'right'}}><b>{formatCurrency(
+                                            BigNumber(row?.gauge?.derivedAPR),
                                             2
-                                          )}
-                                          %
-                                        </b>{" "}
-                                        {row.token0.symbol} APR
-                                      </dd>
-                                      <dd>
-                                        <b>
-                                          {formatCurrency(
-                                            BigNumber(row?.gauge?.boostedApr1),
-                                            2
-                                          )}
-                                          %
-                                        </b>{" "}
-                                        {row.token1.symbol} APR
-                                      </dd>
-                                      <dt>
-                                        <b>
-                                          {formatCurrency(
-                                            BigNumber(row?.gauge?.apr)
-                                              .div(100)
-                                              .times(40),
-                                            2
-                                          )}
-                                          %
-                                        </b>{" "}
-                                        Min staking APR
-                                      </dt>
-                                      <dd>
-                                        <b>
-                                          {formatCurrency(
-                                            BigNumber(row?.gauge?.apr)
-                                              .div(100)
-                                              .times(40),
-                                            2
-                                          )}
-                                          %
-                                        </b>{" "}
-                                        Min APR
-                                      </dd>
-                                      <dd>
-                                        <b>
-                                          {formatCurrency(
-                                            BigNumber(row?.gauge?.apr),
-                                            2
-                                          )}
-                                          %
-                                        </b>{" "}
-                                        Max APR
-                                      </dd>
-                                    </dl>
+                                        )}%</b></td>
+                                      </tr>
+                                      {(row?.gauge?.additionalApr0 && BigNumber(row?.gauge?.additionalApr0).gt(0)) &&
+                                          <tr>
+                                            <td>Bonus {row.token0.symbol} APR</td>
+                                            <td style={{textAlign: 'right'}}><b>
+                                              {formatCurrency(
+                                                  BigNumber(row?.gauge?.additionalApr0),
+                                                  2
+                                              )}%
+                                            </b></td>
+                                          </tr>
+                                      }
+                                      {(row?.gauge?.additionalApr1 && BigNumber(row?.gauge?.additionalApr1).gt(0)) &&
+                                          <tr>
+                                            <td>Bonus {row.token1.symbol} APR</td>
+                                            <td style={{textAlign: 'right'}}><b>
+                                              {formatCurrency(
+                                                  BigNumber(row?.gauge?.additionalApr1),
+                                                  2
+                                              )}%
+                                            </b></td>
+                                          </tr>
+                                      }
+                                      {(row?.gauge?.boost && BigNumber(row?.gauge?.boost).gt(0)) &&
+                                          <tr>
+                                            <td>Your boost</td>
+                                            <td style={{textAlign: 'right'}}><b>x{BigNumber(row?.gauge?.boost).toFixed(2)}</b></td>
+                                          </tr>
+                                      }
+
+                                      {(row?.gauge?.boost && BigNumber(row?.gauge?.boost).gt(0)) &&
+                                          <tr>
+                                            <td>Your APR</td>
+                                            <td style={{textAlign: 'right'}}><b>
+                                              {BigNumber(row?.gauge?.personalAPR).toFixed(2)}%
+                                            </b>{" "}</td>
+                                          </tr>
+                                      }
+                                      </tbody>
+                                    </table>
+
                                   </React.Fragment>
                                 }
                               >
@@ -3237,23 +3192,13 @@ export default function EnhancedTable({ pairs, isLoading }) {
                                     formatCurrency(row.token0.balance)}
                                   {headCell.id === "apr" &&
                                     tableCellContent(
-                                      `${formatCurrency(
-                                        BigNumber.sum(
-                                          BigNumber(row?.gauge?.apr)
-                                            .div(100)
-                                            .times(40),
-                                          BigNumber(row?.gauge?.boostedApr0),
-                                          BigNumber(row?.gauge?.boostedApr1)
-                                        ),
-                                        0
-                                      )}→${formatCurrency(
-                                        BigNumber.sum(
-                                          BigNumber(row?.gauge?.apr),
-                                          BigNumber(row?.gauge?.boostedApr0),
-                                          BigNumber(row?.gauge?.boostedApr1)
-                                        ),
-                                        0
-                                      )}%`,
+                                        `${formatCurrency(
+                                            BigNumber(row?.gauge?.derivedAPR).div(100).times(40),
+                                            0
+                                        )}→${formatCurrency(
+                                            BigNumber(row?.gauge?.derivedAPR),
+                                            0
+                                        )}%`,
                                       null,
                                       <Tooltip
                                         title={
@@ -3263,116 +3208,64 @@ export default function EnhancedTable({ pairs, isLoading }) {
                                             }
                                             <br />
                                             <br />
-                                            {"Total APR"}
-                                            <br />
-                                            <b>
-                                              {formatCurrency(
-                                                BigNumber.sum(
-                                                  BigNumber(row?.gauge?.apr)
-                                                    .div(100)
-                                                    .times(40),
-                                                  BigNumber(
-                                                    row?.gauge?.boostedApr0
-                                                  ),
-                                                  BigNumber(
-                                                    row?.gauge?.boostedApr1
-                                                  )
-                                                ),
-                                                2
-                                              )}
-                                              %{" - "}
-                                              {formatCurrency(
-                                                BigNumber.sum(
-                                                  BigNumber(row?.gauge?.apr),
-                                                  BigNumber(
-                                                    row?.gauge?.boostedApr0
-                                                  ),
-                                                  BigNumber(
-                                                    row?.gauge?.boostedApr1
-                                                  )
-                                                ),
-                                                2
-                                              )}
-                                              %
-                                            </b>
-                                            <br />
-                                            <dl>
-                                              <dt>
-                                                <b>
-                                                  {formatCurrency(
-                                                    BigNumber.sum(
-                                                      BigNumber(
-                                                        row?.gauge?.boostedApr0
-                                                      ),
-                                                      BigNumber(
-                                                        row?.gauge?.boostedApr1
-                                                      )
-                                                    ),
+
+                                            <table>
+                                              <tbody>
+                                              <tr>
+                                                <td style={{minWidth: 100}}>Min APR</td>
+                                                <td style={{textAlign: 'right'}}><b>{formatCurrency(
+                                                    BigNumber(row?.gauge?.derivedAPR)
+                                                        .div(100)
+                                                        .times(40),
                                                     2
-                                                  )}
-                                                  %
-                                                </b>{" "}
-                                                Boosted APR
-                                              </dt>
-                                              <dd>
-                                                <b>
-                                                  {formatCurrency(
-                                                    BigNumber(
-                                                      row?.gauge?.boostedApr0
-                                                    ),
+                                                )}%</b></td>
+                                              </tr>
+                                              <tr>
+                                                <td>Max APR</td>
+                                                <td style={{textAlign: 'right'}}><b>{formatCurrency(
+                                                    BigNumber(row?.gauge?.derivedAPR),
                                                     2
-                                                  )}
-                                                  %
-                                                </b>{" "}
-                                                {row.token0.symbol} APR
-                                              </dd>
-                                              <dd>
-                                                <b>
-                                                  {formatCurrency(
-                                                    BigNumber(
-                                                      row?.gauge?.boostedApr1
-                                                    ),
-                                                    2
-                                                  )}
-                                                  %
-                                                </b>{" "}
-                                                {row.token1.symbol} APR
-                                              </dd>
-                                              <dt>
-                                                <b>
-                                                  {formatCurrency(
-                                                    BigNumber(row?.gauge?.apr)
-                                                      .div(100)
-                                                      .times(40),
-                                                    2
-                                                  )}
-                                                  %
-                                                </b>{" "}
-                                                Min staking APR
-                                              </dt>
-                                              <dd>
-                                                <b>
-                                                  {formatCurrency(
-                                                    BigNumber(row?.gauge?.apr)
-                                                      .div(100)
-                                                      .times(40),
-                                                    2
-                                                  )}
-                                                  %
-                                                </b>{" "}
-                                                Min APR
-                                              </dd>
-                                              <dd>
-                                                <b>
-                                                  {formatCurrency(
-                                                    BigNumber(row?.gauge?.apr),
-                                                    2
-                                                  )}
-                                                  %
-                                                </b>{" "}
-                                                Max APR
-                                              </dd>
-                                            </dl>
+                                                )}%</b></td>
+                                              </tr>
+                                              {(row?.gauge?.additionalApr0 && BigNumber(row?.gauge?.additionalApr0).gt(0)) &&
+                                                  <tr>
+                                                    <td>Bonus {row.token0.symbol} APR</td>
+                                                    <td style={{textAlign: 'right'}}><b>
+                                                      {formatCurrency(
+                                                          BigNumber(row?.gauge?.additionalApr0),
+                                                          2
+                                                      )}%
+                                                    </b></td>
+                                                  </tr>
+                                              }
+                                              {(row?.gauge?.additionalApr1 && BigNumber(row?.gauge?.additionalApr1).gt(0)) &&
+                                                  <tr>
+                                                    <td>Bonus {row.token1.symbol} APR</td>
+                                                    <td style={{textAlign: 'right'}}><b>
+                                                      {formatCurrency(
+                                                          BigNumber(row?.gauge?.additionalApr1),
+                                                          2
+                                                      )}%
+                                                    </b></td>
+                                                  </tr>
+                                              }
+                                              {(row?.gauge?.boost && BigNumber(row?.gauge?.boost).gt(0)) &&
+                                                  <tr>
+                                                    <td>Your boost</td>
+                                                    <td style={{textAlign: 'right'}}><b>x{BigNumber(row?.gauge?.boost).toFixed(2)}</b></td>
+                                                  </tr>
+                                              }
+
+                                              {(row?.gauge?.boost && BigNumber(row?.gauge?.boost).gt(0)) &&
+                                                  <tr>
+                                                    <td>Your APR</td>
+                                                    <td style={{textAlign: 'right'}}><b>
+                                                      {BigNumber(row?.gauge?.personalAPR).toFixed(2)}%
+                                                    </b>{" "}</td>
+                                                  </tr>
+                                              }
+                                              </tbody>
+                                            </table>
                                           </React.Fragment>
                                         }
                                       >

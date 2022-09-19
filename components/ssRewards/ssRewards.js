@@ -24,6 +24,42 @@ export default function ssRewards() {
 
   const {appTheme} = useAppThemeContext();
 
+  const updateNftsAndRewards = (selectedToken) => {
+    const nfts = stores.stableSwapStore.getStore('vestNFTs');
+    if (!!nfts) {
+      // console.log('stableSwapUpdated')
+      // if(!vestNFTs) {
+      setVestNFTs(nfts);
+      // }
+      // if(!veToken) {
+      setVeToken(stores.stableSwapStore.getStore('veToken'));
+      // }
+
+      if (nfts?.length > 0) {
+        nfts.sort((a, b) => (+b.lockValue) - (+a.lockValue));
+
+        let nft = nfts[0];
+        if(!selectedToken) {
+          selectedToken = token;
+        } else {
+          setToken(selectedToken);
+          nft = selectedToken;
+        }
+
+
+        if (selectedToken === null) {
+          setToken(nft);
+        }
+
+        stores.dispatcher.dispatch({type: ACTIONS.GET_REWARD_BALANCES, content: {tokenID: nft.id}});
+      } else {
+        stores.dispatcher.dispatch({type: ACTIONS.GET_REWARD_BALANCES, content: {tokenID: 0}});
+      }
+
+      forceUpdate();
+    }
+  };
+
   const stableSwapUpdated = (rew) => {
     let nfts = stores.stableSwapStore.getStore('vestNFTs');
     if (!!nfts) {
@@ -49,32 +85,26 @@ export default function ssRewards() {
   };
 
   const rewardBalancesReturned = (rew) => {
-    if (rew) {
-      if (rew && rew.bribes && rew.fees && rew.rewards && rew.veDist && rew.bribes.length >= 0 && rew.fees.length >= 0 && rew.rewards.length >= 0) {
-        setRewards([...rew.bribes, ...rew.fees, ...rew.rewards, ...rew.veDist]);
-      }
-    } else {
-      let re = stores.stableSwapStore.getStore('rewards');
-      if (re && re.bribes && re.fees && re.rewards && re.veDist && re.bribes.length >= 0 && re.fees.length >= 0 && re.rewards.length >= 0) {
-        setRewards([...re.bribes, ...re.fees, ...re.rewards, ...re.veDist]);
-      }
+    // console.log('rewardBalancesReturned', rew)
+    if (!rew) {
+      rew = stores.stableSwapStore.getStore('rewards');
     }
+    setRewards(rew);
   };
 
   useEffect(() => {
-    rewardBalancesReturned();
-    // stableSwapUpdated();
-
-    stores.emitter.on(ACTIONS.UPDATED_NFTS, stableSwapUpdated);
+    stores.emitter.on(ACTIONS.CONFIGURED_SS, updateNftsAndRewards);
     stores.emitter.on(ACTIONS.REWARD_BALANCES_RETURNED, rewardBalancesReturned);
     return () => {
-      stores.emitter.removeListener(ACTIONS.UPDATED_NFTS, stableSwapUpdated);
+      stores.emitter.removeListener(ACTIONS.CONFIGURED_SS, updateNftsAndRewards);
       stores.emitter.removeListener(ACTIONS.REWARD_BALANCES_RETURNED, rewardBalancesReturned);
     };
   }, [token]);
 
   useEffect(() => {
-    setVeToken(stores.stableSwapStore.getStore('veToken'));
+
+    updateNftsAndRewards();
+
     const claimReturned = () => {
       setLoading(false);
     };
@@ -82,8 +112,6 @@ export default function ssRewards() {
     const claimAllReturned = () => {
       setLoading(false);
     };
-
-    stableSwapUpdated();
 
     stores.emitter.on(ACTIONS.CLAIM_BRIBE_RETURNED, claimReturned);
     stores.emitter.on(ACTIONS.CLAIM_REWARD_RETURNED, claimReturned);
@@ -99,10 +127,6 @@ export default function ssRewards() {
     };
   }, []);
 
-  const onSearchChanged = (event) => {
-    setSearch(event.target.value);
-  };
-
   const onClaimAll = () => {
     setLoading(true);
     let sendTokenID = 0;
@@ -112,9 +136,6 @@ export default function ssRewards() {
     stores.dispatcher.dispatch({type: ACTIONS.CLAIM_ALL_REWARDS, content: {pairs: rewards, tokenID: sendTokenID}});
   };
 
-  const handleClick = (event) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
 
   const handleChange = (event) => {
     setToken(event.target.value);

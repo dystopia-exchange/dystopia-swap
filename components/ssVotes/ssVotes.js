@@ -25,6 +25,7 @@ export default function ssVotes() {
   const forceUpdate = useCallback(() => updateState({}), []);
 
   const [gauges, setGauges] = useState([]);
+  const [gaugesLoading, setGaugesLoading] = useState(true);
   const [voteLoading, setVoteLoading] = useState(false);
   const [votes, setVotes] = useState([]);
   const [veToken, setVeToken] = useState(null);
@@ -44,6 +45,9 @@ export default function ssVotes() {
       return asset.gauge && asset.gauge.address;
     });
     setGauges(filteredAssets);
+    if (filteredAssets.length > 0 && gaugesLoading) {
+        setGaugesLoading(false)
+    }
 
     const tvldata = await stores.stableSwapStore.getStore("tvls");
 
@@ -428,6 +432,7 @@ export default function ssVotes() {
         token={token}
         noTokenSelected={noTokenSelected}
         showSearch={showSearch}
+        gaugesLoading={gaugesLoading}
       />
     </>
   );

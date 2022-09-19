@@ -21,8 +21,7 @@ import { formatSymbol, formatInputAmount } from '../../utils';
 
 import stores from '../../stores';
 import {
-  ACTIONS,
-  ETHERSCAN_URL,
+  ACTIONS, DEFAULT_ASSET_FROM, DEFAULT_ASSET_TO, ETHERSCAN_URL,
 } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import SwapIconBg from '../../ui/SwapIconBg';
@@ -50,15 +49,41 @@ export default function ssBribeCreate() {
     setGaugeOptions(storePairs);
 
     if (filteredStoreAssetOptions.length > 0 && asset == null) {
-      setAsset(filteredStoreAssetOptions[0]);
+      for (let i = 0; i < storeAssetOptions.length; i++) {
+        if (filteredStoreAssetOptions[i].address.toLowerCase() === DEFAULT_ASSET_TO.toLowerCase()) {
+          setAsset(filteredStoreAssetOptions[i]);
+          break;
+        }
+      }
     }
 
     if (storePairs.length > 0 && gauge == null) {
-      for (var i = 0; i < storePairs.length; i++)
-        if (storePairs[i].gauge != null) {
-          setGauge(storePairs[i]);
-          break;
+      let defaultPair, i;
+
+      for (i = 0; i < storePairs.length; i++) {
+        if (
+            storePairs[i].gauge != null
+            &&
+            (
+                (storePairs[i].token0.address.toLowerCase() === DEFAULT_ASSET_FROM.toLowerCase() && storePairs[i].token1.address.toLowerCase() === DEFAULT_ASSET_TO.toLowerCase())
+                || (storePairs[i].token1.address.toLowerCase() === DEFAULT_ASSET_FROM.toLowerCase() && storePairs[i].token0.address.toLowerCase() === DEFAULT_ASSET_TO.toLowerCase())
+            )
+        ) {
+          defaultPair = storePairs[i]
+          break
+          // console.log(storePairs[i])
         }
+      }
+
+      if (!defaultPair) {
+        for (i = 0; i < storePairs.length; i++)
+          if (storePairs[i].gauge != null) {
+            defaultPair = storePairs[i]
+            break;
+          }
+      }
+
+      setGauge(defaultPair);
     }
   };
 

@@ -1,12 +1,36 @@
 import BigNumber from "bignumber.js";
+import {v4 as uuidv4} from "uuid";
+import {assetIcons} from "../public/images/assets/asset-icons";
+import {ALLOWED_DUPLICATE_SYMBOLS} from "../stores/constants"
 
-// todo: get navigator declared somehow? probably an issue with using nextjs
-// function getLang() {
-//  if (window.navigator.languages != undefined)
-//   return window.navigator.languages[0];
-//  else
-//   return window.navigator.language;
-// }
+export const getTXUUID = () => {
+  return uuidv4();
+};
+
+export function formatBN(num, decimals = '18') {
+  if (!num) {
+    return "0";
+  }
+  return BigNumber(num)
+      .div(BigNumber(10).pow(BigNumber(parseInt(decimals))))
+      .toFixed(parseInt(decimals));
+}
+
+export function parseBN(num, decimals = '18') {
+  if (num === null || num === undefined) {
+    // parse function pretty critical coz using in contract calls
+    // better to throw an error
+    throw new Error("Invalid bn: " + num);
+  }
+  try {
+    return BigNumber(num)
+        .times(BigNumber(10).pow(parseInt(decimals)))
+        .toFixed(0, BigNumber.ROUND_DOWN);
+  } catch (e) {
+    console.info("Error parse bn: ", num)
+    throw e;
+  }
+}
 
 export function formatCurrency(amount, decimals = 2) {
   if (!isNaN(amount)) {
@@ -23,6 +47,19 @@ export function formatCurrency(amount, decimals = 2) {
   } else {
     return 0;
   }
+}
+
+export function calculateApr(
+    timeStart,
+    timeEnd,
+    profit,
+    positionAmount,
+) {
+  const period = BigNumber(timeEnd).minus(timeStart);
+  if (period.isZero() || BigNumber(positionAmount).isZero()) {
+    return '0';
+  }
+  return BigNumber(profit).div(positionAmount).div(period.div(60 * 60 * 24)).times(36500).toString();
 }
 
 export function formatAddress(address, length = "short") {
@@ -184,3 +221,201 @@ export const retry = ({ fn, args, defaultValue }) => {
 
   return wrappedFn;
 };
+
+export const removeDuplicate = (arr) => {
+  const assets = arr.reduce((acc, item) => {
+    if (item.symbol in assetIcons) {
+      item.logoURI = '/images/assets/' + assetIcons[item.symbol]
+    }
+    if (ALLOWED_DUPLICATE_SYMBOLS.includes(item.symbol)) {
+      acc[item.address.toLowerCase()] = item;
+    } else {
+      acc[item.symbol] = item;
+    }
+
+    return acc;
+  }, {});
+  return Object.values(assets);
+};
+
+// ROUTES
+
+export function buildRoutes(routeAssets, addy0, addy1, directRoute) {
+  let result = []
+
+  if (!directRoute) {
+    result = routeAssets
+        .map((routeAsset) => {
+
+          const arr = [];
+
+          if (addy0.toLowerCase() === routeAsset.address.toLowerCase()
+              || addy1.toLowerCase() === routeAsset.address.toLowerCase()) {
+            return arr;
+          }
+          arr.push({
+            routes: [
+              {
+                from: addy0,
+                to: routeAsset.address,
+                stable: true,
+              },
+              {
+                from: routeAsset.address,
+                to: addy1,
+                stable: true,
+              },
+            ],
+            routeAsset: routeAsset,
+          });
+
+
+          arr.push({
+            routes: [
+              {
+                from: addy0,
+                to: routeAsset.address,
+                stable: false,
+              },
+              {
+                from: routeAsset.address,
+                to: addy1,
+                stable: false,
+              },
+            ],
+            routeAsset: routeAsset,
+          });
+
+          arr.push({
+            routes: [
+              {
+                from: addy0,
+                to: routeAsset.address,
+                stable: true,
+              },
+              {
+                from: routeAsset.address,
+                to: addy1,
+                stable: false,
+              },
+            ],
+            routeAsset: routeAsset,
+          });
+          arr.push({
+            routes: [
+              {
+                from: addy0,
+                to: routeAsset.address,
+                stable: false,
+              },
+              {
+                from: routeAsset.address,
+                to: addy1,
+                stable: true,
+              },
+            ],
+            routeAsset: routeAsset,
+          });
+          return arr;
+        })
+        .flat();
+  }
+
+  result.push({
+    routes: [
+      {
+        from: addy0,
+        to: addy1,
+        stable: true,
+      },
+    ],
+    routeAsset: null,
+  });
+  result.push({
+    routes: [
+      {
+        from: addy0,
+        to: addy1,
+        stable: false,
+      },
+    ],
+    routeAsset: null,
+  });
+  // console.log(">>> ROUTES:", result)
+  return result;
+}
+
+/// PRICE CALCULATIONS
+
+export function getPrice(reserveIn, reserveOut, stable) {
+  const minimalValue = BigNumber(1e-9);
+  if (stable) {
+    return getAmountOutStable(minimalValue, reserveIn, reserveOut).div(minimalValue);
+  } else {
+    return getAmountOutVolatile(minimalValue, reserveIn, reserveOut).div(minimalValue);
+  }
+}
+
+export function getAmountOut(amountIn, reserveIn, reserveOut, stable) {
+  if (stable) {
+    return getAmountOutStable(amountIn, reserveIn, reserveOut);
+  } else {
+    return getAmountOutVolatile(amountIn, reserveIn, reserveOut);
+  }
+}
+
+function getAmountOutVolatile(amountIn, reserveIn, reserveOut) {
+  // console.log("getAmountOutVolatile", amountIn.toString(), reserveIn.toString(), reserveOut.toString())
+  return amountIn.times(reserveOut).div(reserveIn.plus(amountIn));
+}
+
+function getAmountOutStable(amountIn, reserveIn, reserveOut) {
+  const xy = _k(reserveIn, reserveOut);
+  return reserveOut.minus(_getY(amountIn.plus(reserveIn), xy, reserveOut));
+}
+
+function _k(_x, _y) {
+  const _a = _x.times(_y);
+  const _b = _x.times(_x).plus(_y.times(_y));
+  // x3y+y3x >= k
+  return _a.times(_b);
+}
+
+function _getY(x0, xy, y) {
+  for (let i = 0; i < 255; i++) {
+    const yPrev = y;
+    const k = _f(x0, y);
+    if (k.lt(xy)) {
+      const dy = xy.minus(k).div(_d(x0, y));
+      y = y.plus(dy);
+    } else {
+      const dy = k.minus(xy).div(_d(x0, y));
+      y = y.minus(dy);
+    }
+    if (_closeTo(y, yPrev, 1)) {
+      break;
+    }
+  }
+  return y;
+}
+
+function _f(x0, y) {
+  return x0.times(y.pow(3)).plus(y.times(x0.pow(3)));
+}
+
+function _d(x0, y) {
+  return BigNumber(3).times(x0.times(y.pow(2))).plus(x0.pow(3));
+}
+
+function _closeTo(a, b, target) {
+  if (a.gt(b)) {
+    if (a.minus(b).lt(target)) {
+      return true;
+    }
+  } else {
+    if (b.minus(a).lt(target)) {
+      return true;
+    }
+  }
+  return false;
+}

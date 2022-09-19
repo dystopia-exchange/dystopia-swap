@@ -23,7 +23,7 @@ import BigNumber from "bignumber.js";
 import { formatCurrency } from "../../utils";
 import classes from "./ssLiquidityManage.module.css";
 import stores from "../../stores";
-import { ACTIONS, CONTRACTS } from "../../stores/constants";
+import {ACTIONS, CONTRACTS, DEFAULT_ASSET_FROM, DEFAULT_ASSET_TO} from "../../stores/constants";
 import {
   Search,
   DeleteOutline,
@@ -191,13 +191,20 @@ export default function ssLiquidityManage() {
     } else {
       let aa0 = asset0;
       let aa1 = asset1;
+
       if (storeAssetOptions.length > 0 && asset0 == null) {
-        setAsset0(storeAssetOptions[0]);
-        aa0 = storeAssetOptions[0];
+        const wmaticIndex = storeAssetOptions.findIndex((token) => {
+          return token.id == DEFAULT_ASSET_FROM;
+        });
+        setAsset0(storeAssetOptions[wmaticIndex]);
+        aa0 = storeAssetOptions[wmaticIndex];
       }
       if (storeAssetOptions.length > 0 && asset1 == null) {
-        setAsset1(storeAssetOptions[1]);
-        aa1 = storeAssetOptions[1];
+        const dystIndex = storeAssetOptions.findIndex((token) => {
+          return token.id == DEFAULT_ASSET_TO;
+        });
+        setAsset1(storeAssetOptions[dystIndex]);
+        aa1 = storeAssetOptions[dystIndex];
       }
       if (withdrawAassetOptions.length > 0 && withdrawAsset == null) {
         setWithdrawAsset(withdrawAassetOptions[0]);
@@ -2862,6 +2869,8 @@ export default function ssLiquidityManage() {
                 depositLoading ||
                 stakeLoading ||
                 depositStakeLoading
+                  || (asset0 && BigNumber(amount0).gt(asset0.balance))
+                  || (asset1 && BigNumber(amount1).gt(asset1.balance))
               }
               className={[
                 classes.buttonOverride,

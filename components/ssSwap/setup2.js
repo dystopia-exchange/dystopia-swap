@@ -12,21 +12,72 @@ import {
 } from "../../utils";
 import classes from "./ssSwap.module.css";
 import stores from "../../stores";
-import {ACTIONS, DIRECT_SWAP_ROUTES} from "../../stores/constants";
-import {FTM_SYMBOL, WFTM_SYMBOL} from "../../stores/constants/contracts";
+import {ACTIONS, DEFAULT_ASSET_FROM, DEFAULT_ASSET_TO, DIRECT_SWAP_ROUTES} from "../../stores/constants";
+import {FTM_SYMBOL, WFTM_SYMBOL, WFTM_ADDRESS} from "../../stores/constants/contracts";
 import BigNumber from "bignumber.js";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import BtnSwap from "../../ui/BtnSwap";
 import Hint from "../hint/hint";
 import Loader from "../../ui/Loader";
 import AssetSelect from "../../ui/AssetSelect";
-import { MultiSwap } from "../MultiSwap";
 import { observer } from 'mobx-react'
-import { multiSwapStore } from '../MultiSwap/store'
 import * as ethers from 'ethers'
 import { toFixed } from './utils'
 
+const MultiSwap = observer((props) => {
+    const multiSwapStore = stores.multiSwapStore;
+    const [provider, setProvider] = useState(null)
+
+    useEffect(() => {
+        async function getProvider() {
+            const web3context = await stores.accountStore.getStore('web3context');
+            if (web3context) {
+                setProvider(new ethers.providers.Web3Provider(web3context.library.instance))
+            }
+        }
+        getProvider()
+    }, [])
+
+    const {
+        tokenIn, setTokenIn,
+        tokenOut, setTokenOut,
+        swapAmount, setSwapAmount,
+        slippage, setSlippage,
+        swap, isFetchingSwapQuery,
+        allowed, isFetchingAllowance,
+        reverseTokens: doReverseTokens,
+        /*approve: doApprove, */isFetchingApprove,
+        doSwap, isFetchingSwap,
+        tokensMap, data: multiswapData,
+        routes,
+    } = multiSwapStore
+
+    if (multiSwapStore.provider === null && provider) {
+        multiSwapStore.setProvider(provider)
+    }
+
+    return (
+        <div style={{ color: '#fff' }}>
+            {props.children({
+                tokenIn, setTokenIn,
+                tokenOut, setTokenOut,
+                swapAmount, setSwapAmount,
+                slippage, setSlippage,
+                allowed, isFetchingAllowance,
+                swap, isFetchingSwapQuery,
+                /*doApprove,*/ isFetchingApprove,
+                doSwap, isFetchingSwap,
+                doReverseTokens,
+                tokensMap,
+                multiswapData,
+                routes,
+            })}
+        </div>
+    )
+})
+
 function Setup() {
+    const multiSwapStore = stores.multiSwapStore;
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
 
@@ -37,7 +88,6 @@ function Setup() {
     const [fromAmountValue, setFromAmountValue] = useState("");
     const [fromAmountError, setFromAmountError] = useState(false);
     const [fromAssetValue, setFromAssetValue] = useState(null);
-
     const [fromAssetError, setFromAssetError] = useState(false);
     const [fromAssetOptions, setFromAssetOptions] = useState([]);
 
@@ -85,6 +135,7 @@ function Setup() {
             };
 
             const quoteReturned = (val) => {
+                // console.log('quoteReturned val', val)
                 if (!val) {
                     setQuoteLoading(false);
                     setQuote(null);
@@ -111,20 +162,20 @@ function Setup() {
                     }
 
                     setToAmountValue(BigNumber(val.output.finalValue).toFixed(8));
+                    // console.log('setquote')
                     setQuote(val);
                 }
             };
 
             const ssUpdated = () => {
                 const baseAsset = stores.stableSwapStore.getStore("baseAssets");
-
                 if (
                     baseAsset.length > 0
                     && multiSwapStore.tokenIn === null
                     && multiSwapStore.tokenOut === null
                 ) {
-                    const WMATIC = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
-                    const DYST = '0x39ab6574c289c3ae4d88500eec792ab5b947a5eb'
+                    const WMATIC = DEFAULT_ASSET_FROM
+                    const DYST = DEFAULT_ASSET_TO
                     multiSwapStore.setTokenIn(WMATIC)
                     multiSwapStore.setTokenOut(DYST)
                 }
@@ -134,17 +185,38 @@ function Setup() {
 
                 if (baseAsset.length > 0 && toAssetValue == null) {
                     const dystIndex = baseAsset.findIndex((token) => {
-                        return token.id == "0x39ab6574c289c3ae4d88500eec792ab5b947a5eb";
+                        return token.id == DEFAULT_ASSET_TO;
                     });
                     setToAssetValue(baseAsset[dystIndex]);
                 }
 
                 if (baseAsset.length > 0 && fromAssetValue == null) {
                     const wmaticIndex = baseAsset.findIndex((token) => {
-                        return token.id == "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270";
+                        return token.id == DEFAULT_ASSET_FROM;
                     });
                     setFromAssetValue(baseAsset[wmaticIndex]);
                 }
+
+                if (fromAssetValue && fromAssetValue.chainId === 'not_inited') {
+                    // console.log('asset not inited')
+                    const foundBaIndex = baseAsset.findIndex((token) => {
+                        return token.id == fromAssetValue.address;
+                    });
+                    if (foundBaIndex) {
+                        setFromAssetValue(baseAsset[foundBaIndex])
+                    }
+                }
+
+                if (toAssetValue && toAssetValue.chainId === 'not_inited') {
+                    // console.log('asset not inited')
+                    const foundBaIndex = baseAsset.findIndex((token) => {
+                        return token.id == toAssetValue.address;
+                    });
+                    if (foundBaIndex) {
+                        setToAssetValue(baseAsset[foundBaIndex])
+                    }
+                }
+
                 forceUpdate();
             };
 
@@ -185,7 +257,6 @@ function Setup() {
             stores.emitter.on(ACTIONS.WRAP_RETURNED, wrapReturned);
             stores.emitter.on(ACTIONS.UNWRAP_RETURNED, wrapReturned);
             stores.emitter.on(ACTIONS.SWAP_RETURNED, swapReturned);
-            // TODO: setQuote
             // stores.emitter.on(ACTIONS.QUOTE_SWAP_RETURNED, quoteReturned);
             stores.emitter.on(ACTIONS.BASE_ASSETS_UPDATED, assetsUpdated);
 
@@ -194,11 +265,14 @@ function Setup() {
             return () => {
                 stores.emitter.removeListener(ACTIONS.ERROR, errorReturned);
                 stores.emitter.removeListener(ACTIONS.UPDATED, ssUpdated);
+                stores.emitter.removeListener(ACTIONS.WRAP_RETURNED, wrapReturned);
+                stores.emitter.removeListener(ACTIONS.UNWRAP_RETURNED, wrapReturned);
                 stores.emitter.removeListener(ACTIONS.SWAP_RETURNED, swapReturned);
-                stores.emitter.removeListener(
+
+                /*stores.emitter.removeListener(
                     ACTIONS.QUOTE_SWAP_RETURNED,
                     quoteReturned
-                );
+                );*/
                 stores.emitter.removeListener(
                     ACTIONS.BASE_ASSETS_UPDATED,
                     assetsUpdated
@@ -786,7 +860,7 @@ function Setup() {
                         className={classes.massiveInputAmount}
                         placeholder="0.00"
                         error={amountError}
-                        value={amountValue}
+                        value={amountValue || ''}
                         onChange={amountChanged}
                         disabled={loading || type === "To"}
                         inputMode={"decimal"}
@@ -972,7 +1046,7 @@ function Setup() {
                     slippage, setSlippage,
                     allowed, isFetchingAllowance,
                     swap, isFetchingSwapQuery,
-                    doApprove, isFetchingApprove,
+                    /*doApprove,*/ isFetchingApprove,
                     doSwap, isFetchingSwap,
                     multiswapData,
                     routes,
@@ -1004,7 +1078,7 @@ function Setup() {
 
                 if (allowed === false && tokenIn) {
                     buttonLabel = 'Approve'
-                    handleClickButton = doApprove
+                    // handleClickButton = doApprove
                     if (!isFetchingApprove && fromAmountValue <= Number(fromAssetValue?.balance)) {
                         disableButton = false
                     }
@@ -1192,7 +1266,7 @@ function Setup() {
 
                             {renderMassiveInput(
                                 "To",
-                                swap?.returnAmount
+                                multiSwapStore.isWrapUnwrap ? toAmountValue : swap?.returnAmount
                                     ? ethers.utils.formatUnits(swap?.returnAmount, toAssetValue?.decimals)
                                     : swap?.returnAmount
                                 ,
@@ -1219,7 +1293,9 @@ function Setup() {
 
                             {(!isFetchingSwapQuery
                                 && multiSwapStore.error === null
-                                && multiSwapStore.priceImpact !== null)
+                                && multiSwapStore.priceImpact !== null
+                                && !multiSwapStore.isWrapUnwrap
+                                )
                                 && (
                                     <>
                                         <Typography
