@@ -61,7 +61,7 @@
         "symbol": "AAVE",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/aave.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/aave.jpg"
     },
     {
         "name": "Adamant",
@@ -101,7 +101,7 @@
         "symbol": "BAT",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/bat.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/bat.jpg"
     },
     {
         "name": "Beefy.finance",
@@ -157,7 +157,7 @@
         "name": "Celsius",
         "symbol": "CEL",
         "decimals": 4,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/cel.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/cel.jpg"
     },
     {
         "name": "ChumHum",
@@ -197,7 +197,7 @@
         "symbol": "CRV",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/crv.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/crv.jpg"
     },
     {
         "name": "Dystopia",
@@ -213,7 +213,7 @@
         "symbol": "DAI",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/dai.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/dai.jpg"
     },
     {
         "name": "DEGEN Index",
@@ -341,7 +341,7 @@
         "symbol": "GRT",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/grt.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/grt.jpg"
     },
     {
         "address": "0xc48F61a288A08F1B80c2edd74652e1276B6A168c",
@@ -389,7 +389,7 @@
         "symbol": "KRILL",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/krill.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/krill.jpg"
     },
     {
         "name": "ChainLink Token",
@@ -397,7 +397,7 @@
         "symbol": "LINK",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/link.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/link.jpg"
     },
     {
         "address": "0xA1c57f48F0Deb89f569dFbE6E2B7f46D33606fD4",
@@ -429,7 +429,7 @@
         "symbol": "MKR",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/mkr.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/mkr.jpg"
     },
     {
         "address": "0xF501dd45a1198C2E1b5aEF5314A68B9006D842E0",
@@ -517,7 +517,7 @@
         "symbol": "PolyDoge",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/doge.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/doge.jpg"
     },
     {
         "name": "Qi Dao",
@@ -533,7 +533,7 @@
         "symbol": "RCN",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/rcn.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/rcn.jpg"
     },
     {
         "name": "Router Protocol",
@@ -549,7 +549,7 @@
         "symbol": "SNX",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/snx.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/snx.jpg"
     },
     {
         "address": "0xf5EA626334037a2cf0155D49eA6462fDdC6Eff19",
@@ -565,7 +565,7 @@
         "symbol": "SAND",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/sand.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/sand.jpg"
     },
     {
         "name": "SushiToken",
@@ -573,7 +573,7 @@
         "symbol": "SUSHI",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/sushi.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/sushi.jpg"
     },
     {
         "name": "SportX",
@@ -621,7 +621,7 @@
         "symbol": "UNI",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/uni.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/uni.jpg"
     },
     {
         "name": "USD Coin",
@@ -629,7 +629,7 @@
         "symbol": "USDC",
         "decimals": 6,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/usdc.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/usdc.jpg"
     },
     {
         "name": "USD+",
@@ -645,7 +645,7 @@
         "symbol": "USDT",
         "decimals": 6,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/usdt.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/usdt.jpg"
     },
     {
         "name": "TerraUSD",
@@ -661,7 +661,7 @@
         "symbol": "WBTC",
         "decimals": 8,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/btc.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/btc.jpg"
     },
     {
         "name": "Wrapped Ether",
@@ -669,7 +669,7 @@
         "symbol": "WETH",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/eth.jpg"
     },
     {
         "name": "Wrapped Matic",
@@ -677,7 +677,7 @@
         "symbol": "WMATIC",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/polygon.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/polygon.jpg"
     },
     {
         "name": "Moonwolf",
@@ -709,7 +709,7 @@
         "name": "yearn.finance",
         "symbol": "YFI",
         "decimals": 18,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/yfi.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/yfi.jpg"
     },
     {
         "name": "dHEDGE Top Index",
@@ -765,7 +765,7 @@
         "symbol": "wFIL",
         "decimals": 18,
         "chainId": 137,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/fil.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/fil.jpg"
     },
     {
         "name": "ARPA Token",
@@ -1125,7 +1125,7 @@
         "name": "SushiBar",
         "symbol": "xSUSHI",
         "decimals": 18,
-        "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/xsushi.jpg"
+        "logoURI": "https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/xsushi.jpg"
     },
     {
         "address": "0x4e1581f01046eFDd7a1a2CDB0F82cdd7F71F2E59",
