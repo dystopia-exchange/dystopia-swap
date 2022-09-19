@@ -1004,7 +1004,7 @@ export default function EnhancedTable({
                       }}
                   >
                     <tr>
-                      <td colSpan="8">
+                      <td colSpan="9">
                         <TableBodyPlaceholder message="Loading gauges from the blockchain, please wait" />
                       </td>
                     </tr>
@@ -1780,7 +1780,7 @@ export default function EnhancedTable({
                                           "($ 0.00a)" : "($ 0a)"
                                         )} `}
                                       {headCell.id === "apr" &&
-                                        `${formatCurrency(BigNumber(row?.gauge?.apr), 0)}%`}
+                                        `${formatCurrency(BigNumber(row?.gauge?.expectAPR), 0)}%`}
                                       {headCell.id === "balance" &&
                                         formatCurrency(
                                           BigNumber(row?.gauge?.balance)
@@ -1840,6 +1840,8 @@ export default function EnhancedTable({
                                         formatCurrency(
                                           BigNumber(row?.reserve1)
                                         )}
+                                      {headCell.id === "apr" &&
+                                          `${formatCurrency(BigNumber(row?.gauge?.apr), 0)}%`}
                                       {headCell.id === "apy" && ""}
                                       {headCell.id === "myVotes" &&
                                         `${formatCurrency(sliderValue)} %`}
@@ -1871,6 +1873,8 @@ export default function EnhancedTable({
                                         formatSymbol(row.token0.symbol)}
                                       {headCell.id === "liquidity" &&
                                         formatSymbol(row.token0.symbol)}
+                                      {headCell.id === "apr" &&
+                                          `Expected`}
                                       {headCell.id === "apy" &&
                                       row?.gaugebribes.bribeTokens.length
                                         ? row?.gaugebribes.bribeTokens
@@ -1908,6 +1912,8 @@ export default function EnhancedTable({
                                         formatSymbol(row.token1.symbol)}
                                       {headCell.id === "liquidity" &&
                                         formatSymbol(row.token1.symbol)}
+                                      {headCell.id === "apr" &&
+                                          `Current`}
                                       {headCell.id === "apy" && ""}
                                       {headCell.id === "myVotes" &&
                                         formatSymbol(row.token1.symbol)}
