@@ -1067,8 +1067,8 @@ function Setup() {
                     // || multiSwapStore.error !== null
                 || fromAmountValue > Number(fromAssetValue?.balance)
 
-                if (isFetchingSwapQuery) loadingMessage = 'loading data of routes...'
-                if (isFetchingAllowance) loadingMessage = 'loading ...'
+                if (isFetchingSwapQuery && swapAmount) loadingMessage = 'loading data of routes...'
+                if (isFetchingAllowance && swapAmount) loadingMessage = 'loading ...'
                 if (isFetchingApprove) loadingMessage = 'transaction of approve in process...'
                 if (isFetchingSwap) loadingMessage = 'token swap in progress...'
 

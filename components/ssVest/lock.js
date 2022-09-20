@@ -28,6 +28,7 @@ import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import SwapIconBg from '../../ui/SwapIconBg';
 
 export default function ssLock({govToken, veToken}) {
+  const unixWeek = 604800
 
   const inputEl = useRef(null);
   const router = useRouter();
@@ -37,9 +38,16 @@ export default function ssLock({govToken, veToken}) {
   const [amount, setAmount] = useState('');
   const [amountError, setAmountError] = useState(false);
   const [selectedValue, setSelectedValue] = useState('week');
-  const [selectedDate, setSelectedDate] = useState(moment().add(7, 'days').format('YYYY-MM-DD'));
+  const [selectedDate, setSelectedDate] = useState(moment.unix(Math.floor(moment().add(7, 'days').unix() / unixWeek) * unixWeek).format('YYYY-MM-DD'));
   const [selectedDateError, setSelectedDateError] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+
+  const isDateCorrect = (dateStr) => {
+    const date = moment(dateStr).format('YYYY-MM-DD')
+    const correctDate = moment.unix(Math.floor(moment(dateStr).add(1, 'days').unix() / unixWeek) * unixWeek).format('YYYY-MM-DD')
+    return date === correctDate && moment(dateStr).unix() > moment().unix()
+  }
 
   useEffect(() => {
     const lockReturned = () => {
@@ -90,9 +98,11 @@ export default function ssLock({govToken, veToken}) {
         break;
       default:
     }
-    const newDate = moment().add(days, 'days').format('YYYY-MM-DD');
+    let newDate = moment().add(days, 'days')/*.format('YYYY-MM-DD')*/;
+    // round to weeks
+    newDate = moment.unix(Math.floor(newDate.unix() / unixWeek) * unixWeek)
 
-    setSelectedDate(newDate);
+    setSelectedDate(newDate.format('YYYY-MM-DD'));
   };
 
   const onLock = () => {
@@ -275,6 +285,15 @@ export default function ssLock({govToken, veToken}) {
 
   const {appTheme} = useAppThemeContext();
 
+  let buttonText = 'Lock Tokens & Get veDYST';
+  if (lockLoading) {
+    buttonText = 'Locking'
+  } else if (amount === '' || Number(amount) === 0) {
+    buttonText = 'Enter amount'
+  } else if (!isDateCorrect(selectedDate)) {
+    buttonText = 'Wrong expiration date'
+  }
+
   return (
     <>
       <Paper
@@ -367,10 +386,10 @@ export default function ssLock({govToken, veToken}) {
           variant="contained"
           size="large"
           color="primary"
-          disabled={lockLoading || amount === '' || Number(amount) === 0}
+          disabled={lockLoading || amount === '' || Number(amount) === 0 || !isDateCorrect(selectedDate)}
           onClick={onLock}>
           <Typography className={classes.actionButtonText}>
-            {lockLoading ? `Locking` : `Lock Tokens & Get veDYST`}
+            {buttonText}
           </Typography>
 
           {lockLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
