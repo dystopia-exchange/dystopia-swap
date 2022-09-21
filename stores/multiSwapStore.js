@@ -3,7 +3,16 @@ import { allowance, approve, doSwap, getSwapContract, swapQuery, api } from "./h
 import * as ethers from 'ethers'
 import { debounce } from "debounce"
 import stores from "./";
-import { FTM_SYMBOL, WFTM_ADDRESS, WFTM_DECIMALS, WFTM_SYMBOL, ROUTER_ADDRESS, multiSwapAddress, ERC20_ABI } from "./constants/contracts";
+import {
+    FTM_SYMBOL,
+    WFTM_ADDRESS,
+    WFTM_DECIMALS,
+    WFTM_SYMBOL,
+    ROUTER_ADDRESS,
+    multiSwapAddress,
+    ERC20_ABI,
+    FTM_DECIMALS
+} from "./constants/contracts";
 import { DIRECT_SWAP_ROUTES, MAX_UINT256, ZERO_ADDRESS} from "./constants";
 import { v4 as uuidv4 } from 'uuid';
 import {formatCurrency, getTXUUID} from "../utils";
@@ -198,8 +207,8 @@ class MultiSwapStore {
                 const fromAmount = this.swapAmount
 
                 const [fromAsset, toAsset] = await Promise.all([
-                    this._getToken(this.tokenIn),
-                    this._getToken(this.tokenOut),
+                    this._getToken(this.tokenIn, false),
+                    this._getToken(this.tokenOut, false),
                 ])
 
                 await emitNewNotifications(this.emitter, [
@@ -275,12 +284,19 @@ class MultiSwapStore {
         }
     }
 
-    async _getToken(address) {
+    async _getToken(address, giveWrappedForNative = true) {
         if (address === FTM_SYMBOL) {
+            if (giveWrappedForNative) {
+                return {
+                    address: WFTM_ADDRESS,
+                    symbol: WFTM_SYMBOL,
+                    decimals: WFTM_DECIMALS,
+                }
+            }
             return {
-                address: WFTM_ADDRESS,
-                symbol: WFTM_SYMBOL,
-                decimals: WFTM_DECIMALS,
+                address: FTM_SYMBOL,
+                symbol: FTM_SYMBOL,
+                decimals: FTM_DECIMALS,
             }
         }
 
