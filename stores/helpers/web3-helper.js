@@ -29,7 +29,7 @@ export const callContractWait = async (
     .then(async (gasAmount) => {
 
       let sendGasAmount = BigNumber(gasAmount).times(1.5).toFixed(0);
-      let sendGasPrice = BigNumber(gasPrice).toFixed(0);
+      let sendGasPrice = BigNumber(gasPrice).times(1.3).toFixed(0);
 
       await contract.methods[method](...params)
         .send({
