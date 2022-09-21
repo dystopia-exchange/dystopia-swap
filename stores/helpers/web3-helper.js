@@ -5,6 +5,7 @@ import {
   emitNotificationRejected,
   emitNotificationSubmitted
 } from "./emit-helper";
+import {GAS_MULTIPLIER} from "../constants";
 
 export const callContractWait = async (
   web3,
@@ -29,7 +30,7 @@ export const callContractWait = async (
     .then(async (gasAmount) => {
 
       let sendGasAmount = BigNumber(gasAmount).times(1.5).toFixed(0);
-      let sendGasPrice = BigNumber(gasPrice).times(1.3).toFixed(0);
+      let sendGasPrice = BigNumber(gasPrice).times(GAS_MULTIPLIER).toFixed(0);
 
       await contract.methods[method](...params)
         .send({
