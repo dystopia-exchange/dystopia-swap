@@ -13,7 +13,7 @@ import {
     ERC20_ABI,
     FTM_DECIMALS
 } from "./constants/contracts";
-import { DIRECT_SWAP_ROUTES, MAX_UINT256, ZERO_ADDRESS} from "./constants";
+import {DIRECT_SWAP_ROUTES, GAS_MULTIPLIER, MAX_UINT256, ZERO_ADDRESS} from "./constants";
 import { v4 as uuidv4 } from 'uuid';
 import {formatCurrency, getTXUUID} from "../utils";
 import {
@@ -245,14 +245,14 @@ class MultiSwapStore {
 
                 // SUBMIT REQUIRED ALLOWANCE TRANSACTIONS
                 if (BigNumber(allowance).lt(fromAmount)) {
-                    const res = await approve(this.tokenIn, this.provider, multiSwapAddress)
+                    const res = await approve(this.tokenIn, this.provider, multiSwapAddress, web3.utils.toWei(BigNumber(await stores.accountStore.getGasPrice()).times(GAS_MULTIPLIER).toFixed(0), "gwei"))
                     emitNotificationSubmitted(emitter, allowanceTXID, res?.hash)
                     await res?.wait(2)
                     emitNotificationConfirmed(emitter, allowanceTXID, res?.hash)
                 }
 
                 emitNotificationPending(emitter, swapTXID)
-                const res = await doSwap(this.swap, this.slippage, this.provider, this.emitter)
+                const res = await doSwap(this.swap, this.slippage, this.provider, this.emitter, web3.utils.toWei(BigNumber(await stores.accountStore.getGasPrice()).times(GAS_MULTIPLIER).toFixed(0), "gwei"))
                 emitNotificationSubmitted(emitter, swapTXID, res?.hash)
 
                 await res?.wait(2)

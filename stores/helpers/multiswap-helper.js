@@ -27,7 +27,7 @@ export async function allowance(tokenAddress, provider, swapAmount, decimals, ro
 }
 
 
-export async function approve(tokenAddress, provider, router = multiSwapAddress) {
+export async function approve(tokenAddress, provider, router = multiSwapAddress, gasPrice) {
     const amount = ethers.constants.MaxUint256;
     const tokenContract = new ethers.Contract(
         tokenAddress,
@@ -36,7 +36,7 @@ export async function approve(tokenAddress, provider, router = multiSwapAddress)
     );
     const tx = await tokenContract
         .connect(provider.getSigner())
-        .approve(router, amount, { gasLimit: 100000 });
+        .approve(router, amount, { gasLimit: 100000, gasPrice, });
 
     return tx
 }
@@ -48,7 +48,7 @@ export function getDeadline() {
     return Math.floor(Date.now() / 1000) + 60 * 30;
 }
 
-export async function doSwap(swap, slippage, provider, emitter) {
+export async function doSwap(swap, slippage, provider, emitter, gasPrice) {
     // console.log('multiswap-helper doSwap ----- swap args:', JSON.parse(JSON.stringify(swap)))
     // console.log('----- ', getSlippage(slippage), getDeadline())
     if (swap && swap.returnAmount) {
@@ -63,7 +63,7 @@ export async function doSwap(swap, slippage, provider, emitter) {
                 swap.tokenAddresses, // array of inter token addresses
                 getSlippage(slippage),
                 getDeadline(),
-                { gasLimit: 3000000, value: swapNative ? swap.swapData.swapAmount : 0 }
+                { gasLimit: 3000000, value: swapNative ? swap.swapData.swapAmount : 0, gasPrice, }
             )
 
         const tx = await getSwapContract()
@@ -74,7 +74,7 @@ export async function doSwap(swap, slippage, provider, emitter) {
                 swap.tokenAddresses, // array of inter token addresses
                 getSlippage(slippage),
                 getDeadline(),
-                { gasLimit: 3000000, value: swapNative ? swap.swapData.swapAmount : 0 }
+                { gasLimit: 3000000, value: swapNative ? swap.swapData.swapAmount : 0, gasPrice, }
             );
 
         // console.log('multiswap-helper doSwap done, tx:', tx)
