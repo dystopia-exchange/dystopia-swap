@@ -588,7 +588,7 @@ const useStyles = makeStyles({
     ["@media (max-width:660px)"]: {
       position: "absolute",
       right: 0,
-      top: 63,
+      top: 68,
     },
   },
   myDeposits: {
@@ -607,7 +607,7 @@ const useStyles = makeStyles({
       // eslint-disable-line no-useless-computed-key
       fontSize: "12px !important",
       paddingLeft: 10,
-      marginLeft: 10,
+      marginLeft: 0,
     },
   },
   myDepositsText: {
@@ -616,6 +616,15 @@ const useStyles = makeStyles({
       display: "flex",
       flexDirection: "column",
     },
+  },
+  "myDepositsText--ellipsis": {
+    ["@media (max-width:330px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      maxWidth: 60,
+    }
   },
   "myDeposits--light": {
     background: "#DBE6EC",
@@ -855,7 +864,7 @@ const useStyles = makeStyles({
   },
   sortSelect: {
     position: "absolute",
-    top: 63,
+    top: 68,
   },
   cellPaddings: {
     padding: "11px 20px",
@@ -1138,11 +1147,13 @@ const EnhancedTableToolbar = (props) => {
             </span>
 
             <span
+              className={classes['myDepositsText--ellipsis']}
               style={{
                 fontSize: "inherit",
                 fontWeight: 500,
                 color: appTheme === "dark" ? "#4CADE6" : "#0B5E8E",
                 whiteSpace: "nowrap",
+                paddingRight: 4,
               }}
             >
               My Deposits
@@ -3200,7 +3211,7 @@ export default function EnhancedTable({ pairs, isLoading }) {
                                             0
                                         )}%`,
                                       null,
-                                      <Tooltip
+                                      windowWidth > 660 ? <Tooltip
                                         title={
                                           <React.Fragment>
                                             {
@@ -3270,7 +3281,7 @@ export default function EnhancedTable({ pairs, isLoading }) {
                                         }
                                       >
                                         <QuizIcon fontSize="small" />
-                                      </Tooltip>,
+                                      </Tooltip> : null,
                                       null
                                     )}
                                   {headCell.id === "tvl" &&
