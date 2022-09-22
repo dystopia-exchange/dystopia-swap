@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/router'
 import {
     TextField,
     Typography,
@@ -78,6 +79,7 @@ const MultiSwap = observer((props) => {
 
 function Setup() {
     const multiSwapStore = stores.multiSwapStore;
+    const router = useRouter()
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
 
@@ -169,34 +171,72 @@ function Setup() {
 
             const ssUpdated = () => {
                 const baseAsset = stores.stableSwapStore.getStore("baseAssets");
+
+                // set tokens for multiswap store
                 if (
                     baseAsset.length > 0
                     && multiSwapStore.tokenIn === null
                     && multiSwapStore.tokenOut === null
                 ) {
-                    const WMATIC = DEFAULT_ASSET_FROM
-                    const DYST = DEFAULT_ASSET_TO
-                    multiSwapStore.setTokenIn(WMATIC)
-                    multiSwapStore.setTokenOut(DYST)
+                    if (router.query.to) {
+                        multiSwapStore.setTokenOut(router.query.to)
+                    } else {
+                        multiSwapStore.setTokenOut(DEFAULT_ASSET_TO)
+                    }
+
+                    if (router.query.from) {
+                        multiSwapStore.setTokenIn(router.query.from)
+                    } else {
+                        multiSwapStore.setTokenIn(DEFAULT_ASSET_FROM)
+                    }
                 }
 
                 setToAssetOptions(baseAsset);
                 setFromAssetOptions(baseAsset);
 
+                // set tokens for component state
                 if (baseAsset.length > 0 && toAssetValue == null) {
-                    const dystIndex = baseAsset.findIndex((token) => {
-                        return token.id == DEFAULT_ASSET_TO;
-                    });
-                    setToAssetValue(baseAsset[dystIndex]);
+                    let toIndex
+                    if (router.query.to) {
+                        const index = baseAsset.findIndex((token) => {
+                            return token.address?.toLowerCase() === router.query.to.toLowerCase();
+                        });
+                        if (index !== -1) {
+                            toIndex = index
+                        }
+                    }
+
+                    if (toIndex === undefined) {
+                        toIndex = baseAsset.findIndex((token) => {
+                            return token.id.toLowerCase() === DEFAULT_ASSET_TO.toLowerCase();
+                        });
+                    }
+
+                    setToAssetValue(baseAsset[toIndex]);
                 }
 
                 if (baseAsset.length > 0 && fromAssetValue == null) {
-                    const wmaticIndex = baseAsset.findIndex((token) => {
-                        return token.id == DEFAULT_ASSET_FROM;
-                    });
-                    setFromAssetValue(baseAsset[wmaticIndex]);
+                    let fromIndex;
+
+                    if (router.query.from) {
+                        const index = baseAsset.findIndex((token) => {
+                            return token.id.toLowerCase() === router.query.from.toLowerCase();
+                        });
+                        if (index !== -1) {
+                            fromIndex = index
+                        }
+                    }
+
+                    if (fromIndex === undefined) {
+                        fromIndex = baseAsset.findIndex((token) => {
+                            return token.id.toLowerCase() === DEFAULT_ASSET_FROM.toLowerCase();
+                        });
+                    }
+
+                    setFromAssetValue(baseAsset[fromIndex]);
                 }
 
+                // update not inited tokens data
                 if (fromAssetValue && fromAssetValue.chainId === 'not_inited') {
                     // console.log('asset not inited')
                     const foundBaIndex = baseAsset.findIndex((token) => {
@@ -283,8 +323,11 @@ function Setup() {
     );
 
     const onAssetSelect = (type, value) => {
+        let from, to;
         if (type === "From") {
             if (value.address === toAssetValue.address) {
+                to = fromAssetValue.address
+                from = toAssetValue.address
                 multiSwapStore.setTokenIn(toAssetValue.address)
                 multiSwapStore.setTokenOut(fromAssetValue.address)
                 setToAssetValue(fromAssetValue);
@@ -304,6 +347,9 @@ function Setup() {
                     setToAmountValue(fromAmountValue);
                 }
             } else {
+                from = value.address
+                to = toAssetValue.address
+
                 // if there is a direct swap route for fromAssetValue, then select the first token available in the route for toAssetValue
                 if (
                     DIRECT_SWAP_ROUTES[value.address.toLowerCase()]
@@ -315,6 +361,7 @@ function Setup() {
                     });
                     setToAssetValue(baseAsset[dystIndex]);
                     multiSwapStore.setTokenOut(baseAsset[dystIndex].address)
+                    to = baseAsset[dystIndex].address
                 }
 
                 multiSwapStore.setTokenIn(value.address)
@@ -336,6 +383,8 @@ function Setup() {
             }
         } else {
             if (value.address === fromAssetValue.address) {
+                to = fromAssetValue.address
+                from = toAssetValue.address
                 multiSwapStore.setTokenIn(toAssetValue.address)
                 multiSwapStore.setTokenOut(fromAssetValue.address)
                 setFromAssetValue(toAssetValue);
@@ -355,6 +404,9 @@ function Setup() {
                     setToAmountValue(fromAmountValue);
                 }
             } else {
+                from = fromAssetValue.address
+                to = value.address
+
                 // if there is a direct swap route for toAssetValue, then select the first token available in the route for fromAssetValue
                 if (
                     DIRECT_SWAP_ROUTES[value.address.toLowerCase()]
@@ -366,6 +418,7 @@ function Setup() {
                     });
                     setFromAssetValue(baseAsset[dystIndex]);
                     multiSwapStore.setTokenIn(baseAsset[dystIndex].address)
+                    from = baseAsset[dystIndex].address
                 }
 
                 multiSwapStore.setTokenOut(value.address)
@@ -386,6 +439,8 @@ function Setup() {
                 }
             }
         }
+
+        router.push(`/swap?from=${from}&to=${to}`, undefined, { shallow: true })
 
         forceUpdate();
     };
@@ -469,6 +524,9 @@ function Setup() {
         const ta = toAssetValue;
         setFromAssetValue(ta);
         setToAssetValue(fa);
+
+        router.push(`/swap?from=${ta.address}&to=${fa.address}`, undefined, { shallow: true })
+
         if (
             !(
                 (fromAssetValue?.symbol === FTM_SYMBOL ||
