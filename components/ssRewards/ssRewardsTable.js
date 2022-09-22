@@ -1020,7 +1020,7 @@ export default function EnhancedTable({ rewards, tokenID }) {
                                   return tableCellContent(
                                     formatCurrency(bribe.earned),
                                     null,
-                                    bribe?.symbol,
+                                    bribe?.token?.symbol,
                                     null,
                                     bribe && bribe.token && bribe.token.logoURI
                                       ? bribe.token.logoURI
@@ -1487,7 +1487,7 @@ export default function EnhancedTable({ rewards, tokenID }) {
                                                     : "#5688A5",
                                               }}
                                             >
-                                              {bribe?.symbol}
+                                              {bribe?.token?.symbol}
                                             </Typography>
                                           </div>
                                         </div>
