@@ -313,7 +313,7 @@ export default function ssLock({govToken, veToken}) {
 
         <div className={[classes.reAddPadding3, classes[`reAddPadding3--${appTheme}`]].join(' ')}>
           {renderMassiveInput('amount', amount, amountError, onAmountChanged, govToken)}
-          
+
           {amountError && <div
                 style={{ marginTop: 20 }}
                 className={[
@@ -378,6 +378,12 @@ export default function ssLock({govToken, veToken}) {
           </div>
 
           {renderVestInformation()}
+          <Typography
+              className={[classes.info, classes[`info--${appTheme}`]].join(" ")}
+              color="textSecondary"
+          >
+            Lock period should be multiples of 1 week (e.g. 28, 35, 42 days, etc.)
+          </Typography>
         </div>
 
         <Button
