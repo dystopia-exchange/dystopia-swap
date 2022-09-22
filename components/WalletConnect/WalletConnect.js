@@ -7,6 +7,7 @@ import Web3 from 'web3'
 import { Web3Provider } from "@ethersproject/providers"
 import { ACTIONS } from '../../stores/constants'
 import { ethers } from 'ethers'
+import {useAppThemeContext} from "../../ui/AppThemeProvider";
 
 const {
   ERROR,
@@ -16,8 +17,19 @@ const {
 } = ACTIONS;
 
 export const WalletConnect = (props) => {
+  const {appTheme} = useAppThemeContext();
+
   const connect = async function web3Init() {
     const web3modal = new Web3Modal({
+      theme: appTheme === 'dark' ? {
+        background: 'rgba(21, 23, 24, 0.8)',
+        main: '#ffffff',
+        hover: '#24292D',
+      } : {
+        background: 'rgb(219, 230, 236)',
+        hover: '#B9DFF5',
+        // border: 'rgb(134, 185, 214)', not working ):
+      },
       cacheProvider: true,
       network: "matic",
       providerOptions: {
