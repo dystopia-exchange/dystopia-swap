@@ -5,7 +5,8 @@ import {
   CONTRACTS,
   QUERIES,
   RENAME_ASSETS,
-  NETWORK_TOKEN_NAME
+  NETWORK_TOKEN_NAME,
+  ALLOWED_DUPLICATE_SYMBOLS
 } from "../constants";
 import {formatBN, removeDuplicate} from '../../utils';
 import {getLocalAssets} from "./local-storage-helper";
@@ -141,8 +142,11 @@ export const getBaseAssets = async () => {
     let dupAssets = [];
     baseAssets.forEach((token, id) => {
       BASE_ASSETS_WHITELIST.forEach((wl) => {
-        if (token.id?.toLowerCase() !== wl.address?.toLowerCase()
-          && wl.symbol?.toLowerCase() === token.symbol?.toLowerCase()) {
+        if (
+            token.id?.toLowerCase() !== wl.address?.toLowerCase()
+            && wl.symbol?.toLowerCase() === token.symbol?.toLowerCase()
+            && !ALLOWED_DUPLICATE_SYMBOLS.includes(token.symbol)
+        ) {
           dupAssets.push(id);
         }
       });
