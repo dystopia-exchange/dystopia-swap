@@ -376,14 +376,13 @@ export default function ssLock({govToken, veToken}) {
               </div>
             </div>
           </div>
-
-          {renderVestInformation()}
           <Typography
-              className={[classes.info, classes[`info--${appTheme}`]].join(" ")}
+              className={[classes.info, classes[`info--${appTheme}`], classes[`info--lock-period`]].join(" ")}
               color="textSecondary"
           >
-            Lock period should be multiples of 1 week (e.g. 28, 35, 42 days, etc.)
+            Lock period should be multiples of 1 week <br/>(e.g. 28, 35, 42 days, etc.)
           </Typography>
+          {renderVestInformation()}
         </div>
 
         <Button

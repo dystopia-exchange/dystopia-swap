@@ -317,7 +317,12 @@ export default function existingLock({nft, govToken, veToken}) {
         <LockAmount govToken={govToken} updateLockAmount={updateLockAmount}/>
 
         <LockDuration nft={nft} govToken={govToken} veToken={veToken} updateLockDuration={updateLockDuration}/>
-
+        <Typography
+            className={[classes.info, classes[`info--${appTheme}`], classes[`info--lock-period`]].join(" ")}
+            color="textSecondary"
+        >
+          Lock period should be multiples of 1 week <br/>(e.g. 28, 35, 42 days, etc.)
+        </Typography>
         <VestingInfo currentNFT={nft} futureNFT={futureNFT} veToken={veToken} showVestingStructure={false}/>
       </div>
 

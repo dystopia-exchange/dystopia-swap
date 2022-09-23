@@ -826,6 +826,10 @@ input[type=number].massiveInputAmount {
   color: #7C838A !important;
 }
 
+.info--lock-period {
+  padding-top: 4px;
+}
+
 .vestPeriodToggle {
   margin-top: 15px;
   background: #CFE5F2;
