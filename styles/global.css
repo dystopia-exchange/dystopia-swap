@@ -30,8 +30,8 @@ button {
   width: 360px !important;
   display: flex !important;
   flex-direction: column !important;
-  background: rgb(219, 230, 236) !important;
-  border: 1px solid rgb(134, 185, 214) !important;
+  /*background: rgb(219, 230, 236) !important;*/
+  /*border: 1px solid rgb(134, 185, 214) !important;*/
   border-radius: 0px !important;
   padding: 20px !important;
 }
@@ -39,8 +39,8 @@ button {
 .web3modal-provider-container {
   border-radius: 0px !important;
   padding: 10px 20px !important;
-  background-color: #cfe5f2 !important;
-  border: 1px solid #86b9d6 !important;
+  /*background-color: #cfe5f2 !important;*/
+  /*border: 1px solid #86b9d6 !important;*/
   display: flex !important;
   justify-content: space-between !important;
   flex-direction: row !important;
