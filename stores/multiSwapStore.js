@@ -13,7 +13,7 @@ import {
     ERC20_ABI,
     FTM_DECIMALS
 } from "./constants/contracts";
-import {DIRECT_SWAP_ROUTES, GAS_MULTIPLIER, MAX_UINT256, ZERO_ADDRESS} from "./constants";
+import {DIRECT_SWAP_ROUTES, GAS_MULTIPLIER, MAX_UINT256, MULTISWAP_EXCLUDE, ZERO_ADDRESS} from "./constants";
 import { v4 as uuidv4 } from 'uuid';
 import {formatCurrency, getTXUUID} from "../utils";
 import {
@@ -174,7 +174,7 @@ class MultiSwapStore {
 
         this.isFetchingSwap = true
 
-        if (this.isDirectRoute) {
+        if (this.isDirectRoute || this.isMultiswapExclude) {
             const [tokenIn, tokenOut] = await Promise.all([
                 this._getToken(this.tokenIn),
                 this._getToken(this.tokenOut),
@@ -332,6 +332,10 @@ class MultiSwapStore {
             || (!!DIRECT_SWAP_ROUTES[this.tokenOut?.toLowerCase()] && DIRECT_SWAP_ROUTES[this.tokenOut?.toLowerCase()] === this.tokenIn?.toLowerCase())
     }
 
+    get isMultiswapExclude() {
+        return MULTISWAP_EXCLUDE.includes(this.tokenIn?.toLowerCase()) || MULTISWAP_EXCLUDE.includes(this.tokenOut?.toLowerCase())
+    }
+
     async _swapQuery() {
         if (!this.swapQueryInProgress) {
             // console.log('>>> SWAP QUERY')
@@ -358,7 +362,7 @@ class MultiSwapStore {
                 this.isFetchingSwapQuery = true
 
                 // query old router for direct swap routes
-                if (this.isDirectRoute) {
+                if (this.isDirectRoute || this.isMultiswapExclude) {
                     const response = await stores.stableSwapStore.quoteSwap({
                         content: {
                             fromAsset: tokenIn,
@@ -423,7 +427,7 @@ class MultiSwapStore {
         if (this.provider && this.isDirectRoute !== undefined) {
             this.isFetchingAllowance = true
             const tokenIn = await this._getToken(this.tokenIn)
-            const response = await allowance(this.tokenIn, this.provider, this.swapAmount, tokenIn.decimals, this.isDirectRoute ? ROUTER_ADDRESS : multiSwapAddress)
+            const response = await allowance(this.tokenIn, this.provider, this.swapAmount, tokenIn.decimals, this.isDirectRoute || this.isMultiswapExclude ? ROUTER_ADDRESS : multiSwapAddress)
             this.allowed = response
             this.isFetchingAllowance = false
             return response

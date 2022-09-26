@@ -147,7 +147,6 @@ export const quoteSwap = async (
     }
 
     let amountOuts = buildRoutes(routeAssets, addy0, addy1, directSwapRoute)
-    console.log('quoteSwap amountOuts', amountOuts)
     const retryCall = async () => {
       const res = await Promise.allSettled(
         amountOuts.map(async (route) => {
@@ -267,9 +266,10 @@ export const quoteSwap = async (
       output: bestAmountOut,
       priceImpact: priceImpact,
     };
-    // todo: refactor multiswap to use emitter quote results first, then can remove return
+
+    emitter.emit(ACTIONS.QUOTE_SWAP_RETURNED, returnValue);
+
     return returnValue;
-    // emitter.emit(ACTIONS.QUOTE_SWAP_RETURNED, returnValue);
   } catch (ex) {
     console.error("Quote swap error", ex);
 
