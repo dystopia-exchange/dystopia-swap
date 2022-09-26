@@ -15,10 +15,12 @@ import {
 import SwapIconBg from '../../ui/SwapIconBg';
 
 export default function existingLock({nft, govToken, veToken}) {
+  const unixWeek = 604800
+
   const [futureNFT, setFutureNFT] = useState(null);
   const [lockLoading, setLockLoading] = useState(false);
   const [lockAmountLoading, setLockAmountLoading] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(moment().add(8, 'days').format('YYYY-MM-DD'));
+  const [selectedDate, setSelectedDate] = useState(moment.unix(Math.floor(moment().add(7, 'days').unix() / unixWeek) * unixWeek).format('YYYY-MM-DD'));
   const [selectedDateError, setSelectedDateError] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null);
   const [amount, setAmount] = useState('');
@@ -26,6 +28,35 @@ export default function existingLock({nft, govToken, veToken}) {
   const [amountError, setAmountError] = useState(false);
 
   const router = useRouter();
+
+  const isDateCorrect = (dateStr) => {
+    const date = moment(dateStr).format('YYYY-MM-DD')
+    const correctDate = moment.unix(Math.floor(moment(dateStr).add(1, 'days').unix() / unixWeek) * unixWeek).format('YYYY-MM-DD')
+    return date === correctDate && moment(dateStr).unix() > moment().unix() && moment(dateStr).unix() > nft?.lockEnds
+  }
+
+  useEffect(() => {
+    const lockReturned = () => {
+      setLockLoading(false);
+    };
+    const lockAmountReturned = () => {
+      setLockAmountLoading(false);
+    };
+    const errorReturned = () => {
+      setLockLoading(false);
+      setLockAmountLoading(false);
+    };
+
+    stores.emitter.on(ACTIONS.ERROR, errorReturned);
+    stores.emitter.on(ACTIONS.INCREASE_VEST_DURATION_RETURNED, lockReturned);
+    stores.emitter.on(ACTIONS.INCREASE_VEST_AMOUNT_RETURNED, lockAmountReturned);
+
+    return () => {
+      stores.emitter.removeListener(ACTIONS.ERROR, errorReturned);
+      stores.emitter.removeListener(ACTIONS.INCREASE_VEST_DURATION_RETURNED, lockReturned);
+      stores.emitter.removeListener(ACTIONS.INCREASE_VEST_AMOUNT_RETURNED, lockAmountReturned);
+    };
+  }, []);
 
   useEffect(() => {
     if (nft && nft.lockEnds) {
@@ -139,10 +170,12 @@ export default function existingLock({nft, govToken, veToken}) {
         break;
       default:
     }
-    const newDate = moment().add(days, 'days').format('YYYY-MM-DD');
+    let newDate = moment().add(days, 'days');
+    // round to weeks
+    newDate = moment.unix(Math.floor(newDate.unix() / unixWeek) * unixWeek)
 
-    setSelectedDate(newDate);
-    updateLockDuration(newDate);
+    setSelectedDate(newDate.format('YYYY-MM-DD'));
+    updateLockDuration(newDate.format('YYYY-MM-DD'));
   };
 
   const focus = () => {
@@ -332,11 +365,18 @@ export default function existingLock({nft, govToken, veToken}) {
         variant="contained"
         size="large"
         color="primary"
-        disabled={lockLoading}
+        disabled={lockAmountLoading || amount === '' || Number(amount) === 0}
         onClick={onLockAmount}>
 
         <Typography
-          className={classes.actionButtonText}>{lockLoading ? `Increasing Lock Amount` : `Increase Lock Amount`}
+          className={classes.actionButtonText}
+        >
+          {
+            lockAmountLoading
+                ? `Increasing Lock Amount`
+                : amount === '' || Number(amount) === 0
+                    ? 'Enter amount' : `Increase Lock Amount`
+          }
         </Typography>
 
         {lockLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
@@ -348,10 +388,17 @@ export default function existingLock({nft, govToken, veToken}) {
         variant="contained"
         size="large"
         color="primary"
-        disabled={lockLoading}
+        disabled={lockLoading || !isDateCorrect(selectedDate)}
         onClick={onLock}>
         <Typography
-          className={classes.actionButtonText}>{lockLoading ? `Increasing Duration` : `Increase Duration`}</Typography>
+          className={classes.actionButtonText}
+        >
+          {
+            lockLoading
+                ? `Increasing Duration` : !isDateCorrect(selectedDate)
+                    ? 'Wrong expiration date' :`Increase Duration`
+          }
+        </Typography>
         {lockLoading && <CircularProgress size={10} className={classes.loadingCircle}/>}
       </Button>
     </Paper>
