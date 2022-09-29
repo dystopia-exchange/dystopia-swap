@@ -176,8 +176,8 @@ class MultiSwapStore {
 
         if (this.isDirectRoute || this.isMultiswapExclude) {
             const [tokenIn, tokenOut] = await Promise.all([
-                this._getToken(this.tokenIn),
-                this._getToken(this.tokenOut),
+                this._getToken(this.tokenIn, false),
+                this._getToken(this.tokenOut, false),
             ])
             try {
                 await stores.stableSwapStore.swap({
