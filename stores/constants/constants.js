@@ -271,9 +271,9 @@ export const DIRECT_SWAP_ROUTES = {
   ["0x5b0522391d0a5a37fd117fe4c43e8876fb4e91e6".toLowerCase()]: "0x39aB6574c289c3Ae4d88500eEc792AB5B947A5Eb".toLowerCase(),
 }
 
-export const MULTISWAP_EXCLUDE = [
-  // SPHERE
-  "0x62f594339830b90ae4c084ae7d223ffafd9658a7".toLowerCase(),
+export const MULTISWAP_INCLUDE = [
+  // TETU
+  "0x255707B70BF90aa112006E1b07B9AeA6De021424".toLowerCase(),
 ]
 
 export const ALLOWED_DUPLICATE_SYMBOLS = [

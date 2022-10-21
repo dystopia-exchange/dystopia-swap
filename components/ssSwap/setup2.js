@@ -479,7 +479,7 @@ function Setup() {
     };
 
     const calculateReceiveAmount = (amount, from, to) => {
-        if (multiSwapStore.isMultiswapExclude) {
+        if (multiSwapStore.isMultiswapInclude) {
             if (amount !== "" && !isNaN(amount) && to != null) {
                 setQuoteLoading(true);
                 setQuoteError(false);
@@ -1456,7 +1456,7 @@ function Setup() {
 
                             {renderMassiveInput(
                                 "To",
-                                multiSwapStore.isWrapUnwrap|| multiSwapStore.isMultiswapExclude ? toAmountValue : swap?.returnAmount
+                                multiSwapStore.isWrapUnwrap|| multiSwapStore.isMultiswapInclude ? toAmountValue : swap?.returnAmount
                                     ? ethers.utils.formatUnits(swap?.returnAmount, toAssetValue?.decimals)
                                     : swap?.returnAmount
                                 ,
@@ -1534,7 +1534,7 @@ function Setup() {
                                 && multiSwapStore.swap !== null
                                 && multiSwapStore.error === null
                                 && multiSwapStore.isWrapUnwrap === false
-                                && (!multiSwapStore.isMultiswapExclude || quote?.output?.finalValue)
+                                && (!multiSwapStore.isMultiswapInclude || quote?.output?.finalValue)
                                 && (
                                     <>
                                         <Typography
@@ -1564,7 +1564,7 @@ function Setup() {
                                                 </Typography>
 
                                                 <Typography className={classes.title}>
-                                                    {multiSwapStore.isMultiswapExclude ?
+                                                    {multiSwapStore.isMultiswapInclude ?
                                                         formatCurrency(
                                                             BigNumber(quote.inputs.fromAmount)
                                                                 .div(quote.output.finalValue)
@@ -1587,7 +1587,7 @@ function Setup() {
                                                 </Typography>
 
                                                 <Typography className={classes.title}>
-                                                    {multiSwapStore.isMultiswapExclude ? formatCurrency(
+                                                    {multiSwapStore.isMultiswapInclude ? formatCurrency(
                                                             BigNumber(quote.output.finalValue)
                                                                 .div(quote.inputs.fromAmount)
                                                                 .toFixed(18)
@@ -1628,7 +1628,7 @@ function Setup() {
                                 </div>
                             )}
 
-                            {!hidequote ? renderSwapInformation({ routes, multiswapData,  directSwapRoute: multiSwapStore.isDirectRoute, multiswapExclude: multiSwapStore.isMultiswapExclude }) : null}
+                            {!hidequote ? renderSwapInformation({ routes, multiswapData,  directSwapRoute: multiSwapStore.isDirectRoute, multiswapExclude: multiSwapStore.isMultiswapInclude }) : null}
 
                             {(isFetchingApprove || isFetchingSwap) && (
                                 <div className={classes.loader}>
