@@ -26,18 +26,20 @@ export const callContractWait = async (
   emitNotificationPending(emitter, uuid)
 
   await contract.methods[method](...params)
-    .estimateGas({from: account, value: sendValue})
+    .estimateGas({from: account, value: sendValue ?? 0})
     .then(async (gasAmount) => {
 
       let sendGasAmount = BigNumber(gasAmount).times(1.5).toFixed(0);
       let sendGasPrice = BigNumber(gasPrice).times(GAS_MULTIPLIER).toFixed(0);
+
+      console.log('callContractWait', method, params, account, sendGasPrice, sendValue);
 
       await contract.methods[method](...params)
         .send({
           from: account,
           gasPrice: web3.utils.toWei(sendGasPrice, "gwei"),
           gas: sendGasAmount,
-          value: sendValue,
+          value: sendValue ?? 0,
           // maxFeePerGas: web3.utils.toWei(gasPrice, "gwei"),
           // maxPriorityFeePerGas: web3.utils.toWei("2", "gwei"),
         })
