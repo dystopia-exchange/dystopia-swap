@@ -222,6 +222,31 @@ export const retry = ({ fn, args, defaultValue }) => {
   return wrappedFn;
 };
 
+export const retryForSwapQuote = ({ fn, args, defaultValue }) => {
+  let retryCount = 0;
+  const wrappedFn = async () => {
+    try {
+      const response = args ? await fn(...args) : await fn();
+      return response;
+    } catch (err) {
+      if (err.toString().includes('execution reverted') || err.toString().includes('Out of Gas')) {
+        retryCount++;
+        if (retryCount > MAX_REQUEST_RETRY) {
+          return defaultValue ?? null;
+        } else {
+          return await wrappedFn();
+        }
+      } else {
+        console.log('retryForSwapQuote bad error catched')
+        console.log(err)
+        return undefined
+      }
+    }
+  };
+
+  return wrappedFn;
+};
+
 export const removeDuplicate = (arr) => {
   const assets = arr.reduce((acc, item) => {
     if (item.symbol in assetIcons) {

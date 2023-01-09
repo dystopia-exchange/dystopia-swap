@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import {ACTIONS, CONTRACTS, DIRECT_SWAP_ROUTES} from "../constants";
-import {formatBN, parseBN, buildRoutes, retry, getPrice, getAmountOut} from '../../utils';
+import {formatBN, parseBN, buildRoutes, getPrice, getAmountOut, retryForSwapQuote} from '../../utils';
 
 export const quoteAddLiquidity = async (
   payload,
@@ -150,7 +150,7 @@ export const quoteSwap = async (
     const retryCall = async () => {
       const res = await Promise.allSettled(
         amountOuts.map(async (route) => {
-          const fn = retry({
+          const fn = retryForSwapQuote({
             fn: routerContract.methods.getAmountsOut(
               sendFromAmount,
               route.routes
@@ -159,6 +159,10 @@ export const quoteSwap = async (
           return await fn();
         })
       );
+
+      if (res.filter(el => el.value === undefined).length !== 0) {
+        return null;
+      }
 
       return res
         .filter((el, index) => {
@@ -177,6 +181,10 @@ export const quoteSwap = async (
     };
 
     const receiveAmounts = await retryCall();
+
+    if (receiveAmounts === null) {
+      return null;
+    }
 
     amountOuts = amountOuts.filter((el) => el !== null);
 

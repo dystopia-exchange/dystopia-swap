@@ -682,7 +682,7 @@ function Setup() {
                                 </div>
                                 <div>
 
-                                    {quote?.output && !quote?.output?.routeAsset && (
+                                    {quote?.output && !quote?.output?.routeAsset && isMultiRouts && (
                                         <div
                                             className={[
                                                 classes.routeArrow,
@@ -693,7 +693,7 @@ function Setup() {
                                         </div>
                                     )}
 
-                                    {quote?.output && !quote?.output?.routeAsset && (
+                                    {quote?.output && !quote?.output?.routeAsset && isMultiRouts && (
                                         <div
                                             className={[
                                                 classes.routeLinesRight,
