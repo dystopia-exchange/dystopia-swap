@@ -373,6 +373,11 @@ class MultiSwapStore {
 
                     // console.log('directSwapRoute old router response', response)
 
+                    if (response === null) {
+                        this.swap = null
+                        this.error = 'Swap query request error. Try again.'
+                    }
+
                     if (response?.output?.finalValue) {
                         this.swap = {
                             returnAmount: response.output.receiveAmounts[1],
