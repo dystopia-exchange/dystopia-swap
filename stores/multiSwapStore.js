@@ -75,11 +75,13 @@ class MultiSwapStore {
     }
 
     startSwapQueryPolling() {
-        if(this.swapQueryTimeout) {
-            clearInterval(this.swapQueryTimeout)
-        }
-        this.debSwapQuery()
-        this.swapQueryTimeout = setInterval(this._swapQuery.bind(this), 10000)
+        // if(this.swapQueryTimeout) {
+        //     clearInterval(this.swapQueryTimeout)
+        // }
+        // this.debSwapQuery()
+        // this.swapQueryTimeout = setInterval(this._swapQuery.bind(this), 10000)
+        // this.debSwapQuery = debounce(this._swapQuery.bind(this), 500)
+        this._swapQuery()
     }
 
     setProvider(provider) {
@@ -338,7 +340,7 @@ class MultiSwapStore {
 
     async _swapQuery() {
         if (!this.swapQueryInProgress) {
-            // console.log('>>> SWAP QUERY')
+            console.log('>>> SWAP QUERY')
             this.swapQueryInProgress = true;
             if (this.isWrapUnwrap) {
                 this.allowed = true

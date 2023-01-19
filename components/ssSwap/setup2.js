@@ -25,6 +25,8 @@ import { observer } from 'mobx-react'
 import * as ethers from 'ethers'
 import { toFixed } from './utils'
 
+const MAX_PRICE_IMPACT = 10;
+
 const MultiSwap = observer((props) => {
     const multiSwapStore = stores.multiSwapStore;
     const [provider, setProvider] = useState(null)
@@ -1256,6 +1258,7 @@ function Setup() {
                     || tokenOut === null
                     // || multiSwapStore.error !== null
                 || fromAmountValue > Number(fromAssetValue?.balance)
+                || parseFloat(multiSwapStore.priceImpact) > MAX_PRICE_IMPACT
 
                 if (isFetchingSwapQuery && swapAmount) loadingMessage = 'loading data of routes...'
                 if (isFetchingAllowance && swapAmount) loadingMessage = 'loading ...'
@@ -1526,6 +1529,33 @@ function Setup() {
                                         align="center"
                                     >
                                         Balance is below the entered value
+                                    </Typography>
+                                </div>
+                            )}
+
+                            {parseFloat(multiSwapStore.priceImpact) > MAX_PRICE_IMPACT && (
+                                <div
+                                    className={[
+                                        classes.warningContainer,
+                                        classes[`warningContainer--${appTheme}`],
+                                        classes.warningContainerError,
+                                    ].join(" ")}
+                                >
+                                    <div
+                                        className={[
+                                            classes.warningDivider,
+                                            classes.warningDividerError,
+                                        ].join(" ")}
+                                    ></div>
+
+                                    <Typography
+                                        className={[
+                                            classes.warningError,
+                                            classes[`warningText--${appTheme}`],
+                                        ].join(" ")}
+                                        align="center"
+                                    >
+                                        Price impact too high
                                     </Typography>
                                 </div>
                             )}

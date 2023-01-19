@@ -101,7 +101,7 @@ export const swap = async (
       .times(sendSlippage)
       .toFixed(0);
     // console.log("fromAmount", fromAmount, sendFromAmount) // 10000000000000000000
-    // console.log("sendMinAmountOut", quote.output.finalValue, sendMinAmountOut) // 563329031843791
+    console.log("sendMinAmountOut", quote.output.finalValue, sendMinAmountOut) // 563329031843791
 
     const deadline = "" + moment().add(600, "seconds").unix();
 
