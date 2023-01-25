@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import Web3Modal from 'web3modal'
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import stores from '../../stores'
 import Web3 from 'web3'
-import { Web3Provider } from "@ethersproject/providers"
 import { ACTIONS } from '../../stores/constants'
 import { ethers } from 'ethers'
 import {useAppThemeContext} from "../../ui/AppThemeProvider";

@@ -1,49 +1,35 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import BigNumber from "bignumber.js";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
 import {
-  Typography,
-  Switch,
-  Button,
-  SvgIcon,
-  Badge,
-  IconButton,
+  NotificationsNoneOutlined
+} from "@mui/icons-material";
+import {
+  Badge, Button, IconButton,
   Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  TableCell,
-  ClickAwayListener,
+  MenuItem, SvgIcon, Typography
 } from "@mui/material";
 import { styled, withStyles, withTheme } from "@mui/styles";
-import {
-  ArrowDropDown,
-  AccountBalanceWalletOutlined,
-  DashboardOutlined,
-  NotificationsNoneOutlined,
-} from "@mui/icons-material";
 
 import Navigation from "../navigation";
-import Unlock from "../unlock";
 import TransactionQueue from "../transactionQueue";
+import Unlock from "../unlock";
 
 import { ACTIONS } from "../../stores/constants";
 
 import stores from "../../stores";
 import { formatAddress } from "../../utils";
 
-import classes from "./header.module.css";
-import TopHeader from "../../ui/TopHeader";
+import { useEthers } from "@usedapp/core";
+import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import Logo from "../../ui/Logo";
 import ThemeSwitcher from "../../ui/ThemeSwitcher";
-import { useAppThemeContext } from "../../ui/AppThemeProvider";
+import TopHeader from "../../ui/TopHeader";
+import Hint from "../hint/hint";
 import SSWarning from "../ssWarning";
 import { WalletConnect } from "../WalletConnect/WalletConnect";
-import { ethers } from "ethers";
-import Web3 from "web3";
-import { useEthers } from "@usedapp/core";
-import Hint from "../hint/hint";
+import classes from "./header.module.css";
 
 const {
   CONNECT_WALLET,

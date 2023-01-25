@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import { useAppThemeContext } from "../AppThemeProvider";
-import classes from '../../components/ssSwap/ssSwap.module.css';
 
 const SwapIconBg = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);

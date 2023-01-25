@@ -1,26 +1,16 @@
-import React, { useState, useEffect, useCallback } from "react";
-import {
-  Paper,
-  Typography,
-  Button,
-  CircularProgress,
-  IconButton,
-  Tooltip,
-  InputBase,
-  Select,
-  ClickAwayListener,
-  MenuItem,
-} from "@mui/material";
 import { ArrowBackIosNew } from "@mui/icons-material";
-import classes from "./vest.module.css";
+import {
+  Button, ClickAwayListener, IconButton, MenuItem, Paper, Select, Tooltip, Typography
+} from "@mui/material";
+import moment from "moment";
 import { useRouter } from "next/router";
-import { useAppThemeContext } from "../../../ui/AppThemeProvider";
-import Form from "../../../ui/MigratorForm";
-import Borders from "../../../ui/Borders";
+import React, { useCallback, useEffect, useState } from "react";
 import stores from "../../../stores";
 import { ACTIONS } from "../../../stores/constants";
-import { formatCurrency } from "../../../utils/utils";
-import moment from "moment";
+import { useAppThemeContext } from "../../../ui/AppThemeProvider";
+import Borders from "../../../ui/Borders";
+import Form from "../../../ui/MigratorForm";
+import classes from "./vest.module.css";
 
 const merge = () => {
   const router = useRouter();

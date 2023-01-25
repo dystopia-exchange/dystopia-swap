@@ -1,8 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useAppThemeContext } from "../AppThemeProvider";
-import classes from './AssetSelect.module.css';
-import stores from '../../stores';
-import { ETHERSCAN_URL } from '../../stores/constants';
+import { ArrowBackIosNew, Close, DeleteOutline, Search } from '@mui/icons-material';
 import {
   Button,
   Dialog, DialogContent,
@@ -11,13 +7,17 @@ import {
   InputAdornment,
   MenuItem,
   TextField,
-  Typography,
+  Typography
 } from '@mui/material';
-import { ArrowBackIosNew, Close, DeleteOutline, Search } from '@mui/icons-material';
-import { formatCurrency } from '../../utils';
-import Borders from '../Borders';
 import BigNumber from 'bignumber.js';
+import React, { useEffect, useState } from "react";
+import stores from '../../stores';
+import { ETHERSCAN_URL } from '../../stores/constants';
+import { formatCurrency } from '../../utils';
+import { useAppThemeContext } from "../AppThemeProvider";
+import Borders from '../Borders';
 import SwapIconBg from '../SwapIconBg';
+import classes from './AssetSelect.module.css';
 
 const AssetSelect = (
   {

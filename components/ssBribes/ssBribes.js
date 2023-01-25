@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Paper } from '@mui/material';
 
 import classes from './ssBribes.module.css';
 

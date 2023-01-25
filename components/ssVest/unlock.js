@@ -1,25 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import {
-  Paper,
-  Typography,
   Button,
   CircularProgress,
-  IconButton,
-  Tooltip,
-  InputBase,
+  IconButton, InputBase, Paper, Tooltip, Typography
 } from "@mui/material";
-import classes from "./ssVest.module.css";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import { formatCurrency } from "../../utils";
+import classes from "./ssVest.module.css";
 
-import { ArrowBack, ArrowBackIosNew } from "@mui/icons-material";
-import VestingInfo from "./vestingInfo";
+import { ArrowBackIosNew } from "@mui/icons-material";
 import stores from "../../stores";
 import { ACTIONS } from "../../stores/constants";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import Form from "../../ui/MigratorForm";
 import SwapIconBg from "../../ui/SwapIconBg";
-import AssetSelect from "../../ui/AssetSelect";
+import VestingInfo from "./vestingInfo";
 
 export default function Unlock({ nft, govToken, veToken }) {
   const router = useRouter();

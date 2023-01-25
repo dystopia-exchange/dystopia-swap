@@ -1,53 +1,30 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { makeStyles, styled, useTheme } from "@mui/styles";
-import QuizIcon from "@mui/icons-material/Quiz";
-import numeral from "numeral";
 import {
-  Button,
-  Table,
+  Add,
+  Close, ExpandLess, ExpandMore, FilterAltOutlined,
+  Search
+} from "@mui/icons-material";
+import QuizIcon from "@mui/icons-material/Quiz";
+import {
+  Accordion, AccordionDetails, AccordionSummary, Button, IconButton, InputAdornment, Popover, Skeleton, Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  TablePagination,
-  Typography,
-  Tooltip,
-  Toolbar,
-  IconButton,
-  TextField,
-  InputAdornment,
-  Popper,
-  Fade,
-  Grid,
-  Switch,
-  Skeleton,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Popover,
+  TableHead, TablePagination, TableRow,
+  TableSortLabel, TextField, Toolbar, Tooltip, Typography
 } from "@mui/material";
-import { useRouter } from "next/router";
+import { makeStyles, styled } from "@mui/styles";
 import BigNumber from "bignumber.js";
-import {
-  FilterAltOutlined,
-  Search,
-  Add,
-  Close,
-  ArrowDropDown,
-  ExpandMore,
-  ExpandLess,
-} from "@mui/icons-material";
-import SortSelect from "../select-sort/select-sort";
-import { formatCurrency } from "../../utils";
-import classes from "./ssLiquidityPairs.module.css";
-import { useAppThemeContext } from "../../ui/AppThemeProvider";
-import TablePaginationActions from "../table-pagination/table-pagination";
-import { formatSymbol } from "../../utils";
-import SwitchCustom from "../../ui/Switch";
+import { useRouter } from "next/router";
+import numeral from "numeral";
+import PropTypes from "prop-types";
+import React, { useState } from "react";
 import { TableBodyPlaceholder } from "../../components/table";
+import { useAppThemeContext } from "../../ui/AppThemeProvider";
+import SwitchCustom from "../../ui/Switch";
+import { formatCurrency, formatSymbol } from "../../utils";
+import SortSelect from "../select-sort/select-sort";
+import TablePaginationActions from "../table-pagination/table-pagination";
+import classes from "./ssLiquidityPairs.module.css";
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {

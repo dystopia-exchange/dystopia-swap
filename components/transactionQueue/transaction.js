@@ -1,17 +1,10 @@
-import React, { Component, useState, useEffect } from "react";
-import { Typography, Button, CircularProgress, Tooltip } from "@mui/material";
+import { Typography } from "@mui/material";
+import React, { useState } from "react";
 import classes from "./transactionQueue.module.css";
 
-import { ACTIONS, ETHERSCAN_URL } from "../../stores/constants";
-import { formatAddress } from "../../utils";
-import {
-  HourglassEmpty,
-  HourglassFull,
-  CheckCircle,
-  Error,
-  Pause,
-} from "@mui/icons-material";
+import { ETHERSCAN_URL } from "../../stores/constants";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
+import { formatAddress } from "../../utils";
 
 export default function Transaction({ transaction }) {
   const [expanded, setExpanded] = useState(false);

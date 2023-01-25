@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Typography, Paper, Button } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { PieChart } from '@mui/icons-material';
+import { Button, Paper, Typography } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import BigNumber from 'bignumber.js';
-import classes from './ssBribeCard.module.css'
-import stores from '../../stores/index.js'
-import { formatCurrency } from '../../utils'
-import { formatSymbol } from '../../utils';
+import React, { useEffect, useState } from 'react';
+import stores from '../../stores/index.js';
+import { formatCurrency, formatSymbol } from '../../utils';
+import classes from './ssBribeCard.module.css';
 
 import { ACTIONS } from '../../stores/constants';
 

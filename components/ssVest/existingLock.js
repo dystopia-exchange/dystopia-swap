@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/router';
-import { Paper, Typography, Grid, IconButton, Tooltip, InputBase, Button, CircularProgress } from '@mui/material';
-import classes from "./ssVest.module.css";
-import moment from 'moment';
+import { ArrowBackIosNew } from '@mui/icons-material';
+import { Button, CircularProgress, IconButton, InputBase, Paper, Tooltip, Typography } from '@mui/material';
 import BigNumber from 'bignumber.js';
-import { ArrowBack, ArrowBackIosNew } from '@mui/icons-material';
-import { formatCurrency, formatInputAmount } from '../../utils';
-import VestingInfo from "./vestingInfo";
-import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import moment from 'moment';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import stores from '../../stores';
 import {
-  ACTIONS,
+  ACTIONS
 } from '../../stores/constants';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import SwapIconBg from '../../ui/SwapIconBg';
+import { formatCurrency, formatInputAmount } from '../../utils';
+import classes from "./ssVest.module.css";
+import VestingInfo from "./vestingInfo";
 
 export default function existingLock({nft, govToken, veToken}) {
   const unixWeek = 604800

@@ -1,16 +1,15 @@
-import { Typography, Button, Paper, SvgIcon, Grid, Avatar } from "@mui/material";
+import { Button, Grid, Paper, Typography } from "@mui/material";
+import ClaimAll from '../../components/ffDashboardClaimAll';
 import Overview from '../../components/ffDashboardOverview';
 import VoteOverview from '../../components/ffDashboardVoteOverview';
-import ClaimAll from '../../components/ffDashboardClaimAll';
 
 import classes from './dashboard.module.css';
 
-import React, { useState, useEffect } from 'react';
-import { ACTIONS } from '../../stores/constants';
-import stores from '../../stores';
 import { useRouter } from "next/router";
+import React, { useEffect, useState } from 'react';
 import Unlock from '../../components/unlock';
-import { formatAddress } from '../../utils';
+import stores from '../../stores';
+import { ACTIONS } from '../../stores/constants';
 
 const { CONNECT_WALLET, ACCOUNT_CONFIGURED } = ACTIONS
 

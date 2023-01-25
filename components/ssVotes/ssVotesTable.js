@@ -1,48 +1,26 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { makeStyles, styled } from "@mui/styles";
 import {
-  Table,
+  Accordion, AccordionDetails, AccordionSummary, Button, Dialog, DialogContent, DialogTitle, InputAdornment, Skeleton, Slider, Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  TablePagination,
-  Typography,
-  Slider,
-  Skeleton,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Button,
-  DialogTitle,
-  DialogContent,
-  Dialog,
-  Hidden,
-  Input,
-  TextField,
-  InputAdornment,
+  TableHead, TablePagination, TableRow,
+  TableSortLabel, TextField, Typography
 } from "@mui/material";
-import Tooltip from "@mui/material/Tooltip";
-import QuizIcon from "@mui/icons-material/Quiz";
-import Icon from "@mui/material/Icon";
-import numeral from "numeral";
+import { makeStyles, styled } from "@mui/styles";
 import BigNumber from "bignumber.js";
+import numeral from "numeral";
+import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 
-import { formatCurrency } from "../../utils";
 import {
-  ArrowDropDown,
-  Close,
   ExpandLess,
-  ExpandMore,
+  ExpandMore
 } from "@mui/icons-material";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
-import TablePaginationActions from "../table-pagination/table-pagination";
+import { formatCurrency, formatSymbol } from "../../utils";
 import SortSelect from "../select-sort/select-sort";
-import { formatSymbol } from "../../utils";
-import {TableBodyPlaceholder} from "../table";
+import { TableBodyPlaceholder } from "../table";
+import TablePaginationActions from "../table-pagination/table-pagination";
 
 const CustomSlider = styled(Slider)(({ theme, appTheme, disabled }) => {
   const MuiSliderthumb = {

@@ -1,22 +1,19 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import Head from "next/head";
-import Layout from "../components/layout/layout.js";
 import CssBaseline from "@mui/material/CssBaseline";
+import Head from "next/head";
 import { useRouter } from "next/router";
+import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import Layout from "../components/layout/layout.js";
 
 import { AppThemeProvider, useAppTheme } from "../ui/AppThemeProvider";
 
-import Configure from "./configure";
-
 import stores from "../stores/index.js";
 
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { ACTIONS } from "../stores/constants";
 import "../styles/global.css";
-import "../styles/variables.css";
 import "../styles/grid.css";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import classes from "./home/home.module.css";
+import "../styles/variables.css";
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();

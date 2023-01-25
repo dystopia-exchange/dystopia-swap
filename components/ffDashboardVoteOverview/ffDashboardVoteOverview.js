@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Paper, Grid, Typography, SvgIcon } from '@mui/material';
+import { Grid, Paper, SvgIcon, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 
-import { formatCurrency } from '../../utils';
+import { formatCurrency, formatSymbol } from '../../utils';
 import classes from './ffDashboardVoteOverview.module.css';
 
-import stores from '../../stores'
+import stores from '../../stores';
 import { ACTIONS } from '../../stores/constants';
-import { formatSymbol } from '../../utils';
 
 function MyVotesIcon(props) {
   const { color, className } = props;

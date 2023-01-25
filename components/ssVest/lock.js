@@ -1,31 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
 import {
-  Paper,
-  Typography,
-  Button,
-  TextField,
-  InputAdornment,
-  CircularProgress,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
-  Tooltip,
-  IconButton, InputBase,
+  Button, CircularProgress, IconButton, InputBase, Paper, Tooltip, Typography
 } from '@mui/material';
-import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import moment from 'moment';
-import { formatCurrency, formatInputAmount } from '../../utils';
-import classes from "./ssVest.module.css";
+import { useRouter } from 'next/router';
+import React, { useEffect, useRef, useState } from 'react';
 import stores from '../../stores';
 import {
-  ACTIONS,
+  ACTIONS
 } from '../../stores/constants';
+import { formatCurrency, formatInputAmount } from '../../utils';
+import classes from "./ssVest.module.css";
 
-import { ArrowBack, ArrowBackIosNew } from '@mui/icons-material';
-import VestingInfo from "./vestingInfo";
+import { ArrowBackIosNew } from '@mui/icons-material';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import SwapIconBg from '../../ui/SwapIconBg';
+import VestingInfo from "./vestingInfo";
 
 export default function ssLock({govToken, veToken}) {
   const unixWeek = 604800

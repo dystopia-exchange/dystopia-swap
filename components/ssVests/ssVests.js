@@ -1,7 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Paper } from '@mui/material';
-
-import classes from './ssVests.module.css';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import VestsTable from './ssVestsTable.js';
 

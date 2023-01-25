@@ -1,22 +1,18 @@
-import React from 'react';
-import { makeStyles } from '@mui/styles';
 import {
-  Grid,
-  Table,
+  Button,
+  CircularProgress, Grid, Skeleton, Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
-  Typography,
-  Button,
-  CircularProgress,
-  Skeleton,
+  Typography
 } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import BigNumber from 'bignumber.js';
+import React from 'react';
 import stores from '../../stores';
 import { ACTIONS } from '../../stores/constants';
-import { formatCurrency } from '../../utils';
-import { formatSymbol } from '../../utils';
+import { formatCurrency, formatSymbol } from '../../utils';
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {

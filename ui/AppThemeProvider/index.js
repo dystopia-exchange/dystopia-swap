@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 
-import { AppTheme, DEFAULT_THEME, useAppTheme } from "./hooks/useAppTheme";
+import { DEFAULT_THEME, useAppTheme } from "./hooks/useAppTheme";
 
 const defaultContext = {
   appTheme: DEFAULT_THEME,

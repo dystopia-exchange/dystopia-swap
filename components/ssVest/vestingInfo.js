@@ -1,10 +1,9 @@
-import { Paper, Typography } from "@mui/material";
-import classes from "./ssVest.module.css";
+import { Typography } from "@mui/material";
 import moment from "moment";
-import { formatCurrency } from "../../utils";
-import BigNumber from "bignumber.js";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import Borders from "../../ui/Borders";
+import { formatCurrency } from "../../utils";
+import classes from "./ssVest.module.css";
 
 export default function VestingInfo({
   currentNFT,

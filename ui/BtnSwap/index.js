@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAppThemeContext } from "../AppThemeProvider";
-import { Typography, Button } from "@mui/material";
 
 const BtnSwap = (props) => {
   const {label, className, labelClassName, isDisabled, onClick} = props;

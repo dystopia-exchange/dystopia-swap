@@ -1,44 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/router";
 import {
-  Paper,
-  Grid,
-  Typography,
-  Button,
-  TextField,
-  InputAdornment,
-  CircularProgress,
-  Tooltip,
-  IconButton,
-  MenuItem,
-  Dialog,
-  InputBase,
-  DialogTitle,
-  DialogContent,
-  Popover,
-  Select,
-  ClickAwayListener,
+  ArrowBackIosNew,
+  Close
+} from "@mui/icons-material";
+import {
+  Button, CircularProgress, ClickAwayListener, Grid, IconButton, InputAdornment, InputBase, MenuItem, Paper, Popover,
+  Select, TextField, Tooltip, Typography
 } from "@mui/material";
 import BigNumber from "bignumber.js";
-import { formatCurrency } from "../../utils";
-import classes from "./ssLiquidityManage.module.css";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
 import stores from "../../stores";
-import {ACTIONS, CONTRACTS, DEFAULT_ASSET_FROM, DEFAULT_ASSET_TO} from "../../stores/constants";
-import {
-  Search,
-  DeleteOutline,
-  ArrowBackIosNew,
-  Close,
-  Settings,
-  ArrowDropDownCircleOutlined,
-} from "@mui/icons-material";
+import { ACTIONS, CONTRACTS, DEFAULT_ASSET_FROM, DEFAULT_ASSET_TO } from "../../stores/constants";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
-import { formatSymbol, formatInputAmount } from "../../utils";
-import SwapIconBg from "../../ui/SwapIconBg";
 import AssetSelect from "../../ui/AssetSelect";
 import Borders from "../../ui/Borders";
 import Loader from "../../ui/Loader";
 import SwitchCustom from "../../ui/Switch";
+import { formatCurrency, formatInputAmount, formatSymbol } from "../../utils";
+import classes from "./ssLiquidityManage.module.css";
 
 export default function ssLiquidityManage() {
   const router = useRouter();

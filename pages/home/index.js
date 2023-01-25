@@ -1,15 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { useTheme, withTheme } from '@mui/styles';
-import { useAppThemeContext } from '../../ui/AppThemeProvider'
-import BtnEnterApp from '../../ui/BtnEnterApp'
+import React, { useEffect, useRef, useState } from 'react';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import BtnEnterApp from '../../ui/BtnEnterApp';
 
 // import leftImageLight from '../../images/main-page/left-illustration-light.png'
 // import rightImageLight from '../../images/main-page/right-illustration-light.png'
 // import leftImageDark from '../../images/main-page/left-illustration-dark.png'
 // import rightImageDark from '../../images/main-page/right-illustration-dark.png'
 
-import classes from './home.module.css'
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
+import classes from './home.module.css';
 
 const socialLinks = {
     twitter: 'https://twitter.com/dystopiaswap',

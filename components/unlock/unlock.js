@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import { withStyles } from "@mui/styles";
-import { Typography, Button, CircularProgress } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import { Web3Provider } from "@ethersproject/providers";
 import { ACTIONS } from "../../stores/constants";
 import classes from "./unlockModal.module.css";

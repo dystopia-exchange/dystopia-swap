@@ -1,31 +1,21 @@
-import React, { useState, useEffect } from "react";
+import { Close, KeyboardArrowDown, Search } from "@mui/icons-material";
 import {
-  TextField,
-  Typography,
-  InputAdornment,
   Button,
-  Dialog,
-  InputBase,
-  DialogTitle,
-  DialogContent,
-  Tooltip,
+  Dialog, DialogContent, DialogTitle, InputAdornment, InputBase, TextField, Tooltip, Typography
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { Search, KeyboardArrowDown, Close } from "@mui/icons-material";
-import migrate from "../../stores/configurations/migrators";
+import { parseUnits } from "ethers/lib/utils";
+import React, { useEffect, useState } from "react";
+import stores from "../../stores";
 import FactoryAbi from "../../stores/abis/FactoryAbi.json";
 import pairContractAbi from "../../stores/abis/pairOldRouter.json";
+import migrate from "../../stores/configurations/migrators";
+import { ACTIONS, CONTRACTS } from "../../stores/constants";
+import { useAppThemeContext } from "../../ui/AppThemeProvider";
+import AssetSelect from "../../ui/AssetSelect";
+import Borders from "../../ui/Borders";
+import Loader from "../../ui/Loader";
 import Form from "../../ui/MigratorForm";
 import classes from "./ssMigrate.module.css";
-import { useAppThemeContext } from "../../ui/AppThemeProvider";
-import stores from "../../stores";
-import { ACTIONS, CONTRACTS, ETHERSCAN_URL } from "../../stores/constants";
-import { BigNumber } from "ethers";
-import { parseUnits } from "ethers/lib/utils";
-import Borders from "../../ui/Borders";
-import AssetSelect from "../../ui/AssetSelect";
-import Loader from "../../ui/Loader";
-import Web3 from "web3";
 
 export default function Setup() {
   const [fromAssetValue, setFromAssetValue] = useState(null);

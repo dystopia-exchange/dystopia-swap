@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import BigNumber from 'bignumber.js';
-import { Typography, Button, Paper, SvgIcon, Grid } from "@mui/material";
+import { Button, Paper, SvgIcon, Typography } from "@mui/material";
+import React, { useCallback, useEffect, useState } from 'react';
 import Vesting from '../../../components/ssVest';
 
 import classes from './vest.module.css';
 
+import Unlock from '../../../components/unlock';
 import stores from '../../../stores';
 import { ACTIONS } from '../../../stores/constants';
-import Unlock from '../../../components/unlock';
 
 function BalanceIcon(props) {
   const { color, className } = props;

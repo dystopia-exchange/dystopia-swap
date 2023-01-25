@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Typography, Button, Paper, SvgIcon } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
+import React, { useEffect, useState } from 'react';
 import Gauges from '../../components/ssVotes';
 import Unlock from '../../components/unlock';
 import classes from './vote.module.css';
 
+import { WalletConnect } from '../../components/WalletConnect';
 import stores from '../../stores';
 import { ACTIONS } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import BtnEnterApp from '../../ui/BtnEnterApp';
-import { WalletConnect } from '../../components/WalletConnect'
 
 function Vote({ changeTheme }) {
   const accountStore = stores.accountStore.getStore('account');

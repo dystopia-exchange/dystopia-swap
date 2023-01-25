@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import BribeCreate from '../../../components/ssBribeCreate';
 
 function Bribe({changeTheme}) {

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 // import Form from '../../ui/Form';
+import { Paper, Typography } from '@mui/material';
+import { useRouter } from 'next/router';
 import Setup from '../../components/migrate/setup';
-import classes from './migrate.module.css';
-import { Button, Paper, Typography } from '@mui/material';
 import Unlock from '../../components/unlock';
 import stores from '../../stores';
-import { useRouter } from 'next/router';
 import { ACTIONS } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import BtnEnterApp from '../../ui/BtnEnterApp';
+import classes from './migrate.module.css';
 
 export default function Migrate() {
   const accountStore = stores.accountStore.getStore('account');

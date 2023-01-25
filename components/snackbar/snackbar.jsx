@@ -1,10 +1,10 @@
-import React, { Component, useState } from 'react';
-import { Snackbar, IconButton, Button, Typography, SvgIcon } from '@mui/material';
-import { colors } from '../../theme/coreTheme';
-import { ETHERSCAN_URL } from '../../stores/constants';
-import classes from './snackbar.module.css';
-import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import { Close } from '@mui/icons-material';
+import { Button, IconButton, SvgIcon, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { ETHERSCAN_URL } from '../../stores/constants';
+import { colors } from '../../theme/coreTheme';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import classes from './snackbar.module.css';
 
 const iconStyle = {
   fontSize: '30px',

@@ -1,12 +1,12 @@
-import { Typography, Button, Paper, SvgIcon } from "@mui/material"
-import LiquidityPairs from '../../components/ssLiquidityPairs'
+import { Button, Paper, SvgIcon, Typography } from "@mui/material";
+import LiquidityPairs from '../../components/ssLiquidityPairs';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ACTIONS } from '../../stores/constants';
 
-import stores from '../../stores';
 import { useRouter } from "next/router";
 import Unlock from '../../components/unlock';
+import stores from '../../stores';
 
 import classes from './gauges.module.css';
 

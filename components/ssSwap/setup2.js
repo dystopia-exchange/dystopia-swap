@@ -13,8 +13,8 @@ import {
 } from "../../utils";
 import classes from "./ssSwap.module.css";
 import stores from "../../stores";
-import {ACTIONS, DEFAULT_ASSET_FROM, DEFAULT_ASSET_TO, DIRECT_SWAP_ROUTES} from "../../stores/constants";
-import {FTM_SYMBOL, WFTM_SYMBOL, WFTM_ADDRESS} from "../../stores/constants/contracts";
+import { ACTIONS, DEFAULT_ASSET_FROM, DEFAULT_ASSET_TO, DIRECT_SWAP_ROUTES } from "../../stores/constants";
+import { FTM_SYMBOL, WFTM_SYMBOL } from "../../stores/constants/contracts";
 import BigNumber from "bignumber.js";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
 import BtnSwap from "../../ui/BtnSwap";

@@ -1,17 +1,17 @@
-import { Typography, Button, Paper, SvgIcon } from "@mui/material"
-import SSRewards from '../../components/ssRewards'
+import { Paper, Typography } from "@mui/material";
+import SSRewards from '../../components/ssRewards';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ACTIONS } from '../../stores/constants';
 
-import stores from '../../stores';
 import { useRouter } from "next/router";
 import Unlock from '../../components/unlock';
+import stores from '../../stores';
 
-import classes from './rewards.module.css';
+import { WalletConnect } from '../../components/WalletConnect';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import BtnEnterApp from '../../ui/BtnEnterApp';
-import { WalletConnect } from '../../components/WalletConnect'
+import classes from './rewards.module.css';
 
 function Rewards({ changeTheme }) {
 

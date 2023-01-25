@@ -1,23 +1,15 @@
-import React, { useState, useEffect, useCallback } from "react";
 import {
-  Paper,
-  TextField,
-  InputAdornment,
-  CircularProgress,
-  Typography,
-  Tooltip,
-  Button,
-  Popover,
+  CircularProgress, InputAdornment, TextField, Tooltip, Typography
 } from "@mui/material";
 import BigNumber from "bignumber.js";
-import TokenSelect from "../select-token/select-token";
-import classes from "./ssWhitelist.module.css";
+import React, { useEffect, useState } from "react";
 import stores from "../../stores";
 import { ACTIONS, ETHERSCAN_URL } from "../../stores/constants";
-import { formatAddress, formatCurrency } from "../../utils";
-import { formatSymbol } from "../../utils";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
+import { formatAddress, formatCurrency, formatSymbol } from "../../utils";
 import Hint from "../hint/hint";
+import TokenSelect from "../select-token/select-token";
+import classes from "./ssWhitelist.module.css";
 
 export default function ssWhitelist() {
   const [web3, setWeb3] = useState(null);

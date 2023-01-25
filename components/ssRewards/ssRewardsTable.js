@@ -1,31 +1,22 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import { ArrowDropDown, ExpandLess, ExpandMore } from "@mui/icons-material";
 import {
-  Button,
-  Table,
+  Accordion, AccordionDetails, AccordionSummary, Button, Skeleton, Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  TablePagination,
-  Typography,
-  Skeleton,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
+  TableHead, TablePagination, TableRow,
+  TableSortLabel, Typography
 } from "@mui/material";
-import { makeStyles, styled, useTheme } from "@mui/styles";
-import { useRouter } from "next/router";
+import { makeStyles, styled } from "@mui/styles";
 import BigNumber from "bignumber.js";
-import { formatCurrency } from "../../utils";
+import { useRouter } from "next/router";
+import PropTypes from "prop-types";
+import React, { useState } from "react";
 import stores from "../../stores";
 import { ACTIONS } from "../../stores/constants";
 import { useAppThemeContext } from "../../ui/AppThemeProvider";
-import { ArrowDropDown, ExpandLess, ExpandMore } from "@mui/icons-material";
+import { formatCurrency, formatSymbol } from "../../utils";
 import TablePaginationActions from "../table-pagination/table-pagination";
-import { formatSymbol } from "../../utils";
 
 function descendingComparator(a, b, orderBy) {
   if (!a || !b) {

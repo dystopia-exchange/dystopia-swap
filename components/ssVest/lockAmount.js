@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Grid, Typography, Button, TextField, InputAdornment, CircularProgress, InputBase } from '@mui/material';
-import { useRouter } from 'next/router';
+import { Button, CircularProgress, InputBase, Typography } from '@mui/material';
 import BigNumber from 'bignumber.js';
-import moment from 'moment';
-import { formatCurrency, formatInputAmount } from '../../utils';
-import classes from "./ssVest.module.css";
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import stores from '../../stores';
 import {
-  ACTIONS,
+  ACTIONS
 } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import { formatCurrency, formatInputAmount } from '../../utils';
+import classes from "./ssVest.module.css";
 
 export default function ffLockAmount({nft, govToken, updateLockAmount}) {
 

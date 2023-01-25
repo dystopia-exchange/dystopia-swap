@@ -1,15 +1,15 @@
-import { Typography, Button, Paper } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import SwapComponent from '../../components/ssSwap';
 
-import React, { useState, useEffect } from 'react';
-import { ACTIONS } from '../../stores/constants';
-import stores from '../../stores';
+import React, { useEffect, useState } from 'react';
 import Unlock from '../../components/unlock';
+import stores from '../../stores';
+import { ACTIONS } from '../../stores/constants';
 
-import classes from './swap.module.css';
+import { WalletConnect } from '../../components/WalletConnect';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
 import BtnEnterApp from '../../ui/BtnEnterApp';
-import { WalletConnect } from '../../components/WalletConnect'
+import classes from './swap.module.css';
 
 
 function Swap({ changeTheme }) {

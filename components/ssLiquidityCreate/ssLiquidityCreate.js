@@ -1,32 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { Add, ArrowBack, DeleteOutline, Search } from '@mui/icons-material';
 import {
-  Paper,
-  Typography,
-  Button,
-  TextField,
-  InputAdornment,
-  CircularProgress,
-  Tooltip,
-  Dialog,
-  MenuItem,
-  IconButton,
-  Select,
-  FormControlLabel,
-  Switch,
+  Button, CircularProgress, Dialog, FormControlLabel, IconButton, InputAdornment, MenuItem, Paper, Select, Switch, TextField, Tooltip, Typography
 } from '@mui/material';
-import { Add, Search, ArrowBack, DeleteOutline } from '@mui/icons-material';
 import BigNumber from 'bignumber.js';
-import { formatCurrency } from '../../utils';
-import classes from './ssLiquidityCreate.module.css';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import stores from '../../stores';
 import {
   ACTIONS,
-  ETHERSCAN_URL,
+  ETHERSCAN_URL
 } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
-import { formatSymbol } from '../../utils';
 import Borders from '../../ui/Borders';
+import { formatCurrency, formatSymbol } from '../../utils';
+import classes from './ssLiquidityCreate.module.css';
 
 export default function SSLiquidityCreate() {
 

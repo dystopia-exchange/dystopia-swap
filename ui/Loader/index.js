@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { useAppThemeContext } from "../AppThemeProvider";
 import classes from './Loader.module.css';

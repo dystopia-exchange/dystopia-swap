@@ -4,14 +4,11 @@ import {
   CONTRACTS,
   ROUTE_ASSETS,
 } from "./constants";
-import {formatBN, formatCurrency, getTXUUID, parseBN, removeDuplicate} from "../utils";
+import {formatBN, getTXUUID, parseBN, removeDuplicate} from "../utils";
 import stores from "./";
 import BigNumber from "bignumber.js";
 import pairContractAbi from "./abis/pairOldRouter.json";
 import migratorAbi from "./abis/migrator.json";
-import {
-  FTM_SYMBOL,
-} from "./constants/contracts";
 import router from "next/router";
 import {enrichAdditionalApr} from "./helpers/additional-apr-helper";
 import {emitError} from "./helpers/emit-helper";

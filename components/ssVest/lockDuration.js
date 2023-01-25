@@ -1,25 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
 import {
-  Grid,
-  Typography,
-  Button,
-  TextField,
-  CircularProgress,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
-  InputAdornment,
-  InputBase,
+  Button, CircularProgress, InputBase, Typography
 } from '@mui/material';
-import { useRouter } from 'next/router';
-import moment from 'moment';
 import BigNumber from 'bignumber.js';
-import classes from "./ssVest.module.css";
+import moment from 'moment';
+import { useRouter } from 'next/router';
+import React, { useEffect, useRef, useState } from 'react';
 import stores from '../../stores';
 import {
-  ACTIONS,
+  ACTIONS
 } from '../../stores/constants';
 import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import classes from "./ssVest.module.css";
 
 export default function ffLockDuration({nft, updateLockDuration}) {
 

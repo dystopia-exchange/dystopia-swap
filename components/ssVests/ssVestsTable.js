@@ -1,32 +1,25 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles, styled } from '@mui/styles';
 import {
-  Paper,
-  Button,
-  Table,
+  ExpandLess, ExpandMore,
+  LockOutlined
+} from '@mui/icons-material';
+import {
+  Accordion, AccordionDetails, AccordionSummary, Button, Paper, Skeleton, Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  TablePagination,
-  Typography,
-  Toolbar,
-  Skeleton, Accordion, AccordionSummary, AccordionDetails,
+  TableHead, TablePagination, TableRow,
+  TableSortLabel, Toolbar, Typography
 } from '@mui/material';
-import { useRouter } from "next/router";
-import {
-  ArrowDropDown, ExpandLess, ExpandMore,
-  LockOutlined,
-} from '@mui/icons-material';
-import moment from 'moment';
-import { formatCurrency } from '../../utils';
-import { useAppThemeContext } from '../../ui/AppThemeProvider';
-import TablePaginationActions from '../table-pagination/table-pagination';
-import SortSelect from '../select-sort/select-sort';
+import { makeStyles, styled } from '@mui/styles';
 import BigNumber from 'bignumber.js';
+import moment from 'moment';
+import { useRouter } from "next/router";
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useAppThemeContext } from '../../ui/AppThemeProvider';
+import { formatCurrency } from '../../utils';
+import SortSelect from '../select-sort/select-sort';
+import TablePaginationActions from '../table-pagination/table-pagination';
 import css from './ssVests.module.css';
 
 function descendingComparator(a, b, orderBy) {
