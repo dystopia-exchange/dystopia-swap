@@ -451,9 +451,11 @@ function Setup() {
 
         setFromAmountError(false);
         setFromAmountValue(value);
+        setQuote(null);
+        setToAmountValue("");
         if (value == "" || Number(value) === 0) {
             setToAmountValue("");
-            setQuote(null);
+            // setQuote(null);
         } else {
             if (
                 !(

@@ -115,6 +115,7 @@ class MultiSwapStore {
     setSwapAmount(value) {
         this.swapAmount = value
         this.error = null
+        this.swap = null
         this._checkAllowance()
         this.startSwapQueryPolling()
     }
