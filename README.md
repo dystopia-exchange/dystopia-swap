@@ -13,5 +13,3 @@
 - Run `npm install`
 - You can now run the nextjs app this way: `npm run dev`
 - That's it! You can now start hacking and submit PRs.
-
-0x771B99f97F8529943aBDe1e76d91AF8d34F7277e
